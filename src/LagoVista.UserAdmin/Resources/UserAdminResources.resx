@@ -1,0 +1,608 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Admin_Contact" xml:space="preserve">
+    <value>Admin Contact</value>
+  </data>
+  <data name="AppUser_ConfirmPassword" xml:space="preserve">
+    <value>Confirm Password</value>
+  </data>
+  <data name="AppUser_Description" xml:space="preserve">
+    <value>Base Class for implementing ASP.NET Identity in LagoVista Applications</value>
+  </data>
+  <data name="AppUser_Email" xml:space="preserve">
+    <value>Email Address</value>
+  </data>
+  <data name="AppUser_FirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="AppUser_Help" xml:space="preserve">
+    <value>Base Class for implementing ASP.NET Identity in LagoVista Applications</value>
+  </data>
+  <data name="AppUser_LastName" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="AppUser_NewPassword" xml:space="preserve">
+    <value>New Password</value>
+  </data>
+  <data name="AppUser_OldPassword" xml:space="preserve">
+    <value>Old Password</value>
+  </data>
+  <data name="AppUser_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="AppUser_PasswordConfirmPasswordMatch" xml:space="preserve">
+    <value>Password and Confirm Password shoudl match.</value>
+  </data>
+  <data name="AppUser_PhoneNumber" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="AppUser_PhoneVerificationCode" xml:space="preserve">
+    <value>Received Code</value>
+  </data>
+  <data name="AppUser_RememberMe" xml:space="preserve">
+    <value>Remember Me</value>
+  </data>
+  <data name="AppUser_RememberMe_InThisBrowser" xml:space="preserve">
+    <value>Remember Me in this Browser</value>
+  </data>
+  <data name="AppUser_Title" xml:space="preserve">
+    <value>Application User</value>
+  </data>
+  <data name="Billing_Contact" xml:space="preserve">
+    <value>Billing Contact</value>
+  </data>
+  <data name="Common_CreatedBy" xml:space="preserve">
+    <value>Created By</value>
+  </data>
+  <data name="Common_CreationDate" xml:space="preserve">
+    <value>Creation Date</value>
+  </data>
+  <data name="Common_Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Common_EmailAddress" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Common_Id" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="Common_LastUpdatedBy" xml:space="preserve">
+    <value>Updated By</value>
+  </data>
+  <data name="Common_LastUpdatedDate" xml:space="preserve">
+    <value>Last Updated</value>
+  </data>
+  <data name="Common_Namespce" xml:space="preserve">
+    <value>Namespace</value>
+  </data>
+  <data name="Common_Notes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="Common_PhoneNumber" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="Common_Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Common_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="GeoLocation_Description" xml:space="preserve">
+    <value>The Geo Location Model is used to provide a class that will store latitude, longitude</value>
+  </data>
+  <data name="GeoLocation_Help" xml:space="preserve">
+    <value>The Geo Location Model is used to provide a class that will store latitude, longitude</value>
+  </data>
+  <data name="GeoLocation_Title" xml:space="preserve">
+    <value>Geographic Location (lat/lon)</value>
+  </data>
+  <data name="ImageDetails_Description" xml:space="preserve">
+    <value>Contains meta data necessary to display an image.</value>
+  </data>
+  <data name="ImageDetails_Help" xml:space="preserve">
+    <value>Contains meta data necessary to display an image.</value>
+  </data>
+  <data name="ImageDetails_Title" xml:space="preserve">
+    <value>Image Details</value>
+  </data>
+  <data name="InuteUser_Status_Declined" xml:space="preserve">
+    <value>Declined</value>
+  </data>
+  <data name="Invitation_Description" xml:space="preserve">
+    <value>Invitations are a storage object that used to invite additional people to partipipate in an organization.</value>
+  </data>
+  <data name="Invitation_Help" xml:space="preserve">
+    <value>Invitations are a storage object that used to invite additional people to partipipate in an organization.</value>
+  </data>
+  <data name="Invitation_Title" xml:space="preserve">
+    <value>Organization Invitation</value>
+  </data>
+  <data name="InviteUser_AlreadyPartOfOrg" xml:space="preserve">
+    <value>The user [USERS_FULL_NAME] with an email address of [EMAIL_ADDRESS] already belongs to this organization.</value>
+  </data>
+  <data name="InviteUser_ClickHere" xml:space="preserve">
+    <value>Please click &lt;a href="[ACCEPT_LINK]"&gt;here&lt;/a&gt; to accept the invitation.</value>
+  </data>
+  <data name="InviteUser_Greeting_Label" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="InviteUser_Greeting_Message" xml:space="preserve">
+    <value>[USERS_FULL_NAME] has invited you to [ORG_NAME] [APP_NAME].</value>
+    <comment>WIll replace [USERS_FULL_NAME] with the first/last name of current user, [ORG_NAME] as the name of the organization.</comment>
+  </data>
+  <data name="InviteUser_InvitedById" xml:space="preserve">
+    <value>InvitedById</value>
+    <comment>No need to translate</comment>
+  </data>
+  <data name="InviteUser_InvitedByName" xml:space="preserve">
+    <value>Invited By</value>
+  </data>
+  <data name="InviteUser_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="InviteUser_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="InviteUser_Status_Accepted" xml:space="preserve">
+    <value>Accepted</value>
+  </data>
+  <data name="InviteUser_Status_Queued" xml:space="preserve">
+    <value>Queued</value>
+  </data>
+  <data name="Invite_Greeting_Subject" xml:space="preserve">
+    <value>[APP_NAME] Invitation for [ORG_NAME]</value>
+  </data>
+  <data name="LocationAccountRole_Description" xml:space="preserve">
+    <value>In some caes, user have different roles depending on which location they are working in.  This entity manages those roles.</value>
+  </data>
+  <data name="LocationAccountRole_Help" xml:space="preserve">
+    <value>In some caes, user have different roles depending on which location they are working in.  This entity manages those roles.</value>
+  </data>
+  <data name="LocationAccountRole_Title" xml:space="preserve">
+    <value>User Roles for a Location</value>
+  </data>
+  <data name="LocationAccount_Description" xml:space="preserve">
+    <value>Cross Reference Table that can be used to relate a app user to a location within an organization.</value>
+  </data>
+  <data name="LocationAccount_Help" xml:space="preserve">
+    <value>Cross Reference Table that can be used to relate a app user to a location within an organization.</value>
+  </data>
+  <data name="LocationAccount_Title" xml:space="preserve">
+    <value>Location Account Cross Reference</value>
+  </data>
+  <data name="LocationNamespace_Help" xml:space="preserve">
+    <value>The location namespace is used when adding a device to a specific location in conjunction with the organizatoin namespace to generate a unique human readable device id. The namespaces must be unique across your organization.  Namespace can only contain lower case letters and number with no spaces or special characters other than dash or [-]</value>
+  </data>
+  <data name="Location_Address1" xml:space="preserve">
+    <value>Address 1</value>
+  </data>
+  <data name="Location_Address2" xml:space="preserve">
+    <value>Address 2</value>
+  </data>
+  <data name="Location_Admin_Contact" xml:space="preserve">
+    <value>Admin Contact</value>
+  </data>
+  <data name="Location_City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="Location_Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="Location_GeoLocation" xml:space="preserve">
+    <value>Geo Location</value>
+  </data>
+  <data name="Location_LocationName" xml:space="preserve">
+    <value>Location Name</value>
+  </data>
+  <data name="Location_PostalCode" xml:space="preserve">
+    <value>Postal Code</value>
+  </data>
+  <data name="Location_State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organization</value>
+  </data>
+  <data name="OrganizationAccountRole_Description" xml:space="preserve">
+    <value>The Organization Account Roles Structures defines which roles the user hold in a particular organization.</value>
+  </data>
+  <data name="OrganizationAccountRole_Help" xml:space="preserve">
+    <value>The Organization Account Roles Structures defines which roles the user hold in a particular organization.</value>
+  </data>
+  <data name="OrganizationAccountRole_Title" xml:space="preserve">
+    <value>User Roles for an Organization</value>
+  </data>
+  <data name="OrganizationAccount_CouldntAdd" xml:space="preserve">
+    <value>Could not add account to organization</value>
+  </data>
+  <data name="OrganizationAccount_UserExists" xml:space="preserve">
+    <value>[USERS_FULL_NAME] is already part of [ORG_NAME], they can't be added twice.</value>
+  </data>
+  <data name="OrganizationLocation_NamespaceInUse" xml:space="preserve">
+    <value>This name space is alredy in use for your organization, please select a new one.</value>
+  </data>
+  <data name="OrganizationNamespace_Help" xml:space="preserve">
+    <value>The organizationn namespace is used to generated unique device ids for your organization. It must be unique within our system or your installation. Namespace can only contain lower case letters and number with no spaces or special characters other than dash or [-]</value>
+  </data>
+  <data name="Organization_Account_Title" xml:space="preserve">
+    <value>Organization Account Cross Reference</value>
+  </data>
+  <data name="Organization_Account_Description" xml:space="preserve">
+    <value>The Organization Account Relationship table is used to map accounts to an organization.</value>
+  </data>
+  <data name="Organization_Account_Help" xml:space="preserve">
+    <value>The Organization Account Relationship table is used to map accounts to an organization.</value>
+  </data>
+  <data name="Organization_CantCreate" xml:space="preserve">
+    <value>Could not create organization</value>
+  </data>
+  <data name="Organization_Description" xml:space="preserve">
+    <value>An organization is a container that can be used to group user, locations, devices, device configurations and any other data or functionalality.</value>
+  </data>
+  <data name="Organization_Help" xml:space="preserve">
+    <value>An organization is a container that can be used to group user, locations, devices, device configurations and any other data or functionalality.</value>
+  </data>
+  <data name="Organization_Location" xml:space="preserve">
+    <value>Organization Location</value>
+  </data>
+  <data name="Organization_Locations" xml:space="preserve">
+    <value>Locations</value>
+  </data>
+  <data name="Organization_Location_Description" xml:space="preserve">
+    <value>An Organization can have Many Locations.  Locations are used to furhter organize resources.</value>
+  </data>
+  <data name="Organization_Location_Help" xml:space="preserve">
+    <value>An Organization can have Many Locations.  Locations are used to furhter organize resources.</value>
+  </data>
+  <data name="Organization_Location_Title" xml:space="preserve">
+    <value>Organization Location</value>
+  </data>
+  <data name="Organization_Name" xml:space="preserve">
+    <value>Organization Name</value>
+  </data>
+  <data name="Organization_NamespaceInUse" xml:space="preserve">
+    <value>This namespace is already in use, please select a new one.</value>
+  </data>
+  <data name="Organization_Primary_Location" xml:space="preserve">
+    <value>Primary Location</value>
+  </data>
+  <data name="Organization_Status_Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Organization_Status_Active_BehindPayments" xml:space="preserve">
+    <value>Behind in Payments (Active)</value>
+  </data>
+  <data name="Organization_Status_Archived" xml:space="preserve">
+    <value>Archived</value>
+  </data>
+  <data name="Organization_Title" xml:space="preserve">
+    <value>Organization</value>
+  </data>
+  <data name="Organization_WebSite" xml:space="preserve">
+    <value>Web Site</value>
+  </data>
+  <data name="Role_Description" xml:space="preserve">
+    <value>Roles are used to assigned to a user to give them access to certain functionality of the system.</value>
+  </data>
+  <data name="Role_Help" xml:space="preserve">
+    <value>Roles are used to assigned to a user to give them access to certain functionality of the system.</value>
+  </data>
+  <data name="Role_Title" xml:space="preserve">
+    <value>User Role</value>
+  </data>
+  <data name="Technical_Contact" xml:space="preserve">
+    <value>Technical Contact</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="VerifyUser_BrowserRemembered" xml:space="preserve">
+    <value>Remember me in this browser</value>
+  </data>
+  <data name="VerifyUser_EmailConfirmed" xml:space="preserve">
+    <value>Email Address Confirmed</value>
+  </data>
+  <data name="VerifyUser_ExistingPhoneNumber" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="VerifyUser_PhoneConfirmed" xml:space="preserve">
+    <value>Phone Number Confirmed</value>
+  </data>
+  <data name="AcceptInviteVM_Description" xml:space="preserve">
+    <value>Allows a user to accept an inviation by logging in or creating a new account.</value>
+  </data>
+  <data name="AcceptInviteVM_Help" xml:space="preserve">
+    <value>Please login if you have an existing account, or register a new one if you are a new user.</value>
+  </data>
+  <data name="AcceptInviteVM_Title" xml:space="preserve">
+    <value>Accept Invitation</value>
+  </data>
+  <data name="ChangePasswordVM_Description" xml:space="preserve">
+    <value>Allows the user to change their password</value>
+  </data>
+  <data name="ChangePasswordVM_Help" xml:space="preserve">
+    <value>Please enter your old password and choose a new one.</value>
+  </data>
+  <data name="ChangePasswordVM_Title" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="CreateLocationVM_Description" xml:space="preserve">
+    <value>Allows the user to create new locations.</value>
+  </data>
+  <data name="CreateLocationVM_Help" xml:space="preserve">
+    <value>Your organization can contain multiple locations, you can add those here.</value>
+  </data>
+  <data name="CreateLocationVM_Title" xml:space="preserve">
+    <value>Create new Location</value>
+  </data>
+  <data name="CreateOrganizationVM_Description" xml:space="preserve">
+    <value>Allows the uesr to create a new organization.  An organization is the primary structure to contain resources</value>
+  </data>
+  <data name="CreateOrganizationVM_Help" xml:space="preserve">
+    <value>Please enter information about your organization</value>
+  </data>
+  <data name="CreateOrganizationVM_Title" xml:space="preserve">
+    <value>Create new Organization</value>
+  </data>
+  <data name="ExternalLoginConfirmVM_Title" xml:space="preserve">
+    <value>Confirm External Login</value>
+  </data>
+  <data name="ExternalLoginConfirmVM_Description" xml:space="preserve">
+    <value>Allows the user to confirm their external login</value>
+  </data>
+  <data name="ExternalLoginConfirmVM_Help" xml:space="preserve">
+    <value>Please confirm your external login</value>
+  </data>
+  <data name="ForgotPasswordVM_Description" xml:space="preserve">
+    <value>Allows the user to enter their email address so they can reset their password</value>
+  </data>
+  <data name="ForgotPasswordVM_Help" xml:space="preserve">
+    <value>Please enter your email address, if it matches a record in our system, you will receive an email to reset your password</value>
+  </data>
+  <data name="ForgotPasswordVM_Title" xml:space="preserve">
+    <value>Forgot Password</value>
+  </data>
+  <data name="IndexVM_Description" xml:space="preserve">
+    <value>Allows the user to view settings and manage their account</value>
+  </data>
+  <data name="IndexVM_Help" xml:space="preserve">
+    <value>View Settings and Manage your Account</value>
+  </data>
+  <data name="IndexVM_Title" xml:space="preserve">
+    <value>Manage your Account</value>
+  </data>
+  <data name="InviteUserVM_Description" xml:space="preserve">
+    <value>Allows one user to invite another user to their organization</value>
+  </data>
+  <data name="InviteUserVM_Help" xml:space="preserve">
+    <value>Please enter the users name, email and message to invite them to your organization.</value>
+  </data>
+  <data name="InviteUserVM_Title" xml:space="preserve">
+    <value>Invite a User to your Organization</value>
+  </data>
+  <data name="LocationVM_Description" xml:space="preserve">
+    <value>A location is a structure that can be used to organize your devices.  An organization can be a physical address, a room or even a conceptual entity.</value>
+  </data>
+  <data name="LocationVM_Help" xml:space="preserve">
+    <value>A location is a structure that can be used to organize your devices.  An organization can be a physical address, a room or even a conceptual entity.</value>
+  </data>
+  <data name="LocationVM_Title" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="LoginVM_Description" xml:space="preserve">
+    <value>Allows the user to enter their email address and password so they can login to the system.</value>
+  </data>
+  <data name="LoginVM_Help" xml:space="preserve">
+    <value>Please enter your login information</value>
+  </data>
+  <data name="LoginVM_Title" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="OrganizationDetailsVM_Description" xml:space="preserve">
+    <value>Details about your organization</value>
+  </data>
+  <data name="OrganizationDetailVM_Help" xml:space="preserve">
+    <value>Your Organization Details</value>
+  </data>
+  <data name="OrganizationDetailVM_Title" xml:space="preserve">
+    <value>Organization Details</value>
+  </data>
+  <data name="OrganizationVM_Description" xml:space="preserve">
+    <value>Record used to display a list of organizations</value>
+  </data>
+  <data name="OrganizationVM_Help" xml:space="preserve">
+    <value>Organization Summary</value>
+  </data>
+  <data name="OrganizationVM_Title" xml:space="preserve">
+    <value>Organization Summary</value>
+  </data>
+  <data name="RegisterVM_Description" xml:space="preserve">
+    <value>Allows a new user to register for an account.</value>
+  </data>
+  <data name="RegisterVM_Help" xml:space="preserve">
+    <value>Please register your account information</value>
+  </data>
+  <data name="RegisterVM_Title" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="ResetPassword_Description" xml:space="preserve">
+    <value>Allows a user to reset their password</value>
+  </data>
+  <data name="ResetPassword_Help" xml:space="preserve">
+    <value>Please enter your email address and new password.</value>
+  </data>
+  <data name="ResetPassword_Title" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
+  <data name="SendCodeVM_Description" xml:space="preserve">
+    <value>Sends a two factor authentication code to a secondary device to confirm the users account</value>
+  </data>
+  <data name="SendCodeVM_Help" xml:space="preserve">
+    <value>Send a two factor authentication code to confirm your account.</value>
+  </data>
+  <data name="SendCodeVM_Title" xml:space="preserve">
+    <value>Send Code</value>
+  </data>
+  <data name="SetPasswordVM_Description" xml:space="preserve">
+    <value>Allows the user to add a password to their account.</value>
+  </data>
+  <data name="SetPasswordVM_Help" xml:space="preserve">
+    <value>Please enter a new password, it must be at least 6 characters long.</value>
+  </data>
+  <data name="SetPasswordVM_Title" xml:space="preserve">
+    <value>Set Password</value>
+  </data>
+  <data name="UpdateLocationVM_Help" xml:space="preserve">
+    <value>Update a Location</value>
+  </data>
+  <data name="UpdateLocationVM_Title" xml:space="preserve">
+    <value>Update Location</value>
+  </data>
+  <data name="UpdateLocatoinVM_Description" xml:space="preserve">
+    <value>Allows the user to Update a Location</value>
+  </data>
+  <data name="UpdateOrganizationVM_Description" xml:space="preserve">
+    <value>Allows a user to Update an Organization</value>
+  </data>
+  <data name="UpdateOrganizationVM_Help" xml:space="preserve">
+    <value>Update an Organization</value>
+  </data>
+  <data name="UpdateOrganizationVM_Title" xml:space="preserve">
+    <value>Update Organization</value>
+  </data>
+  <data name="VerifyCodeVM_Description" xml:space="preserve">
+    <value>Verify the two factor authentication code.</value>
+  </data>
+  <data name="VerifyCodeVM_Help" xml:space="preserve">
+    <value>Verify the two factor authentication code.</value>
+  </data>
+  <data name="VerifyCodeVM_Title" xml:space="preserve">
+    <value>Verify Code</value>
+  </data>
+  <data name="VerifyPhoneNumberVM_Description" xml:space="preserve">
+    <value>Allows the uesr to verify their phone number</value>
+  </data>
+  <data name="VerifyPhoneNumberVM_Help" xml:space="preserve">
+    <value>Please Verify your Phone Number</value>
+  </data>
+  <data name="VerifyPhoneNumberVM_Title" xml:space="preserve">
+    <value>Verify Phone Number</value>
+  </data>
+</root>

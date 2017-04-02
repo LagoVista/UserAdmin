@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{68AF24F5-D5E7-40F5-AE0A-594167F89A44}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0D569608-298B-46AE-82D3-8481FE044E10}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F7CF34E1-86A5-4CF6-842B-C6A89DAFDB91}"
+	ProjectSection(SolutionItems) = preProject
+		CreateLocalPackage.ps1 = CreateLocalPackage.ps1
+		nuget.config = nuget.config
+		README.md = README.md
+		UpdateNuspecVersion.ps1 = UpdateNuspecVersion.ps1
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.UserAdmin", "src\LagoVista.UserAdmin\LagoVista.UserAdmin.csproj", "{4561A425-6327-488F-AFE4-4EDC319273E7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.AspNetCore.Identity", "src\LagoVista.AspNetCore.Identity\LagoVista.AspNetCore.Identity.csproj", "{1C1A073C-92C9-441E-AF87-F536073C73D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.UserAdmin.Repos", "src\LagoVista.UserAdmin.Repos\LagoVista.UserAdmin.Repos.csproj", "{52B500CA-BFAF-4BB6-98CC-3B4F4DF24909}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4561A425-6327-488F-AFE4-4EDC319273E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4561A425-6327-488F-AFE4-4EDC319273E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4561A425-6327-488F-AFE4-4EDC319273E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4561A425-6327-488F-AFE4-4EDC319273E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C1A073C-92C9-441E-AF87-F536073C73D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C1A073C-92C9-441E-AF87-F536073C73D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C1A073C-92C9-441E-AF87-F536073C73D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C1A073C-92C9-441E-AF87-F536073C73D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52B500CA-BFAF-4BB6-98CC-3B4F4DF24909}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52B500CA-BFAF-4BB6-98CC-3B4F4DF24909}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52B500CA-BFAF-4BB6-98CC-3B4F4DF24909}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52B500CA-BFAF-4BB6-98CC-3B4F4DF24909}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4561A425-6327-488F-AFE4-4EDC319273E7} = {68AF24F5-D5E7-40F5-AE0A-594167F89A44}
+		{1C1A073C-92C9-441E-AF87-F536073C73D7} = {68AF24F5-D5E7-40F5-AE0A-594167F89A44}
+		{52B500CA-BFAF-4BB6-98CC-3B4F4DF24909} = {68AF24F5-D5E7-40F5-AE0A-594167F89A44}
+	EndGlobalSection
+EndGlobal

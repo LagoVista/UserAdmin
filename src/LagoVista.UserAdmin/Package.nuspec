@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>LagoVista.UserAdmin</id>
+    <version>0.8.10-alpha01008</version>
+    <authors>Software Logistics, LLC</authors>
+    <owners>Software Logistics, LLC</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
+    <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
+    <description>User, Organization and Location Management API for LagoVista IoT and Device Framework</description>
+    <releaseNotes>Initial Unstable Release</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>HomeAutomation IoT</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="10.0.1" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="readme.txt" target="" />
+    <file src="bin\release\netstandard1.2\*.dll" target="lib\netstandard1.2" />
+  </files>
+</package>
