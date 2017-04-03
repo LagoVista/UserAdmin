@@ -11,7 +11,7 @@ namespace LagoVista.UserAdmin.Repos.Account
 {
     public class LocationAccountRepo : TableStorageBase<LocationAccount>, ILocationAccountRepo
     {
-        public LocationAccountRepo(IAppUserManagementSettings settings, ILogger logger) : 
+        public LocationAccountRepo(IUserAdminSettings settings, ILogger logger) : 
             base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
 

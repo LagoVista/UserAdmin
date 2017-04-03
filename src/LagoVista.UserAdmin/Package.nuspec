@@ -5,15 +5,16 @@
     <version>0.8.10-alpha01008</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
+    <title>LagoVista User Administration</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
-    <description>User, Organization and Location Management API for LagoVista IoT and Device Framework</description>
+    <summary>User, Organization and Location Management Models and API for LagoVista IoT, Devices and Home Automation Framework</summary>
+    <description>User, Organization and Location Management Models and API for LagoVista IoT, Devices and Home Automation Framework</description>
     <releaseNotes>Initial Unstable Release</releaseNotes>
-    <copyright>Copyright 2016</copyright>
+    <copyright>Copyright 2017</copyright>
     <tags>HomeAutomation IoT</tags>
     <dependencies>
-      <dependency id="LagoVista.Core" version="0.8.120-alpha01118" />
     </dependencies>
   </metadata>
   <files>

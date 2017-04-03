@@ -12,7 +12,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 {
     public class OrganizationAccountRepo : TableStorageBase<OrganizationAccount>, IOrganizationAccountRepo
     {
-        public OrganizationAccountRepo(IAppUserManagementSettings settings, ILogger logger) : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
+        public OrganizationAccountRepo(IUserAdminSettings settings, ILogger logger) : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
 
         }

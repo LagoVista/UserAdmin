@@ -9,7 +9,7 @@ using LagoVista.UserAdmin.Resources;
 namespace LagoVista.UserAdmin.Models.Orgs
 {
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Location_Title, UserAdminResources.Names.Organization_Location_Help, UserAdminResources.Names.Organization_Location_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class OrganizationLocation : UserManagementBase, INamedEntity, IValidateable
+    public class OrganizationLocation : UserAdminModelBase, INamedEntity, IValidateable
     {
         [FormField(LabelResource: Resources.UserAdminResources.Names.Organization, IsRequired:true, ResourceType: typeof(Resources.UserAdminResources))]
         public EntityHeader Organization { get; set; }

@@ -9,7 +9,7 @@ namespace LagoVista.UserAdmin.Repos.Security
 {
     public class RoleRepo : DocumentDBRepoBase<Role>, IRoleRepo
     {
-        public RoleRepo(IAppUserManagementSettings settings, ILogger logger) : base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger)
+        public RoleRepo(IUserAdminSettings settings, ILogger logger) : base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger)
         {
 
         }

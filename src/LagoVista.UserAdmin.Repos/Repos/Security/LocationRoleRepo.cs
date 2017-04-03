@@ -11,7 +11,7 @@ namespace LagoVista.UserAdmin.Repos.Security
 {
     public class LocationRoleRepo : TableStorageBase<LocationAccountRoles>, ILocationRoleRepo
     {
-        public LocationRoleRepo(IAppUserManagementSettings settings, ILogger logger) :
+        public LocationRoleRepo(IUserAdminSettings settings, ILogger logger) :
             base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
 

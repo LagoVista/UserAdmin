@@ -4,7 +4,7 @@ using System;
 
 namespace LagoVista.UserAdmin.Repos
 {
-    public interface IAppUserManagementSettings
+    public interface IUserAdminSettings
     {
         IConnectionSettings UserStorage { get; }
         IConnectionSettings UserTableStorage { get; }

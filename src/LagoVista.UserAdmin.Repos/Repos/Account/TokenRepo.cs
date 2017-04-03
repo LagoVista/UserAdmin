@@ -8,7 +8,7 @@ namespace LagoVista.UserAdmin.Repos.Account
 {
     public class TokenRepo : TableStorageBase<RefreshToken>, ITokenRepo
     {
-        public TokenRepo(IAppUserManagementSettings settings, ILogger logger) : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
+        public TokenRepo(IUserAdminSettings settings, ILogger logger) : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
 
         }

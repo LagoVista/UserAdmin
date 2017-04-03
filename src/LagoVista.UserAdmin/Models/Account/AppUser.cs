@@ -12,7 +12,7 @@ using LagoVista.UserAdmin.Resources;
 namespace LagoVista.UserAdmin.Models.Account
 {
     [EntityDescription(Domains.UserDomain, UserAdminResources.Names.AppUser_Title, UserAdminResources.Names.AppUser_Help, UserAdminResources.Names.AppUser_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class AppUser : UserManagementBase, INamedEntity, IValidateable, IOwnedEntity
+    public class AppUser : UserAdminModelBase, INamedEntity, IValidateable, IOwnedEntity
     {
 
 

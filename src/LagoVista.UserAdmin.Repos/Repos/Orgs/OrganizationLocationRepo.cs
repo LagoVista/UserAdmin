@@ -15,10 +15,10 @@ namespace LagoVista.UserAdmin.Repos.Orgs
     {
         bool _shouldConsolidateCollections;
 
-        public OrganizationLocationRepo(IAppUserManagementSettings userManagementSettings, ILogger logger) :
-            base(userManagementSettings.UserStorage.Uri, userManagementSettings.UserStorage.AccessKey, userManagementSettings.UserStorage.ResourceName, logger)
+        public OrganizationLocationRepo(IUserAdminSettings userAdminSettings, ILogger logger) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
         {
-            _shouldConsolidateCollections = userManagementSettings.ShouldConsolidateCollections;
+            _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }
 
         protected override bool ShouldConsolidateCollections

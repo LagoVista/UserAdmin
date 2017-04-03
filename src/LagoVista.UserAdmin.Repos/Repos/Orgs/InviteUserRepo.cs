@@ -9,7 +9,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 {
     public class InviteUserRepo : TableStorageBase<Invitation>, IInviteUserRepo
     {
-        public InviteUserRepo(IAppUserManagementSettings settings, ILogger logger) :
+        public InviteUserRepo(IUserAdminSettings settings, ILogger logger) :
             base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
 

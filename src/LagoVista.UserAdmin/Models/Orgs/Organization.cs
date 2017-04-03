@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace LagoVista.UserAdmin.Models.Orgs
 {
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Title, UserAdminResources.Names.Organization_Help, UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class Organization : UserManagementBase, INamedEntity, IValidateable
+    public class Organization : UserAdminModelBase, INamedEntity, IValidateable
     {
         public Organization()
         {

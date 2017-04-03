@@ -7,7 +7,7 @@ using System;
 
 namespace LagoVista.UserAdmin.Models
 {
-    public abstract class UserManagementBase : ModelBase, IIDEntity, IAuditableEntity, INoSQLEntity
+    public abstract class UserAdminModelBase : ModelBase, IIDEntity, IAuditableEntity, INoSQLEntity
     {
         public String EntityType { get; set; }
         public String DatabaseName { get; set; }

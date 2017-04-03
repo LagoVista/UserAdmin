@@ -40,7 +40,9 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<AppUser> GetUserByIdAsync(string id, EntityHeader requestedByUser)
         {
-            return await _appUserRepo.FindByIdAsync(id);
+            var appUser = await _appUserRepo.FindByIdAsync(id);
+            appUser.PasswordHash = null;
+            return appUser;
         }
 
         public Task<IEnumerable<EntityHeader>> SearchUsers(string firstName, string lastName, EntityHeader searchedBy)

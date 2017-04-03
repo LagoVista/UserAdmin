@@ -2,20 +2,21 @@
 <package>
   <metadata>
     <id>LagoVista.AspNetCore.Identity</id>
+    <title>LagoVista ASP.NET Core Identity Provider</title>
     <version>0.8.10-alpha01008</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
-    <description>ASP.NET Core Identity Provider with DocumentDB and Table Storage backend for LagoVista IoT and Device Framework</description>
+    <description>ASP.NET Core Identity Provider with DocumentDB and Table Storage backend for LagoVista IoT, Devices and Home Automation Frameworks</description>
+    <summary>ASP.NET Core Identity Provider with DocumentDB and Table Storage backend for LagoVista IoT, Devices and Home Automation Frameworks</summary>
     <releaseNotes>Initial Unstable Release</releaseNotes>
     <copyright>Copyright 2016</copyright>
     <tags>HomeAutomation IoT</tags>
     <dependencies>
       <dependency id="MailKit" version="1.12.0" />
       <dependency id="Twilio" version="5.2.1-alpha1" />
-      <dependency id="LagoVista.Core" version="0.8.120-alphas01118" />
     </dependencies>
   </metadata>
   <files>
