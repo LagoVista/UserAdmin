@@ -44,23 +44,7 @@ namespace LagoVista.AspNetCore.Identity.Services
                 await client.SendAsync(msg);
                 await client.DisconnectAsync(true);
             }
-
-            /*
-            var client = new System.Net.Mail.SmtpClient(_settings.SmtpServer.Uri, Convert.ToInt32(587));
-            client.Port = 587;
-            client.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
-            client.EnableSsl = true;
-            client.Credentials = new System.Net.NetworkCredential(_settings.SmtpServer.UserName, _settings.SmtpServer.Password);
-
-
-            var mail = new System.Net.Mail.MailMessage(_settings.SmtpFrom, email);
-            mail.IsBodyHtml = true;
-            mail.Subject = subject;
-            mail.Body = body;
-
-            return client.SendMailAsync(mail);*/
-
+           
         }
     }
 }

@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="LagoVista.CloudStorage" Version="0.8.120-alpha01149" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>

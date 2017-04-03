@@ -4,12 +4,10 @@ using System.Threading.Tasks;
 using LagoVista.Core.Models;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
-using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Repos.Account;
 using LagoVista.UserAdmin.Models.Account;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Interfaces;
-using LagoVista.Core.Authentication.Exceptions;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -17,9 +15,7 @@ namespace LagoVista.UserAdmin.Managers
     {
         IAppUserRepo _appUserRepo;
 
-        public AppUserManager(IAppUserRepo appUserRepo, 
-            ILogger logger, 
-            IAppConfig appConfig) : base(logger, appConfig)
+        public AppUserManager(IAppUserRepo appUserRepo, ILogger logger, IAppConfig appConfig) : base(logger, appConfig)
         {
             _appUserRepo = appUserRepo;
         }

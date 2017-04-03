@@ -13,8 +13,8 @@
     <copyright>Copyright 2016</copyright>
     <tags>HomeAutomation IoT</tags>
     <dependencies>
-      <dependency id="Newtonsoft.Json" version="10.0.1" />
       <dependency id="LagoVista.CloudStorage" version="0.8.120-alpha01149" />
+      <dependency id="Microsoft.DependencyInjection.Abstractions" version="1.1.0" />
     </dependencies>
   </metadata>
   <files>

@@ -18,7 +18,6 @@ namespace LagoVista.AspNetCore.Identity.Services
 
         public async Task SendAsync(string number, string contents)
         {
-
             TwilioClient.Init(_settings.SmsServer.AccountId, _settings.SmsServer.AccessKey);
             var restClient = new TwilioRestClient(_settings.SmsServer.AccountId, _settings.SmsServer.AccessKey);
             await MessageResource.CreateAsync(to: new PhoneNumber(number), from: new PhoneNumber(_settings.FromPhoneNumber), body: contents);

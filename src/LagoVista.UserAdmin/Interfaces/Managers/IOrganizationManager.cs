@@ -18,6 +18,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task AddAccountTosync(string accountId, string locationId, EntityHeader addedBy = null);
         Task AddLocationAsync(CreateLocationViewModel newLocation, EntityHeader addedByUser);
         Task CreateNewOrganizationAsync(CreateOrganizationViewModel organizationViewModel, EntityHeader user);
+
         Task DeclineInvitationAsync(String inviteId);
         CreateLocationViewModel GetCreateLocationViewModel(EntityHeader org, EntityHeader user);
         Task<IEnumerable<LocationAccountRoles>> GetAccountRolesForLocationAsync(string locationId, string accountId);
@@ -34,9 +35,11 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<UpdateLocationViewModel> GetUpdateLocationViewModelAsync(string locationId);
         Task<UpdateOrganizationViewModel> GetUpdateOrganizationViewModel(string organizationId);
         Task<Invitation> InviteUserAsync(InviteUserViewModel inviteViewModel, EntityHeader orgEntityHeader, EntityHeader userEntityHeader);
+
         Task<bool> QueryLocationNamespaceInUseAsync(string orgId, string namespaceText);
         Task<bool> QueryOrganizationHasAccountAsync(string orgId, string accountId);
         Task<bool> QueryOrgNamespaceInUseAsync(string namespaceText);
+
         Task RemoveAccountFromLocation(string locationId, string accountId, EntityHeader removedBy);
         Task RemoveAccountFromOrganizationAsync(EntityHeader account, EntityHeader org, EntityHeader removedBy);
         Task RevokeAllRolesForAccountInLocationAsync(EntityHeader location, EntityHeader account, EntityHeader revokedBy);
