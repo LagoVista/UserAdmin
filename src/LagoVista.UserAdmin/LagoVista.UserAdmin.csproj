@@ -1,13 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.8.0</VersionPrefix>
-    <TargetFrameworks>netstandard1.2</TargetFrameworks>
+    <TargetFramework>netstandard1.2</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core" Version="0.8.123-alpha01103" />
-    <PackageReference Include="LagoVista.Core.Authentication" Version="0.8.123-alpha01103" />
+    <PackageReference Include="LagoVista.Core" Version="0.8.123-alpha01157" />
+    <PackageReference Include="LagoVista.Core.Authentication" Version="0.8.123-alpha01157" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
   </ItemGroup>

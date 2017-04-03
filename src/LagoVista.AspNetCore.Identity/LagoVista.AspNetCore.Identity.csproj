@@ -1,16 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.8.0</VersionPrefix>
-    <TargetFrameworks>netcoreapp1.1;netstandard1.6;</TargetFrameworks>
-    <AssemblyName>LagoVista.AspNetCore.Identity</AssemblyName>
-    <PackageId>LagoVista.Web.Identity</PackageId>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
-    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">$(PackageTargetFallback);dnxcore50;portable-net45+win8</PackageTargetFallback>
-    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.6' ">$(PackageTargetFallback);dotnet5.4;portable-net451+netcore451+win81</PackageTargetFallback>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <TargetFramework>netstandard1.6</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,8 +10,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="1.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
     <PackageReference Include="MailKit" Version="1.12.0" />
-    <PackageReference Include="LagoVista.Core" Version="0.8.123-alpha01103" />
-    <PackageReference Include="LagoVista.Core.Authentication" Version="0.8.123-alpha01103" />
+    <PackageReference Include="LagoVista.Core" Version="0.8.123-alpha01157" />
+    <PackageReference Include="LagoVista.Core.Authentication" Version="0.8.123-alpha01157" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,12 +36,4 @@
       <DependentUpon>T4ResourceGenerator.tt</DependentUpon>
     </Compile>
   </ItemGroup>
-
-<!--
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>-->
-
 </Project>
