@@ -14,8 +14,6 @@
     <tags>HomeAutomation IoT</tags>
     <dependencies>
       <dependency id="LagoVista.Core" version="0.8.120-alpha01118" />
-      <dependency id="LagoVista.Authentication" version="0.8.120-alpha01118" />
-      <dependency id="Microsoft.DependencyInjection.Abstractions" version="1.1.0" />
     </dependencies>
   </metadata>
   <files>
