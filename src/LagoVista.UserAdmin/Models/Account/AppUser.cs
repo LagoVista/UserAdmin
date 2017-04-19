@@ -82,6 +82,8 @@ namespace LagoVista.UserAdmin.Models.Account
         [FormField(LabelResource: Resources.UserAdminResources.Names.AppUser_LastName, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]
         public string LastName { get; set; }
 
+        [FormField(LabelResource: Resources.UserAdminResources.Names.AppUser_LastName, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]
+        public bool IsSystemAdmin { get; set; }
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.AppUser_PhoneNumber, FieldType: FieldTypes.Phone, ResourceType: typeof(Resources.UserAdminResources))]
         public string PhoneNumber { get; set; }
