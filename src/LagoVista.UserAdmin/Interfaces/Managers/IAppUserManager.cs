@@ -12,6 +12,8 @@ namespace LagoVista.UserAdmin.Managers
     {
         Task<AppUser> GetUserByIdAsync(String id, EntityHeader requestedByUser);
 
+        Task<AppUser> GetUserByUserNameAsync(string userName, EntityHeader requestedByUser);
+
         Task<InvokeResult> UpdateUserAsync(AppUser user, EntityHeader updatedByUser);
 
         Task<InvokeResult> AddUserAsync(AppUser user, EntityHeader org, EntityHeader updatedByUserId);

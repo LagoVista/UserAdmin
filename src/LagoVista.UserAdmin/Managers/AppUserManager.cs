@@ -45,6 +45,13 @@ namespace LagoVista.UserAdmin.Managers
             return appUser;
         }
 
+        public async Task<AppUser> GetUserByUserNameAsync(string userName, EntityHeader requestedByUser)
+        {
+            var appUser = await _appUserRepo.FindByNameAsync(userName);
+            appUser.PasswordHash = null;
+            return appUser;
+        }
+
         public Task<IEnumerable<EntityHeader>> SearchUsers(string firstName, string lastName, EntityHeader searchedBy)
         {
             throw new NotImplementedException();
