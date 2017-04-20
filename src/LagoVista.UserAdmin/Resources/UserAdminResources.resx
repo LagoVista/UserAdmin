@@ -189,7 +189,7 @@
   <data name="Common_LastUpdatedDate" xml:space="preserve">
     <value>Last Updated</value>
   </data>
-  <data name="Common_Namespce" xml:space="preserve">
+  <data name="Common_Namespace" xml:space="preserve">
     <value>Namespace</value>
   </data>
   <data name="Common_Notes" xml:space="preserve">
@@ -607,5 +607,26 @@
   </data>
   <data name="AppUser_IsSystemAdmin" xml:space="preserve">
     <value>Is System Admin</value>
+  </data>
+  <data name="Common_Key" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="Common_Key_Help" xml:space="preserve">
+    <value>The key is used to identify this item in scripts and must be unique with respect to it's parent. One a key has been assigned, it can not be changed.</value>
+  </data>
+  <data name="Common_Key_Validation" xml:space="preserve">
+    <value>The key must use only letters and numbers, and must be lowercase and must be between 3 and 20 characters.</value>
+  </data>
+  <data name="Subscription_Description" xml:space="preserve">
+    <value>A subscription is used to track usage of compute and storage resources</value>
+  </data>
+  <data name="Subscription_Help" xml:space="preserve">
+    <value>A subscription is used to track usage of compute and storage resources</value>
+  </data>
+  <data name="Subscription_Title" xml:space="preserve">
+    <value>Subscription</value>
+  </data>
+  <data name="Common_Name" xml:space="preserve">
+    <value>Name</value>
   </data>
 </root>

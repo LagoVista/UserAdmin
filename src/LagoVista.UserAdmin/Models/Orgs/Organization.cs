@@ -18,7 +18,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         [FormField(LabelResource:Resources.UserAdminResources.Names.Organization_Name, IsRequired:true,ResourceType:typeof(Resources.UserAdminResources))]
         public string Name { get; set; }
-        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Namespce, NamespaceType: NamespaceTypes.Organization, NamespaceUniqueMessageResource: Resources.UserAdminResources.Names.Organization_NamespaceInUse, FieldType:FieldTypes.NameSpace, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Namespace, NamespaceType: NamespaceTypes.Organization, NamespaceUniqueMessageResource: Resources.UserAdminResources.Names.Organization_NamespaceInUse, FieldType:FieldTypes.NameSpace, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]
         public string Namespace { get; set; }
         [FormField(LabelResource: Resources.UserAdminResources.Names.Organization_WebSite, ResourceType: typeof(Resources.UserAdminResources))]
         public String WebSite { get; set; }

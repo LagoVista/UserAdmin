@@ -13,6 +13,7 @@ namespace LagoVista.UserAdmin
         {
             services.AddTransient<IAppUserManager, AppUserManager>();
             services.AddTransient<IOrganizationManager, OrganizationManager>();
+            services.AddTransient<ISubscriptionManager, SubscriptionManager>();
         }
     }
 }

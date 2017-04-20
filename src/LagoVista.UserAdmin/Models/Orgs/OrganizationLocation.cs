@@ -17,7 +17,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         /// <summary>
         /// Name space to be used for any devices at this location.  It will build upon the accounts name space.
         /// </summary>
-        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Namespce, NamespaceType: NamespaceTypes.Location, NamespaceUniqueMessageResource: Resources.UserAdminResources.Names.OrganizationLocation_NamespaceInUse, FieldType: FieldTypes.NameSpace, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Namespace, NamespaceType: NamespaceTypes.Location, NamespaceUniqueMessageResource: Resources.UserAdminResources.Names.OrganizationLocation_NamespaceInUse, FieldType: FieldTypes.NameSpace, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]
         public String Namespace { get; set; }
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.Location_LocationName, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]

@@ -13,9 +13,9 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
         public string Name { get; set; }
         [FormField(LabelResource: Resources.UserAdminResources.Names.Organization_WebSite, ResourceType: typeof(Resources.UserAdminResources))]
         public String WebSite { get; set; }
-        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Namespce, FieldType: FieldTypes.NameSpace, NamespaceType: NamespaceTypes.Organization, IsRequired: true, NamespaceUniqueMessageResource: Resources.UserAdminResources.Names.Organization_NamespaceInUse, ResourceType: typeof(Resources.UserAdminResources))]
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Namespace, FieldType: FieldTypes.NameSpace, NamespaceType: NamespaceTypes.Organization, IsRequired: true, NamespaceUniqueMessageResource: Resources.UserAdminResources.Names.Organization_NamespaceInUse, ResourceType: typeof(Resources.UserAdminResources))]
         public String Namespace { get; set; }
-        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Namespce, HelpResource: Resources.UserAdminResources.Names.LocationNamespace_Help, NamespaceType: NamespaceTypes.Location, FieldType: FieldTypes.NameSpace, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Namespace, HelpResource: Resources.UserAdminResources.Names.LocationNamespace_Help, NamespaceType: NamespaceTypes.Location, FieldType: FieldTypes.NameSpace, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]
         public String LocationNamespace { get; set; }
 
         public void MapToOrganization(Models.Orgs.Organization organization)

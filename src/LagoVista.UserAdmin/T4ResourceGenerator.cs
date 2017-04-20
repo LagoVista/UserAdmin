@@ -140,15 +140,27 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:Common_Id
 
 		public static string Common_Id { get { return GetResourceString("Common_Id"); } }
+//Resources:UserAdminResources:Common_Key
+
+		public static string Common_Key { get { return GetResourceString("Common_Key"); } }
+//Resources:UserAdminResources:Common_Key_Help
+
+		public static string Common_Key_Help { get { return GetResourceString("Common_Key_Help"); } }
+//Resources:UserAdminResources:Common_Key_Validation
+
+		public static string Common_Key_Validation { get { return GetResourceString("Common_Key_Validation"); } }
 //Resources:UserAdminResources:Common_LastUpdatedBy
 
 		public static string Common_LastUpdatedBy { get { return GetResourceString("Common_LastUpdatedBy"); } }
 //Resources:UserAdminResources:Common_LastUpdatedDate
 
 		public static string Common_LastUpdatedDate { get { return GetResourceString("Common_LastUpdatedDate"); } }
-//Resources:UserAdminResources:Common_Namespce
+//Resources:UserAdminResources:Common_Name
 
-		public static string Common_Namespce { get { return GetResourceString("Common_Namespce"); } }
+		public static string Common_Name { get { return GetResourceString("Common_Name"); } }
+//Resources:UserAdminResources:Common_Namespace
+
+		public static string Common_Namespace { get { return GetResourceString("Common_Namespace"); } }
 //Resources:UserAdminResources:Common_Notes
 
 		public static string Common_Notes { get { return GetResourceString("Common_Notes"); } }
@@ -496,6 +508,15 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:SetPasswordVM_Title
 
 		public static string SetPasswordVM_Title { get { return GetResourceString("SetPasswordVM_Title"); } }
+//Resources:UserAdminResources:Subscription_Description
+
+		public static string Subscription_Description { get { return GetResourceString("Subscription_Description"); } }
+//Resources:UserAdminResources:Subscription_Help
+
+		public static string Subscription_Help { get { return GetResourceString("Subscription_Help"); } }
+//Resources:UserAdminResources:Subscription_Title
+
+		public static string Subscription_Title { get { return GetResourceString("Subscription_Title"); } }
 //Resources:UserAdminResources:Technical_Contact
 
 		public static string Technical_Contact { get { return GetResourceString("Technical_Contact"); } }
@@ -582,9 +603,13 @@ namespace LagoVista.UserAdmin.Resources
 			public const string Common_Description = "Common_Description";
 			public const string Common_EmailAddress = "Common_EmailAddress";
 			public const string Common_Id = "Common_Id";
+			public const string Common_Key = "Common_Key";
+			public const string Common_Key_Help = "Common_Key_Help";
+			public const string Common_Key_Validation = "Common_Key_Validation";
 			public const string Common_LastUpdatedBy = "Common_LastUpdatedBy";
 			public const string Common_LastUpdatedDate = "Common_LastUpdatedDate";
-			public const string Common_Namespce = "Common_Namespce";
+			public const string Common_Name = "Common_Name";
+			public const string Common_Namespace = "Common_Namespace";
 			public const string Common_Notes = "Common_Notes";
 			public const string Common_PhoneNumber = "Common_PhoneNumber";
 			public const string Common_Role = "Common_Role";
@@ -698,6 +723,9 @@ namespace LagoVista.UserAdmin.Resources
 			public const string SetPasswordVM_Description = "SetPasswordVM_Description";
 			public const string SetPasswordVM_Help = "SetPasswordVM_Help";
 			public const string SetPasswordVM_Title = "SetPasswordVM_Title";
+			public const string Subscription_Description = "Subscription_Description";
+			public const string Subscription_Help = "Subscription_Help";
+			public const string Subscription_Title = "Subscription_Title";
 			public const string Technical_Contact = "Technical_Contact";
 			public const string UpdateLocationVM_Help = "UpdateLocationVM_Help";
 			public const string UpdateLocationVM_Title = "UpdateLocationVM_Title";

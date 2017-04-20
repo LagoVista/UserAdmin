@@ -13,7 +13,7 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
         [FormField(FieldType: FieldTypes.Hidden)]
         public String OrganizationId { get; set; }
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Namespce, HelpResource: Resources.UserAdminResources.Names.LocationNamespace_Help, NamespaceType: NamespaceTypes.Location, NamespaceUniqueMessageResource: Resources.UserAdminResources.Names.OrganizationLocation_NamespaceInUse, FieldType: FieldTypes.NameSpace, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Namespace, HelpResource: Resources.UserAdminResources.Names.LocationNamespace_Help, NamespaceType: NamespaceTypes.Location, NamespaceUniqueMessageResource: Resources.UserAdminResources.Names.OrganizationLocation_NamespaceInUse, FieldType: FieldTypes.NameSpace, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]
         public String LocationNamespace { get; set; }
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.Admin_Contact, FieldType: FieldTypes.Picker, PickerType: Constants.PeoplePicker, PickerFor: nameof(AdminContactId), ResourceType: typeof(Resources.UserAdminResources))]
