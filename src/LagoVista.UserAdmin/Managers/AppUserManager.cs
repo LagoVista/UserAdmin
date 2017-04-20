@@ -20,22 +20,34 @@ namespace LagoVista.UserAdmin.Managers
             _appUserRepo = appUserRepo;
         }
 
-        public async Task<InvokeResult> AddUserAsync(AppUser user, EntityHeader org, EntityHeader updatedByUserId)
+        public async Task<InvokeResult> AddUserAsync(AppUser user, EntityHeader org, EntityHeader updatedByUser)
         {
             ValidationCheck(user, Actions.Create);
-            
+
+            await AuthorizeAsync(user, AuthorizeResult.AuthorizeActions.Update, updatedByUser);
+
             await _appUserRepo.CreateAsync(user);
 
-            return default(InvokeResult);
+            return new InvokeResult(); 
+        }
+
+        public async Task<DependentObjectCheckResult> CheckInUse(string id, EntityHeader org, EntityHeader user)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(id);
+            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Read, user, org);
+
+            return await CheckDepenenciesAsync(appUser);
         }
 
         public async Task<InvokeResult> DeleteUserAsync(String  id, EntityHeader deletedByUser)
         {
             var appUser = await _appUserRepo.FindByIdAsync(id);
 
+            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Delete, deletedByUser);      
+
             await _appUserRepo.DeleteAsync(appUser);
 
-            return default(InvokeResult);
+            return new InvokeResult();
         }
 
         public async Task<AppUser> GetUserByIdAsync(string id, EntityHeader requestedByUser)
@@ -59,9 +71,13 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> UpdateUserAsync(AppUser user, EntityHeader updatedByUser)
         {
+            ValidationCheck(user, Actions.Update);
+
+            await AuthorizeAsync(user, AuthorizeResult.AuthorizeActions.Update, updatedByUser);
+
             await _appUserRepo.UpdateAsync(user);
 
-            return default(InvokeResult);
+            return new InvokeResult();
         }
     }
 }

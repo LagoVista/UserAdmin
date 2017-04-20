@@ -12,7 +12,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> AddSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user);
         Task<InvokeResult> DeleteSubscriptionAsync(String id, EntityHeader org, EntityHeader user);
-        Task<bool> CanDeleteSubscriptionAsync(String id, EntityHeader org, EntityHeader user);
+        Task<DependentObjectCheckResult> CheckInUseAsync(String id, EntityHeader org, EntityHeader user);
         Task<Subscription> GetSubscriptionAsync(String id, EntityHeader org, EntityHeader user);
         Task<IEnumerable<SubscriptionSummary>> GetSubscriptionsForOrgAsync(string orgId, EntityHeader user);
         Task<bool> QueryKeyInUse(string key, EntityHeader org);

@@ -47,7 +47,7 @@ namespace LagoVista.UserAdmin.Managers
             ISmsSender smsSender,
             IEmailSender emailSender,
             IAppConfig appConfig,
-            ILogger logger) : base( logger, appConfig)
+            ILogger logger) : base(logger, appConfig)
         {
 
             _appUserRepo = appUserRepo;
@@ -207,7 +207,7 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             var invite = await _inviteUserRepo.GetInviteByOrgIdAndEmailAsync(orgEntityHeader.Id, inviteViewModel.Email);
-            if(invite != null)
+            if (invite != null)
             {
                 invite.Status = Invitation.StatusTypes.Replaced;
                 await _inviteUserRepo.UpdateInvitationAsync(invite);
