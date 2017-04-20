@@ -35,7 +35,7 @@ namespace LagoVista.UserAdmin.Managers
             return authResult.ToActionResult();
         }
 
-        public Task<bool> CanDeleteSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user)
+        public Task<bool> CanDeleteSubscriptionAsync(string id, EntityHeader org, EntityHeader user)
         {
             return Task.FromResult(true);
         }
