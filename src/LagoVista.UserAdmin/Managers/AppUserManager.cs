@@ -15,7 +15,7 @@ namespace LagoVista.UserAdmin.Managers
     {
         IAppUserRepo _appUserRepo;
 
-        public AppUserManager(IAppUserRepo appUserRepo, ILogger logger, IAppConfig appConfig) : base(logger, appConfig)
+        public AppUserManager(IAppUserRepo appUserRepo, IDependencyManager depManager, ISecurity security, ILogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
             _appUserRepo = appUserRepo;
         }
@@ -36,7 +36,7 @@ namespace LagoVista.UserAdmin.Managers
             var appUser = await _appUserRepo.FindByIdAsync(id);
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Read, user, org);
 
-            return await CheckDepenenciesAsync(appUser);
+            return await CheckForDepenenciesAsync(appUser);
         }
 
         public async Task<InvokeResult> DeleteUserAsync(String  id, EntityHeader deletedByUser)

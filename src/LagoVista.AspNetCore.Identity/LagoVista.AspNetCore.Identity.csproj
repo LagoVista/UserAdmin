@@ -10,8 +10,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="1.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
     <PackageReference Include="MailKit" Version="1.14.2" />
-    <PackageReference Include="LagoVista.Core" Version="0.8.140-alpha01197" />
-    <PackageReference Include="LagoVista.Core.Authentication" Version="0.8.140-alpha01197" />
+    <PackageReference Include="LagoVista.Core" Version="0.8.144-alpha00856" />
+    <PackageReference Include="LagoVista.Core.Authentication" Version="0.8.144-alpha00856" />
   </ItemGroup>
 
   <ItemGroup>

@@ -17,7 +17,7 @@ namespace LagoVista.UserAdmin.Managers
     public class SubscriptionManager : ManagerBase, ISubscriptionManager
     {
         ISubscriptionRepo _subscriptionRepo;
-        public SubscriptionManager(ISubscriptionRepo subscriptionRepo, ILogger logger, IAppConfig appConfig) : base(logger, appConfig)
+        public SubscriptionManager(ISubscriptionRepo subscriptionRepo, IDependencyManager depManager, ISecurity security, ILogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
             _subscriptionRepo = subscriptionRepo;
         }
@@ -36,7 +36,7 @@ namespace LagoVista.UserAdmin.Managers
             var subscription = await _subscriptionRepo.GetSubscriptionAsync(id);
             await AuthorizeAsync(subscription, AuthorizeResult.AuthorizeActions.Read, user, org);
 
-            return await CheckDepenenciesAsync(subscription);            
+            return await CheckForDepenenciesAsync(subscription);            
         }
 
         public async Task<InvokeResult> DeleteSubscriptionAsync(String id, EntityHeader org, EntityHeader user)

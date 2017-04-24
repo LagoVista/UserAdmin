@@ -47,7 +47,9 @@ namespace LagoVista.UserAdmin.Managers
             ISmsSender smsSender,
             IEmailSender emailSender,
             IAppConfig appConfig,
-            ILogger logger) : base(logger, appConfig)
+            IDependencyManager depManager,
+            ISecurity security,
+            ILogger logger) : base(logger, appConfig, depManager, security)
         {
 
             _appUserRepo = appUserRepo;
