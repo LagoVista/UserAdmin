@@ -23,7 +23,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Common_Name, FieldType:FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsRequired: true)]
         public string Name { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_Name, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources), IsRequired: true)]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Description, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources), IsRequired: false)]
         public string Description { get; set; }
 
         public SubscriptionSummary CreateSummary()
