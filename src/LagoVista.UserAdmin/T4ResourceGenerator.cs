@@ -113,6 +113,21 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:AppUser_Title
 
 		public static string AppUser_Title { get { return GetResourceString("AppUser_Title"); } }
+//Resources:UserAdminResources:AssetSet_Description
+
+		public static string AssetSet_Description { get { return GetResourceString("AssetSet_Description"); } }
+//Resources:UserAdminResources:AssetSet_Help
+
+		public static string AssetSet_Help { get { return GetResourceString("AssetSet_Help"); } }
+//Resources:UserAdminResources:AssetSet_IsRestricted
+
+		public static string AssetSet_IsRestricted { get { return GetResourceString("AssetSet_IsRestricted"); } }
+//Resources:UserAdminResources:AssetSet_IsRestricted_Help
+
+		public static string AssetSet_IsRestricted_Help { get { return GetResourceString("AssetSet_IsRestricted_Help"); } }
+//Resources:UserAdminResources:AssetSet_Title
+
+		public static string AssetSet_Title { get { return GetResourceString("AssetSet_Title"); } }
 //Resources:UserAdminResources:Billing_Contact
 
 		public static string Billing_Contact { get { return GetResourceString("Billing_Contact"); } }
@@ -517,6 +532,15 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:Subscription_Title
 
 		public static string Subscription_Title { get { return GetResourceString("Subscription_Title"); } }
+//Resources:UserAdminResources:Team_Description
+
+		public static string Team_Description { get { return GetResourceString("Team_Description"); } }
+//Resources:UserAdminResources:Team_Help
+
+		public static string Team_Help { get { return GetResourceString("Team_Help"); } }
+//Resources:UserAdminResources:Team_Title
+
+		public static string Team_Title { get { return GetResourceString("Team_Title"); } }
 //Resources:UserAdminResources:Technical_Contact
 
 		public static string Technical_Contact { get { return GetResourceString("Technical_Contact"); } }
@@ -594,6 +618,11 @@ namespace LagoVista.UserAdmin.Resources
 			public const string AppUser_RememberMe = "AppUser_RememberMe";
 			public const string AppUser_RememberMe_InThisBrowser = "AppUser_RememberMe_InThisBrowser";
 			public const string AppUser_Title = "AppUser_Title";
+			public const string AssetSet_Description = "AssetSet_Description";
+			public const string AssetSet_Help = "AssetSet_Help";
+			public const string AssetSet_IsRestricted = "AssetSet_IsRestricted";
+			public const string AssetSet_IsRestricted_Help = "AssetSet_IsRestricted_Help";
+			public const string AssetSet_Title = "AssetSet_Title";
 			public const string Billing_Contact = "Billing_Contact";
 			public const string ChangePasswordVM_Description = "ChangePasswordVM_Description";
 			public const string ChangePasswordVM_Help = "ChangePasswordVM_Help";
@@ -726,6 +755,9 @@ namespace LagoVista.UserAdmin.Resources
 			public const string Subscription_Description = "Subscription_Description";
 			public const string Subscription_Help = "Subscription_Help";
 			public const string Subscription_Title = "Subscription_Title";
+			public const string Team_Description = "Team_Description";
+			public const string Team_Help = "Team_Help";
+			public const string Team_Title = "Team_Title";
 			public const string Technical_Contact = "Technical_Contact";
 			public const string UpdateLocationVM_Help = "UpdateLocationVM_Help";
 			public const string UpdateLocationVM_Title = "UpdateLocationVM_Title";

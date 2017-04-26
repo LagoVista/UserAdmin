@@ -65,7 +65,7 @@ namespace LagoVista.UserAdmin.Managers
             return await _subscriptionRepo.GetSubscriptionsForOrgAsync(orgId);
         }
 
-        public Task<bool> QueryKeyInUse(string key, EntityHeader org)
+        public Task<bool> QueryKeyInUseAsync(string key, EntityHeader org)
         {
             return _subscriptionRepo.QueryKeyInUse(key, org.Id);
         }

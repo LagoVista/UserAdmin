@@ -629,4 +629,28 @@
   <data name="Common_Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="AssetSet_Description" xml:space="preserve">
+    <value>An Asset Set is used to organizes groups of assets, they are also used to manage security</value>
+  </data>
+  <data name="AssetSet_Help" xml:space="preserve">
+    <value>An Asset Set is used to organizes groups of assets, they are also used to manage security</value>
+  </data>
+  <data name="AssetSet_IsRestricted" xml:space="preserve">
+    <value>Is Restricted</value>
+  </data>
+  <data name="AssetSet_IsRestricted_Help" xml:space="preserve">
+    <value>If your Asset Set is Restricted any Assets that are assigned to this Asset Set are not available by default.  To gain access to assets in a Restricted Asset Group the team or user must have access to the Asset Set.</value>
+  </data>
+  <data name="AssetSet_Title" xml:space="preserve">
+    <value>Asset Set</value>
+  </data>
+  <data name="Team_Description" xml:space="preserve">
+    <value>A Team is used to organize the people within your organization so you can assign permissions to perform tasks as well as assign access to Assset Sets.</value>
+  </data>
+  <data name="Team_Help" xml:space="preserve">
+    <value>A Team is used to organize the people within your organization so you can assign permissions to perform tasks as well as assign access to Assset Sets.</value>
+  </data>
+  <data name="Team_Title" xml:space="preserve">
+    <value>Team</value>
+  </data>
 </root>

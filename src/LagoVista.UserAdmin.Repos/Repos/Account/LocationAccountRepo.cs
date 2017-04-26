@@ -3,7 +3,6 @@ using LagoVista.Core.PlatformSupport;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LagoVista.Core.Models;
-using System;
 using LagoVista.UserAdmin.Models.Account;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 
@@ -27,15 +26,14 @@ namespace LagoVista.UserAdmin.Repos.Account
             return GetByParitionIdAsync(locationId);
         }
 
-        public Task<IEnumerable<LocationAccount>> GetLocationsForAccountAsync(string userId)
+        public Task<IEnumerable<LocationAccount>> GetLocationsForAccountAsync(string accountId)
         {
-            return GetByFilterAsync(FilterOptions.Create("UserId", FilterOptions.Operators.Equals, userId));
+            return GetByFilterAsync(FilterOptions.Create(nameof(LocationAccount.AccountId), FilterOptions.Operators.Equals, accountId));
         }
 
         public async Task RemoveAccountFromLocationAsync(string locationId, string accountId, EntityHeader removedBy)
         {
-            var rowKey =  LocationAccount.CreateRowId(locationId, accountId);
-            var locationAccount = await GetAsync(rowKey);
+            var locationAccount = await GetAsync(LocationAccount.CreateRowId(locationId, accountId));
             await RemoveAsync(locationAccount);
         }
     }
