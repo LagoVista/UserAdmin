@@ -24,7 +24,7 @@ namespace LagoVista.UserAdmin.Managers
         {
             ValidationCheck(user, Actions.Create);
 
-            await AuthorizeAsync(user, AuthorizeResult.AuthorizeActions.Update, updatedByUser);
+            await AuthorizeAsync(user, AuthorizeResult.AuthorizeActions.Update, updatedByUser, org);
 
             await _appUserRepo.CreateAsync(user);
 
@@ -39,11 +39,11 @@ namespace LagoVista.UserAdmin.Managers
             return await CheckForDepenenciesAsync(appUser);
         }
 
-        public async Task<InvokeResult> DeleteUserAsync(String  id, EntityHeader deletedByUser)
+        public async Task<InvokeResult> DeleteUserAsync(String  id, EntityHeader org, EntityHeader deletedByUser)
         {
             var appUser = await _appUserRepo.FindByIdAsync(id);
 
-            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Delete, deletedByUser);      
+            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Delete, deletedByUser, org);      
 
             await _appUserRepo.DeleteAsync(appUser);
 
@@ -69,11 +69,11 @@ namespace LagoVista.UserAdmin.Managers
             throw new NotImplementedException();
         }
 
-        public async Task<InvokeResult> UpdateUserAsync(AppUser user, EntityHeader updatedByUser)
+        public async Task<InvokeResult> UpdateUserAsync(AppUser user, EntityHeader org, EntityHeader updatedByUser)
         {
             ValidationCheck(user, Actions.Update);
 
-            await AuthorizeAsync(user, AuthorizeResult.AuthorizeActions.Update, updatedByUser);
+            await AuthorizeAsync(user, AuthorizeResult.AuthorizeActions.Update, updatedByUser, org);
 
             await _appUserRepo.UpdateAsync(user);
 

@@ -59,7 +59,7 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<DependentObjectCheckResult> CheckInUseAsync(string id, EntityHeader org, EntityHeader user)
         {
             var assetSet = await _assetSetRepo.GetAssetSetAsync(id);
-            await AuthorizeAsync(assetSet, AuthorizeResult.AuthorizeActions.Read, user);
+            await AuthorizeAsync(assetSet, AuthorizeResult.AuthorizeActions.Read, user, org);
             return await CheckForDepenenciesAsync(assetSet);
         }
 
