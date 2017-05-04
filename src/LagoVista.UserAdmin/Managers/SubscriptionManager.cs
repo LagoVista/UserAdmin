@@ -10,7 +10,6 @@ using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Orgs;
 using System.Threading.Tasks;
-using LagoVista.Core.Authentication.Exceptions;
 
 namespace LagoVista.UserAdmin.Managers
 {
