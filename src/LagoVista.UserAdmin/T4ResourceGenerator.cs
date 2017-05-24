@@ -565,6 +565,15 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:User
 
 		public static string User { get { return GetResourceString("User"); } }
+//Resources:UserAdminResources:UserInfo_Description
+
+		public static string UserInfo_Description { get { return GetResourceString("UserInfo_Description"); } }
+//Resources:UserAdminResources:UserInfo_Help
+
+		public static string UserInfo_Help { get { return GetResourceString("UserInfo_Help"); } }
+//Resources:UserAdminResources:UserInfo_Title
+
+		public static string UserInfo_Title { get { return GetResourceString("UserInfo_Title"); } }
 //Resources:UserAdminResources:VerifyCodeVM_Description
 
 		public static string VerifyCodeVM_Description { get { return GetResourceString("VerifyCodeVM_Description"); } }
@@ -766,6 +775,9 @@ namespace LagoVista.UserAdmin.Resources
 			public const string UpdateOrganizationVM_Help = "UpdateOrganizationVM_Help";
 			public const string UpdateOrganizationVM_Title = "UpdateOrganizationVM_Title";
 			public const string User = "User";
+			public const string UserInfo_Description = "UserInfo_Description";
+			public const string UserInfo_Help = "UserInfo_Help";
+			public const string UserInfo_Title = "UserInfo_Title";
 			public const string VerifyCodeVM_Description = "VerifyCodeVM_Description";
 			public const string VerifyCodeVM_Help = "VerifyCodeVM_Help";
 			public const string VerifyCodeVM_Title = "VerifyCodeVM_Title";
