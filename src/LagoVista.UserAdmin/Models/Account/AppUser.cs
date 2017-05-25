@@ -71,7 +71,7 @@ namespace LagoVista.UserAdmin.Models.Account
                 }
                 else
                 {
-                    _email = value.ToUpper();                    
+                    _email = value.ToUpper();
                 }
             }
         }
@@ -114,5 +114,26 @@ namespace LagoVista.UserAdmin.Models.Account
         public bool IsPublic { get; set; }
         public EntityHeader OwnerOrganization { get; set; }
         public EntityHeader OwnerUser { get; set; }
+
+        public UserInfo ToUserInfo()
+        {
+            return new UserInfo()
+            {
+                IsSystemAdmin = IsSystemAdmin,
+                FirstName = FirstName,
+                LastName = LastName,
+                CreatedBy = CreatedBy,
+                CreationDate = CreationDate,
+                CurrentOrganization = CurrentOrganization,
+                Email = Email,
+                EmailConfirmed = EmailConfirmed,
+                Id = Id,
+                LastUpdatedBy = LastUpdatedBy,
+                LastUpdatedDate = LastUpdatedDate,
+                PhoneNumber = PhoneNumber,
+                PhoneNumberConfirmed = PhoneNumberConfirmed,
+                ProfileImageUrl = ProfileImageUrl
+            };
+        }
     }
 }
