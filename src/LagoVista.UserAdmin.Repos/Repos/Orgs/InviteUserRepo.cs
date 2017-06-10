@@ -4,12 +4,13 @@ using LagoVista.Core.PlatformSupport;
 using System.Linq;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Models.Orgs;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
     public class InviteUserRepo : TableStorageBase<Invitation>, IInviteUserRepo
     {
-        public InviteUserRepo(IUserAdminSettings settings, ILogger logger) :
+        public InviteUserRepo(IUserAdminSettings settings, IAdminLogger logger) :
             base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
 

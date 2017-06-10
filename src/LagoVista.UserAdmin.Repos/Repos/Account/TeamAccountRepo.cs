@@ -5,12 +5,13 @@ using LagoVista.UserAdmin.Models.Orgs;
 using System.Threading.Tasks;
 using LagoVista.CloudStorage.Storage;
 using LagoVista.Core.PlatformSupport;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Account
 {
     public class TeamAccountRepo : TableStorageBase<TeamAccount>, ITeamAccountRepo
     {
-        public TeamAccountRepo(IUserAdminSettings settings, ILogger logger) :
+        public TeamAccountRepo(IUserAdminSettings settings, IAdminLogger logger) :
             base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
 

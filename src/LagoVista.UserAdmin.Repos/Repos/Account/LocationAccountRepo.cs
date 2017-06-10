@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models.Account;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Repos.Account
 {
     public class LocationAccountRepo : TableStorageBase<LocationAccount>, ILocationAccountRepo
     {
-        public LocationAccountRepo(IUserAdminSettings settings, ILogger logger) : 
+        public LocationAccountRepo(IUserAdminSettings settings, IAdminLogger logger) : 
             base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
 

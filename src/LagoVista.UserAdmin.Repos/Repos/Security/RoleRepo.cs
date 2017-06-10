@@ -4,12 +4,13 @@ using System.Threading.Tasks;
 using System;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Account;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Repos.Security
 {
     public class RoleRepo : DocumentDBRepoBase<Role>, IRoleRepo
     {
-        public RoleRepo(IUserAdminSettings settings, ILogger logger) : base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger)
+        public RoleRepo(IUserAdminSettings settings, IAdminLogger logger) : base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger)
         {
 
         }

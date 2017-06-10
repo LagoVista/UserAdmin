@@ -7,13 +7,14 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Account
 {
     public class TeamRepo : DocumentDBRepoBase<Team>, ITeamRepo
     {
         bool _shouldConsolidateCollections;
-        public TeamRepo(IUserAdminSettings userAdminSettings, ILogger logger) : 
+        public TeamRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger) : 
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;

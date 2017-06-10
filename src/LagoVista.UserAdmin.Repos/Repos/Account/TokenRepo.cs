@@ -3,12 +3,13 @@ using LagoVista.Core.PlatformSupport;
 using LagoVista.CloudStorage.Storage;
 using LagoVista.Core.Authentication.Models;
 using LagoVista.UserAdmin.Interfaces.Repos;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Repos.Account
 {
     public class TokenRepo : TableStorageBase<RefreshToken>, ITokenRepo
     {
-        public TokenRepo(IUserAdminSettings settings, ILogger logger) : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
+        public TokenRepo(IUserAdminSettings settings, IAdminLogger logger) : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
 
         }

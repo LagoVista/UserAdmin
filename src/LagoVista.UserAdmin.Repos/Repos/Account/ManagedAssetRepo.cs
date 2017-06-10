@@ -5,12 +5,13 @@ using LagoVista.UserAdmin.Models.Security;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Account
 {
     public class ManagedAssetRepo : TableStorageBase<ManagedAsset>, IManagedAssetRepo
     {
-        public ManagedAssetRepo(IUserAdminSettings settings, ILogger logger) :
+        public ManagedAssetRepo(IUserAdminSettings settings, IAdminLogger logger) :
             base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
 

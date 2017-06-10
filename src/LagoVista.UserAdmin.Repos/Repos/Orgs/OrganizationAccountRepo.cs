@@ -7,12 +7,13 @@ using System;
 using LagoVista.CloudStorage.Storage;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
     public class OrganizationAccountRepo : TableStorageBase<OrganizationAccount>, IOrganizationAccountRepo
     {
-        public OrganizationAccountRepo(IUserAdminSettings settings, ILogger logger) : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
+        public OrganizationAccountRepo(IUserAdminSettings settings, IAdminLogger logger) : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
 
         }

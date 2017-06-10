@@ -5,6 +5,7 @@ using LagoVista.UserAdmin.Models.Orgs;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Orgs
 {
@@ -12,7 +13,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
     {
         bool _shouldConsolidateCollections;
 
-        public SubscriptionRepo(IUserAdminSettings userAdminSettings, ILogger logger) : base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
+        public SubscriptionRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger) : base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }

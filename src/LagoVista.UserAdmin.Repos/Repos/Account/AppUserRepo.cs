@@ -1,5 +1,6 @@
 ﻿using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.Core.PlatformSupport;
+using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Account;
 using LagoVista.UserAdmin.Models.Account;
 using System;
@@ -11,7 +12,7 @@ namespace LagoVista.UserAdmin.Repos.Account
     public class AppUserRepo : DocumentDBRepoBase<AppUser>, IAppUserRepo
     {
         bool _shouldConsolidateCollections;
-        public AppUserRepo(IUserAdminSettings userAdminSettings, ILogger logger) : 
+        public AppUserRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger) : 
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;

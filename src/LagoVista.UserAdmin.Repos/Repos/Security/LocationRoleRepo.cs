@@ -6,12 +6,13 @@ using LagoVista.CloudStorage.Storage;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.UserAdmin.Models.Security;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Repos.Security
 {
     public class LocationRoleRepo : TableStorageBase<LocationAccountRoles>, ILocationRoleRepo
     {
-        public LocationRoleRepo(IUserAdminSettings settings, ILogger logger) :
+        public LocationRoleRepo(IUserAdminSettings settings, IAdminLogger logger) :
             base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
 
