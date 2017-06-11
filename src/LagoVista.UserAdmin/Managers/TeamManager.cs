@@ -12,6 +12,7 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.UserAdmin.Interfaces.Repos.Account;
 using static LagoVista.Core.Models.AuthorizeResult;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -21,7 +22,7 @@ namespace LagoVista.UserAdmin.Managers
         ITeamRepo _teamRepo;
         ITeamAccountRepo _teamAccountRepo;
 
-        public TeamManager(IAppUserRepo appUserRepo, ITeamRepo teamRepo, ITeamAccountRepo teamAccountRepo, IDependencyManager depManager, ISecurity security, ILogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
+        public TeamManager(IAppUserRepo appUserRepo, ITeamRepo teamRepo, ITeamAccountRepo teamAccountRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
             _appUserRepo = appUserRepo;
             _teamRepo = teamRepo;

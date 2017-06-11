@@ -9,6 +9,7 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Managers;
 using static LagoVista.Core.Models.AuthorizeResult;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -17,7 +18,7 @@ namespace LagoVista.UserAdmin.Managers
         IAssetSetRepo _assetSetRepo;
         IManagedAssetRepo _managedAssetRepo;
 
-        public AssetSetManager(IAssetSetRepo assetSetRepo, IManagedAssetRepo managedAssetRepo, IDependencyManager depManager, ISecurity security, ILogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
+        public AssetSetManager(IAssetSetRepo assetSetRepo, IManagedAssetRepo managedAssetRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
             _assetSetRepo = assetSetRepo;
             _managedAssetRepo = managedAssetRepo;

@@ -8,6 +8,7 @@ using LagoVista.UserAdmin.Interfaces.Repos.Account;
 using LagoVista.UserAdmin.Models.Account;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Interfaces;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -15,7 +16,7 @@ namespace LagoVista.UserAdmin.Managers
     {
         IAppUserRepo _appUserRepo;
 
-        public AppUserManager(IAppUserRepo appUserRepo, IDependencyManager depManager, ISecurity security, ILogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
+        public AppUserManager(IAppUserRepo appUserRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
             _appUserRepo = appUserRepo;
         }

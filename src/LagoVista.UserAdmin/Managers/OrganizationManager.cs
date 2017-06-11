@@ -17,6 +17,7 @@ using LagoVista.UserAdmin.ViewModels.Organization;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Account;
 using LagoVista.UserAdmin.Models.Security;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -49,7 +50,7 @@ namespace LagoVista.UserAdmin.Managers
             IAppConfig appConfig,
             IDependencyManager depManager,
             ISecurity security,
-            ILogger logger) : base(logger, appConfig, depManager, security)
+            IAdminLogger logger) : base(logger, appConfig, depManager, security)
         {
 
             _appUserRepo = appUserRepo;

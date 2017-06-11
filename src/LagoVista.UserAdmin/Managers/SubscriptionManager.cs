@@ -10,13 +10,14 @@ using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Orgs;
 using System.Threading.Tasks;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Managers
 {
     public class SubscriptionManager : ManagerBase, ISubscriptionManager
     {
         ISubscriptionRepo _subscriptionRepo;
-        public SubscriptionManager(ISubscriptionRepo subscriptionRepo, IDependencyManager depManager, ISecurity security, ILogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
+        public SubscriptionManager(ISubscriptionRepo subscriptionRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
             _subscriptionRepo = subscriptionRepo;
         }
