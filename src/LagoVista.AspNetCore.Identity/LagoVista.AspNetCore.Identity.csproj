@@ -3,14 +3,14 @@
     <TargetFramework>netstandard1.6</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.IoT.Logging" Version="1.2.41-alpha1351" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="1.2.41-alpha1417" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.1" />
     <PackageReference Include="Twilio" Version="5.5.1-alpha1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="1.1.2" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
     <PackageReference Include="MailKit" Version="1.16.1" />
-    <PackageReference Include="LagoVista.Core" Version="1.2.41-alpha1351" />
-    <PackageReference Include="LagoVista.Core.Authentication" Version="1.2.41-alpha1351" />
+    <PackageReference Include="LagoVista.Core" Version="1.2.41-alpha1417" />
+    <PackageReference Include="LagoVista.Core.Authentication" Version="1.2.41-alpha1417" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.1.4" />
   </ItemGroup>
   <ItemGroup>
