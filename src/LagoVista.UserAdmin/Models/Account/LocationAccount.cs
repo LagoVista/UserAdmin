@@ -52,7 +52,7 @@ namespace LagoVista.UserAdmin.Models.Account
 
         public static string CreateRowId(String locationId, String accountId)
         {
-            return "{locationId}.{accountId}";
+            return $"{locationId}.{accountId}";
         }
     }
 }
