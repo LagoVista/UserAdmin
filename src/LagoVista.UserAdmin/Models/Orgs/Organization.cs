@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace LagoVista.UserAdmin.Models.Orgs
 {
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Title, UserAdminResources.Names.Organization_Help, UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class Organization : UserAdminModelBase, INamedEntity, IValidateable
+    public class Organization : UserAdminModelBase, INamedEntity, IValidateable, IOwnedEntity
     {
         public Organization()
         {
@@ -34,6 +34,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader TechnicalContact { get; set; }
         [FormField(LabelResource: Resources.UserAdminResources.Names.Organization_Locations, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]
         public List<EntityHeader> Locations { get; set; }
+        public bool IsPublic { get; set; }
+        public EntityHeader OwnerOrganization { get; set; }
+        public EntityHeader OwnerUser { get; set; }
 
         public EntityHeader ToEntityHeader()
         {

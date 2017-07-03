@@ -10,7 +10,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
         Task<OrganizationAccount> AddAccountUserAsync(OrganizationAccount accountUser);
         Task<IEnumerable<OrganizationAccount>> GetOrganizationsForAccountAsync(string accountId);
         Task<IEnumerable<OrganizationAccount>> GetAccountsForOrganizationAsync(string organizationId);
-        Task RemoveAccountFromOrgAsync(EntityHeader account, EntityHeader org, EntityHeader removedBy);
+        Task RemoveAccountFromOrgAsync(string orgid, string accountid, EntityHeader removedBy);
         Task<bool> QueryOrganizationHasAccountAsync(string organizationId, string accountId);
         Task<bool> QueryOrganizationHasAccountByEmailAsync(string organizationId, string email);
     }

@@ -45,10 +45,10 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             return GetByParitionIdAsync(organizationId);
         }
 
-        public Task RemoveAccountFromOrgAsync(EntityHeader account, EntityHeader org, EntityHeader removedBy)
+        public Task RemoveAccountFromOrgAsync(string orgid, string userid, EntityHeader removedBy)
         {
-            var rowKey = OrganizationAccount.CreateRowKey(org.Id, account.Id);
-            return RemoveAsync(account.Id, rowKey);
+            var rowKey = OrganizationAccount.CreateRowKey(orgid, userid);
+            return RemoveAsync(orgid, rowKey);
         }
 
         public async Task<bool> QueryOrganizationHasAccountByEmailAsync(string organizationId, string email)

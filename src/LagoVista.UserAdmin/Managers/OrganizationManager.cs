@@ -18,6 +18,7 @@ using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Account;
 using LagoVista.UserAdmin.Models.Security;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.Core.Validation;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -74,7 +75,7 @@ namespace LagoVista.UserAdmin.Managers
             return await _organizationRepo.QueryNamespaceInUseAsync(namespaceText);
         }
 
-        public async Task CreateNewOrganizationAsync(CreateOrganizationViewModel organizationViewModel, EntityHeader user)
+        public async Task<InvokeResult> CreateNewOrganizationAsync(CreateOrganizationViewModel organizationViewModel, EntityHeader user)
         {
             ValidationCheck(organizationViewModel, Core.Validation.Actions.Create);
 
@@ -129,9 +130,58 @@ namespace LagoVista.UserAdmin.Managers
             currentUser.Organizations.Add(organization.ToEntityHeader());
 
             await _appUserRepo.UpdateAsync(currentUser);
+
+            return InvokeResult.Success;
         }
 
-        public async Task UpdateOrganizationAsync(UpdateOrganizationViewModel orgViewModel, EntityHeader user)
+        public async Task<InvokeResult> CreateOrganizationAsync(Organization newOrg, EntityHeader userOrg, EntityHeader user)
+        {
+            /* This means that the user is creating the org upon sign up, 
+             * just go ahead and assign this org as the owner org. */
+            if(userOrg == null)
+            {
+                newOrg.OwnerOrganization = newOrg.ToEntityHeader();
+            }
+
+            await AuthorizeAsync(newOrg, AuthorizeResult.AuthorizeActions.Create, user, userOrg);
+            ValidationCheck(newOrg, Core.Validation.Actions.Create);
+            await _organizationRepo.AddOrganizationAsync(newOrg);
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> UpdateOrganizationAsync(Organization org, EntityHeader userOrg, EntityHeader user)
+        {
+            ValidationCheck(org, Core.Validation.Actions.Create);
+            await AuthorizeAsync(org, AuthorizeResult.AuthorizeActions.Update, user, userOrg);
+            await _organizationRepo.AddOrganizationAsync(org);
+
+            await AddAccountToOrgAsync(user, org.ToEntityHeader(), user);
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> CreateLocationAsync(OrganizationLocation location, EntityHeader org, EntityHeader user)
+        {
+            ValidationCheck(location, Core.Validation.Actions.Create);
+            await AuthorizeAsync(location, AuthorizeResult.AuthorizeActions.Create, user, org);
+            await _locationRepo.AddLocationAsync(location);
+
+            
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> UpdateLocationAsync(OrganizationLocation location, EntityHeader org, EntityHeader user)
+        {
+            ValidationCheck(location, Core.Validation.Actions.Create);
+            await AuthorizeAsync(location, AuthorizeResult.AuthorizeActions.Update, user, org);
+            await _locationRepo.UpdateLocationAsync(location);
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> UpdateOrganizationAsync(UpdateOrganizationViewModel orgViewModel, EntityHeader user)
         {
             ValidationCheck(orgViewModel, Core.Validation.Actions.Update);
 
@@ -140,6 +190,8 @@ namespace LagoVista.UserAdmin.Managers
             ConcurrencyCheck(org, orgViewModel.LastUpdatedDate);
 
             await _organizationRepo.UpdateOrganizationAsync(org);
+
+            return InvokeResult.Success;
         }
 
         public async Task<UpdateOrganizationViewModel> GetUpdateOrganizationViewModel(string organizationId)
@@ -155,7 +207,7 @@ namespace LagoVista.UserAdmin.Managers
         #endregion
 
         #region Invite User
-        public async Task AcceptInvitationAsync(AcceptInviteViewModel acceptInviteViewModel, String acceptedUserId)
+        public async Task<InvokeResult> AcceptInvitationAsync(AcceptInviteViewModel acceptInviteViewModel, String acceptedUserId)
         {
             var invite = await _inviteUserRepo.GetInvitationAsync(acceptInviteViewModel.InviteId);
             invite.Accepted = true;
@@ -177,6 +229,8 @@ namespace LagoVista.UserAdmin.Managers
             acceptedUser.Organizations.Add(orgHeader);
 
             await _appUserRepo.UpdateAsync(acceptedUser);
+
+            return InvokeResult.Success;
         }
 
         public async Task RevokeInvitationAsync(String inviteId)
@@ -251,8 +305,9 @@ namespace LagoVista.UserAdmin.Managers
         #endregion
 
         #region Organization Account Methods
-        public async Task AddAccountToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy = null)
+        public async Task<InvokeResult> AddAccountToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy = null)
         {
+            var result = InvokeResult.Success;
             var appUser = await _appUserRepo.FindByIdAsync(userToAdd.Id);
 
             if (await _orgAccountRepo.QueryOrganizationHasAccountAsync(org.Id, userToAdd.Id))
@@ -276,7 +331,45 @@ namespace LagoVista.UserAdmin.Managers
             accountUser.LastUpdatedById = appUser.Id;
             accountUser.LastUpdatedDate = accountUser.CreationDate;
             await _orgAccountRepo.AddAccountUserAsync(accountUser);
+
+            return result;
         }
+
+        public async Task<InvokeResult> AddAccountToOrgAsync(String orgId, String userId, EntityHeader addedBy)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(userId);
+
+            var org = await _organizationRepo.GetOrganizationAsync(orgId);
+
+
+            await AuthorizeOrgAccess(addedBy, org.ToEntityHeader(), typeof(OrganizationAccount));
+
+            if (await _orgAccountRepo.QueryOrganizationHasAccountAsync(orgId, userId))
+            {
+                var result = new InvokeResult();
+                result.Errors.Add(new ErrorMessage(UserAdminResources.OrganizationAccount_UserExists.Replace(Tokens.USERS_FULL_NAME, appUser.Name).Replace(Tokens.ORG_NAME, org.Name)));
+                return result;
+            }
+
+            var accountUser = new OrganizationAccount(org.Id, userId)
+            {
+                Email = appUser.Email,
+                OrganizationName = org.Name,
+                AccountName = appUser.Name,
+                ProfileImageUrl = appUser.ProfileImageUrl.ImageUrl,
+            };
+
+            accountUser.CreatedBy = addedBy.Text;
+            accountUser.CreatedById = addedBy.Text;
+            accountUser.CreationDate = DateTime.Now.ToJSONString();
+            accountUser.LastUpdatedBy = appUser.Name;
+            accountUser.LastUpdatedById = appUser.Id;
+            accountUser.LastUpdatedDate = accountUser.CreationDate;
+            await _orgAccountRepo.AddAccountUserAsync(accountUser);
+
+            return InvokeResult.Success;
+        }
+
 
         public Task<IEnumerable<OrganizationAccount>> GetAccountsForOrganizationsAsync(string orgId)
         {
@@ -288,9 +381,11 @@ namespace LagoVista.UserAdmin.Managers
             return _orgAccountRepo.GetOrganizationsForAccountAsync(accountId);
         }
 
-        public Task RemoveAccountFromOrganizationAsync(EntityHeader account, EntityHeader org, EntityHeader removedBy)
+        public async Task<InvokeResult> RemoveAccountFromOrganizationAsync(string orgId, string userId, EntityHeader removedBy)
         {
-            return _orgAccountRepo.RemoveAccountFromOrgAsync(account, org, removedBy);
+            await _orgAccountRepo.RemoveAccountFromOrgAsync(orgId, userId, removedBy);
+            return InvokeResult.Success;
+
         }
 
         public Task<bool> QueryOrganizationHasAccountAsync(string orgId, string accountId)
@@ -310,7 +405,7 @@ namespace LagoVista.UserAdmin.Managers
             return (await _locationRepo.GetOrganizationLocationAsync(orgId)).ToList();
         }
 
-        public async Task AddLocationAsync(CreateLocationViewModel newLocation, EntityHeader addedByUser)
+        public async Task<InvokeResult> AddLocationAsync(CreateLocationViewModel newLocation, EntityHeader addedByUser)
         {
             ValidationCheck(newLocation, Core.Validation.Actions.Create);
 
@@ -327,6 +422,8 @@ namespace LagoVista.UserAdmin.Managers
             SetCreatedBy(location, addedByUser);
 
             await _locationRepo.AddLocationAsync(location);
+
+            return InvokeResult.Success;
         }
 
         public CreateLocationViewModel GetCreateLocationViewModel(EntityHeader org, EntityHeader user)
@@ -340,7 +437,7 @@ namespace LagoVista.UserAdmin.Managers
             return UpdateLocationViewModel.CreateForOrganizationLocation(location);
         }
 
-        public async Task UpdateLocationAsync(UpdateLocationViewModel location, EntityHeader user)
+        public async Task<InvokeResult> UpdateLocationAsync(UpdateLocationViewModel location, EntityHeader user)
         {
             ValidationCheck(location, Core.Validation.Actions.Update);
 
@@ -349,6 +446,8 @@ namespace LagoVista.UserAdmin.Managers
             SetLastUpdated(locationFromStorage, user);
 
             await _locationRepo.UpdateLocationAsync(locationFromStorage);
+
+            return InvokeResult.Success;
         }
 
         public Task<OrganizationAccountRoles> AddAccountRoleForOrgAsync(EntityHeader location, EntityHeader account, EntityHeader role, EntityHeader addedBy)
@@ -378,7 +477,7 @@ namespace LagoVista.UserAdmin.Managers
         #endregion
 
         #region Location Account
-        public async Task AddAccountTosync(String accountId, String locationId, EntityHeader addedBy = null)
+        public async Task<InvokeResult> AddAccountToLocationAsync(String accountId, String locationId, EntityHeader addedBy = null)
         {
             var appUser = await _appUserRepo.FindByIdAsync(accountId);
             var location = await _locationRepo.GetLocationAsync(locationId);
@@ -389,6 +488,8 @@ namespace LagoVista.UserAdmin.Managers
             };
 
             await _locationAccountRepo.AddAccountToLocationAsync(locationAccount);
+
+            return InvokeResult.Success;
         }
 
         public Task GetAccountsForLocationAsync(String locationId)
@@ -401,9 +502,11 @@ namespace LagoVista.UserAdmin.Managers
             return _locationAccountRepo.GetLocationsForAccountAsync(accountId);
         }
 
-        public Task RemoveAccountFromLocation(String locationId, String accountId, EntityHeader removedBy)
+        public async Task<InvokeResult> RemoveAccountFromLocation(String locationId, String accountId, EntityHeader removedBy)
         {
-            return _locationAccountRepo.RemoveAccountFromLocationAsync(locationId, accountId, removedBy);
+            await _locationAccountRepo.RemoveAccountFromLocationAsync(locationId, accountId, removedBy);
+
+            return InvokeResult.Success;
         }
 
         public Task<LocationAccountRoles> AddAccountRoleForLocationAsync(EntityHeader location, EntityHeader account, EntityHeader role, EntityHeader addedBy)
