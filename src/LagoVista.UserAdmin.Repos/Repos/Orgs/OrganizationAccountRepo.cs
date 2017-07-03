@@ -25,7 +25,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 
         public async Task<bool> QueryOrganizationHasAccountAsync(string orgId, string accountId)
         {
-            return (await base.GetAsync(OrganizationAccount.CreateRowKey(orgId, accountId))) != null;
+            return (await base.GetAsync(orgId, OrganizationAccount.CreateRowKey(orgId, accountId),false)) != null;
         }
 
         public async Task<OrganizationAccount> AddAccountUserAsync(OrganizationAccount accountUser)
