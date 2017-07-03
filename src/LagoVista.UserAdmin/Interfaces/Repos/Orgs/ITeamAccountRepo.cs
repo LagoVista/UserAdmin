@@ -8,7 +8,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
 {
     public interface ITeamAccountRepo
     {
-        Task AddTeamMemberAsync(TeamAccount newMember);
+        Task AddTeamMemberAsync(TeamUser newMember);
         Task RemoveMemberAsync(String teamId, string memberId);
 
         Task<IEnumerable<TeamAccountSummary>> GetTeamMembersAsync(String teamId);

@@ -60,7 +60,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<IEnumerable<SubscriptionSummary>> GetSubscriptionsForOrgAsync(string orgId, EntityHeader user)
         {
-            await AuthorizeOrgAccess(user, orgId, typeof(SubscriptionSummary));
+            await AuthorizeOrgAccessAsync(user, orgId, typeof(SubscriptionSummary));
 
             return await _subscriptionRepo.GetSubscriptionsForOrgAsync(orgId);
         }

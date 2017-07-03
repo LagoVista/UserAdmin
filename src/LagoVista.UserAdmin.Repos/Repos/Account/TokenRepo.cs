@@ -14,7 +14,6 @@ namespace LagoVista.UserAdmin.Repos.Account
 
         }
 
-        private const string REFRESH_TOKENS = "RefreshTokens";
         
         public Task<RefreshToken> GetRefreshTokenAsync(string tokenId, string userId)
         {

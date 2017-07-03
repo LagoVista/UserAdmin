@@ -9,22 +9,22 @@ using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Account
 {
-    public class TeamAccountRepo : TableStorageBase<TeamAccount>, ITeamAccountRepo
+    public class TeamUserRepo : TableStorageBase<TeamUser>, ITeamAccountRepo
     {
-        public TeamAccountRepo(IUserAdminSettings settings, IAdminLogger logger) :
+        public TeamUserRepo(IUserAdminSettings settings, IAdminLogger logger) :
             base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
 
         }
 
-        public Task AddTeamMemberAsync(TeamAccount newMember)
+        public Task AddTeamMemberAsync(TeamUser newMember)
         {
             return InsertAsync(newMember);
         }
 
-        public async Task<IEnumerable<TeamSummary>> GetMembersTeamsAsync(string accountId)
+        public async Task<IEnumerable<TeamSummary>> GetMembersTeamsAsync(string userId)
         {
-            var teams = await  GetByFilterAsync(FilterOptions.Create(nameof(TeamAccount.AccountId), FilterOptions.Operators.Equals, accountId));
+            var teams = await  GetByFilterAsync(FilterOptions.Create(nameof(TeamUser.UserId), FilterOptions.Operators.Equals, userId));
             return from team in teams
                    select new TeamSummary(){Id = team.TeamId,Name = team.TeamName};
         }
@@ -38,7 +38,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
 
         public async Task RemoveMemberAsync(string teamId, string memberId)
         {
-            var rowKey = TeamAccount.CreateRowKey(teamId, memberId);
+            var rowKey = TeamUser.CreateRowKey(teamId, memberId);
             var locationAccount = await GetAsync(rowKey);
             await RemoveAsync(locationAccount);
         }

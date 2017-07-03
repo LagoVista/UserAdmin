@@ -51,15 +51,17 @@ namespace LagoVista.UserAdmin.Managers
             return new InvokeResult();
         }
 
-        public async Task<AppUser> GetUserByIdAsync(string id, EntityHeader requestedByUser)
+        public async Task<AppUser> GetUserByIdAsync(string id, EntityHeader org, EntityHeader requestedByUser)
         {
             var appUser = await _appUserRepo.FindByIdAsync(id);
             appUser.PasswordHash = null;
+            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Read, requestedByUser, org);
             return appUser;
         }
 
-        public async Task<AppUser> GetUserByUserNameAsync(string userName, EntityHeader requestedByUser)
+        public async Task<AppUser> GetUserByUserNameAsync(string userName, EntityHeader org, EntityHeader requestedByUser)
         {
+            await AuthorizeOrgAccessAsync(requestedByUser, org, typeof(AppUser), Actions.Read);
             var appUser = await _appUserRepo.FindByNameAsync(userName);
             appUser.PasswordHash = null;
             return appUser;

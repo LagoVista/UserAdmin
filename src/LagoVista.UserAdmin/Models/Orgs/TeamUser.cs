@@ -7,25 +7,25 @@ using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
-    public class TeamAccount : TableStorageEntity, IValidateable, ITableStorageAuditableEntity
+    public class TeamUser : TableStorageEntity, IValidateable, ITableStorageAuditableEntity
     {
-        public TeamAccount(EntityHeader team, EntityHeader account)
+        public TeamUser(EntityHeader team, EntityHeader account)
         {
             RowKey = CreateRowKey(team, account);
             PartitionKey = $"{team.Id}";
-            AccountId = account.Id;
+            UserId = account.Id;
             AccountName = account.Text;
             TeamId = team.Id;
             TeamName = team.Text;
         }
 
-        public TeamAccount()
+        public TeamUser()
         {
 
         }
 
 
-        public String AccountId { get; set; }
+        public String UserId { get; set; }
 
         public String AccountName { get; set; }
 
@@ -56,7 +56,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         {
             return new TeamAccountSummary()
             {
-                Id = AccountId,
+                Id = UserId,
                 Name = AccountName,
                 ProfileImageUrl = ProfileImageUrl,
             };

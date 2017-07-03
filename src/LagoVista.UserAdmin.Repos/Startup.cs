@@ -30,7 +30,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<IRoleRepo, RoleRepo>();
             services.AddTransient<ISubscriptionRepo,SubscriptionRepo>();
             services.AddTransient<ITeamRepo, TeamRepo>();
-            services.AddTransient<ITeamAccountRepo, TeamAccountRepo>();
+            services.AddTransient<ITeamAccountRepo, TeamUserRepo>();
             services.AddTransient<IAssetSetRepo, AssetSetRepo>();
             services.AddTransient<IManagedAssetRepo, ManagedAssetRepo>();
         }

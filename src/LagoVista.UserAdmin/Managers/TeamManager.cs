@@ -63,7 +63,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<IEnumerable<TeamSummary>> GetTeamsForOrgAsync(string orgId, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeOrgAccess(user, orgId, typeof(Team));
+            await AuthorizeOrgAccessAsync(user, orgId, typeof(Team));
             return await _teamRepo.GetTeamsForOrgAsync(orgId);
         }
 
@@ -82,7 +82,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public async  Task<IEnumerable<TeamAccountSummary>> GetMembersForTeamAsync(string teamId, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeOrgAccess(user, org.Id, typeof(Team));
+            await AuthorizeOrgAccessAsync(user, org.Id, typeof(Team));
             return await _teamAccountRepo.GetTeamMembersAsync(teamId);
         }    
 
@@ -91,7 +91,7 @@ namespace LagoVista.UserAdmin.Managers
             var team = await _teamRepo.GetTeamAsync(teamId);
             await AuthorizeAsync(team, AuthorizeResult.AuthorizeActions.Update, addedByMemberId, org);
             var member = await _appUserRepo.FindByIdAsync(accountId);
-            var teamMember = new TeamAccount(team.ToEntityHeader(), member.ToEntityHeader());
+            var teamMember = new TeamUser(team.ToEntityHeader(), member.ToEntityHeader());
             await _teamAccountRepo.AddTeamMemberAsync(teamMember);
             return InvokeResult.Success;
         }        

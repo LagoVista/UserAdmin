@@ -71,7 +71,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<IEnumerable<AssetSetSummary>> GetAssetSetsForOrgAsync(string orgId, EntityHeader user)
         {
-            await AuthorizeOrgAccess(user, orgId, typeof(AssetSet));
+            await AuthorizeOrgAccessAsync(user, orgId, typeof(AssetSet));
             return await _assetSetRepo.GetAssetSetsForOrgAsync(orgId);
         }
 
@@ -79,7 +79,7 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<IEnumerable<AssetSetSummary>> GetAssetSetsForManagedAssetAsync(string assetId, EntityHeader org, EntityHeader user)
         {
             /* It's either all objects or none. */
-            await AuthorizeOrgAccess(user, org.Id, typeof(ManagedAsset));
+            await AuthorizeOrgAccessAsync(user, org.Id, typeof(ManagedAsset));
             return await _managedAssetRepo.GetAssetSetsForManagedAssetAsync(assetId);
         }
 

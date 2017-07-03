@@ -10,9 +10,9 @@ namespace LagoVista.UserAdmin.Managers
 {
     public interface IAppUserManager
     {
-        Task<AppUser> GetUserByIdAsync(String id, EntityHeader user);
+        Task<AppUser> GetUserByIdAsync(String id, EntityHeader org, EntityHeader user);
 
-        Task<AppUser> GetUserByUserNameAsync(string userName, EntityHeader user);
+        Task<AppUser> GetUserByUserNameAsync(string userName, EntityHeader org, EntityHeader user);
 
         Task<DependentObjectCheckResult> CheckInUse(string id, EntityHeader org, EntityHeader user);
 

@@ -23,7 +23,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             return GetByParitionIdAsync(accountId);
         }
 
-        public async Task<bool> QueryOrganizationHasAccountAsync(string orgId, string accountId)
+        public async Task<bool> QueryOrganizationHasUserAsync(string orgId, string accountId)
         {
             return (await base.GetAsync(orgId, OrganizationAccount.CreateRowKey(orgId, accountId),false)) != null;
         }

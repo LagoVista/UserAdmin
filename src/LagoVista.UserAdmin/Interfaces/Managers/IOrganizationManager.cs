@@ -12,7 +12,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 {
     public interface IOrganizationManager
     {
-        Task<InvokeResult> AddAccountToOrgAsync(String orgId, String userId, EntityHeader addedBy);
+        Task<InvokeResult> AddAccountToOrgAsync(String orgId, String userId, EntityHeader userOrg, EntityHeader addedBy);
         Task<InvokeResult> CreateOrganizationAsync(Organization newOrg, EntityHeader userOrg, EntityHeader user);
         Task<InvokeResult> UpdateOrganizationAsync(Organization org, EntityHeader userOrg, EntityHeader user);
         
@@ -21,46 +21,46 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
 
         Task<InvokeResult> AcceptInvitationAsync(AcceptInviteViewModel acceptInviteViewModel, string acceptedUserId);
-        Task<LocationAccountRoles> AddAccountRoleForLocationAsync(EntityHeader location, EntityHeader account, EntityHeader role, EntityHeader addedBy);
-        Task<OrganizationAccountRoles> AddAccountRoleForOrgAsync(EntityHeader location, EntityHeader account, EntityHeader role, EntityHeader addedBy);
-        Task<InvokeResult> AddAccountToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy = null);
-        Task<InvokeResult> AddAccountToLocationAsync(string accountId, string locationId, EntityHeader addedBy = null);
-        Task<InvokeResult> AddLocationAsync(CreateLocationViewModel newLocation, EntityHeader addedByUser);
+        Task<InvokeResult> AddAccountRoleForLocationAsync(EntityHeader location, EntityHeader user, EntityHeader role, EntityHeader org, EntityHeader addedBy);
+        Task<InvokeResult> AddAccountToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy);
+        Task<InvokeResult> AddAccountToLocationAsync(string userId, string locationId, EntityHeader org, EntityHeader addedBy);
+        Task<InvokeResult> AddAccountRoleForOrgAsync(EntityHeader org, EntityHeader user, EntityHeader role, EntityHeader addedByOrg, EntityHeader addedBy);
+        Task<InvokeResult> AddLocationAsync(CreateLocationViewModel newLocation, EntityHeader org,  EntityHeader user);
         Task<InvokeResult> CreateNewOrganizationAsync(CreateOrganizationViewModel organizationViewModel, EntityHeader user);
 
         Task DeclineInvitationAsync(String inviteId);
         CreateLocationViewModel GetCreateLocationViewModel(EntityHeader org, EntityHeader user);
-        Task<IEnumerable<LocationAccountRoles>> GetAccountRolesForLocationAsync(string locationId, string accountId);
-        Task<IEnumerable<OrganizationAccountRoles>> GetAccountRolesForOrgAsync(string orgId, string accountId);
-        Task GetAccountsForLocationAsync(string locationId);
-        Task<IEnumerable<OrganizationAccount>> GetAccountsForOrganizationsAsync(string orgId);
-        Task<IEnumerable<LocationAccountRoles>> GetAccountsForRoleInLocationAsync(string locationId, string roleId);
-        Task<IEnumerable<OrganizationAccountRoles>> GetAccountsForRoleInOrgAsync(string orgId, string roleId);
+        Task<IEnumerable<LocationUserRole>> GetAccountRolesForLocationAsync(string locationId, string userId, EntityHeader org, EntityHeader user);
+        Task<IEnumerable<OrganizationUserRole>> GetAccountRolesForOrgAsync(string orgId, string userId, EntityHeader org, EntityHeader user);
+        Task<IEnumerable<LocationAccount>> GetAccountsForLocationAsync(string locationId, EntityHeader org, EntityHeader user);
+        Task<IEnumerable<OrganizationAccount>> GetUsersForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user);
+        Task<IEnumerable<LocationUserRole>> GetAccountsForRoleInLocationAsync(string locationId, string roleId, EntityHeader org, EntityHeader user);
+        Task<IEnumerable<OrganizationUserRole>> GetAccountsForRoleInOrgAsync(string orgId, string roleId, EntityHeader org, EntityHeader user);
         Task<AcceptInviteViewModel> GetInviteViewModelAsync(string inviteId);
-        Task<IEnumerable<OrganizationLocation>> GetLocationsForOrganizationsAsync(String orgId);
-        Task<IEnumerable<LocationAccount>> GetLocationsForAccountAsync(string accountId);
-        Task<Organization> GetOrganizationAsync(string organizationId);
-        Task<IEnumerable<OrganizationAccount>> GetOrganizationsForAccountAsync(string accountId);
-        Task<UpdateLocationViewModel> GetUpdateLocationViewModelAsync(string locationId);
-        Task<UpdateOrganizationViewModel> GetUpdateOrganizationViewModel(string organizationId);
-        Task<Invitation> InviteUserAsync(InviteUserViewModel inviteViewModel, EntityHeader orgEntityHeader, EntityHeader userEntityHeader);
+        Task<IEnumerable<OrganizationLocation>> GetLocationsForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user);
+        Task<IEnumerable<LocationAccount>> GetLocationsForAccountAsync(string userId, EntityHeader org, EntityHeader user);
+        Task<Organization> GetOrganizationAsync(string organizationId, EntityHeader org, EntityHeader user);
+        Task<IEnumerable<OrganizationAccount>> GetOrganizationsForAccountAsync(string userId, EntityHeader org, EntityHeader user);
+        Task<UpdateLocationViewModel> GetUpdateLocationViewModelAsync(string locationId, EntityHeader org, EntityHeader user);
+        Task<UpdateOrganizationViewModel> GetUpdateOrganizationViewModel(string organizationId, EntityHeader org, EntityHeader user);
+        Task<InvokeResult<Invitation>> InviteUserAsync(InviteUserViewModel inviteViewModel, EntityHeader orgEntityHeader, EntityHeader userEntityHeader);
 
         Task<bool> QueryLocationNamespaceInUseAsync(string orgId, string namespaceText);
-        Task<bool> QueryOrganizationHasAccountAsync(string orgId, string accountId);
+        Task<bool> QueryOrganizationHasAccountAsync(string orgId, string userId, EntityHeader org, EntityHeader user);
         Task<bool> QueryOrgNamespaceInUseAsync(string namespaceText);
 
-        Task<InvokeResult> RemoveAccountFromLocation(string locationId, string accountId, EntityHeader removedBy);
-        Task<InvokeResult> RemoveAccountFromOrganizationAsync(string orgId, string accountId, EntityHeader removedBy);
+        Task<InvokeResult> RemoveAccountFromLocationAsync(String locationId, String userId, EntityHeader org, EntityHeader removedBy);
+        Task<InvokeResult> RemoveUserFromOrganizationAsync(string orgId, string userId, EntityHeader org, EntityHeader removedBy);
 
 
-        Task RevokeAllRolesForAccountInLocationAsync(EntityHeader location, EntityHeader account, EntityHeader revokedBy);
-        Task RevokeAllRolesForAccountInOrgAsync(EntityHeader org, EntityHeader account, EntityHeader revokedBy);
-        Task RevokeRoleForAccountInLocationAsync(EntityHeader location, EntityHeader role, EntityHeader account, EntityHeader revokedBy);
-        Task RevokeRoleForAccountInOrgAsync(EntityHeader org, EntityHeader role, EntityHeader account, EntityHeader revokedBy);
-        Task RevokeInvitationAsync(String inviteId);
+        Task<InvokeResult> RevokeAllRolesForAccountInLocationAsync(string locationId, string userId, EntityHeader org, EntityHeader revokedBy);
+        Task<InvokeResult> RevokeAllRolesForAccountInOrgAsync(string locationId, string userId, EntityHeader org, EntityHeader revokedBy);
+        Task<InvokeResult> RevokeRoleForAccountInLocationAsync(string locationId, string userId, string roleId, EntityHeader org, EntityHeader revokedBy);
+        Task<InvokeResult> RevokeRoleForAccountInOrgAsync(string orgId, string userId, string roleId, EntityHeader userOrg, EntityHeader revokedBy);
+        Task<InvokeResult> RevokeInvitationAsync(string inviteId, EntityHeader org, EntityHeader user);
 
 
-        Task<InvokeResult> UpdateLocationAsync(UpdateLocationViewModel location, EntityHeader user);
-        Task<InvokeResult> UpdateOrganizationAsync(UpdateOrganizationViewModel orgViewModel, EntityHeader user);
+        Task<InvokeResult> UpdateLocationAsync(UpdateLocationViewModel location, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> UpdateOrganizationAsync(UpdateOrganizationViewModel orgViewModel, EntityHeader org, EntityHeader user);
     }
 }
