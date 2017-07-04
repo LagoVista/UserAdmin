@@ -4,7 +4,7 @@ using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Resources;
 using LagoVista.UserAdmin.Models;
 
-namespace LagoVista.UserAdmin.ViewModels.Account
+namespace LagoVista.UserAdmin.ViewModels.Users
 {
     [EntityDescription(Domains.UserViewModels, UserAdminResources.Names.RegisterVM_Title, UserAdminResources.Names.RegisterVM_Help, UserAdminResources.Names.RegisterVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class RegisterViewModel : IValidateable

@@ -4,7 +4,7 @@ using LagoVista.UserAdmin.Resources;
 using System.Collections.Generic;
 
 
-namespace LagoVista.UserAdmin.ViewModels.Account
+namespace LagoVista.UserAdmin.ViewModels.Users
 {
     [EntityDescription(Domains.SecurityViewModels, UserAdminResources.Names.SendCodeVM_Title, UserAdminResources.Names.SetPasswordVM_Help, UserAdminResources.Names.SendCodeVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class SendCodeViewModel

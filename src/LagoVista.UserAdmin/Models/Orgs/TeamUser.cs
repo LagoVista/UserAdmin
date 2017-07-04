@@ -9,12 +9,12 @@ namespace LagoVista.UserAdmin.Models.Orgs
 {
     public class TeamUser : TableStorageEntity, IValidateable, ITableStorageAuditableEntity
     {
-        public TeamUser(EntityHeader team, EntityHeader account)
+        public TeamUser(EntityHeader team, EntityHeader user)
         {
-            RowKey = CreateRowKey(team, account);
+            RowKey = CreateRowKey(team, user);
             PartitionKey = $"{team.Id}";
-            UserId = account.Id;
-            AccountName = account.Text;
+            UserId = user.Id;
+            UsersName = user.Text;
             TeamId = team.Id;
             TeamName = team.Text;
         }
@@ -27,7 +27,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public String UserId { get; set; }
 
-        public String AccountName { get; set; }
+        public String UsersName { get; set; }
 
         public String TeamId { get; set; }
 
@@ -42,28 +42,28 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public String LastUpdatedById { get; set; }
         public String LastUpdatedDate { get; set; }
 
-        public static String CreateRowKey(EntityHeader team, EntityHeader account)
+        public static String CreateRowKey(EntityHeader team, EntityHeader user)
         {
-            return $"{team.Id}.{account.Id}";
+            return $"{team.Id}.{user.Id}";
         }
 
-        public static String CreateRowKey(string teamId, string accountId)
+        public static String CreateRowKey(string teamId, string userId)
         {
-            return $"{teamId}.{accountId}";
+            return $"{teamId}.{userId}";
         }
 
-        public TeamAccountSummary CreateSummary()
+        public TeamUserSummary CreateSummary()
         {
-            return new TeamAccountSummary()
+            return new TeamUserSummary()
             {
                 Id = UserId,
-                Name = AccountName,
+                Name = UsersName,
                 ProfileImageUrl = ProfileImageUrl,
             };
         }
     }
 
-    public class TeamAccountSummary : SummaryData
+    public class TeamUserSummary : SummaryData
     {
         public string ProfileImageUrl { get; set; }
     }

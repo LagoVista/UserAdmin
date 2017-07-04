@@ -11,24 +11,24 @@ using System.Linq;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
-using LagoVista.UserAdmin.Interfaces.Repos.Account;
+using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Resources;
 using LagoVista.UserAdmin.ViewModels.Organization;
 using LagoVista.UserAdmin.Models.Orgs;
-using LagoVista.UserAdmin.Models.Account;
+using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Models.Security;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Core.Validation;
 
 namespace LagoVista.UserAdmin.Managers
 {
-    public class OrganizationManager : ManagerBase, IOrganizationManager
+    public class OrgManager : ManagerBase, IOrganizationManager
     {
         #region Fields
         readonly IOrganizationRepo _organizationRepo;
-        readonly IOrganizationLocationRepo _locationRepo;
-        readonly IOrganizationAccountRepo _orgAccountRepo;
-        readonly ILocationAccountRepo _locationAccountRepo;
+        readonly IOrgLocationRepo _locationRepo;
+        readonly IOrgUserRepo _orgUserRepo;
+        readonly ILocationUserRepo _locationUserRepo;
         readonly ISmsSender _smsSender;
         readonly IEmailSender _emailSender;
         readonly IInviteUserRepo _inviteUserRepo;
@@ -38,12 +38,12 @@ namespace LagoVista.UserAdmin.Managers
         #endregion
 
         #region Ctor
-        public OrganizationManager(IOrganizationRepo organizationRepo,
-            IOrganizationLocationRepo locationRepo,
-            IOrganizationAccountRepo orgAccountRepo,
+        public OrgManager(IOrganizationRepo organizationRepo,
+            IOrgLocationRepo locationRepo,
+            IOrgUserRepo orgUserRepo,
             IAppUserRepo appUserRepo,
             IInviteUserRepo inviteUserRepo,
-            ILocationAccountRepo locationAccountRepo,
+            ILocationUserRepo locationUserRepo,
             ILocationRoleRepo locationRoleRepo,
             IOrganizationRoleRepo orgRoleRepo,
             ISmsSender smsSender,
@@ -56,9 +56,9 @@ namespace LagoVista.UserAdmin.Managers
 
             _appUserRepo = appUserRepo;
             _organizationRepo = organizationRepo;
-            _orgAccountRepo = orgAccountRepo;
+            _orgUserRepo = orgUserRepo;
             _locationRepo = locationRepo;
-            _locationAccountRepo = locationAccountRepo;
+            _locationUserRepo = locationUserRepo;
 
             _orgRoleRepo = orgRoleRepo;
             _locationRoleRepo = locationRoleRepo;
@@ -85,7 +85,7 @@ namespace LagoVista.UserAdmin.Managers
             if (await _organizationRepo.QueryNamespaceInUseAsync(organizationViewModel.Namespace))
             {
                 result.Errors.Add(new ErrorMessage(UserAdminResources.Organization_NamespaceInUse.Replace(Tokens.NAMESPACE, organizationViewModel.Namespace)));
-                return result;                              
+                return result;
             }
 
             var organization = new Organization();
@@ -97,7 +97,7 @@ namespace LagoVista.UserAdmin.Managers
             organization.AdminContact = user;
             organization.BillingContact = user;
 
-            var location = new OrganizationLocation();
+            var location = new OrgLocation();
             location.SetId();
             organizationViewModel.MapToOrganizationLocation(location);
             location.SetCreationUpdatedFields(user);
@@ -112,11 +112,11 @@ namespace LagoVista.UserAdmin.Managers
             organization.Locations.Add(location.ToEntityHeader());
 
             var currentUser = await _appUserRepo.FindByIdAsync(user.Id);
-            var locationUser = new LocationAccount(organization.Id, location.Id, user.Id)
+            var locationUser = new LocationUser(organization.Id, location.Id, user.Id)
             {
                 Email = currentUser.Email,
                 OrganizationName = organization.Name,
-                AccountName = currentUser.Name,
+                UsersName = currentUser.Name,
                 ProfileImageUrl = currentUser.ProfileImageUrl.ImageUrl,
                 LocationName = location.Name
             };
@@ -125,20 +125,20 @@ namespace LagoVista.UserAdmin.Managers
             /* At this point nothing has been written to storage, would be nice to wrap the following in a transaction...*/
             //TODO: Can we wrap the following in a transaction?
 
-            var addUserResult = await AddAccountToOrgAsync(currentUser.ToEntityHeader(), organization.ToEntityHeader(), currentUser.ToEntityHeader());
-            if(!addUserResult.Successful)
+            var addUserResult = await AddUserToOrgAsync(currentUser.ToEntityHeader(), organization.ToEntityHeader(), currentUser.ToEntityHeader());
+            if (!addUserResult.Successful)
             {
                 return addUserResult;
-            }            
+            }
 
             /* Create the Organization in Storage */
-            await _organizationRepo.AddOrganizationAsync(organization);     
-            
+            await _organizationRepo.AddOrganizationAsync(organization);
+
             /* create the location */
             await _locationRepo.AddLocationAsync(location);
 
-            /* add the account to the location */
-            await _locationAccountRepo.AddAccountToLocationAsync(locationUser);
+            /* add the user to the location */
+            await _locationUserRepo.AddUserToLocationAsync(locationUser);
 
             if (EntityHeader.IsNullOrEmpty(currentUser.CurrentOrganization)) currentUser.CurrentOrganization = organization.ToEntityHeader();
             if (currentUser.Organizations == null) currentUser.Organizations = new List<EntityHeader>();
@@ -179,7 +179,7 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> CreateLocationAsync(OrganizationLocation location, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> CreateLocationAsync(OrgLocation location, EntityHeader org, EntityHeader user)
         {
             ValidationCheck(location, Core.Validation.Actions.Create);
 
@@ -189,7 +189,7 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> UpdateLocationAsync(OrganizationLocation location, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> UpdateLocationAsync(OrgLocation location, EntityHeader org, EntityHeader user)
         {
             ValidationCheck(location, Core.Validation.Actions.Update);
 
@@ -214,17 +214,17 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<UpdateOrganizationViewModel> GetUpdateOrganizationViewModel(string organizationId, EntityHeader userOrg, EntityHeader user)
+        public async Task<UpdateOrganizationViewModel> GetUpdateOrganizationViewModel(string orgId, EntityHeader userOrg, EntityHeader user)
         {
             /* Only gets a view model with the content of the organization, doesn't do any updating */
-            var org = await _organizationRepo.GetOrganizationAsync(organizationId);
+            var org = await _organizationRepo.GetOrganizationAsync(orgId);
             await AuthorizeAsync(org, AuthorizeResult.AuthorizeActions.Update, user, userOrg);
             return UpdateOrganizationViewModel.CreateFromOrg(org);
         }
 
-        public async Task<Organization> GetOrganizationAsync(string organizationId, EntityHeader userOrg, EntityHeader user)
+        public async Task<Organization> GetOrganizationAsync(string orgId, EntityHeader userOrg, EntityHeader user)
         {
-            var org = await _organizationRepo.GetOrganizationAsync(organizationId);
+            var org = await _organizationRepo.GetOrganizationAsync(orgId);
             await AuthorizeAsync(org, AuthorizeResult.AuthorizeActions.Read, user, userOrg);
             return org;
         }
@@ -243,7 +243,7 @@ namespace LagoVista.UserAdmin.Managers
             var invitingUser = EntityHeader.Create(invite.InvitedById, invite.InvitedByName);
             var orgHeader = EntityHeader.Create(invite.OrganizationId, invite.OrganizationName);
 
-            var result = await AddAccountToOrgAsync(acceptedUser.ToEntityHeader(), orgHeader, invitingUser);
+            var result = await AddUserToOrgAsync(acceptedUser.ToEntityHeader(), orgHeader, invitingUser);
             if (!result.Successful)
             {
                 return result;
@@ -289,7 +289,7 @@ namespace LagoVista.UserAdmin.Managers
         {
             var result = new InvokeResult<Invitation>();
 
-            if (await _orgAccountRepo.QueryOrganizationHasAccountByEmailAsync(orgEntityHeader.Id, inviteViewModel.Email))
+            if (await _orgUserRepo.QueryOrgHasUserByEmailAsync(orgEntityHeader.Id, inviteViewModel.Email))
             {
                 var existingUser = await _appUserRepo.FindByEmailAsync(inviteViewModel.Email);
                 var msg = UserAdminResources.InviteUser_AlreadyPartOfOrg.Replace(Tokens.USERS_FULL_NAME, existingUser.Name).Replace(Tokens.EMAIL_ADDR, inviteViewModel.Email);
@@ -340,102 +340,103 @@ namespace LagoVista.UserAdmin.Managers
         }
         #endregion
 
-        #region Organization Account Methods
-        public async Task<InvokeResult> AddAccountToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy)
+        #region Organization User Methods
+        public async Task<InvokeResult> AddUserToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy)
         {
-            await AuthorizeOrgAccessAsync(addedBy, org, typeof(OrganizationAccount), Actions.Create, new SecurityHelper() { OrgId = org.Id, UserId = userToAdd.Id });
+            await AuthorizeOrgAccessAsync(addedBy, org, typeof(OrgUser), Actions.Create, new SecurityHelper() { OrgId = org.Id, UserId = userToAdd.Id });
 
             var result = InvokeResult.Success;
             var appUser = await _appUserRepo.FindByIdAsync(userToAdd.Id);
 
-            if (await _orgAccountRepo.QueryOrganizationHasUserAsync(org.Id, userToAdd.Id))
+            if (await _orgUserRepo.QueryOrgHasUserAsync(org.Id, userToAdd.Id))
             {
-                throw new ValidationException(Resources.UserAdminResources.OrganizationAccount_CouldntAdd, false,
-                    UserAdminResources.OrganizationAccount_UserExists.Replace(Tokens.USERS_FULL_NAME, appUser.Name).Replace(Tokens.ORG_NAME, org.Text));
+                var couldntAddResult = new InvokeResult();
+                couldntAddResult.Errors.Add(new ErrorMessage(UserAdminResources.OrganizationUser_UserExists.Replace(Tokens.USERS_FULL_NAME, appUser.Name).Replace(Tokens.ORG_NAME, org.Text)));
+                return couldntAddResult;
             }
 
-            var accountUser = new OrganizationAccount(org.Id, userToAdd.Id)
+            var user = new OrgUser(org.Id, userToAdd.Id)
             {
                 Email = appUser.Email,
                 OrganizationName = org.Text,
-                AccountName = appUser.Name,
+                UserName = appUser.Name,
                 ProfileImageUrl = appUser.ProfileImageUrl.ImageUrl,
             };
 
-            accountUser.CreatedBy = appUser.Name;
-            accountUser.CreatedById = appUser.Id;
-            accountUser.CreationDate = DateTime.Now.ToJSONString();
-            accountUser.LastUpdatedBy = appUser.Name;
-            accountUser.LastUpdatedById = appUser.Id;
-            accountUser.LastUpdatedDate = accountUser.CreationDate;
+            user.CreatedBy = appUser.Name;
+            user.CreatedById = appUser.Id;
+            user.CreationDate = DateTime.Now.ToJSONString();
+            user.LastUpdatedBy = appUser.Name;
+            user.LastUpdatedById = appUser.Id;
+            user.LastUpdatedDate = user.CreationDate;
 
-            await AuthorizeOrgAccessAsync(addedBy, org, typeof(OrganizationAccount), Actions.Create, accountUser);
+            await AuthorizeOrgAccessAsync(addedBy, org, typeof(OrgUser), Actions.Create, user);
 
-            await _orgAccountRepo.AddAccountUserAsync(accountUser);
+            await _orgUserRepo.AddOrgUserAsync(user);
 
             return result;
         }
 
-        public async Task<InvokeResult> AddAccountToOrgAsync(string orgId, string userId, EntityHeader userOrg, EntityHeader addedBy)
+        public async Task<InvokeResult> AddUserToOrgAsync(string orgId, string userId, EntityHeader userOrg, EntityHeader addedBy)
         {
-            await AuthorizeOrgAccessAsync(addedBy, userOrg, typeof(OrganizationAccount), Actions.Create, new SecurityHelper() { OrgId = orgId, UserId = userId });
+            await AuthorizeOrgAccessAsync(addedBy, userOrg, typeof(OrgUser), Actions.Create, new SecurityHelper() { OrgId = orgId, UserId = userId });
 
             var appUser = await _appUserRepo.FindByIdAsync(userId);
             var org = await _organizationRepo.GetOrganizationAsync(orgId);
 
-            await AuthorizeOrgAccessAsync(addedBy, org.ToEntityHeader(), typeof(OrganizationAccount));
+            await AuthorizeOrgAccessAsync(addedBy, org.ToEntityHeader(), typeof(OrgUser));
 
-            if (await _orgAccountRepo.QueryOrganizationHasUserAsync(orgId, userId))
+            if (await _orgUserRepo.QueryOrgHasUserAsync(orgId, userId))
             {
                 var result = new InvokeResult();
-                result.Errors.Add(new ErrorMessage(UserAdminResources.OrganizationAccount_UserExists.Replace(Tokens.USERS_FULL_NAME, appUser.Name).Replace(Tokens.ORG_NAME, org.Name)));
+                result.Errors.Add(new ErrorMessage(UserAdminResources.OrganizationUser_UserExists.Replace(Tokens.USERS_FULL_NAME, appUser.Name).Replace(Tokens.ORG_NAME, org.Name)));
                 return result;
             }
 
-            var accountUser = new OrganizationAccount(org.Id, userId)
+            var user = new OrgUser(org.Id, userId)
             {
                 Email = appUser.Email,
                 OrganizationName = org.Name,
-                AccountName = appUser.Name,
+                UserName = appUser.Name,
                 ProfileImageUrl = appUser.ProfileImageUrl.ImageUrl,
             };
 
-            accountUser.CreatedBy = addedBy.Text;
-            accountUser.CreatedById = addedBy.Text;
-            accountUser.CreationDate = DateTime.Now.ToJSONString();
-            accountUser.LastUpdatedBy = addedBy.Text;
-            accountUser.LastUpdatedById = addedBy.Id;
-            accountUser.LastUpdatedDate = accountUser.CreationDate;
+            user.CreatedBy = addedBy.Text;
+            user.CreatedById = addedBy.Text;
+            user.CreationDate = DateTime.Now.ToJSONString();
+            user.LastUpdatedBy = addedBy.Text;
+            user.LastUpdatedById = addedBy.Id;
+            user.LastUpdatedDate = user.CreationDate;
 
-            await _orgAccountRepo.AddAccountUserAsync(accountUser);
+            await _orgUserRepo.AddOrgUserAsync(user);
 
             return InvokeResult.Success;
         }
 
-        public async Task<IEnumerable<OrganizationAccount>> GetUsersForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user)
+        public async Task<IEnumerable<OrgUser>> GetUsersForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeOrgAccessAsync(user, org, typeof(OrganizationAccount), Actions.Read, new SecurityHelper() { OrgId = orgId });
-            return await _orgAccountRepo.GetAccountsForOrganizationAsync(orgId);
+            await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Read, new SecurityHelper() { OrgId = orgId });
+            return await _orgUserRepo.GetUsersForOrgAsync(orgId);
         }
 
-        public async Task<IEnumerable<OrganizationAccount>> GetOrganizationsForAccountAsync(string userId, EntityHeader org, EntityHeader user)
+        public async Task<IEnumerable<OrgUser>> GetOrganizationsForUserAsync(string userId, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeOrgAccessAsync(user, org, typeof(OrganizationAccount), Actions.Read, new SecurityHelper { UserId = userId });
-            return await _orgAccountRepo.GetOrganizationsForAccountAsync(userId);
+            await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Read, new SecurityHelper { UserId = userId });
+            return await _orgUserRepo.GetOrgsForUserAsync(userId);
         }
 
         public async Task<InvokeResult> RemoveUserFromOrganizationAsync(string orgId, string userId, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeOrgAccessAsync(user, org, typeof(OrganizationAccount), Actions.Delete, new SecurityHelper { OrgId = orgId, UserId = userId });
-            await _orgAccountRepo.RemoveAccountFromOrgAsync(orgId, userId, user);
+            await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Delete, new SecurityHelper { OrgId = orgId, UserId = userId });
+            await _orgUserRepo.RemoveUserFromOrgAsync(orgId, userId, user);
             return InvokeResult.Success;
 
         }
 
-        public async Task<bool> QueryOrganizationHasAccountAsync(string orgId, string userId, EntityHeader org, EntityHeader user)
+        public async Task<bool> QueryOrganizationHasUserAsync(string orgId, string userId, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeOrgAccessAsync(user, org, typeof(OrganizationAccount), Actions.Read, new SecurityHelper { OrgId = orgId, UserId = userId });
-            return await _orgAccountRepo.QueryOrganizationHasUserAsync(orgId, userId);
+            await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Read, new SecurityHelper { OrgId = orgId, UserId = userId });
+            return await _orgUserRepo.QueryOrgHasUserAsync(orgId, userId);
         }
         #endregion
 
@@ -445,15 +446,15 @@ namespace LagoVista.UserAdmin.Managers
             return await _locationRepo.QueryNamespaceInUseAsync(orgId, namespaceText);
         }
 
-        public async Task<IEnumerable<OrganizationLocation>> GetLocationsForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user)
+        public async Task<IEnumerable<OrgLocation>> GetLocationsForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeOrgAccessAsync(user, org, typeof(OrganizationLocation), Actions.Read, new SecurityHelper { OrgId = orgId });
+            await AuthorizeOrgAccessAsync(user, org, typeof(OrgLocation), Actions.Read, new SecurityHelper { OrgId = orgId });
             return (await _locationRepo.GetOrganizationLocationAsync(orgId)).ToList();
         }
 
         public async Task<InvokeResult> AddLocationAsync(CreateLocationViewModel newLocation, EntityHeader org, EntityHeader user)
         {
-            var location = new OrganizationLocation();
+            var location = new OrgLocation();
             newLocation.MapToOrganizationLocation(location);
 
             location.IsPublic = false;
@@ -473,7 +474,7 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> AddLocationAsync(OrganizationLocation location, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> AddLocationAsync(OrgLocation location, EntityHeader org, EntityHeader user)
         {
             location.IsPublic = false;
             location.OwnerOrganization = org;
@@ -517,7 +518,7 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> AddAccountRoleForOrgAsync(EntityHeader org, EntityHeader user, EntityHeader role, EntityHeader userOrg, EntityHeader addedBy)
+        public async Task<InvokeResult> AddUserRoleForOrgAsync(EntityHeader org, EntityHeader user, EntityHeader role, EntityHeader userOrg, EntityHeader addedBy)
         {
             await AuthorizeOrgAccessAsync(addedBy, userOrg, typeof(OrganizationUserRole), Actions.Create, new SecurityHelper { UserId = user.Id, OrgId = org.Id, RoleId = role.Id });
             var orgUserRole = new OrganizationUserRole(org, user)
@@ -526,7 +527,7 @@ namespace LagoVista.UserAdmin.Managers
                 RoleId = role.Id
             };
 
-            await _orgRoleRepo.AddRoleForAccountAsync(orgUserRole);
+            await _orgRoleRepo.AddRoleForUserAsync(orgUserRole);
 
             return InvokeResult.Success;
         }
@@ -535,14 +536,14 @@ namespace LagoVista.UserAdmin.Managers
         /// Returns roles for a user in an org
         /// </summary>
         /// <param name="orgId"></param>
-        /// <param name="accountId"></param>
+        /// <param name="userId"></param>
         /// <param name="org">Permissions</param>
         /// <param name="user">Permissions</param>
         /// <returns></returns>
-        public async Task<IEnumerable<OrganizationUserRole>> GetAccountRolesForOrgAsync(string orgId, string userId, EntityHeader org, EntityHeader user)
+        public async Task<IEnumerable<OrganizationUserRole>> GetUsersRolesInOrgAsync(string orgId, string userId, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(OrganizationUserRole), Actions.Read, new SecurityHelper { OrgId = orgId, UserId = userId });
-            return await _orgRoleRepo.GetRolesForAccountAsync(userId, orgId);
+            return await _orgRoleRepo.GetRolesForUserAsync(userId, orgId);
         }
 
         /// <summary>
@@ -553,74 +554,74 @@ namespace LagoVista.UserAdmin.Managers
         /// <param name="org">Permissions</param>
         /// <param name="user">Permissions</param>
         /// <returns></returns>
-        public async Task<IEnumerable<OrganizationUserRole>> GetAccountsForRoleInOrgAsync(string orgId, string roleId, EntityHeader org, EntityHeader user)
+        public async Task<IEnumerable<OrganizationUserRole>> GetUserWithRoleInOrgAsync(string orgId, string roleId, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(OrganizationUserRole), Actions.Read, new SecurityHelper { OrgId = orgId, RoleId = roleId });
-            return await _orgRoleRepo.GetAccountsForRoleAsync(orgId, roleId);
+            return await _orgRoleRepo.GetUserForRoleAsync(orgId, roleId);
         }
 
-        public async Task<InvokeResult> RevokeRoleForAccountInOrgAsync(string orgId, string userId, string roleId, EntityHeader userOrg, EntityHeader revokedBy)
+        public async Task<InvokeResult> RevokeRoleForUserInOrgAsync(string orgId, string userId, string roleId, EntityHeader userOrg, EntityHeader revokedBy)
         {
             await AuthorizeOrgAccessAsync(revokedBy, userOrg, typeof(OrganizationUserRole), Actions.Delete, new SecurityHelper { OrgId = orgId, RoleId = roleId, UserId = userId });
-            await _orgRoleRepo.RevokeRoleForAccountInOrgAsync(orgId, userId, roleId);
+            await _orgRoleRepo.RevokeRoleForUserInOrgAsync(orgId, userId, roleId);
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> RevokeAllRolesForAccountInOrgAsync(string orgId, string userId, EntityHeader org, EntityHeader revokedBy)
+        public async Task<InvokeResult> RevokeAllRolesForUserInOrgAsync(string orgId, string userId, EntityHeader org, EntityHeader revokedBy)
         {
             await AuthorizeOrgAccessAsync(revokedBy, org, typeof(OrganizationUserRole), Actions.Delete, new SecurityHelper { OrgId = orgId, UserId = userId });
-            await _orgRoleRepo.RevokeAllRolesForAccountInOrgAsync(orgId, userId);
+            await _orgRoleRepo.RevokeAllRolesForUserInOrgAsync(orgId, userId);
             return InvokeResult.Success;
         }
         #endregion
 
-        #region Location Account
-        public async Task<InvokeResult> AddAccountToLocationAsync(String accountId, String locationId, EntityHeader org, EntityHeader addedBy)
+        #region Location User
+        public async Task<InvokeResult> AddUserToLocationAsync(String userId, String locationId, EntityHeader org, EntityHeader addedBy)
         {
-            await AuthorizeOrgAccessAsync(addedBy, org, typeof(LocationAccount), Actions.Create, new SecurityHelper { UserId = accountId, LocationId = locationId });
+            await AuthorizeOrgAccessAsync(addedBy, org, typeof(LocationUser), Actions.Create, new SecurityHelper { UserId = userId, LocationId = locationId });
 
-            var appUser = await _appUserRepo.FindByIdAsync(accountId);
+            var appUser = await _appUserRepo.FindByIdAsync(userId);
             var location = await _locationRepo.GetLocationAsync(locationId);
 
-            var locationAccount = new LocationAccount(location.Organization.Id, locationId, accountId)
+            var locationUser = new LocationUser(location.Organization.Id, locationId, userId)
             {
-                AccountName = appUser.Name
+                UsersName = appUser.Name
             };
 
-            await _locationAccountRepo.AddAccountToLocationAsync(locationAccount);
+            await _locationUserRepo.AddUserToLocationAsync(locationUser);
 
             return InvokeResult.Success;
         }
 
-        public async Task<IEnumerable<LocationAccount>> GetAccountsForLocationAsync(string locationId, EntityHeader org, EntityHeader user)
+        public async Task<IEnumerable<LocationUser>> GetUsersForLocationAsync(string locationId, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeOrgAccessAsync(user, org, typeof(LocationAccount), Actions.Read, new SecurityHelper { LocationId = locationId });
-            return await _locationAccountRepo.GetAccountsForLocationAsync(locationId);
+            await AuthorizeOrgAccessAsync(user, org, typeof(LocationUser), Actions.Read, new SecurityHelper { LocationId = locationId });
+            return await _locationUserRepo.GetUsersForLocationAsync(locationId);
         }
 
-        public async Task<IEnumerable<LocationAccount>> GetLocationsForAccountAsync(string accountId, EntityHeader org, EntityHeader user)
+        public async Task<IEnumerable<LocationUser>> GetLocationsForUserAsync(string userId, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeOrgAccessAsync(user, org, typeof(LocationAccount), Actions.Read, new SecurityHelper { UserId = accountId });
-            return await _locationAccountRepo.GetLocationsForAccountAsync(accountId);
+            await AuthorizeOrgAccessAsync(user, org, typeof(LocationUser), Actions.Read, new SecurityHelper { UserId = userId });
+            return await _locationUserRepo.GetLocationsForUserAsync(userId);
         }
 
-        public async Task<InvokeResult> RemoveAccountFromLocationAsync(string locationId, string userId, EntityHeader org, EntityHeader removedBy)
+        public async Task<InvokeResult> RemoveUserFromLocationAsync(string locationId, string userId, EntityHeader org, EntityHeader removedBy)
         {
-            await AuthorizeOrgAccessAsync(removedBy, org, typeof(LocationAccount), Actions.Delete, new SecurityHelper { LocationId = locationId, UserId = userId });
-            await _locationAccountRepo.RemoveAccountFromLocationAsync(locationId, userId, removedBy);
+            await AuthorizeOrgAccessAsync(removedBy, org, typeof(LocationUser), Actions.Delete, new SecurityHelper { LocationId = locationId, UserId = userId });
+            await _locationUserRepo.RemoveUserFromLocationAsync(locationId, userId, removedBy);
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> AddAccountRoleForLocationAsync(EntityHeader location, EntityHeader user, EntityHeader role, EntityHeader org, EntityHeader addedBy)
+        public async Task<InvokeResult> AddUserRoleForLocationAsync(EntityHeader location, EntityHeader user, EntityHeader role, EntityHeader org, EntityHeader addedBy)
         {
             await AuthorizeOrgAccessAsync(addedBy, org, typeof(LocationUserRole), Actions.Read, new SecurityHelper { LocationId = location.Id, UserId = user.Id, RoleId = role.Id });
-            var locationUserRole = new LocationUserRole(location, user )
+            var locationUserRole = new LocationUserRole(location, user)
             {
                 RoleId = role.Id,
-                RoleName = role.Text                 
+                RoleName = role.Text
             };
 
-            await _locationRoleRepo.AddRoleForAccountAsync(locationUserRole);
+            await _locationRoleRepo.AddRoleForUserAsync(locationUserRole);
             return InvokeResult.Success;
         }
 
@@ -632,37 +633,37 @@ namespace LagoVista.UserAdmin.Managers
         /// <param name="org"></param>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<LocationUserRole>> GetAccountRolesForLocationAsync(string locationId, string userId, EntityHeader org, EntityHeader user)
+        public async Task<IEnumerable<LocationUserRole>> GetRolesForUserInLocationAsync(string locationId, string userId, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(LocationUserRole), Actions.Read, data: new SecurityHelper { LocationId = locationId, UserId = userId });
-            return await _locationRoleRepo.GetRolesForAccountInLocationAsync(locationId, userId);
+            return await _locationRoleRepo.GetRolesForUserInLocationAsync(locationId, userId);
         }
 
         /// <summary>
-        /// Return accounts that fill a specific role in a location.
+        /// Return users that fill a specific role in a location.
         /// </summary>
         /// <param name="locationId"></param>
         /// <param name="roleId"></param>
         /// <param name="org">permissions</param>
         /// <param name="user">permissions</param>
         /// <returns></returns>
-        public async Task<IEnumerable<LocationUserRole>> GetAccountsForRoleInLocationAsync(string locationId, string roleId, EntityHeader org, EntityHeader user)
+        public async Task<IEnumerable<LocationUserRole>> GetUserWithRoleInLocationAsync(string locationId, string roleId, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(LocationUserRole), Actions.Read, new SecurityHelper { LocationId = locationId, RoleId = roleId });
-            return await _locationRoleRepo.GetAccountsForRoleInLocationAsync(locationId, roleId);
+            return await _locationRoleRepo.GetUsersInRoleForLocationAsync(locationId, roleId);
         }
 
-        public async Task<InvokeResult> RevokeRoleForAccountInLocationAsync(string locationId, string userId, string roleId, EntityHeader org, EntityHeader revokedBy)
+        public async Task<InvokeResult> RevokeRoleForUserInLocationAsync(string locationId, string userId, string roleId, EntityHeader org, EntityHeader revokedBy)
         {
             await AuthorizeOrgAccessAsync(revokedBy, org, typeof(LocationUserRole), action: Actions.Delete, data: new SecurityHelper { LocationId = locationId, UserId = userId, RoleId = roleId });
-            await _locationRoleRepo.RevokeRoleForAccountInLocationAsync(locationId, userId, roleId);
+            await _locationRoleRepo.RevokeRoleForUserInLocationAsync(locationId, userId, roleId);
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> RevokeAllRolesForAccountInLocationAsync(string locationId, string accountId, EntityHeader org, EntityHeader revokedBy)
+        public async Task<InvokeResult> RevokeAllRolesForUserInLocationAsync(string locationId, string userId, EntityHeader org, EntityHeader revokedBy)
         {
-            await AuthorizeOrgAccessAsync(revokedBy, org, typeof(LocationUserRole), action: Actions.Delete, data: new SecurityHelper { LocationId = locationId, UserId = accountId });
-            await _locationRoleRepo.RevokeAllRolesForAccountInLocationAsync(locationId, accountId);
+            await AuthorizeOrgAccessAsync(revokedBy, org, typeof(LocationUserRole), action: Actions.Delete, data: new SecurityHelper { LocationId = locationId, UserId = userId });
+            await _locationRoleRepo.RevokeAllRolesForUserInLocationAsync(locationId, userId);
             return InvokeResult.Success;
         }
         #endregion

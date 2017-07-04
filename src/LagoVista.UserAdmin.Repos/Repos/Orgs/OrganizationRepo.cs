@@ -24,9 +24,9 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             get { return _shouldConsolidateCollections; }
         }
 
-        public Task AddOrganizationAsync(Organization account)
+        public Task AddOrganizationAsync(Organization org)
         {
-            return CreateDocumentAsync(account);
+            return CreateDocumentAsync(org);
         }
 
         public Task<Organization> GetOrganizationAsync(string id)
@@ -54,9 +54,9 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             return (await GetOrganizationAsync(id)) != null;
         }
 
-        public Task UpdateOrganizationAsync(Organization account)
+        public Task UpdateOrganizationAsync(Organization org)
         {
-            return UpsertDocumentAsync(account);
+            return UpsertDocumentAsync(org);
         }
 
     }

@@ -7,25 +7,25 @@ using System;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.OrganizationAccountRole_Title, UserAdminResources.Names.Organization_Help, UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class OrganizationAccount : TableStorageEntity, IValidateable, ITableStorageAuditableEntity
+    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.OrganizationUserRole_Title, UserAdminResources.Names.Organization_Help, UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
+    public class OrgUser : TableStorageEntity, IValidateable, ITableStorageAuditableEntity
     {
         /* Id will becomposed o */
 
-        public OrganizationAccount(string organizationId, string accountId)
+        public OrgUser(string orgId, string userId)
         {
-            RowKey = CreateRowKey(organizationId, accountId);
-            PartitionKey = $"{organizationId}";
-            AccountId = accountId;
-            OrganizationId = organizationId;
+            RowKey = CreateRowKey(orgId, userId);
+            PartitionKey = $"{orgId}";
+            UserId = userId;
+            OrgId = orgId;
         }
 
         [FormField(IsRequired: true)]
-        public String AccountId { get; set; }
+        public String UserId { get; set; }
         [FormField(IsRequired: true)]
-        public String AccountName { get; set; }
+        public String UserName { get; set; }
         [FormField(IsRequired: true)]
-        public String OrganizationId { get; set; }
+        public String OrgId { get; set; }
         [FormField(IsRequired: true)]
         public String OrganizationName { get; set; }
         [FormField(IsRequired: true)]
@@ -45,9 +45,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(IsRequired: true)]
         public String LastUpdatedDate { get; set; }
 
-        public static String CreateRowKey(String organizationId, String accountId)
+        public static String CreateRowKey(String orgId, String userId)
         {
-            return $"{organizationId}.{accountId}";
+            return $"{orgId}.{userId}";
         }
     }
 }

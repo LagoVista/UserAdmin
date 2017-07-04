@@ -4,7 +4,7 @@ using LagoVista.UserAdmin.Resources;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
-    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.LocationAccountRole_Title, UserAdminResources.Names.LocationAccountRole_Help, UserAdminResources.Names.LocationAccountRole_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
+    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.LocationUserRole_Title, UserAdminResources.Names.LocationUserRole_Help, UserAdminResources.Names.LocationUserRole_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
     public class LocationUserRole : TableStorageEntity
     {
         public LocationUserRole(EntityHeader location, EntityHeader user)

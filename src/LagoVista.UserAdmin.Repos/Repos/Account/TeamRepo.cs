@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LagoVista.IoT.Logging.Loggers;
 
-namespace LagoVista.UserAdmin.Repos.Repos.Account
+namespace LagoVista.UserAdmin.Repos.Repos.Users
 {
     public class TeamRepo : DocumentDBRepoBase<Team>, ITeamRepo
     {

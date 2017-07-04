@@ -1,4 +1,4 @@
-﻿using LagoVista.UserAdmin.Models.Account;
+﻿using LagoVista.UserAdmin.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 

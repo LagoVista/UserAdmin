@@ -1,8 +1,8 @@
-﻿using LagoVista.UserAdmin.Models.Account;
+﻿using LagoVista.UserAdmin.Models.Users;
 using System;
 using System.Threading.Tasks;
 
-namespace LagoVista.UserAdmin.Interfaces.Repos.Account
+namespace LagoVista.UserAdmin.Interfaces.Repos.Users
 {
     public interface IAppUserRepo : IDisposable
     {

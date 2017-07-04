@@ -4,7 +4,7 @@ using LagoVista.UserAdmin.Resources;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
-    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.OrganizationAccountRole_Title, UserAdminResources.Names.OrganizationAccountRole_Title, UserAdminResources.Names.OrganizationAccountRole_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
+    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.OrganizationUserRole_Title, UserAdminResources.Names.OrganizationUserRole_Title, UserAdminResources.Names.OrganizationUserRole_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
     public class OrganizationUserRole : TableStorageEntity
     {
         public OrganizationUserRole(EntityHeader organization, EntityHeader user)
@@ -24,9 +24,9 @@ namespace LagoVista.UserAdmin.Models.Security
         public string RoleName { get; set; }
         public string RoleId { get; set; }
 
-        public string GetRowKey(string organizationId, string userId)
+        public string GetRowKey(string orgId, string userId)
         {
-            return $"{organizationId}.{userId}";
+            return $"{orgId}.{userId}";
         }
 
         public string GetRowKey()

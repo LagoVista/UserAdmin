@@ -7,8 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using LagoVista.Core;
 using LagoVista.Core.Authentication.Models;
-using LagoVista.UserAdmin.Models.Account;
-using LagoVista.UserAdmin.Interfaces.Repos.Account;
+using LagoVista.UserAdmin.Models.Users;
+using LagoVista.UserAdmin.Interfaces.Repos.Users;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {

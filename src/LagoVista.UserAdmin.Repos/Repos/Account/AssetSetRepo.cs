@@ -10,7 +10,7 @@ using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.IoT.Logging.Loggers;
 
-namespace LagoVista.UserAdmin.Repos.Repos.Account
+namespace LagoVista.UserAdmin.Repos.Repos.Users
 {
     public class AssetSetRepo : DocumentDBRepoBase<AssetSet>, IAssetSetRepo
     {

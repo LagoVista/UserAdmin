@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
 {
-    public interface ITeamAccountRepo
+    public interface ITeamUserRepo
     {
         Task AddTeamMemberAsync(TeamUser newMember);
         Task RemoveMemberAsync(String teamId, string memberId);
 
-        Task<IEnumerable<TeamAccountSummary>> GetTeamMembersAsync(String teamId);
+        Task<IEnumerable<TeamUserSummary>> GetTeamMembersAsync(String teamId);
 
         Task<IEnumerable<TeamSummary>> GetMembersTeamsAsync(String teamId);
     }

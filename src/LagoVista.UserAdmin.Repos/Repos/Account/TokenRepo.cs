@@ -5,7 +5,7 @@ using LagoVista.Core.Authentication.Models;
 using LagoVista.UserAdmin.Interfaces.Repos;
 using LagoVista.IoT.Logging.Loggers;
 
-namespace LagoVista.UserAdmin.Repos.Account
+namespace LagoVista.UserAdmin.Repos.Users
 {
     public class TokenRepo : TableStorageBase<RefreshToken>, ITokenRepo
     {

@@ -7,9 +7,9 @@ using LagoVista.CloudStorage.Storage;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.IoT.Logging.Loggers;
 
-namespace LagoVista.UserAdmin.Repos.Repos.Account
+namespace LagoVista.UserAdmin.Repos.Users
 {
-    public class TeamUserRepo : TableStorageBase<TeamUser>, ITeamAccountRepo
+    public class TeamUserRepo : TableStorageBase<TeamUser>, ITeamUserRepo
     {
         public TeamUserRepo(IUserAdminSettings settings, IAdminLogger logger) :
             base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
@@ -29,7 +29,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
                    select new TeamSummary(){Id = team.TeamId,Name = team.TeamName};
         }
 
-        public async Task<IEnumerable<TeamAccountSummary>> GetTeamMembersAsync(string teamId)
+        public async Task<IEnumerable<TeamUserSummary>> GetTeamMembersAsync(string teamId)
         {
             var members = await GetByParitionIdAsync(teamId);
             return from member in members
@@ -39,8 +39,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
         public async Task RemoveMemberAsync(string teamId, string memberId)
         {
             var rowKey = TeamUser.CreateRowKey(teamId, memberId);
-            var locationAccount = await GetAsync(rowKey);
-            await RemoveAsync(locationAccount);
+            var teamUser = await GetAsync(rowKey);
+            await RemoveAsync(teamUser);
         }
     }
 }

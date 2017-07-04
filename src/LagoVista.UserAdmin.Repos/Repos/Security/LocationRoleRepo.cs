@@ -16,32 +16,32 @@ namespace LagoVista.UserAdmin.Repos.Security
 
         }
 
-        public Task AddRoleForAccountAsync(LocationUserRole locationUseRole)
+        public Task AddRoleForUserAsync(LocationUserRole locationUseRole)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> ConfirmUserInRoleAsync(string locationId, string accountId, string roleId)
+        public Task<bool> ConfirmUserInRoleAsync(string locationId, string userId, string roleId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<LocationUserRole>> GetAccountsForRoleInLocationAsync(string roleId, string locationId)
+        public Task<IEnumerable<LocationUserRole>> GetUsersInRoleForLocationAsync(string roleId, string locationId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<LocationUserRole>> GetRolesForAccountInLocationAsync(string locationId, string accountId)
+        public Task<IEnumerable<LocationUserRole>> GetRolesForUserInLocationAsync(string locationId, string userId)
         {
             throw new NotImplementedException();
         }
 
-        public Task RevokeAllRolesForAccountInLocationAsync(string accountId, string locationId)
+        public Task RevokeAllRolesForUserInLocationAsync(string userId, string locationId)
         {
             throw new NotImplementedException();
         }
 
-        public Task RevokeRoleForAccountInLocationAsync(string accountId, string locationId, string roleId)
+        public Task RevokeRoleForUserInLocationAsync(string userId, string locationId, string roleId)
         {
             throw new NotImplementedException();
         }

@@ -18,13 +18,13 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
         Task<IEnumerable<TeamSummary>> GetTeamsForOrgAsync(String orgId, EntityHeader org, EntityHeader user);
 
-        Task<IEnumerable<TeamAccountSummary>> GetMembersForTeamAsync(String teamId, EntityHeader org, EntityHeader user);
+        Task<IEnumerable<TeamUserSummary>> GetMembersForTeamAsync(String teamId, EntityHeader org, EntityHeader user);
 
         Task<Team> GetTeamAsync(String id, EntityHeader org, EntityHeader user);
 
-        Task<InvokeResult> AddTeamMemberAsync(string teamId, string accountId, EntityHeader org, EntityHeader addedByMemberId);
+        Task<InvokeResult> AddTeamMemberAsync(string teamId, string userId, EntityHeader org, EntityHeader addedByMemberId);
 
-        Task<InvokeResult> RemoveTeamMemberAsync(string teamId, string accountId, EntityHeader org, EntityHeader addedByMemberId);
+        Task<InvokeResult> RemoveTeamMemberAsync(string teamId, string userId, EntityHeader org, EntityHeader addedByMemberId);
 
         Task<bool> QueryKeyInUseAsync(string key, EntityHeader org);
 

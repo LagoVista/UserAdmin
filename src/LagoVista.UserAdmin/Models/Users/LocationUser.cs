@@ -5,26 +5,26 @@ using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Resources;
 using System;
 
-namespace LagoVista.UserAdmin.Models.Account
+namespace LagoVista.UserAdmin.Models.Users
 {
-    [EntityDescription(Domains.UserDomain, UserAdminResources.Names.LocationAccount_Title, UserAdminResources.Names.LocationAccount_Help, UserAdminResources.Names.LocationAccount_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class LocationAccount : TableStorageEntity, IValidateable, ITableStorageAuditableEntity
+    [EntityDescription(Domains.UserDomain, UserAdminResources.Names.LocationUser_Title, UserAdminResources.Names.LocationUser_Help, UserAdminResources.Names.LocationUser_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
+    public class LocationUser : TableStorageEntity, IValidateable, ITableStorageAuditableEntity
     {
         /* Id will becomposed o */
 
-        public LocationAccount(string organizationId, string locationId, string accountId)
+        public LocationUser(string orgId, string locationId, string userId)
         {
-            RowKey = CreateRowId(locationId, accountId);
-            PartitionKey = $"{organizationId}";
-            AccountId = accountId;
+            RowKey = CreateRowId(locationId, userId);
+            PartitionKey = $"{locationId}";
+            UserId = userId;
             LocationId = locationId;
-            OrganizationId = organizationId;
+            OrganizationId = orgId;
         }
 
         [FormField(IsRequired: true)]
-        public String AccountId { get; set; }
+        public String UserId { get; set; }
         [FormField(IsRequired: true)]
-        public String AccountName { get; set; }
+        public String UsersName { get; set; }
         [FormField(IsRequired: true)]
         public String OrganizationId { get; set; }
         [FormField(IsRequired: true)]
@@ -50,9 +50,9 @@ namespace LagoVista.UserAdmin.Models.Account
         [FormField(IsRequired: true)]
         public String LastUpdatedDate { get; set; }
 
-        public static string CreateRowId(String locationId, String accountId)
+        public static string CreateRowId(String locationId, String userId)
         {
-            return $"{locationId}.{accountId}";
+            return $"{locationId}.{userId}";
         }
     }
 }

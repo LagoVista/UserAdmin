@@ -5,12 +5,12 @@ using LagoVista.UserAdmin.Models.Orgs;
 
 namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
 {
-    public interface IOrganizationLocationRepo : IDisposable
+    public interface IOrgLocationRepo : IDisposable
     {
-        Task AddLocationAsync(OrganizationLocation account);
-        Task<OrganizationLocation> GetLocationAsync(string id);
-        Task UpdateLocationAsync(OrganizationLocation account);
-        Task<IEnumerable<OrganizationLocation>> GetOrganizationLocationAsync(String organizationId);
+        Task AddLocationAsync(OrgLocation orgLocation);
+        Task<OrgLocation> GetLocationAsync(string id);
+        Task UpdateLocationAsync(OrgLocation orgLocation);
+        Task<IEnumerable<OrgLocation>> GetOrganizationLocationAsync(String orgId);
         Task<bool> QueryNamespaceInUseAsync(string orgId, string namespaceText);
     }
 }

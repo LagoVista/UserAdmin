@@ -7,11 +7,11 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
 {
     public interface IOrganizationRoleRepo
     {
-        Task AddRoleForAccountAsync(OrganizationUserRole userRole);
-        Task<bool> ConfirmUserInRoleAsync(string orgId, string accountId, string roleId);
-        Task<IEnumerable<OrganizationUserRole>> GetRolesForAccountAsync(string accountId, string organizationId);
-        Task<IEnumerable<OrganizationUserRole>> GetAccountsForRoleAsync(string roleId, string organziationId);
-        Task RevokeRoleForAccountInOrgAsync(string orgId, string userId, string roleId);
-        Task RevokeAllRolesForAccountInOrgAsync(string orgId, string account);
+        Task AddRoleForUserAsync(OrganizationUserRole userRole);
+        Task<bool> ConfirmUserInRoleAsync(string orgId, string userId, string roleId);
+        Task<IEnumerable<OrganizationUserRole>> GetRolesForUserAsync(string userId, string orgId);
+        Task<IEnumerable<OrganizationUserRole>> GetUserForRoleAsync(string roleId, string orgId);
+        Task RevokeRoleForUserInOrgAsync(string orgId, string userId, string roleId);
+        Task RevokeAllRolesForUserInOrgAsync(string orgId, string userId);
     }
 }

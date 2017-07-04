@@ -269,23 +269,23 @@
   <data name="Invite_Greeting_Subject" xml:space="preserve">
     <value>[APP_NAME] Invitation for [ORG_NAME]</value>
   </data>
-  <data name="LocationAccountRole_Description" xml:space="preserve">
+  <data name="LocationUserRole_Description" xml:space="preserve">
     <value>In some caes, user have different roles depending on which location they are working in.  This entity manages those roles.</value>
   </data>
-  <data name="LocationAccountRole_Help" xml:space="preserve">
+  <data name="LocationUserRole_Help" xml:space="preserve">
     <value>In some caes, user have different roles depending on which location they are working in.  This entity manages those roles.</value>
   </data>
-  <data name="LocationAccountRole_Title" xml:space="preserve">
+  <data name="LocationUserRole_Title" xml:space="preserve">
     <value>User Roles for a Location</value>
   </data>
-  <data name="LocationAccount_Description" xml:space="preserve">
+  <data name="LocationUser_Description" xml:space="preserve">
     <value>Cross Reference Table that can be used to relate a app user to a location within an organization.</value>
   </data>
-  <data name="LocationAccount_Help" xml:space="preserve">
+  <data name="LocationUser_Help" xml:space="preserve">
     <value>Cross Reference Table that can be used to relate a app user to a location within an organization.</value>
   </data>
-  <data name="LocationAccount_Title" xml:space="preserve">
-    <value>Location Account Cross Reference</value>
+  <data name="LocationUser_Title" xml:space="preserve">
+    <value>Location User Cross Reference</value>
   </data>
   <data name="LocationNamespace_Help" xml:space="preserve">
     <value>The location namespace is used when adding a device to a specific location in conjunction with the organizatoin namespace to generate a unique human readable device id. The namespaces must be unique across your organization.  Namespace can only contain lower case letters and number with no spaces or special characters other than dash or [-]</value>
@@ -320,19 +320,19 @@
   <data name="Organization" xml:space="preserve">
     <value>Organization</value>
   </data>
-  <data name="OrganizationAccountRole_Description" xml:space="preserve">
-    <value>The Organization Account Roles Structures defines which roles the user hold in a particular organization.</value>
+  <data name="OrganizationUserRole_Description" xml:space="preserve">
+    <value>The Organization User Roles Structures defines which roles the user hold in a particular organization.</value>
   </data>
-  <data name="OrganizationAccountRole_Help" xml:space="preserve">
-    <value>The Organization Account Roles Structures defines which roles the user hold in a particular organization.</value>
+  <data name="OrganizationUserRole_Help" xml:space="preserve">
+    <value>The Organization User Roles Structures defines which roles the user hold in a particular organization.</value>
   </data>
-  <data name="OrganizationAccountRole_Title" xml:space="preserve">
+  <data name="OrganizationUserRole_Title" xml:space="preserve">
     <value>User Roles for an Organization</value>
   </data>
-  <data name="OrganizationAccount_CouldntAdd" xml:space="preserve">
-    <value>Could not add account to organization</value>
+  <data name="OrganizationUser_CouldntAdd" xml:space="preserve">
+    <value>Could not add user to organization</value>
   </data>
-  <data name="OrganizationAccount_UserExists" xml:space="preserve">
+  <data name="OrganizationUser_UserExists" xml:space="preserve">
     <value>[USERS_FULL_NAME] is already part of [ORG_NAME], they can't be added twice.</value>
   </data>
   <data name="OrganizationLocation_NamespaceInUse" xml:space="preserve">
@@ -341,14 +341,14 @@
   <data name="OrganizationNamespace_Help" xml:space="preserve">
     <value>The organizationn namespace is used to generated unique device ids for your organization. It must be unique within our system or your installation. Namespace can only contain lower case letters and number with no spaces or special characters other than dash or [-]</value>
   </data>
-  <data name="Organization_Account_Title" xml:space="preserve">
-    <value>Organization Account Cross Reference</value>
+  <data name="Organization_User_Title" xml:space="preserve">
+    <value>Organization User Cross Reference</value>
   </data>
-  <data name="Organization_Account_Description" xml:space="preserve">
-    <value>The Organization Account Relationship table is used to map accounts to an organization.</value>
+  <data name="Organization_User_Description" xml:space="preserve">
+    <value>The Organization User Relationship table is used to map users to an organization.</value>
   </data>
-  <data name="Organization_Account_Help" xml:space="preserve">
-    <value>The Organization Account Relationship table is used to map accounts to an organization.</value>
+  <data name="Organization_User_Help" xml:space="preserve">
+    <value>The Organization User Relationship table is used to map users to an organization.</value>
   </data>
   <data name="Organization_CantCreate" xml:space="preserve">
     <value>Could not create organization</value>
@@ -555,7 +555,7 @@
     <value>Sends a two factor authentication code to a secondary device to confirm the users account</value>
   </data>
   <data name="SendCodeVM_Help" xml:space="preserve">
-    <value>Send a two factor authentication code to confirm your account.</value>
+    <value>Send a two factor authentication code to confirm your acount.</value>
   </data>
   <data name="SendCodeVM_Title" xml:space="preserve">
     <value>Send Code</value>

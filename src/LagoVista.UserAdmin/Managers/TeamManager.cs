@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.PlatformSupport;
-using LagoVista.UserAdmin.Interfaces.Repos.Account;
+using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using static LagoVista.Core.Models.AuthorizeResult;
 using LagoVista.IoT.Logging.Loggers;
 
@@ -20,13 +20,13 @@ namespace LagoVista.UserAdmin.Managers
     {
         IAppUserRepo _appUserRepo;
         ITeamRepo _teamRepo;
-        ITeamAccountRepo _teamAccountRepo;
+        ITeamUserRepo _teamUserRepo;
 
-        public TeamManager(IAppUserRepo appUserRepo, ITeamRepo teamRepo, ITeamAccountRepo teamAccountRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
+        public TeamManager(IAppUserRepo appUserRepo, ITeamRepo teamRepo, ITeamUserRepo teamUserRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
             _appUserRepo = appUserRepo;
             _teamRepo = teamRepo;
-            _teamAccountRepo = teamAccountRepo;
+            _teamUserRepo = teamUserRepo;
         }
 
         public async Task<InvokeResult> AddTeamAsync(Team team, EntityHeader org, EntityHeader user)
@@ -80,28 +80,28 @@ namespace LagoVista.UserAdmin.Managers
         }
 
 
-        public async  Task<IEnumerable<TeamAccountSummary>> GetMembersForTeamAsync(string teamId, EntityHeader org, EntityHeader user)
+        public async  Task<IEnumerable<TeamUserSummary>> GetMembersForTeamAsync(string teamId, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org.Id, typeof(Team));
-            return await _teamAccountRepo.GetTeamMembersAsync(teamId);
+            return await _teamUserRepo.GetTeamMembersAsync(teamId);
         }    
 
-        public async Task<InvokeResult> AddTeamMemberAsync(string teamId, string accountId, EntityHeader org, EntityHeader addedByMemberId)
+        public async Task<InvokeResult> AddTeamMemberAsync(string teamId, string userId, EntityHeader org, EntityHeader addedByMemberId)
         {
             var team = await _teamRepo.GetTeamAsync(teamId);
             await AuthorizeAsync(team, AuthorizeResult.AuthorizeActions.Update, addedByMemberId, org);
-            var member = await _appUserRepo.FindByIdAsync(accountId);
+            var member = await _appUserRepo.FindByIdAsync(userId);
             var teamMember = new TeamUser(team.ToEntityHeader(), member.ToEntityHeader());
-            await _teamAccountRepo.AddTeamMemberAsync(teamMember);
+            await _teamUserRepo.AddTeamMemberAsync(teamMember);
             return InvokeResult.Success;
         }        
 
-        public async Task<InvokeResult> RemoveTeamMemberAsync(string teamId, string accountId, EntityHeader org, EntityHeader addedByMemberId)
+        public async Task<InvokeResult> RemoveTeamMemberAsync(string teamId, string userId, EntityHeader org, EntityHeader addedByMemberId)
         {
             var team = await _teamRepo.GetTeamAsync(teamId);
             await AuthorizeAsync(team, AuthorizeResult.AuthorizeActions.Update, addedByMemberId, org);
 
-            await _teamAccountRepo.RemoveMemberAsync(teamId, accountId);
+            await _teamUserRepo.RemoveMemberAsync(teamId, userId);
             return InvokeResult.Success;
         }
     }

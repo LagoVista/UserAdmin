@@ -6,10 +6,10 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
 {
     public interface IOrganizationRepo
     {
-        Task AddOrganizationAsync(Organization account);
-        Task<Organization> GetOrganizationAsync(string id);
-        Task UpdateOrganizationAsync(Organization account);
-        Task<bool> QueryOrganizationExistAsync(string id);
+        Task AddOrganizationAsync(Organization org);
+        Task<Organization> GetOrganizationAsync(string orgId);
+        Task UpdateOrganizationAsync(Organization org);
+        Task<bool> QueryOrganizationExistAsync(string orgId);
         Task<bool> QueryNamespaceInUseAsync(string namespaceText);
     }
 }

@@ -3,7 +3,7 @@ using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models;
 using LagoVista.UserAdmin.Resources;
 
-namespace LagoVista.UserAdmin.ViewModels.ManageAccount
+namespace LagoVista.UserAdmin.ViewModels.ManageUsers
 {
     [EntityDescription(Domains.SecurityViewModels, UserAdminResources.Names.ChangePasswordVM_Title, UserAdminResources.Names.ChangePasswordVM_Help, UserAdminResources.Names.ChangePasswordVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class ChangePasswordViewModel : IValidateable

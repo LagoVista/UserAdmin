@@ -12,11 +12,11 @@ using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
-    public class OrganizationLocationRepo : DocumentDBRepoBase<OrganizationLocation>, IOrganizationLocationRepo
+    public class OrgLocationRepo : DocumentDBRepoBase<OrgLocation>, IOrgLocationRepo
     {
         bool _shouldConsolidateCollections;
 
-        public OrganizationLocationRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger) :
+        public OrgLocationRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
@@ -27,24 +27,24 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             get { return _shouldConsolidateCollections; }
         }
 
-        public Task AddLocationAsync(OrganizationLocation account)
+        public Task AddLocationAsync(OrgLocation orgLocation)
         {
-            return CreateDocumentAsync(account);
+            return CreateDocumentAsync(orgLocation);
         }
 
-        public Task UpdateLocationAsync(OrganizationLocation account)
+        public Task UpdateLocationAsync(OrgLocation org)
         {
-            return UpsertDocumentAsync(account);
+            return UpsertDocumentAsync(org);
         }
 
-        public Task<OrganizationLocation> GetLocationAsync(String id)
+        public Task<OrgLocation> GetLocationAsync(String id)
         {
             return GetDocumentAsync(id);
         }
 
-        public Task<IEnumerable<OrganizationLocation>> GetOrganizationLocationAsync(String organizationId)
+        public Task<IEnumerable<OrgLocation>> GetOrganizationLocationAsync(String orgId)
         {
-            return QueryAsync(act => act.Organization.Id == organizationId);
+            return QueryAsync(act => act.Organization.Id == orgId);
         }
 
         public async Task<bool> QueryNamespaceInUseAsync(string orgId, string namespaceText)

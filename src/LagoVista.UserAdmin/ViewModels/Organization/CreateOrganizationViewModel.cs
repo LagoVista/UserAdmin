@@ -25,7 +25,7 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
             organization.WebSite = WebSite;
         }
 
-        public override void MapToOrganizationLocation(Models.Orgs.OrganizationLocation location)
+        public override void MapToOrganizationLocation(Models.Orgs.OrgLocation location)
         {
             base.MapToOrganizationLocation(location);
             location.Namespace = LocationNamespace;

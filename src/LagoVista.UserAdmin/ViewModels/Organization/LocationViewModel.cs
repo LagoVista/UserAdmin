@@ -8,7 +8,7 @@ using System;
 
 namespace LagoVista.UserAdmin.ViewModels.Organization
 {
-    [EntityDescription(Domains.OrganizationViewModels, UserAdminResources.Names.LocationVM_Title, UserAdminResources.Names.LocationVM_Help, UserAdminResources.Names.LocationAccount_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(Domains.OrganizationViewModels, UserAdminResources.Names.LocationVM_Title, UserAdminResources.Names.LocationVM_Help, UserAdminResources.Names.LocationUser_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class LocationViewModel : IValidateable
     {
         [FormField(LabelResource: Resources.UserAdminResources.Names.Location_LocationName, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]
@@ -63,7 +63,7 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Notes, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(Resources.UserAdminResources))]
         public String Notes { get; set; }
 
-        public virtual void MapToOrganizationLocation(OrganizationLocation location)
+        public virtual void MapToOrganizationLocation(OrgLocation location)
         {
             location.Name = LocationName;
             location.Addr1 = Addr1;

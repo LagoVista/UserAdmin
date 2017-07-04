@@ -21,11 +21,11 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             return base.GetAsync(id);
         }
 
-        public async Task<Invitation> GetInviteByOrgIdAndEmailAsync(string organizationId, string email)
+        public async Task<Invitation> GetInviteByOrgIdAndEmailAsync(string orgId, string email)
         {
             return (await GetByFilterAsync(
-                 FilterOptions.Create("Email", FilterOptions.Operators.Equals, email.ToUpper()),
-                 FilterOptions.Create("OrganizationId", FilterOptions.Operators.Equals, organizationId)
+                 FilterOptions.Create(nameof(Invitation.Email), FilterOptions.Operators.Equals, email.ToUpper()),
+                 FilterOptions.Create(nameof(Invitation.OrganizationId), FilterOptions.Operators.Equals, orgId)
                  )).FirstOrDefault();
         }
 

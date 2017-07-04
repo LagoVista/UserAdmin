@@ -1,4 +1,4 @@
-﻿using LagoVista.UserAdmin.Models.Account;
+﻿using LagoVista.UserAdmin.Models.Users;
 using System;
 using System.Threading.Tasks;
 
@@ -6,7 +6,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
 {
     public interface IRoleRepo : IDisposable
     {
-        Task AddRoleAsync(String organizationId, Role role);
+        Task AddRoleAsync(String orgId, Role role);
         Task InsertAsync(Role role);
 
         Task RemoveAsync(string id, string etag = "*");

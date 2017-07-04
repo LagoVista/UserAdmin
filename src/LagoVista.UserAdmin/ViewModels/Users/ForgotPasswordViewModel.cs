@@ -3,7 +3,7 @@ using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models;
 using LagoVista.UserAdmin.Resources;
 
-namespace LagoVista.UserAdmin.ViewModels.Account
+namespace LagoVista.UserAdmin.ViewModels.Users
 {
     [EntityDescription(Domains.SecurityViewModels, UserAdminResources.Names.ForgotPasswordVM_Title, UserAdminResources.Names.ForgotPasswordVM_Help, UserAdminResources.Names.ForgotPasswordVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
 

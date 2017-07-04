@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using LagoVista.Core.Models;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
-using LagoVista.UserAdmin.Interfaces.Repos.Account;
-using LagoVista.UserAdmin.Models.Account;
+using LagoVista.UserAdmin.Interfaces.Repos.Users;
+using LagoVista.UserAdmin.Models.Users;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Interfaces;
 using LagoVista.IoT.Logging.Loggers;
@@ -25,16 +25,17 @@ namespace LagoVista.UserAdmin.Managers
         {
             ValidationCheck(user, Actions.Create);
 
-            await AuthorizeAsync(user, AuthorizeResult.AuthorizeActions.Update, updatedByUser, org);
+            await AuthorizeAsync(user, AuthorizeResult.AuthorizeActions.Create, updatedByUser, org);
 
             await _appUserRepo.CreateAsync(user);
 
-            return new InvokeResult(); 
+            return InvokeResult.Success;
         }
 
         public async Task<DependentObjectCheckResult> CheckInUse(string id, EntityHeader org, EntityHeader user)
         {
             var appUser = await _appUserRepo.FindByIdAsync(id);
+
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Read, user, org);
 
             return await CheckForDepenenciesAsync(appUser);
@@ -45,24 +46,25 @@ namespace LagoVista.UserAdmin.Managers
             var appUser = await _appUserRepo.FindByIdAsync(id);
 
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Delete, deletedByUser, org);      
-
             await _appUserRepo.DeleteAsync(appUser);
 
-            return new InvokeResult();
+            return InvokeResult.Success;
         }
 
         public async Task<AppUser> GetUserByIdAsync(string id, EntityHeader org, EntityHeader requestedByUser)
         {
             var appUser = await _appUserRepo.FindByIdAsync(id);
             appUser.PasswordHash = null;
+
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Read, requestedByUser, org);
             return appUser;
         }
 
         public async Task<AppUser> GetUserByUserNameAsync(string userName, EntityHeader org, EntityHeader requestedByUser)
-        {
-            await AuthorizeOrgAccessAsync(requestedByUser, org, typeof(AppUser), Actions.Read);
+        {            
             var appUser = await _appUserRepo.FindByNameAsync(userName);
+            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Read, requestedByUser, org);
+
             appUser.PasswordHash = null;
             return appUser;
         }
@@ -80,7 +82,7 @@ namespace LagoVista.UserAdmin.Managers
 
             await _appUserRepo.UpdateAsync(user);
 
-            return new InvokeResult();
+            return InvokeResult.Success;
         }
     }
 }

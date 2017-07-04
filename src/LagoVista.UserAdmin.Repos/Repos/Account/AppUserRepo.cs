@@ -1,13 +1,13 @@
 ﻿using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.IoT.Logging.Loggers;
-using LagoVista.UserAdmin.Interfaces.Repos.Account;
-using LagoVista.UserAdmin.Models.Account;
+using LagoVista.UserAdmin.Interfaces.Repos.Users;
+using LagoVista.UserAdmin.Models.Users;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LagoVista.UserAdmin.Repos.Account
+namespace LagoVista.UserAdmin.Repos.Users
 {
     public class AppUserRepo : DocumentDBRepoBase<AppUser>, IAppUserRepo
     {

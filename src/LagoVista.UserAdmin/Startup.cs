@@ -9,7 +9,7 @@ namespace LagoVista.UserAdmin
         public static void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IAppUserManager, AppUserManager>();
-            services.AddTransient<IOrganizationManager, OrganizationManager>();
+            services.AddTransient<IOrganizationManager, OrgManager>();
             services.AddTransient<ITeamManager, TeamManager>();
             services.AddTransient<IAssetSetManager, AssetSetManager>();
             services.AddTransient<ISubscriptionManager, SubscriptionManager>();

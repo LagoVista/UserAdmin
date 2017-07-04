@@ -340,27 +340,27 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:Location_State
 
 		public static string Location_State { get { return GetResourceString("Location_State"); } }
-//Resources:UserAdminResources:LocationAccount_Description
-
-		public static string LocationAccount_Description { get { return GetResourceString("LocationAccount_Description"); } }
-//Resources:UserAdminResources:LocationAccount_Help
-
-		public static string LocationAccount_Help { get { return GetResourceString("LocationAccount_Help"); } }
-//Resources:UserAdminResources:LocationAccount_Title
-
-		public static string LocationAccount_Title { get { return GetResourceString("LocationAccount_Title"); } }
-//Resources:UserAdminResources:LocationAccountRole_Description
-
-		public static string LocationAccountRole_Description { get { return GetResourceString("LocationAccountRole_Description"); } }
-//Resources:UserAdminResources:LocationAccountRole_Help
-
-		public static string LocationAccountRole_Help { get { return GetResourceString("LocationAccountRole_Help"); } }
-//Resources:UserAdminResources:LocationAccountRole_Title
-
-		public static string LocationAccountRole_Title { get { return GetResourceString("LocationAccountRole_Title"); } }
 //Resources:UserAdminResources:LocationNamespace_Help
 
 		public static string LocationNamespace_Help { get { return GetResourceString("LocationNamespace_Help"); } }
+//Resources:UserAdminResources:LocationUser_Description
+
+		public static string LocationUser_Description { get { return GetResourceString("LocationUser_Description"); } }
+//Resources:UserAdminResources:LocationUser_Help
+
+		public static string LocationUser_Help { get { return GetResourceString("LocationUser_Help"); } }
+//Resources:UserAdminResources:LocationUser_Title
+
+		public static string LocationUser_Title { get { return GetResourceString("LocationUser_Title"); } }
+//Resources:UserAdminResources:LocationUserRole_Description
+
+		public static string LocationUserRole_Description { get { return GetResourceString("LocationUserRole_Description"); } }
+//Resources:UserAdminResources:LocationUserRole_Help
+
+		public static string LocationUserRole_Help { get { return GetResourceString("LocationUserRole_Help"); } }
+//Resources:UserAdminResources:LocationUserRole_Title
+
+		public static string LocationUserRole_Title { get { return GetResourceString("LocationUserRole_Title"); } }
 //Resources:UserAdminResources:LocationVM_Description
 
 		public static string LocationVM_Description { get { return GetResourceString("LocationVM_Description"); } }
@@ -382,15 +382,6 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:Organization
 
 		public static string Organization { get { return GetResourceString("Organization"); } }
-//Resources:UserAdminResources:Organization_Account_Description
-
-		public static string Organization_Account_Description { get { return GetResourceString("Organization_Account_Description"); } }
-//Resources:UserAdminResources:Organization_Account_Help
-
-		public static string Organization_Account_Help { get { return GetResourceString("Organization_Account_Help"); } }
-//Resources:UserAdminResources:Organization_Account_Title
-
-		public static string Organization_Account_Title { get { return GetResourceString("Organization_Account_Title"); } }
 //Resources:UserAdminResources:Organization_CantCreate
 
 		public static string Organization_CantCreate { get { return GetResourceString("Organization_CantCreate"); } }
@@ -436,24 +427,18 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:Organization_Title
 
 		public static string Organization_Title { get { return GetResourceString("Organization_Title"); } }
+//Resources:UserAdminResources:Organization_User_Description
+
+		public static string Organization_User_Description { get { return GetResourceString("Organization_User_Description"); } }
+//Resources:UserAdminResources:Organization_User_Help
+
+		public static string Organization_User_Help { get { return GetResourceString("Organization_User_Help"); } }
+//Resources:UserAdminResources:Organization_User_Title
+
+		public static string Organization_User_Title { get { return GetResourceString("Organization_User_Title"); } }
 //Resources:UserAdminResources:Organization_WebSite
 
 		public static string Organization_WebSite { get { return GetResourceString("Organization_WebSite"); } }
-//Resources:UserAdminResources:OrganizationAccount_CouldntAdd
-
-		public static string OrganizationAccount_CouldntAdd { get { return GetResourceString("OrganizationAccount_CouldntAdd"); } }
-//Resources:UserAdminResources:OrganizationAccount_UserExists
-
-		public static string OrganizationAccount_UserExists { get { return GetResourceString("OrganizationAccount_UserExists"); } }
-//Resources:UserAdminResources:OrganizationAccountRole_Description
-
-		public static string OrganizationAccountRole_Description { get { return GetResourceString("OrganizationAccountRole_Description"); } }
-//Resources:UserAdminResources:OrganizationAccountRole_Help
-
-		public static string OrganizationAccountRole_Help { get { return GetResourceString("OrganizationAccountRole_Help"); } }
-//Resources:UserAdminResources:OrganizationAccountRole_Title
-
-		public static string OrganizationAccountRole_Title { get { return GetResourceString("OrganizationAccountRole_Title"); } }
 //Resources:UserAdminResources:OrganizationDetailsVM_Description
 
 		public static string OrganizationDetailsVM_Description { get { return GetResourceString("OrganizationDetailsVM_Description"); } }
@@ -469,6 +454,21 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:OrganizationNamespace_Help
 
 		public static string OrganizationNamespace_Help { get { return GetResourceString("OrganizationNamespace_Help"); } }
+//Resources:UserAdminResources:OrganizationUser_CouldntAdd
+
+		public static string OrganizationUser_CouldntAdd { get { return GetResourceString("OrganizationUser_CouldntAdd"); } }
+//Resources:UserAdminResources:OrganizationUser_UserExists
+
+		public static string OrganizationUser_UserExists { get { return GetResourceString("OrganizationUser_UserExists"); } }
+//Resources:UserAdminResources:OrganizationUserRole_Description
+
+		public static string OrganizationUserRole_Description { get { return GetResourceString("OrganizationUserRole_Description"); } }
+//Resources:UserAdminResources:OrganizationUserRole_Help
+
+		public static string OrganizationUserRole_Help { get { return GetResourceString("OrganizationUserRole_Help"); } }
+//Resources:UserAdminResources:OrganizationUserRole_Title
+
+		public static string OrganizationUserRole_Title { get { return GetResourceString("OrganizationUserRole_Title"); } }
 //Resources:UserAdminResources:OrganizationVM_Description
 
 		public static string OrganizationVM_Description { get { return GetResourceString("OrganizationVM_Description"); } }
@@ -565,15 +565,6 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:User
 
 		public static string User { get { return GetResourceString("User"); } }
-//Resources:UserAdminResources:UserInfo_Description
-
-		public static string UserInfo_Description { get { return GetResourceString("UserInfo_Description"); } }
-//Resources:UserAdminResources:UserInfo_Help
-
-		public static string UserInfo_Help { get { return GetResourceString("UserInfo_Help"); } }
-//Resources:UserAdminResources:UserInfo_Title
-
-		public static string UserInfo_Title { get { return GetResourceString("UserInfo_Title"); } }
 //Resources:UserAdminResources:VerifyCodeVM_Description
 
 		public static string VerifyCodeVM_Description { get { return GetResourceString("VerifyCodeVM_Description"); } }
@@ -700,13 +691,13 @@ namespace LagoVista.UserAdmin.Resources
 			public const string Location_LocationName = "Location_LocationName";
 			public const string Location_PostalCode = "Location_PostalCode";
 			public const string Location_State = "Location_State";
-			public const string LocationAccount_Description = "LocationAccount_Description";
-			public const string LocationAccount_Help = "LocationAccount_Help";
-			public const string LocationAccount_Title = "LocationAccount_Title";
-			public const string LocationAccountRole_Description = "LocationAccountRole_Description";
-			public const string LocationAccountRole_Help = "LocationAccountRole_Help";
-			public const string LocationAccountRole_Title = "LocationAccountRole_Title";
 			public const string LocationNamespace_Help = "LocationNamespace_Help";
+			public const string LocationUser_Description = "LocationUser_Description";
+			public const string LocationUser_Help = "LocationUser_Help";
+			public const string LocationUser_Title = "LocationUser_Title";
+			public const string LocationUserRole_Description = "LocationUserRole_Description";
+			public const string LocationUserRole_Help = "LocationUserRole_Help";
+			public const string LocationUserRole_Title = "LocationUserRole_Title";
 			public const string LocationVM_Description = "LocationVM_Description";
 			public const string LocationVM_Help = "LocationVM_Help";
 			public const string LocationVM_Title = "LocationVM_Title";
@@ -714,9 +705,6 @@ namespace LagoVista.UserAdmin.Resources
 			public const string LoginVM_Help = "LoginVM_Help";
 			public const string LoginVM_Title = "LoginVM_Title";
 			public const string Organization = "Organization";
-			public const string Organization_Account_Description = "Organization_Account_Description";
-			public const string Organization_Account_Help = "Organization_Account_Help";
-			public const string Organization_Account_Title = "Organization_Account_Title";
 			public const string Organization_CantCreate = "Organization_CantCreate";
 			public const string Organization_Description = "Organization_Description";
 			public const string Organization_Help = "Organization_Help";
@@ -732,17 +720,20 @@ namespace LagoVista.UserAdmin.Resources
 			public const string Organization_Status_Active_BehindPayments = "Organization_Status_Active_BehindPayments";
 			public const string Organization_Status_Archived = "Organization_Status_Archived";
 			public const string Organization_Title = "Organization_Title";
+			public const string Organization_User_Description = "Organization_User_Description";
+			public const string Organization_User_Help = "Organization_User_Help";
+			public const string Organization_User_Title = "Organization_User_Title";
 			public const string Organization_WebSite = "Organization_WebSite";
-			public const string OrganizationAccount_CouldntAdd = "OrganizationAccount_CouldntAdd";
-			public const string OrganizationAccount_UserExists = "OrganizationAccount_UserExists";
-			public const string OrganizationAccountRole_Description = "OrganizationAccountRole_Description";
-			public const string OrganizationAccountRole_Help = "OrganizationAccountRole_Help";
-			public const string OrganizationAccountRole_Title = "OrganizationAccountRole_Title";
 			public const string OrganizationDetailsVM_Description = "OrganizationDetailsVM_Description";
 			public const string OrganizationDetailVM_Help = "OrganizationDetailVM_Help";
 			public const string OrganizationDetailVM_Title = "OrganizationDetailVM_Title";
 			public const string OrganizationLocation_NamespaceInUse = "OrganizationLocation_NamespaceInUse";
 			public const string OrganizationNamespace_Help = "OrganizationNamespace_Help";
+			public const string OrganizationUser_CouldntAdd = "OrganizationUser_CouldntAdd";
+			public const string OrganizationUser_UserExists = "OrganizationUser_UserExists";
+			public const string OrganizationUserRole_Description = "OrganizationUserRole_Description";
+			public const string OrganizationUserRole_Help = "OrganizationUserRole_Help";
+			public const string OrganizationUserRole_Title = "OrganizationUserRole_Title";
 			public const string OrganizationVM_Description = "OrganizationVM_Description";
 			public const string OrganizationVM_Help = "OrganizationVM_Help";
 			public const string OrganizationVM_Title = "OrganizationVM_Title";
@@ -775,9 +766,6 @@ namespace LagoVista.UserAdmin.Resources
 			public const string UpdateOrganizationVM_Help = "UpdateOrganizationVM_Help";
 			public const string UpdateOrganizationVM_Title = "UpdateOrganizationVM_Title";
 			public const string User = "User";
-			public const string UserInfo_Description = "UserInfo_Description";
-			public const string UserInfo_Help = "UserInfo_Help";
-			public const string UserInfo_Title = "UserInfo_Title";
 			public const string VerifyCodeVM_Description = "VerifyCodeVM_Description";
 			public const string VerifyCodeVM_Help = "VerifyCodeVM_Help";
 			public const string VerifyCodeVM_Title = "VerifyCodeVM_Title";

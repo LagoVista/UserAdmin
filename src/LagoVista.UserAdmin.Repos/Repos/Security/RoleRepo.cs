@@ -3,7 +3,7 @@ using LagoVista.Core.PlatformSupport;
 using System.Threading.Tasks;
 using System;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
-using LagoVista.UserAdmin.Models.Account;
+using LagoVista.UserAdmin.Models.Users;
 using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Repos.Security
@@ -15,7 +15,7 @@ namespace LagoVista.UserAdmin.Repos.Security
 
         }
 
-        public Task AddRoleAsync(string organizationId, Role role)
+        public Task AddRoleAsync(string orgId, Role role)
         {
             throw new NotImplementedException();
         }

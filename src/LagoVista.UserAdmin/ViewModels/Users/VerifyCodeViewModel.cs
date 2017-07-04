@@ -3,7 +3,7 @@ using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models;
 using LagoVista.UserAdmin.Resources;
 
-namespace LagoVista.UserAdmin.ViewModels.Account
+namespace LagoVista.UserAdmin.ViewModels.Users
 {
     [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.VerifyCodeVM_Title, UserAdminResources.Names.VerifyCodeVM_Help, UserAdminResources.Names.VerifyCodeVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class VerifyCodeViewModel : IValidateable

@@ -27,7 +27,7 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
         public String TechnicalContactId { get; set; }
 
 
-        public override void MapToOrganizationLocation(OrganizationLocation location)
+        public override void MapToOrganizationLocation(OrgLocation location)
         {
             base.MapToOrganizationLocation(location);
             location.Namespace = LocationNamespace;

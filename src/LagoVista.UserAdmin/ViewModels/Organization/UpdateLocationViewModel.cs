@@ -28,14 +28,14 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
         [FormField(IsRequired: true, FieldType: FieldTypes.Hidden)]
         public String TechnicalContactId { get; set; }
        
-        public override void MapToOrganizationLocation(OrganizationLocation location)
+        public override void MapToOrganizationLocation(OrgLocation location)
         {
             base.MapToOrganizationLocation(location);
             location.AdminContact = EntityHeader.Create(AdminContactId, AdminContact);
             location.TechnicalContact = EntityHeader.Create(AdminContactId, TechnicalContact);
         }
 
-        public static UpdateLocationViewModel CreateForOrganizationLocation(OrganizationLocation loc)
+        public static UpdateLocationViewModel CreateForOrganizationLocation(OrgLocation loc)
         {
             return new Organization.UpdateLocationViewModel()
             {

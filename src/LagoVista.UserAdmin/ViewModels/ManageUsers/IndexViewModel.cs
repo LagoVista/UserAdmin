@@ -2,7 +2,7 @@
 using LagoVista.UserAdmin.Models;
 using LagoVista.UserAdmin.Resources;
 
-namespace LagoVista.UserAdmin.ViewModels.ManageAccount
+namespace LagoVista.UserAdmin.ViewModels.ManageUsers
 {
     [EntityDescription(Domains.UserViewModels, UserAdminResources.Names.IndexVM_Title, UserAdminResources.Names.IndexVM_Help, UserAdminResources.Names.IndexVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class IndexViewModel

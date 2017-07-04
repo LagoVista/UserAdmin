@@ -11,7 +11,7 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
     {
         public String OrganizationName { get; set; }
         public Models.Orgs.Organization Organization { get; set; }
-        public IEnumerable<Models.Orgs.OrganizationAccount> People { get; set; }
-        public IEnumerable<Models.Orgs.OrganizationLocation> Locations { get; set; }
+        public IEnumerable<Models.Orgs.OrgUser> People { get; set; }
+        public IEnumerable<Models.Orgs.OrgLocation> Locations { get; set; }
     }
 }
