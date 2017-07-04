@@ -24,7 +24,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public String WebSite { get; set; }
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Status, IsUserEditable:false, ResourceType: typeof(Resources.UserAdminResources))]
         public String Status { get; set; }
-        [FormField(LabelResource: Resources.UserAdminResources.Names.Organization_Primary_Location, IsRequired: true, IsUserEditable: false, ResourceType: typeof(Resources.UserAdminResources))]
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Organization_Primary_Location, IsRequired: false, IsUserEditable: true, ResourceType: typeof(Resources.UserAdminResources))]
         public EntityHeader PrimaryLocation { get; set; }
         [FormField(LabelResource: Resources.UserAdminResources.Names.Admin_Contact, IsRequired:true, ResourceType: typeof(Resources.UserAdminResources))]
         public EntityHeader AdminContact { get; set; }

@@ -97,48 +97,16 @@ namespace LagoVista.UserAdmin.Managers
             organization.AdminContact = user;
             organization.BillingContact = user;
 
-            var location = new OrgLocation();
-            location.SetId();
-            organizationViewModel.MapToOrganizationLocation(location);
-            location.SetCreationUpdatedFields(user);
-            location.AdminContact = user;
-            location.TechnicalContact = user;
-            location.OwnerOrganization = organization.ToEntityHeader();
-            location.Organization = organization.ToEntityHeader();
-
-            organization.PrimaryLocation = location.ToEntityHeader();
-
-            if (organization.Locations == null) organization.Locations = new List<EntityHeader>();
-            organization.Locations.Add(location.ToEntityHeader());
+            /* Create the Organization in Storage */
+            await _organizationRepo.AddOrganizationAsync(organization);
 
             var currentUser = await _appUserRepo.FindByIdAsync(user.Id);
-            var locationUser = new LocationUser(organization.Id, location.Id, user.Id)
-            {
-                Email = currentUser.Email,
-                OrganizationName = organization.Name,
-                UsersName = currentUser.Name,
-                ProfileImageUrl = currentUser.ProfileImageUrl.ImageUrl,
-                LocationName = location.Name
-            };
-            locationUser.SetCreationUpdatedFields(user);
-
-            /* At this point nothing has been written to storage, would be nice to wrap the following in a transaction...*/
-            //TODO: Can we wrap the following in a transaction?
 
             var addUserResult = await AddUserToOrgAsync(currentUser.ToEntityHeader(), organization.ToEntityHeader(), currentUser.ToEntityHeader());
             if (!addUserResult.Successful)
             {
                 return addUserResult;
             }
-
-            /* Create the Organization in Storage */
-            await _organizationRepo.AddOrganizationAsync(organization);
-
-            /* create the location */
-            await _locationRepo.AddLocationAsync(location);
-
-            /* add the user to the location */
-            await _locationUserRepo.AddUserToLocationAsync(locationUser);
 
             if (EntityHeader.IsNullOrEmpty(currentUser.CurrentOrganization)) currentUser.CurrentOrganization = organization.ToEntityHeader();
             if (currentUser.Organizations == null) currentUser.Organizations = new List<EntityHeader>();
