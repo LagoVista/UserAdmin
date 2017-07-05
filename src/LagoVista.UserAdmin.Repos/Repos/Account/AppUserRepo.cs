@@ -35,7 +35,7 @@ namespace LagoVista.UserAdmin.Repos.Users
 
         public Task<AppUser> FindByIdAsync(string id)
         {
-            return GetDocumentAsync(id);
+            return GetDocumentAsync(id,false);
         }
 
         public async Task<AppUser> FindByNameAsync(string userName)
