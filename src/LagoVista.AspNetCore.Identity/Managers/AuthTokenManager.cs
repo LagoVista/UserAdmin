@@ -60,10 +60,10 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthMissingAppId.ToErrorMessage());
             }
 
-            if (String.IsNullOrEmpty(authRequest.ClientId))
+            if (String.IsNullOrEmpty(authRequest.InstallationId))
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AuthAsync", UserAdminErrorCodes.AuthMissingClientId.Message);
-                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthMissingClientId.ToErrorMessage());
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AuthAsync", UserAdminErrorCodes.AuthMissingInstallationId.Message);
+                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthMissingInstallationId.ToErrorMessage());
             }
 
             if (String.IsNullOrEmpty(authRequest.ClientType))
@@ -104,9 +104,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
                         return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
                     }
 
-                    var expires = DateTime.UtcNow.AddDays(_tokenOptions.AuthExpiration.TotalDays);
-                    var token = GetJWToken(appUser, expires);
-                    var refreshTokenResponse = await _refreshTokenManager.GenerateRefreshTokenAsync(authRequest.AppId, authRequest.ClientId, appUser.Id);
+                    var accessExpires = DateTime.UtcNow.AddDays(_tokenOptions.AccessExpiration.TotalMinutes);
+                    var token = GetJWToken(appUser, accessExpires);
+                    var refreshTokenResponse = await _refreshTokenManager.GenerateRefreshTokenAsync(authRequest.AppId, authRequest.InstallationId, appUser.Id);
                     if (!refreshTokenResponse.Successful)
                     {
                         var failedResult = new InvokeResult<AuthResponse>();
@@ -116,9 +116,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
                     var authResponse = new AuthResponse()
                     {
-                        AuthToken = token,
+                        AccessToken = token,
                         TokenType = AUTH_TOKEN_TYPE,
-                        AuthTokenExpiresUTC = expires.ToJSONString(),
+                        AccessTokenExpiresUTC = accessExpires.ToJSONString(),
                         RefreshToken = refreshTokenResponse.Result.RowKey,
                         RefreshTokenExpiresUTC = refreshTokenResponse.Result.ExpiresUtc
 
@@ -152,10 +152,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
                     return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
                 }
 
-                var expires = DateTime.UtcNow.AddDays(_tokenOptions.AuthExpiration.TotalDays);
-                var offset = DateTimeOffset.Now;
-
-                var token = GetJWToken(appUser, expires);
+                var accessExpires = DateTime.UtcNow.AddDays(_tokenOptions.AccessExpiration.TotalMinutes);
+                var token = GetJWToken(appUser, accessExpires);
                 var refreshTokenResponse = await _refreshTokenManager.RenewRefreshTokenAsync(authRequest.RefreshToken, user.Id);
                 if (!refreshTokenResponse.Successful)
                 {
@@ -166,9 +164,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
                 var authResponse = new AuthResponse()
                 {
-                    AuthToken = token,
+                    AccessToken = token,
                     TokenType = AUTH_TOKEN_TYPE,
-                    AuthTokenExpiresUTC = expires.ToJSONString(),
+                    AccessTokenExpiresUTC = accessExpires.ToJSONString(),
                     RefreshToken = refreshTokenResponse.Result.RowKey,
                     RefreshTokenExpiresUTC = refreshTokenResponse.Result.ExpiresUtc
                 };
@@ -183,7 +181,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             }
         }
 
-        private string GetJWToken(AppUser user, DateTime? expires)
+        private string GetJWToken(AppUser user, DateTime expires)
         {
             var handler = new JwtSecurityTokenHandler();
 
@@ -199,7 +197,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 audience: _tokenOptions.Audience,
                 claims: _claimsFactory.GetClaims(user),
                 notBefore: now,
-                expires: now.Add(_tokenOptions.AuthExpiration),
+                expires: expires,
                 signingCredentials: _tokenOptions.SigningCredentials);
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }

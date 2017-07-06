@@ -34,7 +34,7 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
 
             var tokenOptions = new TokenAuthOptions()
             {
-                AuthExpiration = TimeSpan.FromMinutes(90),
+                AccessExpiration = TimeSpan.FromMinutes(90),
                 RefreshExpiration = TimeSpan.FromDays(90),
             };
 
@@ -67,14 +67,12 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
             var authRequest = new AuthRequest()
             {
                 GrantType = "password",
-                ClientId = "dontcare",
+                InstallationId = "dontcare",
                 AppId = "dontcare",
                 ClientType = "iphone",
                 Email = "fred@bedrockquery.com",
                 Password = "BedRocks!"
             };
-
-
 
             _refreshTokenManager.Setup(rtm => rtm.GenerateRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(
                 InvokeResult<RefreshToken>.Create(
@@ -86,14 +84,7 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
 
 
             var result = await _authTokenManager.AuthAsync(authRequest);
-
-            Console.WriteLine(result.Result.AuthToken);
-            Console.WriteLine(result.Result.RefreshToken);
-
             Assert.True(result.Successful);
-
         }
-
-
     }
 }

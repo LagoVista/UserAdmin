@@ -14,7 +14,7 @@ namespace LagoVista.UserAdmin.Resources
         public static ErrorCode AuthCouldNotFindUserAccount => new ErrorCode() { Code = "AUTH005", Message = UserAdminResources.AuthErr_CouldNotFindUserAccount };
         public static ErrorCode AuthMissingAppId => new ErrorCode() { Code = "AUTH006", Message = UserAdminResources.AuthErr_MissingAppId };
         public static ErrorCode AuthMissingClientType => new ErrorCode() { Code = "AUTH007", Message = UserAdminResources.AuthErr_MissingClientType };
-        public static ErrorCode AuthMissingClientId => new ErrorCode() { Code = "AUTH008", Message = UserAdminResources.AuthErr_MssingClientId };
+        public static ErrorCode AuthMissingInstallationId => new ErrorCode() { Code = "AUTH008", Message = UserAdminResources.AuthErr_MissingInstallationId };
         public static ErrorCode AuthMissingRefreshToken => new ErrorCode() { Code = "AUTH009", Message = UserAdminResources.AuthErr_MissingRefreshToken };
         public static ErrorCode AuthRefrshTokenInvalidFormat => new ErrorCode() { Code = "AUTH010", Message = UserAdminResources.AuthErr_RefreshToken_InvalidFormat };
         public static ErrorCode AuthRefrshTokenNotFound => new ErrorCode() { Code = "AUTH011", Message = UserAdminResources.AuthErr_RefreshToken_NotFound };

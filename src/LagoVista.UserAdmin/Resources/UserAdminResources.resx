@@ -674,8 +674,8 @@
   <data name="AuthErr_MissingClientType" xml:space="preserve">
     <value>ClientType is required for authentication</value>
   </data>
-  <data name="AuthErr_MssingClientId" xml:space="preserve">
-    <value>ClientId is required for authentication</value>
+  <data name="AuthErr_MissingInstallationId" xml:space="preserve">
+    <value>Installation Id is required for authentication</value>
   </data>
   <data name="AuthErr_EmailInvalidFormat" xml:space="preserve">
     <value>Invalid Email Format</value>

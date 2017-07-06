@@ -155,15 +155,15 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:AuthErr_MissingEmailAddress
 
 		public static string AuthErr_MissingEmailAddress { get { return GetResourceString("AuthErr_MissingEmailAddress"); } }
+//Resources:UserAdminResources:AuthErr_MissingInstallationId
+
+		public static string AuthErr_MissingInstallationId { get { return GetResourceString("AuthErr_MissingInstallationId"); } }
 //Resources:UserAdminResources:AuthErr_MissingPassword
 
 		public static string AuthErr_MissingPassword { get { return GetResourceString("AuthErr_MissingPassword"); } }
 //Resources:UserAdminResources:AuthErr_MissingRefreshToken
 
 		public static string AuthErr_MissingRefreshToken { get { return GetResourceString("AuthErr_MissingRefreshToken"); } }
-//Resources:UserAdminResources:AuthErr_MssingClientId
-
-		public static string AuthErr_MssingClientId { get { return GetResourceString("AuthErr_MssingClientId"); } }
 //Resources:UserAdminResources:AuthErr_RefreshToken_InvalidFormat
 
 		public static string AuthErr_RefreshToken_InvalidFormat { get { return GetResourceString("AuthErr_RefreshToken_InvalidFormat"); } }
@@ -683,9 +683,9 @@ namespace LagoVista.UserAdmin.Resources
 			public const string AuthErr_MissingAppId = "AuthErr_MissingAppId";
 			public const string AuthErr_MissingClientType = "AuthErr_MissingClientType";
 			public const string AuthErr_MissingEmailAddress = "AuthErr_MissingEmailAddress";
+			public const string AuthErr_MissingInstallationId = "AuthErr_MissingInstallationId";
 			public const string AuthErr_MissingPassword = "AuthErr_MissingPassword";
 			public const string AuthErr_MissingRefreshToken = "AuthErr_MissingRefreshToken";
-			public const string AuthErr_MssingClientId = "AuthErr_MssingClientId";
 			public const string AuthErr_RefreshToken_InvalidFormat = "AuthErr_RefreshToken_InvalidFormat";
 			public const string AuthErr_RefreshToken_NotFound = "AuthErr_RefreshToken_NotFound";
 			public const string AuthErr_RefreshTokenExpired = "AuthErr_RefreshTokenExpired";
