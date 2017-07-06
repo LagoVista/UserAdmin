@@ -24,6 +24,9 @@ namespace LagoVista.UserAdmin.Resources
         public static ErrorCode AuthEmailInvalidFormat => new ErrorCode() { Code = "AUTH014", Message = UserAdminResources.AuthErr_EmailInvalidFormat };
         public static ErrorCode AuthRefreshTokenNotInStorage => new ErrorCode() { Code = "AUTH015", Message = UserAdminResources.AuthErr_RefreshTokenNotInStoraage };
         public static ErrorCode AuthUserIsNullForRefresh => new ErrorCode() { Code = "AUTH016", Message = UserAdminResources.AuthErr_UserIsNullForRefresh };
+        public static ErrorCode AuthRequestNull => new ErrorCode() { Code = "AUTH017", Message = UserAdminResources.AuthErr_AuthRequestNull };
 
+
+        
     }
 }

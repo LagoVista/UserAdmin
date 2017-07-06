@@ -128,6 +128,9 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:AssetSet_Title
 
 		public static string AssetSet_Title { get { return GetResourceString("AssetSet_Title"); } }
+//Resources:UserAdminResources:AuthErr_AuthRequestNull
+
+		public static string AuthErr_AuthRequestNull { get { return GetResourceString("AuthErr_AuthRequestNull"); } }
 //Resources:UserAdminResources:AuthErr_CouldNotFindUserAccount
 
 		public static string AuthErr_CouldNotFindUserAccount { get { return GetResourceString("AuthErr_CouldNotFindUserAccount"); } }
@@ -671,6 +674,7 @@ namespace LagoVista.UserAdmin.Resources
 			public const string AssetSet_IsRestricted = "AssetSet_IsRestricted";
 			public const string AssetSet_IsRestricted_Help = "AssetSet_IsRestricted_Help";
 			public const string AssetSet_Title = "AssetSet_Title";
+			public const string AuthErr_AuthRequestNull = "AuthErr_AuthRequestNull";
 			public const string AuthErr_CouldNotFindUserAccount = "AuthErr_CouldNotFindUserAccount";
 			public const string AuthErr_EmailInvalidFormat = "AuthErr_EmailInvalidFormat";
 			public const string AuthErr_InvalidCredentials = "AuthErr_InvalidCredentials";

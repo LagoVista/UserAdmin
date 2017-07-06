@@ -15,6 +15,9 @@ namespace LagoVista.AspNetCore.Identity
         public static void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IEmailSender, SendGridEmailService>();
+            services.AddTransient<IUserManager, UserManager>();
+            services.AddTransient<ISignInManager, SignInManager>();
+            services.AddTransient<IEmailSender, SendGridEmailService>();
             services.AddTransient<ISmsSender, TwilioSMSSender>();
             services.AddTransient<IAuthTokenManager, AuthTokenManager>();
             services.AddSingleton<IClaimsFactory, ClaimsFactory>();

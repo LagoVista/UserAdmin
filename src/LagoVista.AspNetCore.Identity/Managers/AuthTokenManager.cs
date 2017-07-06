@@ -26,8 +26,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
         IRefreshTokenManager _refreshTokenManager;
         IAdminLogger _adminLogger;
         IClaimsFactory _claimsFactory;
-        SignInManager<AppUser> _signInManager;
-        UserManager<AppUser> _userManager;
+        ISignInManager _signInManager;
+        IUserManager _userManager;
+
 
         private const string AUTH_TOKEN_TYPE = "auth";
         private const string GRANT_TYPE_PASSWORD = "password";
@@ -35,7 +36,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         private const string EMAIL_REGEX_FORMAT = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
 
-        public AuthTokenManager(TokenAuthOptions tokenOptions, IRefreshTokenManager refreshTokenManager, IAdminLogger adminLogger, IClaimsFactory claimsFactory, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager)
+        public AuthTokenManager(TokenAuthOptions tokenOptions, IRefreshTokenManager refreshTokenManager, IAdminLogger adminLogger, IClaimsFactory claimsFactory, ISignInManager signInManager, IUserManager userManager)
         {
             _tokenOptions = tokenOptions;
             _refreshTokenManager = refreshTokenManager;
@@ -43,10 +44,16 @@ namespace LagoVista.AspNetCore.Identity.Managers
             _signInManager = signInManager;
             _userManager = userManager;
             _claimsFactory = claimsFactory;
-        }
+        }        
 
         public async Task<InvokeResult<AuthResponse>> AuthAsync(AuthRequest authRequest, EntityHeader org = null, EntityHeader user = null)
         {
+            if (authRequest == null)
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AuthAsync", UserAdminErrorCodes.AuthRequestNull.Message);
+                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthRequestNull.ToErrorMessage());
+            }
+
             if (String.IsNullOrEmpty(authRequest.AppId))
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AuthAsync", UserAdminErrorCodes.AuthMissingAppId.Message);

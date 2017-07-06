@@ -701,4 +701,7 @@
   <data name="AuthErr_UserIsNullForRefresh" xml:space="preserve">
     <value>User is null, must pass in current user when requesting a refresh token grant</value>
   </data>
+  <data name="AuthErr_AuthRequestNull" xml:space="preserve">
+    <value>Authentication Request is null, can not validate user</value>
+  </data>
 </root>

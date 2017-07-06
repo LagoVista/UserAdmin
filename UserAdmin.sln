@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{68AF24F5-D5E7-40F5-AE0A-594167F89A44}"
 EndProject
@@ -20,7 +20,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.UserAdmin", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.AspNetCore.Identity", "src\LagoVista.AspNetCore.Identity\LagoVista.AspNetCore.Identity.csproj", "{1C1A073C-92C9-441E-AF87-F536073C73D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.UserAdmin.Repos", "src\LagoVista.UserAdmin.Repos\LagoVista.UserAdmin.Repos.csproj", "{52B500CA-BFAF-4BB6-98CC-3B4F4DF24909}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.UserAdmin.Repos", "src\LagoVista.UserAdmin.Repos\LagoVista.UserAdmin.Repos.csproj", "{52B500CA-BFAF-4BB6-98CC-3B4F4DF24909}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.UserAdmin.Tests", "tests\LagoVista.UserAdmin.Tests\LagoVista.UserAdmin.Tests.csproj", "{BDEF733C-D8EC-495E-9383-9ECADDA940A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +42,10 @@ Global
 		{52B500CA-BFAF-4BB6-98CC-3B4F4DF24909}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52B500CA-BFAF-4BB6-98CC-3B4F4DF24909}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52B500CA-BFAF-4BB6-98CC-3B4F4DF24909}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDEF733C-D8EC-495E-9383-9ECADDA940A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDEF733C-D8EC-495E-9383-9ECADDA940A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDEF733C-D8EC-495E-9383-9ECADDA940A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDEF733C-D8EC-495E-9383-9ECADDA940A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,5 +54,6 @@ Global
 		{4561A425-6327-488F-AFE4-4EDC319273E7} = {68AF24F5-D5E7-40F5-AE0A-594167F89A44}
 		{1C1A073C-92C9-441E-AF87-F536073C73D7} = {68AF24F5-D5E7-40F5-AE0A-594167F89A44}
 		{52B500CA-BFAF-4BB6-98CC-3B4F4DF24909} = {68AF24F5-D5E7-40F5-AE0A-594167F89A44}
+		{BDEF733C-D8EC-495E-9383-9ECADDA940A0} = {0D569608-298B-46AE-82D3-8481FE044E10}
 	EndGlobalSection
 EndGlobal
