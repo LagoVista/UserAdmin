@@ -128,6 +128,54 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:AssetSet_Title
 
 		public static string AssetSet_Title { get { return GetResourceString("AssetSet_Title"); } }
+//Resources:UserAdminResources:AuthErr_CouldNotFindUserAccount
+
+		public static string AuthErr_CouldNotFindUserAccount { get { return GetResourceString("AuthErr_CouldNotFindUserAccount"); } }
+//Resources:UserAdminResources:AuthErr_EmailInvalidFormat
+
+		public static string AuthErr_EmailInvalidFormat { get { return GetResourceString("AuthErr_EmailInvalidFormat"); } }
+//Resources:UserAdminResources:AuthErr_InvalidCredentials
+
+		public static string AuthErr_InvalidCredentials { get { return GetResourceString("AuthErr_InvalidCredentials"); } }
+//Resources:UserAdminResources:AuthErr_InvalidGrantType
+
+		public static string AuthErr_InvalidGrantType { get { return GetResourceString("AuthErr_InvalidGrantType"); } }
+//Resources:UserAdminResources:AuthErr_InvalidRefreshToken
+
+		public static string AuthErr_InvalidRefreshToken { get { return GetResourceString("AuthErr_InvalidRefreshToken"); } }
+//Resources:UserAdminResources:AuthErr_MissingAppId
+
+		public static string AuthErr_MissingAppId { get { return GetResourceString("AuthErr_MissingAppId"); } }
+//Resources:UserAdminResources:AuthErr_MissingClientType
+
+		public static string AuthErr_MissingClientType { get { return GetResourceString("AuthErr_MissingClientType"); } }
+//Resources:UserAdminResources:AuthErr_MissingEmailAddress
+
+		public static string AuthErr_MissingEmailAddress { get { return GetResourceString("AuthErr_MissingEmailAddress"); } }
+//Resources:UserAdminResources:AuthErr_MissingPassword
+
+		public static string AuthErr_MissingPassword { get { return GetResourceString("AuthErr_MissingPassword"); } }
+//Resources:UserAdminResources:AuthErr_MissingRefreshToken
+
+		public static string AuthErr_MissingRefreshToken { get { return GetResourceString("AuthErr_MissingRefreshToken"); } }
+//Resources:UserAdminResources:AuthErr_MssingClientId
+
+		public static string AuthErr_MssingClientId { get { return GetResourceString("AuthErr_MssingClientId"); } }
+//Resources:UserAdminResources:AuthErr_RefreshToken_InvalidFormat
+
+		public static string AuthErr_RefreshToken_InvalidFormat { get { return GetResourceString("AuthErr_RefreshToken_InvalidFormat"); } }
+//Resources:UserAdminResources:AuthErr_RefreshToken_NotFound
+
+		public static string AuthErr_RefreshToken_NotFound { get { return GetResourceString("AuthErr_RefreshToken_NotFound"); } }
+//Resources:UserAdminResources:AuthErr_RefreshTokenExpired
+
+		public static string AuthErr_RefreshTokenExpired { get { return GetResourceString("AuthErr_RefreshTokenExpired"); } }
+//Resources:UserAdminResources:AuthErr_RefreshTokenNotInStoraage
+
+		public static string AuthErr_RefreshTokenNotInStoraage { get { return GetResourceString("AuthErr_RefreshTokenNotInStoraage"); } }
+//Resources:UserAdminResources:AuthErr_UserIsNullForRefresh
+
+		public static string AuthErr_UserIsNullForRefresh { get { return GetResourceString("AuthErr_UserIsNullForRefresh"); } }
 //Resources:UserAdminResources:Billing_Contact
 
 		public static string Billing_Contact { get { return GetResourceString("Billing_Contact"); } }
@@ -623,6 +671,22 @@ namespace LagoVista.UserAdmin.Resources
 			public const string AssetSet_IsRestricted = "AssetSet_IsRestricted";
 			public const string AssetSet_IsRestricted_Help = "AssetSet_IsRestricted_Help";
 			public const string AssetSet_Title = "AssetSet_Title";
+			public const string AuthErr_CouldNotFindUserAccount = "AuthErr_CouldNotFindUserAccount";
+			public const string AuthErr_EmailInvalidFormat = "AuthErr_EmailInvalidFormat";
+			public const string AuthErr_InvalidCredentials = "AuthErr_InvalidCredentials";
+			public const string AuthErr_InvalidGrantType = "AuthErr_InvalidGrantType";
+			public const string AuthErr_InvalidRefreshToken = "AuthErr_InvalidRefreshToken";
+			public const string AuthErr_MissingAppId = "AuthErr_MissingAppId";
+			public const string AuthErr_MissingClientType = "AuthErr_MissingClientType";
+			public const string AuthErr_MissingEmailAddress = "AuthErr_MissingEmailAddress";
+			public const string AuthErr_MissingPassword = "AuthErr_MissingPassword";
+			public const string AuthErr_MissingRefreshToken = "AuthErr_MissingRefreshToken";
+			public const string AuthErr_MssingClientId = "AuthErr_MssingClientId";
+			public const string AuthErr_RefreshToken_InvalidFormat = "AuthErr_RefreshToken_InvalidFormat";
+			public const string AuthErr_RefreshToken_NotFound = "AuthErr_RefreshToken_NotFound";
+			public const string AuthErr_RefreshTokenExpired = "AuthErr_RefreshTokenExpired";
+			public const string AuthErr_RefreshTokenNotInStoraage = "AuthErr_RefreshTokenNotInStoraage";
+			public const string AuthErr_UserIsNullForRefresh = "AuthErr_UserIsNullForRefresh";
 			public const string Billing_Contact = "Billing_Contact";
 			public const string ChangePasswordVM_Description = "ChangePasswordVM_Description";
 			public const string ChangePasswordVM_Help = "ChangePasswordVM_Help";
@@ -778,4 +842,5 @@ namespace LagoVista.UserAdmin.Resources
 			public const string VerifyUser_PhoneConfirmed = "VerifyUser_PhoneConfirmed";
 		}
 	}
+ 
 }

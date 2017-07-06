@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using LagoVista.IoT.Logging;
+using LagoVista.UserAdmin.Resources;
 
 namespace LagoVista.UserAdmin.Repos
 {
@@ -20,7 +22,7 @@ namespace LagoVista.UserAdmin.Repos
         {
             services.AddTransient<IAppUserRepo, AppUserRepo>();
             services.AddTransient<ILocationUserRepo, LocationUserRepo>();
-            services.AddTransient<ITokenRepo, TokenRepo>();
+            services.AddTransient<IRefreshTokenRepo, RefreshTokenRepo>();
             services.AddTransient<IInviteUserRepo, InviteUserRepo>();
             services.AddTransient<IOrgUserRepo, OrgUserRepo>();
             services.AddTransient<IOrgLocationRepo, OrgLocationRepo>();
@@ -33,6 +35,8 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<ITeamUserRepo, TeamUserRepo>();
             services.AddTransient<IAssetSetRepo, AssetSetRepo>();
             services.AddTransient<IManagedAssetRepo, ManagedAssetRepo>();
+
+            ErrorCodes.Register(typeof(UserAdminErrorCodes));
         }
     }
 }

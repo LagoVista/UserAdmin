@@ -28,7 +28,7 @@ This template if free for redistribution in accordance with the same license.
 <#@ import namespace="EnvDTE" #>
 <#@ import namespace="EnvDTE80" #>
 <#@ import namespace="Microsoft.VisualStudio.TextTemplating" #>
-<#
+<#  
    var serviceProvider = Host as IServiceProvider;
     if (serviceProvider != null) {
         Dte = serviceProvider.GetService(typeof(SDTE)) as DTE;

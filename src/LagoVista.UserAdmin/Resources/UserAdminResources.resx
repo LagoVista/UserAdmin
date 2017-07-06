@@ -653,4 +653,52 @@
   <data name="Team_Title" xml:space="preserve">
     <value>Team</value>
   </data>
+  <data name="AuthErr_InvalidCredentials" xml:space="preserve">
+    <value>Invalid Credentials</value>
+  </data>
+  <data name="AuthErr_InvalidRefreshToken" xml:space="preserve">
+    <value>Invalid Refresh Token</value>
+  </data>
+  <data name="AuthErr_RefreshTokenExpired" xml:space="preserve">
+    <value>Refresh Token Expired</value>
+  </data>
+  <data name="AuthErr_InvalidGrantType" xml:space="preserve">
+    <value>Invalid Grant Type, allowable grant types are password and refreshtoken</value>
+  </data>
+  <data name="AuthErr_CouldNotFindUserAccount" xml:space="preserve">
+    <value>Could Not Find User Account</value>
+  </data>
+  <data name="AuthErr_MissingAppId" xml:space="preserve">
+    <value>AppId is required for authentication</value>
+  </data>
+  <data name="AuthErr_MissingClientType" xml:space="preserve">
+    <value>ClientType is required for authentication</value>
+  </data>
+  <data name="AuthErr_MssingClientId" xml:space="preserve">
+    <value>ClientId is required for authentication</value>
+  </data>
+  <data name="AuthErr_EmailInvalidFormat" xml:space="preserve">
+    <value>Invalid Email Format</value>
+  </data>
+  <data name="AuthErr_MissingEmailAddress" xml:space="preserve">
+    <value>Missing Email Address</value>
+  </data>
+  <data name="AuthErr_MissingPassword" xml:space="preserve">
+    <value>Missing Password</value>
+  </data>
+  <data name="AuthErr_MissingRefreshToken" xml:space="preserve">
+    <value>Grant Type is refreshtoken but refresh token not provided</value>
+  </data>
+  <data name="AuthErr_RefreshToken_InvalidFormat" xml:space="preserve">
+    <value>The format of of the refresh token is not valid</value>
+  </data>
+  <data name="AuthErr_RefreshToken_NotFound" xml:space="preserve">
+    <value>Could not find supplied refresh token</value>
+  </data>
+  <data name="AuthErr_RefreshTokenNotInStoraage" xml:space="preserve">
+    <value>Attempt to retrieve refresh token from stroage by id failed.</value>
+  </data>
+  <data name="AuthErr_UserIsNullForRefresh" xml:space="preserve">
+    <value>User is null, must pass in current user when requesting a refresh token grant</value>
+  </data>
 </root>

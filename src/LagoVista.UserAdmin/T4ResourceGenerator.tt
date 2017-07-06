@@ -68,8 +68,8 @@ try{
 
 		var newNamespace = ("Resources." + entry.Path + ".").Replace(".Resources.", ".");
 		newNamespace = RootNamespace + "." + newNamespace.Substring(0, newNamespace.Length-1);
-		var newClass = entry.File;
-
+		var newClass = entry.File;  
+		 
 		bool namesapceIsChanging = newNamespace != currentNamespace;
 		bool classIsChanging = namesapceIsChanging || newClass != currentClass;
 		
@@ -202,10 +202,10 @@ try{
 	}
 }
 catch(Exception ex)
-{
+{ 
 	Error(ex.ToString());
 }
-#>
+#> 
 }
 <#+
     const string Kind_PhysicalFolder = "{6BB5F8EF-4483-11D3-8BCF-00C04F8EC28C}";

@@ -3,7 +3,7 @@
   <metadata>
     <id>LagoVista.AspNetCore.Identity</id>
     <title>LagoVista ASP.NET Core Identity Provider</title>
-    <version>1.2.49-alpha1816</version>
+    <version>1.2.50-alpha1026</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -19,7 +19,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="readme.txt" target="" />
     <file src="bin\release\netstandard1.6\*.dll" target="lib\netstandard1.6" />
   </files>
 </package>

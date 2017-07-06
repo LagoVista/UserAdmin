@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AuthErr_InvalidCredentials" xml:space="preserve">
+    <value>Invalid Credentials</value>
+  </data>
+  <data name="AuthErr_InvalidRefreshToken" xml:space="preserve">
+    <value>Invalid Refresh Token</value>
+  </data>
+  <data name="AuthErr_RefreshTokenExpired" xml:space="preserve">
+    <value>Refresh Token Expired</value>
+  </data>
   <data name="Login_Email" xml:space="preserve">
     <value>Email</value>
   </data>

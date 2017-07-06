@@ -3,10 +3,11 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Interfaces.Repos
 {
-    public interface ITokenRepo
+    public interface IRefreshTokenRepo
     {
         Task<RefreshToken> GetRefreshTokenAsync(string tokenId, string userId);
-        Task RemoveRefreshTokenAsync(string userId, string tokenId);
         Task SaveRefreshTokenAsync(RefreshToken token);
+        Task RemoveRefreshTokenAsync(string tokenId, string userId);
+        Task RemoveAllForUserAsync(string userId);
     }
 }

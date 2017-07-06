@@ -4,20 +4,29 @@ using LagoVista.CloudStorage.Storage;
 using LagoVista.Core.Authentication.Models;
 using LagoVista.UserAdmin.Interfaces.Repos;
 using LagoVista.IoT.Logging.Loggers;
+using System;
 
 namespace LagoVista.UserAdmin.Repos.Users
 {
-    public class TokenRepo : TableStorageBase<RefreshToken>, ITokenRepo
+    public class RefreshTokenRepo : TableStorageBase<RefreshToken>, IRefreshTokenRepo
     {
-        public TokenRepo(IUserAdminSettings settings, IAdminLogger logger) : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
+        public RefreshTokenRepo(IUserAdminSettings settings, IAdminLogger logger) : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
 
         }
-
         
         public Task<RefreshToken> GetRefreshTokenAsync(string tokenId, string userId)
         {
-            return GetAsync(userId, tokenId);
+            return GetAsync(userId, tokenId, false);
+        }
+
+        public async Task RemoveAllForUserAsync(string userId)
+        {
+            var tokens = await GetByParitionIdAsync(userId);
+            foreach(var token in tokens)
+            {
+                await RemoveAsync(token);
+            }
         }
 
         public Task RemoveRefreshTokenAsync(string userId, string tokenId)

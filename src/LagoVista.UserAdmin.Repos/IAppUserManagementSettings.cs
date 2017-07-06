@@ -16,3 +16,4 @@ namespace LagoVista.UserAdmin.Repos
         bool ShouldConsolidateCollections { get; }
     }
 }
+                                                                                                                                                                                                                               
