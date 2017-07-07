@@ -532,6 +532,24 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:OrganizationVM_Title
 
 		public static string OrganizationVM_Title { get { return GetResourceString("OrganizationVM_Title"); } }
+//Resources:UserAdminResources:RegErr_ErrorSendingEmail
+
+		public static string RegErr_ErrorSendingEmail { get { return GetResourceString("RegErr_ErrorSendingEmail"); } }
+//Resources:UserAdminResources:RegErr_ErrorSendingPhoneNumber
+
+		public static string RegErr_ErrorSendingPhoneNumber { get { return GetResourceString("RegErr_ErrorSendingPhoneNumber"); } }
+//Resources:UserAdminResources:RegErr_InvalidEmailAddress
+
+		public static string RegErr_InvalidEmailAddress { get { return GetResourceString("RegErr_InvalidEmailAddress"); } }
+//Resources:UserAdminResources:RegErr_MissingFirstName
+
+		public static string RegErr_MissingFirstName { get { return GetResourceString("RegErr_MissingFirstName"); } }
+//Resources:UserAdminResources:RegErr_MissingLastName
+
+		public static string RegErr_MissingLastName { get { return GetResourceString("RegErr_MissingLastName"); } }
+//Resources:UserAdminResources:RegErr_MissingPhoneNumber
+
+		public static string RegErr_MissingPhoneNumber { get { return GetResourceString("RegErr_MissingPhoneNumber"); } }
 //Resources:UserAdminResources:RegisterVM_Description
 
 		public static string RegisterVM_Description { get { return GetResourceString("RegisterVM_Description"); } }
@@ -809,6 +827,12 @@ namespace LagoVista.UserAdmin.Resources
 			public const string OrganizationVM_Description = "OrganizationVM_Description";
 			public const string OrganizationVM_Help = "OrganizationVM_Help";
 			public const string OrganizationVM_Title = "OrganizationVM_Title";
+			public const string RegErr_ErrorSendingEmail = "RegErr_ErrorSendingEmail";
+			public const string RegErr_ErrorSendingPhoneNumber = "RegErr_ErrorSendingPhoneNumber";
+			public const string RegErr_InvalidEmailAddress = "RegErr_InvalidEmailAddress";
+			public const string RegErr_MissingFirstName = "RegErr_MissingFirstName";
+			public const string RegErr_MissingLastName = "RegErr_MissingLastName";
+			public const string RegErr_MissingPhoneNumber = "RegErr_MissingPhoneNumber";
 			public const string RegisterVM_Description = "RegisterVM_Description";
 			public const string RegisterVM_Help = "RegisterVM_Help";
 			public const string RegisterVM_Title = "RegisterVM_Title";

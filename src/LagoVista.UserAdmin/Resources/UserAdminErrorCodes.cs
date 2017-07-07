@@ -26,5 +26,12 @@ namespace LagoVista.UserAdmin.Resources
         public static ErrorCode AuthUserIsNullForRefresh => new ErrorCode() { Code = "AUTH016", Message = UserAdminResources.AuthErr_UserIsNullForRefresh };
         public static ErrorCode AuthRequestNull => new ErrorCode() { Code = "AUTH017", Message = UserAdminResources.AuthErr_AuthRequestNull };
         public static ErrorCode AuthMissingDeviceId => new ErrorCode() { Code = "AUTH018", Message = UserAdminResources.AuthErr_MissingDeviceId };
+        public static ErrorCode RegMissingFirstLastName => new ErrorCode() { Code = "AUTH019", Message = UserAdminResources.RegErr_MissingFirstName };
+        public static ErrorCode RegMissingLastName => new ErrorCode() { Code = "AUTH20", Message = UserAdminResources.RegErr_MissingLastName };
+        public static ErrorCode RegMissingEmail => new ErrorCode() { Code = "AUTH21", Message = UserAdminResources.AuthErr_MissingEmailAddress };
+        public static ErrorCode RegInvalidEmailAddress => new ErrorCode() { Code = "AUTH22", Message = UserAdminResources.RegErr_InvalidEmailAddress };
+        public static ErrorCode RegMissingPhoneNumber => new ErrorCode() { Code = "AUTH23", Message = UserAdminResources.RegErr_MissingPhoneNumber };
+        public static ErrorCode RegErrorSendingSMS => new ErrorCode() { Code = "AUTH24", Message = UserAdminResources.RegErr_ErrorSendingPhoneNumber };
+        public static ErrorCode RegErrorSendingEmail => new ErrorCode() { Code = "AUTH25", Message = UserAdminResources.RegErr_ErrorSendingEmail };
     }
 }

@@ -707,4 +707,22 @@
   <data name="AuthErr_MissingDeviceId" xml:space="preserve">
     <value>Device ID is required for authorization</value>
   </data>
+  <data name="RegErr_ErrorSendingEmail" xml:space="preserve">
+    <value>Error sending confirmation email, please check your address and try again.</value>
+  </data>
+  <data name="RegErr_ErrorSendingPhoneNumber" xml:space="preserve">
+    <value>Error sending SMS code to phone, please check your number and try again.</value>
+  </data>
+  <data name="RegErr_InvalidEmailAddress" xml:space="preserve">
+    <value>Invalid Email Address</value>
+  </data>
+  <data name="RegErr_MissingFirstName" xml:space="preserve">
+    <value>Missing First Name for User Registration</value>
+  </data>
+  <data name="RegErr_MissingLastName" xml:space="preserve">
+    <value>Missing Last Name for User Registration</value>
+  </data>
+  <data name="RegErr_MissingPhoneNumber" xml:space="preserve">
+    <value>Missing Phone Number on Registration</value>
+  </data>
 </root>
