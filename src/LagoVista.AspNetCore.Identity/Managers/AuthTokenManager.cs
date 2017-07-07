@@ -112,6 +112,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
                     {
                         authRequest.AppInstanceId = Guid.NewGuid().ToId();
                         var appInstance = new AppInstance(authRequest.AppInstanceId, appUser.Id);
+                        appInstance.CreationDate = DateTime.UtcNow.ToJSONString();
+                        appInstance.LastAccessTokenRefresh = DateTime.UtcNow.ToJSONString();
+                        appInstance.LastLogin = DateTime.UtcNow.ToJSONString();
                         await _appInstanceRepo.AddAppInstanceAsync(appInstance);
                     }
 
