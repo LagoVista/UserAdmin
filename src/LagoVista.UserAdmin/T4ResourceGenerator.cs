@@ -149,15 +149,18 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:AuthErr_MissingAppId
 
 		public static string AuthErr_MissingAppId { get { return GetResourceString("AuthErr_MissingAppId"); } }
+//Resources:UserAdminResources:AuthErr_MissingAppInstanceid
+
+		public static string AuthErr_MissingAppInstanceid { get { return GetResourceString("AuthErr_MissingAppInstanceid"); } }
 //Resources:UserAdminResources:AuthErr_MissingClientType
 
 		public static string AuthErr_MissingClientType { get { return GetResourceString("AuthErr_MissingClientType"); } }
+//Resources:UserAdminResources:AuthErr_MissingDeviceId
+
+		public static string AuthErr_MissingDeviceId { get { return GetResourceString("AuthErr_MissingDeviceId"); } }
 //Resources:UserAdminResources:AuthErr_MissingEmailAddress
 
 		public static string AuthErr_MissingEmailAddress { get { return GetResourceString("AuthErr_MissingEmailAddress"); } }
-//Resources:UserAdminResources:AuthErr_MissingInstallationId
-
-		public static string AuthErr_MissingInstallationId { get { return GetResourceString("AuthErr_MissingInstallationId"); } }
 //Resources:UserAdminResources:AuthErr_MissingPassword
 
 		public static string AuthErr_MissingPassword { get { return GetResourceString("AuthErr_MissingPassword"); } }
@@ -681,9 +684,10 @@ namespace LagoVista.UserAdmin.Resources
 			public const string AuthErr_InvalidGrantType = "AuthErr_InvalidGrantType";
 			public const string AuthErr_InvalidRefreshToken = "AuthErr_InvalidRefreshToken";
 			public const string AuthErr_MissingAppId = "AuthErr_MissingAppId";
+			public const string AuthErr_MissingAppInstanceid = "AuthErr_MissingAppInstanceid";
 			public const string AuthErr_MissingClientType = "AuthErr_MissingClientType";
+			public const string AuthErr_MissingDeviceId = "AuthErr_MissingDeviceId";
 			public const string AuthErr_MissingEmailAddress = "AuthErr_MissingEmailAddress";
-			public const string AuthErr_MissingInstallationId = "AuthErr_MissingInstallationId";
 			public const string AuthErr_MissingPassword = "AuthErr_MissingPassword";
 			public const string AuthErr_MissingRefreshToken = "AuthErr_MissingRefreshToken";
 			public const string AuthErr_RefreshToken_InvalidFormat = "AuthErr_RefreshToken_InvalidFormat";

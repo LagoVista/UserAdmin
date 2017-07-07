@@ -28,12 +28,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
             _tokenOptions = tokenOptions;
         }
 
-        public async Task<InvokeResult<RefreshToken>> GenerateRefreshTokenAsync(string appId, string clientId, string userId)
+        public async Task<InvokeResult<RefreshToken>> GenerateRefreshTokenAsync(string appId, string appInstanceId, string userId)
         {
             var refreshToken = new RefreshToken(userId);
             refreshToken.RowKey = DateTime.UtcNow.ToInverseTicksRowKey();
             refreshToken.AppId = appId;
-            refreshToken.ClientId = clientId;
+            refreshToken.AppInstanceId = appInstanceId;
             refreshToken.IssuedUtc = DateTime.UtcNow.ToJSONString();
             refreshToken.ExpiresUtc = (DateTime.UtcNow + _tokenOptions.RefreshExpiration).ToJSONString();
             await _refreshTokenRepo.SaveRefreshTokenAsync(refreshToken);
@@ -62,7 +62,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             }
 
             await _refreshTokenRepo.RemoveRefreshTokenAsync(oldRefreshToken.RowKey, oldRefreshToken.PartitionKey);
-            return await GenerateRefreshTokenAsync(oldRefreshToken.AppId, oldRefreshToken.PartitionKey, oldRefreshToken.ClientId);
+            return await GenerateRefreshTokenAsync(oldRefreshToken.AppId, oldRefreshToken.PartitionKey, oldRefreshToken.AppInstanceId);
         }
 
         public async Task<InvokeResult<RefreshToken>> RenewRefreshTokenAsync(String refreshTokenId, string userId)

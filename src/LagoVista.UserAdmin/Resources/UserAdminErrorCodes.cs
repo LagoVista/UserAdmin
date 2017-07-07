@@ -14,7 +14,7 @@ namespace LagoVista.UserAdmin.Resources
         public static ErrorCode AuthCouldNotFindUserAccount => new ErrorCode() { Code = "AUTH005", Message = UserAdminResources.AuthErr_CouldNotFindUserAccount };
         public static ErrorCode AuthMissingAppId => new ErrorCode() { Code = "AUTH006", Message = UserAdminResources.AuthErr_MissingAppId };
         public static ErrorCode AuthMissingClientType => new ErrorCode() { Code = "AUTH007", Message = UserAdminResources.AuthErr_MissingClientType };
-        public static ErrorCode AuthMissingInstallationId => new ErrorCode() { Code = "AUTH008", Message = UserAdminResources.AuthErr_MissingInstallationId };
+        public static ErrorCode AuthMissingAppInstanceId => new ErrorCode() { Code = "AUTH008", Message = UserAdminResources.AuthErr_MissingAppInstanceid };
         public static ErrorCode AuthMissingRefreshToken => new ErrorCode() { Code = "AUTH009", Message = UserAdminResources.AuthErr_MissingRefreshToken };
         public static ErrorCode AuthRefrshTokenInvalidFormat => new ErrorCode() { Code = "AUTH010", Message = UserAdminResources.AuthErr_RefreshToken_InvalidFormat };
         public static ErrorCode AuthRefrshTokenNotFound => new ErrorCode() { Code = "AUTH011", Message = UserAdminResources.AuthErr_RefreshToken_NotFound };
@@ -25,8 +25,6 @@ namespace LagoVista.UserAdmin.Resources
         public static ErrorCode AuthRefreshTokenNotInStorage => new ErrorCode() { Code = "AUTH015", Message = UserAdminResources.AuthErr_RefreshTokenNotInStoraage };
         public static ErrorCode AuthUserIsNullForRefresh => new ErrorCode() { Code = "AUTH016", Message = UserAdminResources.AuthErr_UserIsNullForRefresh };
         public static ErrorCode AuthRequestNull => new ErrorCode() { Code = "AUTH017", Message = UserAdminResources.AuthErr_AuthRequestNull };
-
-
-        
+        public static ErrorCode AuthMissingDeviceId => new ErrorCode() { Code = "AUTH018", Message = UserAdminResources.AuthErr_MissingDeviceId };
     }
 }

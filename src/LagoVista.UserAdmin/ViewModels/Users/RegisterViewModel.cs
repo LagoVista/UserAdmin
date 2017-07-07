@@ -10,7 +10,7 @@ namespace LagoVista.UserAdmin.ViewModels.Users
     public class RegisterViewModel : IValidateable
     {
         public String AppId { get; set; }
-        public String InstallationId { get; set; }
+        public String AppInstanceId { get; set; }
         public String ClientType { get; set; }
         public String DeviceId { get; set; }
 

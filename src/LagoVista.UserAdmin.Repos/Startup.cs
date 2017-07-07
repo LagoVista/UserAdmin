@@ -8,11 +8,10 @@ using LagoVista.UserAdmin.Repos.Repos.Users;
 using LagoVista.UserAdmin.Repos.Repos.Orgs;
 using LagoVista.UserAdmin.Repos.Security;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using LagoVista.IoT.Logging;
 using LagoVista.UserAdmin.Resources;
+using LagoVista.UserAdmin.Repos.Repos.Apps;
+using LagoVista.UserAdmin.Interfaces.Repos.Apps;
 
 namespace LagoVista.UserAdmin.Repos
 {
@@ -35,7 +34,8 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<ITeamUserRepo, TeamUserRepo>();
             services.AddTransient<IAssetSetRepo, AssetSetRepo>();
             services.AddTransient<IManagedAssetRepo, ManagedAssetRepo>();
-
+            services.AddTransient<IAppInstanceRepo, AppInstanceRepo>();
+            
             ErrorCodes.Register(typeof(UserAdminErrorCodes));
         }
     }

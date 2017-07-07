@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using LagoVista.Core.Validation;
+using LagoVista.UserAdmin.Interfaces.Repos.Apps;
 
 namespace LagoVista.UserAdmin.Tests.TokenTests
 {
@@ -38,7 +39,7 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
                 RefreshExpiration = TimeSpan.FromDays(90),
             };
 
-            _authTokenManager = new AuthTokenManager(tokenOptions, _refreshTokenManager.Object, new Mock<IAdminLogger>().Object, _claimsFactory.Object, _signInManager.Object, _userManager.Object);
+            _authTokenManager = new AuthTokenManager(tokenOptions, new Mock<IAppInstanceRepo>().Object, _refreshTokenManager.Object, new Mock<IAdminLogger>().Object, _claimsFactory.Object, _signInManager.Object, _userManager.Object);
             _signInManager.Setup(sim => sim.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(Task.FromResult(SignInResult.Success));
             _userManager.Setup(usm => usm.FindByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { Id = Guid.NewGuid().ToId() }));
             _userManager.Setup(usm => usm.FindByNameAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { Id = Guid.NewGuid().ToId() }));
@@ -67,7 +68,7 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
             var authRequest = new AuthRequest()
             {
                 GrantType = "password",
-                InstallationId = "dontcare",
+                AppInstanceId = "dontcare",
                 AppId = "dontcare",
                 ClientType = "iphone",
                 Email = "fred@bedrockquery.com",

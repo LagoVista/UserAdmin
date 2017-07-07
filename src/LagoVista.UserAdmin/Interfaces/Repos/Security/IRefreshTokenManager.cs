@@ -9,7 +9,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
 {
     public interface IRefreshTokenManager
     {
-        Task<InvokeResult<RefreshToken>> GenerateRefreshTokenAsync(string appId, string clientId, string userId);
+        Task<InvokeResult<RefreshToken>> GenerateRefreshTokenAsync(string appId, string appInstanceId, string userId);
 
         Task<InvokeResult<RefreshToken>> RenewRefreshTokenAsync(RefreshToken oldRefreshToken);
 
