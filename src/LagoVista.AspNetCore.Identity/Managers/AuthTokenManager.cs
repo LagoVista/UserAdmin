@@ -120,14 +120,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
                     var accessExpires = DateTime.UtcNow.AddDays(_tokenOptions.AccessExpiration.TotalMinutes);
                     var token = GetJWToken(appUser, accessExpires, authRequest.AppInstanceId);
-                    var refreshTokenResponse = await _refreshTokenManager.GenerateRefreshTokenAsync(authRequest.AppId, authRequest.AppInstanceId, appUser.Id);
+                    var refreshTokenResponse = await _refreshTokenManager.GenerateRefreshTokenAsync(authRequest.AppId, authRequest.AppInstanceId, appUser.Id);                   
                     if (!refreshTokenResponse.Successful)
                     {
                         var failedResult = new InvokeResult<AuthResponse>();
                         failedResult.Concat(refreshTokenResponse);
                         return failedResult;
                     }
-
 
                     var authResponse = new AuthResponse()
                     {
@@ -147,10 +146,11 @@ namespace LagoVista.AspNetCore.Identity.Managers
             }
             else if (authRequest.GrantType == GRANT_TYPE_REFRESHTOKEN)
             {
-                if (user == null)
+                var appUser = await _userManager.FindByNameAsync(authRequest.UserName);
+                if(appUser == null)
                 {
-                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AuthAsync", UserAdminErrorCodes.AuthUserIsNullForRefresh.Message);
-                    return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthUserIsNullForRefresh.ToErrorMessage());
+                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AuthAsync", UserAdminErrorCodes.AuthCouldNotFindUserAccount.Message, new KeyValuePair<string, string>("id", authRequest.UserName));
+                    return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
                 }
 
                 if (String.IsNullOrEmpty(authRequest.RefreshToken))
@@ -165,23 +165,18 @@ namespace LagoVista.AspNetCore.Identity.Managers
                     return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthMissingAppInstanceId.ToErrorMessage());
                 }
 
-                var appUser = await _userManager.FindByIdAsync(user.Id);
-                if (appUser == null)
-                {
-                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AuthAsync", UserAdminErrorCodes.AuthCouldNotFindUserAccount.Message, new KeyValuePair<string, string>("id", user.Id));
-                    return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
-                }
-
-
                 var accessExpires = DateTime.UtcNow.AddDays(_tokenOptions.AccessExpiration.TotalMinutes);
                 var token = GetJWToken(appUser, accessExpires, authRequest.AppInstanceId);
                 var refreshTokenResponse = await _refreshTokenManager.RenewRefreshTokenAsync(authRequest.RefreshToken, user.Id);
+                _adminLogger.LogInvokeResult("AuthTokenManager_AuthAsync_RefreshToken", refreshTokenResponse);
+
                 if (!refreshTokenResponse.Successful)
                 {
+                    
                     var failedResult = new InvokeResult<AuthResponse>();
                     failedResult.Concat(refreshTokenResponse);
                     return failedResult;
-                }
+                }                
 
                 var authResponse = new AuthResponse()
                 {
