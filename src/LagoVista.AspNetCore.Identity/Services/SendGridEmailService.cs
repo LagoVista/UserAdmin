@@ -32,6 +32,9 @@ namespace LagoVista.AspNetCore.Identity.Services
 <h1>{_appConfig.AppName}</h1>
 <h2>{subject}</h2>
 {body}
+<img src=""{_appConfig.CompanyLogo}"" />
+<p>Please do not reply to this email as it is an unmonitored address</p>
+<a mailto:""support@software-logistics.com"">Contact Support</a>
 </body>";
 
                 var msg = new MimeMessage()
