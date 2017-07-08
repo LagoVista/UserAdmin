@@ -113,8 +113,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return Task.FromResult(0);
         }
 
-
-
         public Task SetEmailAsync(AppUser user, string email, CancellationToken token)
         {
             user.Email = email;
