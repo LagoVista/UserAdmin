@@ -731,4 +731,7 @@
   <data name="AuthErr_ErrorUpdatingUser" xml:space="preserve">
     <value>System Error writing Change User Org to Database</value>
   </data>
+  <data name="AuthErr_UserLockedOut" xml:space="preserve">
+    <value>Sorry, this account has been locked out.  Please try again later or contact an administrator</value>
+  </data>
 </root>

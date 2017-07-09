@@ -36,9 +36,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(CurrentUserProfilePictureurl, user.ProfileImageUrl.ImageUrl),
             };
 
-            foreach(var role in user.CurrentOrganizationRoles)
+            if (user.CurrentOrganizationRoles != null)
             {
-                claims.Add(new Claim(ClaimTypes.Role, $"{role.Id}.{role.Text}"));
+                foreach (var role in user.CurrentOrganizationRoles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, $"{role.Id}.{role.Text}"));
+                }
             }
 
             return claims;

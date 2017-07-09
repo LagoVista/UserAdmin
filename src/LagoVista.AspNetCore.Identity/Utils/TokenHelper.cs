@@ -21,9 +21,9 @@ namespace LagoVista.AspNetCore.Identity.Utils
 
         public TokenHelper(TokenAuthOptions tokenOptions, IClaimsFactory claimsFactory, IAdminLogger adminLogger)
         {
-            _claimsFactory = claimsFactory;
-            _adminLogger = adminLogger;
             _tokenOptions = tokenOptions;
+            _claimsFactory = claimsFactory;
+            _adminLogger = adminLogger;            
         }
 
         public InvokeResult<AuthResponse> GenerateAuthResponse(AppUser appUser, AuthRequest authRequest, InvokeResult<RefreshToken> refreshTokenResponse)
@@ -44,8 +44,14 @@ namespace LagoVista.AspNetCore.Identity.Utils
                 AppInstanceId = authRequest.AppInstanceId,
                 AccessTokenExpiresUTC = accessExpires.ToJSONString(),
                 RefreshToken = refreshTokenResponse.Result.RowKey,
+                Roles = appUser.CurrentOrganizationRoles,
                 RefreshTokenExpiresUTC = refreshTokenResponse.Result.ExpiresUtc
             };
+
+            if(!String.IsNullOrEmpty(authRequest.OrgId))
+            {
+                authResponse.Org = new Core.Models.EntityHeader() { Id = authRequest.OrgId, Text = authRequest.OrgName };
+            }
 
             return InvokeResult<AuthResponse>.Create(authResponse);
         }
@@ -68,6 +74,7 @@ namespace LagoVista.AspNetCore.Identity.Utils
                 notBefore: now,
                 expires: accessExpires,
                 signingCredentials: _tokenOptions.SigningCredentials);
+
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
 

@@ -188,6 +188,9 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:AuthErr_UserIsNullForRefresh
 
 		public static string AuthErr_UserIsNullForRefresh { get { return GetResourceString("AuthErr_UserIsNullForRefresh"); } }
+//Resources:UserAdminResources:AuthErr_UserLockedOut
+
+		public static string AuthErr_UserLockedOut { get { return GetResourceString("AuthErr_UserLockedOut"); } }
 //Resources:UserAdminResources:Billing_Contact
 
 		public static string Billing_Contact { get { return GetResourceString("Billing_Contact"); } }
@@ -721,6 +724,7 @@ namespace LagoVista.UserAdmin.Resources
 			public const string AuthErr_RefreshTokenExpired = "AuthErr_RefreshTokenExpired";
 			public const string AuthErr_RefreshTokenNotInStoraage = "AuthErr_RefreshTokenNotInStoraage";
 			public const string AuthErr_UserIsNullForRefresh = "AuthErr_UserIsNullForRefresh";
+			public const string AuthErr_UserLockedOut = "AuthErr_UserLockedOut";
 			public const string Billing_Contact = "Billing_Contact";
 			public const string ChangePasswordVM_Description = "ChangePasswordVM_Description";
 			public const string ChangePasswordVM_Help = "ChangePasswordVM_Help";

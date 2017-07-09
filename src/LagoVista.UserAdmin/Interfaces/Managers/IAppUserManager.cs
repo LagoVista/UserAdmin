@@ -1,5 +1,7 @@
-﻿using LagoVista.Core.Models;
+﻿using LagoVista.Core.Authentication.Models;
+using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
+using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Models.Users;
 using System;
 using System.Collections.Generic;
@@ -23,5 +25,7 @@ namespace LagoVista.UserAdmin.Managers
         Task<InvokeResult> DeleteUserAsync(String id, EntityHeader org, EntityHeader deletedByUser);
 
         Task<IEnumerable<EntityHeader>> SearchUsers(string firstName, string lastName, EntityHeader searchedBy);
+
+        Task<InvokeResult<AuthResponse>> CreateUserAsync(RegisterUser newUser);
     }
 }

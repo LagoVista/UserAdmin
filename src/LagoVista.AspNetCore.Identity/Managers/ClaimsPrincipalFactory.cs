@@ -13,11 +13,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         IClaimsFactory _claimsFactory;
 
-        public ClaimsPrincipalFactory(
-            UserManager<AppUser> userManager,
-            RoleManager<Role> roleManager,
-            IClaimsFactory claimsFactory,
-            IOptions<IdentityOptions> optionsAccessor) : base(userManager, roleManager, optionsAccessor)
+        public ClaimsPrincipalFactory(UserManager<AppUser> userManager, RoleManager<Role> roleManager, IClaimsFactory claimsFactory, IOptions<IdentityOptions> optionsAccessor) : base(userManager, roleManager, optionsAccessor)
         {
             _claimsFactory = claimsFactory;
         }

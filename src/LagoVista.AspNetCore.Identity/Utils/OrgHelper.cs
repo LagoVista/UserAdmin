@@ -6,11 +6,10 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Resources;
-using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
+using LagoVista.Core;
 
 namespace LagoVista.AspNetCore.Identity.Utils
 {
@@ -33,13 +32,15 @@ namespace LagoVista.AspNetCore.Identity.Utils
             var org = new EntityHeader() { Id = authRequest.OrgId, Text = authRequest.OrgName };
             var user = new EntityHeader() { Id = appUser.Id, Text = $"{appUser.FirstName} {appUser.LastName}" };
 
+            authRequest.OrgId = org.Id;
+            authRequest.OrgName = org.Text;
 
             // 1) Ensure user has access to the requested org.
             var orgs = await _orgManager.GetOrganizationsForUserAsync(appUser.Id, org, user);
             var switchToOrg = orgs.Where(o => o.OrgId == authRequest.OrgId).FirstOrDefault();
             if (switchToOrg == null)
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_SetOrg", UserAdminErrorCodes.AuthMissingRefreshToken.Message,
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_SetOrg", UserAdminErrorCodes.AuthOrgNotAuthorized.Message,
                     new KeyValuePair<string, string>("userid", appUser.Id),
                     new KeyValuePair<string, string>("requestedOrgId", authRequest.OrgId));
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthOrgNotAuthorized.ToErrorMessage());
@@ -65,18 +66,15 @@ namespace LagoVista.AspNetCore.Identity.Utils
 
             // 4) Write the updated user back to storage.
             var updateResult = await _userManager.UpdateAsync(appUser);
-            if (!updateResult.Succeeded)
+            if (!updateResult.Successful)
             {
-                var args = new List<KeyValuePair<string, string>>();
-                var idx = 1;
+                var invokeResult = updateResult.ToInvokeResult();
 
-                foreach (var err in updateResult.Errors)
-                {
-                    args.Add(new KeyValuePair<string, string>($"{idx++}", err.Description));
-                }
+                _adminLogger.LogInvokeResult("OrgHelper_SetUserOrgAsync", invokeResult,
+                    new KeyValuePair<string, string>("userId", appUser.Id),
+                    new KeyValuePair<string, string>("userName", appUser.UserName));
 
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_SetOrg", UserAdminErrorCodes.AuthErrorUpdatingUser.Message, args.ToArray());
-                return InvokeResult.FromErrors(UserAdminErrorCodes.AuthMissingRefreshToken.ToErrorMessage());
+                return invokeResult;
             }
 
             // 5) Write this change to logger.

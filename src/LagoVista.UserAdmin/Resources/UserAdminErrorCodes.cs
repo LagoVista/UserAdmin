@@ -35,7 +35,10 @@ namespace LagoVista.UserAdmin.Resources
         public static ErrorCode RegErrorSendingEmail => new ErrorCode() { Code = "AUTH025", Message = UserAdminResources.RegErr_ErrorSendingEmail };
         public static ErrorCode AuthOrgNotAuthorized => new ErrorCode() { Code = "AUTH026", Message = UserAdminResources.AuthErr_OrgNotAuthorized };
         public static ErrorCode AuthErrorUpdatingUser => new ErrorCode() { Code = "AUTH027", Message = UserAdminResources.AuthErr_ErrorUpdatingUser };
+        public static ErrorCode AuthUserLockedOut => new ErrorCode() { Code = "AUTH028", Message = UserAdminResources.AuthErr_UserLockedOut };
 
 
+
+        
     }
 }

@@ -5,9 +5,6 @@ using LagoVista.AspNetCore.Identity.Utils;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LagoVista.AspNetCore.Identity
 {
@@ -17,8 +14,9 @@ namespace LagoVista.AspNetCore.Identity
         {
             services.AddTransient<IUserManager, UserManager>();
             services.AddTransient<ISignInManager, SignInManager>();
-            services.AddTransient<IEmailSender, SendGridEmailService>();
 
+            //TODO: These don't belong here.
+            services.AddTransient<IEmailSender, SendGridEmailService>();
             services.AddTransient<ISmsSender, TwilioSMSSender>();
 
             services.AddSingleton<IClaimsFactory, ClaimsFactory>();
