@@ -7,6 +7,7 @@ using LagoVista.UserAdmin.ViewModels.Organization;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using LagoVista.UserAdmin.Models.DTOs;
 
 namespace LagoVista.UserAdmin.Interfaces.Managers
 {
@@ -43,7 +44,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<IEnumerable<OrgUser>> GetOrganizationsForUserAsync(string userId, EntityHeader org, EntityHeader user);
         Task<UpdateLocationViewModel> GetUpdateLocationViewModelAsync(string locationId, EntityHeader org, EntityHeader user);
         Task<UpdateOrganizationViewModel> GetUpdateOrganizationViewModel(string orgId, EntityHeader org, EntityHeader user);
-        Task<InvokeResult<Invitation>> InviteUserAsync(InviteUserViewModel inviteViewModel, EntityHeader orgEntityHeader, EntityHeader userEntityHeader);
+        Task<InvokeResult<Invitation>> InviteUserAsync(InviteUser inviteViewModel, EntityHeader orgEntityHeader, EntityHeader userEntityHeader);
 
         Task<bool> QueryLocationNamespaceInUseAsync(string orgId, string namespaceText);
         Task<bool> QueryOrganizationHasUserAsync(string orgId, string userId, EntityHeader org, EntityHeader user);

@@ -11,6 +11,8 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Apps
         Task AddAppInstanceAsync(AppInstance appInstance);
 
         Task UpdateAppInstanceAsync(AppInstance appInstance);
-        Task<IEnumerable<AppInstance>> GetForUser(string userId);
+        Task<IEnumerable<AppInstance>> GetForUserAsync(string userId);
+
+        Task<AppInstance> GetAppInstanceAsync(string userId, string appInstanceId);
     }
 }

@@ -33,5 +33,14 @@ namespace LagoVista.UserAdmin.Models.Security
         {
             return $"{OrganizationId}.{UserId}";
         }
+
+        public EntityHeader ToEntityHeader()
+        {
+            return new EntityHeader()
+            {
+                Id = RoleId,
+                Text = RoleName
+            };
+        }
     }
 }

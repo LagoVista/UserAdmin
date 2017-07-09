@@ -25,5 +25,10 @@ namespace LagoVista.AspNetCore.Identity.Managers
         {
             return _userManager.FindByNameAsync(userName);
         }
+
+        public Task<IdentityResult> UpdateAsync(AppUser appUser)
+        {
+            return _userManager.UpdateAsync(appUser);
+        }
     }
 }

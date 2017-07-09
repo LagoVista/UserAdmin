@@ -7,6 +7,8 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
 {
     public interface IAuthTokenManager
     {
-        Task<InvokeResult<AuthResponse>> AuthAsync(AuthRequest authRequest, EntityHeader org = null, EntityHeader user = null);
+        Task<InvokeResult<AuthResponse>> AccessTokenGrantAsync(AuthRequest authRequest);
+
+        Task<InvokeResult<AuthResponse>> RefreshTokenGrantAsync(AuthRequest authRequest, EntityHeader org, EntityHeader user);
     }
 }

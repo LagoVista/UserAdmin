@@ -43,6 +43,7 @@ namespace LagoVista.UserAdmin.Models.Users
             };
 
             Organizations = new List<EntityHeader>();
+            CurrentOrganizationRoles = new List<EntityHeader>();
         }
 
         public AppUser()
@@ -52,7 +53,7 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public List<EntityHeader> Organizations { get; set; }
         public EntityHeader CurrentOrganization { get; set; }
-        public EntityHeader CurrentOrganizationRoles { get; set; }
+        public List<EntityHeader> CurrentOrganizationRoles { get; set; }
 
         public ImageDetails ProfileImageUrl { get; set; }
 

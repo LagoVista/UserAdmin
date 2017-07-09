@@ -725,4 +725,10 @@
   <data name="RegErr_MissingPhoneNumber" xml:space="preserve">
     <value>Missing Phone Number on Registration</value>
   </data>
+  <data name="AuthErr_OrgNotAuthorized" xml:space="preserve">
+    <value>Sorry, you are not authorized to switch to that organization.</value>
+  </data>
+  <data name="AuthErr_ErrorUpdatingUser" xml:space="preserve">
+    <value>System Error writing Change User Org to Database</value>
+  </data>
 </root>

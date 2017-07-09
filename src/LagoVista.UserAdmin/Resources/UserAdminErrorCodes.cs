@@ -7,7 +7,7 @@ namespace LagoVista.UserAdmin.Resources
 {
     public class UserAdminErrorCodes
     {
-        public static ErrorCode AuthInvalidCredentials => new ErrorCode() { Code = "AUTH001", Message = UserAdminResources.AuthErr_InvalidCredentials};
+        public static ErrorCode AuthInvalidCredentials => new ErrorCode() { Code = "AUTH001", Message = UserAdminResources.AuthErr_InvalidCredentials };
         public static ErrorCode AuthInvalidRefreshToken => new ErrorCode() { Code = "AUTH002", Message = UserAdminResources.AuthErr_InvalidRefreshToken };
         public static ErrorCode AuthRefreshTokenExpired => new ErrorCode() { Code = "AUTH003", Message = UserAdminResources.AuthErr_RefreshTokenExpired };
         public static ErrorCode AuthInvalidGrantType => new ErrorCode() { Code = "AUTH004", Message = UserAdminResources.AuthErr_InvalidGrantType };
@@ -27,11 +27,15 @@ namespace LagoVista.UserAdmin.Resources
         public static ErrorCode AuthRequestNull => new ErrorCode() { Code = "AUTH017", Message = UserAdminResources.AuthErr_AuthRequestNull };
         public static ErrorCode AuthMissingDeviceId => new ErrorCode() { Code = "AUTH018", Message = UserAdminResources.AuthErr_MissingDeviceId };
         public static ErrorCode RegMissingFirstLastName => new ErrorCode() { Code = "AUTH019", Message = UserAdminResources.RegErr_MissingFirstName };
-        public static ErrorCode RegMissingLastName => new ErrorCode() { Code = "AUTH20", Message = UserAdminResources.RegErr_MissingLastName };
-        public static ErrorCode RegMissingEmail => new ErrorCode() { Code = "AUTH21", Message = UserAdminResources.AuthErr_MissingEmailAddress };
-        public static ErrorCode RegInvalidEmailAddress => new ErrorCode() { Code = "AUTH22", Message = UserAdminResources.RegErr_InvalidEmailAddress };
-        public static ErrorCode RegMissingPhoneNumber => new ErrorCode() { Code = "AUTH23", Message = UserAdminResources.RegErr_MissingPhoneNumber };
-        public static ErrorCode RegErrorSendingSMS => new ErrorCode() { Code = "AUTH24", Message = UserAdminResources.RegErr_ErrorSendingPhoneNumber };
-        public static ErrorCode RegErrorSendingEmail => new ErrorCode() { Code = "AUTH25", Message = UserAdminResources.RegErr_ErrorSendingEmail };
+        public static ErrorCode RegMissingLastName => new ErrorCode() { Code = "AUTH020", Message = UserAdminResources.RegErr_MissingLastName };
+        public static ErrorCode RegMissingEmail => new ErrorCode() { Code = "AUTH021", Message = UserAdminResources.AuthErr_MissingEmailAddress };
+        public static ErrorCode RegInvalidEmailAddress => new ErrorCode() { Code = "AUTH022", Message = UserAdminResources.RegErr_InvalidEmailAddress };
+        public static ErrorCode RegMissingPhoneNumber => new ErrorCode() { Code = "AUTH023", Message = UserAdminResources.RegErr_MissingPhoneNumber };
+        public static ErrorCode RegErrorSendingSMS => new ErrorCode() { Code = "AUTH024", Message = UserAdminResources.RegErr_ErrorSendingPhoneNumber };
+        public static ErrorCode RegErrorSendingEmail => new ErrorCode() { Code = "AUTH025", Message = UserAdminResources.RegErr_ErrorSendingEmail };
+        public static ErrorCode AuthOrgNotAuthorized => new ErrorCode() { Code = "AUTH026", Message = UserAdminResources.AuthErr_OrgNotAuthorized };
+        public static ErrorCode AuthErrorUpdatingUser => new ErrorCode() { Code = "AUTH027", Message = UserAdminResources.AuthErr_ErrorUpdatingUser };
+
+
     }
 }

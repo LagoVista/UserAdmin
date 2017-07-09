@@ -253,7 +253,7 @@ namespace LagoVista.UserAdmin.Managers
             return AcceptInviteViewModel.CreateFromInvite(invite);
         }
 
-        public async Task<InvokeResult<Invitation>> InviteUserAsync(InviteUserViewModel inviteViewModel, EntityHeader orgEntityHeader, EntityHeader userEntityHeader)
+        public async Task<InvokeResult<Invitation>> InviteUserAsync(Models.DTOs.InviteUser inviteViewModel, EntityHeader orgEntityHeader, EntityHeader userEntityHeader)
         {
             var result = new InvokeResult<Invitation>();
 

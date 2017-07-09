@@ -22,7 +22,12 @@ namespace LagoVista.UserAdmin.Repos.Repos.Apps
             return InsertAsync(appInstance);
         }
 
-        public Task<IEnumerable<AppInstance>> GetForUser(string userId)
+        public Task<AppInstance> GetAppInstanceAsync(string userId, string appInstanceId)
+        {
+            return GetAsync(userId, appInstanceId);
+        }
+
+        public Task<IEnumerable<AppInstance>> GetForUserAsync(string userId)
         {
             return GetByParitionIdAsync(userId);
         }

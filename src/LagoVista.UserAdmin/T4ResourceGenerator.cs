@@ -137,6 +137,9 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:AuthErr_EmailInvalidFormat
 
 		public static string AuthErr_EmailInvalidFormat { get { return GetResourceString("AuthErr_EmailInvalidFormat"); } }
+//Resources:UserAdminResources:AuthErr_ErrorUpdatingUser
+
+		public static string AuthErr_ErrorUpdatingUser { get { return GetResourceString("AuthErr_ErrorUpdatingUser"); } }
 //Resources:UserAdminResources:AuthErr_InvalidCredentials
 
 		public static string AuthErr_InvalidCredentials { get { return GetResourceString("AuthErr_InvalidCredentials"); } }
@@ -167,6 +170,9 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:AuthErr_MissingRefreshToken
 
 		public static string AuthErr_MissingRefreshToken { get { return GetResourceString("AuthErr_MissingRefreshToken"); } }
+//Resources:UserAdminResources:AuthErr_OrgNotAuthorized
+
+		public static string AuthErr_OrgNotAuthorized { get { return GetResourceString("AuthErr_OrgNotAuthorized"); } }
 //Resources:UserAdminResources:AuthErr_RefreshToken_InvalidFormat
 
 		public static string AuthErr_RefreshToken_InvalidFormat { get { return GetResourceString("AuthErr_RefreshToken_InvalidFormat"); } }
@@ -698,6 +704,7 @@ namespace LagoVista.UserAdmin.Resources
 			public const string AuthErr_AuthRequestNull = "AuthErr_AuthRequestNull";
 			public const string AuthErr_CouldNotFindUserAccount = "AuthErr_CouldNotFindUserAccount";
 			public const string AuthErr_EmailInvalidFormat = "AuthErr_EmailInvalidFormat";
+			public const string AuthErr_ErrorUpdatingUser = "AuthErr_ErrorUpdatingUser";
 			public const string AuthErr_InvalidCredentials = "AuthErr_InvalidCredentials";
 			public const string AuthErr_InvalidGrantType = "AuthErr_InvalidGrantType";
 			public const string AuthErr_InvalidRefreshToken = "AuthErr_InvalidRefreshToken";
@@ -708,6 +715,7 @@ namespace LagoVista.UserAdmin.Resources
 			public const string AuthErr_MissingEmailAddress = "AuthErr_MissingEmailAddress";
 			public const string AuthErr_MissingPassword = "AuthErr_MissingPassword";
 			public const string AuthErr_MissingRefreshToken = "AuthErr_MissingRefreshToken";
+			public const string AuthErr_OrgNotAuthorized = "AuthErr_OrgNotAuthorized";
 			public const string AuthErr_RefreshToken_InvalidFormat = "AuthErr_RefreshToken_InvalidFormat";
 			public const string AuthErr_RefreshToken_NotFound = "AuthErr_RefreshToken_NotFound";
 			public const string AuthErr_RefreshTokenExpired = "AuthErr_RefreshTokenExpired";

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using LagoVista.UserAdmin.Models.Users;
 using System.Security.Claims;
+using LagoVista.Core.Models;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -21,7 +22,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public List<Claim> GetClaims(AppUser user)
         {
-            return new List<Claim> {
+            var claims = new List<Claim> {
                 new Claim(ClaimTypes.NameIdentifier, user.UserName),
                 new Claim(ClaimTypes.GivenName, user.FirstName),
                 new Claim(ClaimTypes.Surname, user.LastName),
@@ -34,6 +35,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(CurrentOrgId, user.CurrentOrganization == null ? None : user.CurrentOrganization.Id),
                 new Claim(CurrentUserProfilePictureurl, user.ProfileImageUrl.ImageUrl),
             };
+
+            foreach(var role in user.CurrentOrganizationRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, $"{role.Id}.{role.Text}"));
+            }
+
+            return claims;
         }
     }
 }

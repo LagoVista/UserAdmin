@@ -1,4 +1,5 @@
-﻿using LagoVista.UserAdmin.Models.Users;
+﻿using LagoVista.Core.Models;
+using LagoVista.UserAdmin.Models.Users;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
