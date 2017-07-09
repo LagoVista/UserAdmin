@@ -3,7 +3,7 @@ using System;
 
 namespace LagoVista.UserAdmin.Models.DTOs
 {
-    public class RegisterUserDTO
+    public class RegisterUser
     {
         [JsonProperty("appId")]
         public String AppId { get; set; }

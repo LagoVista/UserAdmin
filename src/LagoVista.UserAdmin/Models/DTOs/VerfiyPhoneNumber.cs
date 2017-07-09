@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LagoVista.UserAdmin.Models.DTOs
 {
-    public class VerfiyPhoneNumberDTO
+    public class VerfiyPhoneNumber
     {
         [JsonProperty("smsCode")]
         public String SMSCode { get; set; }
