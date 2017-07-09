@@ -16,17 +16,18 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> AddUserToOrgAsync(String orgId, String userId, EntityHeader userOrg, EntityHeader addedBy);
         Task<InvokeResult> CreateOrganizationAsync(Organization newOrg, EntityHeader userOrg, EntityHeader user);
         Task<InvokeResult> UpdateOrganizationAsync(Organization org, EntityHeader userOrg, EntityHeader user);
-        
+
         Task<InvokeResult> CreateLocationAsync(OrgLocation location, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateLocationAsync(OrgLocation location, EntityHeader org, EntityHeader user);
 
 
         Task<InvokeResult> AcceptInvitationAsync(AcceptInviteViewModel acceptInviteViewModel, string acceptedUserId);
+        Task<InvokeResult> AcceptInvitationAsync(string inviteId, EntityHeader orgHeader, EntityHeader user);
         Task<InvokeResult> AddUserRoleForLocationAsync(EntityHeader location, EntityHeader user, EntityHeader role, EntityHeader org, EntityHeader addedBy);
         Task<InvokeResult> AddUserToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy);
         Task<InvokeResult> AddUserToLocationAsync(string userId, string locationId, EntityHeader org, EntityHeader addedBy);
         Task<InvokeResult> AddUserRoleForOrgAsync(EntityHeader org, EntityHeader user, EntityHeader role, EntityHeader addedByOrg, EntityHeader addedBy);
-        Task<InvokeResult> AddLocationAsync(CreateLocationViewModel newLocation, EntityHeader org,  EntityHeader user);
+        Task<InvokeResult> AddLocationAsync(CreateLocationViewModel newLocation, EntityHeader org, EntityHeader user);
         Task<InvokeResult> CreateNewOrganizationAsync(CreateOrganizationViewModel organizationViewModel, EntityHeader user);
 
         Task DeclineInvitationAsync(String inviteId);

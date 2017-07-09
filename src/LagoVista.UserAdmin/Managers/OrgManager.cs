@@ -204,7 +204,7 @@ namespace LagoVista.UserAdmin.Managers
             var invite = await _inviteUserRepo.GetInvitationAsync(acceptInviteViewModel.InviteId);
             invite.Accepted = true;
             invite.Status = Invitation.StatusTypes.Accepted;
-            invite.DateAccepted = DateTime.Now.ToJSONString();
+            invite.DateAccepted = DateTime.UtcNow.ToJSONString();
             await _inviteUserRepo.UpdateInvitationAsync(invite);
 
             var acceptedUser = await _appUserRepo.FindByIdAsync(acceptedUserId);
@@ -228,6 +228,28 @@ namespace LagoVista.UserAdmin.Managers
 
             return InvokeResult.Success;
         }
+
+
+        public async Task<InvokeResult> AcceptInvitationAsync(string inviteId, EntityHeader orgHeader, EntityHeader user)
+        {
+            var invite = await _inviteUserRepo.GetInvitationAsync(inviteId);
+            invite.Accepted = true;
+            invite.Status = Invitation.StatusTypes.Accepted;
+            invite.DateAccepted = DateTime.UtcNow.ToJSONString();
+
+            var newOrgHeader = new EntityHeader()
+            {
+                Id = invite.OrganizationId,
+                Text = invite.OrganizationName
+            };
+
+            await _inviteUserRepo.UpdateInvitationAsync(invite);
+
+            var invitingUser = EntityHeader.Create(invite.InvitedById, invite.InvitedByName);
+
+            return await AddUserToOrgAsync(user, newOrgHeader, invitingUser);
+        }
+
 
         public async Task<InvokeResult> RevokeInvitationAsync(String inviteId, EntityHeader org, EntityHeader user)
         {

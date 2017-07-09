@@ -7,13 +7,16 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Interfaces.Managers
 {
-    /* Hack ot make UserManager<AppUser> testable :/ */
+    /* Let's us bring the user manager code into user admin which is a .NET Standard 1.2 library and can't do the identity stuff. */
     public interface IUserManager
     {
         Task<AppUser> FindByNameAsync(string userName);
         Task<AppUser> FindByIdAsync(string id);
         Task<InvokeResult> UpdateAsync(AppUser appUser);
-
         Task<InvokeResult> CreateAsync(AppUser user, string password);
+        Task<string> GenerateEmailConfirmationTokenAsync(AppUser user);
+        Task<String> GenerateChangePhoneNumberTokenAsync(AppUser user, string phone);
+        Task<InvokeResult> ChangePhoneNumberAsync(AppUser user, string phone, string token);
+        Task<InvokeResult> ConfirmEmailAsync(AppUser user, string token);
     }
 }

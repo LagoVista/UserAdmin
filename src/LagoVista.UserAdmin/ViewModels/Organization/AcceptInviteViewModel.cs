@@ -7,6 +7,12 @@ using LagoVista.UserAdmin.Models.Orgs;
 
 namespace LagoVista.UserAdmin.ViewModels.Organization
 {
+    public enum AcceptTypes
+    {
+        Login,
+        Register
+    }
+
     [EntityDescription(Domains.UserViewModels, UserAdminResources.Names.AcceptInviteVM_Title, UserAdminResources.Names.AcceptInviteVM_Help, UserAdminResources.Names.AcceptInviteVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class AcceptInviteViewModel
     {
@@ -50,6 +56,7 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
 
          
         public bool Active { get; set; }
+
 
         public EntityHeader GetInvitedByEntityHeader() { return EntityHeader.Create(InvitedById, InvitedByName); }
 

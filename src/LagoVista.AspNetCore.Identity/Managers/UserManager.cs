@@ -7,6 +7,7 @@ using LagoVista.Core;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
+    /* Let's us bring the user manager code into user admin which is a .NET Standard 1.2 library and can't do the identity stuff. */
     public class UserManager : IUserManager
     {
         private readonly UserManager<AppUser> _userManager;
@@ -34,6 +35,26 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public async Task<InvokeResult> UpdateAsync(AppUser appUser)
         {
             return (await _userManager.UpdateAsync(appUser)).ToInvokeResult();
-        }       
+        }
+
+        public Task<string> GenerateEmailConfirmationTokenAsync(AppUser user)
+        {
+            return _userManager.GenerateEmailConfirmationTokenAsync(user);
+        }
+
+        public Task<string> GenerateChangePhoneNumberTokenAsync(AppUser user, string phone)
+        {
+            return _userManager.GenerateChangePhoneNumberTokenAsync(user, phone);
+        }
+
+        public async Task<InvokeResult> ChangePhoneNumberAsync(AppUser user, string phone, string token)
+        {
+            return (await _userManager.ChangePhoneNumberAsync(user, phone, token)).ToInvokeResult();
+        }
+
+        public async Task<InvokeResult> ConfirmEmailAsync(AppUser user, string token)
+        {
+            return (await _userManager.ConfirmEmailAsync(user, token)).ToInvokeResult();
+        }
     }
 }

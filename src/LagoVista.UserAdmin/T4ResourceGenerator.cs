@@ -269,6 +269,39 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:CreateOrganizationVM_Title
 
 		public static string CreateOrganizationVM_Title { get { return GetResourceString("CreateOrganizationVM_Title"); } }
+//Resources:UserAdminResources:Email_ResetPassword_Body
+
+		public static string Email_ResetPassword_Body { get { return GetResourceString("Email_ResetPassword_Body"); } }
+//Resources:UserAdminResources:Email_ResetPassword_Subject
+
+		public static string Email_ResetPassword_Subject { get { return GetResourceString("Email_ResetPassword_Subject"); } }
+//Resources:UserAdminResources:Email_RestPassword_ErrorSending
+
+		public static string Email_RestPassword_ErrorSending { get { return GetResourceString("Email_RestPassword_ErrorSending"); } }
+//Resources:UserAdminResources:Email_Verification_Body
+
+		public static string Email_Verification_Body { get { return GetResourceString("Email_Verification_Body"); } }
+//Resources:UserAdminResources:Email_Verification_Subject
+
+		public static string Email_Verification_Subject { get { return GetResourceString("Email_Verification_Subject"); } }
+//Resources:UserAdminResources:Err_PwdChange_CouldNotFindUser
+
+		public static string Err_PwdChange_CouldNotFindUser { get { return GetResourceString("Err_PwdChange_CouldNotFindUser"); } }
+//Resources:UserAdminResources:Err_PwdChange_NewPassword_Missing
+
+		public static string Err_PwdChange_NewPassword_Missing { get { return GetResourceString("Err_PwdChange_NewPassword_Missing"); } }
+//Resources:UserAdminResources:Err_PwdChange_OldPassword_Missing
+
+		public static string Err_PwdChange_OldPassword_Missing { get { return GetResourceString("Err_PwdChange_OldPassword_Missing"); } }
+//Resources:UserAdminResources:Err_PwdChange_UserId_Missing
+
+		public static string Err_PwdChange_UserId_Missing { get { return GetResourceString("Err_PwdChange_UserId_Missing"); } }
+//Resources:UserAdminResources:Err_ResetPwd_CouldNotFindUser
+
+		public static string Err_ResetPwd_CouldNotFindUser { get { return GetResourceString("Err_ResetPwd_CouldNotFindUser"); } }
+//Resources:UserAdminResources:Err_UserId_DoesNotMatch
+
+		public static string Err_UserId_DoesNotMatch { get { return GetResourceString("Err_UserId_DoesNotMatch"); } }
 //Resources:UserAdminResources:ExternalLoginConfirmVM_Description
 
 		public static string ExternalLoginConfirmVM_Description { get { return GetResourceString("ExternalLoginConfirmVM_Description"); } }
@@ -604,6 +637,12 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:SetPasswordVM_Title
 
 		public static string SetPasswordVM_Title { get { return GetResourceString("SetPasswordVM_Title"); } }
+//Resources:UserAdminResources:SMS_CouldNotVerify
+
+		public static string SMS_CouldNotVerify { get { return GetResourceString("SMS_CouldNotVerify"); } }
+//Resources:UserAdminResources:SMS_Verification_Body
+
+		public static string SMS_Verification_Body { get { return GetResourceString("SMS_Verification_Body"); } }
 //Resources:UserAdminResources:Subscription_Description
 
 		public static string Subscription_Description { get { return GetResourceString("Subscription_Description"); } }
@@ -751,6 +790,17 @@ namespace LagoVista.UserAdmin.Resources
 			public const string CreateOrganizationVM_Description = "CreateOrganizationVM_Description";
 			public const string CreateOrganizationVM_Help = "CreateOrganizationVM_Help";
 			public const string CreateOrganizationVM_Title = "CreateOrganizationVM_Title";
+			public const string Email_ResetPassword_Body = "Email_ResetPassword_Body";
+			public const string Email_ResetPassword_Subject = "Email_ResetPassword_Subject";
+			public const string Email_RestPassword_ErrorSending = "Email_RestPassword_ErrorSending";
+			public const string Email_Verification_Body = "Email_Verification_Body";
+			public const string Email_Verification_Subject = "Email_Verification_Subject";
+			public const string Err_PwdChange_CouldNotFindUser = "Err_PwdChange_CouldNotFindUser";
+			public const string Err_PwdChange_NewPassword_Missing = "Err_PwdChange_NewPassword_Missing";
+			public const string Err_PwdChange_OldPassword_Missing = "Err_PwdChange_OldPassword_Missing";
+			public const string Err_PwdChange_UserId_Missing = "Err_PwdChange_UserId_Missing";
+			public const string Err_ResetPwd_CouldNotFindUser = "Err_ResetPwd_CouldNotFindUser";
+			public const string Err_UserId_DoesNotMatch = "Err_UserId_DoesNotMatch";
 			public const string ExternalLoginConfirmVM_Description = "ExternalLoginConfirmVM_Description";
 			public const string ExternalLoginConfirmVM_Help = "ExternalLoginConfirmVM_Help";
 			public const string ExternalLoginConfirmVM_Title = "ExternalLoginConfirmVM_Title";
@@ -860,6 +910,8 @@ namespace LagoVista.UserAdmin.Resources
 			public const string SetPasswordVM_Description = "SetPasswordVM_Description";
 			public const string SetPasswordVM_Help = "SetPasswordVM_Help";
 			public const string SetPasswordVM_Title = "SetPasswordVM_Title";
+			public const string SMS_CouldNotVerify = "SMS_CouldNotVerify";
+			public const string SMS_Verification_Body = "SMS_Verification_Body";
 			public const string Subscription_Description = "Subscription_Description";
 			public const string Subscription_Help = "Subscription_Help";
 			public const string Subscription_Title = "Subscription_Title";
