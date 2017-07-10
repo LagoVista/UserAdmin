@@ -29,7 +29,7 @@ namespace LagoVista.UserAdmin.Repos.Users
             }
         }
 
-        public Task RemoveRefreshTokenAsync(string userId, string tokenId)
+        public Task RemoveRefreshTokenAsync(string tokenId, string userId)
         {
             return RemoveAsync(userId, tokenId);
         }

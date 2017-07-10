@@ -56,17 +56,17 @@ namespace LagoVista.AspNetCore.Identity.Utils
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthMissingClientType.ToErrorMessage());
             }
 
-            return InvokeResult.Success;
-        }
-
-        public InvokeResult ValidateAccessTokenGrant(AuthRequest authRequest)
-        {
             if (String.IsNullOrEmpty(authRequest.Email))
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateAccessTokenGrant", UserAdminErrorCodes.AuthMissingEmail.Message);
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthMissingEmail.ToErrorMessage());
             }
 
+            return InvokeResult.Success;
+        }
+
+        public InvokeResult ValidateAccessTokenGrant(AuthRequest authRequest)
+        {
             if (String.IsNullOrEmpty(authRequest.Password))
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateAccessTokenGrant", UserAdminErrorCodes.AuthMissingPassword.Message);

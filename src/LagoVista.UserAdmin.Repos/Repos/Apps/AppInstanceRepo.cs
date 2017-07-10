@@ -24,7 +24,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Apps
 
         public Task<AppInstance> GetAppInstanceAsync(string userId, string appInstanceId)
         {
-            return GetAsync(userId, appInstanceId);
+            return GetAsync(userId, appInstanceId, false);
         }
 
         public Task<IEnumerable<AppInstance>> GetForUserAsync(string userId)

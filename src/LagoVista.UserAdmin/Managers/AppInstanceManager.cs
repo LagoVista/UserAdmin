@@ -7,16 +7,20 @@ using LagoVista.Core;
 using System.Threading.Tasks;
 using LagoVista.UserAdmin.Models.Apps;
 using LagoVista.Core.Validation;
+using LagoVista.IoT.Logging.Loggers;
+using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.Managers
 {
     public class AppInstanceManager : IAppInstanceManager
     {
         IAppInstanceRepo _appInstanceRepo;
+        IAdminLogger _adminLogger;
 
-        public AppInstanceManager(IAppInstanceRepo appInstanceRepo)
+        public AppInstanceManager(IAppInstanceRepo appInstanceRepo, IAdminLogger adminLogger)
         {
             _appInstanceRepo = appInstanceRepo;
+            _adminLogger = adminLogger;
         }
 
         public async Task<InvokeResult<AppInstance>> CreateForUserAsync(AppUser appUser, AuthRequest authRequest)
@@ -41,9 +45,24 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<InvokeResult> UpdateLastLoginAsync(string appUserId, string appInstanceId)
         {
             var appInstance = await _appInstanceRepo.GetAppInstanceAsync(appUserId, appInstanceId);
-            appInstance.LastLogin = DateTime.UtcNow.ToJSONString();
-            await _appInstanceRepo.UpdateAppInstanceAsync(appInstance);
-            return InvokeResult.Success;
+            if (appInstance == null)
+            {
+                _adminLogger.AddError("AppInstanceManager_UpdateLastLoginAsync", "Could Not Find App Instance Record",
+                    new KeyValuePair<string, string>("appUserId", appUserId),
+                    new KeyValuePair<string, string>("appInstanceId", appInstanceId));
+
+                return InvokeResult.FromErrors(new ErrorMessage() { Message = "Could Not Find App Instance Id to Update" });
+            }
+            else
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "AppInstanceManager_UpdateLastLoginAsync", "Update Last Login Information",
+                    new KeyValuePair<string, string>("appUserId", appUserId),
+                    new KeyValuePair<string, string>("appInstanceId", appInstanceId));
+
+                appInstance.LastLogin = DateTime.UtcNow.ToJSONString();
+                await _appInstanceRepo.UpdateAppInstanceAsync(appInstance);
+                return InvokeResult.Success;
+            }
         }
 
         public async Task<InvokeResult> UpdateLastAccessTokenRefreshAsync(string appUserId, string appInstanceId)

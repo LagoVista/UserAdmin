@@ -69,10 +69,10 @@ namespace LagoVista.UserAdmin.Managers
 
             try
             {
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                code = System.Net.WebUtility.UrlEncode(code);
-                var callbackUrl = $"{_appConfig.WebAddress}/VerifyIdentity/{ConfirmEmailLink}?userId={user.Id}&code={code}";
-                var mobileCallbackUrl = $"nuviot://confirmemail?userId={user.Id}&code={code}";
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var encodedToken = System.Net.WebUtility.UrlEncode(token);
+                var callbackUrl = $"{_appConfig.WebAddress}/VerifyIdentity/{ConfirmEmailLink}?userId={user.Id}&code={encodedToken}";
+                var mobileCallbackUrl = $"nuviot://confirmemail?userId={user.Id}&code={encodedToken}";
 
 
                 var subject = UserAdminResources.Email_Verification_Subject.Replace("[APP_NAME]", _appConfig.AppName);
@@ -81,13 +81,18 @@ namespace LagoVista.UserAdmin.Managers
                 var result = await _emailSender.SendAsync(user.Email, subject, body);
 
                 _adminLogger.LogInvokeResult("UserVerficationManager_SendConfirmationEmailAsync", result,
-                    new KeyValuePair<string, string>("toAddress", user.Email));
+                    new KeyValuePair<string, string>("token", token),
+                    new KeyValuePair<string, string>("toUserId", user.Id),
+                    new KeyValuePair<string, string>("toEmail", user.Email));
 
                 return result;
             }
             catch (Exception ex)
             {
-                _adminLogger.AddException("UserVerficationManager_SendConfirmationEmailAsync", ex);
+                _adminLogger.AddException("UserVerficationManager_SendConfirmationEmailAsync", ex,
+                   new KeyValuePair<string, string>("toUserId", user.Id),
+                   new KeyValuePair<string, string>("toEmail", user.Email));
+
                 return InvokeResult.FromErrors(UserAdminErrorCodes.RegErrorSendingEmail.ToErrorMessage(), new ErrorMessage() { Message = ex.Message });
             }
         }
@@ -166,12 +171,11 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
 
-            var code = System.Net.WebUtility.UrlDecode(confirmemaildto.ReceivedCode);
-            var result = await _userManager.ConfirmEmailAsync(user, code);
+            var result = await _userManager.ConfirmEmailAsync(user, confirmemaildto.ReceivedCode);
             if (result.Successful)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "UserVerficationManager_ValidateEmailAsync", "Success_ConfirmEmail",
-                    new KeyValuePair<string, string>("toEmail", user.Email),
+                    new KeyValuePair<string, string>("userId", user.Id),
                     new KeyValuePair<string, string>("code", confirmemaildto.ReceivedCode));
 
                 return InvokeResult.Success;
@@ -179,7 +183,7 @@ namespace LagoVista.UserAdmin.Managers
             else
             {
                 _adminLogger.LogInvokeResult("UserVerficationManager_ValidateEmailAsync", result,
-                    new KeyValuePair<string, string>("toEmail", user.Email),
+                    new KeyValuePair<string, string>("userId", user.Id),
                     new KeyValuePair<string, string>("sentToken", confirmemaildto.ReceivedCode));
                 return result;
             }

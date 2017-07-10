@@ -78,7 +78,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
             }
             else
             {
-                await _appInstanceManager.UpdateLastLoginAsync(appUser.Id, authRequest.AppInstanceId);
+
+                if(!(await _appInstanceManager.UpdateLastLoginAsync(appUser.Id, authRequest.AppInstanceId)).Successful)
+                {
+                    /* If we don't find it, it is likely because a different user is logging in with the same device */
+                    var appInstanceResult = await _appInstanceManager.CreateForUserAsync(appUser, authRequest);
+                    authRequest.AppInstanceId = appInstanceResult.Result.RowKey;
+                }
             }
 
             var refreshTokenResponse = await _refreshTokenManager.GenerateRefreshTokenAsync(authRequest.AppId, authRequest.AppInstanceId, appUser.Id);
@@ -86,7 +92,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         }
 
 
-        public async Task<InvokeResult<AuthResponse>> RefreshTokenGrantAsync(AuthRequest authRequest, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult<AuthResponse>> RefreshTokenGrantAsync(AuthRequest authRequest)
         {
             var requestValidationResult = _authRequestValidators.ValidateAuthRequest(authRequest);
             if (!requestValidationResult.Successful) return InvokeResult<AuthResponse>.FromInvokeResult(requestValidationResult);
@@ -109,7 +115,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             await _appInstanceManager.UpdateLastAccessTokenRefreshAsync(appUser.Id, authRequest.AppInstanceId);
 
-            var refreshTokenResponse = await _refreshTokenManager.RenewRefreshTokenAsync(authRequest.RefreshToken, user.Id);
+            var refreshTokenResponse = await _refreshTokenManager.RenewRefreshTokenAsync(authRequest.RefreshToken, appUser.Id);
             _adminLogger.LogInvokeResult("AuthTokenManager_RefreshTokenGrantAsync", refreshTokenResponse);
             return _tokenHelper.GenerateAuthResponse(appUser, authRequest, refreshTokenResponse);
         }

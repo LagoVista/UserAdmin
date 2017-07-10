@@ -9,6 +9,6 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
     {
         Task<InvokeResult<AuthResponse>> AccessTokenGrantAsync(AuthRequest authRequest);
 
-        Task<InvokeResult<AuthResponse>> RefreshTokenGrantAsync(AuthRequest authRequest, EntityHeader org, EntityHeader user);
+        Task<InvokeResult<AuthResponse>> RefreshTokenGrantAsync(AuthRequest authRequest);
     }
 }

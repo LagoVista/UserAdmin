@@ -116,7 +116,7 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
 
             };
 
-            var result = await _authTokenManager.RefreshTokenGrantAsync(request, new EntityHeader(), new EntityHeader());
+            var result = await _authTokenManager.RefreshTokenGrantAsync(request);
             Assert.True(result.Successful);
         }
     }
