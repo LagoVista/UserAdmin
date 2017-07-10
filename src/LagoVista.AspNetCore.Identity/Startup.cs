@@ -2,6 +2,7 @@
 using LagoVista.AspNetCore.Identity.Managers;
 using LagoVista.AspNetCore.Identity.Services;
 using LagoVista.AspNetCore.Identity.Utils;
+using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using Microsoft.Extensions.DependencyInjection;

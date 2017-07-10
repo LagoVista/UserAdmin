@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using LagoVista.UserAdmin.Interfaces.Repos.Apps;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -68,7 +69,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AccessTokenGrantAsync", UserAdminErrorCodes.AuthCouldNotFindUserAccount.Message, new KeyValuePair<string, string>("email", authRequest.UserName));
                 return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
-            
+
             if (String.IsNullOrEmpty(authRequest.AppInstanceId))
             {
                 /* This generally happens for the first time the app is logged in on a new device, if it is logged in again future times it will resend the app id */
@@ -80,7 +81,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 await _appInstanceManager.UpdateLastLoginAsync(appUser.Id, authRequest.AppInstanceId);
             }
 
-            var refreshTokenResponse = await _refreshTokenManager.GenerateRefreshTokenAsync(authRequest.AppId, authRequest.AppInstanceId, appUser.Id);            
+            var refreshTokenResponse = await _refreshTokenManager.GenerateRefreshTokenAsync(authRequest.AppId, authRequest.AppInstanceId, appUser.Id);
             return _tokenHelper.GenerateAuthResponse(appUser, authRequest, refreshTokenResponse);
         }
 

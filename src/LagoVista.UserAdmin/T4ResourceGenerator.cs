@@ -287,6 +287,9 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:Err_PwdChange_CouldNotFindUser
 
 		public static string Err_PwdChange_CouldNotFindUser { get { return GetResourceString("Err_PwdChange_CouldNotFindUser"); } }
+//Resources:UserAdminResources:Err_PwdChange_MissingUserId
+
+		public static string Err_PwdChange_MissingUserId { get { return GetResourceString("Err_PwdChange_MissingUserId"); } }
 //Resources:UserAdminResources:Err_PwdChange_NewPassword_Missing
 
 		public static string Err_PwdChange_NewPassword_Missing { get { return GetResourceString("Err_PwdChange_NewPassword_Missing"); } }
@@ -296,6 +299,18 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:Err_PwdChange_UserId_Missing
 
 		public static string Err_PwdChange_UserId_Missing { get { return GetResourceString("Err_PwdChange_UserId_Missing"); } }
+//Resources:UserAdminResources:Err_PwdChange_UserIdMismatch
+
+		public static string Err_PwdChange_UserIdMismatch { get { return GetResourceString("Err_PwdChange_UserIdMismatch"); } }
+//Resources:UserAdminResources:Err_PwdReset_MissingNewPassword
+
+		public static string Err_PwdReset_MissingNewPassword { get { return GetResourceString("Err_PwdReset_MissingNewPassword"); } }
+//Resources:UserAdminResources:Err_PwdReset_MissingToken
+
+		public static string Err_PwdReset_MissingToken { get { return GetResourceString("Err_PwdReset_MissingToken"); } }
+//Resources:UserAdminResources:Err_PwdReset_MssingEmail
+
+		public static string Err_PwdReset_MssingEmail { get { return GetResourceString("Err_PwdReset_MssingEmail"); } }
 //Resources:UserAdminResources:Err_ResetPwd_CouldNotFindUser
 
 		public static string Err_ResetPwd_CouldNotFindUser { get { return GetResourceString("Err_ResetPwd_CouldNotFindUser"); } }
@@ -796,9 +811,14 @@ namespace LagoVista.UserAdmin.Resources
 			public const string Email_Verification_Body = "Email_Verification_Body";
 			public const string Email_Verification_Subject = "Email_Verification_Subject";
 			public const string Err_PwdChange_CouldNotFindUser = "Err_PwdChange_CouldNotFindUser";
+			public const string Err_PwdChange_MissingUserId = "Err_PwdChange_MissingUserId";
 			public const string Err_PwdChange_NewPassword_Missing = "Err_PwdChange_NewPassword_Missing";
 			public const string Err_PwdChange_OldPassword_Missing = "Err_PwdChange_OldPassword_Missing";
 			public const string Err_PwdChange_UserId_Missing = "Err_PwdChange_UserId_Missing";
+			public const string Err_PwdChange_UserIdMismatch = "Err_PwdChange_UserIdMismatch";
+			public const string Err_PwdReset_MissingNewPassword = "Err_PwdReset_MissingNewPassword";
+			public const string Err_PwdReset_MissingToken = "Err_PwdReset_MissingToken";
+			public const string Err_PwdReset_MssingEmail = "Err_PwdReset_MssingEmail";
 			public const string Err_ResetPwd_CouldNotFindUser = "Err_ResetPwd_CouldNotFindUser";
 			public const string Err_UserId_DoesNotMatch = "Err_UserId_DoesNotMatch";
 			public const string ExternalLoginConfirmVM_Description = "ExternalLoginConfirmVM_Description";

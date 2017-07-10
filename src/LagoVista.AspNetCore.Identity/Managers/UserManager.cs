@@ -4,6 +4,7 @@ using LagoVista.UserAdmin.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using LagoVista.Core;
+using System;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -55,6 +56,26 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public async Task<InvokeResult> ConfirmEmailAsync(AppUser user, string token)
         {
             return (await _userManager.ConfirmEmailAsync(user, token)).ToInvokeResult();
+        }
+
+        public async Task<InvokeResult> ChangePasswordAsync(AppUser user, string oldPassword, string newPassword)
+        {
+            return (await _userManager.ChangePasswordAsync(user, oldPassword, newPassword)).ToInvokeResult();
+        }
+
+        public Task<AppUser> FindByEmailAsync(string email)
+        {
+            return _userManager.FindByEmailAsync(email);
+        }
+
+        public Task<string> GeneratePasswordResetTokenAsync(AppUser user)
+        {
+            return _userManager.GeneratePasswordResetTokenAsync(user);
+        }
+
+        public async Task<InvokeResult> ResetPasswordAsync(AppUser user, string token, string newPassword)
+        {
+            return (await _userManager.ResetPasswordAsync(user, token, newPassword)).ToInvokeResult();
         }
     }
 }

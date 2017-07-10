@@ -10,6 +10,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LagoVista.Core;
+using LagoVista.UserAdmin;
 
 namespace LagoVista.AspNetCore.Identity.Utils
 {

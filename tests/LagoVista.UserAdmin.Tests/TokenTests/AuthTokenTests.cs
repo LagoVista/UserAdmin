@@ -49,15 +49,75 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
             };
 
             _authTokenManager = new AuthTokenManager(new Mock<IAppInstanceRepo>().Object, _refreshTokenManager.Object, _authRequestValidators.Object, _orgHelper.Object, _tokenHelper.Object, _appInstanceManager.Object, new Mock<IAdminLogger>().Object, _signInManager.Object, _userManager.Object);
+
             _signInManager.Setup(sim => sim.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(Task.FromResult(InvokeResult.Success));
             _userManager.Setup(usm => usm.FindByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { Id = Guid.NewGuid().ToId() }));
             _userManager.Setup(usm => usm.FindByNameAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { Id = Guid.NewGuid().ToId() }));
+            _orgHelper.Setup(ohlp => ohlp.SetUserOrgAsync(It.IsAny<AuthRequest>(), It.IsAny<AppUser>())).Returns(Task.FromResult(InvokeResult.Success));
             _refreshTokenManager.Setup(rtm => rtm.GenerateRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task<RefreshToken>.FromResult(InvokeResult<RefreshToken>.Create(new RefreshToken("XXXX"))));
             _authRequestValidators.Setup(arv => arv.ValidateAuthRequest(It.IsAny<AuthRequest>())).Returns(InvokeResult.Success);
             _authRequestValidators.Setup(arv => arv.ValidateAccessTokenGrant(It.IsAny<AuthRequest>())).Returns(InvokeResult.Success);
             _authRequestValidators.Setup(arv => arv.ValidateRefreshTokenGrant(It.IsAny<AuthRequest>())).Returns(InvokeResult.Success);
+            _tokenHelper.Setup(tlp => tlp.GenerateAuthResponse(It.IsAny<AppUser>(), It.IsAny<AuthRequest>(), It.IsAny<InvokeResult<RefreshToken>>())).Returns(new InvokeResult<AuthResponse>()
+            {
+                Result = new AuthResponse()
+                {
+                    AccessToken = "ACC",
+                    AccessTokenExpiresUTC = DateTime.Now.AddMinutes(30).ToJSONString(),
+                }
+            });
         }
 
         //TODO: SHould write some tests here but behind schedule...did deskcheck of code and after refactoring its very straight forward.
+
+
+        [Fact]
+        public async Task ShouldGenerateAccessToken()
+        {
+            Init();
+
+            var request = new AuthRequest()
+            {
+                AppId = "APP123",
+                AppInstanceId = "INST12",
+                ClientType = "APP",
+                DeviceId = "DEV001",
+                Email = "email@address.net",
+                GrantType = "password",
+                OrgId = "org12",
+                OrgName = "orgname",
+                Password = "pwd",
+                UserName = "email@foo.net"
+
+            };
+
+            var result = await _authTokenManager.AccessTokenGrantAsync(request);
+            Assert.True(result.Successful);
+        }
+
+
+        [Fact]
+        public async Task ShouldGenerateRefreshToken()
+        {
+            Init();
+
+            var request = new AuthRequest()
+            {
+                AppId = "APP123",
+                AppInstanceId = "INST12",
+                ClientType = "APP",
+                DeviceId = "DEV001",
+                Email = "email@address.net",
+                GrantType = "refreshtoken",
+                OrgId = "org12",
+                OrgName = "orgname",
+                Password = "pwd",
+                UserName = "email@foo.net"
+
+            };
+
+            var result = await _authTokenManager.RefreshTokenGrantAsync(request, new EntityHeader(), new EntityHeader());
+            Assert.True(result.Successful);
+        }
     }
 }

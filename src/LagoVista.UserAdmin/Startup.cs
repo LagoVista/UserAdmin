@@ -15,7 +15,7 @@ namespace LagoVista.UserAdmin
             services.AddTransient<ISubscriptionManager, SubscriptionManager>();
             services.AddTransient<IAppInstanceManager, AppInstanceManager>();
             services.AddTransient<IUserVerficationManager, UserVerficationManager>();
-            
+            services.AddTransient<IPasswordManager, PasswordManager>();
         }
     }
 }

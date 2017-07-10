@@ -779,4 +779,19 @@
   <data name="SMS_Verification_Body" xml:space="preserve">
     <value>Please enter the code [CODE] in [APP_NAME]</value>
   </data>
+  <data name="Err_PwdChange_MissingUserId" xml:space="preserve">
+    <value>Missing User Id on Password Change Request</value>
+  </data>
+  <data name="Err_PwdChange_UserIdMismatch" xml:space="preserve">
+    <value>User ID Provided in Password Change Request does not Match Logged in User</value>
+  </data>
+  <data name="Err_PwdReset_MissingNewPassword" xml:space="preserve">
+    <value>Missing New Password on Reset Password Request</value>
+  </data>
+  <data name="Err_PwdReset_MissingToken" xml:space="preserve">
+    <value>Missing Token on Reset Password Request</value>
+  </data>
+  <data name="Err_PwdReset_MssingEmail" xml:space="preserve">
+    <value>Missing Email on Reset Password Request</value>
+  </data>
 </root>

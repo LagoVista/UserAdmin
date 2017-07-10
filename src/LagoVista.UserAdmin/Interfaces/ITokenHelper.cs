@@ -2,10 +2,8 @@
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Users;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace LagoVista.AspNetCore.Identity.Interfaces
+namespace LagoVista.UserAdmin
 {
     public interface ITokenHelper
     {

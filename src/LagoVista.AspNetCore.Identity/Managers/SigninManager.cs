@@ -1,14 +1,10 @@
-﻿using LagoVista.AspNetCore.Identity.Interfaces;
-using LagoVista.Core.Authentication.Models;
-using LagoVista.Core.Validation;
+﻿using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Resources;
 using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.AspNetCore.Identity.Managers
@@ -16,15 +12,11 @@ namespace LagoVista.AspNetCore.Identity.Managers
     public class SignInManager : ISignInManager
     {
         IAdminLogger _adminLogger;
-        public SignInManager(IAdminLogger adminLogger)
-        {
-            _adminLogger = adminLogger;
-        }
-
         SignInManager<AppUser> _signinManager;
-        public SignInManager(SignInManager<AppUser> signInManager)
+        public SignInManager(SignInManager<AppUser> signInManager, IAdminLogger adminLogger)
         {
             _signinManager = signInManager;
+            _adminLogger = adminLogger;
         }
 
         public Task SignInAsync(AppUser user)

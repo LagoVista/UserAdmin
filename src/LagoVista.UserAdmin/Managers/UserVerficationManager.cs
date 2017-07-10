@@ -22,9 +22,9 @@ namespace LagoVista.UserAdmin.Managers
         ISmsSender _smsSender;
 
         /* 
-            * Note this MUCH match the name of the action on the VerifyIdentityController in the Web project
-             * User Admin code in MVC shoudl be refactored to use this and provide a constant link.
-            */
+         * Note this MUCH match the name of the action on the VerifyIdentityController in the Web project
+         * User Admin code in MVC shoudl be refactored to use this and provide a constant link.
+         */
         private const string ConfirmEmailLink = "ConfirmEmailLink";
 
 
@@ -80,14 +80,14 @@ namespace LagoVista.UserAdmin.Managers
 
                 var result = await _emailSender.SendAsync(user.Email, subject, body);
 
-                _adminLogger.LogInvokeResult("UserVerifyController_SendConfirmationEmailAsync", result,
+                _adminLogger.LogInvokeResult("UserVerficationManager_SendConfirmationEmailAsync", result,
                     new KeyValuePair<string, string>("toAddress", user.Email));
 
                 return result;
             }
             catch (Exception ex)
             {
-                _adminLogger.AddException("UserVerifyController_SendConfirmationEmailAsync", ex);
+                _adminLogger.AddException("UserVerficationManager_SendConfirmationEmailAsync", ex);
                 return InvokeResult.FromErrors(UserAdminErrorCodes.RegErrorSendingEmail.ToErrorMessage(), new ErrorMessage() { Message = ex.Message });
             }
         }
@@ -96,14 +96,14 @@ namespace LagoVista.UserAdmin.Managers
         {
             if (String.IsNullOrEmpty(sendSMSCode.PhoneNumber))
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserVerifyController_SendSMSCodeAsync", UserAdminErrorCodes.RegMissingEmail.Message);
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserVerficationManager_SendSMSCodeAsync", UserAdminErrorCodes.RegMissingEmail.Message);
                 return InvokeResult.FromErrors(UserAdminErrorCodes.RegMissingPhoneNumber.ToErrorMessage());
             }
 
             var user = await _userManager.FindByIdAsync(userHeader.Id);
             if (user == null)
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserVerifyController_SendSMSCodeAsync", "Could not get current user.");
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserVerficationManager_SendSMSCodeAsync", "Could not get current user.");
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
 
@@ -112,7 +112,7 @@ namespace LagoVista.UserAdmin.Managers
                 var code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, sendSMSCode.PhoneNumber);
                 var result = await _smsSender.SendAsync(sendSMSCode.PhoneNumber, UserAdminResources.SMS_Verification_Body.Replace("[CODE]", code).Replace("[APP_NAME]", _appConfig.AppName));
 
-                _adminLogger.LogInvokeResult("UserVerifyController_SendSMSCodeAsync", result,
+                _adminLogger.LogInvokeResult("UserVerficationManager_SendSMSCodeAsync", result,
                     new KeyValuePair<string, string>("phone", sendSMSCode.PhoneNumber),
                     new KeyValuePair<string, string>("code", code));
 
@@ -120,7 +120,7 @@ namespace LagoVista.UserAdmin.Managers
             }
             catch (Exception ex)
             {
-                _adminLogger.AddException("UserVerifyController_SendSMSCodeAsync", ex);
+                _adminLogger.AddException("UserVerficationManager_SendSMSCodeAsync", ex);
                 return InvokeResult.FromErrors(UserAdminErrorCodes.RegErrorSendingSMS.ToErrorMessage(), new ErrorMessage() { Message = ex.Message });
             }
         }
@@ -132,14 +132,14 @@ namespace LagoVista.UserAdmin.Managers
             var user = await _userManager.FindByIdAsync(userHeader.Id);
             if (user == null)
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserVerifyController_ValidateSMSAsync", "Could not get current user.");
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserVerficationManager_ValidateSMSAsync", "Could not get current user.");
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
 
             var result = await _userManager.ChangePhoneNumberAsync(user, verifyRequest.PhoneNumber, verifyRequest.SMSCode);
             if (result.Successful)
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "UserVerifyController_ValidateSMSAsync", "Success_ConfirmSMS",
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "UserVerficationManager_ValidateSMSAsync", "Success_ConfirmSMS",
                     new KeyValuePair<string, string>("phone", verifyRequest.PhoneNumber),
                     new KeyValuePair<string, string>("code", verifyRequest.SMSCode));
 
@@ -162,7 +162,7 @@ namespace LagoVista.UserAdmin.Managers
             var user = await _userManager.FindByIdAsync(userHeader.Id);
             if (user == null)
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserVerifyController_ValidateEmailAsync", "Could not get current user.");
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserVerficationManager_ValidateEmailAsync", "Could not get current user.");
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
 
@@ -170,7 +170,7 @@ namespace LagoVista.UserAdmin.Managers
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (result.Successful)
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "UserVerifyController_ValidateEmailAsync", "Success_ConfirmEmail",
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "UserVerficationManager_ValidateEmailAsync", "Success_ConfirmEmail",
                     new KeyValuePair<string, string>("toEmail", user.Email),
                     new KeyValuePair<string, string>("code", confirmemaildto.ReceivedCode));
 

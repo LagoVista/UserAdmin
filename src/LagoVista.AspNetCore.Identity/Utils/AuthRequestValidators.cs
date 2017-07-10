@@ -1,5 +1,4 @@
-﻿using LagoVista.AspNetCore.Identity.Interfaces;
-using LagoVista.Core.Authentication.Models;
+﻿using LagoVista.Core.Authentication.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos;
@@ -7,23 +6,27 @@ using LagoVista.UserAdmin.Resources;
 using LagoVista.Core;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using LagoVista.UserAdmin.Models.DTOs;
+using LagoVista.UserAdmin;
+using LagoVista.UserAdmin.Interfaces.Managers;
 
 namespace LagoVista.AspNetCore.Identity.Utils
 {
     public class AuthRequestValidators : IAuthRequestValidators
     {
         IAdminLogger _adminLogger;
+        IUserManager _userManager;
         IRefreshTokenRepo _refreshTokenRepo;
 
         private const string EMAIL_REGEX_FORMAT = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
         private const string REFRESH_TOKEN_FORMAT = @"[0-9]{19,19}\.[0-9A-F]{32,32}";
 
-        public AuthRequestValidators(IAdminLogger adminLogger, IRefreshTokenRepo refreshTokenRepo)
+        public AuthRequestValidators(IAdminLogger adminLogger, IRefreshTokenRepo refreshTokenRepo, IUserManager userManager)
         {
             _adminLogger = adminLogger;
+            _userManager = userManager;
             _refreshTokenRepo = refreshTokenRepo;
         }
 
@@ -128,6 +131,86 @@ namespace LagoVista.AspNetCore.Identity.Utils
             }
 
             return InvokeResult.Success;
+        }
+
+        public InvokeResult ValidatePasswordChangeRequest(ChangePassword changePassword, string userId)
+        {
+            if (String.IsNullOrEmpty(changePassword.UserId))
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidatePasswordChangeRequest", UserAdminResources.Err_PwdChange_MissingUserId);
+                return InvokeResult.FromErrors(new ErrorMessage(UserAdminResources.Err_PwdChange_MissingUserId));
+            }
+
+            if (changePassword.UserId != userId)
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidatePasswordChangeRequest", UserAdminResources.Err_PwdChange_UserIdMismatch,
+                    new KeyValuePair<string, string>("requestUseId", changePassword.UserId),
+                     new KeyValuePair<string, string>("currentUserId", userId));
+                return InvokeResult.FromErrors(new ErrorMessage(UserAdminResources.Err_PwdChange_UserIdMismatch));
+            }
+
+            if (String.IsNullOrEmpty(changePassword.OldPassword))
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidatePasswordChangeRequest", UserAdminResources.Err_PwdChange_OldPassword_Missing);
+                return InvokeResult.FromErrors(new ErrorMessage(UserAdminResources.Err_PwdChange_OldPassword_Missing));
+            }
+
+            if (String.IsNullOrEmpty(changePassword.NewPassword))
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidatePasswordChangeRequest", UserAdminResources.Err_PwdChange_NewPassword_Missing);
+                return InvokeResult.FromErrors(new ErrorMessage(UserAdminResources.Err_PwdChange_NewPassword_Missing));
+            }
+
+            return InvokeResult.Success;
+        }
+
+        public InvokeResult ValidateSendPasswordLinkRequest(SendResetPasswordLink sendRestPasswordLink)
+        {
+            if (String.IsNullOrEmpty(sendRestPasswordLink.Email))
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateSendPasswordLinkRequest", UserAdminErrorCodes.RegMissingEmail.Message);
+                return InvokeResult.FromErrors(UserAdminErrorCodes.RegMissingEmail.ToErrorMessage());
+            }
+
+            var emailRegEx = new Regex(EMAIL_REGEX_FORMAT);
+            if (!emailRegEx.Match(sendRestPasswordLink.Email).Success)
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateSendPasswordLinkRequest", UserAdminErrorCodes.RegInvalidEmailAddress.Message);
+                return InvokeResult.FromErrors(UserAdminErrorCodes.RegInvalidEmailAddress.ToErrorMessage());
+            }
+
+            return InvokeResult.Success;
+        }
+
+        public InvokeResult ValidateResetPasswordRequest(ResetPassword resetPassword)
+        {
+            if (String.IsNullOrEmpty(resetPassword.Email))
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateResetPasswordRequest", UserAdminErrorCodes.RegMissingEmail.Message);
+                return InvokeResult.FromErrors(UserAdminErrorCodes.RegMissingEmail.ToErrorMessage());
+            }
+
+            if (String.IsNullOrEmpty(resetPassword.Token))
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateResetPasswordRequest", UserAdminResources.Err_PwdChange_NewPassword_Missing);
+                return InvokeResult.FromErrors(new ErrorMessage(UserAdminResources.Err_PwdChange_NewPassword_Missing));
+            }
+
+            if (String.IsNullOrEmpty(resetPassword.NewPassword))
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateResetPasswordRequest", UserAdminResources.Err_PwdChange_NewPassword_Missing);
+                return InvokeResult.FromErrors(new ErrorMessage(UserAdminResources.Err_PwdChange_NewPassword_Missing));
+            }
+
+            var emailRegEx = new Regex(EMAIL_REGEX_FORMAT);
+            if (!emailRegEx.Match(resetPassword.Email).Success)
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateResetPasswordRequest", UserAdminErrorCodes.RegInvalidEmailAddress.Message);
+                return InvokeResult.FromErrors(UserAdminErrorCodes.RegInvalidEmailAddress.ToErrorMessage());
+            }
+
+            return InvokeResult.Success;
+
         }
     }
 }
