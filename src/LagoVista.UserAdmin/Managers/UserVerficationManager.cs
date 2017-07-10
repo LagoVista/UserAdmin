@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using LagoVista.Core;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -60,8 +61,8 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> SendConfirmationEmailAsync(EntityHeader orgHeader, EntityHeader userHeader)
         {
-            var user = await _userManager.FindByIdAsync(userHeader.Id);
-            if (user == null)
+            var appUser = await _userManager.FindByIdAsync(userHeader.Id);
+            if (appUser == null)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserVerifyController_SendConfirmationEmailAsync", "Could not get current user.");
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
@@ -69,29 +70,36 @@ namespace LagoVista.UserAdmin.Managers
 
             try
             {
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
                 var encodedToken = System.Net.WebUtility.UrlEncode(token);
-                var callbackUrl = $"{_appConfig.WebAddress}/VerifyIdentity/{ConfirmEmailLink}?userId={user.Id}&code={encodedToken}";
-                var mobileCallbackUrl = $"nuviot://confirmemail?userId={user.Id}&code={encodedToken}";
+                var callbackUrl = $"{_appConfig.WebAddress}/VerifyIdentity/{ConfirmEmailLink}?userId={appUser.Id}&code={encodedToken}";
+                var mobileCallbackUrl = $"nuviot://confirmemail?userId={appUser.Id}&code={encodedToken}";
 
+#if DEBUG
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "UserVerifyController_SendConfirmationEmailAsync", "SentToken",
+                     token.ToKVP("token"),
+                     appUser.Id.ToKVP("appUserId"),
+                     encodedToken.ToKVP("encodedToken"),
+                     appUser.Email.ToKVP("toEmailAddress"));
+#endif 
 
                 var subject = UserAdminResources.Email_Verification_Subject.Replace("[APP_NAME]", _appConfig.AppName);
                 var body = UserAdminResources.Email_Verification_Body.Replace("[CALLBACK_URL]", callbackUrl).Replace("[MOBILE_CALLBACK_URL]", mobileCallbackUrl);
 
-                var result = await _emailSender.SendAsync(user.Email, subject, body);
+                var result = await _emailSender.SendAsync(appUser.Email, subject, body);
 
                 _adminLogger.LogInvokeResult("UserVerficationManager_SendConfirmationEmailAsync", result,
                     new KeyValuePair<string, string>("token", token),
-                    new KeyValuePair<string, string>("toUserId", user.Id),
-                    new KeyValuePair<string, string>("toEmail", user.Email));
+                    new KeyValuePair<string, string>("toUserId", appUser.Id),
+                    new KeyValuePair<string, string>("toEmail", appUser.Email));
 
                 return result;
             }
             catch (Exception ex)
             {
                 _adminLogger.AddException("UserVerficationManager_SendConfirmationEmailAsync", ex,
-                   new KeyValuePair<string, string>("toUserId", user.Id),
-                   new KeyValuePair<string, string>("toEmail", user.Email));
+                   new KeyValuePair<string, string>("toUserId", appUser.Id),
+                   new KeyValuePair<string, string>("toEmail", appUser.Email));
 
                 return InvokeResult.FromErrors(UserAdminErrorCodes.RegErrorSendingEmail.ToErrorMessage(), new ErrorMessage() { Message = ex.Message });
             }
@@ -132,8 +140,6 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> ValidateSMSAsync(VerfiyPhoneNumber verifyRequest, EntityHeader orgHeader, EntityHeader userHeader)
         {
-
-
             var user = await _userManager.FindByIdAsync(userHeader.Id);
             if (user == null)
             {
@@ -156,26 +162,32 @@ namespace LagoVista.UserAdmin.Managers
                     new KeyValuePair<string, string>("phone", verifyRequest.PhoneNumber),
                     new KeyValuePair<string, string>("sentToken", verifyRequest.SMSCode));
                 return result;
-
-
             }
         }
 
         public async Task<InvokeResult> ValidateEmailAsync(ConfirmEmail confirmemaildto, EntityHeader orgHeader, EntityHeader userHeader)
         {
 
-            var user = await _userManager.FindByIdAsync(userHeader.Id);
-            if (user == null)
+            var appUser = await _userManager.FindByIdAsync(userHeader.Id);
+            if (appUser == null)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserVerficationManager_ValidateEmailAsync", "Could not get current user.");
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
 
-            var result = await _userManager.ConfirmEmailAsync(user, confirmemaildto.ReceivedCode);
+#if DEBUG
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "UserVerficationManager_ValidateEmailAsync", "ReceivedToken",
+                 confirmemaildto.ReceivedCode.ToKVP("token"),
+                 appUser.Id.ToKVP("appUserId"),
+                 appUser.Email.ToKVP("toEmailAddress"));
+#endif 
+
+
+            var result = await _userManager.ConfirmEmailAsync(appUser, confirmemaildto.ReceivedCode);
             if (result.Successful)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "UserVerficationManager_ValidateEmailAsync", "Success_ConfirmEmail",
-                    new KeyValuePair<string, string>("userId", user.Id),
+                    new KeyValuePair<string, string>("userId", appUser.Id),
                     new KeyValuePair<string, string>("code", confirmemaildto.ReceivedCode));
 
                 return InvokeResult.Success;
@@ -183,7 +195,7 @@ namespace LagoVista.UserAdmin.Managers
             else
             {
                 _adminLogger.LogInvokeResult("UserVerficationManager_ValidateEmailAsync", result,
-                    new KeyValuePair<string, string>("userId", user.Id),
+                    new KeyValuePair<string, string>("userId", appUser.Id),
                     new KeyValuePair<string, string>("sentToken", confirmemaildto.ReceivedCode));
                 return result;
             }

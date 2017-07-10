@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using LagoVista.UserAdmin.Interfaces.Repos.Apps;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin;
+using LagoVista.Core;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -78,7 +79,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
             }
             else
             {
-
                 if(!(await _appInstanceManager.UpdateLastLoginAsync(appUser.Id, authRequest.AppInstanceId)).Successful)
                 {
                     /* If we don't find it, it is likely because a different user is logging in with the same device */

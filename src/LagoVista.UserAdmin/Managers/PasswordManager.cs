@@ -7,8 +7,11 @@ using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Resources;
 using System;
+using LagoVista.Core;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
+
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -35,31 +38,44 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<InvokeResult> SendResetPasswordLinkAsync(SendResetPasswordLink sendResetPasswordLink)
         {
             var validationResult = _authRequestValidators.ValidateSendPasswordLinkRequest(sendResetPasswordLink);
-            if(!validationResult.Successful) return validationResult;
+            if (!validationResult.Successful) return validationResult;
 
-            try
+            var appUser = await _userManager.FindByEmailAsync(sendResetPasswordLink.Email);
+            if (appUser == null)
             {
-                var appUser = await _userManager.FindByEmailAsync(sendResetPasswordLink.Email);
-                if (appUser == null)
-                {
-                    _adminLogger.AddError("PasswordManager_SendResetPasswordLinkAsync", "CouldNotFindUser", new System.Collections.Generic.KeyValuePair<string, string>("email", sendResetPasswordLink.Email));
-                    return InvokeResult.FromErrors(new ErrorMessage(UserAdminResources.Err_ResetPwd_CouldNotFindUser));
-                }
-
-                var code = await _userManager.GeneratePasswordResetTokenAsync(appUser);
-                var callbackUrl = $"{_appConfig.WebAddress}/{ACTION_RESET_PASSWORD}?code={code}";
-                var mobileCallbackUrl = $"nuviot://resetpassword?code={code}";
-
-                var subject = UserAdminResources.Email_ResetPassword_Subject.Replace("[APP_NAME]", _appConfig.AppName);
-                var body = UserAdminResources.Email_ResetPassword_Body.Replace("[CALLBACK_URL]", callbackUrl).Replace("[MOBILE_CALLBACK_URL]", mobileCallbackUrl);
-
-                return await _emailSender.SendAsync(sendResetPasswordLink.Email, subject, body);
+                _adminLogger.AddError("PasswordManager_SendResetPasswordLinkAsync", "CouldNotFindUser", new System.Collections.Generic.KeyValuePair<string, string>("email", sendResetPasswordLink.Email));
+                return InvokeResult.FromErrors(new ErrorMessage(UserAdminResources.Err_ResetPwd_CouldNotFindUser));
             }
-            catch (Exception ex)
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(appUser);
+            var encodedToken = System.Net.WebUtility.UrlEncode(token);
+            var callbackUrl = $"{_appConfig.WebAddress}/{ACTION_RESET_PASSWORD}?code={token}";
+            var mobileCallbackUrl = $"nuviot://resetpassword?code={token}";
+
+#if DEBUG
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_SendResetPasswordLinkAsync", "SentToken",
+                 token.ToKVP("token"),
+                 appUser.Id.ToKVP("appUserId"),
+                 encodedToken.ToKVP("encodedToken"),
+                 appUser.Email.ToKVP("toEmailAddress"));
+#endif 
+
+            var subject = UserAdminResources.Email_ResetPassword_Subject.Replace("[APP_NAME]", _appConfig.AppName);
+            var body = UserAdminResources.Email_ResetPassword_Body.Replace("[CALLBACK_URL]", callbackUrl).Replace("[MOBILE_CALLBACK_URL]", mobileCallbackUrl);
+
+            var result = await _emailSender.SendAsync(sendResetPasswordLink.Email, subject, body);
+            if (result.Successful)
             {
-                _adminLogger.AddException("PasswordManager_SendResetPasswordLinkAsync", ex);
-                return InvokeResult.FromErrors(new ErrorMessage(UserAdminResources.Email_RestPassword_ErrorSending), new ErrorMessage() { Message = ex.Message });
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_SendResetPasswordLinkAsync", "SentLink",
+                     appUser.Id.ToKVP("appUserId"),
+                     appUser.Email.ToKVP("toEmailAddress"));
             }
+            else
+            {
+                _adminLogger.AddError("PasswordManager_SendResetPasswordLinkAsync", "Could Not Send Password Link", result.ErrorsToKVPArray());
+            }
+
+            return result;
         }
 
         public async Task<InvokeResult> ChangePasswordAsync(ChangePassword changePassword, EntityHeader orgEntityHeader, EntityHeader userEntityHeader)
@@ -74,7 +90,19 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult.FromErrors(new ErrorMessage(UserAdminResources.Err_PwdChange_CouldNotFindUser));
             }
 
-            return await _userManager.ChangePasswordAsync(appUser, changePassword.OldPassword, changePassword.NewPassword);
+            var result = await _userManager.ChangePasswordAsync(appUser, changePassword.OldPassword, changePassword.NewPassword);
+            if (result.Successful)
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_ChangePasswordAsync", "PasswordChange",
+                 appUser.Id.ToKVP("appUserId"),
+                 appUser.Email.ToKVP("userEmailAddress"));
+            }
+            else
+            {
+                _adminLogger.AddError("PasswordManager_ChangePasswordAsync", "Could Not Chance Password", result.ErrorsToKVPArray());
+            }
+
+            return result;
         }
 
         public async Task<InvokeResult> ResetPasswordAsync(ResetPassword resetPassword)
@@ -89,8 +117,26 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult.FromErrors(new ErrorMessage(UserAdminResources.Err_PwdChange_CouldNotFindUser));
             }
 
-            return await _userManager.ResetPasswordAsync(appUser, resetPassword.Token, resetPassword.NewPassword);
+#if DEBUG
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_ResetPasswordAsync", "ReceivedToken",
+                 resetPassword.Token.ToKVP("token"),
+                 appUser.Id.ToKVP("appUserId"),
+                 appUser.Email.ToKVP("toEmailAddress"));
+#endif 
 
+            var result = await _userManager.ResetPasswordAsync(appUser, resetPassword.Token, resetPassword.NewPassword);
+            if (result.Successful)
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_ResetPasswordAsync", "PasswordChange",
+                 appUser.Id.ToKVP("appUserId"),
+                 appUser.Email.ToKVP("userEmailAddress"));
+            }
+            else
+            {
+                _adminLogger.AddError("PasswordManager_ResetPasswordAsync", "Could Not Reset Password", result.ErrorsToKVPArray());
+            }
+
+            return result;
         }
     }
 }
