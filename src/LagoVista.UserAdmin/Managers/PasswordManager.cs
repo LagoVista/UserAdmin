@@ -1,4 +1,6 @@
-﻿using LagoVista.Core.Interfaces;
+﻿#define DIAG
+
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
@@ -49,10 +51,9 @@ namespace LagoVista.UserAdmin.Managers
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(appUser);
             var encodedToken = System.Net.WebUtility.UrlEncode(token);
-            var callbackUrl = $"{_appConfig.WebAddress}/{ACTION_RESET_PASSWORD}?code={token}";
+            var callbackUrl = $"{_appConfig.WebAddress}/{ACTION_RESET_PASSWORD}?code={encodedToken}";
             var mobileCallbackUrl = $"nuviot://resetpassword?code={token}";
-
-#if DEBUG
+#if DIAG
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_SendResetPasswordLinkAsync", "SentToken",
                  token.ToKVP("token"),
                  appUser.Id.ToKVP("appUserId"),
@@ -117,7 +118,7 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult.FromErrors(new ErrorMessage(UserAdminResources.Err_PwdChange_CouldNotFindUser));
             }
 
-#if DEBUG
+#if DIAG
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_ResetPasswordAsync", "ReceivedToken",
                  resetPassword.Token.ToKVP("token"),
                  appUser.Id.ToKVP("appUserId"),

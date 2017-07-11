@@ -18,7 +18,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 
         public Task<Invitation> GetInvitationAsync(string id)
         {
-            return base.GetAsync(id);
+            return base.GetAsync(id, false);
         }
 
         public async Task<Invitation> GetInviteByOrgIdAndEmailAsync(string orgId, string email)

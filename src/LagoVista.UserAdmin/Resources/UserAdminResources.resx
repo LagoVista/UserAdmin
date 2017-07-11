@@ -238,7 +238,7 @@
     <value>The user [USERS_FULL_NAME] with an email address of [EMAIL_ADDRESS] already belongs to this organization.</value>
   </data>
   <data name="InviteUser_ClickHere" xml:space="preserve">
-    <value>Please click &lt;a href="[ACCEPT_LINK]"&gt;here&lt;/a&gt; to accept the invitation.</value>
+    <value>&lt;p&gt;Please click on the &lt;a href="[ACCEPT_LINK]"&gt;browser link&lt;/a&gt; or the &lt;a href="[MOBILE_ACCEPT_LINK]"&gt; mobile app link&lt;/a&gt;to accept the invitation.&lt;/p&gt;</value>
   </data>
   <data name="InviteUser_Greeting_Label" xml:space="preserve">
     <value>Message</value>
@@ -793,5 +793,11 @@
   </data>
   <data name="Err_PwdReset_MssingEmail" xml:space="preserve">
     <value>Missing Email on Reset Password Request</value>
+  </data>
+  <data name="ErrInvitation_AlreayAccepted" xml:space="preserve">
+    <value>That invitation has already been accepted</value>
+  </data>
+  <data name="ErrInvitation_CantFind" xml:space="preserve">
+    <value>Sorry, we could not find that invitation</value>
   </data>
 </root>
