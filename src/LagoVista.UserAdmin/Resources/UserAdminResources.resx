@@ -696,7 +696,7 @@
     <value>Could not find supplied refresh token</value>
   </data>
   <data name="AuthErr_RefreshTokenNotInStoraage" xml:space="preserve">
-    <value>Attempt to retrieve refresh token from stroage by id failed.</value>
+    <value>Attempt to retrieve refresh token from storage by id failed.</value>
   </data>
   <data name="AuthErr_UserIsNullForRefresh" xml:space="preserve">
     <value>User is null, must pass in current user when requesting a refresh token grant</value>

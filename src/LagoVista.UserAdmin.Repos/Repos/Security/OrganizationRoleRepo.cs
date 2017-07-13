@@ -31,9 +31,9 @@ namespace LagoVista.UserAdmin.Repos.Security
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<OrganizationUserRole>> GetRolesForUserAsync(string usertId, string orgId)
+        public Task<IEnumerable<OrganizationUserRole>> GetRolesForUserAsync(string userId, string orgId)
         {
-            throw new NotImplementedException();
+            return GetByParitionIdAsync(OrganizationUserRole.GetPartitionKey(orgId, userId));
         }
 
         public Task RevokeAllRolesForUserInOrgAsync(string orgId, string userId)

@@ -1,6 +1,8 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
+using LagoVista.Core;
 using LagoVista.UserAdmin.Resources;
+using System;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
@@ -14,7 +16,13 @@ namespace LagoVista.UserAdmin.Models.Security
             OrganizationName = organization.Text;
             UserId = user.Id;
             UserName = user.Text;
-            RowKey = GetRowKey();
+            PartitionKey = GetPartitionKey();
+            RowKey = Guid.NewGuid().ToId();
+        }
+
+        public OrganizationUserRole()
+        {
+
         }
 
         public string OrganizationId { get; set; }
@@ -24,12 +32,12 @@ namespace LagoVista.UserAdmin.Models.Security
         public string RoleName { get; set; }
         public string RoleId { get; set; }
 
-        public string GetRowKey(string orgId, string userId)
+        public static string GetPartitionKey(string orgId, string userId)
         {
             return $"{orgId}.{userId}";
         }
 
-        public string GetRowKey()
+        public string GetPartitionKey()
         {
             return $"{OrganizationId}.{UserId}";
         }

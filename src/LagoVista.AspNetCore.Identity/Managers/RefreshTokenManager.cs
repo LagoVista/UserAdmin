@@ -40,9 +40,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
             await _refreshTokenRepo.SaveRefreshTokenAsync(refreshToken);
 
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "RefreshTokenManager_GenerateRefreshTokenAsync", "RefreshTokenGenerated",
-                new KeyValuePair<string, string>("appId", appId),
-                new KeyValuePair<string, string>("appInstanceId", appInstanceId),
-                new KeyValuePair<string, string>("userId", userId));
+                new KeyValuePair<string, string>("authAppId", appId),
+                new KeyValuePair<string, string>("authAppInstanceId", appInstanceId),
+                new KeyValuePair<string, string>("authUserId", userId));
 
             return InvokeResult<RefreshToken>.Create(refreshToken);
         }
@@ -64,21 +64,21 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (!validateRefreshTokenResult.Successful)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "RefreshTokenManager_RenewRefreshTokenAsync", UserAdminErrorCodes.AuthRefreshTokenExpired.Message,
-                    new KeyValuePair<string, string>("appId", oldRefreshToken.AppId),
-                    new KeyValuePair<string, string>("appInstanceId", oldRefreshToken.AppInstanceId),
-                    new KeyValuePair<string, string>("userId", oldRefreshToken.PartitionKey));
+                    new KeyValuePair<string, string>("authAppId", oldRefreshToken.AppId),
+                    new KeyValuePair<string, string>("authAppInstanceId", oldRefreshToken.AppInstanceId),
+                    new KeyValuePair<string, string>("authUserId", oldRefreshToken.PartitionKey));
 
                 await _refreshTokenRepo.RemoveRefreshTokenAsync(oldRefreshToken.RowKey, oldRefreshToken.PartitionKey);
                 return InvokeResult<RefreshToken>.FromErrors(UserAdminErrorCodes.AuthRefreshTokenExpired.ToErrorMessage());
             }
 
-            var newRefreshToken = await GenerateRefreshTokenAsync(oldRefreshToken.AppId, oldRefreshToken.PartitionKey, oldRefreshToken.AppInstanceId);
+            var newRefreshToken = await GenerateRefreshTokenAsync(oldRefreshToken.AppId, oldRefreshToken.AppInstanceId, oldRefreshToken.PartitionKey);
             if (newRefreshToken.Successful)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "RefreshTokenManager_RenewRefreshTokenAsync", "RefrehTokenRenewed",
-                    new KeyValuePair<string, string>("appId", oldRefreshToken.AppId),
-                    new KeyValuePair<string, string>("appInstanceId", oldRefreshToken.AppInstanceId),
-                    new KeyValuePair<string, string>("userId", oldRefreshToken.PartitionKey));
+                    new KeyValuePair<string, string>("authAppId", oldRefreshToken.AppId),
+                    new KeyValuePair<string, string>("authAppInstanceId", oldRefreshToken.AppInstanceId),
+                    new KeyValuePair<string, string>("authUserId", oldRefreshToken.PartitionKey));
 
                 await _refreshTokenRepo.RemoveRefreshTokenAsync(oldRefreshToken.RowKey, oldRefreshToken.PartitionKey);
             }
@@ -93,7 +93,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "RefreshTokenManager_RenewRefreshTokenAsync", UserAdminErrorCodes.AuthRefreshTokenNotInStorage.Message, 
                     new KeyValuePair<string, string>("refreshtokenid", refreshTokenId),
-                    new KeyValuePair<string, string>("userId", userId));
+                    new KeyValuePair<string, string>("authUserId", userId));
                 return InvokeResult<RefreshToken>.FromErrors(UserAdminErrorCodes.AuthRefreshTokenNotInStorage.ToErrorMessage());
             }
 
