@@ -74,16 +74,19 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (String.IsNullOrEmpty(authRequest.AppInstanceId))
             {
                 /* This generally happens for the first time the app is logged in on a new device, if it is logged in again future times it will resend the app id */
-                var appInstanceResult = await _appInstanceManager.CreateForUserAsync(appUser, authRequest);
+                var appInstanceResult = await _appInstanceManager.CreateForUserAsync(appUser.Id, authRequest);
                 authRequest.AppInstanceId = appInstanceResult.Result.RowKey;
             }
             else
             {
-                if(!(await _appInstanceManager.UpdateLastLoginAsync(appUser.Id, authRequest.AppInstanceId)).Successful)
+                var updateLastLoginResult = (await _appInstanceManager.UpdateLastLoginAsync(appUser.Id, authRequest));
+                if(updateLastLoginResult.Successful)
                 {
-                    /* If we don't find it, it is likely because a different user is logging in with the same device */
-                    var appInstanceResult = await _appInstanceManager.CreateForUserAsync(appUser, authRequest);
-                    authRequest.AppInstanceId = appInstanceResult.Result.RowKey;
+                    authRequest.AppInstanceId = updateLastLoginResult.Result.RowKey;
+                }
+                else
+                {
+                    return InvokeResult<AuthResponse>.FromInvokeResult(updateLastLoginResult.ToInvokeResult());
                 }
             }
 
@@ -113,11 +116,18 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 if (!changeOrgResult.Successful) return InvokeResult<AuthResponse>.FromInvokeResult(changeOrgResult);
             }
 
-            await _appInstanceManager.UpdateLastAccessTokenRefreshAsync(appUser.Id, authRequest.AppInstanceId);
-
-            var refreshTokenResponse = await _refreshTokenManager.RenewRefreshTokenAsync(authRequest.RefreshToken, appUser.Id);
-            _adminLogger.LogInvokeResult("AuthTokenManager_RefreshTokenGrantAsync", refreshTokenResponse);
-            return _tokenHelper.GenerateAuthResponse(appUser, authRequest, refreshTokenResponse);
+            var updateLastRefreshTokenResult = (await _appInstanceManager.UpdateLastAccessTokenRefreshAsync(appUser.Id, authRequest));
+            if (updateLastRefreshTokenResult.Successful)
+            {
+                authRequest.AppInstanceId = updateLastRefreshTokenResult.Result.RowKey;
+                var refreshTokenResponse = await _refreshTokenManager.RenewRefreshTokenAsync(authRequest.RefreshToken, appUser.Id);
+                _adminLogger.LogInvokeResult("AuthTokenManager_RefreshTokenGrantAsync", refreshTokenResponse);
+                return _tokenHelper.GenerateAuthResponse(appUser, authRequest, refreshTokenResponse);
+            }
+            else
+            {
+                return InvokeResult<AuthResponse>.FromInvokeResult(updateLastRefreshTokenResult.ToInvokeResult());
+            }
         }
     }
 }

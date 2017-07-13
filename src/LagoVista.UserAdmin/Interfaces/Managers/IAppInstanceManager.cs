@@ -8,11 +8,11 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 {
     public interface IAppInstanceManager
     {
-        Task<InvokeResult<AppInstance>> CreateForUserAsync(AppUser appUser, AuthRequest authRequest);
+        Task<InvokeResult<AppInstance>> CreateForUserAsync(string appUserId, AuthRequest authRequest);
 
-        Task<InvokeResult> UpdateLastLoginAsync(string appUserId, string appInstanceId);
+        Task<InvokeResult<AppInstance>> UpdateLastLoginAsync(string appUserId, AuthRequest authRequeset);
 
-        Task<InvokeResult> UpdateLastAccessTokenRefreshAsync(string appUserId, string appInstanceId);
+        Task<InvokeResult<AppInstance>> UpdateLastAccessTokenRefreshAsync(string appUserId, AuthRequest authRequest);
 
     }
 }

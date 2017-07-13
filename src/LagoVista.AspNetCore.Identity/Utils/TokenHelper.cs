@@ -31,9 +31,7 @@ namespace LagoVista.AspNetCore.Identity.Utils
         {
             if (!refreshTokenResponse.Successful)
             {
-                var failedResult = new InvokeResult<AuthResponse>();
-                failedResult.Concat(refreshTokenResponse);
-                return failedResult;
+                return InvokeResult<AuthResponse>.FromInvokeResult(refreshTokenResponse.ToInvokeResult());
             }
 
             var accessExpires = DateTime.UtcNow.AddMinutes(_tokenOptions.AccessExpiration.TotalMinutes);
