@@ -6,17 +6,20 @@ using Microsoft.Azure.Documents;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.UserAdmin.Interfaces.Managers;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
     public class OrganizationRepo : DocumentDBRepoBase<Organization>, IOrganizationRepo
     {
-        bool _shouldConsolidateCollections;        
+        bool _shouldConsolidateCollections;
+        IRDBMSManager _rdbmsUserManager;
 
-        public OrganizationRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger) :
+        public OrganizationRepo(IRDBMSManager rdbmsUserManager, IUserAdminSettings userAdminSettings, IAdminLogger logger) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
+            _rdbmsUserManager = rdbmsUserManager;
         }
 
         protected override bool ShouldConsolidateCollections
@@ -24,9 +27,10 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             get { return _shouldConsolidateCollections; }
         }
 
-        public Task AddOrganizationAsync(Organization org)
+        public async Task AddOrganizationAsync(Organization org)
         {
-            return CreateDocumentAsync(org);
+            await _rdbmsUserManager.AddOrgAsync(org);
+            await CreateDocumentAsync(org);
         }
 
         public Task<Organization> GetOrganizationAsync(string id)
@@ -54,9 +58,10 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             return (await GetOrganizationAsync(id)) != null;
         }
 
-        public Task UpdateOrganizationAsync(Organization org)
+        public async Task UpdateOrganizationAsync(Organization org)
         {
-            return UpsertDocumentAsync(org);
+            await _rdbmsUserManager.UpdateOrgAsync(org);
+            await UpsertDocumentAsync(org);
         }
 
     }

@@ -51,7 +51,7 @@ namespace LagoVista.UserAdmin.Managers
             IEmailSender emailSender,
             IAppConfig appConfig,
             IDependencyManager depManager,
-            ISecurity security,
+            ISecurity security, 
             IAdminLogger logger) : base(logger, appConfig, depManager, security)
         {
 
@@ -133,7 +133,7 @@ namespace LagoVista.UserAdmin.Managers
             ValidationCheck(newOrg, Core.Validation.Actions.Create);
 
             await AuthorizeAsync(newOrg, AuthorizeResult.AuthorizeActions.Create, user, userOrg);
-            await _organizationRepo.AddOrganizationAsync(newOrg);
+            await _organizationRepo.AddOrganizationAsync(newOrg);            
 
             return InvokeResult.Success;
         }
@@ -143,7 +143,7 @@ namespace LagoVista.UserAdmin.Managers
             ValidationCheck(org, Core.Validation.Actions.Update);
 
             await AuthorizeAsync(org, AuthorizeResult.AuthorizeActions.Update, user, userOrg);
-            await _organizationRepo.UpdateOrganizationAsync(org);
+            await _organizationRepo.UpdateOrganizationAsync(org);            
 
             return InvokeResult.Success;
         }
@@ -234,12 +234,12 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<InvokeResult> AcceptInvitationAsync(string inviteId, EntityHeader orgHeader, EntityHeader user)
         {
             var invite = await _inviteUserRepo.GetInvitationAsync(inviteId);
-            if(invite == null)
+            if (invite == null)
             {
                 return "Could Not Find Invitation".ToInvokeResult();
             }
 
-            if(invite.Accepted)
+            if (invite.Accepted)
             {
                 return "This invitation has already been accepted".ToInvokeResult();
             }

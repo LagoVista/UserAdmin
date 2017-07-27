@@ -1,6 +1,7 @@
 ﻿using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Users;
 using System;
@@ -12,10 +13,13 @@ namespace LagoVista.UserAdmin.Repos.Users
     public class AppUserRepo : DocumentDBRepoBase<AppUser>, IAppUserRepo
     {
         bool _shouldConsolidateCollections;
-        public AppUserRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger) : 
+        IRDBMSManager _rdbmsUserManager;
+
+        public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserAdminSettings userAdminSettings, IAdminLogger logger) : 
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
+            _rdbmsUserManager = rdbmsUserManager;
         }
 
         protected override bool ShouldConsolidateCollections
@@ -26,6 +30,7 @@ namespace LagoVista.UserAdmin.Repos.Users
         public async Task CreateAsync(AppUser user)
         {
             await CreateDocumentAsync(user);
+            await _rdbmsUserManager.AddAppUserAsync(user);
         }
 
         public async Task DeleteAsync(AppUser user)
@@ -51,6 +56,7 @@ namespace LagoVista.UserAdmin.Repos.Users
         public async Task UpdateAsync(AppUser user)
         {
             await Client.UpsertDocumentAsync(await GetCollectionDocumentsLinkAsync(), user);
+            await _rdbmsUserManager.UpdateAppUserAsync(user);
         }
         
         public Task<AppUser> FindByThirdPartyLogin(string providerId, string providerKey)

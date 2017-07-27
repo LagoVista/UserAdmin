@@ -25,6 +25,7 @@ namespace LagoVista.UserAdmin.Managers
         IAuthTokenManager _authTokenManager;
         IUserManager _userManager;
         ISignInManager _signInManager;
+        
 
         public AppUserManager(IAppUserRepo appUserRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig,
             IAuthTokenManager authTokenManager, IUserManager userManager, ISignInManager signInManager, IAdminLogger adminLogger) : base(logger, appConfig, depManager, security)

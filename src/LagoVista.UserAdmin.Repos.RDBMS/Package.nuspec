@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>LagoVista.UserAdmin.Repos.RDBMS</id>
+    <version>1.2.71-alpha1415</version>
+    <authors>Software Logistics, LLC</authors>
+    <owners>Software Logistics, LLC</owners>
+    <title>LagoVista Relational DB Repo for Orgs and Users</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
+    <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
+    <summary>User and Organizations primarily exist in NOSQL storage, however the headers for these records are helpful (and used for referential integrity) of relational DBs, so they are also stored there</summary>
+    <description>User, Organization and Location Management Models and API for LagoVista IoT, Devices and Home Automation Framework</description>
+    <releaseNotes>Initial Unstable Release</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>HomeAutomation IoT</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="readme.txt" target="" />
+    <file src="bin\release\netstandard1.2\*.dll" target="lib\netstandard1.2" />
+  </files>
+</package>
