@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{68AF24F5-D5E7-40F5-AE0A-594167F89A44}"
 EndProject
@@ -24,7 +24,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.UserAdmin.Repos",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.UserAdmin.Tests", "tests\LagoVista.UserAdmin.Tests\LagoVista.UserAdmin.Tests.csproj", "{BDEF733C-D8EC-495E-9383-9ECADDA940A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.UserAdmin.Repos.RDBMS", "src\LagoVista.UserAdmin.Repos.RDBMS\LagoVista.UserAdmin.Repos.RDBMS.csproj", "{00AC9BA5-03B5-4CB8-BFD9-9607F58EDCB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.UserAdmin.Repos.RDBMS", "src\LagoVista.UserAdmin.Repos.RDBMS\LagoVista.UserAdmin.Repos.RDBMS.csproj", "{00AC9BA5-03B5-4CB8-BFD9-9607F58EDCB6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.IoT.ProductStore", "src\LagoVista.IoT.ProductStore\LagoVista.IoT.ProductStore.csproj", "{27FDAB9E-0E97-4E98-9CD1-A64D5062171D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +54,10 @@ Global
 		{00AC9BA5-03B5-4CB8-BFD9-9607F58EDCB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00AC9BA5-03B5-4CB8-BFD9-9607F58EDCB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00AC9BA5-03B5-4CB8-BFD9-9607F58EDCB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27FDAB9E-0E97-4E98-9CD1-A64D5062171D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27FDAB9E-0E97-4E98-9CD1-A64D5062171D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27FDAB9E-0E97-4E98-9CD1-A64D5062171D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27FDAB9E-0E97-4E98-9CD1-A64D5062171D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,5 +68,6 @@ Global
 		{52B500CA-BFAF-4BB6-98CC-3B4F4DF24909} = {68AF24F5-D5E7-40F5-AE0A-594167F89A44}
 		{BDEF733C-D8EC-495E-9383-9ECADDA940A0} = {0D569608-298B-46AE-82D3-8481FE044E10}
 		{00AC9BA5-03B5-4CB8-BFD9-9607F58EDCB6} = {68AF24F5-D5E7-40F5-AE0A-594167F89A44}
+		{27FDAB9E-0E97-4E98-9CD1-A64D5062171D} = {68AF24F5-D5E7-40F5-AE0A-594167F89A44}
 	EndGlobalSection
 EndGlobal

@@ -1,24 +1,21 @@
 <?xml version="1.0"?>
 <package>
   <metadata>
-    <id>LagoVista.UserAdmin</id>
-    <version>1.2.63-alpha1541</version>
+    <id>LagoVista.IoT.ProductStore</id>
+    <title>LagoVista ASP.NET Core Identity Provider</title>
+    <version>1.2.72-alpha0816</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
-    <title>LagoVista User Administration</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
-    <summary>User, Organization and Location Management Models and API for LagoVista IoT, Devices and Home Automation Framework</summary>
-    <description>User, Organization and Location Management Models and API for LagoVista IoT, Devices and Home Automation Framework</description>
+    <description>Contains data structure and an interface for a manager to retrieve Product Offerings for the LagoVista Devices, IoT and Home Automation Framework </description>
+    <summary>Contains data structure and an interface for a manager to retrieve Product Offerings, IoT and Home Automation Framework</summary>
     <releaseNotes>Initial Unstable Release</releaseNotes>
     <copyright>Copyright 2017</copyright>
-    <tags>HomeAutomation IoT Devices NuvIoT LagoVista</tags>
-    <dependencies>
-    </dependencies>
+    <tags>HomeAutomation IoT</tags>
   </metadata>
   <files>
-    <file src="readme.txt" target="" />
     <file src="bin\release\netstandard1.2\*.dll" target="lib\netstandard1.2" />
   </files>
 </package>
