@@ -12,6 +12,7 @@ using LagoVista.IoT.Logging;
 using LagoVista.UserAdmin.Resources;
 using LagoVista.UserAdmin.Repos.Repos.Apps;
 using LagoVista.UserAdmin.Interfaces.Repos.Apps;
+using LagoVista.UserAdmin.Repos.Repos.Security;
 
 namespace LagoVista.UserAdmin.Repos
 {
@@ -29,6 +30,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<ILocationRoleRepo, LocationRoleRepo>();
             services.AddTransient<IOrganizationRoleRepo, OrganizationRoleRepo>();
             services.AddTransient<IRoleRepo, RoleRepo>();
+            services.AddTransient<IAccessLogRepo, AccessLogRepo>();
             services.AddTransient<ISubscriptionRepo,SubscriptionRepo>();
             services.AddTransient<ITeamRepo, TeamRepo>();
             services.AddTransient<ITeamUserRepo, TeamUserRepo>();

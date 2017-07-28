@@ -8,6 +8,7 @@ namespace LagoVista.UserAdmin.Repos
     {
         IConnectionSettings UserStorage { get; }
         IConnectionSettings UserTableStorage { get; }
+        IConnectionSettings AccessLogTableStorage { get; }
 
         
         TimeSpan AccessTokenExpiresTimeSpan { get; }
