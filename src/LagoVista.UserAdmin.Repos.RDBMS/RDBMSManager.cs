@@ -30,7 +30,6 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
             await _dataContext.SaveChangesAsync();
 
             return InvokeResult.Success;
-
         }
 
         public async Task<InvokeResult> AddOrgAsync(Organization org)

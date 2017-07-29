@@ -1,11 +1,9 @@
 ﻿using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
-using LagoVista.Core.PlatformSupport;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Orgs;
@@ -24,25 +22,25 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> AddSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeAsync(subscription, AuthorizeResult.AuthorizeActions.Create, user, org);            
+            await AuthorizeAsync( user, org, "addSubscription", subscription);            
 
             await _subscriptionRepo.AddSubscriptionAsync(subscription);
 
             return new InvokeResult();
         }
 
-        public async Task<DependentObjectCheckResult> CheckInUseAsync(string id, EntityHeader org, EntityHeader user)
+        public async Task<DependentObjectCheckResult> CheckInUseAsync(Guid id, EntityHeader org, EntityHeader user)
         {
             var subscription = await _subscriptionRepo.GetSubscriptionAsync(id);
-            await AuthorizeAsync(subscription, AuthorizeResult.AuthorizeActions.Read, user, org);
+            await AuthorizeAsync(user, org, "getSubscription", subscription);
 
             return await CheckForDepenenciesAsync(subscription);            
         }
 
-        public async Task<InvokeResult> DeleteSubscriptionAsync(String id, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> DeleteSubscriptionAsync(Guid id, EntityHeader org, EntityHeader user)
         {
             var subscription = await _subscriptionRepo.GetSubscriptionAsync(id);
-            await AuthorizeAsync(subscription, AuthorizeResult.AuthorizeActions.Delete, user, org);
+            await AuthorizeAsync(user, org, "deleteSubscription", subscription);
             await ConfirmNoDepenenciesAsync(subscription);
 
             await _subscriptionRepo.DeleteSubscriptionAsync(subscription.Id);
@@ -50,10 +48,10 @@ namespace LagoVista.UserAdmin.Managers
             return new InvokeResult();
         }
 
-        public async Task<Subscription> GetSubscriptionAsync(string id, EntityHeader org, EntityHeader user)
+        public async Task<Subscription> GetSubscriptionAsync(Guid id, EntityHeader org, EntityHeader user)
         {
             var subscription = await _subscriptionRepo.GetSubscriptionAsync(id);
-            await AuthorizeAsync(subscription, AuthorizeResult.AuthorizeActions.Read, user, org);            
+            await AuthorizeAsync(user, org, "getSubscription", subscription);
 
             return subscription;            
         }
@@ -72,8 +70,8 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> UpdateSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeAsync(subscription, AuthorizeResult.AuthorizeActions.Update, user, org);
-            
+            await AuthorizeAsync(user, org, "updateSubscription", subscription);
+
             await _subscriptionRepo.UpdateSubscriptionAsync(subscription);
 
             return new InvokeResult();

@@ -4,12 +4,13 @@ namespace LagoVista.IoT.ProductStore
 {
     public class ProductOffering
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
+        public string Key { get; set; }
         public string ProductCategoryKey { get; set; }
         public string Name { get; set; }
 
-        public string SKU { get; set; }
+        public string Sku { get; set; }
 
         public string DetailsHTML { get; set; }
 
@@ -19,6 +20,6 @@ namespace LagoVista.IoT.ProductStore
 
         public decimal UnitCost { get; set; }
 
-        public decimal UnitType { get; set; }
+        public string UnitType { get; set; }
     }
 }

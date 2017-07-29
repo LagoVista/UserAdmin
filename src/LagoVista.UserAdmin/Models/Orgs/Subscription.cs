@@ -10,12 +10,21 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Orgs
 {
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Subscription_Title, UserAdminResources.Names.Subscription_Help, UserAdminResources.Names.Subscription_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class Subscription : UserAdminModelBase, IOwnedEntity, IValidateable, IKeyedEntity, INoSQLEntity, INamedEntity
+    public class Subscription : IValidateable, IKeyedEntity,  INamedEntity
     {
-        public bool IsPublic { get; set; }
-        public EntityHeader OwnerOrganization { get; set; }
-        public EntityHeader OwnerUser { get; set; }
+        public Guid Id { get; set; }
 
+        public String OrgId { get; set; }
+
+        public string CreatedById { get; set; }
+
+        public string LastUpdatedById { get; set; }
+
+        public DateTime CreationDate { get; set; }
+
+        public DateTime LastUpdatedDate { get; set; }
+
+        public String Status { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Key, HelpResource: Resources.UserAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key, RegExValidationMessageResource: Resources.UserAdminResources.Names.Common_Key_Validation, ResourceType: typeof(UserAdminResources), IsRequired: true)]
         public string Key { get; set; }
@@ -30,17 +39,19 @@ namespace LagoVista.UserAdmin.Models.Orgs
         {
             return new SubscriptionSummary()
             {
-                Description = Description,
                 Id = Id,
-                IsPublic = IsPublic,
-                Key = Key,
-                Name = Name
+                Name = Name,
+                Status = Status,
+                Key = Key
             };
         }
-    }
+    }    
 
-    public class SubscriptionSummary : SummaryData
+    public class SubscriptionSummary
     {
-
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Status { get; set; }
+        public string Key { get; set; }
     }
 }

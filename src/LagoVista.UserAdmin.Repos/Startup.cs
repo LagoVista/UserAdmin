@@ -5,7 +5,6 @@ using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Repos.Users;
 using LagoVista.UserAdmin.Repos.Orgs;
 using LagoVista.UserAdmin.Repos.Repos.Users;
-using LagoVista.UserAdmin.Repos.Repos.Orgs;
 using LagoVista.UserAdmin.Repos.Security;
 using Microsoft.Extensions.DependencyInjection;
 using LagoVista.IoT.Logging;
@@ -31,7 +30,6 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<IOrganizationRoleRepo, OrganizationRoleRepo>();
             services.AddTransient<IRoleRepo, RoleRepo>();
             services.AddTransient<IAccessLogRepo, AccessLogRepo>();
-            services.AddTransient<ISubscriptionRepo,SubscriptionRepo>();
             services.AddTransient<ITeamRepo, TeamRepo>();
             services.AddTransient<ITeamUserRepo, TeamUserRepo>();
             services.AddTransient<IAssetSetRepo, AssetSetRepo>();

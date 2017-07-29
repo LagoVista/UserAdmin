@@ -6,6 +6,7 @@ using LagoVista.Core.PlatformSupport;
 using Microsoft.Extensions.Configuration;
 using LagoVista.IoT.Logging.Exceptions;
 using LagoVista.Core.Models;
+using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 
 namespace LagoVista.UserAdmin.Repos.RDBMS
 {
@@ -54,6 +55,7 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
 
             var connectionString = $"Server=tcp:{connectionSettings.Uri},1433;Initial Catalog={connectionSettings.ResourceName};Persist Security Info=False;User ID={connectionSettings.UserName};Password={connectionSettings.Password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
+            services.AddTransient<ISubscriptionRepo, SubscriptionRepo>();
             services.AddTransient<IRDBMSManager, RDBMSManager>();
 
             services.AddDbContext<UserAdminDataContext>(options =>
