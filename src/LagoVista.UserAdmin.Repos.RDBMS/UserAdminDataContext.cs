@@ -7,8 +7,13 @@ using System.Text;
 
 namespace LagoVista.UserAdmin.Repos.RDBMS
 {
-    public class UserAdminDataContext : DbContext
+    public class UserAdminDataContext : DbContext 
     {
+        public UserAdminDataContext(DbContextOptions<UserAdminDataContext> contextOptions) : base(contextOptions)
+        {
+
+        }
+        
         public DbSet<RDBMSOrg> Org { get; set; }
         public DbSet<RDBMSAppUser> AppUser { get; set; }
         public DbSet<Subscription> Subscription { get; set; }
