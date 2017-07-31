@@ -24,5 +24,7 @@ namespace LagoVista.UserAdmin.Models.Security
         public string UserName { get; set; }
         public string Action { get; set; }
         public string Details { get; set; }
+        public bool Authorized { get; set; }
+        public string NotAuthorizedReason { get; set; }
     }
 }

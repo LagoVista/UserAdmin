@@ -7,7 +7,7 @@
     <PackageReference Include="LagoVista.Core.Authentication" Version="1.2.63-alpha1541" />
     <PackageReference Include="LagoVista.IoT.Logging" Version="1.2.63-alpha1541" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
   <ItemGroup>
     <None Update="T4ResourceGenerator.tt">

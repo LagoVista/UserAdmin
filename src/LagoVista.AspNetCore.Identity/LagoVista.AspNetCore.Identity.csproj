@@ -6,13 +6,13 @@
     <PackageReference Include="LagoVista.IoT.Logging" Version="1.2.63-alpha1541" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.1" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0-preview2-25405-01" />
-    <PackageReference Include="Twilio" Version="5.5.1-alpha1" />
+    <PackageReference Include="Twilio" Version="5.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="1.1.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
-    <PackageReference Include="MailKit" Version="1.16.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="MailKit" Version="1.16.2" />
     <PackageReference Include="LagoVista.Core" Version="1.2.63-alpha1541" />
     <PackageReference Include="LagoVista.Core.Authentication" Version="1.2.63-alpha1541" />
-    <PackageReference Include="WindowsAzure.Storage" Version="8.1.4" />
+    <PackageReference Include="WindowsAzure.Storage" Version="8.2.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.UserAdmin\LagoVista.UserAdmin.csproj" />
