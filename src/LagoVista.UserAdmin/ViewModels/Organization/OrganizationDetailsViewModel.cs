@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models;
 using LagoVista.UserAdmin.Resources;
 using System;
@@ -11,7 +12,7 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
     {
         public String OrganizationName { get; set; }
         public Models.Orgs.Organization Organization { get; set; }
-        public IEnumerable<Models.Orgs.OrgUser> People { get; set; }
+        public IEnumerable<UserInfoSummary> People { get; set; }
         public IEnumerable<Models.Orgs.OrgLocation> Locations { get; set; }
     }
 }

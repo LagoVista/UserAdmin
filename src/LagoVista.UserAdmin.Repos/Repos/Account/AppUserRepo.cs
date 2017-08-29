@@ -7,6 +7,9 @@ using LagoVista.UserAdmin.Models.Users;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using LagoVista.Core.Models;
+using System.Collections.Generic;
+using Microsoft.Azure.Documents;
 
 namespace LagoVista.UserAdmin.Repos.Users
 {
@@ -62,6 +65,34 @@ namespace LagoVista.UserAdmin.Repos.Users
         public Task<AppUser> FindByThirdPartyLogin(string providerId, string providerKey)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<UserInfoSummary>> GetUserSummaryForListAsync(List<string> userIds)
+        {
+            var sqlParams = string.Empty;
+            var idx = 0;
+            var paramCollection = new SqlParameterCollection();
+            foreach (var userId in userIds)
+            {
+                if(!String.IsNullOrEmpty(sqlParams))
+                {
+                    sqlParams += ",";
+                }
+                var paramName = $"@userId{idx++}";
+
+                sqlParams += paramName;
+                paramCollection.Add(new SqlParameter(paramName, userId));
+            }
+
+            sqlParams.TrimEnd(',');
+
+            //TODO: This seems kind of ugly...need to put more thought into this, this shouldn't be a query that is hit very often
+            var query = $"SELECT * FROM c where c.id in ({sqlParams})";
+
+            Console.WriteLine(query);
+
+            var appUsers = await QueryAsync(query, paramCollection);
+            return from appUser in appUsers select appUser.ToUserInfoSummary();
         }
     }
 }

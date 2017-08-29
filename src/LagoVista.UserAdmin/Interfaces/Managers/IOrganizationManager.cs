@@ -35,7 +35,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<IEnumerable<LocationUserRole>> GetRolesForUserInLocationAsync(string locationId, string userId, EntityHeader org, EntityHeader user);
         Task<IEnumerable<OrganizationUserRole>> GetUsersRolesInOrgAsync(string orgId, string userId, EntityHeader org, EntityHeader user);
         Task<IEnumerable<LocationUser>> GetUsersForLocationAsync(string locationId, EntityHeader org, EntityHeader user);
-        Task<IEnumerable<OrgUser>> GetUsersForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user);
+        Task<IEnumerable<UserInfoSummary>> GetUsersForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user);
         Task<IEnumerable<LocationUserRole>> GetUserWithRoleInLocationAsync(string locationId, string roleId, EntityHeader org, EntityHeader user);
         Task<IEnumerable<OrganizationUserRole>> GetUserWithRoleInOrgAsync(string orgId, string roleId, EntityHeader org, EntityHeader user);
         Task<AcceptInviteViewModel> GetInviteViewModelAsync(string inviteId);

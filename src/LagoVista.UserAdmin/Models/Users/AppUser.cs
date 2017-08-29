@@ -134,5 +134,20 @@ namespace LagoVista.UserAdmin.Models.Users
                 ProfileImageUrl = ProfileImageUrl
             };
         }
+
+        public UserInfoSummary ToUserInfoSummary()
+        {
+            return new UserInfoSummary()
+            {
+                Email = Email,
+                EmailConfirmed = EmailConfirmed,
+                Id = Id,
+                IsSystemAdmin = IsSystemAdmin,
+                Name = Name,
+                PhoneNumberConfirmed = PhoneNumberConfirmed,
+                ProfileImageUrl = ProfileImageUrl,
+                Key = Id,
+            };
+        }
     }
 }

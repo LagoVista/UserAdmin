@@ -415,10 +415,12 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<IEnumerable<OrgUser>> GetUsersForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user)
+        public async Task<IEnumerable<UserInfoSummary>> GetUsersForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Read, new SecurityHelper() { OrgId = orgId });
-            return await _orgUserRepo.GetUsersForOrgAsync(orgId);
+            var orgUsers = await _orgUserRepo.GetUsersForOrgAsync(orgId);
+            var userIds = (from orgUser in orgUsers select orgUser.UserId).ToList();
+            return await _appUserRepo.GetUserSummaryForListAsync(userIds);
         }
 
         public async Task<IEnumerable<OrgUser>> GetOrganizationsForUserAsync(string userId, EntityHeader org, EntityHeader user)

@@ -1,11 +1,14 @@
-﻿using LagoVista.UserAdmin.Models.Users;
+﻿using LagoVista.Core.Models;
+using LagoVista.UserAdmin.Models.Users;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Interfaces.Repos.Users
 {
     public interface IAppUserRepo : IDisposable
     {
+        Task<IEnumerable<UserInfoSummary>> GetUserSummaryForListAsync(List<string> userId);
         Task CreateAsync(AppUser user);
         Task<AppUser> FindByIdAsync(string userId);
         Task<AppUser> FindByNameAsync(string userName);

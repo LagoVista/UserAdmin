@@ -57,6 +57,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
             return new TeamUserSummary()
             {
                 Id = UserId,
+                Key = UserId,
                 Name = UsersName,
                 ProfileImageUrl = ProfileImageUrl,
             };
