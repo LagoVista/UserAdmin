@@ -191,6 +191,9 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:AuthErr_UserLockedOut
 
 		public static string AuthErr_UserLockedOut { get { return GetResourceString("AuthErr_UserLockedOut"); } }
+//Resources:UserAdminResources:AuthError_NotSysAdmin
+
+		public static string AuthError_NotSysAdmin { get { return GetResourceString("AuthError_NotSysAdmin"); } }
 //Resources:UserAdminResources:Billing_Contact
 
 		public static string Billing_Contact { get { return GetResourceString("Billing_Contact"); } }
@@ -317,6 +320,12 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:Err_UserId_DoesNotMatch
 
 		public static string Err_UserId_DoesNotMatch { get { return GetResourceString("Err_UserId_DoesNotMatch"); } }
+//Resources:UserAdminResources:ErrInvitation_AlreayAccepted
+
+		public static string ErrInvitation_AlreayAccepted { get { return GetResourceString("ErrInvitation_AlreayAccepted"); } }
+//Resources:UserAdminResources:ErrInvitation_CantFind
+
+		public static string ErrInvitation_CantFind { get { return GetResourceString("ErrInvitation_CantFind"); } }
 //Resources:UserAdminResources:ExternalLoginConfirmVM_Description
 
 		public static string ExternalLoginConfirmVM_Description { get { return GetResourceString("ExternalLoginConfirmVM_Description"); } }
@@ -779,6 +788,7 @@ namespace LagoVista.UserAdmin.Resources
 			public const string AuthErr_RefreshTokenNotInStoraage = "AuthErr_RefreshTokenNotInStoraage";
 			public const string AuthErr_UserIsNullForRefresh = "AuthErr_UserIsNullForRefresh";
 			public const string AuthErr_UserLockedOut = "AuthErr_UserLockedOut";
+			public const string AuthError_NotSysAdmin = "AuthError_NotSysAdmin";
 			public const string Billing_Contact = "Billing_Contact";
 			public const string ChangePasswordVM_Description = "ChangePasswordVM_Description";
 			public const string ChangePasswordVM_Help = "ChangePasswordVM_Help";
@@ -821,6 +831,8 @@ namespace LagoVista.UserAdmin.Resources
 			public const string Err_PwdReset_MssingEmail = "Err_PwdReset_MssingEmail";
 			public const string Err_ResetPwd_CouldNotFindUser = "Err_ResetPwd_CouldNotFindUser";
 			public const string Err_UserId_DoesNotMatch = "Err_UserId_DoesNotMatch";
+			public const string ErrInvitation_AlreayAccepted = "ErrInvitation_AlreayAccepted";
+			public const string ErrInvitation_CantFind = "ErrInvitation_CantFind";
 			public const string ExternalLoginConfirmVM_Description = "ExternalLoginConfirmVM_Description";
 			public const string ExternalLoginConfirmVM_Help = "ExternalLoginConfirmVM_Help";
 			public const string ExternalLoginConfirmVM_Title = "ExternalLoginConfirmVM_Title";

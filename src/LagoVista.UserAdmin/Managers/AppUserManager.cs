@@ -101,6 +101,33 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
+        public async Task<InvokeResult> UpdateUserAsync(UserInfo user, EntityHeader org, EntityHeader updatedByUser)
+        {
+            var appUser = await GetUserByIdAsync(user.Id, org, updatedByUser);
+            appUser.FirstName = user.FirstName;
+            appUser.LastName = user.LastName;
+            appUser.ProfileImageUrl = user.ProfileImageUrl;
+            if(appUser.IsSystemAdmin != user.IsSystemAdmin)
+            {
+                var updateByAppUser = await GetUserByIdAsync(updatedByUser.Id, org, updatedByUser);
+                if(!updateByAppUser.IsSystemAdmin)
+                {
+                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_UpdateUserAsync", UserAdminErrorCodes.AuthNotSysAdmin.Message);
+                    return InvokeResult.FromErrors(UserAdminErrorCodes.AuthNotSysAdmin.ToErrorMessage());
+                }
+                appUser.IsSystemAdmin = user.IsSystemAdmin;
+            }
+
+
+            ValidationCheck(appUser, Actions.Update);
+
+            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, updatedByUser, org);
+
+            await _appUserRepo.UpdateAsync(appUser);
+
+            return InvokeResult.Success;
+        }
+
         public async Task<InvokeResult<AuthResponse>> CreateUserAsync(RegisterUser newUser)
         {
             /* Need to check all these, if any fail, we want to aboart, we need to refactor this into the UserAdmin module :( */

@@ -118,6 +118,9 @@ namespace LagoVista.UserAdmin.Models.Users
         {
             return new UserInfo()
             {
+                Id = Id,
+                Key = Id,
+                Name = Name,
                 IsSystemAdmin = IsSystemAdmin,
                 FirstName = FirstName,
                 LastName = LastName,
@@ -126,7 +129,6 @@ namespace LagoVista.UserAdmin.Models.Users
                 CurrentOrganization = CurrentOrganization,
                 Email = Email,
                 EmailConfirmed = EmailConfirmed,
-                Id = Id,
                 LastUpdatedBy = LastUpdatedBy,
                 LastUpdatedDate = LastUpdatedDate,
                 PhoneNumber = PhoneNumber,

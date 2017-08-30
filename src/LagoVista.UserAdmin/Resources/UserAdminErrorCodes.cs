@@ -37,8 +37,7 @@ namespace LagoVista.UserAdmin.Resources
         public static ErrorCode AuthErrorUpdatingUser => new ErrorCode() { Code = "AUTH027", Message = UserAdminResources.AuthErr_ErrorUpdatingUser };
         public static ErrorCode AuthUserLockedOut => new ErrorCode() { Code = "AUTH028", Message = UserAdminResources.AuthErr_UserLockedOut };
 
+        public static ErrorCode AuthNotSysAdmin=> new ErrorCode() { Code = "AUTH029", Message = UserAdminResources.AuthError_NotSysAdmin };
 
-
-        
     }
 }
