@@ -39,5 +39,15 @@ namespace LagoVista.UserAdmin.Resources
 
         public static ErrorCode AuthNotSysAdmin=> new ErrorCode() { Code = "AUTH029", Message = UserAdminResources.AuthError_NotSysAdmin };
 
+        public static ErrorCode AuthNotOrgAdmin => new ErrorCode() { Code = "AUTH030", Message = UserAdminResources.AuthErr_NotOrgAdmin };
+        public static ErrorCode AuthCantRemoveSelfFromOrgAdmin => new ErrorCode() { Code = "AUTH031", Message = UserAdminResources.AuthErr_CanNotRemoveSelfFromOrgAdmin };
+
+        public static ErrorCode AuthCouldNotFindUser => new ErrorCode() { Code = "AUTH032", Message = UserAdminResources.AuthErr_CouldNotFindUser };
+
+        public static ErrorCode AuthAlreadyInOrg => new ErrorCode() { Code = "AUTH033", Message = UserAdminResources.AuthErr_CurrentOrgAlreadySet };
+
+        
+
+
     }
 }

@@ -80,6 +80,9 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:AppUser_Help
 
 		public static string AppUser_Help { get { return GetResourceString("AppUser_Help"); } }
+//Resources:UserAdminResources:AppUser_IsOrgAdmin
+
+		public static string AppUser_IsOrgAdmin { get { return GetResourceString("AppUser_IsOrgAdmin"); } }
 //Resources:UserAdminResources:AppUser_IsSystemAdmin
 
 		public static string AppUser_IsSystemAdmin { get { return GetResourceString("AppUser_IsSystemAdmin"); } }
@@ -131,9 +134,18 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:AuthErr_AuthRequestNull
 
 		public static string AuthErr_AuthRequestNull { get { return GetResourceString("AuthErr_AuthRequestNull"); } }
+//Resources:UserAdminResources:AuthErr_CanNotRemoveSelfFromOrgAdmin
+
+		public static string AuthErr_CanNotRemoveSelfFromOrgAdmin { get { return GetResourceString("AuthErr_CanNotRemoveSelfFromOrgAdmin"); } }
+//Resources:UserAdminResources:AuthErr_CouldNotFindUser
+
+		public static string AuthErr_CouldNotFindUser { get { return GetResourceString("AuthErr_CouldNotFindUser"); } }
 //Resources:UserAdminResources:AuthErr_CouldNotFindUserAccount
 
 		public static string AuthErr_CouldNotFindUserAccount { get { return GetResourceString("AuthErr_CouldNotFindUserAccount"); } }
+//Resources:UserAdminResources:AuthErr_CurrentOrgAlreadySet
+
+		public static string AuthErr_CurrentOrgAlreadySet { get { return GetResourceString("AuthErr_CurrentOrgAlreadySet"); } }
 //Resources:UserAdminResources:AuthErr_EmailInvalidFormat
 
 		public static string AuthErr_EmailInvalidFormat { get { return GetResourceString("AuthErr_EmailInvalidFormat"); } }
@@ -170,6 +182,9 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:AuthErr_MissingRefreshToken
 
 		public static string AuthErr_MissingRefreshToken { get { return GetResourceString("AuthErr_MissingRefreshToken"); } }
+//Resources:UserAdminResources:AuthErr_NotOrgAdmin
+
+		public static string AuthErr_NotOrgAdmin { get { return GetResourceString("AuthErr_NotOrgAdmin"); } }
 //Resources:UserAdminResources:AuthErr_OrgNotAuthorized
 
 		public static string AuthErr_OrgNotAuthorized { get { return GetResourceString("AuthErr_OrgNotAuthorized"); } }
@@ -751,6 +766,7 @@ namespace LagoVista.UserAdmin.Resources
 			public const string AppUser_Email = "AppUser_Email";
 			public const string AppUser_FirstName = "AppUser_FirstName";
 			public const string AppUser_Help = "AppUser_Help";
+			public const string AppUser_IsOrgAdmin = "AppUser_IsOrgAdmin";
 			public const string AppUser_IsSystemAdmin = "AppUser_IsSystemAdmin";
 			public const string AppUser_LastName = "AppUser_LastName";
 			public const string AppUser_NewPassword = "AppUser_NewPassword";
@@ -768,7 +784,10 @@ namespace LagoVista.UserAdmin.Resources
 			public const string AssetSet_IsRestricted_Help = "AssetSet_IsRestricted_Help";
 			public const string AssetSet_Title = "AssetSet_Title";
 			public const string AuthErr_AuthRequestNull = "AuthErr_AuthRequestNull";
+			public const string AuthErr_CanNotRemoveSelfFromOrgAdmin = "AuthErr_CanNotRemoveSelfFromOrgAdmin";
+			public const string AuthErr_CouldNotFindUser = "AuthErr_CouldNotFindUser";
 			public const string AuthErr_CouldNotFindUserAccount = "AuthErr_CouldNotFindUserAccount";
+			public const string AuthErr_CurrentOrgAlreadySet = "AuthErr_CurrentOrgAlreadySet";
 			public const string AuthErr_EmailInvalidFormat = "AuthErr_EmailInvalidFormat";
 			public const string AuthErr_ErrorUpdatingUser = "AuthErr_ErrorUpdatingUser";
 			public const string AuthErr_InvalidCredentials = "AuthErr_InvalidCredentials";
@@ -781,6 +800,7 @@ namespace LagoVista.UserAdmin.Resources
 			public const string AuthErr_MissingEmailAddress = "AuthErr_MissingEmailAddress";
 			public const string AuthErr_MissingPassword = "AuthErr_MissingPassword";
 			public const string AuthErr_MissingRefreshToken = "AuthErr_MissingRefreshToken";
+			public const string AuthErr_NotOrgAdmin = "AuthErr_NotOrgAdmin";
 			public const string AuthErr_OrgNotAuthorized = "AuthErr_OrgNotAuthorized";
 			public const string AuthErr_RefreshToken_InvalidFormat = "AuthErr_RefreshToken_InvalidFormat";
 			public const string AuthErr_RefreshToken_NotFound = "AuthErr_RefreshToken_NotFound";

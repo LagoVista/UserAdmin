@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using LagoVista.Core.Models;
 using System.Collections.Generic;
 using Microsoft.Azure.Documents;
+using LagoVista.UserAdmin.Models.Orgs;
 
 namespace LagoVista.UserAdmin.Repos.Users
 {
@@ -67,12 +68,12 @@ namespace LagoVista.UserAdmin.Repos.Users
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<UserInfoSummary>> GetUserSummaryForListAsync(List<string> userIds)
+        public async Task<IEnumerable<UserInfoSummary>> GetUserSummaryForListAsync(IEnumerable<OrgUser> orgUsers)
         {
             var sqlParams = string.Empty;
             var idx = 0;
             var paramCollection = new SqlParameterCollection();
-            foreach (var userId in userIds)
+            foreach (var orgUser in orgUsers)
             {
                 if(!String.IsNullOrEmpty(sqlParams))
                 {
@@ -81,7 +82,7 @@ namespace LagoVista.UserAdmin.Repos.Users
                 var paramName = $"@userId{idx++}";
 
                 sqlParams += paramName;
-                paramCollection.Add(new SqlParameter(paramName, userId));
+                paramCollection.Add(new SqlParameter(paramName, orgUser.UserId));
             }
 
             sqlParams.TrimEnd(',');
@@ -89,10 +90,15 @@ namespace LagoVista.UserAdmin.Repos.Users
             //TODO: This seems kind of ugly...need to put more thought into this, this shouldn't be a query that is hit very often
             var query = $"SELECT * FROM c where c.id in ({sqlParams})";
 
-            Console.WriteLine(query);
-
+            /* this sorta sux, but oh well */
             var appUsers = await QueryAsync(query, paramCollection);
-            return from appUser in appUsers select appUser.ToUserInfoSummary();
+            var userSummaries = from appUser 
+                                in appUsers
+                                join orgUser 
+                                in orgUsers on appUser.Id equals orgUser.UserId
+                                select appUser.ToUserInfoSummary(orgUser.IsOrgAdmin);            
+
+            return userSummaries;
         }
     }
 }

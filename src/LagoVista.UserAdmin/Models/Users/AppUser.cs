@@ -81,8 +81,12 @@ namespace LagoVista.UserAdmin.Models.Users
         [FormField(LabelResource: Resources.UserAdminResources.Names.AppUser_LastName, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]
         public string LastName { get; set; }
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.AppUser_LastName, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]
+        [FormField(LabelResource: Resources.UserAdminResources.Names.AppUser_IsSystemAdmin, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.UserAdminResources))]
         public bool IsSystemAdmin { get; set; }
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.AppUser_IsOrgAdmin, FieldType:FieldTypes.CheckBox, ResourceType: typeof(Resources.UserAdminResources))]
+        public bool IsOrgAdmin { get; set; }
+
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.AppUser_PhoneNumber, FieldType: FieldTypes.Phone, ResourceType: typeof(Resources.UserAdminResources))]
         public string PhoneNumber { get; set; }
@@ -137,7 +141,7 @@ namespace LagoVista.UserAdmin.Models.Users
             };
         }
 
-        public UserInfoSummary ToUserInfoSummary()
+        public UserInfoSummary ToUserInfoSummary(bool isOrgAdmin)
         {
             return new UserInfoSummary()
             {
@@ -145,6 +149,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 EmailConfirmed = EmailConfirmed,
                 Id = Id,
                 IsSystemAdmin = IsSystemAdmin,
+                IsOrgAdmin = isOrgAdmin,
                 Name = Name,
                 PhoneNumberConfirmed = PhoneNumberConfirmed,
                 ProfileImageUrl = ProfileImageUrl,

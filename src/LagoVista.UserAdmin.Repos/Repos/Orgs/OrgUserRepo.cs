@@ -48,8 +48,27 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         {
             return (await GetByFilterAsync(
                 FilterOptions.Create(nameof(OrgUser.Email), FilterOptions.Operators.Equals, email.ToUpper()),
-                FilterOptions.Create(nameof(OrgUser.OrgId), FilterOptions.Operators.Equals, orgId)
+                FilterOptions.Create(nameof(OrgUser.PartitionKey), FilterOptions.Operators.Equals, orgId)
                 )).ToList().Any();
+        }
+
+        public async  Task<bool> IsUserOrgAdminAsync(string orgId, string userId)
+        {
+            var orgUser = await GetOrgUserAsync(orgId, userId);
+            return orgUser.IsOrgAdmin;
+        }
+
+        public async Task<OrgUser> GetOrgUserAsync(string orgId, string userId)
+        {
+            return (await GetByFilterAsync(
+                FilterOptions.Create(nameof(OrgUser.UserId), FilterOptions.Operators.Equals, userId.ToUpper()),
+                FilterOptions.Create(nameof(OrgUser.PartitionKey), FilterOptions.Operators.Equals, orgId)
+                )).FirstOrDefault();
+        }
+
+        public Task UpdateOrgUserAsync(OrgUser orgUser)
+        {
+            return this.UpdateAsync(orgUser);
         }
     }
 }

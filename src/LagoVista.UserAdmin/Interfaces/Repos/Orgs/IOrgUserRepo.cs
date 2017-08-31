@@ -13,5 +13,9 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
         Task RemoveUserFromOrgAsync(string orgid, string userId, EntityHeader removedBy);
         Task<bool> QueryOrgHasUserAsync(string orgId, string userId);
         Task<bool> QueryOrgHasUserByEmailAsync(string orgId, string email);
+
+        Task<bool> IsUserOrgAdminAsync(string orgId, string userId);
+        Task<OrgUser> GetOrgUserAsync(string orgId, string userId);
+        Task UpdateOrgUserAsync(OrgUser orgUser);
     }
 }

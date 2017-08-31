@@ -48,7 +48,7 @@ namespace LagoVista.AspNetCore.Identity.Utils
             }
 
             var oldOrgId = EntityHeader.IsNullOrEmpty(appUser.CurrentOrganization) ? "none" : appUser.CurrentOrganization.Id;
-            var oldOrgName = EntityHeader.IsNullOrEmpty(appUser.CurrentOrganization) ? "none" : appUser.CurrentOrganization.Text;
+            var oldOrgName = EntityHeader.IsNullOrEmpty(appUser.CurrentOrganization) ? "none" : appUser.CurrentOrganization.Text;            
 
             // 2) Change the org on the user object
             appUser.CurrentOrganization = new EntityHeader()
@@ -56,6 +56,8 @@ namespace LagoVista.AspNetCore.Identity.Utils
                 Id = authRequest.OrgId,
                 Text = switchToOrg.OrganizationName,
             };
+
+            appUser.IsOrgAdmin = switchToOrg.IsOrgAdmin;    
 
             // 3) Add the roles to the user for the org.
             var orgRoles = await _orgManager.GetUsersRolesInOrgAsync(authRequest.OrgId, appUser.Id, appUser.CurrentOrganization, appUser.ToEntityHeader());

@@ -19,7 +19,7 @@ using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Models.Security;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Core.Validation;
-
+using LagoVista.Core.Models.UIMetaData;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -51,7 +51,7 @@ namespace LagoVista.UserAdmin.Managers
             IEmailSender emailSender,
             IAppConfig appConfig,
             IDependencyManager depManager,
-            ISecurity security, 
+            ISecurity security,
             IAdminLogger logger) : base(logger, appConfig, depManager, security)
         {
 
@@ -82,7 +82,7 @@ namespace LagoVista.UserAdmin.Managers
 
             ValidationCheck(organizationViewModel, Core.Validation.Actions.Create);
 
-            //HACK: Very, small chance, but it does exist...two entries could be added at exact same time and check would fail...need to make progress, can live with rish for now.
+            //HACK: Very, small chance, but it does exist...two entries could be added at exact same time and check would fail...need to make progress, can live with risk for now.
             if (await _organizationRepo.QueryNamespaceInUseAsync(organizationViewModel.Namespace))
             {
                 result.Errors.Add(new ErrorMessage(UserAdminResources.Organization_NamespaceInUse.Replace(Tokens.NAMESPACE, organizationViewModel.Namespace)));
@@ -103,7 +103,7 @@ namespace LagoVista.UserAdmin.Managers
 
             var currentUser = await _appUserRepo.FindByIdAsync(user.Id);
 
-            var addUserResult = await AddUserToOrgAsync(currentUser.ToEntityHeader(), organization.ToEntityHeader(), currentUser.ToEntityHeader());
+            var addUserResult = await AddUserToOrgAsync(currentUser.ToEntityHeader(), organization.ToEntityHeader(), currentUser.ToEntityHeader(), true);
             if (!addUserResult.Successful)
             {
                 return addUserResult;
@@ -133,9 +133,32 @@ namespace LagoVista.UserAdmin.Managers
             ValidationCheck(newOrg, Core.Validation.Actions.Create);
 
             await AuthorizeAsync(newOrg, AuthorizeResult.AuthorizeActions.Create, user, userOrg);
-            await _organizationRepo.AddOrganizationAsync(newOrg);            
+            await _organizationRepo.AddOrganizationAsync(newOrg);
 
             return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult<AppUser>> ChangeOrgsAsync(string newOrgId, EntityHeader org, EntityHeader user)
+        {
+            if(newOrgId == org.Id)
+            {
+                return InvokeResult<AppUser>.FromErrors(UserAdminErrorCodes.AuthAlreadyInOrg.ToErrorMessage());
+            }
+
+            var hasAccess = await _orgUserRepo.QueryOrgHasUserAsync(newOrgId, user.Id);
+            if(!hasAccess)
+            {
+                return InvokeResult<AppUser>.FromErrors(UserAdminErrorCodes.AuthOrgNotAuthorized.ToErrorMessage());
+            }
+
+            var newOrg = await _organizationRepo.GetOrganizationAsync(newOrgId);
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+            appUser.CurrentOrganization = newOrg.ToEntityHeader();
+            appUser.IsOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(newOrgId, user.Id);
+            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, user, org, "switchOrgs");
+            await _appUserRepo.UpdateAsync(appUser);
+
+            return InvokeResult<AppUser>.Create(appUser);
         }
 
         public async Task<InvokeResult> UpdateOrganizationAsync(Organization org, EntityHeader userOrg, EntityHeader user)
@@ -143,7 +166,7 @@ namespace LagoVista.UserAdmin.Managers
             ValidationCheck(org, Core.Validation.Actions.Update);
 
             await AuthorizeAsync(org, AuthorizeResult.AuthorizeActions.Update, user, userOrg);
-            await _organizationRepo.UpdateOrganizationAsync(org);            
+            await _organizationRepo.UpdateOrganizationAsync(org);
 
             return InvokeResult.Success;
         }
@@ -261,6 +284,13 @@ namespace LagoVista.UserAdmin.Managers
             return await AddUserToOrgAsync(user, newOrgHeader, invitingUser);
         }
 
+        public async Task<ListResponse<Invitation>> GetInvitationsAsync(ListRequest request, EntityHeader org, EntityHeader user)
+        {
+            await AuthorizeOrgAccessAsync(user, org, typeof(Invitation), Actions.Read);
+
+            return await _inviteUserRepo.GetInvitationsForOrgAsync(org.Id, request);
+        }
+
 
         public async Task<InvokeResult> RevokeInvitationAsync(String inviteId, EntityHeader org, EntityHeader user)
         {
@@ -343,7 +373,7 @@ namespace LagoVista.UserAdmin.Managers
         #endregion
 
         #region Organization User Methods
-        public async Task<InvokeResult> AddUserToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy)
+        public async Task<InvokeResult> AddUserToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy, bool isOrgAdmin = false)
         {
             await AuthorizeOrgAccessAsync(addedBy, org, typeof(OrgUser), Actions.Create, new SecurityHelper() { OrgId = org.Id, UserId = userToAdd.Id });
 
@@ -362,6 +392,7 @@ namespace LagoVista.UserAdmin.Managers
                 Email = appUser.Email,
                 OrganizationName = org.Text,
                 UserName = appUser.Name,
+                IsOrgAdmin = isOrgAdmin,
                 ProfileImageUrl = appUser.ProfileImageUrl.ImageUrl,
             };
 
@@ -399,6 +430,7 @@ namespace LagoVista.UserAdmin.Managers
             {
                 Email = appUser.Email,
                 OrganizationName = org.Name,
+                IsOrgAdmin = false,
                 UserName = appUser.Name,
                 ProfileImageUrl = appUser.ProfileImageUrl.ImageUrl,
             };
@@ -415,12 +447,57 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
+        public async Task<InvokeResult> SetOrgAdminAsync(string userId, EntityHeader org, EntityHeader user)
+        {
+            var isUpdateUserOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(org.Id, user.Id);
+            if (isUpdateUserOrgAdmin)
+            {
+                var orgUser = await _orgUserRepo.GetOrgUserAsync(org.Id, userId);
+                orgUser.IsOrgAdmin = true;
+                orgUser.LastUpdatedBy = user.Text;
+                orgUser.LastUpdatedById = user.Id;
+                orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+                await _orgUserRepo.UpdateOrgUserAsync(orgUser);
+
+                return InvokeResult.Success;
+            }
+            else
+            {
+                return InvokeResult.FromErrors(Resources.UserAdminErrorCodes.AuthNotOrgAdmin.ToErrorMessage());
+            }
+        }
+
+        public async Task<InvokeResult> ClearOrgAdminAsync(string userId, EntityHeader org, EntityHeader user)
+        {
+            var isUpdateUserOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(org.Id, user.Id);
+            if (isUpdateUserOrgAdmin)
+            {
+                if (user.Id == userId)
+                {
+                    return InvokeResult.FromErrors(Resources.UserAdminErrorCodes.AuthCantRemoveSelfFromOrgAdmin.ToErrorMessage());
+                }
+
+                var orgUser = await _orgUserRepo.GetOrgUserAsync(org.Id, userId);
+                orgUser.IsOrgAdmin = false;
+                orgUser.LastUpdatedBy = user.Text;
+                orgUser.LastUpdatedById = user.Id;
+                orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+                await _orgUserRepo.UpdateOrgUserAsync(orgUser);
+
+                return InvokeResult.Success;
+            }
+            else
+            {
+                return InvokeResult.FromErrors(Resources.UserAdminErrorCodes.AuthNotOrgAdmin.ToErrorMessage());
+            }
+        }
+
         public async Task<IEnumerable<UserInfoSummary>> GetUsersForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Read, new SecurityHelper() { OrgId = orgId });
             var orgUsers = await _orgUserRepo.GetUsersForOrgAsync(orgId);
             var userIds = (from orgUser in orgUsers select orgUser.UserId).ToList();
-            return await _appUserRepo.GetUserSummaryForListAsync(userIds);
+            return await _appUserRepo.GetUserSummaryForListAsync(orgUsers);
         }
 
         public async Task<IEnumerable<OrgUser>> GetOrganizationsForUserAsync(string userId, EntityHeader org, EntityHeader user)

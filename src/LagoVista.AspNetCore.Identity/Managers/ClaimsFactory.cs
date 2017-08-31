@@ -18,6 +18,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string EmailVerified = "com.lagovista.iot.emailverified";
         public const string PhoneVerfiied = "com.lagovista.iot.phoneverified";
         public const string IsSystemAdmin = "com.lagovista.iot.issystemadmin";
+        public const string IsOrgAdmin = "com.lagovista.iot.isorgadmin";
         public const string CurrentUserProfilePictureurl = "com.lagovista.iot.currentprofilepictureurl";
 
         public List<Claim> GetClaims(AppUser user)
@@ -31,6 +32,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(EmailVerified, user.EmailConfirmed.ToString()),
                 new Claim(PhoneVerfiied, user.PhoneNumberConfirmed.ToString()),
                 new Claim(IsSystemAdmin, user.IsSystemAdmin.ToString()),
+                new Claim(IsOrgAdmin, user.IsOrgAdmin.ToString()),
                 new Claim(CurrentOrgName, user.CurrentOrganization == null ? None : user.CurrentOrganization.Text),
                 new Claim(CurrentOrgId, user.CurrentOrganization == null ? None : user.CurrentOrganization.Id),
                 new Claim(CurrentUserProfilePictureurl, user.ProfileImageUrl.ImageUrl),

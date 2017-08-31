@@ -5,6 +5,8 @@ using System.Linq;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.Core.Models.UIMetaData;
+using System;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
@@ -19,6 +21,11 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         public Task<Invitation> GetInvitationAsync(string id)
         {
             return base.GetAsync(id, false);
+        }
+
+        public Task<ListResponse<Invitation>> GetInvitationsForOrgAsync(string orgId, ListRequest listRequest)
+        {
+            return GetPagedResultsAsync(orgId, listRequest);
         }
 
         public async Task<Invitation> GetInviteByOrgIdAndEmailAsync(string orgId, string email)

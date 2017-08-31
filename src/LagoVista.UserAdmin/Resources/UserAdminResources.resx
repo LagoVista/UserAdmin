@@ -803,4 +803,19 @@
   <data name="AuthError_NotSysAdmin" xml:space="preserve">
     <value>Update Requires SysAdmin </value>
   </data>
+  <data name="AppUser_IsOrgAdmin" xml:space="preserve">
+    <value>Is Org Admin</value>
+  </data>
+  <data name="AuthErr_NotOrgAdmin" xml:space="preserve">
+    <value>Sorry, you need to be an Organization Admin to Perform this Task.</value>
+  </data>
+  <data name="AuthErr_CanNotRemoveSelfFromOrgAdmin" xml:space="preserve">
+    <value>Sorry, you can not remove your self from the role of Org Admin</value>
+  </data>
+  <data name="AuthErr_CouldNotFindUser" xml:space="preserve">
+    <value>Could not find user.</value>
+  </data>
+  <data name="AuthErr_CurrentOrgAlreadySet" xml:space="preserve">
+    <value>You are already logged in with this org and can not switch to itself.</value>
+  </data>
 </root>
