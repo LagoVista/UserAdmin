@@ -818,4 +818,7 @@
   <data name="AuthErr_CurrentOrgAlreadySet" xml:space="preserve">
     <value>You are already logged in with this org and can not switch to itself.</value>
   </data>
+  <data name="Err_PwdChange_Token_Missing" xml:space="preserve">
+    <value>Missing Password Change Token</value>
+  </data>
 </root>

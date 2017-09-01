@@ -284,13 +284,33 @@ namespace LagoVista.UserAdmin.Managers
             return await AddUserToOrgAsync(user, newOrgHeader, invitingUser);
         }
 
-        public async Task<ListResponse<Invitation>> GetInvitationsAsync(ListRequest request, EntityHeader org, EntityHeader user)
+        public async Task<ListResponse<Invitation>> GetInvitationsAsync(ListRequest request, EntityHeader org, EntityHeader user, Invitation.StatusTypes? byStatus = null)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(Invitation), Actions.Read);
-
-            return await _inviteUserRepo.GetInvitationsForOrgAsync(org.Id, request);
+            return await _inviteUserRepo.GetInvitationsForOrgAsync(org.Id, request, byStatus);
         }
 
+
+        public async Task<ListResponse<Invitation>> GetActiveInvitationsForOrgAsync(ListRequest request, EntityHeader org, EntityHeader user)
+        {
+            await AuthorizeOrgAccessAsync(user, org, typeof(Invitation), Actions.Read);
+            return await _inviteUserRepo.GetActiveInvitationsForOrgAsync(org.Id, request);
+        }
+
+        public async Task<InvokeResult> ResendInvitationAsync(String inviteId, EntityHeader org, EntityHeader user)
+        {
+            var invite = await _inviteUserRepo.GetInvitationAsync(inviteId);
+
+            await AuthorizeAsync(user, org, "ResendInvite", invite);
+
+            await SendInvitationAsync(invite, org, user);
+
+            invite.DateSent = DateTime.Now.ToJSONString();
+            invite.Status = Invitation.StatusTypes.Resent;
+            await _inviteUserRepo.UpdateInvitationAsync(invite);
+
+            return InvokeResult.Success;
+        }
 
         public async Task<InvokeResult> RevokeInvitationAsync(String inviteId, EntityHeader org, EntityHeader user)
         {
@@ -316,11 +336,24 @@ namespace LagoVista.UserAdmin.Managers
             return AcceptInviteViewModel.CreateFromInvite(invite);
         }
 
-        public async Task<InvokeResult<Invitation>> InviteUserAsync(Models.DTOs.InviteUser inviteViewModel, EntityHeader orgEntityHeader, EntityHeader userEntityHeader)
+        private async Task SendInvitationAsync(Invitation inviteModel, EntityHeader org, EntityHeader user)
+        {
+            var subject = Resources.UserAdminResources.Invite_Greeting_Subject.Replace(Tokens.APP_NAME, AppConfig.AppName).Replace(Tokens.ORG_NAME, org.Text);
+            var message = Resources.UserAdminResources.InviteUser_Greeting_Message.Replace(Tokens.USERS_FULL_NAME, user.Text).Replace(Tokens.ORG_NAME, org.Text).Replace(Tokens.APP_NAME, AppConfig.AppName);
+            message += $"<br /><br />{inviteModel.Message}<br /><br />";
+            var acceptLink = $"{AppConfig.WebAddress}/organization/acceptinvite/{inviteModel.RowKey}";
+            var mobileAcceptLink = $"nuviot://acceptinvite?inviteId={inviteModel.RowKey}";
+
+            message += Resources.UserAdminResources.InviteUser_ClickHere.Replace("[ACCEPT_LINK]", acceptLink).Replace("[MOBILE_ACCEPT_LINK]", mobileAcceptLink);
+
+            await _emailSender.SendAsync(inviteModel.Email, subject, message);
+        }
+
+        public async Task<InvokeResult<Invitation>> InviteUserAsync(Models.DTOs.InviteUser inviteViewModel, EntityHeader org, EntityHeader user)
         {
             var result = new InvokeResult<Invitation>();
 
-            if (await _orgUserRepo.QueryOrgHasUserByEmailAsync(orgEntityHeader.Id, inviteViewModel.Email))
+            if (await _orgUserRepo.QueryOrgHasUserByEmailAsync(org.Id, inviteViewModel.Email))
             {
                 var existingUser = await _appUserRepo.FindByEmailAsync(inviteViewModel.Email);
                 var msg = UserAdminResources.InviteUser_AlreadyPartOfOrg.Replace(Tokens.USERS_FULL_NAME, existingUser.Name).Replace(Tokens.EMAIL_ADDR, inviteViewModel.Email);
@@ -328,7 +361,7 @@ namespace LagoVista.UserAdmin.Managers
                 return result;
             }
 
-            var invite = await _inviteUserRepo.GetInviteByOrgIdAndEmailAsync(orgEntityHeader.Id, inviteViewModel.Email);
+            var invite = await _inviteUserRepo.GetInviteByOrgIdAndEmailAsync(org.Id, inviteViewModel.Email);
             if (invite != null)
             {
                 invite.Status = Invitation.StatusTypes.Replaced;
@@ -338,34 +371,27 @@ namespace LagoVista.UserAdmin.Managers
             var inviteModel = new Invitation()
             {
                 RowKey = Guid.NewGuid().ToId(),
-                PartitionKey = orgEntityHeader.Id,
-                OrganizationId = orgEntityHeader.Id,
-                OrganizationName = orgEntityHeader.Text,
-                InvitedById = userEntityHeader.Id,
-                InvitedByName = userEntityHeader.Text,
+                PartitionKey = org.Id,
+                OrganizationId = org.Id,
+                OrganizationName = org.Text,
+                InvitedById = user.Id,
+                InvitedByName = user.Text,
+                Message = inviteViewModel.Message,
                 Name = inviteViewModel.Name,
                 Email = inviteViewModel.Email,
                 DateSent = DateTime.Now.ToJSONString(),
                 Status = Invitation.StatusTypes.New,
             };
 
-            await AuthorizeAsync(userEntityHeader, orgEntityHeader, "inviteuser", inviteModel);
+            await AuthorizeAsync(user, org, "InviteUser", inviteModel);
             await _inviteUserRepo.InsertInvitationAsync(inviteModel);
 
-            var subject = Resources.UserAdminResources.Invite_Greeting_Subject.Replace(Tokens.APP_NAME, AppConfig.AppName).Replace(Tokens.ORG_NAME, orgEntityHeader.Text);
-            var message = Resources.UserAdminResources.InviteUser_Greeting_Message.Replace(Tokens.USERS_FULL_NAME, userEntityHeader.Text).Replace(Tokens.ORG_NAME, orgEntityHeader.Text).Replace(Tokens.APP_NAME, AppConfig.AppName);
-            message += $"<br /><br />{inviteViewModel.Message}<br /><br />";
-            var acceptLink = $"{AppConfig.WebAddress}/organization/acceptinvite/{inviteModel.RowKey}";
-            var mobileAcceptLink = $"nuviot://acceptinvite?inviteId={inviteModel.RowKey}";
-
-            message += Resources.UserAdminResources.InviteUser_ClickHere.Replace("[ACCEPT_LINK]", acceptLink).Replace("[MOBILE_ACCEPT_LINK]", mobileAcceptLink);
-
-            await _emailSender.SendAsync(inviteModel.Email, subject, message);
-
             inviteModel = await _inviteUserRepo.GetInvitationAsync(inviteModel.RowKey);
+            await SendInvitationAsync(inviteModel, org, user);
             inviteModel.DateSent = DateTime.Now.ToJSONString();
             inviteModel.Status = Invitation.StatusTypes.Sent;
             await _inviteUserRepo.UpdateInvitationAsync(inviteModel);
+
             result.Result = inviteModel;
 
             return result;
@@ -398,7 +424,7 @@ namespace LagoVista.UserAdmin.Managers
 
             user.CreatedBy = appUser.Name;
             user.CreatedById = appUser.Id;
-            user.CreationDate = DateTime.Now.ToJSONString();
+            user.CreationDate = DateTime.UtcNow.ToJSONString();
             user.LastUpdatedBy = appUser.Name;
             user.LastUpdatedById = appUser.Id;
             user.LastUpdatedDate = user.CreationDate;
@@ -437,7 +463,7 @@ namespace LagoVista.UserAdmin.Managers
 
             user.CreatedBy = addedBy.Text;
             user.CreatedById = addedBy.Text;
-            user.CreationDate = DateTime.Now.ToJSONString();
+            user.CreationDate = DateTime.UtcNow.ToJSONString();
             user.LastUpdatedBy = addedBy.Text;
             user.LastUpdatedById = addedBy.Id;
             user.LastUpdatedDate = user.CreationDate;
@@ -458,6 +484,8 @@ namespace LagoVista.UserAdmin.Managers
                 orgUser.LastUpdatedById = user.Id;
                 orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
                 await _orgUserRepo.UpdateOrgUserAsync(orgUser);
+
+                await LogEntityActionAsync(userId, typeof(AppUser).Name, "SetAsOrgAdmin", org, user);
 
                 return InvokeResult.Success;
             }
@@ -483,6 +511,8 @@ namespace LagoVista.UserAdmin.Managers
                 orgUser.LastUpdatedById = user.Id;
                 orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
                 await _orgUserRepo.UpdateOrgUserAsync(orgUser);
+
+                await LogEntityActionAsync(userId, typeof(AppUser).Name, "ClearAsOrgAdmin", org, user);
 
                 return InvokeResult.Success;
             }

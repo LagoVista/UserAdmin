@@ -18,10 +18,12 @@ namespace LagoVista.UserAdmin.Repos.Users
     {
         bool _shouldConsolidateCollections;
         IRDBMSManager _rdbmsUserManager;
+        IUserAdminSettings _adminSettings;
 
-        public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserAdminSettings userAdminSettings, IAdminLogger logger) : 
+        public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserAdminSettings userAdminSettings, IAdminLogger logger) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
         {
+            _adminSettings = userAdminSettings;
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
             _rdbmsUserManager = rdbmsUserManager;
         }
@@ -44,25 +46,30 @@ namespace LagoVista.UserAdmin.Repos.Users
 
         public Task<AppUser> FindByIdAsync(string id)
         {
-            return GetDocumentAsync(id,false);
+            return GetDocumentAsync(id, false);
         }
 
         public async Task<AppUser> FindByNameAsync(string userName)
         {
-            return (await QueryAsync(usr => usr.UserName == userName.ToLower())).FirstOrDefault();
+            var user = (await QueryAsync(usr => usr.UserName == userName.ToLower())).FirstOrDefault();
+            //TODO: THIS SUX, when deserializing the query it auto converts to date time, we want the json string
+            return await FindByIdAsync(user.Id);
         }
 
         public async Task<AppUser> FindByEmailAsync(string email)
         {
-            return (await QueryAsync(usr => usr.Email == email.ToUpper())).FirstOrDefault();
+            var user = (await QueryAsync(usr => usr.Email == email.ToUpper())).FirstOrDefault();
+            //TODO: THIS SUX, when deserializing the query it auto converts to date time, we want the json string
+            return await FindByIdAsync(user.Id);
         }
 
         public async Task UpdateAsync(AppUser user)
         {
             await Client.UpsertDocumentAsync(await GetCollectionDocumentsLinkAsync(), user);
+            Console.WriteLine("OUTGOING ====> " + user.CreationDate);
             await _rdbmsUserManager.UpdateAppUserAsync(user);
         }
-        
+
         public Task<AppUser> FindByThirdPartyLogin(string providerId, string providerKey)
         {
             throw new NotImplementedException();
@@ -75,7 +82,7 @@ namespace LagoVista.UserAdmin.Repos.Users
             var paramCollection = new SqlParameterCollection();
             foreach (var orgUser in orgUsers)
             {
-                if(!String.IsNullOrEmpty(sqlParams))
+                if (!String.IsNullOrEmpty(sqlParams))
                 {
                     sqlParams += ",";
                 }
@@ -92,11 +99,11 @@ namespace LagoVista.UserAdmin.Repos.Users
 
             /* this sorta sux, but oh well */
             var appUsers = await QueryAsync(query, paramCollection);
-            var userSummaries = from appUser 
+            var userSummaries = from appUser
                                 in appUsers
-                                join orgUser 
+                                join orgUser
                                 in orgUsers on appUser.Id equals orgUser.UserId
-                                select appUser.ToUserInfoSummary(orgUser.IsOrgAdmin);            
+                                select appUser.ToUserInfoSummary(orgUser.IsOrgAdmin);
 
             return userSummaries;
         }

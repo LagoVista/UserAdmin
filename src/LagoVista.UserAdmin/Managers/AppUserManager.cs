@@ -15,6 +15,7 @@ using LagoVista.Core.Authentication.Models;
 using LagoVista.UserAdmin.Resources;
 using System.Text.RegularExpressions;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.Core;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -107,6 +108,9 @@ namespace LagoVista.UserAdmin.Managers
             appUser.FirstName = user.FirstName;
             appUser.LastName = user.LastName;
             appUser.ProfileImageUrl = user.ProfileImageUrl;
+            appUser.LastUpdatedBy = updatedByUser;
+            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+
             if(appUser.IsSystemAdmin != user.IsSystemAdmin)
             {
                 var updateByAppUser = await GetUserByIdAsync(updatedByUser.Id, org, updatedByUser);
@@ -117,7 +121,6 @@ namespace LagoVista.UserAdmin.Managers
                 }
                 appUser.IsSystemAdmin = user.IsSystemAdmin;
             }
-
 
             ValidationCheck(appUser, Actions.Update);
 

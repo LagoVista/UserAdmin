@@ -7,7 +7,7 @@ namespace LagoVista.UserAdmin.Models.DTOs
 {
     public class ResetPassword
     {
-        [JsonProperty("useId")]
+        [JsonProperty("email")]
         public String Email { get; set; }
         [JsonProperty("token")]
         public String Token { get; set; }

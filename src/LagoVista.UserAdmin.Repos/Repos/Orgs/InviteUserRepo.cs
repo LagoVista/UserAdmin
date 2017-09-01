@@ -23,9 +23,27 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             return base.GetAsync(id, false);
         }
 
-        public Task<ListResponse<Invitation>> GetInvitationsForOrgAsync(string orgId, ListRequest listRequest)
+        public async Task<ListResponse<Invitation>> GetInvitationsForOrgAsync(string orgId, ListRequest listRequest, Invitation.StatusTypes? byStatus)
         {
-            return GetPagedResultsAsync(orgId, listRequest);
+            var invitations = await GetPagedResultsAsync(orgId, listRequest);
+            if (byStatus.HasValue)
+            {
+                //TODO: Yeah, we can do better...should extend calls with ListRequest to do additional filtering.
+                invitations.Model = invitations.Model.Where(invite => invite.Status == byStatus.Value);
+            }
+
+            return invitations;
+        }
+
+        public async Task<ListResponse<Invitation>> GetActiveInvitationsForOrgAsync(string orgId, ListRequest listRequest)
+        {
+            var invitations = await GetPagedResultsAsync(orgId, listRequest);
+            //TODO: Yeah, we can do better...should extend calls with ListRequest to do additional filtering.
+            invitations.Model = invitations.Model.Where(invite => (invite.Status == Invitation.StatusTypes.Sent ||
+                                                                    invite.Status == Invitation.StatusTypes.Replaced ||
+                                                                    invite.Status == Invitation.StatusTypes.Resent ||
+                                                                    invite.Status == Invitation.StatusTypes.New));
+            return invitations;
         }
 
         public async Task<Invitation> GetInviteByOrgIdAndEmailAsync(string orgId, string email)

@@ -192,8 +192,8 @@ namespace LagoVista.AspNetCore.Identity.Utils
 
             if (String.IsNullOrEmpty(resetPassword.Token))
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateResetPasswordRequest", UserAdminResources.Err_PwdChange_NewPassword_Missing);
-                return InvokeResult.FromErrors(new ErrorMessage(UserAdminResources.Err_PwdChange_NewPassword_Missing));
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateResetPasswordRequest", UserAdminResources.Err_PwdChange_Token_Missing);
+                return InvokeResult.FromErrors(new ErrorMessage(UserAdminResources.Err_PwdChange_Token_Missing));
             }
 
             if (String.IsNullOrEmpty(resetPassword.NewPassword))

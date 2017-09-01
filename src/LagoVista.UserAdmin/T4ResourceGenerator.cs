@@ -314,6 +314,9 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:Err_PwdChange_OldPassword_Missing
 
 		public static string Err_PwdChange_OldPassword_Missing { get { return GetResourceString("Err_PwdChange_OldPassword_Missing"); } }
+//Resources:UserAdminResources:Err_PwdChange_Token_Missing
+
+		public static string Err_PwdChange_Token_Missing { get { return GetResourceString("Err_PwdChange_Token_Missing"); } }
 //Resources:UserAdminResources:Err_PwdChange_UserId_Missing
 
 		public static string Err_PwdChange_UserId_Missing { get { return GetResourceString("Err_PwdChange_UserId_Missing"); } }
@@ -844,6 +847,7 @@ namespace LagoVista.UserAdmin.Resources
 			public const string Err_PwdChange_MissingUserId = "Err_PwdChange_MissingUserId";
 			public const string Err_PwdChange_NewPassword_Missing = "Err_PwdChange_NewPassword_Missing";
 			public const string Err_PwdChange_OldPassword_Missing = "Err_PwdChange_OldPassword_Missing";
+			public const string Err_PwdChange_Token_Missing = "Err_PwdChange_Token_Missing";
 			public const string Err_PwdChange_UserId_Missing = "Err_PwdChange_UserId_Missing";
 			public const string Err_PwdChange_UserIdMismatch = "Err_PwdChange_UserIdMismatch";
 			public const string Err_PwdReset_MissingNewPassword = "Err_PwdReset_MissingNewPassword";

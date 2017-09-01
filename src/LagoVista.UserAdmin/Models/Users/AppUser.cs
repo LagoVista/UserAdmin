@@ -24,7 +24,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 Id = Id,
                 Text = createdBy
             };
-            CreationDate = DateTime.Now.ToJSONString();
+            CreationDate = DateTime.UtcNow.ToJSONString();
 
             LastUpdatedBy = new EntityHeader()
             {
@@ -32,7 +32,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 Text = createdBy
             };
 
-            LastUpdatedDate = DateTime.Now.ToJSONString();
+            LastUpdatedDate = DateTime.UtcNow.ToJSONString();
 
             ProfileImageUrl = new ImageDetails()
             {

@@ -16,6 +16,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         {
             New,
             Sent,
+            Resent,
             Accepted,
             Declined,
             Revoked,
@@ -28,6 +29,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public String Email { get; set; }
         [FormField(LabelResource: Resources.UserAdminResources.Names.InviteUser_Name, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(Resources.UserAdminResources))]
         public String Name { get; set; }
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.InviteUser_Greeting_Message, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(Resources.UserAdminResources))]
+        public String Message { get; set; }
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.InviteUser_InvitedByName, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(Resources.UserAdminResources))]
         public String InvitedByName { get; set; }

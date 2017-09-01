@@ -10,10 +10,8 @@ using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Resources;
 using System;
 using LagoVista.Core;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
-
+using LagoVista.UserAdmin.Models.Users;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -43,6 +41,7 @@ namespace LagoVista.UserAdmin.Managers
             if (!validationResult.Successful) return validationResult;
 
             var appUser = await _userManager.FindByEmailAsync(sendResetPasswordLink.Email);
+
             if (appUser == null)
             {
                 _adminLogger.AddError("PasswordManager_SendResetPasswordLinkAsync", "CouldNotFindUser", new System.Collections.Generic.KeyValuePair<string, string>("email", sendResetPasswordLink.Email));
@@ -51,7 +50,7 @@ namespace LagoVista.UserAdmin.Managers
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(appUser);
             var encodedToken = System.Net.WebUtility.UrlEncode(token);
-            var callbackUrl = $"{_appConfig.WebAddress}/{ACTION_RESET_PASSWORD}?code={encodedToken}";
+            var callbackUrl = $"{_appConfig.WebAddress}{ACTION_RESET_PASSWORD}?code={encodedToken}";
             var mobileCallbackUrl = $"nuviot://resetpassword?code={token}";
 #if DIAG
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_SendResetPasswordLinkAsync", "SentToken",
@@ -70,6 +69,10 @@ namespace LagoVista.UserAdmin.Managers
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_SendResetPasswordLinkAsync", "SentLink",
                      appUser.Id.ToKVP("appUserId"),
                      appUser.Email.ToKVP("toEmailAddress"));
+
+                var org = appUser.CurrentOrganization == null ? EntityHeader.Create(Guid.Empty.ToId(), "????") : appUser.CurrentOrganization;
+
+                await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "SentResetPasswordLink", org, appUser.ToEntityHeader());
             }
             else
             {
@@ -97,6 +100,9 @@ namespace LagoVista.UserAdmin.Managers
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_ChangePasswordAsync", "PasswordChange",
                  appUser.Id.ToKVP("appUserId"),
                  appUser.Email.ToKVP("userEmailAddress"));
+
+                var org = appUser.CurrentOrganization == null ? EntityHeader.Create(Guid.Empty.ToId(), "????") : appUser.CurrentOrganization;
+                await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "ChangePassword", org, appUser.ToEntityHeader());
             }
             else
             {
@@ -124,13 +130,16 @@ namespace LagoVista.UserAdmin.Managers
                  appUser.Id.ToKVP("appUserId"),
                  appUser.Email.ToKVP("toEmailAddress"));
 #endif 
-
+            
             var result = await _userManager.ResetPasswordAsync(appUser, resetPassword.Token, resetPassword.NewPassword);
             if (result.Successful)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_ResetPasswordAsync", "PasswordChange",
                  appUser.Id.ToKVP("appUserId"),
                  appUser.Email.ToKVP("userEmailAddress"));
+
+                var org = appUser.CurrentOrganization == null ? EntityHeader.Create(Guid.Empty.ToId(), "????") : appUser.CurrentOrganization;
+                await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "RestPassword", org, appUser.ToEntityHeader());
             }
             else
             {
