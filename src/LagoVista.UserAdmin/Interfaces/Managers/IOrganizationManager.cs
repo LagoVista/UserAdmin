@@ -35,6 +35,8 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
         Task<InvokeResult> ClearOrgAdminAsync(string userId, EntityHeader org, EntityHeader user);
 
+        Task<bool> IsUserOrgAdminAsync(string orgId, string userId);
+
         Task<InvokeResult<AppUser>> ChangeOrgsAsync(string newOrgId, EntityHeader org, EntityHeader user);
 
         Task DeclineInvitationAsync(String inviteId);

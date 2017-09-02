@@ -161,6 +161,11 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult<AppUser>.Create(appUser);
         }
 
+        public Task<bool> IsUserOrgAdminAsync(string orgId, string userId)
+        {
+            return _orgUserRepo.IsUserOrgAdminAsync(orgId, userId);
+        }
+
         public async Task<InvokeResult> UpdateOrganizationAsync(Organization org, EntityHeader userOrg, EntityHeader user)
         {
             ValidationCheck(org, Core.Validation.Actions.Update);
