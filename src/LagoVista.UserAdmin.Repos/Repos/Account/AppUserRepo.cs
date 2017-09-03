@@ -51,14 +51,34 @@ namespace LagoVista.UserAdmin.Repos.Users
 
         public async Task<AppUser> FindByNameAsync(string userName)
         {
-            var user = (await QueryAsync(usr => usr.UserName == userName.ToLower())).FirstOrDefault();
+            if(String.IsNullOrEmpty(userName))
+            {
+                throw new InvalidOperationException("Attempt to find user with null or empty user name.");
+            }
+
+            var user = (await QueryAsync(usr => usr.UserName == userName.ToUpper())).FirstOrDefault();
+            if(user == null)
+            {
+                return null;
+            }
+
             //TODO: THIS SUX, when deserializing the query it auto converts to date time, we want the json string
             return await FindByIdAsync(user.Id);
         }
 
         public async Task<AppUser> FindByEmailAsync(string email)
         {
+            if (String.IsNullOrEmpty(email))
+            {
+                throw new InvalidOperationException("Attempt to find user with null or empty user name.");
+            }
+
             var user = (await QueryAsync(usr => usr.Email == email.ToUpper())).FirstOrDefault();
+            if(user == null)
+            {
+                return null;
+            }
+
             //TODO: THIS SUX, when deserializing the query it auto converts to date time, we want the json string
             return await FindByIdAsync(user.Id);
         }

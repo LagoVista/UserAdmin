@@ -84,7 +84,7 @@ namespace LagoVista.UserAdmin.Models.Users
         [FormField(LabelResource: Resources.UserAdminResources.Names.AppUser_IsSystemAdmin, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.UserAdminResources))]
         public bool IsSystemAdmin { get; set; }
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.AppUser_IsOrgAdmin, FieldType:FieldTypes.CheckBox, ResourceType: typeof(Resources.UserAdminResources))]
+        [FormField(LabelResource: Resources.UserAdminResources.Names.AppUser_IsOrgAdmin, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.UserAdminResources))]
         public bool IsOrgAdmin { get; set; }
 
 
@@ -99,7 +99,22 @@ namespace LagoVista.UserAdmin.Models.Users
         }
 
 
-        public string UserName { get; set; }
+        private string _userName;
+        public string UserName
+        {
+            get { return _userName; }
+            set
+            {
+                if(String.IsNullOrEmpty(value))
+                {
+                    _userName = null;
+                }
+                else
+                {
+                    _userName = value.ToUpper();
+                }
+            }
+        }
 
         public EntityHeader ToEntityHeader()
         {

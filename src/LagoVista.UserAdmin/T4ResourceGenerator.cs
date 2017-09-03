@@ -631,9 +631,15 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:RegErr_MissingLastName
 
 		public static string RegErr_MissingLastName { get { return GetResourceString("RegErr_MissingLastName"); } }
+//Resources:UserAdminResources:RegErr_MissingPassword
+
+		public static string RegErr_MissingPassword { get { return GetResourceString("RegErr_MissingPassword"); } }
 //Resources:UserAdminResources:RegErr_MissingPhoneNumber
 
 		public static string RegErr_MissingPhoneNumber { get { return GetResourceString("RegErr_MissingPhoneNumber"); } }
+//Resources:UserAdminResources:RegErr_UserAlreadyExists
+
+		public static string RegErr_UserAlreadyExists { get { return GetResourceString("RegErr_UserAlreadyExists"); } }
 //Resources:UserAdminResources:RegisterVM_Description
 
 		public static string RegisterVM_Description { get { return GetResourceString("RegisterVM_Description"); } }
@@ -950,7 +956,9 @@ namespace LagoVista.UserAdmin.Resources
 			public const string RegErr_InvalidEmailAddress = "RegErr_InvalidEmailAddress";
 			public const string RegErr_MissingFirstName = "RegErr_MissingFirstName";
 			public const string RegErr_MissingLastName = "RegErr_MissingLastName";
+			public const string RegErr_MissingPassword = "RegErr_MissingPassword";
 			public const string RegErr_MissingPhoneNumber = "RegErr_MissingPhoneNumber";
+			public const string RegErr_UserAlreadyExists = "RegErr_UserAlreadyExists";
 			public const string RegisterVM_Description = "RegisterVM_Description";
 			public const string RegisterVM_Help = "RegisterVM_Help";
 			public const string RegisterVM_Title = "RegisterVM_Title";

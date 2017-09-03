@@ -821,4 +821,10 @@
   <data name="Err_PwdChange_Token_Missing" xml:space="preserve">
     <value>Missing Password Change Token</value>
   </data>
+  <data name="RegErr_MissingPassword" xml:space="preserve">
+    <value>Missing Password for User Registration</value>
+  </data>
+  <data name="RegErr_UserAlreadyExists" xml:space="preserve">
+    <value>A User with that Email Already Exists.  Please login with that account, if you don't know your password use the Forgot Password Link.</value>
+  </data>
 </root>

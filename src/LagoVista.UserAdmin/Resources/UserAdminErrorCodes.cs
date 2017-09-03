@@ -29,24 +29,26 @@ namespace LagoVista.UserAdmin.Resources
         public static ErrorCode RegMissingFirstLastName => new ErrorCode() { Code = "AUTH019", Message = UserAdminResources.RegErr_MissingFirstName };
         public static ErrorCode RegMissingLastName => new ErrorCode() { Code = "AUTH020", Message = UserAdminResources.RegErr_MissingLastName };
         public static ErrorCode RegMissingEmail => new ErrorCode() { Code = "AUTH021", Message = UserAdminResources.AuthErr_MissingEmailAddress };
-        public static ErrorCode RegInvalidEmailAddress => new ErrorCode() { Code = "AUTH022", Message = UserAdminResources.RegErr_InvalidEmailAddress };
-        public static ErrorCode RegMissingPhoneNumber => new ErrorCode() { Code = "AUTH023", Message = UserAdminResources.RegErr_MissingPhoneNumber };
-        public static ErrorCode RegErrorSendingSMS => new ErrorCode() { Code = "AUTH024", Message = UserAdminResources.RegErr_ErrorSendingPhoneNumber };
-        public static ErrorCode RegErrorSendingEmail => new ErrorCode() { Code = "AUTH025", Message = UserAdminResources.RegErr_ErrorSendingEmail };
-        public static ErrorCode AuthOrgNotAuthorized => new ErrorCode() { Code = "AUTH026", Message = UserAdminResources.AuthErr_OrgNotAuthorized };
-        public static ErrorCode AuthErrorUpdatingUser => new ErrorCode() { Code = "AUTH027", Message = UserAdminResources.AuthErr_ErrorUpdatingUser };
-        public static ErrorCode AuthUserLockedOut => new ErrorCode() { Code = "AUTH028", Message = UserAdminResources.AuthErr_UserLockedOut };
+        public static ErrorCode RegMissingPassword => new ErrorCode() { Code = "AUTH022", Message = UserAdminResources.RegErr_MissingPassword };
+        public static ErrorCode RegInvalidEmailAddress => new ErrorCode() { Code = "AUTH023", Message = UserAdminResources.RegErr_InvalidEmailAddress };
+        public static ErrorCode RegMissingPhoneNumber => new ErrorCode() { Code = "AUTH024", Message = UserAdminResources.RegErr_MissingPhoneNumber };
+        public static ErrorCode RegErrorSendingSMS => new ErrorCode() { Code = "AUTH025", Message = UserAdminResources.RegErr_ErrorSendingPhoneNumber };
+        public static ErrorCode RegErrorSendingEmail => new ErrorCode() { Code = "AUTH026", Message = UserAdminResources.RegErr_ErrorSendingEmail };
+        public static ErrorCode RegErrorUserExists => new ErrorCode() { Code = "AUTH027", Message = UserAdminResources.RegErr_UserAlreadyExists };
+        public static ErrorCode AuthOrgNotAuthorized => new ErrorCode() { Code = "AUTH028", Message = UserAdminResources.AuthErr_OrgNotAuthorized };
+        public static ErrorCode AuthErrorUpdatingUser => new ErrorCode() { Code = "AUTH029", Message = UserAdminResources.AuthErr_ErrorUpdatingUser };
+        public static ErrorCode AuthUserLockedOut => new ErrorCode() { Code = "AUTH030", Message = UserAdminResources.AuthErr_UserLockedOut };
 
-        public static ErrorCode AuthNotSysAdmin=> new ErrorCode() { Code = "AUTH029", Message = UserAdminResources.AuthError_NotSysAdmin };
+        public static ErrorCode AuthNotSysAdmin => new ErrorCode() { Code = "AUTH031", Message = UserAdminResources.AuthError_NotSysAdmin };
 
-        public static ErrorCode AuthNotOrgAdmin => new ErrorCode() { Code = "AUTH030", Message = UserAdminResources.AuthErr_NotOrgAdmin };
-        public static ErrorCode AuthCantRemoveSelfFromOrgAdmin => new ErrorCode() { Code = "AUTH031", Message = UserAdminResources.AuthErr_CanNotRemoveSelfFromOrgAdmin };
+        public static ErrorCode AuthNotOrgAdmin => new ErrorCode() { Code = "AUTH032", Message = UserAdminResources.AuthErr_NotOrgAdmin };
+        public static ErrorCode AuthCantRemoveSelfFromOrgAdmin => new ErrorCode() { Code = "AUTH033", Message = UserAdminResources.AuthErr_CanNotRemoveSelfFromOrgAdmin };
 
-        public static ErrorCode AuthCouldNotFindUser => new ErrorCode() { Code = "AUTH032", Message = UserAdminResources.AuthErr_CouldNotFindUser };
+        public static ErrorCode AuthCouldNotFindUser => new ErrorCode() { Code = "AUTH034", Message = UserAdminResources.AuthErr_CouldNotFindUser };
 
-        public static ErrorCode AuthAlreadyInOrg => new ErrorCode() { Code = "AUTH033", Message = UserAdminResources.AuthErr_CurrentOrgAlreadySet };
+        public static ErrorCode AuthAlreadyInOrg => new ErrorCode() { Code = "AUTH035", Message = UserAdminResources.AuthErr_CurrentOrgAlreadySet };
 
-        
+
 
 
     }

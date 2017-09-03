@@ -37,8 +37,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public async Task<InvokeResult> CreateAsync(AppUser appUser, string password)
         {
-            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, EntityHeader.Create(Guid.Empty.ToId(), "????"), appUser.ToEntityHeader());
-
             return (await _userManager.CreateAsync(appUser, password)).ToInvokeResult();
         }
 

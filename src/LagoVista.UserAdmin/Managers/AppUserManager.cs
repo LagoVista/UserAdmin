@@ -26,7 +26,7 @@ namespace LagoVista.UserAdmin.Managers
         IAuthTokenManager _authTokenManager;
         IUserManager _userManager;
         ISignInManager _signInManager;
-        
+
 
         public AppUserManager(IAppUserRepo appUserRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig,
             IAuthTokenManager authTokenManager, IUserManager userManager, ISignInManager signInManager, IAdminLogger adminLogger) : base(logger, appConfig, depManager, security)
@@ -58,11 +58,11 @@ namespace LagoVista.UserAdmin.Managers
             return await CheckForDepenenciesAsync(appUser);
         }
 
-        public async Task<InvokeResult> DeleteUserAsync(String  id, EntityHeader org, EntityHeader deletedByUser)
+        public async Task<InvokeResult> DeleteUserAsync(String id, EntityHeader org, EntityHeader deletedByUser)
         {
             var appUser = await _appUserRepo.FindByIdAsync(id);
 
-            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Delete, deletedByUser, org);      
+            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Delete, deletedByUser, org);
             await _appUserRepo.DeleteAsync(appUser);
 
             return InvokeResult.Success;
@@ -78,7 +78,7 @@ namespace LagoVista.UserAdmin.Managers
         }
 
         public async Task<AppUser> GetUserByUserNameAsync(string userName, EntityHeader org, EntityHeader requestedByUser)
-        {            
+        {
             var appUser = await _appUserRepo.FindByNameAsync(userName);
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Read, requestedByUser, org);
 
@@ -111,10 +111,10 @@ namespace LagoVista.UserAdmin.Managers
             appUser.LastUpdatedBy = updatedByUser;
             appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
 
-            if(appUser.IsSystemAdmin != user.IsSystemAdmin)
+            if (appUser.IsSystemAdmin != user.IsSystemAdmin)
             {
                 var updateByAppUser = await GetUserByIdAsync(updatedByUser.Id, org, updatedByUser);
-                if(!updateByAppUser.IsSystemAdmin)
+                if (!updateByAppUser.IsSystemAdmin)
                 {
                     _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_UpdateUserAsync", UserAdminErrorCodes.AuthNotSysAdmin.Message);
                     return InvokeResult.FromErrors(UserAdminErrorCodes.AuthNotSysAdmin.ToErrorMessage());
@@ -133,13 +133,25 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult<AuthResponse>> CreateUserAsync(RegisterUser newUser)
         {
+            if (String.IsNullOrEmpty(newUser.Email))
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateNewAsync", UserAdminErrorCodes.RegMissingEmail.Message);
+                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegMissingEmail.ToErrorMessage());
+            }
+
+            var user = await _appUserRepo.FindByEmailAsync(newUser.Email);
+            if(user != null)
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateNewAsync", UserAdminErrorCodes.RegErrorUserExists.Message);
+                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegErrorUserExists.ToErrorMessage());
+            }
+
             /* Need to check all these, if any fail, we want to aboart, we need to refactor this into the UserAdmin module :( */
             if (String.IsNullOrEmpty(newUser.AppId))
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateNewAsync", UserAdminErrorCodes.AuthMissingAppId.Message);
                 return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthMissingAppId.ToErrorMessage());
             }
-
 
             if (String.IsNullOrEmpty(newUser.ClientType))
             {
@@ -165,16 +177,11 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegMissingLastName.ToErrorMessage());
             }
 
-            if (String.IsNullOrEmpty(newUser.Email))
-            {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateNewAsync", UserAdminErrorCodes.RegMissingEmail.Message);
-                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegMissingEmail.ToErrorMessage());
-            }
 
             if (String.IsNullOrEmpty(newUser.Password))
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateNewAsync", UserAdminErrorCodes.RegMissingEmail.Message);
-                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegMissingEmail.ToErrorMessage());
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateNewAsync", UserAdminErrorCodes.RegMissingPassword.Message);
+                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegMissingPassword.ToErrorMessage());
             }
 
             var emailRegEx = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
@@ -184,38 +191,56 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegInvalidEmailAddress.ToErrorMessage());
             }
 
-            var lagoVistaUser = new AppUser(newUser.Email, $"{newUser.FirstName} {newUser.LastName}")
+            var appUser = new AppUser(newUser.Email, $"{newUser.FirstName} {newUser.LastName}")
             {
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
             };
 
-            var identityResult = await _userManager.CreateAsync(lagoVistaUser, newUser.Password);
+            var identityResult = await _userManager.CreateAsync(appUser, newUser.Password);
             if (identityResult.Successful)
             {
-                await _signInManager.SignInAsync(lagoVistaUser);
-                var authRequest = new AuthRequest()
+                await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "New User Registered", null, appUser.ToEntityHeader());
+                await _signInManager.SignInAsync(appUser);
+                if (newUser.ClientType != "WEBAPP")
                 {
-                    AppId = newUser.AppId,
-                    DeviceId = newUser.DeviceId,
-                    AppInstanceId = newUser.AppInstanceId,
-                    ClientType = newUser.ClientType,
-                    GrantType = "password",
-                    Email = newUser.Email,
-                    UserName = newUser.Email,
-                    Password = newUser.Password,
-                };
+                    var authRequest = new AuthRequest()
+                    {
+                        AppId = newUser.AppId,
+                        DeviceId = newUser.DeviceId,
+                        AppInstanceId = newUser.AppInstanceId,
+                        ClientType = newUser.ClientType,
+                        GrantType = "password",
+                        Email = newUser.Email,
+                        UserName = newUser.Email,
+                        Password = newUser.Password,
+                    };
 
-                var tokenResponse = await _authTokenManager.AccessTokenGrantAsync(authRequest);
-                if (tokenResponse.Successful)
-                {
-                    return InvokeResult<AuthResponse>.Create(tokenResponse.Result);
+                    var tokenResponse = await _authTokenManager.AccessTokenGrantAsync(authRequest);
+                    if (tokenResponse.Successful)
+                    {
+                        return InvokeResult<AuthResponse>.Create(tokenResponse.Result);
+                    }
+                    else
+                    {
+                        var failedValidationResult = new InvokeResult<AuthResponse>();
+                        failedValidationResult.Concat(tokenResponse);
+                        return failedValidationResult;
+                    }
                 }
                 else
                 {
-                    var failedValidationResult = new InvokeResult<AuthResponse>();
-                    failedValidationResult.Concat(tokenResponse);
-                    return failedValidationResult;
+                    /* If we are logging in as web app, none of this applies */
+                    return InvokeResult<AuthResponse>.Create(new AuthResponse()
+                    {
+                        AccessToken = "N/A",
+                        AccessTokenExpiresUTC = "N/A",
+                        RefreshToken = "N/A",
+                        AppInstanceId = "N/A",
+                        RefreshTokenExpiresUTC = "N/A",
+                        IsLockedOut = false,
+                        Roles = new List<EntityHeader>()
+                    });
                 }
             }
             else
