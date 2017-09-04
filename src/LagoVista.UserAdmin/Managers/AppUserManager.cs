@@ -26,9 +26,9 @@ namespace LagoVista.UserAdmin.Managers
         IAuthTokenManager _authTokenManager;
         IUserManager _userManager;
         ISignInManager _signInManager;
+        IUserVerficationManager _userVerificationmanager;
 
-
-        public AppUserManager(IAppUserRepo appUserRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig,
+        public AppUserManager(IAppUserRepo appUserRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
             IAuthTokenManager authTokenManager, IUserManager userManager, ISignInManager signInManager, IAdminLogger adminLogger) : base(logger, appConfig, depManager, security)
         {
             _appUserRepo = appUserRepo;
@@ -36,6 +36,7 @@ namespace LagoVista.UserAdmin.Managers
             _authTokenManager = authTokenManager;
             _signInManager = signInManager;
             _userManager = userManager;
+            _userVerificationmanager = userVerificationmanager;
         }
 
         public async Task<InvokeResult> AddUserAsync(AppUser user, EntityHeader org, EntityHeader updatedByUser)
@@ -219,6 +220,7 @@ namespace LagoVista.UserAdmin.Managers
                     var tokenResponse = await _authTokenManager.AccessTokenGrantAsync(authRequest);
                     if (tokenResponse.Successful)
                     {
+                        await _userVerificationmanager.SendConfirmationEmailAsync(null, appUser.ToEntityHeader());
                         return InvokeResult<AuthResponse>.Create(tokenResponse.Result);
                     }
                     else
@@ -226,10 +228,12 @@ namespace LagoVista.UserAdmin.Managers
                         var failedValidationResult = new InvokeResult<AuthResponse>();
                         failedValidationResult.Concat(tokenResponse);
                         return failedValidationResult;
-                    }
+                    }                    
                 }
                 else
                 {
+                    await _userVerificationmanager.SendConfirmationEmailAsync(null, appUser.ToEntityHeader());
+
                     /* If we are logging in as web app, none of this applies */
                     return InvokeResult<AuthResponse>.Create(new AuthResponse()
                     {

@@ -22,13 +22,6 @@ namespace LagoVista.UserAdmin.Managers
         IEmailSender _emailSender;
         ISmsSender _smsSender;
 
-        /* 
-         * Note this MUCH match the name of the action on the VerifyIdentityController in the Web project
-         * User Admin code in MVC shoudl be refactored to use this and provide a constant link.
-         */
-        private const string ConfirmEmailLink = "ConfirmEmailLink";
-
-
         public UserVerficationManager(IAdminLogger adminLogger, IUserManager userMananger, IAppConfig appConfig, ISmsSender smsSender,
                     IEmailSender emailSender, IDependencyManager depManager, ISecurity security) : base(adminLogger, appConfig, depManager, security)
         {
@@ -72,7 +65,7 @@ namespace LagoVista.UserAdmin.Managers
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
                 var encodedToken = System.Net.WebUtility.UrlEncode(token);
-                var callbackUrl = $"{_appConfig.WebAddress}/VerifyIdentity/{ConfirmEmailLink}?userId={appUser.Id}&code={encodedToken}";
+                var callbackUrl = $"{_appConfig.WebAddress}/VerifyIdentity?userId={appUser.Id}&code={encodedToken}";
                 var mobileCallbackUrl = $"nuviot://confirmemail?userId={appUser.Id}&code={encodedToken}";
 
 #if DEBUG
