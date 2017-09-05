@@ -105,7 +105,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> UpdateUserAsync(UserInfo user, EntityHeader org, EntityHeader updatedByUser)
         {
-            var appUser = await GetUserByIdAsync(user.Id, org, updatedByUser);
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
             appUser.FirstName = user.FirstName;
             appUser.LastName = user.LastName;
             appUser.ProfileImageUrl = user.ProfileImageUrl;

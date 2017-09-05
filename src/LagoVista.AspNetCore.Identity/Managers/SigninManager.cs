@@ -18,12 +18,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
         IUserManager _userManager;
         IOrganizationManager _orgManager;
         SignInManager<AppUser> _signinManager;
-        public SignInManager(IAdminLogger adminLogger, IDependencyManager depManager, ISecurity security, IAppConfig appConfig, IOrganizationManager orgManager, SignInManager<AppUser> signInManager)
+        public SignInManager(IAdminLogger adminLogger, IDependencyManager depManager, ISecurity security, IAppConfig appConfig, IUserManager userManager, IOrganizationManager orgManager, SignInManager<AppUser> signInManager)
             : base(adminLogger, appConfig, depManager, security)
         {
             _signinManager = signInManager;
             _adminLogger = adminLogger;
             _orgManager = orgManager;
+            _userManager = userManager;
         }
 
         public Task SignInAsync(AppUser user)
@@ -37,26 +38,14 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             var appUser = await _userManager.FindByEmailAsync(userName);
 
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("PWD LOGIN");
-
             if (appUser != null && appUser.CurrentOrganization != null)
             {
-                Console.WriteLine("APP USER FOUND");
                 var isOrgAdmin = await _orgManager.IsUserOrgAdminAsync(appUser.CurrentOrganization.Id, appUser.Id);
-                Console.WriteLine("IS ORRGA -> " + isOrgAdmin);
                 if (isOrgAdmin != appUser.IsOrgAdmin)
                 {
                     appUser.IsOrgAdmin = isOrgAdmin;
                     await _userManager.UpdateAsync(appUser);
-                    Console.WriteLine("SHOULD HAVE UPDATED ORG ADMIN -> " + isOrgAdmin);
                 }
-                else
-                {
-                    Console.WriteLine("NO IT DIDNT-> " + isOrgAdmin);
-                }
-
-                Console.ResetColor();
             }
 
             if (signInResult.Succeeded)

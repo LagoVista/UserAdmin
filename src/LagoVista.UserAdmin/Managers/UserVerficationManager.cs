@@ -65,7 +65,7 @@ namespace LagoVista.UserAdmin.Managers
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
                 var encodedToken = System.Net.WebUtility.UrlEncode(token);
-                var callbackUrl = $"{_appConfig.WebAddress}/VerifyIdentity?userId={appUser.Id}&code={encodedToken}";
+                var callbackUrl = $"{_appConfig.WebAddress}/Account/Verify?userId={appUser.Id}&code={encodedToken}";
                 var mobileCallbackUrl = $"nuviot://confirmemail?userId={appUser.Id}&code={encodedToken}";
 
 #if DEBUG

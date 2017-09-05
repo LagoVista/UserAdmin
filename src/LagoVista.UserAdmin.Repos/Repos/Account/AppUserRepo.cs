@@ -86,7 +86,6 @@ namespace LagoVista.UserAdmin.Repos.Users
         public async Task UpdateAsync(AppUser user)
         {
             await Client.UpsertDocumentAsync(await GetCollectionDocumentsLinkAsync(), user);
-            Console.WriteLine("OUTGOING ====> " + user.CreationDate);
             await _rdbmsUserManager.UpdateAppUserAsync(user);
         }
 
