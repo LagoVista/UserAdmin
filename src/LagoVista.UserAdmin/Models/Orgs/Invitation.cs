@@ -61,5 +61,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Id, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.UserAdminResources))]
         public bool Declined { get; set; }
 
+        public bool IsActive()
+        {
+            return Status == StatusTypes.Replaced || Status == StatusTypes.Resent || Status == StatusTypes.Sent;
+        }
     }
 }

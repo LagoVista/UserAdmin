@@ -21,5 +21,7 @@ namespace LagoVista.UserAdmin.Models.DTOs
         public string Email { get; set; }
         [JsonProperty("password")]
         public string Password { get; set; }
+        [JsonProperty("inviteId")]
+        public string InviteId { get; set; }
     }
 }

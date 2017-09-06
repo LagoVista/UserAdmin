@@ -9,7 +9,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
     {
         Task InsertInvitationAsync(Invitation invitation);
         Task UpdateInvitationAsync(Invitation invitation);
-        Task<Invitation> GetInvitationAsync(String invitation);
+        Task<Invitation> GetInvitationAsync(String invitationId);
         Task<ListResponse<Invitation>> GetInvitationsForOrgAsync(String orgId, ListRequest listRequest, Invitation.StatusTypes? byStatus = null);
         Task<ListResponse<Invitation>> GetActiveInvitationsForOrgAsync(String orgId, ListRequest listRequest);
         Task<Invitation> GetInviteByOrgIdAndEmailAsync(String orgId, String email);

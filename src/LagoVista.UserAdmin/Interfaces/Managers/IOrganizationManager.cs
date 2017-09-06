@@ -50,6 +50,11 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<AcceptInviteViewModel> GetInviteViewModelAsync(string inviteId);
         Task<ListResponse<Invitation>> GetInvitationsAsync(ListRequest request, EntityHeader org, EntityHeader user, Invitation.StatusTypes? byStatus = null);
         Task<ListResponse<Invitation>> GetActiveInvitationsForOrgAsync(ListRequest request, EntityHeader org, EntityHeader user);
+        Task<bool> GetIsInvigationActiveAsync(string inviteId);
+
+        Task<Invitation> GetInvitationAsync(string inviteId);
+
+        Task<InvokeResult> AcceptInvitationAsync(string inviteId, string acceptedUserId);
 
         Task<InvokeResult> ResendInvitationAsync(string inviteId, EntityHeader org, EntityHeader user);
 

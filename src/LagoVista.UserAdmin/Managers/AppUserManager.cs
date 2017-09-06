@@ -86,8 +86,8 @@ namespace LagoVista.UserAdmin.Managers
             appUser.PasswordHash = null;
             return appUser;
         }
-
         public Task<IEnumerable<EntityHeader>> SearchUsers(string firstName, string lastName, EntityHeader searchedBy)
+
         {
             throw new NotImplementedException();
         }
@@ -243,6 +243,7 @@ namespace LagoVista.UserAdmin.Managers
                         AppInstanceId = "N/A",
                         RefreshTokenExpiresUTC = "N/A",
                         IsLockedOut = false,
+                        User = appUser.ToEntityHeader(),
                         Roles = new List<EntityHeader>()
                     });
                 }

@@ -44,7 +44,9 @@ namespace LagoVista.AspNetCore.Identity.Utils
                 AccessTokenExpiresUTC = accessExpires.ToJSONString(),
                 RefreshToken = refreshTokenResponse.Result.RowKey,
                 Roles = appUser.CurrentOrganizationRoles,
-                RefreshTokenExpiresUTC = refreshTokenResponse.Result.ExpiresUtc
+                RefreshTokenExpiresUTC = refreshTokenResponse.Result.ExpiresUtc,
+                User = appUser.ToEntityHeader(),
+                Org = appUser.CurrentOrganization
             };
 
             if(!String.IsNullOrEmpty(authRequest.OrgId))

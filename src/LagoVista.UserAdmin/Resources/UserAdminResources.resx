@@ -827,4 +827,19 @@
   <data name="RegErr_UserAlreadyExists" xml:space="preserve">
     <value>A User with that Email Already Exists.  Please login with that account, if you don't know your password use the Forgot Password Link.</value>
   </data>
+  <data name="AuthErr_InviteNotActive" xml:space="preserve">
+    <value>Sorry, this invitation is not availabe, you have already accepted it, or it has been revoked.</value>
+  </data>
+  <data name="InviteErr_EmailInvalid" xml:space="preserve">
+    <value>Email Address Is Invalid for Inviting a User.</value>
+  </data>
+  <data name="InviteErr_EmailIsEmpty" xml:space="preserve">
+    <value>Email is Required to Invite a User</value>
+  </data>
+  <data name="InviteErr_InviteIsNull" xml:space="preserve">
+    <value>Invite Model is Null</value>
+  </data>
+  <data name="InviteErr_NameIsRequired" xml:space="preserve">
+    <value>Name is Required to Invite a User</value>
+  </data>
 </root>

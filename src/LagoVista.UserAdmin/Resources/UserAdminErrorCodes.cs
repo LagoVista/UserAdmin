@@ -47,9 +47,12 @@ namespace LagoVista.UserAdmin.Resources
         public static ErrorCode AuthCouldNotFindUser => new ErrorCode() { Code = "AUTH034", Message = UserAdminResources.AuthErr_CouldNotFindUser };
 
         public static ErrorCode AuthAlreadyInOrg => new ErrorCode() { Code = "AUTH035", Message = UserAdminResources.AuthErr_CurrentOrgAlreadySet };
+        public static ErrorCode AuthInviteNotActive => new ErrorCode() { Code = "AUTH036", Message = UserAdminResources.AuthErr_InviteNotActive };
 
 
-
-
+        public static ErrorCode InviteIsNull => new ErrorCode() { Code = "INVT001", Message = UserAdminResources.InviteErr_InviteIsNull };
+        public static ErrorCode InviteEmailIsEmpty=> new ErrorCode() { Code = "INVT002", Message = UserAdminResources.InviteErr_EmailIsEmpty };
+        public static ErrorCode InviteNameIsEmpty => new ErrorCode() { Code = "INVT003", Message = UserAdminResources.InviteErr_NameIsRequired };
+        public static ErrorCode InviteEmailIsInvalid => new ErrorCode() { Code = "INVT004", Message = UserAdminResources.InviteErr_EmailInvalid };
     }
 }

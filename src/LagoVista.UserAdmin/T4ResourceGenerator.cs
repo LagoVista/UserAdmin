@@ -161,6 +161,9 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:AuthErr_InvalidRefreshToken
 
 		public static string AuthErr_InvalidRefreshToken { get { return GetResourceString("AuthErr_InvalidRefreshToken"); } }
+//Resources:UserAdminResources:AuthErr_InviteNotActive
+
+		public static string AuthErr_InviteNotActive { get { return GetResourceString("AuthErr_InviteNotActive"); } }
 //Resources:UserAdminResources:AuthErr_MissingAppId
 
 		public static string AuthErr_MissingAppId { get { return GetResourceString("AuthErr_MissingAppId"); } }
@@ -404,6 +407,18 @@ namespace LagoVista.UserAdmin.Resources
 //Resources:UserAdminResources:Invite_Greeting_Subject
 
 		public static string Invite_Greeting_Subject { get { return GetResourceString("Invite_Greeting_Subject"); } }
+//Resources:UserAdminResources:InviteErr_EmailInvalid
+
+		public static string InviteErr_EmailInvalid { get { return GetResourceString("InviteErr_EmailInvalid"); } }
+//Resources:UserAdminResources:InviteErr_EmailIsEmpty
+
+		public static string InviteErr_EmailIsEmpty { get { return GetResourceString("InviteErr_EmailIsEmpty"); } }
+//Resources:UserAdminResources:InviteErr_InviteIsNull
+
+		public static string InviteErr_InviteIsNull { get { return GetResourceString("InviteErr_InviteIsNull"); } }
+//Resources:UserAdminResources:InviteErr_NameIsRequired
+
+		public static string InviteErr_NameIsRequired { get { return GetResourceString("InviteErr_NameIsRequired"); } }
 //Resources:UserAdminResources:InviteUser_AlreadyPartOfOrg
 
 		public static string InviteUser_AlreadyPartOfOrg { get { return GetResourceString("InviteUser_AlreadyPartOfOrg"); } }
@@ -802,6 +817,7 @@ namespace LagoVista.UserAdmin.Resources
 			public const string AuthErr_InvalidCredentials = "AuthErr_InvalidCredentials";
 			public const string AuthErr_InvalidGrantType = "AuthErr_InvalidGrantType";
 			public const string AuthErr_InvalidRefreshToken = "AuthErr_InvalidRefreshToken";
+			public const string AuthErr_InviteNotActive = "AuthErr_InviteNotActive";
 			public const string AuthErr_MissingAppId = "AuthErr_MissingAppId";
 			public const string AuthErr_MissingAppInstanceid = "AuthErr_MissingAppInstanceid";
 			public const string AuthErr_MissingClientType = "AuthErr_MissingClientType";
@@ -883,6 +899,10 @@ namespace LagoVista.UserAdmin.Resources
 			public const string Invitation_Help = "Invitation_Help";
 			public const string Invitation_Title = "Invitation_Title";
 			public const string Invite_Greeting_Subject = "Invite_Greeting_Subject";
+			public const string InviteErr_EmailInvalid = "InviteErr_EmailInvalid";
+			public const string InviteErr_EmailIsEmpty = "InviteErr_EmailIsEmpty";
+			public const string InviteErr_InviteIsNull = "InviteErr_InviteIsNull";
+			public const string InviteErr_NameIsRequired = "InviteErr_NameIsRequired";
 			public const string InviteUser_AlreadyPartOfOrg = "InviteUser_AlreadyPartOfOrg";
 			public const string InviteUser_ClickHere = "InviteUser_ClickHere";
 			public const string InviteUser_Greeting_Label = "InviteUser_Greeting_Label";
