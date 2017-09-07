@@ -74,7 +74,12 @@ namespace LagoVista.UserAdmin.Managers
             var appUser = await _appUserRepo.FindByIdAsync(id);
             appUser.PasswordHash = null;
 
-            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Read, requestedByUser, org);
+            /* The user should always be able to get it's own account */
+            if (requestedByUser.Id != id)
+            {
+                await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Read, requestedByUser, org);
+            }
+
             return appUser;
         }
 
@@ -141,7 +146,7 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             var user = await _appUserRepo.FindByEmailAsync(newUser.Email);
-            if(user != null)
+            if (user != null)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateNewAsync", UserAdminErrorCodes.RegErrorUserExists.Message);
                 return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegErrorUserExists.ToErrorMessage());
@@ -228,7 +233,7 @@ namespace LagoVista.UserAdmin.Managers
                         var failedValidationResult = new InvokeResult<AuthResponse>();
                         failedValidationResult.Concat(tokenResponse);
                         return failedValidationResult;
-                    }                    
+                    }
                 }
                 else
                 {
