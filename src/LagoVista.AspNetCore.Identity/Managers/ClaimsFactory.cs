@@ -1,10 +1,7 @@
 ﻿using LagoVista.AspNetCore.Identity.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using LagoVista.UserAdmin.Models.Users;
 using System.Security.Claims;
-using LagoVista.Core.Models;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -18,6 +15,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string EmailVerified = "com.lagovista.iot.emailverified";
         public const string PhoneVerfiied = "com.lagovista.iot.phoneverified";
         public const string IsSystemAdmin = "com.lagovista.iot.issystemadmin";
+        public const string IsPreviewUser = "com.lagovista.iot.ispreviewuser";
         public const string IsOrgAdmin = "com.lagovista.iot.isorgadmin";
         public const string CurrentUserProfilePictureurl = "com.lagovista.iot.currentprofilepictureurl";
 
@@ -29,6 +27,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(ClaimTypes.Surname, user.LastName),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(CurrentUserId, user.Id),
+                new Claim(IsPreviewUser, user.IsPreviewUser.ToString().ToLower()),
                 new Claim(EmailVerified, user.EmailConfirmed.ToString()),
                 new Claim(PhoneVerfiied, user.PhoneNumberConfirmed.ToString()),
                 new Claim(IsSystemAdmin, user.IsSystemAdmin.ToString()),

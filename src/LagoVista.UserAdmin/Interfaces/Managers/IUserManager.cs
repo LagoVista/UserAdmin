@@ -23,7 +23,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> ChangePhoneNumberAsync(AppUser user, string phone, string token);
         Task<InvokeResult> ConfirmEmailAsync(AppUser user, string token);
         Task<InvokeResult> ResetPasswordAsync(AppUser user, string token, string newPassword);
-
+        Task<InvokeResult> SetPreviewUserStatusAsync(string id, bool previewStatus, EntityHeader org, EntityHeader user);
         Task<InvokeResult> SetSystemAdminAsync(String userId, EntityHeader org, EntityHeader user);
         Task<InvokeResult> ClearSystemAdminAsync(String userId, EntityHeader org, EntityHeader user);
     }

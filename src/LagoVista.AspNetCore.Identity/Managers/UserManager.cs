@@ -8,7 +8,6 @@ using System;
 using LagoVista.Core.Models;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Interfaces;
-using LagoVista.Core.PlatformSupport;
 using LagoVista.UserAdmin.Resources;
 using LagoVista.IoT.Logging.Loggers;
 
@@ -47,6 +46,22 @@ namespace LagoVista.AspNetCore.Identity.Managers
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, org, appUser.ToEntityHeader());
 
             return (await _userManager.UpdateAsync(appUser)).ToInvokeResult();
+        }
+
+        public async Task<InvokeResult> SetPreviewUserStatusAsync(string id, bool previewStatus, EntityHeader org, EntityHeader user)
+        {
+            var editingUser = await _userManager.FindByIdAsync(id);
+            if(!editingUser.IsSystemAdmin)
+            {
+                return InvokeResult.FromErrors(new ErrorMessage() { Message = "Must be a System Admin to enable/disable preview user status." });
+            }
+
+            await LogEntityActionAsync(user.Id, typeof(AppUser).Name, previewStatus ? "SetAsPreviewUser" : "SetAsNonPreviewUser", org, user);
+
+            var loadedUser = await _userManager.FindByIdAsync(id);
+            loadedUser.IsPreviewUser = previewStatus;
+            await _userManager.UpdateAsync(loadedUser);
+            return InvokeResult.Success;
         }
 
         public Task<string> GenerateEmailConfirmationTokenAsync(AppUser user)

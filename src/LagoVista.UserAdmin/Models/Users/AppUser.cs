@@ -26,6 +26,8 @@ namespace LagoVista.UserAdmin.Models.Users
             };
             CreationDate = DateTime.UtcNow.ToJSONString();
 
+            IsPreviewUser = true;
+
             LastUpdatedBy = new EntityHeader()
             {
                 Id = Id,
@@ -121,6 +123,8 @@ namespace LagoVista.UserAdmin.Models.Users
             return EntityHeader.Create(Id, $"{FirstName} ${LastName}");
         }
 
+        public bool IsPreviewUser { get; set; }
+
         public int AccessFailedCount { get; set; }
         public string LockoutDate { get; set; }
         public bool LockoutEnabled { get; set; }
@@ -145,6 +149,8 @@ namespace LagoVista.UserAdmin.Models.Users
                 LastName = LastName,
                 CreatedBy = CreatedBy,
                 CreationDate = CreationDate,
+                IsPreviewUser = IsPreviewUser,
+                IsOrgAdmin =IsOrgAdmin,
                 CurrentOrganization = CurrentOrganization,
                 Email = Email,
                 EmailConfirmed = EmailConfirmed,
