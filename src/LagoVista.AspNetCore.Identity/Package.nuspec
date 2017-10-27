@@ -3,7 +3,7 @@
   <metadata>
     <id>LagoVista.AspNetCore.Identity</id>
     <title>LagoVista ASP.NET Core Identity Provider</title>
-    <version>1.2.158-alpha0617</version>
+    <version>1.2.163-alpha0901</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
