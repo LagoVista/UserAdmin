@@ -1,9 +1,9 @@
 ﻿using LagoVista.Core.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.Core.PlatformSupport;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using LagoVista.IoT.Logging.Exceptions;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
@@ -12,7 +12,7 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
 {
     public static class Startup
     {
-        public static void ConfigureServices(IConfigurationRoot configurationRoot, IServiceCollection services, ILogger logger)
+        public static void ConfigureServices(IConfigurationRoot configurationRoot, Microsoft.Extensions.DependencyInjection.IServiceCollection services, ILogger logger)
         {
             var billingDbSection = configurationRoot.GetSection("BillingDb");
             if (billingDbSection == null)

@@ -1,6 +1,7 @@
-﻿using LagoVista.UserAdmin.Interfaces.Managers;
+﻿using LagoVista.Core.Interfaces;
+using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Managers;
-using Microsoft.Extensions.DependencyInjection;
+
 
 namespace LagoVista.UserAdmin
 {
@@ -8,6 +9,7 @@ namespace LagoVista.UserAdmin
     {
         public static void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IAppUserManager, AppUserManager>();
             services.AddTransient<IAppUserManager, AppUserManager>();
             services.AddTransient<IOrganizationManager, OrgManager>();
             services.AddTransient<ITeamManager, TeamManager>();

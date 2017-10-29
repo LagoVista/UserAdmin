@@ -6,12 +6,12 @@ using LagoVista.UserAdmin.Repos.Users;
 using LagoVista.UserAdmin.Repos.Orgs;
 using LagoVista.UserAdmin.Repos.Repos.Users;
 using LagoVista.UserAdmin.Repos.Security;
-using Microsoft.Extensions.DependencyInjection;
 using LagoVista.IoT.Logging;
 using LagoVista.UserAdmin.Resources;
 using LagoVista.UserAdmin.Repos.Repos.Apps;
 using LagoVista.UserAdmin.Interfaces.Repos.Apps;
 using LagoVista.UserAdmin.Repos.Repos.Security;
+using LagoVista.Core.Interfaces;
 
 namespace LagoVista.UserAdmin.Repos
 {
