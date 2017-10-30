@@ -59,10 +59,7 @@ namespace LagoVista.AspNetCore.Identity.Utils
 
         public string GetJWToken(AppUser user, DateTime accessExpires, string installationId)
         {
-            var handler = new JwtSecurityTokenHandler();
-
             var now = DateTime.UtcNow;
-
             var claims = _claimsFactory.GetClaims(user);
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, NonceGenerator()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64));
