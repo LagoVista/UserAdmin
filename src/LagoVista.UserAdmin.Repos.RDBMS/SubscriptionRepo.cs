@@ -35,7 +35,7 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
             var subscription = await _dataContext.Subscription.Where(prd => prd.Id == id).FirstOrDefaultAsync();
             if (subscription == null)
             {
-                throw new RecordNotFoundException("Product", id.ToString());
+                throw new RecordNotFoundException("Subscription", id.ToString());
             }
 
             return subscription;
