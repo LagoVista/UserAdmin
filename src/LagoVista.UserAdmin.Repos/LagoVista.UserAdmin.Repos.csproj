@@ -9,8 +9,8 @@
     <None Remove="Account\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.CloudStorage" Version="1.2.183-alpha1053" />
-    <PackageReference Include="LagoVista.IoT.Logging" Version="1.2.183-alpha1053" />
+    <PackageReference Include="LagoVista.CloudStorage" Version="1.2.184-alpha1030" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="1.2.184-alpha1030" />
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="1.6.0" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.5.0" />
   </ItemGroup>
