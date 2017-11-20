@@ -24,6 +24,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public DateTime LastUpdatedDate { get; set; }
 
+        public string PaymentToken { get; set; }
+        public DateTime? PaymentTokenDate { get; set; }
+
+        public string PaymentTokenStatus { get; set; }
+
         public String Status { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Key, HelpResource: Resources.UserAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key, RegExValidationMessageResource: Resources.UserAdminResources.Names.Common_Key_Validation, ResourceType: typeof(UserAdminResources), IsRequired: true)]
@@ -41,7 +46,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
             {
                 Id = Id,
                 Name = Name,
-                Status = Status,
+                PaymentTokenStatus = PaymentTokenStatus,
                 Key = Key
             };
         }
@@ -52,6 +57,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Status { get; set; }
+        public string PaymentTokenStatus { get; set; }
         public string Key { get; set; }
     }
 }
