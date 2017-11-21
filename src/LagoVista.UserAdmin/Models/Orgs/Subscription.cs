@@ -27,6 +27,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public string PaymentToken { get; set; }
         public DateTime? PaymentTokenDate { get; set; }
 
+        public DateTime? PaymentTokenExpires { get; set; }
+
         public string PaymentTokenStatus { get; set; }
 
         public String Status { get; set; }
