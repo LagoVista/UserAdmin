@@ -12,6 +12,15 @@ namespace LagoVista.UserAdmin.Models.Orgs
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Subscription_Title, UserAdminResources.Names.Subscription_Help, UserAdminResources.Names.Subscription_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
     public class Subscription : IValidateable, IKeyedEntity,  INamedEntity
     {
+        public const string Status_OK = "ok";
+        public const string Status_FreeAccount = "freeaccount";
+        public const string Status_NoPaymentDetails = "nopaymentdetails";
+
+        public const string PaymentTokenStatus_OK = "ok";
+        public const string PaymentTokenStatus_Empty = "empty";
+        public const string PaymentTokenStatus_Invalid = "invalid";
+
+
         public Guid Id { get; set; }
 
         public String OrgId { get; set; }
@@ -23,7 +32,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public DateTime CreationDate { get; set; }
 
         public DateTime LastUpdatedDate { get; set; }
-
+        public string CustomerId { get; set; }
         public string PaymentToken { get; set; }
         public DateTime? PaymentTokenDate { get; set; }
 

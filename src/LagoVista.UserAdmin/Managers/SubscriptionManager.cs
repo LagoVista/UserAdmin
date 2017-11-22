@@ -14,15 +14,33 @@ namespace LagoVista.UserAdmin.Managers
 {
     public class SubscriptionManager : ManagerBase, ISubscriptionManager
     {
+        IPaymentCustomers _paymentCustomers;
         ISubscriptionRepo _subscriptionRepo;
-        public SubscriptionManager(ISubscriptionRepo subscriptionRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
+        public SubscriptionManager(ISubscriptionRepo subscriptionRepo, IDependencyManager depManager, IPaymentCustomers paymentCustomers, ISecurity security, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
             _subscriptionRepo = subscriptionRepo;
+            _paymentCustomers = paymentCustomers;
         }
 
         public async Task<InvokeResult> AddSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user)
         {
             await AuthorizeAsync( user, org, "addSubscription", subscription);            
+
+            if(String.IsNullOrEmpty(subscription.PaymentToken))
+            {
+                subscription.PaymentTokenStatus = Subscription.PaymentTokenStatus_Empty;
+                subscription.Status = Subscription.Status_NoPaymentDetails;
+            }
+            else
+            {
+                var result = await _paymentCustomers.CreateCustomerAsync(subscription.Id.ToString(), subscription.PaymentToken);
+                if (!result.Successful) return result.ToInvokeResult();
+
+                subscription.CustomerId = result.Result;
+                subscription.PaymentTokenStatus = Subscription.PaymentTokenStatus_OK;
+                subscription.Status = Subscription.Status_OK;
+                subscription.PaymentTokenDate = DateTime.UtcNow;
+            }
 
             await _subscriptionRepo.AddSubscriptionAsync(subscription);
 
@@ -71,6 +89,27 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<InvokeResult> UpdateSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user)
         {
             await AuthorizeAsync(user, org, "updateSubscription", subscription);
+
+            var oldSubscription = await _subscriptionRepo.GetSubscriptionAsync(subscription.Id, true);
+
+            if(oldSubscription.PaymentToken != subscription.PaymentToken)
+            {
+                if(String.IsNullOrEmpty(oldSubscription.PaymentToken))
+                {
+                    var result = await _paymentCustomers.CreateCustomerAsync(subscription.Id.ToString(), subscription.PaymentToken);
+                    if (!result.Successful) return result.ToInvokeResult();
+                    subscription.CustomerId = result.Result;
+                }
+                else
+                {
+                    var result = await _paymentCustomers.AddPaymentSource(subscription.CustomerId, subscription.PaymentToken);
+                    if (!result.Successful) return result.ToInvokeResult();
+                }
+
+                subscription.PaymentTokenStatus = Subscription.PaymentTokenStatus_OK;
+                subscription.Status = Subscription.Status_OK;
+                subscription.PaymentTokenDate = DateTime.UtcNow;
+            }
 
             await _subscriptionRepo.UpdateSubscriptionAsync(subscription);
 

@@ -30,9 +30,18 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
             await _dataContext.SaveChangesAsync();
         }
 
-        public async Task<Subscription> GetSubscriptionAsync(Guid id)
+        public async Task<Subscription> GetSubscriptionAsync(Guid id, bool disableTracking = false)
         {
-            var subscription = await _dataContext.Subscription.Where(prd => prd.Id == id).FirstOrDefaultAsync();
+            Subscription subscription;
+            if (disableTracking)
+            {
+                subscription = await _dataContext.Subscription.AsNoTracking().Where(prd => prd.Id == id).FirstOrDefaultAsync();
+            }
+            else
+            {
+                subscription = await _dataContext.Subscription.Where(prd => prd.Id == id).FirstOrDefaultAsync();
+            }
+
             if (subscription == null)
             {
                 throw new RecordNotFoundException("Subscription", id.ToString());
@@ -43,7 +52,7 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
 
         public async Task<IEnumerable<SubscriptionSummary>> GetSubscriptionsForOrgAsync(string orgId)
         {
-            var subscriptions = await  _dataContext.Subscription.Where(pc => pc.OrgId == orgId).ToListAsync();
+            var subscriptions = await _dataContext.Subscription.Where(pc => pc.OrgId == orgId).ToListAsync();
             return from sub in subscriptions select sub.CreateSummary();
         }
 

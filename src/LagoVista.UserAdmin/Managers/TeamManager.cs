@@ -34,6 +34,7 @@ namespace LagoVista.UserAdmin.Managers
             await AuthorizeAsync(team, AuthorizeActions.Create, user, org);
             ValidationCheck(team, Actions.Create);
             await _teamRepo.AddTeamAsync(team);
+
             return InvokeResult.Success;
         }
 
