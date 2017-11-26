@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup Label="Configuration">
     <TargetFramework>net461</TargetFramework>
     <DebugType>portable</DebugType>
     <AssemblyName>LagoVista.UserAdmin.Tests</AssemblyName>
