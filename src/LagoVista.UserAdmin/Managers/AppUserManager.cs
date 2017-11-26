@@ -19,7 +19,7 @@ using LagoVista.Core;
 
 namespace LagoVista.UserAdmin.Managers
 {
-    public class AppUserManager : ManagerBase, IAppUserManager
+    public class AppUserManager : AppUserManagerReadOnly, IAppUserManager
     {
         IAppUserRepo _appUserRepo;
         IAdminLogger _adminLogger;
@@ -29,7 +29,7 @@ namespace LagoVista.UserAdmin.Managers
         IUserVerficationManager _userVerificationmanager;
 
         public AppUserManager(IAppUserRepo appUserRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
-            IAuthTokenManager authTokenManager, IUserManager userManager, ISignInManager signInManager, IAdminLogger adminLogger) : base(logger, appConfig, depManager, security)
+            IAuthTokenManager authTokenManager, IUserManager userManager, ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, depManager, security,  logger, appConfig)
         {
             _appUserRepo = appUserRepo;
             _adminLogger = logger;
@@ -69,33 +69,7 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<AppUser> GetUserByIdAsync(string id, EntityHeader org, EntityHeader requestedByUser)
-        {
-            var appUser = await _appUserRepo.FindByIdAsync(id);
-            appUser.PasswordHash = null;
 
-            /* The user should always be able to get it's own account */
-            if (requestedByUser.Id != id)
-            {
-                await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Read, requestedByUser, org);
-            }
-
-            return appUser;
-        }
-
-        public async Task<AppUser> GetUserByUserNameAsync(string userName, EntityHeader org, EntityHeader requestedByUser)
-        {
-            var appUser = await _appUserRepo.FindByNameAsync(userName);
-            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Read, requestedByUser, org);
-
-            appUser.PasswordHash = null;
-            return appUser;
-        }
-        public Task<IEnumerable<EntityHeader>> SearchUsers(string firstName, string lastName, EntityHeader searchedBy)
-
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<InvokeResult> UpdateUserAsync(AppUser user, EntityHeader org, EntityHeader updatedByUser)
         {

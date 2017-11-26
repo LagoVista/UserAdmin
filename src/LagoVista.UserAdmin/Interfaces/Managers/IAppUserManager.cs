@@ -10,6 +10,15 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Managers
 {
+    public interface IAppUserManagerReadOnly
+    {
+        Task<AppUser> GetUserByIdAsync(String id, EntityHeader org, EntityHeader user);
+
+        Task<AppUser> GetUserByUserNameAsync(string userName, EntityHeader org, EntityHeader user);
+
+        Task<IEnumerable<EntityHeader>> SearchUsers(string firstName, string lastName, EntityHeader searchedBy);
+    }
+
     public interface IAppUserManager
     {
         Task<AppUser> GetUserByIdAsync(String id, EntityHeader org, EntityHeader user);

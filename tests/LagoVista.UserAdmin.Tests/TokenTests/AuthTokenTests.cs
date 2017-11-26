@@ -11,14 +11,16 @@ using System;
 using LagoVista.Core;
 using System.Text;
 using System.Threading.Tasks;
-using Xunit;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Interfaces.Repos.Apps;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using LagoVista.UserAdmin.Models.Apps;
 
 namespace LagoVista.UserAdmin.Tests.TokenTests
 {
+    [TestClass]
     public class AuthTokenTests
     {
         Mock<IUserManager> _userManager;
@@ -31,8 +33,8 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
 
         AuthTokenManager _authTokenManager;
 
-
-        private void Init()
+        [TestInitialize]
+        public void Init()
         {
             _signInManager = new Mock<ISignInManager>();
             _userManager = new Mock<IUserManager>();
@@ -49,6 +51,9 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
             };
 
             _authTokenManager = new AuthTokenManager(new Mock<IAppInstanceRepo>().Object, _refreshTokenManager.Object, _authRequestValidators.Object, _orgHelper.Object, _tokenHelper.Object, _appInstanceManager.Object, new Mock<IAdminLogger>().Object, _signInManager.Object, _userManager.Object);
+
+            _appInstanceManager.Setup(ais => ais.UpdateLastLoginAsync(It.IsAny<string>(), It.IsAny<AuthRequest>())).ReturnsAsync(InvokeResult<AppInstance>.Create(new AppInstance("rowid","userid")));
+            _appInstanceManager.Setup(ais => ais.UpdateLastAccessTokenRefreshAsync(It.IsAny<string>(), It.IsAny<AuthRequest>())).ReturnsAsync(InvokeResult<AppInstance>.Create(new AppInstance("rowid", "userid")));
 
             _signInManager.Setup(sim => sim.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(Task.FromResult(InvokeResult.Success));
             _userManager.Setup(usm => usm.FindByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { Id = Guid.NewGuid().ToId() }));
@@ -71,11 +76,9 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
         //TODO: SHould write some tests here but behind schedule...did deskcheck of code and after refactoring its very straight forward.
 
 
-        [Fact]
+        [TestMethod]
         public async Task ShouldGenerateAccessToken()
         {
-            Init();
-
             var request = new AuthRequest()
             {
                 AppId = "APP123",
@@ -92,15 +95,13 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
             };
 
             var result = await _authTokenManager.AccessTokenGrantAsync(request);
-            Assert.True(result.Successful);
+            Assert.IsTrue(result.Successful);
         }
 
 
-        [Fact]
+        [TestMethod]
         public async Task ShouldGenerateRefreshToken()
         {
-            Init();
-
             var request = new AuthRequest()
             {
                 AppId = "APP123",
@@ -117,7 +118,7 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
             };
 
             var result = await _authTokenManager.RefreshTokenGrantAsync(request);
-            Assert.True(result.Successful);
+            Assert.IsTrue(result.Successful);
         }
     }
 }

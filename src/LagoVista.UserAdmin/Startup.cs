@@ -10,6 +10,7 @@ namespace LagoVista.UserAdmin
         public static void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IAppUserManager, AppUserManager>();
+            services.AddTransient<IAppUserManagerReadOnly, AppUserManagerReadOnly>();
             services.AddTransient<IAppUserManager, AppUserManager>();
             services.AddTransient<IOrganizationManager, OrgManager>();
             services.AddTransient<ITeamManager, TeamManager>();
