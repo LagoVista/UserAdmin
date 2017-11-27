@@ -61,7 +61,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var signInRequest = await _signInManager.PasswordSignInAsync(authRequest.UserName, authRequest.Password, true, false);
             if (!signInRequest.Successful) return InvokeResult<AuthResponse>.FromInvokeResult(signInRequest);
 
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AccessTokenGrantAsync", "UserLoggedIn", new KeyValuePair<string, string>("email", authRequest.UserName));
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "AuthTokenManager_AccessTokenGrantAsync", "UserLoggedIn", new KeyValuePair<string, string>("email", authRequest.UserName));
 
             var appUser = await _userManager.FindByNameAsync(authRequest.UserName);
             if (appUser == null)
