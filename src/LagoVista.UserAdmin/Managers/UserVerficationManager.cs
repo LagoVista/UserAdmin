@@ -23,7 +23,7 @@ namespace LagoVista.UserAdmin.Managers
         ISmsSender _smsSender;
 
         public UserVerficationManager(IAdminLogger adminLogger, IUserManager userMananger, IAppConfig appConfig, ISmsSender smsSender,
-                    IEmailSender emailSender, IDependencyManager depManager, ISecurity security) : base(adminLogger, appConfig, depManager, security)
+                                    IEmailSender emailSender, IDependencyManager depManager, ISecurity security) : base(adminLogger, appConfig, depManager, security)
         {
             _smsSender = smsSender;
             _adminLogger = adminLogger;
@@ -74,19 +74,18 @@ namespace LagoVista.UserAdmin.Managers
                      appUser.Id.ToKVP("appUserId"),
                      encodedToken.ToKVP("encodedToken"),
                      appUser.Email.ToKVP("toEmailAddress"));
-#endif 
+#endif
 
                 var subject = UserAdminResources.Email_Verification_Subject.Replace("[APP_NAME]", _appConfig.AppName);
                 var body = UserAdminResources.Email_Verification_Body.Replace("[CALLBACK_URL]", callbackUrl).Replace("[MOBILE_CALLBACK_URL]", mobileCallbackUrl);
-
                 var result = await _emailSender.SendAsync(appUser.Email, subject, body);
 
                 _adminLogger.LogInvokeResult("UserVerficationManager_SendConfirmationEmailAsync", result,
                     new KeyValuePair<string, string>("token", token),
                     new KeyValuePair<string, string>("toUserId", appUser.Id),
                     new KeyValuePair<string, string>("toEmail", appUser.Email));
-
                 return result;
+
             }
             catch (Exception ex)
             {

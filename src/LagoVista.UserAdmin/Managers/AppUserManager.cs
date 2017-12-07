@@ -27,6 +27,7 @@ namespace LagoVista.UserAdmin.Managers
         IUserManager _userManager;
         ISignInManager _signInManager;
         IUserVerficationManager _userVerificationmanager;
+        IAppConfig _appConfig;
 
         public AppUserManager(IAppUserRepo appUserRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
             IAuthTokenManager authTokenManager, IUserManager userManager, ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, depManager, security,  logger, appConfig)
@@ -36,6 +37,7 @@ namespace LagoVista.UserAdmin.Managers
             _authTokenManager = authTokenManager;
             _signInManager = signInManager;
             _userManager = userManager;
+            _appConfig = appConfig;
             _userVerificationmanager = userVerificationmanager;
         }
 
@@ -44,6 +46,11 @@ namespace LagoVista.UserAdmin.Managers
             ValidationCheck(user, Actions.Create);
 
             await AuthorizeAsync(user, AuthorizeResult.AuthorizeActions.Create, updatedByUser, org);
+            if(_appConfig.Environment == Environments.Testing)
+            {
+                user.EmailConfirmed = true;
+                user.PhoneNumberConfirmed = true;
+            }
 
             await _appUserRepo.CreateAsync(user);
 
@@ -177,6 +184,15 @@ namespace LagoVista.UserAdmin.Managers
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
             };
+
+            /* In the testing environment we just go ahead and not make the user confirm by email or phone number so we can start using 
+             * right away, eventually we will probably build this into testing but need some way of getting the confirmation tokens */
+       
+            if(_appConfig.Environment == Environments.Testing)
+            {
+                appUser.PhoneNumberConfirmed = true;
+                appUser.EmailConfirmed = true;
+            }
 
             var identityResult = await _userManager.CreateAsync(appUser, newUser.Password);
             if (identityResult.Successful)
