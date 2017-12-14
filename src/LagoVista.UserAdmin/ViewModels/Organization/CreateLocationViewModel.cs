@@ -4,6 +4,7 @@ using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models;
 using LagoVista.UserAdmin.Resources;
 using LagoVista.UserAdmin.Models.Orgs;
+using LagoVista.UserAdmin.Models.Resources;
 
 namespace LagoVista.UserAdmin.ViewModels.Organization
 {
@@ -13,15 +14,15 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
         [FormField(FieldType: FieldTypes.Hidden)]
         public String OrganizationId { get; set; }
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Namespace, HelpResource: Resources.UserAdminResources.Names.LocationNamespace_Help, NamespaceType: NamespaceTypes.Location, NamespaceUniqueMessageResource: Resources.UserAdminResources.Names.OrganizationLocation_NamespaceInUse, FieldType: FieldTypes.NameSpace, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Namespace, HelpResource: UserAdminResources.Names.LocationNamespace_Help, NamespaceType: NamespaceTypes.Location, NamespaceUniqueMessageResource: UserAdminResources.Names.OrganizationLocation_NamespaceInUse, FieldType: FieldTypes.NameSpace, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public String LocationNamespace { get; set; }
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.Admin_Contact, FieldType: FieldTypes.Picker, PickerType: Constants.PeoplePicker, PickerFor: nameof(AdminContactId), ResourceType: typeof(Resources.UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Admin_Contact, FieldType: FieldTypes.Picker, PickerType: Constants.PeoplePicker, PickerFor: nameof(AdminContactId), ResourceType: typeof(UserAdminResources))]
         public String AdminContact { get; set; }
         [FormField(IsRequired: true, FieldType: FieldTypes.Hidden)]
         public String AdminContactId { get; set; }
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.Technical_Contact, FieldType: FieldTypes.Picker, PickerType: Constants.PeoplePicker, PickerFor: nameof(TechnicalContactId), ResourceType: typeof(Resources.UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Technical_Contact, FieldType: FieldTypes.Picker, PickerType: Constants.PeoplePicker, PickerFor: nameof(TechnicalContactId), ResourceType: typeof(UserAdminResources))]
         public String TechnicalContact { get; set; }
         [FormField(IsRequired: true, FieldType: FieldTypes.Hidden)]
         public String TechnicalContactId { get; set; }

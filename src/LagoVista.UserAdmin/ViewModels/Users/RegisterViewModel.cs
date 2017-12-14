@@ -3,6 +3,7 @@ using System;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Resources;
 using LagoVista.UserAdmin.Models;
+using LagoVista.UserAdmin.Models.Resources;
 
 namespace LagoVista.UserAdmin.ViewModels.Users
 {

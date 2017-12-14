@@ -4,6 +4,7 @@ using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models;
 using LagoVista.UserAdmin.Resources;
 using LagoVista.UserAdmin.Models.Orgs;
+using LagoVista.UserAdmin.Models.Resources;
 
 namespace LagoVista.UserAdmin.ViewModels.Organization
 {

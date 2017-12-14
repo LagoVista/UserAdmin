@@ -12,6 +12,7 @@ using System;
 using LagoVista.Core;
 using System.Threading.Tasks;
 using LagoVista.UserAdmin.Models.Users;
+using LagoVista.UserAdmin.Models.Resources;
 
 namespace LagoVista.UserAdmin.Managers
 {

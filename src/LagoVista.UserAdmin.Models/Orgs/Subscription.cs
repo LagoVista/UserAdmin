@@ -2,6 +2,7 @@
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
+using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Resources;
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public String Status { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_Key, HelpResource: Resources.UserAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key, RegExValidationMessageResource: Resources.UserAdminResources.Names.Common_Key_Validation, ResourceType: typeof(UserAdminResources), IsRequired: true)]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Key, HelpResource: UserAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key, RegExValidationMessageResource: UserAdminResources.Names.Common_Key_Validation, ResourceType: typeof(UserAdminResources), IsRequired: true)]
         public string Key { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Name, FieldType:FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsRequired: true)]

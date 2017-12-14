@@ -2,7 +2,7 @@
 using System.Reflection;
 
 //Resources:UserAdminResources:AcceptInviteVM_Description
-namespace LagoVista.UserAdmin.Resources
+namespace LagoVista.UserAdmin.Models.Resources
 {
 	public class UserAdminResources
 	{
@@ -18,7 +18,7 @@ namespace LagoVista.UserAdmin.Resources
 			{
                 if (object.ReferenceEquals(_resourceManager, null)) 
 				{
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LagoVista.UserAdmin.Resources.UserAdminResources", typeof(UserAdminResources).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LagoVista.UserAdmin.Models.UserAdminResources", typeof(UserAdminResources).GetTypeInfo().Assembly);
                     _resourceManager = temp;
                 }
                 return _resourceManager;

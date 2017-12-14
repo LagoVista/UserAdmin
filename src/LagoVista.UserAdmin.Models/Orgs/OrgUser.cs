@@ -2,6 +2,7 @@
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
+using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Resources;
 using System;
 

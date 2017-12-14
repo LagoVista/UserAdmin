@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models;
+using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Resources;
 using System;
 using System.Collections.Generic;

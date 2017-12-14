@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
+using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Resources;
 
 namespace LagoVista.UserAdmin.Models.Security

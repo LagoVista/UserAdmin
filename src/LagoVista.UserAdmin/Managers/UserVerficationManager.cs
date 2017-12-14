@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using LagoVista.Core;
+using LagoVista.UserAdmin.Models.Resources;
 
 namespace LagoVista.UserAdmin.Managers
 {

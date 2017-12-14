@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Models.Resources;
 
 namespace LagoVista.AspNetCore.Identity.Utils
 {

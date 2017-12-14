@@ -8,6 +8,7 @@ using LagoVista.Core.Validation;
 using LagoVista.Core;
 using LagoVista.Core.Authentication.Models;
 using LagoVista.UserAdmin.Resources;
+using LagoVista.UserAdmin.Models.Resources;
 
 namespace LagoVista.UserAdmin.Models.Users
 {
@@ -60,7 +61,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public ImageDetails ProfileImageUrl { get; set; }
 
         private string _email;
-        [FormField(LabelResource: Resources.UserAdminResources.Names.AppUser_Email, IsRequired: true, FieldType: FieldTypes.Email, ResourceType: typeof(Resources.UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_Email, IsRequired: true, FieldType: FieldTypes.Email, ResourceType: typeof(UserAdminResources))]
         public string Email
         {
             get { return _email; }
@@ -78,19 +79,19 @@ namespace LagoVista.UserAdmin.Models.Users
         }
         public bool EmailConfirmed { get; set; }
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.AppUser_FirstName, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_FirstName, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string FirstName { get; set; }
-        [FormField(LabelResource: Resources.UserAdminResources.Names.AppUser_LastName, IsRequired: true, ResourceType: typeof(Resources.UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_LastName, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string LastName { get; set; }
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.AppUser_IsSystemAdmin, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_IsSystemAdmin, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool IsSystemAdmin { get; set; }
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.AppUser_IsOrgAdmin, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_IsOrgAdmin, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool IsOrgAdmin { get; set; }
 
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.AppUser_PhoneNumber, FieldType: FieldTypes.Phone, ResourceType: typeof(Resources.UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_PhoneNumber, FieldType: FieldTypes.Phone, ResourceType: typeof(UserAdminResources))]
         public string PhoneNumber { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
 

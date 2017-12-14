@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>LagoVista.UserAdmin.Models</id>
+    <version>1.2.211-alpha0847</version>
+    <authors>Software Logistics, LLC</authors>
+    <owners>Software Logistics, LLC</owners>
+    <title>LagoVista User Models</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
+    <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
+    <summary>User, Organization and Location Models for the LagoVista IoT, Devices and Home Automation Framework</summary>
+    <description>User, Organization and Location Models for LagoVista IoT, Devices and Home Automation Framework</description>
+    <releaseNotes>Initial Unstable Release</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>HomeAutomation IoT Devices NuvIoT LagoVista</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\release\netstandard1.2\*.dll" target="lib\netstandard1.2" />
+  </files>
+</package>

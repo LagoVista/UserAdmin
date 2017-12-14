@@ -21,6 +21,7 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Core.Validation;
 using LagoVista.Core.Models.UIMetaData;
 using System.Text.RegularExpressions;
+using LagoVista.UserAdmin.Models.Resources;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -394,13 +395,13 @@ namespace LagoVista.UserAdmin.Managers
         private async Task SendInvitationAsync(Invitation inviteModel, string orgName, EntityHeader user)
         {
 
-            var subject = Resources.UserAdminResources.Invite_Greeting_Subject.Replace(Tokens.APP_NAME, AppConfig.AppName).Replace(Tokens.ORG_NAME, orgName);
-            var message = Resources.UserAdminResources.InviteUser_Greeting_Message.Replace(Tokens.USERS_FULL_NAME, user.Text).Replace(Tokens.ORG_NAME, orgName).Replace(Tokens.APP_NAME, AppConfig.AppName);
+            var subject = UserAdminResources.Invite_Greeting_Subject.Replace(Tokens.APP_NAME, AppConfig.AppName).Replace(Tokens.ORG_NAME, orgName);
+            var message = UserAdminResources.InviteUser_Greeting_Message.Replace(Tokens.USERS_FULL_NAME, user.Text).Replace(Tokens.ORG_NAME, orgName).Replace(Tokens.APP_NAME, AppConfig.AppName);
             message += $"<br /><br />{inviteModel.Message}<br /><br />";
             var acceptLink = $"{AppConfig.WebAddress}/account/acceptinvite/{inviteModel.RowKey}";
             var mobileAcceptLink = $"nuviot://acceptinvite?inviteId={inviteModel.RowKey}";
 
-            message += Resources.UserAdminResources.InviteUser_ClickHere.Replace("[ACCEPT_LINK]", acceptLink).Replace("[MOBILE_ACCEPT_LINK]", mobileAcceptLink);
+            message += UserAdminResources.InviteUser_ClickHere.Replace("[ACCEPT_LINK]", acceptLink).Replace("[MOBILE_ACCEPT_LINK]", mobileAcceptLink);
 
             await _emailSender.SendAsync(inviteModel.Email, subject, message);
         }

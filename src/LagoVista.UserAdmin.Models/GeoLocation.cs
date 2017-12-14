@@ -1,6 +1,6 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Geo;
-using LagoVista.UserAdmin.Resources;
+using LagoVista.UserAdmin.Models.Resources;
 
 namespace LagoVista.UserAdmin.Models
 {

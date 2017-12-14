@@ -3,6 +3,7 @@ using LagoVista.Core.Models;
 using LagoVista.Core;
 using LagoVista.UserAdmin.Resources;
 using System;
+using LagoVista.UserAdmin.Models.Resources;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
