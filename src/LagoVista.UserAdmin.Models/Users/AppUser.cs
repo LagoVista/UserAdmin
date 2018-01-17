@@ -27,7 +27,7 @@ namespace LagoVista.UserAdmin.Models.Users
             };
             CreationDate = DateTime.UtcNow.ToJSONString();
 
-            IsPreviewUser = true;
+            IsPreviewUser = false;
 
             LastUpdatedBy = new EntityHeader()
             {
