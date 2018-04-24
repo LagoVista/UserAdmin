@@ -4,12 +4,12 @@
     <NetStandardImplicitPackageVersion>2.0.1</NetStandardImplicitPackageVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core" Version="1.2.334-alpha1220" />
+    <PackageReference Include="LagoVista.Core" Version="" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.4.3" />
-    <PackageReference Include="LagoVista.IoT.Logging" Version="1.2.334-alpha1220" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
   </ItemGroup>
   <ItemGroup>
