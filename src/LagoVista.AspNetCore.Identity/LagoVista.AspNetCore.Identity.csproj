@@ -1,18 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <NetStandardImplicitPackageVersion>2.0.1</NetStandardImplicitPackageVersion>
+    <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.IoT.Logging" Version="" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
-    <PackageReference Include="Twilio" Version="5.9.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.0.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
-    <PackageReference Include="MailKit" Version="2.0.1" />
-    <PackageReference Include="LagoVista.Core" Version="" />
-    <PackageReference Include="LagoVista.Core.Authentication" Version="" />
-    <PackageReference Include="WindowsAzure.Storage" Version="9.1.0" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.435-beta1758" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+    <PackageReference Include="Twilio" Version="5.14.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.1.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="MailKit" Version="2.0.5" />
+    <PackageReference Include="LagoVista.Core" Version="2.1.435-beta1758" />
+    <PackageReference Include="LagoVista.Core.Authentication" Version="2.1.435-beta1758" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.3.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.UserAdmin\LagoVista.UserAdmin.csproj" />

@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard1.2</TargetFramework>
-    <NetStandardImplicitPackageVersion>2.0.1</NetStandardImplicitPackageVersion>
+    <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core" Version="" />
-    <PackageReference Include="LagoVista.IoT.Logging" Version="" />
-    <PackageReference Include="LagoVista.Core.Authentication" Version="" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+    <PackageReference Include="LagoVista.Core" Version="2.1.435-beta1758" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.435-beta1758" />
+    <PackageReference Include="LagoVista.Core.Authentication" Version="2.1.435-beta1758" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="T4ResourceGenerator.cs">
