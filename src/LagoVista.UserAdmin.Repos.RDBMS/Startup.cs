@@ -57,9 +57,8 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
 
             services.AddTransient<ISubscriptionRepo, SubscriptionRepo>();
             services.AddTransient<IRDBMSManager, RDBMSManager>();
-
-            services.AddDbContext<UserAdminDataContext>(options =>
-                options.UseSqlServer(connectionString));
+            services.AddDbContext<UserAdminDataContext>(options => 
+                options.UseSqlServer(connectionString, moreOptions => moreOptions.EnableRetryOnFailure()));
         }
     }
 }
