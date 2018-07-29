@@ -20,13 +20,9 @@ namespace LagoVista.UserAdmin.Repos.Users
             return GetAsync(userId, tokenId, false);
         }
 
-        public async Task RemoveAllForUserAsync(string userId)
-        {
-            var tokens = await GetByParitionIdAsync(userId);
-            foreach(var token in tokens)
-            {
-                await RemoveAsync(token);
-            }
+        public Task RemoveAllForUserAsync(string userId)
+        {            
+            return RemoveByPartitionKeyAsync(userId);
         }
 
         public Task RemoveRefreshTokenAsync(string tokenId, string userId)
