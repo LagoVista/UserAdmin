@@ -46,12 +46,6 @@ namespace LagoVista.UserAdmin.Managers
             ValidationCheck(user, Actions.Create);
 
             await AuthorizeAsync(user, AuthorizeResult.AuthorizeActions.Create, updatedByUser, org);
-            if(_appConfig.Environment == Environments.Testing)
-            {
-                user.EmailConfirmed = true;
-                user.PhoneNumberConfirmed = true;
-            }
-
             await _appUserRepo.CreateAsync(user);
 
             return InvokeResult.Success;
