@@ -179,15 +179,6 @@ namespace LagoVista.UserAdmin.Managers
                 LastName = newUser.LastName,
             };
 
-            /* In the testing environment we just go ahead and not make the user confirm by email or phone number so we can start using 
-             * right away, eventually we will probably build this into testing but need some way of getting the confirmation tokens */
-       
-            if(_appConfig.Environment == Environments.Testing)
-            {
-                appUser.PhoneNumberConfirmed = true;
-                appUser.EmailConfirmed = true;
-            }
-
             var identityResult = await _userManager.CreateAsync(appUser, newUser.Password);
             if (identityResult.Successful)
             {

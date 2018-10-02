@@ -4,9 +4,9 @@
     <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core" Version="2.1.435-beta1758" />
-    <PackageReference Include="LagoVista.Core.Authentication" Version="2.1.435-beta1758" />
-    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.435-beta1758" />
+    <PackageReference Include="LagoVista.Core" Version="2.1.503-beta1710" />
+    <PackageReference Include="LagoVista.Core.Authentication" Version="2.1.503-beta1710" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.503-beta1710" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
   <ItemGroup>
