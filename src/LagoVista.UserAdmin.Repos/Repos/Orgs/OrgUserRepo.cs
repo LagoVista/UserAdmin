@@ -57,7 +57,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             var orgUser = await GetOrgUserAsync(orgId, userId);
             return orgUser.IsOrgAdmin;
         }
-
+       
         public async Task<OrgUser> GetOrgUserAsync(string orgId, string userId)
         {
             return (await GetByFilterAsync(
@@ -69,6 +69,12 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         public Task UpdateOrgUserAsync(OrgUser orgUser)
         {
             return this.UpdateAsync(orgUser);
+        }
+
+        public async Task<bool> IsAppBuilderAsync(string orgId, string userId)
+        {
+            var orgUser = await GetOrgUserAsync(orgId, userId);
+            return orgUser.IsAppBuilder;
         }
     }
 }

@@ -80,6 +80,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AppUser_Help
 
 		public static string AppUser_Help { get { return GetResourceString("AppUser_Help"); } }
+//Resources:UserAdminResources:AppUser_IsAppBuilder
+
+		public static string AppUser_IsAppBuilder { get { return GetResourceString("AppUser_IsAppBuilder"); } }
 //Resources:UserAdminResources:AppUser_IsOrgAdmin
 
 		public static string AppUser_IsOrgAdmin { get { return GetResourceString("AppUser_IsOrgAdmin"); } }
@@ -224,6 +227,33 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:ChangePasswordVM_Title
 
 		public static string ChangePasswordVM_Title { get { return GetResourceString("ChangePasswordVM_Title"); } }
+//Resources:UserAdminResources:ClientApp_AppAuthKey1
+
+		public static string ClientApp_AppAuthKey1 { get { return GetResourceString("ClientApp_AppAuthKey1"); } }
+//Resources:UserAdminResources:ClientApp_AppAuthKey2
+
+		public static string ClientApp_AppAuthKey2 { get { return GetResourceString("ClientApp_AppAuthKey2"); } }
+//Resources:UserAdminResources:ClientApp_Description
+
+		public static string ClientApp_Description { get { return GetResourceString("ClientApp_Description"); } }
+//Resources:UserAdminResources:ClientApp_DeviceConfigs
+
+		public static string ClientApp_DeviceConfigs { get { return GetResourceString("ClientApp_DeviceConfigs"); } }
+//Resources:UserAdminResources:ClientApp_DeviceTypes
+
+		public static string ClientApp_DeviceTypes { get { return GetResourceString("ClientApp_DeviceTypes"); } }
+//Resources:UserAdminResources:ClientApp_Help
+
+		public static string ClientApp_Help { get { return GetResourceString("ClientApp_Help"); } }
+//Resources:UserAdminResources:ClientApp_Instance
+
+		public static string ClientApp_Instance { get { return GetResourceString("ClientApp_Instance"); } }
+//Resources:UserAdminResources:ClientApp_SelectInstance
+
+		public static string ClientApp_SelectInstance { get { return GetResourceString("ClientApp_SelectInstance"); } }
+//Resources:UserAdminResources:ClientApp_Title
+
+		public static string ClientApp_Title { get { return GetResourceString("ClientApp_Title"); } }
 //Resources:UserAdminResources:Common_CreatedBy
 
 		public static string Common_CreatedBy { get { return GetResourceString("Common_CreatedBy"); } }
@@ -239,6 +269,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Common_Id
 
 		public static string Common_Id { get { return GetResourceString("Common_Id"); } }
+//Resources:UserAdminResources:Common_IsPublic
+
+		public static string Common_IsPublic { get { return GetResourceString("Common_IsPublic"); } }
 //Resources:UserAdminResources:Common_Key
 
 		public static string Common_Key { get { return GetResourceString("Common_Key"); } }
@@ -790,6 +823,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AppUser_Email = "AppUser_Email";
 			public const string AppUser_FirstName = "AppUser_FirstName";
 			public const string AppUser_Help = "AppUser_Help";
+			public const string AppUser_IsAppBuilder = "AppUser_IsAppBuilder";
 			public const string AppUser_IsOrgAdmin = "AppUser_IsOrgAdmin";
 			public const string AppUser_IsSystemAdmin = "AppUser_IsSystemAdmin";
 			public const string AppUser_LastName = "AppUser_LastName";
@@ -838,11 +872,21 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string ChangePasswordVM_Description = "ChangePasswordVM_Description";
 			public const string ChangePasswordVM_Help = "ChangePasswordVM_Help";
 			public const string ChangePasswordVM_Title = "ChangePasswordVM_Title";
+			public const string ClientApp_AppAuthKey1 = "ClientApp_AppAuthKey1";
+			public const string ClientApp_AppAuthKey2 = "ClientApp_AppAuthKey2";
+			public const string ClientApp_Description = "ClientApp_Description";
+			public const string ClientApp_DeviceConfigs = "ClientApp_DeviceConfigs";
+			public const string ClientApp_DeviceTypes = "ClientApp_DeviceTypes";
+			public const string ClientApp_Help = "ClientApp_Help";
+			public const string ClientApp_Instance = "ClientApp_Instance";
+			public const string ClientApp_SelectInstance = "ClientApp_SelectInstance";
+			public const string ClientApp_Title = "ClientApp_Title";
 			public const string Common_CreatedBy = "Common_CreatedBy";
 			public const string Common_CreationDate = "Common_CreationDate";
 			public const string Common_Description = "Common_Description";
 			public const string Common_EmailAddress = "Common_EmailAddress";
 			public const string Common_Id = "Common_Id";
+			public const string Common_IsPublic = "Common_IsPublic";
 			public const string Common_Key = "Common_Key";
 			public const string Common_Key_Help = "Common_Key_Help";
 			public const string Common_Key_Validation = "Common_Key_Validation";

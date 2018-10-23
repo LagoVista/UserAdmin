@@ -15,6 +15,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
         Task<bool> QueryOrgHasUserByEmailAsync(string orgId, string email);
 
         Task<bool> IsUserOrgAdminAsync(string orgId, string userId);
+        Task<bool> IsAppBuilderAsync(string orgId, string userId);
         Task<OrgUser> GetOrgUserAsync(string orgId, string userId);
         Task UpdateOrgUserAsync(OrgUser orgUser);
     }

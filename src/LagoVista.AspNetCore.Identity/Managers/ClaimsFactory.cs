@@ -18,7 +18,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string IsPreviewUser = "com.lagovista.iot.ispreviewuser";
         public const string IsOrgAdmin = "com.lagovista.iot.isorgadmin";
         public const string CurrentUserProfilePictureurl = "com.lagovista.iot.currentprofilepictureurl";
-
+      
         public List<Claim> GetClaims(AppUser user)
         {
             var claims = new List<Claim> {

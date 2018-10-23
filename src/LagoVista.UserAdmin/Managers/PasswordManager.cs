@@ -1,4 +1,4 @@
-﻿#define DIAG
+﻿//#define DIAG
 
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;

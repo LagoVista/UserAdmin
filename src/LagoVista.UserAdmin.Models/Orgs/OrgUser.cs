@@ -47,6 +47,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public String LastUpdatedDate { get; set; }
 
         public bool IsOrgAdmin { get; set; }
+        public bool IsAppBuilder { get; set; }
 
         public static String CreateRowKey(String orgId, String userId)
         {

@@ -106,7 +106,7 @@ namespace LagoVista.UserAdmin.Managers
 
             var currentUser = await _appUserRepo.FindByIdAsync(user.Id);
 
-            var addUserResult = await AddUserToOrgAsync(currentUser.ToEntityHeader(), organization.ToEntityHeader(), currentUser.ToEntityHeader(), true);
+            var addUserResult = await AddUserToOrgAsync(currentUser.ToEntityHeader(), organization.ToEntityHeader(), currentUser.ToEntityHeader(), true, true);
             if (!addUserResult.Successful)
             {
                 return addUserResult;
@@ -160,6 +160,7 @@ namespace LagoVista.UserAdmin.Managers
             var appUser = await _appUserRepo.FindByIdAsync(user.Id);
             appUser.CurrentOrganization = newOrg.ToEntityHeader();
             appUser.IsOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(newOrgId, user.Id);
+            appUser.IsAppBuilder = await _orgUserRepo.IsAppBuilderAsync(newOrgId, user.Id);
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, user, org, "switchOrgs");
             await _appUserRepo.UpdateAsync(appUser);
 
@@ -499,7 +500,7 @@ namespace LagoVista.UserAdmin.Managers
         #endregion
 
         #region Organization User Methods
-        public async Task<InvokeResult> AddUserToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy, bool isOrgAdmin = false)
+        public async Task<InvokeResult> AddUserToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy, bool isOrgAdmin = false, bool isAppBuilder = false)
         {
             await AuthorizeOrgAccessAsync(addedBy, org, typeof(OrgUser), Actions.Create, new SecurityHelper() { OrgId = org.Id, UserId = userToAdd.Id });
 
@@ -519,6 +520,7 @@ namespace LagoVista.UserAdmin.Managers
                 OrganizationName = org.Text,
                 UserName = appUser.Name,
                 IsOrgAdmin = isOrgAdmin,
+                IsAppBuilder = isAppBuilder,
                 ProfileImageUrl = appUser.ProfileImageUrl.ImageUrl,
             };
 
@@ -557,6 +559,7 @@ namespace LagoVista.UserAdmin.Managers
                 Email = appUser.Email,
                 OrganizationName = org.Name,
                 IsOrgAdmin = false,
+                IsAppBuilder = false,
                 UserName = appUser.Name,
                 ProfileImageUrl = appUser.ProfileImageUrl.ImageUrl,
             };

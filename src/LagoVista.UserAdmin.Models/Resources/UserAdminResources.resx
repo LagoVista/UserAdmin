@@ -842,4 +842,37 @@
   <data name="InviteErr_NameIsRequired" xml:space="preserve">
     <value>Name is Required to Invite a User</value>
   </data>
+  <data name="ClientApp_AppAuthKey1" xml:space="preserve">
+    <value>App Auth Key - Primary</value>
+  </data>
+  <data name="ClientApp_AppAuthKey2" xml:space="preserve">
+    <value>App Auth Key - Secondary</value>
+  </data>
+  <data name="ClientApp_Description" xml:space="preserve">
+    <value>A client app is a thick/mobile/external application that will authenticate and access NuvIoT via REST</value>
+  </data>
+  <data name="ClientApp_DeviceConfigs" xml:space="preserve">
+    <value>Device Configurations</value>
+  </data>
+  <data name="ClientApp_DeviceTypes" xml:space="preserve">
+    <value>Device Types</value>
+  </data>
+  <data name="ClientApp_Help" xml:space="preserve">
+    <value>A client app is a thick/mobile/external application that will authenticate and access NuvIoT via REST</value>
+  </data>
+  <data name="ClientApp_Instance" xml:space="preserve">
+    <value>Instance</value>
+  </data>
+  <data name="ClientApp_SelectInstance" xml:space="preserve">
+    <value>-select deployment instance-</value>
+  </data>
+  <data name="ClientApp_Title" xml:space="preserve">
+    <value>Mobile Application</value>
+  </data>
+  <data name="Common_IsPublic" xml:space="preserve">
+    <value>Is Public</value>
+  </data>
+  <data name="AppUser_IsAppBuilder" xml:space="preserve">
+    <value>Is Application Builder</value>
+  </data>
 </root>
