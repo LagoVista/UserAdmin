@@ -35,7 +35,14 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
         Task<InvokeResult> ClearOrgAdminAsync(string userId, EntityHeader org, EntityHeader user);
 
+        Task<InvokeResult> SetAppBuilderAsync(string userId, EntityHeader org, EntityHeader user);
+
+        Task<InvokeResult> ClearAppBuilderAsync(string userId, EntityHeader org, EntityHeader user);
+
+
         Task<bool> IsUserOrgAdminAsync(string orgId, string userId);
+
+        Task<bool> IsUserAppBuildernAsync(string orgId, string userId);
 
         Task<InvokeResult<AppUser>> ChangeOrgsAsync(string newOrgId, EntityHeader org, EntityHeader user);
 

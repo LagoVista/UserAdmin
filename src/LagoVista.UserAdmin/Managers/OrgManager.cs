@@ -161,6 +161,7 @@ namespace LagoVista.UserAdmin.Managers
             appUser.CurrentOrganization = newOrg.ToEntityHeader();
             appUser.IsOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(newOrgId, user.Id);
             appUser.IsAppBuilder = await _orgUserRepo.IsAppBuilderAsync(newOrgId, user.Id);
+           
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, user, org, "switchOrgs");
             await _appUserRepo.UpdateAsync(appUser);
 
@@ -170,6 +171,12 @@ namespace LagoVista.UserAdmin.Managers
         public Task<bool> IsUserOrgAdminAsync(string orgId, string userId)
         {
             return _orgUserRepo.IsUserOrgAdminAsync(orgId, userId);
+        }
+
+
+        public Task<bool> IsUserAppBuildernAsync(string orgId, string userId)
+        {
+            return _orgUserRepo.IsAppBuilderAsync(orgId, userId);
         }
 
         public async Task<InvokeResult> UpdateOrganizationAsync(Organization org, EntityHeader userOrg, EntityHeader user)
@@ -583,6 +590,7 @@ namespace LagoVista.UserAdmin.Managers
             {
                 var orgUser = await _orgUserRepo.GetOrgUserAsync(org.Id, userId);
                 orgUser.IsOrgAdmin = true;
+                orgUser.IsAppBuilder = true;
                 orgUser.LastUpdatedBy = user.Text;
                 orgUser.LastUpdatedById = user.Id;
                 orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
@@ -624,6 +632,63 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult.FromErrors(Resources.UserAdminErrorCodes.AuthNotOrgAdmin.ToErrorMessage());
             }
         }
+
+        public async Task<InvokeResult> SetAppBuilderAsync(string userId, EntityHeader org, EntityHeader user)
+        {
+            var isUpdateUserOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(org.Id, user.Id);
+            if (isUpdateUserOrgAdmin)
+            {
+                if (user.Id == userId)
+                {
+                    return InvokeResult.FromErrors(Resources.UserAdminErrorCodes.AuthCantRemoveSelfFromOrgAdmin.ToErrorMessage());
+                }
+
+                var orgUser = await _orgUserRepo.GetOrgUserAsync(org.Id, userId);
+                orgUser.IsAppBuilder = true;
+                orgUser.IsOrgAdmin = false;
+                orgUser.LastUpdatedBy = user.Text;
+                orgUser.LastUpdatedById = user.Id;
+                orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+                await _orgUserRepo.UpdateOrgUserAsync(orgUser);
+
+                await LogEntityActionAsync(userId, typeof(AppUser).Name, "SetAsOrgAdmin", org, user);
+
+                return InvokeResult.Success;
+            }
+            else
+            {
+                return InvokeResult.FromErrors(Resources.UserAdminErrorCodes.AuthNotOrgAdmin.ToErrorMessage());
+            }
+        }
+
+        public async Task<InvokeResult> ClearAppBuilderAsync(string userId, EntityHeader org, EntityHeader user)
+        {
+            var isUpdateUserOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(org.Id, user.Id);
+            if (isUpdateUserOrgAdmin)
+            {
+                if (user.Id == userId)
+                {
+                    return InvokeResult.FromErrors(Resources.UserAdminErrorCodes.AuthCantRemoveSelfFromOrgAdmin.ToErrorMessage());
+                }
+
+                var orgUser = await _orgUserRepo.GetOrgUserAsync(org.Id, userId);
+                orgUser.IsOrgAdmin = false;
+                orgUser.IsAppBuilder = false;
+                orgUser.LastUpdatedBy = user.Text;
+                orgUser.LastUpdatedById = user.Id;
+                orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+                await _orgUserRepo.UpdateOrgUserAsync(orgUser);
+
+                await LogEntityActionAsync(userId, typeof(AppUser).Name, "ClearAsOrgAdmin", org, user);
+
+                return InvokeResult.Success;
+            }
+            else
+            {
+                return InvokeResult.FromErrors(Resources.UserAdminErrorCodes.AuthNotOrgAdmin.ToErrorMessage());
+            }
+        }
+
 
         public async Task<IEnumerable<UserInfoSummary>> GetUsersForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user)
         {
