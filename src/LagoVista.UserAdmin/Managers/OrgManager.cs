@@ -550,7 +550,16 @@ namespace LagoVista.UserAdmin.Managers
             await AuthorizeOrgAccessAsync(addedBy, userOrg, typeof(OrgUser), Actions.Create, new SecurityHelper() { OrgId = orgId, UserId = userId });
 
             var appUser = await _appUserRepo.FindByIdAsync(userId);
+            if(appUser == null)
+            {
+                return InvokeResult.FromError($"Could not find user with user id [{userId}] when attempting to add user to the org [{orgId}]");
+            }
+
             var org = await _organizationRepo.GetOrganizationAsync(orgId);
+            if (org == null)
+            {
+                return InvokeResult.FromError($"Could not find org with org id [{orgId}] when attempting to add a user with id [{userId}] to this org.");
+            }
 
             await AuthorizeOrgAccessAsync(addedBy, org.ToEntityHeader(), typeof(OrgUser));
 

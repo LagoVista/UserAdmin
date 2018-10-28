@@ -16,6 +16,7 @@ using LagoVista.UserAdmin.Resources;
 using System.Text.RegularExpressions;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.Core;
+using LagoVista.Core.Models.UIMetaData;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -111,6 +112,13 @@ namespace LagoVista.UserAdmin.Managers
             await _appUserRepo.UpdateAsync(appUser);
 
             return InvokeResult.Success;
+        }
+
+        public async Task<ListResponse<UserInfoSummary>> GetDeviceUsersAsync(string deviceRepoId, EntityHeader org, EntityHeader user, ListRequest listRequest)
+        {
+            await AuthorizeAsync(user, org, "GetDeviceUsersAsync", deviceRepoId);
+
+            return await _appUserRepo.GetDeviceUsersAsync(deviceRepoId, listRequest);
         }
 
         public async Task<InvokeResult<AuthResponse>> CreateUserAsync(RegisterUser newUser)

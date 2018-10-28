@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using LagoVista.Core.Models;
+﻿using LagoVista.Core;
 using LagoVista.Core.Attributes;
-using LagoVista.Core.Interfaces;
-using Newtonsoft.Json;
-using LagoVista.Core.Validation;
-using LagoVista.Core;
 using LagoVista.Core.Authentication.Models;
-using LagoVista.UserAdmin.Resources;
+using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models;
+using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Resources;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.Models.Users
 {
@@ -45,13 +44,23 @@ namespace LagoVista.UserAdmin.Models.Users
                 Id = "b78ca749a1e64ce59df4aa100050dcc7"
             };
 
+            IsUserDevice = false;
+
             Organizations = new List<EntityHeader>();
             CurrentOrganizationRoles = new List<EntityHeader>();
         }
 
         public AppUser()
         {
+            ProfileImageUrl = new ImageDetails()
+            {
+                Width = 128,
+                Height = 128,
+                ImageUrl = "https://bytemaster.blob.core.windows.net/userprofileimages/watermark.png",
+                Id = "b78ca749a1e64ce59df4aa100050dcc7"
+            };
 
+            IsUserDevice = false;
         }
 
         public List<EntityHeader> Organizations { get; set; }
@@ -93,6 +102,8 @@ namespace LagoVista.UserAdmin.Models.Users
         [FormField(LabelResource: UserAdminResources.Names.AppUser_IsAppBuilder, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool IsAppBuilder { get; set; }
 
+        public bool IsUserDevice { get; set; }
+
 
         [FormField(LabelResource: UserAdminResources.Names.AppUser_PhoneNumber, FieldType: FieldTypes.Phone, ResourceType: typeof(UserAdminResources))]
         public string PhoneNumber { get; set; }
@@ -111,7 +122,7 @@ namespace LagoVista.UserAdmin.Models.Users
             get { return _userName; }
             set
             {
-                if(String.IsNullOrEmpty(value))
+                if (String.IsNullOrEmpty(value))
                 {
                     _userName = null;
                 }
@@ -136,6 +147,10 @@ namespace LagoVista.UserAdmin.Models.Users
         public string SecurityStamp { get; set; }
         public bool TwoFactorEnabled { get; set; }
 
+        public EntityHeader PrimaryDevice { get; set; }
+        public EntityHeader DeviceRepo { get; set; }
+        public EntityHeader DeviceConfiguration { get; set; }
+
         public IList<ThirdPartyLoginInfo> Logins { get; set; }
         public bool IsPublic { get; set; }
         public EntityHeader OwnerOrganization { get; set; }
@@ -154,7 +169,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 CreatedBy = CreatedBy,
                 CreationDate = CreationDate,
                 IsPreviewUser = IsPreviewUser,
-                IsOrgAdmin =IsOrgAdmin,
+                IsOrgAdmin = IsOrgAdmin,
                 CurrentOrganization = CurrentOrganization,
                 Email = Email,
                 EmailConfirmed = EmailConfirmed,

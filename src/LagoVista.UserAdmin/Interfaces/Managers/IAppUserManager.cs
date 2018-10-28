@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Authentication.Models;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Models.Users;
@@ -34,5 +35,7 @@ namespace LagoVista.UserAdmin.Managers
         Task<IEnumerable<EntityHeader>> SearchUsers(string firstName, string lastName, EntityHeader searchedBy);
 
         Task<InvokeResult<AuthResponse>> CreateUserAsync(RegisterUser newUser);
+
+        Task<ListResponse<UserInfoSummary>> GetDeviceUsersAsync(string deviceRepoId, EntityHeader org, EntityHeader user, ListRequest listRequest);
     }
 }

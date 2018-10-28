@@ -1,16 +1,16 @@
 ﻿using LagoVista.CloudStorage.DocumentDB;
-using LagoVista.Core.PlatformSupport;
+using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
+using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Users;
+using Microsoft.Azure.Documents;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using LagoVista.Core.Models;
-using System.Collections.Generic;
-using Microsoft.Azure.Documents;
-using LagoVista.UserAdmin.Models.Orgs;
 
 namespace LagoVista.UserAdmin.Repos.Users
 {
@@ -51,13 +51,13 @@ namespace LagoVista.UserAdmin.Repos.Users
 
         public async Task<AppUser> FindByNameAsync(string userName)
         {
-            if(String.IsNullOrEmpty(userName))
+            if (String.IsNullOrEmpty(userName))
             {
                 throw new InvalidOperationException("Attempt to find user with null or empty user name.");
             }
 
             var user = (await QueryAsync(usr => usr.UserName == userName.ToUpper())).FirstOrDefault();
-            if(user == null)
+            if (user == null)
             {
                 return null;
             }
@@ -74,7 +74,7 @@ namespace LagoVista.UserAdmin.Repos.Users
             }
 
             var user = (await QueryAsync(usr => usr.Email == email.ToUpper())).FirstOrDefault();
-            if(user == null)
+            if (user == null)
             {
                 return null;
             }
@@ -92,6 +92,12 @@ namespace LagoVista.UserAdmin.Repos.Users
         public Task<AppUser> FindByThirdPartyLogin(string providerId, string providerKey)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<ListResponse<UserInfoSummary>> GetDeviceUsersAsync(string deviceRepoId, ListRequest listRequest)
+        {
+            var users = await QueryAsync(usr => usr.IsUserDevice == true && usr.DeviceRepo != null && usr.DeviceRepo.Id == deviceRepoId, listRequest);
+            return ListResponse<UserInfoSummary>.Create(users.Model.Select(usr => usr.ToUserInfoSummary(false)));
         }
 
         public async Task<IEnumerable<UserInfoSummary>> GetUserSummaryForListAsync(IEnumerable<OrgUser> orgUsers)

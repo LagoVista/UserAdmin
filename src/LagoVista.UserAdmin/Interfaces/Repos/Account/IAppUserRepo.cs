@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Users;
 using System;
@@ -10,6 +11,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Users
     public interface IAppUserRepo : IDisposable
     {
         Task<IEnumerable<UserInfoSummary>> GetUserSummaryForListAsync(IEnumerable<OrgUser> orgUsers);
+        Task<ListResponse<UserInfoSummary>> GetDeviceUsersAsync(string deviceRepoId, ListRequest listRequest);
         Task CreateAsync(AppUser user);
         Task<AppUser> FindByIdAsync(string userId);
         Task<AppUser> FindByNameAsync(string userName);
