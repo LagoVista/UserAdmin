@@ -50,6 +50,8 @@ namespace LagoVista.UserAdmin.Resources
         public static ErrorCode AuthAlreadyInOrg => new ErrorCode() { Code = "AUTH035", Message = UserAdminResources.AuthErr_CurrentOrgAlreadySet };
         public static ErrorCode AuthInviteNotActive => new ErrorCode() { Code = "AUTH036", Message = UserAdminResources.AuthErr_InviteNotActive };
 
+        public static ErrorCode AuthMissingRepoIdForDeviceUser => new ErrorCode() { Code = "AUTH037", Message = "When logging in as a device user you must provide a device repo id." };
+
 
         public static ErrorCode InviteIsNull => new ErrorCode() { Code = "INVT001", Message = UserAdminResources.InviteErr_InviteIsNull };
         public static ErrorCode InviteEmailIsEmpty=> new ErrorCode() { Code = "INVT002", Message = UserAdminResources.InviteErr_EmailIsEmpty };

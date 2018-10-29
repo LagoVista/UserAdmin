@@ -35,6 +35,7 @@ namespace LagoVista.AspNetCore.Identity.Utils
             }
 
             var accessExpires = DateTime.UtcNow.AddMinutes(_tokenOptions.AccessExpiration.TotalMinutes);
+
             var token = GetJWToken(appUser, accessExpires, authRequest.AppInstanceId);
 
             var authResponse = new AuthResponse()
@@ -60,7 +61,7 @@ namespace LagoVista.AspNetCore.Identity.Utils
         public string GetJWToken(AppUser user, DateTime accessExpires, string installationId)
         {
             var now = DateTime.UtcNow;
-            var claims = _claimsFactory.GetClaims(user);
+            var claims = _claimsFactory.GetClaims(user);            
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, NonceGenerator()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64));
 

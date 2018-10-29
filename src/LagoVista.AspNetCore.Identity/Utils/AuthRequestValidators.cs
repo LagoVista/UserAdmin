@@ -12,6 +12,7 @@ using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Models.Resources;
+using LagoVista.Core.Interfaces;
 
 namespace LagoVista.AspNetCore.Identity.Utils
 {
@@ -61,6 +62,28 @@ namespace LagoVista.AspNetCore.Identity.Utils
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateAccessTokenGrant", UserAdminErrorCodes.AuthMissingEmail.Message);
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthMissingEmail.ToErrorMessage());
+            }
+
+            if (String.IsNullOrEmpty(authRequest.UserName))
+            {
+                authRequest.UserName = authRequest.Email;
+            }
+
+            switch (authRequest.AuthType)
+            {
+                case AuthTypes.ClientApp:
+                    break;
+                case AuthTypes.DeviceUser:
+                    if (String.IsNullOrEmpty(authRequest.DeviceRepoId))
+                    {
+                        _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateAccessTokenGrant", UserAdminErrorCodes.AuthMissingRepoIdForDeviceUser.Message);
+                        return InvokeResult.FromErrors(UserAdminErrorCodes.AuthMissingRepoIdForDeviceUser.ToErrorMessage());
+                    }
+                    break;
+                case AuthTypes.Runtime:
+                    break;
+                case AuthTypes.User:
+                    break;
             }
 
             return InvokeResult.Success;

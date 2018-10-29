@@ -12,6 +12,7 @@ using LagoVista.UserAdmin.Interfaces.Repos.Apps;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin;
 using LagoVista.Core;
+using LagoVista.Core.Interfaces;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -58,16 +59,35 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var accessTokenRequestValidationResult = _authRequestValidators.ValidateAccessTokenGrant(authRequest);
             if (!accessTokenRequestValidationResult.Successful) return InvokeResult<AuthResponse>.FromInvokeResult(accessTokenRequestValidationResult);
 
-            var signInRequest = await _signInManager.PasswordSignInAsync(authRequest.UserName, authRequest.Password, true, false);
+            var userName = authRequest.UserName;
+            var password = authRequest.Password;
+
+            
+
+            switch (authRequest.AuthType)
+            {
+                case AuthTypes.DeviceUser:
+                    userName = $"{authRequest.DeviceRepoId}-{authRequest.UserName}";
+                    break;
+                case AuthTypes.ClientApp:
+                    userName = $"{authRequest.AppId}-{authRequest.UserName}";
+                    break;
+                case AuthTypes.Runtime:
+                    userName = authRequest.InstanceId;
+                    password = authRequest.InstanceAuthKey;
+                    break;
+            }
+
+            var signInRequest = await _signInManager.PasswordSignInAsync(userName, password, true, false);
             if (!signInRequest.Successful) return InvokeResult<AuthResponse>.FromInvokeResult(signInRequest);
 
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "AuthTokenManager_AccessTokenGrantAsync", "UserLoggedIn", new KeyValuePair<string, string>("email", authRequest.UserName));
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "AuthTokenManager_AccessTokenGrantAsync", "UserLoggedIn", new KeyValuePair<string, string>("email", userName));
 
-            var appUser = await _userManager.FindByNameAsync(authRequest.UserName);
+            var appUser = await _userManager.FindByNameAsync(userName);
             if (appUser == null)
             {
                 /* Should really never, ever happen, but well...let's track it */
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AccessTokenGrantAsync", UserAdminErrorCodes.AuthCouldNotFindUserAccount.Message, new KeyValuePair<string, string>("email", authRequest.UserName));
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AccessTokenGrantAsync", UserAdminErrorCodes.AuthCouldNotFindUserAccount.Message, new KeyValuePair<string, string>("email", userName));
                 return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
 
@@ -91,7 +111,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
             }
 
             var refreshTokenResponse = await _refreshTokenManager.GenerateRefreshTokenAsync(authRequest.AppId, authRequest.AppInstanceId, appUser.Id);
-            return _tokenHelper.GenerateAuthResponse(appUser, authRequest, refreshTokenResponse);
+            var authResponse = _tokenHelper.GenerateAuthResponse(appUser, authRequest, refreshTokenResponse);
+            return authResponse;
         }
 
 
@@ -100,13 +121,27 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var requestValidationResult = _authRequestValidators.ValidateAuthRequest(authRequest);
             if (!requestValidationResult.Successful) return InvokeResult<AuthResponse>.FromInvokeResult(requestValidationResult);
 
+            var userName = authRequest.UserName;
+            switch (authRequest.AuthType)
+            {
+                case AuthTypes.DeviceUser:
+                    userName = $"{authRequest}-{authRequest.UserName}";
+                    break;
+                case AuthTypes.ClientApp:
+                    userName = $"{authRequest}-{authRequest.UserName}";
+                    break;
+                case AuthTypes.Runtime:
+                    userName = authRequest.InstanceId;
+                    break;
+            }
+
             var refreshTokenRequestValidationResult = _authRequestValidators.ValidateRefreshTokenGrant(authRequest);
             if (!refreshTokenRequestValidationResult.Successful) return InvokeResult<AuthResponse>.FromInvokeResult(refreshTokenRequestValidationResult);
 
             var appUser = await _userManager.FindByNameAsync(authRequest.UserName);
             if (appUser == null)
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_RefreshTokenGrantAsync", UserAdminErrorCodes.AuthCouldNotFindUserAccount.Message, new KeyValuePair<string, string>("id", authRequest.UserName));
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_RefreshTokenGrantAsync", UserAdminErrorCodes.AuthCouldNotFindUserAccount.Message, new KeyValuePair<string, string>("id", userName));
                 return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
 

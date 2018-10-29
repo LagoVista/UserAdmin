@@ -102,7 +102,11 @@ namespace LagoVista.UserAdmin.Models.Users
         [FormField(LabelResource: UserAdminResources.Names.AppUser_IsAppBuilder, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool IsAppBuilder { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_IsUserDevice, FieldType: FieldTypes.CheckBox, IsUserEditable:false, ResourceType: typeof(UserAdminResources))]
         public bool IsUserDevice { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Appuser_IsRuntimeUser, FieldType: FieldTypes.CheckBox, IsUserEditable: false, ResourceType: typeof(UserAdminResources))]
+        public bool IsRuntimeuser { get; set; }
 
 
         [FormField(LabelResource: UserAdminResources.Names.AppUser_PhoneNumber, FieldType: FieldTypes.Phone, ResourceType: typeof(UserAdminResources))]
@@ -170,8 +174,14 @@ namespace LagoVista.UserAdmin.Models.Users
                 CreationDate = CreationDate,
                 IsPreviewUser = IsPreviewUser,
                 IsOrgAdmin = IsOrgAdmin,
+                IsAppBuilder = IsAppBuilder,
+                IsRuntimeUser = IsRuntimeuser,
+                IsUserDevice = IsUserDevice,
                 CurrentOrganization = CurrentOrganization,
                 Email = Email,
+                PrimaryDevice = PrimaryDevice,
+                DeviceConfiguration = DeviceConfiguration,
+                DeviceRepo = DeviceRepo,
                 EmailConfirmed = EmailConfirmed,
                 LastUpdatedBy = LastUpdatedBy,
                 LastUpdatedDate = LastUpdatedDate,
@@ -190,6 +200,9 @@ namespace LagoVista.UserAdmin.Models.Users
                 Id = Id,
                 IsSystemAdmin = IsSystemAdmin,
                 IsOrgAdmin = isOrgAdmin,
+                IsRuntimeUser = IsRuntimeuser,
+                IsAppBuilder= IsAppBuilder,
+                IsUserDevice = IsUserDevice,
                 Name = Name,
                 PhoneNumberConfirmed = PhoneNumberConfirmed,
                 ProfileImageUrl = ProfileImageUrl,

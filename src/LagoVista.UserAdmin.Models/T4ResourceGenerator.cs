@@ -86,9 +86,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AppUser_IsOrgAdmin
 
 		public static string AppUser_IsOrgAdmin { get { return GetResourceString("AppUser_IsOrgAdmin"); } }
+//Resources:UserAdminResources:Appuser_IsRuntimeUser
+
+		public static string Appuser_IsRuntimeUser { get { return GetResourceString("Appuser_IsRuntimeUser"); } }
 //Resources:UserAdminResources:AppUser_IsSystemAdmin
 
 		public static string AppUser_IsSystemAdmin { get { return GetResourceString("AppUser_IsSystemAdmin"); } }
+//Resources:UserAdminResources:AppUser_IsUserDevice
+
+		public static string AppUser_IsUserDevice { get { return GetResourceString("AppUser_IsUserDevice"); } }
 //Resources:UserAdminResources:AppUser_LastName
 
 		public static string AppUser_LastName { get { return GetResourceString("AppUser_LastName"); } }
@@ -825,7 +831,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AppUser_Help = "AppUser_Help";
 			public const string AppUser_IsAppBuilder = "AppUser_IsAppBuilder";
 			public const string AppUser_IsOrgAdmin = "AppUser_IsOrgAdmin";
+			public const string Appuser_IsRuntimeUser = "Appuser_IsRuntimeUser";
 			public const string AppUser_IsSystemAdmin = "AppUser_IsSystemAdmin";
+			public const string AppUser_IsUserDevice = "AppUser_IsUserDevice";
 			public const string AppUser_LastName = "AppUser_LastName";
 			public const string AppUser_NewPassword = "AppUser_NewPassword";
 			public const string AppUser_OldPassword = "AppUser_OldPassword";

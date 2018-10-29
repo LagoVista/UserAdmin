@@ -875,4 +875,10 @@
   <data name="AppUser_IsAppBuilder" xml:space="preserve">
     <value>Is Application Builder</value>
   </data>
+  <data name="Appuser_IsRuntimeUser" xml:space="preserve">
+    <value>Is Runtime User</value>
+  </data>
+  <data name="AppUser_IsUserDevice" xml:space="preserve">
+    <value>Is User Device</value>
+  </data>
 </root>
