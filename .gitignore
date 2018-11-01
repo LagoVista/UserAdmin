@@ -10,6 +10,9 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+*.csproj.bak
+*.nuspec.txt
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
