@@ -191,7 +191,7 @@ namespace LagoVista.UserAdmin.Models.Users
             };
         }
 
-        public UserInfoSummary ToUserInfoSummary(bool isOrgAdmin)
+        public UserInfoSummary ToUserInfoSummary(bool isOrgAdmin, bool isAppBuilder)
         {
             return new UserInfoSummary()
             {
@@ -200,8 +200,9 @@ namespace LagoVista.UserAdmin.Models.Users
                 Id = Id,
                 IsSystemAdmin = IsSystemAdmin,
                 IsOrgAdmin = isOrgAdmin,
-                IsRuntimeUser = IsRuntimeuser,
-                IsAppBuilder= IsAppBuilder,
+                IsAppBuilder = isAppBuilder,
+
+                IsRuntimeUser = IsRuntimeuser,                
                 IsUserDevice = IsUserDevice,
                 Name = Name,
                 PhoneNumberConfirmed = PhoneNumberConfirmed,

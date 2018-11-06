@@ -660,7 +660,7 @@ namespace LagoVista.UserAdmin.Managers
                 orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
                 await _orgUserRepo.UpdateOrgUserAsync(orgUser);
 
-                await LogEntityActionAsync(userId, typeof(AppUser).Name, "SetAsOrgAdmin", org, user);
+                await LogEntityActionAsync(userId, typeof(AppUser).Name, "SetAppBuilder", org, user);
 
                 return InvokeResult.Success;
             }
@@ -688,7 +688,7 @@ namespace LagoVista.UserAdmin.Managers
                 orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
                 await _orgUserRepo.UpdateOrgUserAsync(orgUser);
 
-                await LogEntityActionAsync(userId, typeof(AppUser).Name, "ClearAsOrgAdmin", org, user);
+                await LogEntityActionAsync(userId, typeof(AppUser).Name, "ClearAppBuilder", org, user);
 
                 return InvokeResult.Success;
             }
@@ -703,7 +703,6 @@ namespace LagoVista.UserAdmin.Managers
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Read, new SecurityHelper() { OrgId = orgId });
             var orgUsers = await _orgUserRepo.GetUsersForOrgAsync(orgId);
-            var userIds = (from orgUser in orgUsers select orgUser.UserId).ToList();
             return await _appUserRepo.GetUserSummaryForListAsync(orgUsers);
         }
 

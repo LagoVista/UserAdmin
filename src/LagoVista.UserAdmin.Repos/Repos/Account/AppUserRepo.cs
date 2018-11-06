@@ -97,7 +97,7 @@ namespace LagoVista.UserAdmin.Repos.Users
         public async Task<ListResponse<UserInfoSummary>> GetDeviceUsersAsync(string deviceRepoId, ListRequest listRequest)
         {
             var users = await QueryAsync(usr => usr.IsUserDevice == true && usr.DeviceRepo != null && usr.DeviceRepo.Id == deviceRepoId, listRequest);
-            return ListResponse<UserInfoSummary>.Create(users.Model.Select(usr => usr.ToUserInfoSummary(false)));
+            return ListResponse<UserInfoSummary>.Create(users.Model.Select(usr => usr.ToUserInfoSummary(false, false)));
         }
 
         public async Task<IEnumerable<UserInfoSummary>> GetUserSummaryForListAsync(IEnumerable<OrgUser> orgUsers)
@@ -128,7 +128,7 @@ namespace LagoVista.UserAdmin.Repos.Users
                                 in appUsers
                                 join orgUser
                                 in orgUsers on appUser.Id equals orgUser.UserId
-                                select appUser.ToUserInfoSummary(orgUser.IsOrgAdmin);
+                                select appUser.ToUserInfoSummary(orgUser.IsOrgAdmin, orgUser.IsAppBuilder);
 
             return userSummaries;
         }
