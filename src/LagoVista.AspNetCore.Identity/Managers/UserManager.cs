@@ -156,6 +156,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             var updatedUser = await _userManager.FindByIdAsync(userId);
             updatedUser.IsSystemAdmin = true;
+            updateByUser.IsAccountDisabled = false;
             updatedUser.LastUpdatedBy = user;
             updatedUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
 

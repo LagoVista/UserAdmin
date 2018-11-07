@@ -108,6 +108,9 @@ namespace LagoVista.UserAdmin.Models.Users
         [FormField(LabelResource: UserAdminResources.Names.Appuser_IsRuntimeUser, FieldType: FieldTypes.CheckBox, IsUserEditable: false, ResourceType: typeof(UserAdminResources))]
         public bool IsRuntimeuser { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Appuser_IsAccountDisabled, FieldType: FieldTypes.CheckBox, IsUserEditable: false, ResourceType: typeof(UserAdminResources))]
+        public bool IsAccountDisabled { get; set; }
+
 
         [FormField(LabelResource: UserAdminResources.Names.AppUser_PhoneNumber, FieldType: FieldTypes.Phone, ResourceType: typeof(UserAdminResources))]
         public string PhoneNumber { get; set; }
@@ -177,12 +180,13 @@ namespace LagoVista.UserAdmin.Models.Users
                 IsAppBuilder = IsAppBuilder,
                 IsRuntimeUser = IsRuntimeuser,
                 IsUserDevice = IsUserDevice,
+                IsAccountDisabled = IsAccountDisabled,
                 CurrentOrganization = CurrentOrganization,
                 Email = Email,
                 PrimaryDevice = PrimaryDevice,
                 DeviceConfiguration = DeviceConfiguration,
                 DeviceRepo = DeviceRepo,
-                EmailConfirmed = EmailConfirmed,
+                EmailConfirmed = EmailConfirmed,                
                 LastUpdatedBy = LastUpdatedBy,
                 LastUpdatedDate = LastUpdatedDate,
                 PhoneNumber = PhoneNumber,
@@ -201,7 +205,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 IsSystemAdmin = IsSystemAdmin,
                 IsOrgAdmin = isOrgAdmin,
                 IsAppBuilder = isAppBuilder,
-
+                IsAccountDisabled = IsAccountDisabled,
                 IsRuntimeUser = IsRuntimeuser,                
                 IsUserDevice = IsUserDevice,
                 Name = Name,

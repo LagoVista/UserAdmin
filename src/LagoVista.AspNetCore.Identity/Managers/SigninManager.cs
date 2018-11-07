@@ -6,7 +6,6 @@ using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Resources;
 using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -37,8 +36,19 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var signInResult = await _signinManager.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
 
             var appUser = await _userManager.FindByEmailAsync(userName);
+            if (appUser == null)
+            {
+                await LogEntityActionAsync(userName, typeof(AppUser).Name, $"Could not find user with account [{userName}].", appUser.CurrentOrganization, appUser.ToEntityHeader());
+                return InvokeResult.FromError($"Could not find user [{userName}].");
+            }
 
-            if (appUser != null && appUser.CurrentOrganization != null)
+            if(appUser.IsAccountDisabled)
+            {
+                await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed - Account Disabled", appUser.CurrentOrganization, appUser.ToEntityHeader());
+                return InvokeResult.FromError($"Account [{userName}] is disabled.");
+            }
+
+            if (appUser.CurrentOrganization != null)
             {
                 var isOrgAdmin = await _orgManager.IsUserOrgAdminAsync(appUser.CurrentOrganization.Id, appUser.Id);
                 if (isOrgAdmin != appUser.IsOrgAdmin)
@@ -56,19 +66,15 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             if (signInResult.IsLockedOut)
             {
-                if (appUser != null)
-                {
-                    await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed - Locked Out", appUser.CurrentOrganization, appUser.ToEntityHeader());
-                }
+
+                await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed - Locked Out", appUser.CurrentOrganization, appUser.ToEntityHeader());
 
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AccessTokenGrantAsync", UserAdminErrorCodes.AuthUserLockedOut.Message, new KeyValuePair<string, string>("email", userName));
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthUserLockedOut.ToErrorMessage());
             }
 
-            if (appUser != null)
-            {
-                await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed", appUser.CurrentOrganization, appUser.ToEntityHeader());
-            }
+            await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed", appUser.CurrentOrganization, appUser.ToEntityHeader());
+
 
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AccessTokenGrantAsync", UserAdminErrorCodes.AuthInvalidCredentials.Message, new KeyValuePair<string, string>("email", userName));
             return InvokeResult.FromErrors(UserAdminErrorCodes.AuthInvalidCredentials.ToErrorMessage());

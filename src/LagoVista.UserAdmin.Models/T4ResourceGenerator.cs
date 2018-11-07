@@ -80,6 +80,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AppUser_Help
 
 		public static string AppUser_Help { get { return GetResourceString("AppUser_Help"); } }
+//Resources:UserAdminResources:Appuser_IsAccountDisabled
+
+		public static string Appuser_IsAccountDisabled { get { return GetResourceString("Appuser_IsAccountDisabled"); } }
 //Resources:UserAdminResources:AppUser_IsAppBuilder
 
 		public static string AppUser_IsAppBuilder { get { return GetResourceString("AppUser_IsAppBuilder"); } }
@@ -829,6 +832,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AppUser_Email = "AppUser_Email";
 			public const string AppUser_FirstName = "AppUser_FirstName";
 			public const string AppUser_Help = "AppUser_Help";
+			public const string Appuser_IsAccountDisabled = "Appuser_IsAccountDisabled";
 			public const string AppUser_IsAppBuilder = "AppUser_IsAppBuilder";
 			public const string AppUser_IsOrgAdmin = "AppUser_IsOrgAdmin";
 			public const string Appuser_IsRuntimeUser = "Appuser_IsRuntimeUser";

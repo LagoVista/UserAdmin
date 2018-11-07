@@ -97,12 +97,21 @@ namespace LagoVista.UserAdmin.Managers
             if (appUser.IsSystemAdmin != user.IsSystemAdmin)
             {
                 var updateByAppUser = await GetUserByIdAsync(updatedByUser.Id, org, updatedByUser);
+                if (updateByAppUser == null)
+                {
+                    return InvokeResult.FromError($"Could not find updating user with id: {updateByAppUser.Id}.");
+                }
+
                 if (!updateByAppUser.IsSystemAdmin)
                 {
                     _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_UpdateUserAsync", UserAdminErrorCodes.AuthNotSysAdmin.Message);
                     return InvokeResult.FromErrors(UserAdminErrorCodes.AuthNotSysAdmin.ToErrorMessage());
                 }
                 appUser.IsSystemAdmin = user.IsSystemAdmin;
+                appUser.IsAppBuilder = user.IsAppBuilder;
+                appUser.IsOrgAdmin = user.IsOrgAdmin;
+                appUser.IsRuntimeuser = user.IsRuntimeUser;
+                appUser.IsUserDevice = user.IsUserDevice;
             }
 
             ValidationCheck(appUser, Actions.Update);
@@ -114,6 +123,67 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
+        public async Task<InvokeResult> SetApprovedAsync(string userId, EntityHeader org, EntityHeader approvingUser)
+        {
+            await AuthorizeAsync(approvingUser, org, "SetApporvedStatus", userId);
+
+            var appUser = await GetUserByIdAsync(approvingUser.Id, org, approvingUser);
+            if (appUser == null)
+            {
+                return InvokeResult.FromError($"Could not find approving user with id: {approvingUser.Id}.");
+            }
+
+            if(appUser.CurrentOrganization.Id != org.Id)
+            {
+                return InvokeResult.FromError("Org Mismatch on current user.");
+            }
+
+            if(!appUser.IsOrgAdmin)
+            {
+                return InvokeResult.FromError("Must be an org admin to automically approve a user.");
+            }
+
+            var user = await _appUserRepo.FindByIdAsync(userId);
+            user.EmailConfirmed = true;
+            user.PhoneNumberConfirmed = true;
+            user.IsAccountDisabled = false;
+            user.CurrentOrganization = org;
+
+            await _appUserRepo.UpdateAsync(user);
+
+            await LogEntityActionAsync(userId, typeof(AppUser).Name, "Auto Approved", org, approvingUser);
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> DisableAccountAsync(string userId, EntityHeader org, EntityHeader adminUser)
+        {
+            await AuthorizeAsync(adminUser, org, "DisabledUser", userId);
+
+            var appUser = await GetUserByIdAsync(adminUser.Id, org, adminUser);
+            if (appUser == null)
+            {
+                return InvokeResult.FromError($"Could not find admin user with id: {adminUser.Id}.");
+            }
+
+            if (appUser.CurrentOrganization.Id != org.Id)
+            {
+                return InvokeResult.FromError("Org Mismatch on current user.");
+            }
+
+            if (!appUser.IsOrgAdmin)
+            {
+                return InvokeResult.FromError("Must be an org admin to disable a user.");
+            }
+
+            var user = await _appUserRepo.FindByIdAsync(userId);
+            user.IsAccountDisabled = true;
+            await _appUserRepo.UpdateAsync(user);
+            await LogEntityActionAsync(userId, typeof(AppUser).Name, "Disabe User Account", org, adminUser);
+
+            return InvokeResult.Success;
+        }
+
         public async Task<ListResponse<UserInfoSummary>> GetDeviceUsersAsync(string deviceRepoId, EntityHeader org, EntityHeader user, ListRequest listRequest)
         {
             await AuthorizeAsync(user, org, "GetDeviceUsersAsync", deviceRepoId);
@@ -121,7 +191,7 @@ namespace LagoVista.UserAdmin.Managers
             return await _appUserRepo.GetDeviceUsersAsync(deviceRepoId, listRequest);
         }
 
-        public async Task<InvokeResult<AuthResponse>> CreateUserAsync(RegisterUser newUser)
+        public async Task<InvokeResult<AuthResponse>> CreateUserAsync(RegisterUser newUser, bool sendAuthEmail = true, bool autoLogin = true)
         {
             if (String.IsNullOrEmpty(newUser.Email))
             {
@@ -191,7 +261,12 @@ namespace LagoVista.UserAdmin.Managers
             if (identityResult.Successful)
             {
                 await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "New User Registered", null, appUser.ToEntityHeader());
-                await _signInManager.SignInAsync(appUser);
+
+                if (autoLogin)
+                {
+                    await _signInManager.SignInAsync(appUser);
+                }
+
                 if (newUser.ClientType != "WEBAPP")
                 {
                     var authRequest = new AuthRequest()
@@ -221,7 +296,10 @@ namespace LagoVista.UserAdmin.Managers
                 }
                 else
                 {
-                    await _userVerificationmanager.SendConfirmationEmailAsync(null, appUser.ToEntityHeader());
+                    if (sendAuthEmail)
+                    {
+                        await _userVerificationmanager.SendConfirmationEmailAsync(null, appUser.ToEntityHeader());
+                    }
 
                     /* If we are logging in as web app, none of this applies */
                     return InvokeResult<AuthResponse>.Create(new AuthResponse()

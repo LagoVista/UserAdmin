@@ -605,6 +605,12 @@ namespace LagoVista.UserAdmin.Managers
                 orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
                 await _orgUserRepo.UpdateOrgUserAsync(orgUser);
 
+                var appUser = await _appUserRepo.FindByIdAsync(userId);
+                appUser.IsOrgAdmin = true;
+                appUser.IsAppBuilder = true;
+                appUser.IsAccountDisabled = false;
+                await _appUserRepo.UpdateAsync(appUser);
+
                 await LogEntityActionAsync(userId, typeof(AppUser).Name, "SetAsOrgAdmin", org, user);
 
                 return InvokeResult.Success;
@@ -627,10 +633,17 @@ namespace LagoVista.UserAdmin.Managers
 
                 var orgUser = await _orgUserRepo.GetOrgUserAsync(org.Id, userId);
                 orgUser.IsOrgAdmin = false;
+                
                 orgUser.LastUpdatedBy = user.Text;
                 orgUser.LastUpdatedById = user.Id;
                 orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
                 await _orgUserRepo.UpdateOrgUserAsync(orgUser);
+
+                var appUser = await _appUserRepo.FindByIdAsync(userId);
+                appUser.IsOrgAdmin = false;
+                appUser.IsAccountDisabled = false;
+                await _appUserRepo.UpdateAsync(appUser);
+
 
                 await LogEntityActionAsync(userId, typeof(AppUser).Name, "ClearAsOrgAdmin", org, user);
 
@@ -660,6 +673,11 @@ namespace LagoVista.UserAdmin.Managers
                 orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
                 await _orgUserRepo.UpdateOrgUserAsync(orgUser);
 
+                var appUser = await _appUserRepo.FindByIdAsync(userId);
+                appUser.IsAppBuilder = true;
+                appUser.IsAccountDisabled = false;
+                await _appUserRepo.UpdateAsync(appUser);
+
                 await LogEntityActionAsync(userId, typeof(AppUser).Name, "SetAppBuilder", org, user);
 
                 return InvokeResult.Success;
@@ -687,6 +705,13 @@ namespace LagoVista.UserAdmin.Managers
                 orgUser.LastUpdatedById = user.Id;
                 orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
                 await _orgUserRepo.UpdateOrgUserAsync(orgUser);
+
+                var appUser = await  _appUserRepo.FindByIdAsync(userId);
+                appUser.IsOrgAdmin = false;
+                appUser.IsAppBuilder = false;
+                appUser.IsAccountDisabled = false;
+                await  _appUserRepo.UpdateAsync(appUser);
+
 
                 await LogEntityActionAsync(userId, typeof(AppUser).Name, "ClearAppBuilder", org, user);
 

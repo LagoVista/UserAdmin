@@ -60,9 +60,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (!accessTokenRequestValidationResult.Successful) return InvokeResult<AuthResponse>.FromInvokeResult(accessTokenRequestValidationResult);
 
             var userName = authRequest.UserName;
-            var password = authRequest.Password;
-
-            
+            var password = authRequest.Password;            
 
             switch (authRequest.AuthType)
             {
@@ -91,6 +89,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
 
+            if(appUser.IsAccountDisabled)
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AccessTokenGrantAsync", "UserLogin Failed - Account Disabled", new KeyValuePair<string, string>("email", userName));
+                return InvokeResult<AuthResponse>.FromError("Accound Disabled.");
+            }
+
             if (String.IsNullOrEmpty(authRequest.AppInstanceId))
             {
                 /* This generally happens for the first time the app is logged in on a new device, if it is logged in again future times it will resend the app id */
@@ -114,7 +118,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var authResponse = _tokenHelper.GenerateAuthResponse(appUser, authRequest, refreshTokenResponse);
             return authResponse;
         }
-
 
         public async Task<InvokeResult<AuthResponse>> RefreshTokenGrantAsync(AuthRequest authRequest)
         {
@@ -143,6 +146,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_RefreshTokenGrantAsync", UserAdminErrorCodes.AuthCouldNotFindUserAccount.Message, new KeyValuePair<string, string>("id", userName));
                 return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
+            }
+
+            if (appUser.IsAccountDisabled)
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_RefreshTokenGrantAsync", "UserLogin Failed - Account Disabled", new KeyValuePair<string, string>("email", userName));
+                return InvokeResult<AuthResponse>.FromError("Accound Disabled.");
             }
 
             if (!String.IsNullOrEmpty(authRequest.OrgId) && (appUser.CurrentOrganization == null || authRequest.OrgId != appUser.CurrentOrganization.Id))

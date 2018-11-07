@@ -881,4 +881,7 @@
   <data name="AppUser_IsUserDevice" xml:space="preserve">
     <value>Is User Device</value>
   </data>
+  <data name="Appuser_IsAccountDisabled" xml:space="preserve">
+    <value>Is Account Disabled</value>
+  </data>
 </root>
