@@ -4,14 +4,14 @@
     <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.555-beta1508" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.615-beta1617" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
     <PackageReference Include="Twilio" Version="5.22.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.1.6" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="MailKit" Version="2.0.7" />
-    <PackageReference Include="LagoVista.Core" Version="2.1.555-beta1508" />
-    <PackageReference Include="LagoVista.Core.Authentication" Version="2.1.555-beta1508" />
+    <PackageReference Include="MailKit" Version="2.1.2" />
+    <PackageReference Include="LagoVista.Core" Version="2.1.615-beta1617" />
+    <PackageReference Include="LagoVista.Core.Authentication" Version="2.1.615-beta1617" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.2" />
   </ItemGroup>
   <ItemGroup>
