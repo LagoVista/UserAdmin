@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
+using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
@@ -33,12 +34,15 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public async Task<InvokeResult> PasswordSignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure)
         {
+            if (string.IsNullOrEmpty(userName)) return InvokeResult.FromError($"User name is a required field [{userName}].");
+            if (string.IsNullOrEmpty(password)) return InvokeResult.FromError($"Password is a required field [{userName}].");
+
             var signInResult = await _signinManager.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
 
             var appUser = await _userManager.FindByEmailAsync(userName);
             if (appUser == null)
             {
-                await LogEntityActionAsync(userName, typeof(AppUser).Name, $"Could not find user with account [{userName}].", appUser.CurrentOrganization, appUser.ToEntityHeader());
+                await LogEntityActionAsync(userName, typeof(AppUser).Name, $"Could not find user with account [{userName}].", EntityHeader.Create("unkonwn", "unknown"), EntityHeader.Create(userName, userName));
                 return InvokeResult.FromError($"Could not find user [{userName}].");
             }
 
