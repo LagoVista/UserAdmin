@@ -9,6 +9,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
     {
         public const string None = "-";
 
+        public const string InstanceId = "com.lagovista.iot.instanceid";
+        public const string InstanceName = "com.lagovista.iot.instancename";
+        
         public const string CurrentUserId = "com.lagovista.iot.userid";
         public const string CurrentOrgName = "com.lagovista.iot.currentorgname";
         public const string CurrentOrgId = "com.lagovista.iot.currentorgid";
