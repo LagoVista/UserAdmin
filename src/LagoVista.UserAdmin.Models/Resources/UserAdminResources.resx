@@ -238,7 +238,9 @@
     <value>The user [USERS_FULL_NAME] with an email address of [EMAIL_ADDRESS] already belongs to this organization.</value>
   </data>
   <data name="InviteUser_ClickHere" xml:space="preserve">
-    <value>&lt;p&gt;Please click on the &lt;a href="[ACCEPT_LINK]"&gt;browser link&lt;/a&gt; or the &lt;a href="[MOBILE_ACCEPT_LINK]"&gt; mobile app link&lt;/a&gt;to accept the invitation.&lt;/p&gt;</value>
+    <value>&lt;p&gt;To accept the invitation and begin using the platform, please click one of the links below:&lt;/p&gt;
+    
+&lt;ul&gt;&lt;li&gt;Mobile app: &lt;a href='[MOBILE_ACCEPT_LINK]'&gt;open in app&lt;/a&gt;&lt;/li&gt;&lt;li&gt;Browser: &lt;a href='[ACCEPT_LINK]'&gt;open in browser&lt;/a&gt;&lt;/li&gt;&lt;li&gt;Web App: &lt;a href='[ACCEPT_LINK]'&gt;open in web app&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</value>
   </data>
   <data name="InviteUser_Greeting_Label" xml:space="preserve">
     <value>Message</value>
