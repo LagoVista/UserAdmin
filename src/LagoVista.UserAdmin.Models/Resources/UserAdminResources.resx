@@ -825,7 +825,7 @@
     <value>Missing Password for User Registration</value>
   </data>
   <data name="RegErr_UserAlreadyExists" xml:space="preserve">
-    <value>A User with that Email Already Exists.  Please login with that account, if you don't know your password use the Forgot Password Link.</value>
+    <value>You have entered an email account that is already in use. Please log on to your existing account. If you have forgotten your password, you can reset it by clicking on the Forgot Password link. If you believe you have received this message in error, please contact support.</value>
   </data>
   <data name="AuthErr_InviteNotActive" xml:space="preserve">
     <value>Sorry, this invitation is not availabe, you have already accepted it, or it has been revoked.</value>
