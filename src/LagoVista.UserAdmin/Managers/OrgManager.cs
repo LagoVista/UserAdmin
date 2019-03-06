@@ -39,6 +39,7 @@ namespace LagoVista.UserAdmin.Managers
         readonly IOrganizationRoleRepo _orgRoleRepo;
         readonly IAppUserRepo _appUserRepo;
         readonly IAdminLogger _adminLogger;
+        readonly ISignInManager _signInManager;
         #endregion
 
         #region Ctor
@@ -49,6 +50,7 @@ namespace LagoVista.UserAdmin.Managers
             IInviteUserRepo inviteUserRepo,
             ILocationUserRepo locationUserRepo,
             ILocationRoleRepo locationRoleRepo,
+            ISignInManager signInManager,
             IOrganizationRoleRepo orgRoleRepo,
             ISmsSender smsSender,
             IEmailSender emailSender,
@@ -112,11 +114,20 @@ namespace LagoVista.UserAdmin.Managers
                 return addUserResult;
             }
 
-            if (EntityHeader.IsNullOrEmpty(currentUser.CurrentOrganization)) currentUser.CurrentOrganization = organization.ToEntityHeader();
             if (currentUser.Organizations == null) currentUser.Organizations = new List<EntityHeader>();
 
             /* add the organization ot the newly created user */
             currentUser.Organizations.Add(organization.ToEntityHeader());
+
+            //In this case we are creating a new org for first time through, make sure they have all the correct privelages.
+            if (EntityHeader.IsNullOrEmpty(currentUser.CurrentOrganization))
+            {
+                currentUser.IsOrgAdmin = true;
+                currentUser.IsAppBuilder = true;
+                currentUser.CurrentOrganization = organization.ToEntityHeader();
+                await _signInManager.SignInAsync(currentUser);
+            }
+
 
             /* Final update of the user */
             await _appUserRepo.UpdateAsync(currentUser);
