@@ -32,6 +32,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return _signinManager.SignInAsync(user, true);
         }
 
+        public async Task RefreshUserLoginAsync(AppUser user)
+        {
+            var appUser = await _userManager.FindByIdAsync(user.Id);
+            await _signinManager.SignInAsync(appUser, true);
+        }
+
         public async Task<InvokeResult> PasswordSignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure)
         {
             if (string.IsNullOrEmpty(userName)) return InvokeResult.FromError($"User name is a required field [{userName}].");

@@ -39,7 +39,6 @@ namespace LagoVista.UserAdmin.Managers
         readonly IOrganizationRoleRepo _orgRoleRepo;
         readonly IAppUserRepo _appUserRepo;
         readonly IAdminLogger _adminLogger;
-        readonly ISignInManager _signInManager;
         #endregion
 
         #region Ctor
@@ -50,7 +49,6 @@ namespace LagoVista.UserAdmin.Managers
             IInviteUserRepo inviteUserRepo,
             ILocationUserRepo locationUserRepo,
             ILocationRoleRepo locationRoleRepo,
-            ISignInManager signInManager,
             IOrganizationRoleRepo orgRoleRepo,
             ISmsSender smsSender,
             IEmailSender emailSender,
@@ -125,9 +123,7 @@ namespace LagoVista.UserAdmin.Managers
                 currentUser.IsOrgAdmin = true;
                 currentUser.IsAppBuilder = true;
                 currentUser.CurrentOrganization = organization.ToEntityHeader();
-                await _signInManager.SignInAsync(currentUser);
             }
-
 
             /* Final update of the user */
             await _appUserRepo.UpdateAsync(currentUser);

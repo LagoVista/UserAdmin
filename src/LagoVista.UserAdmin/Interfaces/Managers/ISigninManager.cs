@@ -10,5 +10,12 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> PasswordSignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure);
 
         Task SignInAsync(AppUser user);
+
+        /// <summary>
+        /// Method can be called to refresh the user claims
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        Task RefreshUserLoginAsync(AppUser user);
     }
 }
