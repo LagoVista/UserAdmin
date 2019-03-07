@@ -148,7 +148,7 @@
     <value>Password</value>
   </data>
   <data name="AppUser_PasswordConfirmPasswordMatch" xml:space="preserve">
-    <value>Password and Confirm Password shoudl match.</value>
+    <value>Password and Confirm Password should match.</value>
   </data>
   <data name="AppUser_PhoneNumber" xml:space="preserve">
     <value>Phone Number</value>
