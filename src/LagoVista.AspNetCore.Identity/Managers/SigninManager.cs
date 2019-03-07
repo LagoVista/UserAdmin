@@ -41,7 +41,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public async Task<InvokeResult> PasswordSignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure)
         {
             if (string.IsNullOrEmpty(userName)) return InvokeResult.FromError($"User name is a required field [{userName}].");
-            if (string.IsNullOrEmpty(password)) return InvokeResult.FromError($"Password is a required field [{userName}].");
+            if (string.IsNullOrEmpty(password)) return InvokeResult.FromError($"Password is a required field [{userName}].");            
 
             var signInResult = await _signinManager.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
 
