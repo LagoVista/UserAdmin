@@ -238,9 +238,10 @@
     <value>The user [USERS_FULL_NAME] with an email address of [EMAIL_ADDRESS] already belongs to this organization.</value>
   </data>
   <data name="InviteUser_ClickHere" xml:space="preserve">
-    <value>&lt;p&gt;To accept the invitation and begin using the platform, please click one of the links below:&lt;/p&gt;
-    
-&lt;ul&gt;&lt;li&gt;Mobile app: &lt;a href='[MOBILE_ACCEPT_LINK]'&gt;open in app&lt;/a&gt;&lt;/li&gt;&lt;li&gt;Browser: &lt;a href='[ACCEPT_LINK]'&gt;open in browser&lt;/a&gt;&lt;/li&gt;&lt;li&gt;Web App: &lt;a href='[ACCEPT_LINK]'&gt;open in web app&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</value>
+    <value>&lt;p&gt;To accept the invitation and begin using the platform, please click &lt;a href='[ACCEPT_LINK]'&gt;open in browser&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Or copy and paste the link below into the address bar of yoru browser
+&lt;div&gt;[ACCEPT_LINK]&lt;/div&gt;
+&lt;/p&gt;</value>
   </data>
   <data name="InviteUser_Greeting_Label" xml:space="preserve">
     <value>Message</value>
@@ -380,7 +381,7 @@
     <value>Organization Name</value>
   </data>
   <data name="Organization_NamespaceInUse" xml:space="preserve">
-    <value>This namespace is already in use, please select a new one.</value>
+    <value>A unique namespace is required. You have entered a namespace that is already in use, please enter a new namespace.</value>
   </data>
   <data name="Organization_Primary_Location" xml:space="preserve">
     <value>Primary Location</value>
@@ -739,7 +740,7 @@
   <data name="Email_ResetPassword_Body" xml:space="preserve">
     <value>&lt;p&gt;You have requested to have your password reset.&lt;/p&gt;
 
-&lt;p&gt;Please Reset your Password by clicking this &lt;a href='[CALLBACK_URL]'&gt;browser link&lt;/a&gt; on your desktop or &lt;a href='[MOBILE_CALLBACK_URL]'&gt;mobile link&lt;/a&gt; on your mobile phone.&lt;/p&gt;
+&lt;p&gt;Please Reset your Password by clicking this &lt;a href='[CALLBACK_URL]'&gt;Reset Password&lt;/a&gt;link.&lt;/p&gt;
 
 &lt;p&gt;If you did not request your password to be changed, you can safely ignore this email.&lt;/p&gt;</value>
   </data>
@@ -750,8 +751,9 @@
     <value>Sorry, there was an error sending your reset password link, please try again later.</value>
   </data>
   <data name="Email_Verification_Body" xml:space="preserve">
-    <value>&lt;p&gt;Thank you for registering for access to NuvIoT.&lt;/p&gt; &lt;p/&gt;To confirm your email address and complete the registration process, please click on the this &lt;a href='[CALLBACK_URL]' link&lt;/a&gt; or paste this link into your browser
-&lt;/ul&gt;</value>
+    <value>&lt;p&gt;Thank you for registering for access to NuvIoT.&lt;/p&gt; &lt;p&gt;To confirm your email address and complete the registration process, please click on this &lt;a href='[CALLBACK_URL]'&gt;Confirm Email&lt;/a&gt; link or copy and paste the link into your browser.&lt;/p&gt; 
+&lt;div style='font-family:consolas'&gt;[CALLBACK_URL]&lt;/div&gt;
+</value>
   </data>
   <data name="Email_Verification_Subject" xml:space="preserve">
     <value>Confirm your [APP_NAME] account</value>
@@ -829,7 +831,7 @@
     <value>You have entered an email account that is already in use. Please log on to your existing account. If you have forgotten your password, you can reset it by clicking on the Forgot Password link. If you believe you have received this message in error, please contact support.</value>
   </data>
   <data name="AuthErr_InviteNotActive" xml:space="preserve">
-    <value>Sorry, this invitation is not availabe, you have already accepted it, or it has been revoked.</value>
+    <value>Sorry, this invitation is not available, you have already accepted it, or it has been revoked.</value>
   </data>
   <data name="InviteErr_EmailInvalid" xml:space="preserve">
     <value>Email Address Is Invalid for Inviting a User.</value>

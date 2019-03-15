@@ -296,7 +296,7 @@ namespace LagoVista.AspNetCore.Identity.Services
 		<!--[if (gte mso 9)|(IE)]>
                 
 		<![endif]-->
-		<table width=""100%"" cellpadding=""0"" cellspacing=""0"" border=""0"" style=""max-width:600px""><div>
+		<table width=""100%"" cellpadding=""20"" cellspacing=""0"" border=""0"" style=""max-width:600px; background-color:white""><div>
             <tr>
                 <td>
                     <img src=""{_appConfig.AppLogo}"" />
@@ -308,7 +308,7 @@ namespace LagoVista.AspNetCore.Identity.Services
                 </td>
             </tr>
         </table>
-    <p>Please do not reply to this email as it is an unmonitored address</p>
+    <p>Please do not reply to this email as it is an unmonitored address.</p>
     <a href=""mailto:support@software-logistics.com"">Contact Support</a>
 
 </div>
