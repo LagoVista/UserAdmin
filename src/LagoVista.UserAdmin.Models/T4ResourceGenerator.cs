@@ -697,6 +697,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:RegErr_UserAlreadyExists
 
 		public static string RegErr_UserAlreadyExists { get { return GetResourceString("RegErr_UserAlreadyExists"); } }
+//Resources:UserAdminResources:RegisterUserExists_3rdParty
+
+		public static string RegisterUserExists_3rdParty { get { return GetResourceString("RegisterUserExists_3rdParty"); } }
 //Resources:UserAdminResources:RegisterVM_Description
 
 		public static string RegisterVM_Description { get { return GetResourceString("RegisterVM_Description"); } }
@@ -1035,6 +1038,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string RegErr_MissingPassword = "RegErr_MissingPassword";
 			public const string RegErr_MissingPhoneNumber = "RegErr_MissingPhoneNumber";
 			public const string RegErr_UserAlreadyExists = "RegErr_UserAlreadyExists";
+			public const string RegisterUserExists_3rdParty = "RegisterUserExists_3rdParty";
 			public const string RegisterVM_Description = "RegisterVM_Description";
 			public const string RegisterVM_Help = "RegisterVM_Help";
 			public const string RegisterVM_Title = "RegisterVM_Title";

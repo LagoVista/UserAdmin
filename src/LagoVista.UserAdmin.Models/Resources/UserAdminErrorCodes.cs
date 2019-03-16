@@ -52,6 +52,8 @@ namespace LagoVista.UserAdmin.Resources
 
         public static ErrorCode AuthMissingRepoIdForDeviceUser => new ErrorCode() { Code = "AUTH037", Message = "When logging in as a device user you must provide a device repo id." };
 
+        public static ErrorCode RegisterUserExists_3rdParty => new ErrorCode() { Code = "AUTH038", Message = UserAdminResources.RegisterUserExists_3rdParty };
+
 
         public static ErrorCode InviteIsNull => new ErrorCode() { Code = "INVT001", Message = UserAdminResources.InviteErr_InviteIsNull };
         public static ErrorCode InviteEmailIsEmpty=> new ErrorCode() { Code = "INVT002", Message = UserAdminResources.InviteErr_EmailIsEmpty };

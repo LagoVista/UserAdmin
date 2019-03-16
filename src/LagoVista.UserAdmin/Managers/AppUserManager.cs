@@ -203,7 +203,14 @@ namespace LagoVista.UserAdmin.Managers
             if (user != null)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateUserAsync", UserAdminErrorCodes.RegErrorUserExists.Message);
-                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegErrorUserExists.ToErrorMessage());
+                if (sendAuthEmail)
+                {
+                    return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegErrorUserExists.ToErrorMessage());
+                }
+                else
+                {
+                    return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegisterUserExists_3rdParty.ToErrorMessage());
+                }
             }
 
             /* Need to check all these, if any fail, we want to aboart, we need to refactor this into the UserAdmin module :( */
