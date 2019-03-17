@@ -36,6 +36,25 @@ namespace LagoVista.UserAdmin.Managers
             _authRequestValidators = authRequestValidators;
         }
 
+        //In some cases, this will be called from API, we don't want to return API as part of the link.
+        private String GetWebURI()
+        {
+            var environment = _appConfig.WebAddress;
+            if (_appConfig.WebAddress.ToLower().Contains("api"))
+            {
+                switch (_appConfig.Environment)
+                {
+                    case Environments.Development: environment = "https://dev.nuviot.com"; break;
+                    case Environments.Testing: environment = "https://test.nuviot.com"; break;
+                    case Environments.Beta: environment = "https://qa.nuviot.com"; break;
+                    case Environments.Staging: environment = "https://stage.nuviot.com"; break;
+                    case Environments.Production: environment = "https://www.nuviot.com"; break;
+                }
+            }
+
+            return environment;
+        }
+
         public async Task<InvokeResult> SendResetPasswordLinkAsync(SendResetPasswordLink sendResetPasswordLink)
         {
             var validationResult = _authRequestValidators.ValidateSendPasswordLinkRequest(sendResetPasswordLink);
@@ -51,7 +70,7 @@ namespace LagoVista.UserAdmin.Managers
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(appUser);
             var encodedToken = System.Net.WebUtility.UrlEncode(token);
-            var callbackUrl = $"{_appConfig.WebAddress}{ACTION_RESET_PASSWORD}?code={encodedToken}";
+            var callbackUrl = $"{GetWebURI()}{ACTION_RESET_PASSWORD}?code={encodedToken}";
             var mobileCallbackUrl = $"nuviot://resetpassword?code={token}";
 #if DIAG
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_SendResetPasswordLinkAsync", "SentToken",

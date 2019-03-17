@@ -407,13 +407,32 @@ namespace LagoVista.UserAdmin.Managers
             return invite.Status == Invitation.StatusTypes.Sent || invite.Status == Invitation.StatusTypes.Resent || invite.Status == Invitation.StatusTypes.Replaced;
         }
 
+        //In some cases, this will be called from API, we don't want to return API as part of the link.
+        private String GetWebURI()
+        {
+            var environment = AppConfig.WebAddress;
+            if (AppConfig.WebAddress.ToLower().Contains("api"))
+            {
+                switch (AppConfig.Environment)
+                {
+                    case Environments.Development: environment = "https://dev.nuviot.com"; break;
+                    case Environments.Testing: environment = "https://test.nuviot.com"; break;
+                    case Environments.Beta: environment = "https://qa.nuviot.com"; break;
+                    case Environments.Staging: environment = "https://stage.nuviot.com"; break;
+                    case Environments.Production: environment = "https://www.nuviot.com"; break;
+                }
+            }
+
+            return environment;
+        }
+
         private async Task SendInvitationAsync(Invitation inviteModel, string orgName, EntityHeader user)
         {
 
             var subject = UserAdminResources.Invite_Greeting_Subject.Replace(Tokens.APP_NAME, AppConfig.AppName).Replace(Tokens.ORG_NAME, orgName);
             var message = UserAdminResources.InviteUser_Greeting_Message.Replace(Tokens.USERS_FULL_NAME, user.Text).Replace(Tokens.ORG_NAME, orgName).Replace(Tokens.APP_NAME, AppConfig.AppName);
             message += $"<br /><br />{inviteModel.Message}<br /><br />";
-            var acceptLink = $"{AppConfig.WebAddress}/account/acceptinvite/{inviteModel.RowKey}";
+            var acceptLink = $"{GetWebURI()}/account/acceptinvite/{inviteModel.RowKey}";
             var mobileAcceptLink = $"nuviot://acceptinvite?inviteId={inviteModel.RowKey}";
 
             message += UserAdminResources.InviteUser_ClickHere.Replace("[ACCEPT_LINK]", acceptLink).Replace("[MOBILE_ACCEPT_LINK]", mobileAcceptLink);
