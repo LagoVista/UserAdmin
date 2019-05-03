@@ -154,7 +154,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 return InvokeResult<AuthResponse>.FromError("Accound Disabled.");
             }
 
-            if (!String.IsNullOrEmpty(authRequest.OrgId) && (appUser.CurrentOrganization == null || authRequest.OrgId != appUser.CurrentOrganization.Id))
+            if (!String.IsNullOrEmpty(authRequest.OrgId) && appUser.CurrentOrganization == null)
             {
                 var changeOrgResult = await _orgHelper.SetUserOrgAsync(authRequest, appUser);
                 if (!changeOrgResult.Successful) return InvokeResult<AuthResponse>.FromInvokeResult(changeOrgResult);
