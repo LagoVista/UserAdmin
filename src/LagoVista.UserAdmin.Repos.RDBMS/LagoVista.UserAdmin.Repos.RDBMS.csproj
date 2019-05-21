@@ -6,7 +6,7 @@
   <ItemGroup>
     <PackageReference Include="LagoVista.Core" Version="2.1.734-beta1138" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
     <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.734-beta1138" />
