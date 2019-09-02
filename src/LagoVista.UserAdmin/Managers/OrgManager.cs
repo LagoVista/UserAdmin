@@ -39,6 +39,7 @@ namespace LagoVista.UserAdmin.Managers
         readonly IOrganizationRoleRepo _orgRoleRepo;
         readonly IAppUserRepo _appUserRepo;
         readonly IAdminLogger _adminLogger;
+        readonly IOrgInitializer _orgInitializer;
         #endregion
 
         #region Ctor
@@ -55,6 +56,7 @@ namespace LagoVista.UserAdmin.Managers
             IAppConfig appConfig,
             IDependencyManager depManager,
             ISecurity security,
+            IOrgInitializer orgInitializer,
             IAdminLogger logger) : base(logger, appConfig, depManager, security)
         {
 
@@ -70,6 +72,7 @@ namespace LagoVista.UserAdmin.Managers
             _emailSender = emailSender;
             _inviteUserRepo = inviteUserRepo;
             _adminLogger = logger;
+            _orgInitializer = orgInitializer;
         }
         #endregion
 
@@ -127,6 +130,8 @@ namespace LagoVista.UserAdmin.Managers
 
             /* Final update of the user */
             await _appUserRepo.UpdateAsync(currentUser);
+
+            await _orgInitializer.Init(organization.ToEntityHeader(), currentUser.ToEntityHeader(), organizationViewModel.CreateGettingsStartedData);
 
             await LogEntityActionAsync(organization.Id, typeof(Organization).Name, "Created Organization", organization.ToEntityHeader(), user);
 

@@ -15,6 +15,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
     {
         public const string Status_OK = "ok";
         public const string Status_FreeAccount = "freeaccount";
+        public const string Status_TrialAccount = "trialaccount";
         public const string Status_NoPaymentDetails = "nopaymentdetails";
 
         public const string PaymentTokenStatus_OK = "ok";

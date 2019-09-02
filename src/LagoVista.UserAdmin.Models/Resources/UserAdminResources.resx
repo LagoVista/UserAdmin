@@ -890,4 +890,10 @@
   <data name="RegisterUserExists_3rdParty" xml:space="preserve">
     <value>A user with that email account already exists please invite them to this organization.</value>
   </data>
+  <data name="Organization_CreateGettingStartedData" xml:space="preserve">
+    <value>Create Getting Started Data</value>
+  </data>
+  <data name="Organization_CreateGettingStartedData_Help" xml:space="preserve">
+    <value>When you create your organization it can be populated with a few objects that will help getting started a little easier.</value>
+  </data>
 </root>

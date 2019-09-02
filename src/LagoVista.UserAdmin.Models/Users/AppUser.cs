@@ -120,6 +120,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public String Name
         {
             get { return $"{FirstName} {LastName}"; }
+            set { }
         }
 
 

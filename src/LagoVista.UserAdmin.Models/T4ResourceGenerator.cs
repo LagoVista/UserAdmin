@@ -580,6 +580,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_CantCreate
 
 		public static string Organization_CantCreate { get { return GetResourceString("Organization_CantCreate"); } }
+//Resources:UserAdminResources:Organization_CreateGettingStartedData
+
+		public static string Organization_CreateGettingStartedData { get { return GetResourceString("Organization_CreateGettingStartedData"); } }
+//Resources:UserAdminResources:Organization_CreateGettingStartedData_Help
+
+		public static string Organization_CreateGettingStartedData_Help { get { return GetResourceString("Organization_CreateGettingStartedData_Help"); } }
 //Resources:UserAdminResources:Organization_Description
 
 		public static string Organization_Description { get { return GetResourceString("Organization_Description"); } }
@@ -999,6 +1005,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string LoginVM_Title = "LoginVM_Title";
 			public const string Organization = "Organization";
 			public const string Organization_CantCreate = "Organization_CantCreate";
+			public const string Organization_CreateGettingStartedData = "Organization_CreateGettingStartedData";
+			public const string Organization_CreateGettingStartedData_Help = "Organization_CreateGettingStartedData_Help";
 			public const string Organization_Description = "Organization_Description";
 			public const string Organization_Help = "Organization_Help";
 			public const string Organization_Location = "Organization_Location";
