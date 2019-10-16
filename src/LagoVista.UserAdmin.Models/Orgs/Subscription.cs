@@ -11,7 +11,7 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Orgs
 {
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Subscription_Title, UserAdminResources.Names.Subscription_Help, UserAdminResources.Names.Subscription_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class Subscription : IValidateable, IKeyedEntity,  INamedEntity
+    public class Subscription : IValidateable, IKeyedEntity, INamedEntity
     {
         public const string Status_OK = "ok";
         public const string Status_FreeAccount = "freeaccount";
@@ -19,9 +19,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public const string Status_NoPaymentDetails = "nopaymentdetails";
 
         public const string PaymentTokenStatus_OK = "ok";
+        public const string PaymentTokenStatus_Waived = "waived";
         public const string PaymentTokenStatus_Empty = "empty";
         public const string PaymentTokenStatus_Invalid = "invalid";
 
+        public const string SubscriptionKey_Trial = "trial";
 
         public Guid Id { get; set; }
 
@@ -47,11 +49,20 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Common_Key, HelpResource: UserAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key, RegExValidationMessageResource: UserAdminResources.Names.Common_Key_Validation, ResourceType: typeof(UserAdminResources), IsRequired: true)]
         public string Key { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_Name, FieldType:FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsRequired: true)]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Name, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsRequired: true)]
         public string Name { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Description, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources), IsRequired: false)]
         public string Description { get; set; }
+
+        [CustomValidator]
+        public void Validate(ValidationResult result, Actions action)
+        {
+            if (action == Actions.Update && Key == SubscriptionKey_Trial)
+            {
+                result.AddUserError("Can not update trial subscription.");
+            }
+        }
 
         public SubscriptionSummary CreateSummary()
         {
@@ -63,7 +74,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 Key = Key
             };
         }
-    }    
+    }
 
     public class SubscriptionSummary
     {

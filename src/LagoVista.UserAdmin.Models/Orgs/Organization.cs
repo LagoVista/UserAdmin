@@ -38,6 +38,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public bool IsPublic { get; set; }
         public EntityHeader OwnerOrganization { get; set; }
         public EntityHeader OwnerUser { get; set; }
+        public bool IsArchived { get; set; }
 
         public EntityHeader ToEntityHeader()
         {
