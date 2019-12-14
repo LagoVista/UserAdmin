@@ -26,7 +26,6 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> AddSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user)
         {
-
             if (subscription.Key == Subscription.SubscriptionKey_Trial)
             {
                 var subscriptions = await GetSubscriptionsForOrgAsync(org.Id, user);
@@ -89,7 +88,10 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<Subscription> GetTrialSubscriptionAsync(EntityHeader org, EntityHeader user)
         {
             var subscription = await _subscriptionRepo.GetTrialSubscriptionAsync(org.Id);
-            await AuthorizeAsync(user, org, "getSubscription", subscription);
+            if (subscription != null)
+            {
+                await AuthorizeAsync(user, org, "getTrialSubscription", subscription);
+            }
 
             return subscription;
         }
