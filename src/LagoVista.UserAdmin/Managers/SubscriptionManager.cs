@@ -86,6 +86,15 @@ namespace LagoVista.UserAdmin.Managers
             return new InvokeResult();
         }
 
+        public async Task<Subscription> GetTrialSubscriptionAsync(EntityHeader org, EntityHeader user)
+        {
+            var subscription = await _subscriptionRepo.GetTrialSubscriptionAsync(org.Id);
+            await AuthorizeAsync(user, org, "getSubscription", subscription);
+
+            return subscription;
+        }
+
+
         public async Task<Subscription> GetSubscriptionAsync(Guid id, EntityHeader org, EntityHeader user)
         {
             var subscription = await _subscriptionRepo.GetSubscriptionAsync(id);

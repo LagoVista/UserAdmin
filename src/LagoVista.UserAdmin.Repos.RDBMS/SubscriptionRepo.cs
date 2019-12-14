@@ -50,6 +50,11 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
             return subscription;
         }
 
+        public Task<Subscription> GetTrialSubscriptionAsync(string orgId)
+        {
+            return _dataContext.Subscription.Where(prd => prd.OrgId == orgId && prd.Key == Subscription.SubscriptionKey_Trial).FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<SubscriptionSummary>> GetSubscriptionsForOrgAsync(string orgId)
         {
             var subscriptions = await _dataContext.Subscription.Where(pc => pc.OrgId == orgId).ToListAsync();
