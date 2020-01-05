@@ -191,6 +191,13 @@ namespace LagoVista.UserAdmin.Managers
             return await _appUserRepo.GetDeviceUsersAsync(deviceRepoId, listRequest);
         }
 
+        public async Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(EntityHeader org, EntityHeader user, ListRequest listRequest)
+        {
+            await AuthorizeAsync(user, org, "GetAllUsersAsync", nameof(AppUser));
+
+            return await _appUserRepo.GetAllUsersAsync(listRequest);
+        }
+
         public async Task<InvokeResult<AuthResponse>> CreateUserAsync(RegisterUser newUser, bool sendAuthEmail = true, bool autoLogin = true)
         {
             if (String.IsNullOrEmpty(newUser.Email))

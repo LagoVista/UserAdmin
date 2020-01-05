@@ -132,5 +132,10 @@ namespace LagoVista.UserAdmin.Repos.Users
 
             return userSummaries;
         }
+
+        public async Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(ListRequest listRequest)
+        {
+            return ListResponse<UserInfoSummary>.Create((await DescOrderQueryAsync(us => us.IsUserDevice == false, us => us.CreationDate, listRequest)).Model.Select(rec => rec.ToUserInfoSummary()));
+        }
     }
 }

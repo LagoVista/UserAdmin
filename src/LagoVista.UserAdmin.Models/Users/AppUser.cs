@@ -196,11 +196,12 @@ namespace LagoVista.UserAdmin.Models.Users
             };
         }
 
-        public UserInfoSummary ToUserInfoSummary(bool isOrgAdmin, bool isAppBuilder)
+        public UserInfoSummary ToUserInfoSummary(bool isOrgAdmin = false, bool isAppBuilder = false)
         {
             return new UserInfoSummary()
             {
                 Email = Email,
+                CreationDate = CreationDate,
                 EmailConfirmed = EmailConfirmed,
                 Id = Id,
                 IsSystemAdmin = IsSystemAdmin,

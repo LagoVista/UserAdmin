@@ -28,7 +28,7 @@ namespace LagoVista.UserAdmin.Managers
         Task<AppUser> GetUserByUserNameAsync(string userName, EntityHeader org, EntityHeader user);
 
         Task<DependentObjectCheckResult> CheckInUse(string id, EntityHeader org, EntityHeader user);
-
+        Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(EntityHeader org, EntityHeader user, ListRequest listRequest);
         Task<InvokeResult> UpdateUserAsync(UserInfo user, EntityHeader org, EntityHeader updatedByUser);
 
         Task<InvokeResult> DeleteUserAsync(String id, EntityHeader org, EntityHeader deletedByUser);

@@ -17,6 +17,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Users
         Task<AppUser> FindByNameAsync(string userName);
         Task<AppUser> FindByEmailAsync(string email);
         Task<AppUser> FindByThirdPartyLogin(string providerId, string providerKey);
+        Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(ListRequest listRequest);
         Task UpdateAsync(AppUser user);
         Task DeleteAsync(AppUser user);
     }
