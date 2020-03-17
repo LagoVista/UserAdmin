@@ -13,7 +13,14 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
         public AccessLogRepo(IUserAdminSettings settings, IAdminLogger logger) :
             base(settings.AccessLogTableStorage.AccountId, settings.AccessLogTableStorage.AccessKey, logger)
         {
-            
+
+        }
+
+        public void AddActivity(AccessLog accessLog)
+        {
+            Task.Run(async () =>  {
+                await AddActivityAsync(accessLog);
+            });
         }
 
         public Task AddActivityAsync(AccessLog accessLog)
