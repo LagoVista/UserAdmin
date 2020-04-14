@@ -9,7 +9,7 @@
     <RootNamespace>LagoVista.UserAdmin.Tests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Moq" Version="4.10.1" />
+    <PackageReference Include="Moq" Version="4.13.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
     <PackageReference Include="Microsoft.CodeCoverage" Version="16.3.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
