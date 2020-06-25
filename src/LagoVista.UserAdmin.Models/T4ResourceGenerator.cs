@@ -332,6 +332,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:CreateOrganizationVM_Title
 
 		public static string CreateOrganizationVM_Title { get { return GetResourceString("CreateOrganizationVM_Title"); } }
+//Resources:UserAdminResources:DistroList_Description
+
+		public static string DistroList_Description { get { return GetResourceString("DistroList_Description"); } }
+//Resources:UserAdminResources:DistroList_Help
+
+		public static string DistroList_Help { get { return GetResourceString("DistroList_Help"); } }
+//Resources:UserAdminResources:DistroList_Name
+
+		public static string DistroList_Name { get { return GetResourceString("DistroList_Name"); } }
 //Resources:UserAdminResources:Email_ResetPassword_Body
 
 		public static string Email_ResetPassword_Body { get { return GetResourceString("Email_ResetPassword_Body"); } }
@@ -925,6 +934,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string CreateOrganizationVM_Description = "CreateOrganizationVM_Description";
 			public const string CreateOrganizationVM_Help = "CreateOrganizationVM_Help";
 			public const string CreateOrganizationVM_Title = "CreateOrganizationVM_Title";
+			public const string DistroList_Description = "DistroList_Description";
+			public const string DistroList_Help = "DistroList_Help";
+			public const string DistroList_Name = "DistroList_Name";
 			public const string Email_ResetPassword_Body = "Email_ResetPassword_Body";
 			public const string Email_ResetPassword_Subject = "Email_ResetPassword_Subject";
 			public const string Email_RestPassword_ErrorSending = "Email_RestPassword_ErrorSending";

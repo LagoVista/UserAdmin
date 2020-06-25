@@ -896,4 +896,13 @@
   <data name="Organization_CreateGettingStartedData_Help" xml:space="preserve">
     <value>When you create your organization it can be populated with a few objects that will help getting started a little easier.</value>
   </data>
+  <data name="DistroList_Description" xml:space="preserve">
+    <value>A distribution list is a list of people that will be notifified when a certain event happen.</value>
+  </data>
+  <data name="DistroList_Help" xml:space="preserve">
+    <value>A distribution list is a list of people that will be notifified when a certain event happen.</value>
+  </data>
+  <data name="DistroList_Name" xml:space="preserve">
+    <value>Distribution List</value>
+  </data>
 </root>

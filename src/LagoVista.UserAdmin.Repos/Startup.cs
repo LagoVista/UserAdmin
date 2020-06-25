@@ -12,6 +12,7 @@ using LagoVista.UserAdmin.Repos.Repos.Apps;
 using LagoVista.UserAdmin.Interfaces.Repos.Apps;
 using LagoVista.UserAdmin.Repos.Repos.Security;
 using LagoVista.Core.Interfaces;
+using LagoVista.UserAdmin.Repos.Repos.Orgs;
 
 namespace LagoVista.UserAdmin.Repos
 {
@@ -35,6 +36,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<IAssetSetRepo, AssetSetRepo>();
             services.AddTransient<IManagedAssetRepo, ManagedAssetRepo>();
             services.AddTransient<IAppInstanceRepo, AppInstanceRepo>();
+            services.AddTransient<IDistributionListRepo, DistributionListRepo>();
             
             ErrorCodes.Register(typeof(UserAdminErrorCodes));
         }
