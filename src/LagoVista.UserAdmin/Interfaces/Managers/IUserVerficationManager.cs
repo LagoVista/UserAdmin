@@ -15,5 +15,6 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> SendSMSCodeAsync(VerfiyPhoneNumber sendSMSCode, EntityHeader orgHeader, EntityHeader userHeader);
         Task<InvokeResult> ValidateSMSAsync(VerfiyPhoneNumber verifyRequest, EntityHeader orgHeader, EntityHeader userHeader);
         Task<InvokeResult> ValidateEmailAsync(ConfirmEmail confirmemaildto, EntityHeader orgHeader, EntityHeader userHeader);
+        Task<InvokeResult> SetUserSMSValidated(string userId, EntityHeader orgHeader, EntityHeader userHeader);
     }
 }

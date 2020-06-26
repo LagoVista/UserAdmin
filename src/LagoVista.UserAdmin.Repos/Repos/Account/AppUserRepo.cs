@@ -10,6 +10,7 @@ using Microsoft.Azure.Documents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.Users
@@ -135,7 +136,50 @@ namespace LagoVista.UserAdmin.Repos.Users
 
         public async Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(ListRequest listRequest)
         {
-            return ListResponse<UserInfoSummary>.Create((await DescOrderQueryAsync(us => us.IsUserDevice == false, us => us.CreationDate, listRequest)).Model.Select(rec => rec.ToUserInfoSummary()));
+            var results = await DescOrderQueryAsync(us => us.IsUserDevice == false, us => us.CreationDate, listRequest);
+
+            return new ListResponse<UserInfoSummary>()
+            {
+                Model = results.Model.Select(rec => rec.ToUserInfoSummary()),
+                NextPartitionKey = results.NextPartitionKey,
+                NextRowKey = results.NextRowKey,
+                PageCount = results.PageCount,
+                HasMoreRecords = results.HasMoreRecords,
+                PageIndex = results.PageIndex,
+                PageSize = results.PageSize,
+            };
+        }
+
+        public async Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(ListRequest listRequest, bool? emailConfirmed, bool? phoneConfirmed)
+        {
+            Expression<Func<AppUser, bool>> mthd = (exp => exp.IsUserDevice == false);
+
+            if (emailConfirmed.HasValue)
+            {
+                Expression<Func<AppUser, bool>> closeExpression = (exp => exp.EmailConfirmed == emailConfirmed.Value);
+                var combined = Expression.And(mthd, closeExpression);
+                mthd = Expression.Lambda<Func<AppUser, bool>>(combined);
+            }
+
+            if (phoneConfirmed.HasValue)
+            {
+                Expression<Func<AppUser, bool>> closeExpression = (exp => exp.PhoneNumberConfirmed == phoneConfirmed.Value);
+                var combined = Expression.And(mthd, closeExpression);
+                mthd = Expression.Lambda<Func<AppUser, bool>>(combined);
+            }
+
+            var results = await DescOrderQueryAsync(mthd, us => us.CreationDate, listRequest);
+
+            return new ListResponse<UserInfoSummary>()
+            {
+                Model = results.Model.Select(rec => rec.ToUserInfoSummary()),
+                NextPartitionKey = results.NextPartitionKey,
+                NextRowKey = results.NextRowKey,
+                PageCount = results.PageCount,
+                HasMoreRecords = results.HasMoreRecords,
+                PageIndex = results.PageIndex,
+                PageSize = results.PageSize,                 
+            };
         }
     }
 }

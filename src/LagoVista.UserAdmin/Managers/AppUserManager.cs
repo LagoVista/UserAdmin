@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LagoVista.Core.Models;
-using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Users;
-using LagoVista.Core.Managers;
 using LagoVista.Core.Interfaces;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Models.DTOs;
@@ -333,6 +331,13 @@ namespace LagoVista.UserAdmin.Managers
             {
                 return InvokeResult<AuthResponse>.FromInvokeResult(identityResult);
             }
+        }
+
+        public async Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(bool? emailConfirmed, bool? smsConfirmed, EntityHeader org, EntityHeader user, ListRequest listRequest)
+        {
+            await AuthorizeAsync(user, org, "GetAllUsersAsync", nameof(AppUser));
+
+            return await _appUserRepo.GetAllUsersAsync(listRequest, emailConfirmed, smsConfirmed);
         }
     }
 }

@@ -12,25 +12,28 @@ using System.Text;
 using System.Threading.Tasks;
 using LagoVista.Core;
 using LagoVista.UserAdmin.Models.Resources;
+using LagoVista.UserAdmin.Interfaces.Repos.Users;
 
 namespace LagoVista.UserAdmin.Managers
 {
     public class UserVerficationManager : ManagerBase, IUserVerficationManager
     {
-        IAdminLogger _adminLogger;
-        IUserManager _userManager;
-        IAppConfig _appConfig;
-        IEmailSender _emailSender;
-        ISmsSender _smsSender;
+        private readonly IAdminLogger _adminLogger;
+        private readonly IUserManager _userManager;
+        private readonly IAppConfig _appConfig;
+        private readonly IEmailSender _emailSender;
+        private readonly ISmsSender _smsSender;
+        private readonly IAppUserRepo _appUserRepo;
 
-        public UserVerficationManager(IAdminLogger adminLogger, IUserManager userMananger, IAppConfig appConfig, ISmsSender smsSender,
+        public UserVerficationManager(IAdminLogger adminLogger, IUserManager userMananger, IAppConfig appConfig, ISmsSender smsSender, IAppUserRepo appUserRepo,
                                     IEmailSender emailSender, IDependencyManager depManager, ISecurity security) : base(adminLogger, appConfig, depManager, security)
         {
-            _smsSender = smsSender;
-            _adminLogger = adminLogger;
-            _userManager = userMananger;
-            _appConfig = appConfig;
-            _emailSender = emailSender;
+            _smsSender = smsSender ?? throw new ArgumentNullException(nameof(smsSender));
+            _adminLogger = adminLogger ?? throw new ArgumentNullException(nameof(adminLogger));
+            _userManager = userMananger ?? throw new ArgumentNullException(nameof(userMananger));
+            _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
+            _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
+            _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
         }
 
         public async Task<InvokeResult> CheckConfirmedAsync(EntityHeader orgHeader, EntityHeader userHeader)
@@ -214,6 +217,19 @@ namespace LagoVista.UserAdmin.Managers
                     new KeyValuePair<string, string>("sentToken", confirmemaildto.ReceivedCode));
                 return result;
             }
+        }
+
+        public async Task<InvokeResult> SetUserSMSValidated(string userId, EntityHeader orgHeader, EntityHeader userHeader)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(userHeader.Id);
+            if (!appUser.IsSystemAdmin) return InvokeResult.FromError("Must be a system admin to set a users phone number as verified.");
+
+            var user = await _appUserRepo.FindByIdAsync(userId);
+            user.PhoneNumber = "5555551212";
+            user.PhoneNumberConfirmed = true;
+            await _appUserRepo.UpdateAsync(user);
+
+            return InvokeResult.Success;
         }
     }
 }
