@@ -29,7 +29,7 @@ namespace LagoVista.UserAdmin.Managers
         IAppConfig _appConfig;
 
         public AppUserManager(IAppUserRepo appUserRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
-            IAuthTokenManager authTokenManager, IUserManager userManager, ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, depManager, security,  logger, appConfig)
+            IAuthTokenManager authTokenManager, IUserManager userManager, ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, depManager, security, logger, appConfig)
         {
             _appUserRepo = appUserRepo;
             _adminLogger = logger;
@@ -86,9 +86,16 @@ namespace LagoVista.UserAdmin.Managers
         {
             var appUser = await _appUserRepo.FindByIdAsync(user.Id);
 
-            appUser.FirstName = user.FirstName;
-            appUser.LastName = user.LastName;
-            appUser.ProfileImageUrl = user.ProfileImageUrl;
+            if (!String.IsNullOrEmpty(user.FirstName)) appUser.FirstName = user.FirstName;
+            if (!String.IsNullOrEmpty(user.LastName)) appUser.LastName = user.LastName;
+            if (!String.IsNullOrEmpty(user.PhoneNumber))
+            {
+                appUser.PhoneNumber = user.PhoneNumber;
+                appUser.PhoneNumberConfirmed = true;
+            }
+
+            if ((user.ProfileImageUrl != null)) appUser.ProfileImageUrl = user.ProfileImageUrl;
+
             appUser.LastUpdatedBy = updatedByUser;
             appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
 
@@ -131,12 +138,12 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult.FromError($"Could not find approving user with id: {approvingUser.Id}.");
             }
 
-            if(appUser.CurrentOrganization.Id != org.Id)
+            if (appUser.CurrentOrganization.Id != org.Id)
             {
                 return InvokeResult.FromError("Org Mismatch on current user.");
             }
 
-            if(!appUser.IsOrgAdmin)
+            if (!appUser.IsOrgAdmin)
             {
                 return InvokeResult.FromError("Must be an org admin to automically approve a user.");
             }

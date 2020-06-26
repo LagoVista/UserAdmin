@@ -211,6 +211,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 IsRuntimeUser = IsRuntimeuser,                
                 IsUserDevice = IsUserDevice,
                 Name = Name,
+                PhoneNumber = PhoneNumber,
                 PhoneNumberConfirmed = PhoneNumberConfirmed,
                 ProfileImageUrl = ProfileImageUrl,
                 Key = Id,
