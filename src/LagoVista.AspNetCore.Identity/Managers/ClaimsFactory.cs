@@ -23,6 +23,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string IsAppBuilder = "com.lagovista.iot.isappbuilder";
         public const string IsUserDevice = "com.lagovista.iot.isuserdevice";
         public const string CurrentUserProfilePictureurl = "com.lagovista.iot.currentprofilepictureurl";
+
+        // support for unattended Kiosk authentication
+        public const string KioskId = "com.lagovista.iot.kioskid";
       
         public List<Claim> GetClaims(AppUser user)
         {
