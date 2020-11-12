@@ -31,8 +31,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
         {
             var claims = new List<Claim> {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.GivenName, user.FirstName),
-                new Claim(ClaimTypes.Surname, user.LastName),
+                new Claim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(user.FirstName) ? user.FirstName : None),
+                new Claim(ClaimTypes.Surname, !string.IsNullOrWhiteSpace(user.LastName) ? user.LastName : None),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(CurrentUserId, user.Id),
                 new Claim(IsPreviewUser, user.IsPreviewUser.ToString().ToLower()),
