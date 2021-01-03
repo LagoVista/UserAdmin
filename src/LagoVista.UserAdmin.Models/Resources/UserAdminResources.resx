@@ -905,4 +905,106 @@
   <data name="DistroList_Name" xml:space="preserve">
     <value>Distribution List</value>
   </data>
+  <data name="DownTimeType_Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="DownTimeType_Holiday" xml:space="preserve">
+    <value>Holiday</value>
+  </data>
+  <data name="DownTimeType_Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="DownTimeType_ScheduledMaintenance" xml:space="preserve">
+    <value>Scheduled Maintenance</value>
+  </data>
+  <data name="DownTimeType_Select" xml:space="preserve">
+    <value>-select downtime type-</value>
+  </data>
+  <data name="HolidaySet_Culture_Or_Country" xml:space="preserve">
+    <value>Culture or Country</value>
+  </data>
+  <data name="HolidaySet_Description" xml:space="preserve">
+    <value>A Holiday Set is a collection of predefined holidays for a culture, these are used to seed down time for organizations.</value>
+  </data>
+  <data name="HolidaySet_Help" xml:space="preserve">
+    <value>A Holiday Set is a collection of predefined holidays for a culture, these are used to seed down time for organizations.</value>
+  </data>
+  <data name="HolidaySet_Holidays" xml:space="preserve">
+    <value>Holidays</value>
+  </data>
+  <data name="HolidaySet_Title" xml:space="preserve">
+    <value>Holiday Set</value>
+  </data>
+  <data name="ScheduledDowntimePeriod_Description" xml:space="preserve">
+    <value>A Scheduled Downtime Period is when equipment or processes are down for a portion of a day. </value>
+  </data>
+  <data name="ScheduledDowntimePeriod_End" xml:space="preserve">
+    <value>End</value>
+  </data>
+  <data name="ScheduledDowntimePeriod_End_Help" xml:space="preserve">
+    <value>End time for the down tme period, must be number representing the time such as 1030 for 10:30 AM and 1415 for 2:15 PM</value>
+  </data>
+  <data name="ScheduledDowntimePeriod_Help" xml:space="preserve">
+    <value>A Scheduled Downtime Period is when equipment or processes are down for a portion of a day.</value>
+  </data>
+  <data name="ScheduledDowntimePeriod_Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="ScheduledDowntimePeriod_Start_Help" xml:space="preserve">
+    <value>Start time for the down time  period, must be number representing the time such as 1030 for 10:30 AM and 1415 for 2:15 PM</value>
+  </data>
+  <data name="ScheduledDowntimePeriod_TItle" xml:space="preserve">
+    <value>Scheduled Downtime Period</value>
+  </data>
+  <data name="ScheduledDowntime_AllDay" xml:space="preserve">
+    <value>All Day</value>
+  </data>
+  <data name="ScheduledDowntime_Day" xml:space="preserve">
+    <value>Day</value>
+  </data>
+  <data name="ScheduledDowntime_DayOfWeek" xml:space="preserve">
+    <value>Day of Week</value>
+  </data>
+  <data name="ScheduledDowntime_Description" xml:space="preserve">
+    <value>Scheduled Downtime can be added for any days where operations may be halted.</value>
+  </data>
+  <data name="ScheduledDowntime_DowntimeType" xml:space="preserve">
+    <value>Down time type</value>
+  </data>
+  <data name="ScheduledDowntime_Help" xml:space="preserve">
+    <value>Scheduled Downtime can be added for any days where operations may be halted.</value>
+  </data>
+  <data name="ScheduledDowntime_Month" xml:space="preserve">
+    <value>Month</value>
+  </data>
+  <data name="ScheduledDowntime_Periods" xml:space="preserve">
+    <value>Periods</value>
+  </data>
+  <data name="ScheduledDowntime_ScheduleType" xml:space="preserve">
+    <value>Schedule Type</value>
+  </data>
+  <data name="ScheduledDowntime_ScheduleType_Select" xml:space="preserve">
+    <value>-select schedule type-</value>
+  </data>
+  <data name="ScheduledDowntime_ScheduleType_SpecificDate" xml:space="preserve">
+    <value>Specific Date</value>
+  </data>
+  <data name="ScheduledDowntime_ScheduleType_SpecificMonthDay" xml:space="preserve">
+    <value>Specific Month Day</value>
+  </data>
+  <data name="ScheduledDowntime_ScheduleType_Week_DayOfWeek" xml:space="preserve">
+    <value>Day of week, of week in month</value>
+  </data>
+  <data name="ScheduledDowntime_Title" xml:space="preserve">
+    <value>Scheduled Downtime</value>
+  </data>
+  <data name="ScheduledDowntime_Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="ScheduledDowntime_Year" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="ScheudledDowntime_Week" xml:space="preserve">
+    <value>Week Number</value>
+  </data>
 </root>

@@ -48,9 +48,9 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> DeleteTeamAsync(String teamId, EntityHeader org, EntityHeader user)
         {
-            var assetSet = await _teamRepo.GetTeamAsync(teamId);
-            await AuthorizeAsync(assetSet, AuthorizeActions.Delete, user, org);
-            await ConfirmNoDepenenciesAsync(assetSet);
+            var team = await _teamRepo.GetTeamAsync(teamId);
+            await AuthorizeAsync(team, AuthorizeActions.Delete, user, org);
+            await ConfirmNoDepenenciesAsync(team);
             await _teamRepo.DeleteTeamAsync(teamId);
             return InvokeResult.Success;
         }
@@ -79,7 +79,6 @@ namespace LagoVista.UserAdmin.Managers
             await AuthorizeAsync(team, AuthorizeResult.AuthorizeActions.Read, user, org);
             return await CheckForDepenenciesAsync(team);
         }
-
 
         public async  Task<IEnumerable<TeamUserSummary>> GetMembersForTeamAsync(string teamId, EntityHeader org, EntityHeader user)
         {

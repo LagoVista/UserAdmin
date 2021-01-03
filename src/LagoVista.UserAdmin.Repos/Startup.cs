@@ -31,6 +31,8 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<IOrganizationRoleRepo, OrganizationRoleRepo>();
             services.AddTransient<IRoleRepo, RoleRepo>();
             services.AddTransient<IAccessLogRepo, AccessLogRepo>();
+            services.AddTransient<IHolidaySetRepo, HolidaySetRepo>();
+            services.AddTransient<IScheduledDowntimeRepo, ScheduledDowntimeRepo>();
             services.AddTransient<ITeamRepo, TeamRepo>();
             services.AddTransient<ITeamUserRepo, TeamUserRepo>();
             services.AddTransient<IAssetSetRepo, AssetSetRepo>();

@@ -341,6 +341,21 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:DistroList_Name
 
 		public static string DistroList_Name { get { return GetResourceString("DistroList_Name"); } }
+//Resources:UserAdminResources:DownTimeType_Admin
+
+		public static string DownTimeType_Admin { get { return GetResourceString("DownTimeType_Admin"); } }
+//Resources:UserAdminResources:DownTimeType_Holiday
+
+		public static string DownTimeType_Holiday { get { return GetResourceString("DownTimeType_Holiday"); } }
+//Resources:UserAdminResources:DownTimeType_Other
+
+		public static string DownTimeType_Other { get { return GetResourceString("DownTimeType_Other"); } }
+//Resources:UserAdminResources:DownTimeType_ScheduledMaintenance
+
+		public static string DownTimeType_ScheduledMaintenance { get { return GetResourceString("DownTimeType_ScheduledMaintenance"); } }
+//Resources:UserAdminResources:DownTimeType_Select
+
+		public static string DownTimeType_Select { get { return GetResourceString("DownTimeType_Select"); } }
 //Resources:UserAdminResources:Email_ResetPassword_Body
 
 		public static string Email_ResetPassword_Body { get { return GetResourceString("Email_ResetPassword_Body"); } }
@@ -425,6 +440,21 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:GeoLocation_Title
 
 		public static string GeoLocation_Title { get { return GetResourceString("GeoLocation_Title"); } }
+//Resources:UserAdminResources:HolidaySet_Culture_Or_Country
+
+		public static string HolidaySet_Culture_Or_Country { get { return GetResourceString("HolidaySet_Culture_Or_Country"); } }
+//Resources:UserAdminResources:HolidaySet_Description
+
+		public static string HolidaySet_Description { get { return GetResourceString("HolidaySet_Description"); } }
+//Resources:UserAdminResources:HolidaySet_Help
+
+		public static string HolidaySet_Help { get { return GetResourceString("HolidaySet_Help"); } }
+//Resources:UserAdminResources:HolidaySet_Holidays
+
+		public static string HolidaySet_Holidays { get { return GetResourceString("HolidaySet_Holidays"); } }
+//Resources:UserAdminResources:HolidaySet_Title
+
+		public static string HolidaySet_Title { get { return GetResourceString("HolidaySet_Title"); } }
 //Resources:UserAdminResources:ImageDetails_Description
 
 		public static string ImageDetails_Description { get { return GetResourceString("ImageDetails_Description"); } }
@@ -742,6 +772,78 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Role_Title
 
 		public static string Role_Title { get { return GetResourceString("Role_Title"); } }
+//Resources:UserAdminResources:ScheduledDowntime_AllDay
+
+		public static string ScheduledDowntime_AllDay { get { return GetResourceString("ScheduledDowntime_AllDay"); } }
+//Resources:UserAdminResources:ScheduledDowntime_Day
+
+		public static string ScheduledDowntime_Day { get { return GetResourceString("ScheduledDowntime_Day"); } }
+//Resources:UserAdminResources:ScheduledDowntime_DayOfWeek
+
+		public static string ScheduledDowntime_DayOfWeek { get { return GetResourceString("ScheduledDowntime_DayOfWeek"); } }
+//Resources:UserAdminResources:ScheduledDowntime_Description
+
+		public static string ScheduledDowntime_Description { get { return GetResourceString("ScheduledDowntime_Description"); } }
+//Resources:UserAdminResources:ScheduledDowntime_DowntimeType
+
+		public static string ScheduledDowntime_DowntimeType { get { return GetResourceString("ScheduledDowntime_DowntimeType"); } }
+//Resources:UserAdminResources:ScheduledDowntime_Help
+
+		public static string ScheduledDowntime_Help { get { return GetResourceString("ScheduledDowntime_Help"); } }
+//Resources:UserAdminResources:ScheduledDowntime_Month
+
+		public static string ScheduledDowntime_Month { get { return GetResourceString("ScheduledDowntime_Month"); } }
+//Resources:UserAdminResources:ScheduledDowntime_Periods
+
+		public static string ScheduledDowntime_Periods { get { return GetResourceString("ScheduledDowntime_Periods"); } }
+//Resources:UserAdminResources:ScheduledDowntime_ScheduleType
+
+		public static string ScheduledDowntime_ScheduleType { get { return GetResourceString("ScheduledDowntime_ScheduleType"); } }
+//Resources:UserAdminResources:ScheduledDowntime_ScheduleType_Select
+
+		public static string ScheduledDowntime_ScheduleType_Select { get { return GetResourceString("ScheduledDowntime_ScheduleType_Select"); } }
+//Resources:UserAdminResources:ScheduledDowntime_ScheduleType_SpecificDate
+
+		public static string ScheduledDowntime_ScheduleType_SpecificDate { get { return GetResourceString("ScheduledDowntime_ScheduleType_SpecificDate"); } }
+//Resources:UserAdminResources:ScheduledDowntime_ScheduleType_SpecificMonthDay
+
+		public static string ScheduledDowntime_ScheduleType_SpecificMonthDay { get { return GetResourceString("ScheduledDowntime_ScheduleType_SpecificMonthDay"); } }
+//Resources:UserAdminResources:ScheduledDowntime_ScheduleType_Week_DayOfWeek
+
+		public static string ScheduledDowntime_ScheduleType_Week_DayOfWeek { get { return GetResourceString("ScheduledDowntime_ScheduleType_Week_DayOfWeek"); } }
+//Resources:UserAdminResources:ScheduledDowntime_Title
+
+		public static string ScheduledDowntime_Title { get { return GetResourceString("ScheduledDowntime_Title"); } }
+//Resources:UserAdminResources:ScheduledDowntime_Type
+
+		public static string ScheduledDowntime_Type { get { return GetResourceString("ScheduledDowntime_Type"); } }
+//Resources:UserAdminResources:ScheduledDowntime_Year
+
+		public static string ScheduledDowntime_Year { get { return GetResourceString("ScheduledDowntime_Year"); } }
+//Resources:UserAdminResources:ScheduledDowntimePeriod_Description
+
+		public static string ScheduledDowntimePeriod_Description { get { return GetResourceString("ScheduledDowntimePeriod_Description"); } }
+//Resources:UserAdminResources:ScheduledDowntimePeriod_End
+
+		public static string ScheduledDowntimePeriod_End { get { return GetResourceString("ScheduledDowntimePeriod_End"); } }
+//Resources:UserAdminResources:ScheduledDowntimePeriod_End_Help
+
+		public static string ScheduledDowntimePeriod_End_Help { get { return GetResourceString("ScheduledDowntimePeriod_End_Help"); } }
+//Resources:UserAdminResources:ScheduledDowntimePeriod_Help
+
+		public static string ScheduledDowntimePeriod_Help { get { return GetResourceString("ScheduledDowntimePeriod_Help"); } }
+//Resources:UserAdminResources:ScheduledDowntimePeriod_Start
+
+		public static string ScheduledDowntimePeriod_Start { get { return GetResourceString("ScheduledDowntimePeriod_Start"); } }
+//Resources:UserAdminResources:ScheduledDowntimePeriod_Start_Help
+
+		public static string ScheduledDowntimePeriod_Start_Help { get { return GetResourceString("ScheduledDowntimePeriod_Start_Help"); } }
+//Resources:UserAdminResources:ScheduledDowntimePeriod_TItle
+
+		public static string ScheduledDowntimePeriod_TItle { get { return GetResourceString("ScheduledDowntimePeriod_TItle"); } }
+//Resources:UserAdminResources:ScheudledDowntime_Week
+
+		public static string ScheudledDowntime_Week { get { return GetResourceString("ScheudledDowntime_Week"); } }
 //Resources:UserAdminResources:SendCodeVM_Description
 
 		public static string SendCodeVM_Description { get { return GetResourceString("SendCodeVM_Description"); } }
@@ -937,6 +1039,11 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string DistroList_Description = "DistroList_Description";
 			public const string DistroList_Help = "DistroList_Help";
 			public const string DistroList_Name = "DistroList_Name";
+			public const string DownTimeType_Admin = "DownTimeType_Admin";
+			public const string DownTimeType_Holiday = "DownTimeType_Holiday";
+			public const string DownTimeType_Other = "DownTimeType_Other";
+			public const string DownTimeType_ScheduledMaintenance = "DownTimeType_ScheduledMaintenance";
+			public const string DownTimeType_Select = "DownTimeType_Select";
 			public const string Email_ResetPassword_Body = "Email_ResetPassword_Body";
 			public const string Email_ResetPassword_Subject = "Email_ResetPassword_Subject";
 			public const string Email_RestPassword_ErrorSending = "Email_RestPassword_ErrorSending";
@@ -965,6 +1072,11 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string GeoLocation_Description = "GeoLocation_Description";
 			public const string GeoLocation_Help = "GeoLocation_Help";
 			public const string GeoLocation_Title = "GeoLocation_Title";
+			public const string HolidaySet_Culture_Or_Country = "HolidaySet_Culture_Or_Country";
+			public const string HolidaySet_Description = "HolidaySet_Description";
+			public const string HolidaySet_Help = "HolidaySet_Help";
+			public const string HolidaySet_Holidays = "HolidaySet_Holidays";
+			public const string HolidaySet_Title = "HolidaySet_Title";
 			public const string ImageDetails_Description = "ImageDetails_Description";
 			public const string ImageDetails_Help = "ImageDetails_Help";
 			public const string ImageDetails_Title = "ImageDetails_Title";
@@ -1068,6 +1180,30 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Role_Description = "Role_Description";
 			public const string Role_Help = "Role_Help";
 			public const string Role_Title = "Role_Title";
+			public const string ScheduledDowntime_AllDay = "ScheduledDowntime_AllDay";
+			public const string ScheduledDowntime_Day = "ScheduledDowntime_Day";
+			public const string ScheduledDowntime_DayOfWeek = "ScheduledDowntime_DayOfWeek";
+			public const string ScheduledDowntime_Description = "ScheduledDowntime_Description";
+			public const string ScheduledDowntime_DowntimeType = "ScheduledDowntime_DowntimeType";
+			public const string ScheduledDowntime_Help = "ScheduledDowntime_Help";
+			public const string ScheduledDowntime_Month = "ScheduledDowntime_Month";
+			public const string ScheduledDowntime_Periods = "ScheduledDowntime_Periods";
+			public const string ScheduledDowntime_ScheduleType = "ScheduledDowntime_ScheduleType";
+			public const string ScheduledDowntime_ScheduleType_Select = "ScheduledDowntime_ScheduleType_Select";
+			public const string ScheduledDowntime_ScheduleType_SpecificDate = "ScheduledDowntime_ScheduleType_SpecificDate";
+			public const string ScheduledDowntime_ScheduleType_SpecificMonthDay = "ScheduledDowntime_ScheduleType_SpecificMonthDay";
+			public const string ScheduledDowntime_ScheduleType_Week_DayOfWeek = "ScheduledDowntime_ScheduleType_Week_DayOfWeek";
+			public const string ScheduledDowntime_Title = "ScheduledDowntime_Title";
+			public const string ScheduledDowntime_Type = "ScheduledDowntime_Type";
+			public const string ScheduledDowntime_Year = "ScheduledDowntime_Year";
+			public const string ScheduledDowntimePeriod_Description = "ScheduledDowntimePeriod_Description";
+			public const string ScheduledDowntimePeriod_End = "ScheduledDowntimePeriod_End";
+			public const string ScheduledDowntimePeriod_End_Help = "ScheduledDowntimePeriod_End_Help";
+			public const string ScheduledDowntimePeriod_Help = "ScheduledDowntimePeriod_Help";
+			public const string ScheduledDowntimePeriod_Start = "ScheduledDowntimePeriod_Start";
+			public const string ScheduledDowntimePeriod_Start_Help = "ScheduledDowntimePeriod_Start_Help";
+			public const string ScheduledDowntimePeriod_TItle = "ScheduledDowntimePeriod_TItle";
+			public const string ScheudledDowntime_Week = "ScheudledDowntime_Week";
 			public const string SendCodeVM_Description = "SendCodeVM_Description";
 			public const string SendCodeVM_Help = "SendCodeVM_Help";
 			public const string SendCodeVM_Title = "SendCodeVM_Title";
