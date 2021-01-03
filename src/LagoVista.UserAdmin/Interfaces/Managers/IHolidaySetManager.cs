@@ -11,10 +11,11 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
     {
         Task<InvokeResult> AddHolidaySetAsync(HolidaySet holidaySet, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateHolidaySetAsync(HolidaySet holidaySet, EntityHeader org, EntityHeader user);
-        Task<InvokeResult> DeleteHolidaySetAsync(String holidaySetId, EntityHeader org, EntityHeader user);
-        Task<ListResponse<HolidaySetSummary>> GetAllHolidaySets(ListRequest listRequest, EntityHeader org, EntityHeader user );
+        Task<InvokeResult> DeleteHolidaySetAsync(string holidaySetId, EntityHeader org, EntityHeader user);
+        Task<HolidaySet> GetHolidaySetAsync(string holidaySetId, EntityHeader org, EntityHeader user);
+        Task<ListResponse<HolidaySetSummary>> GetAllHolidaySets(EntityHeader org, EntityHeader user, ListRequest listRequest);
         Task<bool> QueryKeyInUseAsync(string key, EntityHeader org);
         Task<DependentObjectCheckResult> CheckHolidaySetInUseAsync(String holidaySetId, EntityHeader org, EntityHeader user);
-        Task<InvokeResult> CopyToOrgAsync(string holidaySetId, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> CopyToOrgAsync(string holidaySetId, string destOrgId, EntityHeader org, EntityHeader user);
     }
 }

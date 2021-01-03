@@ -8,8 +8,6 @@ using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Models.Orgs;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using static LagoVista.Core.Models.AuthorizeResult;
 
@@ -50,10 +48,17 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<ListResponse<ScheduledDowntimeSummary>> GetScheduledDowntimesForOrgAsync(string orgId, ListRequest listRequest, EntityHeader org, EntityHeader user)
+        public async Task<ScheduledDowntime> GetScheduledDowntimeAsync(string scheduledDowntimeId, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeOrgAccessAsync(user, orgId, typeof(ScheduledDowntime));
-            return await _repo.GetScheduledDowntimesAsync(orgId, listRequest);
+            var scheduledDowntime = await _repo.GetScheduledDowntimeAsync(scheduledDowntimeId);
+            await AuthorizeAsync(scheduledDowntime, AuthorizeActions.Read, user, org);
+            return scheduledDowntime;
+        }
+
+        public async Task<ListResponse<ScheduledDowntimeSummary>> GetScheduledDowntimesForOrgAsync(EntityHeader org, EntityHeader user, ListRequest listRequest)
+        {
+            await AuthorizeOrgAccessAsync(user, org.Id, typeof(ScheduledDowntime));
+            return await _repo.GetScheduledDowntimesAsync(org.Id, listRequest);
 
         }
 

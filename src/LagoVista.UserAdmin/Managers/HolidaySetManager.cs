@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core;
+using LagoVista.Core.Exceptions;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Models;
@@ -19,12 +20,14 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IHolidaySetRepo _repo;
         private readonly IScheduledDowntimeManager _scheduledDownTimeManager;
         private readonly IScheduledDowntimeRepo _scheduledDowntimeRepo;
+        private readonly IAppUserManager _userManager;
 
-        public HolidaySetManager(IHolidaySetRepo holidaySetRepo, IScheduledDowntimeManager scheduledDowntimeManager,  IScheduledDowntimeRepo scheduledDowntimeRepo,
+        public HolidaySetManager(IHolidaySetRepo holidaySetRepo, IScheduledDowntimeManager scheduledDowntimeManager, IAppUserManager userManager,  IScheduledDowntimeRepo scheduledDowntimeRepo,
             IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig) :
             base(logger, appConfig, depManager, security)
         {
             _repo = holidaySetRepo ?? throw new ArgumentNullException(nameof(holidaySetRepo));
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _scheduledDownTimeManager = scheduledDowntimeManager ?? throw new ArgumentNullException(nameof(scheduledDowntimeManager));
             _scheduledDowntimeRepo = scheduledDowntimeRepo ?? throw new ArgumentNullException(nameof(scheduledDowntimeRepo));
         }
@@ -45,9 +48,18 @@ namespace LagoVista.UserAdmin.Managers
             return await CheckForDepenenciesAsync(record);
         }
 
-        public async Task<InvokeResult> CopyToOrgAsync(string holidaySetId, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> CopyToOrgAsync(string holidaySetId, string destOrgId, EntityHeader org, EntityHeader user)
         {
             var timeStamp = DateTime.UtcNow.ToJSONString();
+
+            if(destOrgId != org.Id)
+            {
+                var currentUser = await _userManager.GetUserByIdAsync(user.Id, org, user);
+                if(!currentUser.IsSystemAdmin)
+                {
+                    throw new NotAuthorizedException("To copy holiday sets to an org, must belong to that org, or be a system admin.");
+                }
+            }
 
             var holidaySet = await _repo.GetHolidaySetAsync(holidaySetId);
             foreach(var downTime in holidaySet.Holidays)
@@ -79,9 +91,16 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        public Task<ListResponse<HolidaySetSummary>> GetAllHolidaySets(ListRequest listRequest, EntityHeader org, EntityHeader user)
+        public Task<ListResponse<HolidaySetSummary>> GetAllHolidaySets(EntityHeader org, EntityHeader user, ListRequest listRequest)
         {
             return _repo.GetAllHolidaySetsAsync(listRequest);
+        }
+
+        public async Task<HolidaySet> GetHolidaySetAsync(string holidaySetId, EntityHeader org, EntityHeader user)
+        {
+            var holidaySet = await _repo.GetHolidaySetAsync(holidaySetId);
+            await AuthorizeAsync(holidaySet, AuthorizeActions.Read, user, org);
+            return holidaySet;
         }
 
         public Task<bool> QueryKeyInUseAsync(string key, EntityHeader org)
