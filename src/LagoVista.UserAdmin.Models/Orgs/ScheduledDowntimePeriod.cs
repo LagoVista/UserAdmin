@@ -7,6 +7,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
                               UserAdminResources.Names.ScheduledDowntimePeriod_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
     public class ScheduledDowntimePeriod
     {
+        public string Id { get; set; }
+
         [FormField(LabelResource: UserAdminResources.Names.Common_Name, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsRequired: true)]
         public string Name { get; set; }
 
@@ -14,6 +16,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
          RegExValidationMessageResource: UserAdminResources.Names.Common_Key_Validation, ResourceType: typeof(UserAdminResources), IsRequired: true)]
         public string Key { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Common_Description, IsRequired: true, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public string Description { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.ScheduledDowntimePeriod_Start, HelpResource: UserAdminResources.Names.ScheduledDowntimePeriod_Start_Help,

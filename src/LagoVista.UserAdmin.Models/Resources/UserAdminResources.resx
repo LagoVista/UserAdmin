@@ -969,7 +969,7 @@
     <value>Scheduled Downtime can be added for any days where operations may be halted.</value>
   </data>
   <data name="ScheduledDowntime_DowntimeType" xml:space="preserve">
-    <value>Down time type</value>
+    <value>Downtime Type</value>
   </data>
   <data name="ScheduledDowntime_Help" xml:space="preserve">
     <value>Scheduled Downtime can be added for any days where operations may be halted.</value>
@@ -989,10 +989,10 @@
   <data name="ScheduledDowntime_ScheduleType_SpecificDate" xml:space="preserve">
     <value>Specific Date</value>
   </data>
-  <data name="ScheduledDowntime_ScheduleType_SpecificMonthDay" xml:space="preserve">
-    <value>Specific Month Day</value>
+  <data name="ScheduledDowntime_ScheduleType_DayInMonth" xml:space="preserve">
+    <value>Day in Month</value>
   </data>
-  <data name="ScheduledDowntime_ScheduleType_Week_DayOfWeek" xml:space="preserve">
+  <data name="ScheduledDowntime_ScheduleType_DayOfWeekOfWeekInMonth" xml:space="preserve">
     <value>Day of week, of week in month</value>
   </data>
   <data name="ScheduledDowntime_Title" xml:space="preserve">
@@ -1006,5 +1006,71 @@
   </data>
   <data name="ScheudledDowntime_Week" xml:space="preserve">
     <value>Week Number</value>
+  </data>
+  <data name="DayOfWeek_Friday" xml:space="preserve">
+    <value>Friday</value>
+  </data>
+  <data name="DayOfWeek_Monday" xml:space="preserve">
+    <value>Monday</value>
+  </data>
+  <data name="DayOfWeek_Saturday" xml:space="preserve">
+    <value>Saturday</value>
+  </data>
+  <data name="DayOfWeek_Select" xml:space="preserve">
+    <value>-select day of week-</value>
+  </data>
+  <data name="DayOfWeek_Sunday" xml:space="preserve">
+    <value>Sunday</value>
+  </data>
+  <data name="DayOfWeek_Thursday" xml:space="preserve">
+    <value>Thursday</value>
+  </data>
+  <data name="DayOfWeek_Tuesday" xml:space="preserve">
+    <value>Tuesday</value>
+  </data>
+  <data name="DayOfWeek_Wednesday" xml:space="preserve">
+    <value>Wednesday</value>
+  </data>
+  <data name="Month_April" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="Month_August" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="Month_December" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="Month_February" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="Month_January" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="Month_July" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="Month_June" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="Month_March" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="Month_May" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="Month_November" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="Month_October" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="Month_Select" xml:space="preserve">
+    <value>-select month-</value>
+  </data>
+  <data name="Month_September" xml:space="preserve">
+    <value>September</value>
+  </data>
+  <data name="ScheduledDowntime_ScheduleType_DayOfWeek" xml:space="preserve">
+    <value>Day of Week</value>
   </data>
 </root>

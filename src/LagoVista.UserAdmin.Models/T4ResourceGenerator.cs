@@ -332,6 +332,30 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:CreateOrganizationVM_Title
 
 		public static string CreateOrganizationVM_Title { get { return GetResourceString("CreateOrganizationVM_Title"); } }
+//Resources:UserAdminResources:DayOfWeek_Friday
+
+		public static string DayOfWeek_Friday { get { return GetResourceString("DayOfWeek_Friday"); } }
+//Resources:UserAdminResources:DayOfWeek_Monday
+
+		public static string DayOfWeek_Monday { get { return GetResourceString("DayOfWeek_Monday"); } }
+//Resources:UserAdminResources:DayOfWeek_Saturday
+
+		public static string DayOfWeek_Saturday { get { return GetResourceString("DayOfWeek_Saturday"); } }
+//Resources:UserAdminResources:DayOfWeek_Select
+
+		public static string DayOfWeek_Select { get { return GetResourceString("DayOfWeek_Select"); } }
+//Resources:UserAdminResources:DayOfWeek_Sunday
+
+		public static string DayOfWeek_Sunday { get { return GetResourceString("DayOfWeek_Sunday"); } }
+//Resources:UserAdminResources:DayOfWeek_Thursday
+
+		public static string DayOfWeek_Thursday { get { return GetResourceString("DayOfWeek_Thursday"); } }
+//Resources:UserAdminResources:DayOfWeek_Tuesday
+
+		public static string DayOfWeek_Tuesday { get { return GetResourceString("DayOfWeek_Tuesday"); } }
+//Resources:UserAdminResources:DayOfWeek_Wednesday
+
+		public static string DayOfWeek_Wednesday { get { return GetResourceString("DayOfWeek_Wednesday"); } }
 //Resources:UserAdminResources:DistroList_Description
 
 		public static string DistroList_Description { get { return GetResourceString("DistroList_Description"); } }
@@ -613,6 +637,45 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:LoginVM_Title
 
 		public static string LoginVM_Title { get { return GetResourceString("LoginVM_Title"); } }
+//Resources:UserAdminResources:Month_April
+
+		public static string Month_April { get { return GetResourceString("Month_April"); } }
+//Resources:UserAdminResources:Month_August
+
+		public static string Month_August { get { return GetResourceString("Month_August"); } }
+//Resources:UserAdminResources:Month_December
+
+		public static string Month_December { get { return GetResourceString("Month_December"); } }
+//Resources:UserAdminResources:Month_February
+
+		public static string Month_February { get { return GetResourceString("Month_February"); } }
+//Resources:UserAdminResources:Month_January
+
+		public static string Month_January { get { return GetResourceString("Month_January"); } }
+//Resources:UserAdminResources:Month_July
+
+		public static string Month_July { get { return GetResourceString("Month_July"); } }
+//Resources:UserAdminResources:Month_June
+
+		public static string Month_June { get { return GetResourceString("Month_June"); } }
+//Resources:UserAdminResources:Month_March
+
+		public static string Month_March { get { return GetResourceString("Month_March"); } }
+//Resources:UserAdminResources:Month_May
+
+		public static string Month_May { get { return GetResourceString("Month_May"); } }
+//Resources:UserAdminResources:Month_November
+
+		public static string Month_November { get { return GetResourceString("Month_November"); } }
+//Resources:UserAdminResources:Month_October
+
+		public static string Month_October { get { return GetResourceString("Month_October"); } }
+//Resources:UserAdminResources:Month_Select
+
+		public static string Month_Select { get { return GetResourceString("Month_Select"); } }
+//Resources:UserAdminResources:Month_September
+
+		public static string Month_September { get { return GetResourceString("Month_September"); } }
 //Resources:UserAdminResources:Organization
 
 		public static string Organization { get { return GetResourceString("Organization"); } }
@@ -799,18 +862,21 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:ScheduledDowntime_ScheduleType
 
 		public static string ScheduledDowntime_ScheduleType { get { return GetResourceString("ScheduledDowntime_ScheduleType"); } }
+//Resources:UserAdminResources:ScheduledDowntime_ScheduleType_DayInMonth
+
+		public static string ScheduledDowntime_ScheduleType_DayInMonth { get { return GetResourceString("ScheduledDowntime_ScheduleType_DayInMonth"); } }
+//Resources:UserAdminResources:ScheduledDowntime_ScheduleType_DayOfWeek
+
+		public static string ScheduledDowntime_ScheduleType_DayOfWeek { get { return GetResourceString("ScheduledDowntime_ScheduleType_DayOfWeek"); } }
+//Resources:UserAdminResources:ScheduledDowntime_ScheduleType_DayOfWeekOfWeekInMonth
+
+		public static string ScheduledDowntime_ScheduleType_DayOfWeekOfWeekInMonth { get { return GetResourceString("ScheduledDowntime_ScheduleType_DayOfWeekOfWeekInMonth"); } }
 //Resources:UserAdminResources:ScheduledDowntime_ScheduleType_Select
 
 		public static string ScheduledDowntime_ScheduleType_Select { get { return GetResourceString("ScheduledDowntime_ScheduleType_Select"); } }
 //Resources:UserAdminResources:ScheduledDowntime_ScheduleType_SpecificDate
 
 		public static string ScheduledDowntime_ScheduleType_SpecificDate { get { return GetResourceString("ScheduledDowntime_ScheduleType_SpecificDate"); } }
-//Resources:UserAdminResources:ScheduledDowntime_ScheduleType_SpecificMonthDay
-
-		public static string ScheduledDowntime_ScheduleType_SpecificMonthDay { get { return GetResourceString("ScheduledDowntime_ScheduleType_SpecificMonthDay"); } }
-//Resources:UserAdminResources:ScheduledDowntime_ScheduleType_Week_DayOfWeek
-
-		public static string ScheduledDowntime_ScheduleType_Week_DayOfWeek { get { return GetResourceString("ScheduledDowntime_ScheduleType_Week_DayOfWeek"); } }
 //Resources:UserAdminResources:ScheduledDowntime_Title
 
 		public static string ScheduledDowntime_Title { get { return GetResourceString("ScheduledDowntime_Title"); } }
@@ -1036,6 +1102,14 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string CreateOrganizationVM_Description = "CreateOrganizationVM_Description";
 			public const string CreateOrganizationVM_Help = "CreateOrganizationVM_Help";
 			public const string CreateOrganizationVM_Title = "CreateOrganizationVM_Title";
+			public const string DayOfWeek_Friday = "DayOfWeek_Friday";
+			public const string DayOfWeek_Monday = "DayOfWeek_Monday";
+			public const string DayOfWeek_Saturday = "DayOfWeek_Saturday";
+			public const string DayOfWeek_Select = "DayOfWeek_Select";
+			public const string DayOfWeek_Sunday = "DayOfWeek_Sunday";
+			public const string DayOfWeek_Thursday = "DayOfWeek_Thursday";
+			public const string DayOfWeek_Tuesday = "DayOfWeek_Tuesday";
+			public const string DayOfWeek_Wednesday = "DayOfWeek_Wednesday";
 			public const string DistroList_Description = "DistroList_Description";
 			public const string DistroList_Help = "DistroList_Help";
 			public const string DistroList_Name = "DistroList_Name";
@@ -1127,6 +1201,19 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string LoginVM_Description = "LoginVM_Description";
 			public const string LoginVM_Help = "LoginVM_Help";
 			public const string LoginVM_Title = "LoginVM_Title";
+			public const string Month_April = "Month_April";
+			public const string Month_August = "Month_August";
+			public const string Month_December = "Month_December";
+			public const string Month_February = "Month_February";
+			public const string Month_January = "Month_January";
+			public const string Month_July = "Month_July";
+			public const string Month_June = "Month_June";
+			public const string Month_March = "Month_March";
+			public const string Month_May = "Month_May";
+			public const string Month_November = "Month_November";
+			public const string Month_October = "Month_October";
+			public const string Month_Select = "Month_Select";
+			public const string Month_September = "Month_September";
 			public const string Organization = "Organization";
 			public const string Organization_CantCreate = "Organization_CantCreate";
 			public const string Organization_CreateGettingStartedData = "Organization_CreateGettingStartedData";
@@ -1189,10 +1276,11 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string ScheduledDowntime_Month = "ScheduledDowntime_Month";
 			public const string ScheduledDowntime_Periods = "ScheduledDowntime_Periods";
 			public const string ScheduledDowntime_ScheduleType = "ScheduledDowntime_ScheduleType";
+			public const string ScheduledDowntime_ScheduleType_DayInMonth = "ScheduledDowntime_ScheduleType_DayInMonth";
+			public const string ScheduledDowntime_ScheduleType_DayOfWeek = "ScheduledDowntime_ScheduleType_DayOfWeek";
+			public const string ScheduledDowntime_ScheduleType_DayOfWeekOfWeekInMonth = "ScheduledDowntime_ScheduleType_DayOfWeekOfWeekInMonth";
 			public const string ScheduledDowntime_ScheduleType_Select = "ScheduledDowntime_ScheduleType_Select";
 			public const string ScheduledDowntime_ScheduleType_SpecificDate = "ScheduledDowntime_ScheduleType_SpecificDate";
-			public const string ScheduledDowntime_ScheduleType_SpecificMonthDay = "ScheduledDowntime_ScheduleType_SpecificMonthDay";
-			public const string ScheduledDowntime_ScheduleType_Week_DayOfWeek = "ScheduledDowntime_ScheduleType_Week_DayOfWeek";
 			public const string ScheduledDowntime_Title = "ScheduledDowntime_Title";
 			public const string ScheduledDowntime_Type = "ScheduledDowntime_Type";
 			public const string ScheduledDowntime_Year = "ScheduledDowntime_Year";
