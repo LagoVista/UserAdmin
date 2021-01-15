@@ -11,17 +11,22 @@ using LagoVista.UserAdmin.Models.Orgs;
 using System.Threading.Tasks;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Core.Exceptions;
+using LagoVista.Core.Models.UIMetaData;
 
 namespace LagoVista.UserAdmin.Managers
 {
     public class SubscriptionManager : ManagerBase, ISubscriptionManager
     {
-        IPaymentCustomers _paymentCustomers;
-        ISubscriptionRepo _subscriptionRepo;
-        public SubscriptionManager(ISubscriptionRepo subscriptionRepo, IDependencyManager depManager, IPaymentCustomers paymentCustomers, ISecurity security, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
+        readonly IPaymentCustomers _paymentCustomers;
+        readonly ISubscriptionRepo _subscriptionRepo;
+        readonly ISubscriptionResourceRepo _subscriptionResourceRepo;
+
+        public SubscriptionManager(ISubscriptionRepo subscriptionRepo, IDependencyManager depManager, IPaymentCustomers paymentCustomers,
+            ISubscriptionResourceRepo subscriptionResourceRepo, ISecurity security, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
-            _subscriptionRepo = subscriptionRepo;
-            _paymentCustomers = paymentCustomers;
+            _subscriptionRepo = subscriptionRepo ?? throw new ArgumentNullException(nameof(subscriptionRepo));
+            _paymentCustomers = paymentCustomers ?? throw new ArgumentNullException(nameof(paymentCustomers));
+            _subscriptionResourceRepo = subscriptionResourceRepo ?? throw new ArgumentNullException(nameof(subscriptionResourceRepo));
         }
 
         public async Task<InvokeResult> AddSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user)
@@ -96,13 +101,19 @@ namespace LagoVista.UserAdmin.Managers
             return subscription;
         }
 
-
         public async Task<Subscription> GetSubscriptionAsync(Guid id, EntityHeader org, EntityHeader user)
         {
             var subscription = await _subscriptionRepo.GetSubscriptionAsync(id);
             await AuthorizeAsync(user, org, "getSubscription", subscription);
-
             return subscription;
+        }
+
+        public async Task<ListResponse<SubscriptionResource>> GetResourcesForSubscriptionAsync(Guid subscriptionId, ListRequest listRequest, EntityHeader org, EntityHeader user)
+        {
+            var subscription = await GetSubscriptionAsync(subscriptionId, org, user);
+            await AuthorizeAsync(user, org, "getResourcesForSubscription", subscription);
+
+            return await _subscriptionResourceRepo.GetResourcesForSubscriptionAsync(subscriptionId, listRequest, org.Id);
         }
 
         public async Task<IEnumerable<SubscriptionSummary>> GetSubscriptionsForOrgAsync(string orgId, EntityHeader user)
