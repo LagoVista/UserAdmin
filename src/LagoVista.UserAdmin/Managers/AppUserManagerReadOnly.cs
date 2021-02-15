@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Interfaces;
+﻿using LagoVista.Core.Exceptions;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Models;
 using LagoVista.IoT.Logging.Loggers;
@@ -20,13 +21,23 @@ namespace LagoVista.UserAdmin.Managers
             _appUserRepo = appUserRepo;
         }
 
-        public async Task<AppUser> GetUserByIdAsync(string id, EntityHeader org, EntityHeader requestedByUser)
+        public async Task<AppUser> GetUserByIdAsync(string appUserId, EntityHeader org, EntityHeader requestedByUser)
         {
-            var appUser = await _appUserRepo.FindByIdAsync(id);
+            if(String.IsNullOrEmpty(appUserId))
+            {
+                throw new ArgumentNullException(nameof(appUserId));
+            }
+
+            var appUser = await _appUserRepo.FindByIdAsync(appUserId);
+            if(appUser == null)
+            {
+                throw new LagoVista.Core.Exceptions.RecordNotFoundException(nameof(AppUser), appUserId);
+            }
+
             appUser.PasswordHash = null;
 
             /* The user should always be able to get it's own account */
-            if (requestedByUser.Id != id)
+            if (requestedByUser.Id != appUserId)
             {
                 await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Read, requestedByUser, org);
             }
