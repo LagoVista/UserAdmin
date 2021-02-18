@@ -4,7 +4,9 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using MailKit.Net.Smtp;
 using MimeKit;
+using SendGrid.Helpers.Mail;
 using System;
+using System.Net.Mime;
 using System.Threading.Tasks;
 
 namespace LagoVista.AspNetCore.Identity.Services
@@ -315,22 +317,20 @@ namespace LagoVista.AspNetCore.Identity.Services
 </body>
 </html>";
 
-                var msg = new MimeMessage()
-                {
-                    Subject = subject,
-                    Body = new TextPart("html", body),
-                };
 
-                msg.To.Add(new MailboxAddress(email));
-                msg.From.Add(new MailboxAddress(_settings.SmtpFrom));
+				var msg = new SendGridMessage();
+				msg.AddTo(email);
+				msg.From = new EmailAddress(_settings.SmtpFrom, "NuvIoT Notifications") ;
+				msg.Subject = subject;
+				msg.AddContent(MediaTypeNames.Text.Html, body);
 
-                using (var client = new SmtpClient())
+				if(String.IsNullOrEmpty(_settings.SmtpServer.Password))
                 {
-                    await client.ConnectAsync(_settings.SmtpServer.Uri.ToString(), 587, false);
-                    await client.AuthenticateAsync(_settings.SmtpServer.UserName, _settings.SmtpServer.Password);
-                    await client.SendAsync(msg);
-                    await client.DisconnectAsync(true);
+					throw new ArgumentNullException("SMTP Server API Key (SendGrid) is null or empty");
                 }
+
+				var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
+				await client.SendEmailAsync(msg);
 
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "SendGridEmailServices_SendAsync", "EmailSent",
                     new System.Collections.Generic.KeyValuePair<string, string>("Subject", subject),
