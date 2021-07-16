@@ -11,6 +11,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using LagoVista.UserAdmin;
+using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.Core.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
+using LagoVista.AspNetCore.Identity.Managers;
 
 namespace LagoVista.AspNetCore.Identity.Utils
 {
@@ -19,15 +26,20 @@ namespace LagoVista.AspNetCore.Identity.Utils
         TokenAuthOptions _tokenOptions;
         IClaimsFactory _claimsFactory;
         IAdminLogger _adminLogger;
+        IOrgUserRepo _orgUserRepo;
+        private readonly IOrganizationManager _orgManager;
 
-        public TokenHelper(TokenAuthOptions tokenOptions, IClaimsFactory claimsFactory, IAdminLogger adminLogger)
+
+        public TokenHelper(TokenAuthOptions tokenOptions, IOrganizationManager orgManager, IOrgUserRepo orgUserRepo, IClaimsFactory claimsFactory, IAdminLogger adminLogger)
         {
             _tokenOptions = tokenOptions;
             _claimsFactory = claimsFactory;
-            _adminLogger = adminLogger;            
+            _adminLogger = adminLogger;
+            _orgManager = orgManager;
+            _orgUserRepo = orgUserRepo;
         }
 
-        public InvokeResult<AuthResponse> GenerateAuthResponse(AppUser appUser, AuthRequest authRequest, InvokeResult<RefreshToken> refreshTokenResponse)
+        public async Task<InvokeResult<AuthResponse>> GenerateAuthResponseAsync(AppUser appUser, AuthRequest authRequest, InvokeResult<RefreshToken> refreshTokenResponse)
         {
             if (!refreshTokenResponse.Successful)
             {
@@ -36,23 +48,30 @@ namespace LagoVista.AspNetCore.Identity.Utils
 
             var accessExpires = DateTime.UtcNow.AddMinutes(_tokenOptions.AccessExpiration.TotalMinutes);
 
-            var token = GetJWToken(appUser, accessExpires, authRequest.AppInstanceId);
-
             var authResponse = new AuthResponse()
             {
-                AccessToken = token,
                 AppInstanceId = authRequest.AppInstanceId,
                 AccessTokenExpiresUTC = accessExpires.ToJSONString(),
                 RefreshToken = refreshTokenResponse.Result.RowKey,
-                Roles = appUser.CurrentOrganizationRoles,
                 RefreshTokenExpiresUTC = refreshTokenResponse.Result.ExpiresUtc,
                 User = appUser.ToEntityHeader(),
-                Org = appUser.CurrentOrganization
             };
 
             if(!String.IsNullOrEmpty(authRequest.OrgId))
             {
+                // we have already confirmed that the user has access to this org.
                 authResponse.Org = new Core.Models.EntityHeader() { Id = authRequest.OrgId, Text = authRequest.OrgName };
+                var orgRoles = await _orgManager.GetUsersRolesInOrgAsync(authRequest.OrgId, appUser.Id, appUser.CurrentOrganization, appUser.ToEntityHeader());
+                authResponse.Roles = new List<EntityHeader>(orgRoles.Select(rle=>rle.ToEntityHeader()));
+                var isOrgAdmin = await  _orgUserRepo.IsUserOrgAdminAsync(authRequest.OrgId, authResponse.User.Id);
+                var isAppBuilder = await _orgUserRepo.IsAppBuilderAsync(authRequest.OrgId, authResponse.User.Id);
+                authResponse.AccessToken = GetJWToken(appUser, authResponse.Org, isOrgAdmin, isAppBuilder, accessExpires, authRequest.AppInstanceId);
+            }
+            else
+            {
+                authResponse.Roles = appUser.CurrentOrganizationRoles;
+                authResponse.Org = appUser.CurrentOrganization;
+                authResponse.AccessToken = GetJWToken(appUser, accessExpires, authRequest.AppInstanceId);
             }
 
             return InvokeResult<AuthResponse>.Create(authResponse);
@@ -62,6 +81,25 @@ namespace LagoVista.AspNetCore.Identity.Utils
         {
             var now = DateTime.UtcNow;
             var claims = _claimsFactory.GetClaims(user);            
+            claims.Add(new Claim(JwtRegisteredClaimNames.Jti, NonceGenerator()));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64));
+
+            // Create the JWT and write it to a string
+            var jwt = new JwtSecurityToken(
+                issuer: _tokenOptions.Issuer,
+                audience: _tokenOptions.Audience,
+                claims: claims,
+                notBefore: now,
+                expires: accessExpires,
+                signingCredentials: _tokenOptions.SigningCredentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(jwt);
+        }
+
+        public string GetJWToken(AppUser user, EntityHeader org, bool isOrgAdmin, bool isAppBuilder, DateTime accessExpires, string installationId)
+        {
+            var now = DateTime.UtcNow;
+            var claims = _claimsFactory.GetClaims(user, org, isOrgAdmin, isAppBuilder);
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, NonceGenerator()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64));
 

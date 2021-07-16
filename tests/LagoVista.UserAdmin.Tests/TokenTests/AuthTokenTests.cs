@@ -27,20 +27,20 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
         Mock<ISignInManager> _signInManager;
         Mock<IRefreshTokenManager> _refreshTokenManager;
         Mock<ITokenHelper> _tokenHelper;
-        Mock<IOrgHelper> _orgHelper;
+        Mock<IOrganizationManager> _orgManager;
         Mock<IAppInstanceManager> _appInstanceManager;
         Mock<IAuthRequestValidators> _authRequestValidators;
 
         AuthTokenManager _authTokenManager;
 
         [TestInitialize]
-        public void Init()
+        public async Task Init()
         {
             _signInManager = new Mock<ISignInManager>();
             _userManager = new Mock<IUserManager>();
             _refreshTokenManager = new Mock<IRefreshTokenManager>();
             _tokenHelper = new Mock<ITokenHelper>();
-            _orgHelper = new Mock<IOrgHelper>();
+            _orgManager = new Mock<IOrganizationManager>();
             _appInstanceManager = new Mock<IAppInstanceManager>();
             _authRequestValidators = new Mock<IAuthRequestValidators>();
 
@@ -50,20 +50,21 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
                 RefreshExpiration = TimeSpan.FromDays(90),
             };
 
-            _authTokenManager = new AuthTokenManager(new Mock<IAppInstanceRepo>().Object, _refreshTokenManager.Object, _authRequestValidators.Object, _orgHelper.Object, _tokenHelper.Object, _appInstanceManager.Object, new Mock<IAdminLogger>().Object, _signInManager.Object, _userManager.Object);
+            _authTokenManager = new AuthTokenManager(new Mock<IAppInstanceRepo>().Object, _orgManager.Object, _refreshTokenManager.Object,
+                _authRequestValidators.Object, _tokenHelper.Object, _appInstanceManager.Object, 
+                new Mock<IAdminLogger>().Object, _signInManager.Object, _userManager.Object);
 
-            _appInstanceManager.Setup(ais => ais.UpdateLastLoginAsync(It.IsAny<string>(), It.IsAny<AuthRequest>())).ReturnsAsync(InvokeResult<AppInstance>.Create(new AppInstance("rowid","userid")));
+            _appInstanceManager.Setup(ais => ais.UpdateLastLoginAsync(It.IsAny<string>(), It.IsAny<AuthRequest>())).ReturnsAsync(InvokeResult<AppInstance>.Create(new AppInstance("rowid", "userid")));
             _appInstanceManager.Setup(ais => ais.UpdateLastAccessTokenRefreshAsync(It.IsAny<string>(), It.IsAny<AuthRequest>())).ReturnsAsync(InvokeResult<AppInstance>.Create(new AppInstance("rowid", "userid")));
 
             _signInManager.Setup(sim => sim.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(Task.FromResult(InvokeResult.Success));
             _userManager.Setup(usm => usm.FindByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { Id = Guid.NewGuid().ToId() }));
             _userManager.Setup(usm => usm.FindByNameAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { Id = Guid.NewGuid().ToId() }));
-            _orgHelper.Setup(ohlp => ohlp.SetUserOrgAsync(It.IsAny<AuthRequest>(), It.IsAny<AppUser>())).Returns(Task.FromResult(InvokeResult.Success));
             _refreshTokenManager.Setup(rtm => rtm.GenerateRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task<RefreshToken>.FromResult(InvokeResult<RefreshToken>.Create(new RefreshToken("XXXX"))));
             _authRequestValidators.Setup(arv => arv.ValidateAuthRequest(It.IsAny<AuthRequest>())).Returns(InvokeResult.Success);
             _authRequestValidators.Setup(arv => arv.ValidateAccessTokenGrant(It.IsAny<AuthRequest>())).Returns(InvokeResult.Success);
             _authRequestValidators.Setup(arv => arv.ValidateRefreshTokenGrant(It.IsAny<AuthRequest>())).Returns(InvokeResult.Success);
-            _tokenHelper.Setup(tlp => tlp.GenerateAuthResponse(It.IsAny<AppUser>(), It.IsAny<AuthRequest>(), It.IsAny<InvokeResult<RefreshToken>>())).Returns(new InvokeResult<AuthResponse>()
+            _tokenHelper.Setup(tlp => tlp.GenerateAuthResponseAsync(It.IsAny<AppUser>(), It.IsAny<AuthRequest>(), It.IsAny<InvokeResult<RefreshToken>>())).ReturnsAsync(new InvokeResult<AuthResponse>()
             {
                 Result = new AuthResponse()
                 {

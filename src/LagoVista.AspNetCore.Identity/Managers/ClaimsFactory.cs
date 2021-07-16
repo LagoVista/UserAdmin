@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using LagoVista.UserAdmin.Models.Users;
 using System.Security.Claims;
+using LagoVista.Core.Models;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -57,5 +58,37 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             return claims;
         }
+
+        public List<Claim> GetClaims(AppUser user, EntityHeader org, bool isOrgAdmin, bool isAppBuilder)
+        {
+            var claims = new List<Claim> {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(user.FirstName) ? user.FirstName : None),
+                new Claim(ClaimTypes.Surname, !string.IsNullOrWhiteSpace(user.LastName) ? user.LastName : None),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(CurrentUserId, user.Id),
+                new Claim(IsPreviewUser, user.IsPreviewUser.ToString().ToLower()),
+                new Claim(EmailVerified, user.EmailConfirmed.ToString()),
+                new Claim(PhoneVerfiied, user.PhoneNumberConfirmed.ToString()),
+                new Claim(IsSystemAdmin, user.IsSystemAdmin.ToString()),
+                new Claim(IsOrgAdmin, isOrgAdmin.ToString()),
+                new Claim(IsAppBuilder, isAppBuilder.ToString()),
+                new Claim(IsUserDevice, user.IsUserDevice.ToString()),
+                new Claim(CurrentOrgName, org.Text),
+                new Claim(CurrentOrgId, org.Id),
+                new Claim(CurrentUserProfilePictureurl, user.ProfileImageUrl.ImageUrl),
+            };
+
+            if (user.CurrentOrganizationRoles != null)
+            {
+                foreach (var role in user.CurrentOrganizationRoles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, $"{role.Id}.{role.Text}"));
+                }
+            }
+
+            return claims;
+        }
+
     }
 }

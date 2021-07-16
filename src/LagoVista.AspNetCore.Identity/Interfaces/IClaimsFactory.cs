@@ -10,5 +10,6 @@ namespace LagoVista.AspNetCore.Identity.Interfaces
     public interface IClaimsFactory
     {
         List<Claim> GetClaims(AppUser user);
+        List<Claim> GetClaims(AppUser user, EntityHeader org, bool isOrgAdmin, bool isAppBuilder);
     }
 }

@@ -1,6 +1,4 @@
-﻿using LagoVista.AspNetCore.Identity.Interfaces;
-using LagoVista.Core.Authentication.Models;
-using LagoVista.Core.Models;
+﻿using LagoVista.Core.Authentication.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
@@ -11,36 +9,36 @@ using System.Threading.Tasks;
 using LagoVista.UserAdmin.Interfaces.Repos.Apps;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin;
-using LagoVista.Core;
 using LagoVista.Core.Interfaces;
+using System.Linq;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
     public class AuthTokenManager : IAuthTokenManager
     {
-        IRefreshTokenManager _refreshTokenManager;
-        IAdminLogger _adminLogger;
-        ISignInManager _signInManager;
-        IUserManager _userManager;
-        ITokenHelper _tokenHelper;
-        IAppInstanceManager _appInstanceManager;
-        IAuthRequestValidators _authRequestValidators;
-        IOrgHelper _orgHelper;
+        private readonly IRefreshTokenManager _refreshTokenManager;
+        private readonly IAdminLogger _adminLogger;
+        private readonly ISignInManager _signInManager;
+        private readonly IUserManager _userManager;
+        private readonly ITokenHelper _tokenHelper;
+        private readonly IAppInstanceManager _appInstanceManager;
+        private readonly IAuthRequestValidators _authRequestValidators;
+        private readonly IOrganizationManager _orgManager;
 
         public const string GRANT_TYPE_PASSWORD = "password";
         public const string GRANT_TYPE_REFRESHTOKEN = "refreshtoken";
 
-        public AuthTokenManager(IAppInstanceRepo appInstanceRepo,
-                                IRefreshTokenManager refreshTokenManager, IAuthRequestValidators authRequestValidators, IOrgHelper orgHelper,
+        public AuthTokenManager(IAppInstanceRepo appInstanceRepo, IOrganizationManager orgManager,
+                                IRefreshTokenManager refreshTokenManager, IAuthRequestValidators authRequestValidators,
                                 ITokenHelper tokenHelper, IAppInstanceManager appInstanceManager,
                                 IAdminLogger adminLogger, ISignInManager signInManager, IUserManager userManager)
         {
             _refreshTokenManager = refreshTokenManager;
             _adminLogger = adminLogger;
-            _orgHelper = orgHelper;
             _tokenHelper = tokenHelper;
             _signInManager = signInManager;
             _userManager = userManager;
+            _orgManager = orgManager;
             _authRequestValidators = authRequestValidators;
             _appInstanceManager = appInstanceManager;
         }
@@ -60,7 +58,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (!accessTokenRequestValidationResult.Successful) return InvokeResult<AuthResponse>.FromInvokeResult(accessTokenRequestValidationResult);
 
             var userName = authRequest.UserName;
-            var password = authRequest.Password;            
+            var password = authRequest.Password;
 
             switch (authRequest.AuthType)
             {
@@ -89,10 +87,17 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
 
-            if(appUser.IsAccountDisabled)
+            if (appUser.IsAccountDisabled)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AccessTokenGrantAsync", "UserLogin Failed - Account Disabled", new KeyValuePair<string, string>("email", userName));
-                return InvokeResult<AuthResponse>.FromError("Accound Disabled.");
+                return InvokeResult<AuthResponse>.FromError("Account Disabled.");
+            }
+
+            if (!string.IsNullOrEmpty(authRequest.OrgId))
+            {
+                var userOrgs = await _orgManager.GetOrganizationsForUserAsync(appUser.Id, appUser.ToEntityHeader(), appUser.CurrentOrganization);
+                if (!userOrgs.Where(org => org.OrgId == authRequest.OrgId).Any())
+                    return InvokeResult<AuthResponse>.FromError($"User does not have access to {authRequest.OrgName}");
             }
 
             if (String.IsNullOrEmpty(authRequest.AppInstanceId))
@@ -104,7 +109,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             else
             {
                 var updateLastLoginResult = (await _appInstanceManager.UpdateLastLoginAsync(appUser.Id, authRequest));
-                if(updateLastLoginResult.Successful)
+                if (updateLastLoginResult.Successful)
                 {
                     authRequest.AppInstanceId = updateLastLoginResult.Result.RowKey;
                 }
@@ -115,7 +120,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             }
 
             var refreshTokenResponse = await _refreshTokenManager.GenerateRefreshTokenAsync(authRequest.AppId, authRequest.AppInstanceId, appUser.Id);
-            var authResponse = _tokenHelper.GenerateAuthResponse(appUser, authRequest, refreshTokenResponse);
+            var authResponse = await _tokenHelper.GenerateAuthResponseAsync(appUser, authRequest, refreshTokenResponse);
             return authResponse;
         }
 
@@ -151,13 +156,14 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (appUser.IsAccountDisabled)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_RefreshTokenGrantAsync", "UserLogin Failed - Account Disabled", new KeyValuePair<string, string>("email", userName));
-                return InvokeResult<AuthResponse>.FromError("Accound Disabled.");
+                return InvokeResult<AuthResponse>.FromError("Account Disabled.");
             }
 
-            if (!String.IsNullOrEmpty(authRequest.OrgId) && appUser.CurrentOrganization == null)
+            if (!String.IsNullOrEmpty(authRequest.OrgId))
             {
-                var changeOrgResult = await _orgHelper.SetUserOrgAsync(authRequest, appUser);
-                if (!changeOrgResult.Successful) return InvokeResult<AuthResponse>.FromInvokeResult(changeOrgResult);
+                var userOrgs = await _orgManager.GetOrganizationsForUserAsync(appUser.Id, appUser.ToEntityHeader(), appUser.CurrentOrganization);
+                if (!userOrgs.Where(org => org.OrgId == authRequest.OrgId).Any())
+                    return InvokeResult<AuthResponse>.FromError($"User does not have access to {authRequest.OrgName}");
             }
 
             var updateLastRefreshTokenResult = (await _appInstanceManager.UpdateLastAccessTokenRefreshAsync(appUser.Id, authRequest));
@@ -166,7 +172,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 authRequest.AppInstanceId = updateLastRefreshTokenResult.Result.RowKey;
                 var refreshTokenResponse = await _refreshTokenManager.RenewRefreshTokenAsync(authRequest.RefreshToken, appUser.Id);
                 _adminLogger.LogInvokeResult("AuthTokenManager_RefreshTokenGrantAsync", refreshTokenResponse);
-                return _tokenHelper.GenerateAuthResponse(appUser, authRequest, refreshTokenResponse);
+                return await _tokenHelper.GenerateAuthResponseAsync(appUser, authRequest, refreshTokenResponse);
             }
             else
             {

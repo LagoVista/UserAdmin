@@ -49,7 +49,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 					}
 					catch
 					{
-						throw ex;
+						throw;
 					}
 				}
 				else
