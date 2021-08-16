@@ -3,7 +3,6 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Resources;
-using LagoVista.UserAdmin.Resources;
 using System;
 
 namespace LagoVista.UserAdmin.Models.Orgs
@@ -11,8 +10,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.OrganizationUserRole_Title, UserAdminResources.Names.Organization_Help, UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
     public class OrgUser : TableStorageEntity, IValidateable, ITableStorageAuditableEntity
     {
-        /* Id will becomposed o */
-
         public OrgUser(string orgId, string userId)
         {
             RowKey = CreateRowKey(orgId, userId);

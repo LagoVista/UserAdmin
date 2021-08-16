@@ -303,7 +303,6 @@ namespace LagoVista.AspNetCore.Identity.Services
                 <td>
                     <img src=""{_appConfig.AppLogo}"" />
                     <h1>{_appConfig.AppName}</h1>
-                    <h2>{subject}</h2>
                     <div style=""width:550px"">
                     {body}
                     </div>
