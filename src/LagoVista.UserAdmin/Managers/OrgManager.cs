@@ -766,7 +766,7 @@ namespace LagoVista.UserAdmin.Managers
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Read, new SecurityHelper() { OrgId = orgId });
             var orgUsers = await _orgUserRepo.GetUsersForOrgAsync(orgId);
-            return (await _appUserRepo.GetUserSummaryForListAsync(orgUsers)).Where(usr=>!usr.IsAccountDisabled && !usr.IsRuntimeUser && !usr.IsUserDevice);
+            return (await _appUserRepo.GetUserSummaryForListAsync(orgUsers)).Where(usr=>!usr.IsAccountDisabled && !usr.IsRuntimeUser && !usr.IsUserDevice).OrderBy(usr=>usr.Name);
         }
 
         public async Task<IEnumerable<OrgUser>> GetOrganizationsForUserAsync(string userId, EntityHeader org, EntityHeader user)
