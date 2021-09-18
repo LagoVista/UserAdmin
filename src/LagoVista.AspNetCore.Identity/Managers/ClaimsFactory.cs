@@ -23,6 +23,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string IsOrgAdmin = "com.lagovista.iot.isorgadmin";
         public const string IsAppBuilder = "com.lagovista.iot.isappbuilder";
         public const string IsUserDevice = "com.lagovista.iot.isuserdevice";
+        public const string IsFinancceAdmin = "com.lagovista.iot.isfinanceadmin";
         public const string CurrentUserProfilePictureurl = "com.lagovista.iot.currentprofilepictureurl";
 
         // support for unattended Kiosk authentication
@@ -43,6 +44,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(IsOrgAdmin, user.IsOrgAdmin.ToString()),
                 new Claim(IsAppBuilder, user.IsAppBuilder.ToString()),
                 new Claim(IsUserDevice, user.IsUserDevice.ToString()),
+                new Claim(IsFinancceAdmin, user.IsFinanceAdmin.ToString()),
                 new Claim(CurrentOrgName, user.CurrentOrganization == null ? None : user.CurrentOrganization.Text),
                 new Claim(CurrentOrgId, user.CurrentOrganization == null ? None : user.CurrentOrganization.Id),
                 new Claim(CurrentUserProfilePictureurl, user.ProfileImageUrl.ImageUrl),
@@ -74,6 +76,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(IsOrgAdmin, isOrgAdmin.ToString()),
                 new Claim(IsAppBuilder, isAppBuilder.ToString()),
                 new Claim(IsUserDevice, user.IsUserDevice.ToString()),
+                new Claim(IsFinancceAdmin, user.IsFinanceAdmin.ToString()),
                 new Claim(CurrentOrgName, org.Text),
                 new Claim(CurrentOrgId, org.Id),
                 new Claim(CurrentUserProfilePictureurl, user.ProfileImageUrl.ImageUrl),
