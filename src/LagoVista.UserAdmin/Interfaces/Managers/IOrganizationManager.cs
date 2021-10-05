@@ -39,6 +39,10 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
         Task<InvokeResult> ClearAppBuilderAsync(string userId, EntityHeader org, EntityHeader user);
 
+        Task<InvokeResult> DeleteOrgAsync(string orgId, EntityHeader org, EntityHeader user);
+
+        Task<ListResponse<OwnedObject>> GetOwnedObjectsForOrgAsync(string orgId, ListRequest request, EntityHeader org, EntityHeader user);
+
 
         Task<bool> IsUserOrgAdminAsync(string orgId, string userId);
 
@@ -60,6 +64,8 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<ListResponse<Invitation>> GetActiveInvitationsForOrgAsync(ListRequest request, EntityHeader org, EntityHeader user);
         Task<bool> GetIsInvigationActiveAsync(string inviteId);
 
+        Task<ListResponse<Organization>> GetAllOrgsAsync(EntityHeader org, EntityHeader user, ListRequest listRequest);
+       
         Task<Invitation> GetInvitationAsync(string inviteId);
 
         Task<InvokeResult> AcceptInvitationAsync(string inviteId, string acceptedUserId);

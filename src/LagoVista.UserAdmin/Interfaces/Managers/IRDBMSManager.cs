@@ -10,8 +10,11 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
     public interface  IRDBMSManager
     {
         Task<InvokeResult> AddAppUserAsync(AppUser user);
+        Task<InvokeResult> DeleteAppUserAsync(string userId);
+        Task<InvokeResult> DeleteOrgAsync(string orgId);
         Task<InvokeResult> UpdateAppUserAsync(AppUser user);
         Task<InvokeResult> AddOrgAsync(Models.Orgs.Organization org);
         Task<InvokeResult> UpdateOrgAsync(Models.Orgs.Organization org);
+        Task<bool> HasBillingRecords(string orgId);
     }
 }

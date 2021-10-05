@@ -5,15 +5,20 @@ using System.Threading.Tasks;
 using LagoVista.Core;
 using System.Linq;
 using LagoVista.UserAdmin.Models.Orgs;
+using System.Text;
+using System;
+using System.Data.SqlClient;
 
 namespace LagoVista.UserAdmin.Repos.RDBMS
 {
     public class RDBMSManager : IRDBMSManager
     {
-        UserAdminDataContext _dataContext;
-        public RDBMSManager(UserAdminDataContext dataContext)
+        private readonly UserAdminDataContext _dataContext;
+        private readonly IRDBMSConnectionSettings _connectionSettings;
+        public RDBMSManager(UserAdminDataContext dataContext, IRDBMSConnectionSettings connectionSettings)
         {
-            _dataContext = dataContext;
+            _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
+            _connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
         }
 
         public async Task<InvokeResult> AddAppUserAsync(AppUser user)
@@ -49,6 +54,49 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
             await _dataContext.SaveChangesAsync();
 
             return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> DeleteAppUserAsync(string userId)
+        {
+            var appUser = await _dataContext.AppUser.FindAsync(userId);
+            _dataContext.AppUser.Remove(appUser);
+            await _dataContext.SaveChangesAsync();
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> DeleteOrgAsync(string orgId)
+        {
+            var org = await _dataContext.Org.FindAsync(orgId);
+            _dataContext.Org.Remove(org);
+            await _dataContext.SaveChangesAsync();
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<bool> HasBillingRecords(string orgId)
+        {
+            var query = new StringBuilder(@"
+select subs.id 
+ from BillingEvents be
+ join Subscription subs on be.SubscriptionId = subs.Id
+ where subs.OrgId = @orgId
+");
+
+            var connectionString = $"Server=tcp:{_connectionSettings.DbConnectionSettings.Uri},1433;Initial Catalog={_connectionSettings.DbConnectionSettings.ResourceName};Persist Security Info=False;User ID={_connectionSettings.DbConnectionSettings.UserName};Password={_connectionSettings.DbConnectionSettings.Password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            using(var cn = new SqlConnection(connectionString))
+            using(var cmd = new SqlCommand())
+            {
+                cmd.Connection = cn;
+                cmd.CommandText = query.ToString();
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.Connection.Open();
+                cmd.Parameters.AddWithValue(@"orgId", orgId);
+                using(var rdr = await cmd.ExecuteReaderAsync())
+                {
+                    return await rdr.ReadAsync();
+                }
+            }
         }
 
         public async Task<InvokeResult> UpdateAppUserAsync(AppUser user)

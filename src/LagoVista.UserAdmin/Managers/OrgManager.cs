@@ -40,6 +40,7 @@ namespace LagoVista.UserAdmin.Managers
         readonly IAppUserRepo _appUserRepo;
         readonly IAdminLogger _adminLogger;
         readonly IOrgInitializer _orgInitializer;
+        readonly IOwnedObjectRepo _ownedObjectRepo;
         #endregion
 
         #region Ctor
@@ -57,6 +58,7 @@ namespace LagoVista.UserAdmin.Managers
             IDependencyManager depManager,
             ISecurity security,
             IOrgInitializer orgInitializer,
+            IOwnedObjectRepo ownedObjectRepo,
             IAdminLogger logger) : base(logger, appConfig, depManager, security)
         {
 
@@ -73,6 +75,7 @@ namespace LagoVista.UserAdmin.Managers
             _inviteUserRepo = inviteUserRepo;
             _adminLogger = logger;
             _orgInitializer = orgInitializer;
+            _ownedObjectRepo = ownedObjectRepo;
         }
         #endregion
 
@@ -173,7 +176,7 @@ namespace LagoVista.UserAdmin.Managers
             appUser.CurrentOrganization = newOrg.ToEntityHeader();
             appUser.IsOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(newOrgId, user.Id);
             appUser.IsAppBuilder = await _orgUserRepo.IsAppBuilderAsync(newOrgId, user.Id);
-           
+
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, user, org, "switchOrgs");
             await _appUserRepo.UpdateAsync(appUser);
 
@@ -284,7 +287,7 @@ namespace LagoVista.UserAdmin.Managers
 
             if (acceptedUser.CurrentOrganization == null || acceptedUser.CurrentOrganization.IsEmpty())
             {
-                acceptedUser.CurrentOrganization = orgHeader;                
+                acceptedUser.CurrentOrganization = orgHeader;
             }
 
             acceptedUser.Organizations.Add(orgHeader);
@@ -581,7 +584,7 @@ namespace LagoVista.UserAdmin.Managers
             await AuthorizeOrgAccessAsync(addedBy, userOrg, typeof(OrgUser), Actions.Create, new SecurityHelper() { OrgId = orgId, UserId = userId });
 
             var appUser = await _appUserRepo.FindByIdAsync(userId);
-            if(appUser == null)
+            if (appUser == null)
             {
                 return InvokeResult.FromError($"Could not find user with user id [{userId}] when attempting to add user to the org [{orgId}]");
             }
@@ -664,7 +667,7 @@ namespace LagoVista.UserAdmin.Managers
 
                 var orgUser = await _orgUserRepo.GetOrgUserAsync(org.Id, userId);
                 orgUser.IsOrgAdmin = false;
-                
+
                 orgUser.LastUpdatedBy = user.Text;
                 orgUser.LastUpdatedById = user.Id;
                 orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
@@ -737,11 +740,11 @@ namespace LagoVista.UserAdmin.Managers
                 orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
                 await _orgUserRepo.UpdateOrgUserAsync(orgUser);
 
-                var appUser = await  _appUserRepo.FindByIdAsync(userId);
+                var appUser = await _appUserRepo.FindByIdAsync(userId);
                 appUser.IsOrgAdmin = false;
                 appUser.IsAppBuilder = false;
                 appUser.IsAccountDisabled = false;
-                await  _appUserRepo.UpdateAsync(appUser);
+                await _appUserRepo.UpdateAsync(appUser);
 
 
                 await LogEntityActionAsync(userId, typeof(AppUser).Name, "ClearAppBuilder", org, user);
@@ -757,7 +760,18 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<IEnumerable<UserInfoSummary>> GetUsersForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Read, new SecurityHelper() { OrgId = orgId });
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+
+            if(orgId == org.Id)
+            {
+                await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Read, new SecurityHelper() { OrgId = orgId });
+            }
+            else if (!appUser.IsSystemAdmin) // Eventually if we need to delete all the data && ((org.Id != orgId) || (org.Id == orgId && !appUser.IsOrgAdmin)))
+            {
+                //throw new NotAuthorizedException("Must be system admin or belong to the org and be an org admin for the org that is to be deleted, neither of these are the case.");
+                throw new NotAuthorizedException("Must be a system admin to check for billing records.");
+            }
+            
             var orgUsers = await _orgUserRepo.GetUsersForOrgAsync(orgId);
             return await _appUserRepo.GetUserSummaryForListAsync(orgUsers);
         }
@@ -766,7 +780,7 @@ namespace LagoVista.UserAdmin.Managers
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Read, new SecurityHelper() { OrgId = orgId });
             var orgUsers = await _orgUserRepo.GetUsersForOrgAsync(orgId);
-            return (await _appUserRepo.GetUserSummaryForListAsync(orgUsers)).Where(usr=>!usr.IsAccountDisabled && !usr.IsRuntimeUser && !usr.IsUserDevice).OrderBy(usr=>usr.Name);
+            return (await _appUserRepo.GetUserSummaryForListAsync(orgUsers)).Where(usr => !usr.IsAccountDisabled && !usr.IsRuntimeUser && !usr.IsUserDevice).OrderBy(usr => usr.Name);
         }
 
         public async Task<IEnumerable<OrgUser>> GetOrganizationsForUserAsync(string userId, EntityHeader org, EntityHeader user)
@@ -1016,6 +1030,87 @@ namespace LagoVista.UserAdmin.Managers
             await AuthorizeOrgAccessAsync(revokedBy, org, typeof(LocationUserRole), action: Actions.Delete, data: new SecurityHelper { LocationId = locationId, UserId = userId });
             await _locationRoleRepo.RevokeAllRolesForUserInLocationAsync(locationId, userId);
             return InvokeResult.Success;
+        }
+
+        public async Task<bool> HasBillingRecords(string orgId, EntityHeader org, EntityHeader user)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+
+            if (!appUser.IsSystemAdmin) // Eventually if we need to delete all the data && ((org.Id != orgId) || (org.Id == orgId && !appUser.IsOrgAdmin)))
+            {
+                //throw new NotAuthorizedException("Must be system admin or belong to the org and be an org admin for the org that is to be deleted, neither of these are the case.");
+                throw new NotAuthorizedException("Must be a system admin to check for billing records.");
+            }
+
+            return await _organizationRepo.HasBillingRecords(orgId);
+        }
+
+        public async Task<InvokeResult> DeleteOrgAsync(string orgId, EntityHeader org, EntityHeader user)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+            var fullOrg = await _organizationRepo.GetOrganizationAsync(orgId);
+
+            if (!appUser.IsSystemAdmin) // Eventually if we need to delete all the data && ((org.Id != orgId) || (org.Id == orgId && !appUser.IsOrgAdmin)))
+            {
+                //throw new NotAuthorizedException("Must be system admin or belong to the org and be an org admin for the org that is to be deleted, neither of these are the case.");
+                throw new NotAuthorizedException("Must be a system admin to remove an organization.");
+            }
+
+            var hasBillingEvents = await _organizationRepo.HasBillingRecords(orgId);
+            if (hasBillingEvents)
+            {
+                return InvokeResult.FromError("Organization has billing events, can not remove.");
+            }
+
+            var users = await _orgUserRepo.GetUsersForOrgAsync(orgId);
+
+            foreach (var orgUser in users)
+            {
+                await _orgUserRepo.RemoveUserFromOrgAsync(orgId, orgUser.UserId, user);
+                _adminLogger.AddCustomEvent(LogLevel.Message, "UserAdmin_DeleteOrgAsync_RemoveUserFromOrg", $"{user.Text} removed the user {orgUser.UserName} from {orgUser.OrganizationName}");
+                var orgUsers = await _orgUserRepo.GetOrgsForUserAsync(orgUser.UserId);
+                if (!orgUsers.Any())
+                {
+                    _adminLogger.AddCustomEvent(LogLevel.Message, "UserAdmin_DeleteOrgAsync_DeleteUser", $"{user.Text} delete the user {orgUser.UserName} - {orgUser.Email} from system");
+                    await _appUserRepo.DeleteAsync(orgUser.UserId);
+                }
+                else
+                {
+                    var existingUserNames = String.Join(",", orgUsers.Select(usrOrg => usrOrg.OrganizationName));
+                    _adminLogger.AddCustomEvent(LogLevel.Message, "UserAdmin_DeleteOrgAsync_DidNotDeleteUser", $"{user.Text} did not delete the user {orgUser.UserName} - {orgUser.Email}, user still belongs to orgs [{existingUserNames}].");
+                }
+            }
+
+            _adminLogger.AddCustomEvent(LogLevel.Message, "UserAdmin_DeleteOrgAsync", $"{user.Text} delete the user {fullOrg.Name} from system");
+            await _organizationRepo.DeleteOrgAsync(orgId);
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<ListResponse<Organization>> GetAllOrgsAsync(EntityHeader org, EntityHeader user, ListRequest listRequest)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+
+            if (!appUser.IsSystemAdmin) // Eventually if we need to delete all the data && ((org.Id != orgId) || (org.Id == orgId && !appUser.IsOrgAdmin)))
+            {
+                //throw new NotAuthorizedException("Must be system admin or belong to the org and be an org admin for the org that is to be deleted, neither of these are the case.");
+                throw new NotAuthorizedException("Must be a system admin to get all organizations.");
+            }
+
+            return await _organizationRepo.GetAllOrgsAsync(listRequest);
+        }
+
+        public async Task<ListResponse<OwnedObject>> GetOwnedObjectsForOrgAsync(string orgId, ListRequest request, EntityHeader org, EntityHeader user)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+
+            if (!appUser.IsSystemAdmin) // Eventually if we need to delete all the data && ((org.Id != orgId) || (org.Id == orgId && !appUser.IsOrgAdmin)))
+            {
+                //throw new NotAuthorizedException("Must be system admin or belong to the org and be an org admin for the org that is to be deleted, neither of these are the case.");
+                throw new NotAuthorizedException("Must be a system admin to query owned objects for org.");
+            }
+
+            return await _ownedObjectRepo.GetOwnedObjectsForOrgAsync(orgId, request);
         }
         #endregion
     }

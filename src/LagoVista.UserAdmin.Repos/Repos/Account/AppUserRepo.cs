@@ -17,9 +17,9 @@ namespace LagoVista.UserAdmin.Repos.Users
 {
     public class AppUserRepo : DocumentDBRepoBase<AppUser>, IAppUserRepo
     {
-        bool _shouldConsolidateCollections;
-        IRDBMSManager _rdbmsUserManager;
-        IUserAdminSettings _adminSettings;
+        private readonly bool _shouldConsolidateCollections;
+        private readonly IRDBMSManager _rdbmsUserManager;
+        private readonly IUserAdminSettings _adminSettings;
 
         public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserAdminSettings userAdminSettings, IAdminLogger logger) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
@@ -42,7 +42,8 @@ namespace LagoVista.UserAdmin.Repos.Users
 
         public async Task DeleteAsync(AppUser user)
         {
-            await DeleteAsync(user);
+            await  DeleteDocumentAsync(user.Id);
+            await _rdbmsUserManager.DeleteAppUserAsync(user.Id);
         }
 
         public Task<AppUser> FindByIdAsync(string id)
@@ -180,6 +181,18 @@ namespace LagoVista.UserAdmin.Repos.Users
                 PageIndex = results.PageIndex,
                 PageSize = results.PageSize,                 
             };
+        }
+
+        public async Task DeleteAsync(string userId)
+        {
+            await this.DeleteDocumentAsync(userId);
+            await this._rdbmsUserManager.DeleteAppUserAsync(userId);
+        }
+
+        public async Task<ListResponse<UserInfoSummary>> GetUsersWithoutOrgsAsync(ListRequest listRequest)
+        {       
+            var users = (await QueryAsync(usr => (usr.Organizations == null || usr.Organizations.Count == 0), listRequest));
+            return ListResponse<UserInfoSummary>.Create(users.Model.Select(usr => usr.ToUserInfoSummary(false, false)));
         }
     }
 }

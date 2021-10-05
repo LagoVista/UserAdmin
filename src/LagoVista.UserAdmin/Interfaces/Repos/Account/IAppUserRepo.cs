@@ -19,7 +19,9 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Users
         Task<AppUser> FindByThirdPartyLogin(string providerId, string providerKey);
         Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(ListRequest listRequest);
         Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(ListRequest listRequest, bool? emailConfirmed, bool? phoneConfirmed);
+        Task<ListResponse<UserInfoSummary>> GetUsersWithoutOrgsAsync(ListRequest listRequest);
         Task UpdateAsync(AppUser user);
         Task DeleteAsync(AppUser user);
+        Task DeleteAsync(string userId);
     }
 }

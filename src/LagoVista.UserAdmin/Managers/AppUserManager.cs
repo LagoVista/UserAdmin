@@ -15,29 +15,33 @@ using System.Text.RegularExpressions;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.Core;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.Core.Exceptions;
+using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 
 namespace LagoVista.UserAdmin.Managers
 {
     public class AppUserManager : AppUserManagerReadOnly, IAppUserManager
     {
-        IAppUserRepo _appUserRepo;
-        IAdminLogger _adminLogger;
-        IAuthTokenManager _authTokenManager;
-        IUserManager _userManager;
-        ISignInManager _signInManager;
-        IUserVerficationManager _userVerificationmanager;
-        IAppConfig _appConfig;
+        private readonly IAppUserRepo _appUserRepo;
+        private readonly IAdminLogger _adminLogger;
+        private readonly IAuthTokenManager _authTokenManager;
+        private readonly IUserManager _userManager;
+        private readonly ISignInManager _signInManager;
+        private readonly IUserVerficationManager _userVerificationmanager;
+        private readonly IAppConfig _appConfig;
+        private readonly IOrgUserRepo _orgUserRepo;
 
-        public AppUserManager(IAppUserRepo appUserRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
+        public AppUserManager(IAppUserRepo appUserRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IOrgUserRepo orgUserRepo, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
             IAuthTokenManager authTokenManager, IUserManager userManager, ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, depManager, security, logger, appConfig)
         {
-            _appUserRepo = appUserRepo;
-            _adminLogger = logger;
-            _authTokenManager = authTokenManager;
-            _signInManager = signInManager;
-            _userManager = userManager;
-            _appConfig = appConfig;
-            _userVerificationmanager = userVerificationmanager;
+            _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
+            _orgUserRepo = orgUserRepo ?? throw new ArgumentNullException(nameof(orgUserRepo));
+            _adminLogger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _authTokenManager = authTokenManager ?? throw new ArgumentNullException(nameof(authTokenManager));
+            _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
+            _userVerificationmanager = userVerificationmanager ?? throw new ArgumentNullException(nameof(userVerificationmanager));
         }
 
         public async Task<InvokeResult> AddUserAsync(AppUser user, EntityHeader org, EntityHeader updatedByUser)
@@ -63,12 +67,18 @@ namespace LagoVista.UserAdmin.Managers
         {
             var appUser = await _appUserRepo.FindByIdAsync(id);
 
+            foreach(var userOrg in appUser.Organizations)
+            {
+                await _orgUserRepo.RemoveUserFromOrgAsync(userOrg.Id, id, deletedByUser);
+            }
+
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "AppUserManager__DeleteuserAsync", $"{deletedByUser.Text} delete the user {appUser.Name}");
+
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Delete, deletedByUser, org);
             await _appUserRepo.DeleteAsync(appUser);
 
             return InvokeResult.Success;
         }
-
 
 
         public async Task<InvokeResult> UpdateUserAsync(AppUser user, EntityHeader org, EntityHeader updatedByUser)
@@ -342,9 +352,30 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(bool? emailConfirmed, bool? smsConfirmed, EntityHeader org, EntityHeader user, ListRequest listRequest)
         {
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+
+            if (!appUser.IsSystemAdmin) // Eventually if we need to delete all the data && ((org.Id != orgId) || (org.Id == orgId && !appUser.IsOrgAdmin)))
+            {
+                //throw new NotAuthorizedException("Must be system admin or belong to the org and be an org admin for the org that is to be deleted, neither of these are the case.");
+                throw new NotAuthorizedException("Must be a system admin to check for billing records.");
+            }
+
             await AuthorizeAsync(user, org, "GetAllUsersAsync", nameof(AppUser));
 
             return await _appUserRepo.GetAllUsersAsync(listRequest, emailConfirmed, smsConfirmed);
+        }
+
+        public async Task<ListResponse<UserInfoSummary>> GetUsersWithoutOrgsAsync(EntityHeader user, ListRequest listRequest)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+
+            if (!appUser.IsSystemAdmin) // Eventually if we need to delete all the data && ((org.Id != orgId) || (org.Id == orgId && !appUser.IsOrgAdmin)))
+            {
+                //throw new NotAuthorizedException("Must be system admin or belong to the org and be an org admin for the org that is to be deleted, neither of these are the case.");
+                throw new NotAuthorizedException("Must be a system admin to check for billing records.");
+            }
+
+            return await _appUserRepo.GetUsersWithoutOrgsAsync(listRequest);
         }
     }
 }

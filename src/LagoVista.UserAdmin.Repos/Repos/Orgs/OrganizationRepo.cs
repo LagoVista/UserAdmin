@@ -7,19 +7,21 @@ using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using System;
+using LagoVista.Core.Models.UIMetaData;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
     public class OrganizationRepo : DocumentDBRepoBase<Organization>, IOrganizationRepo
     {
-        bool _shouldConsolidateCollections;
-        IRDBMSManager _rdbmsUserManager;
+        private readonly bool _shouldConsolidateCollections;
+        private readonly IRDBMSManager _rdbmsUserManager;
 
         public OrganizationRepo(IRDBMSManager rdbmsUserManager, IUserAdminSettings userAdminSettings, IAdminLogger logger) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
-            _rdbmsUserManager = rdbmsUserManager;
+            _rdbmsUserManager = rdbmsUserManager ?? throw new ArgumentNullException(nameof(rdbmsUserManager));
         }
 
         protected override bool ShouldConsolidateCollections
@@ -33,9 +35,24 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             await CreateDocumentAsync(org);
         }
 
+        public Task DeleteOrgAsync(string orgId)
+        {
+            return DeleteDocumentAsync(orgId);
+        }
+
+        public async Task<ListResponse<Organization>> GetAllOrgsAsync(ListRequest listRequest)
+        {
+            return  await base.QueryAsync(qry => true, listRequest);
+        }
+
         public Task<Organization> GetOrganizationAsync(string id)
         {
             return GetDocumentAsync(id);
+        }
+
+        public Task<bool> HasBillingRecords(string orgId)
+        {
+            return _rdbmsUserManager.HasBillingRecords(orgId);
         }
 
         public async Task<bool> QueryNamespaceInUseAsync(string namespaceText)

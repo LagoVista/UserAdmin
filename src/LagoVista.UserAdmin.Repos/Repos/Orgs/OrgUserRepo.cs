@@ -17,10 +17,10 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         {
 
         }
-       
+
         public async Task<bool> QueryOrgHasUserAsync(string orgId, string userId)
         {
-            return (await base.GetAsync(orgId, OrgUser.CreateRowKey(orgId, userId),false)) != null;
+            return (await base.GetAsync(orgId, OrgUser.CreateRowKey(orgId, userId), false)) != null;
         }
 
         public async Task AddOrgUserAsync(OrgUser user)
@@ -38,10 +38,17 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             return GetByParitionIdAsync(orgId);
         }
 
-        public Task RemoveUserFromOrgAsync(string orgid, string userid, EntityHeader removedBy)
+        public async Task RemoveUserFromOrgAsync(string orgid, string userid, EntityHeader removedBy)
         {
-            var rowKey = OrgUser.CreateRowKey(orgid, userid);
-            return RemoveAsync(orgid, rowKey);
+            try
+            {
+                var rowKey = OrgUser.CreateRowKey(orgid, userid);
+                await RemoveAsync(orgid, rowKey);
+            }
+            catch (Exception)
+            {
+                /* NOP - not a huge problem */
+            }
         }
 
         public async Task<bool> QueryOrgHasUserByEmailAsync(string orgId, string email)
@@ -52,12 +59,12 @@ namespace LagoVista.UserAdmin.Repos.Orgs
                 )).ToList().Any();
         }
 
-        public async  Task<bool> IsUserOrgAdminAsync(string orgId, string userId)
+        public async Task<bool> IsUserOrgAdminAsync(string orgId, string userId)
         {
             var orgUser = await GetOrgUserAsync(orgId, userId);
             return orgUser.IsOrgAdmin;
         }
-       
+
         public async Task<OrgUser> GetOrgUserAsync(string orgId, string userId)
         {
             return (await GetByFilterAsync(
