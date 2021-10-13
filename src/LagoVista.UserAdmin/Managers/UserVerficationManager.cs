@@ -64,7 +64,7 @@ namespace LagoVista.UserAdmin.Managers
             {
                 switch (_appConfig.Environment)
                 {
-                    case Environments.Development: environment = "https://dev.nuviot.com";  break;
+                    case Environments.Development: environment = "https://dev.nuviot.com"; break;
                     case Environments.Testing: environment = "https://test.nuviot.com"; break;
                     case Environments.Beta: environment = "https://qa.nuviot.com"; break;
                     case Environments.Staging: environment = "https://stage.nuviot.com"; break;
@@ -89,7 +89,7 @@ namespace LagoVista.UserAdmin.Managers
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
                 var encodedToken = System.Net.WebUtility.UrlEncode(token);
 
-                
+
 
                 var callbackUrl = $"{GetWebURI()}/Account/Verify?userId={appUser.Id}&code={encodedToken}";
                 var mobileCallbackUrl = $"nuviot:confirmemail/?userId={appUser.Id}&code={encodedToken}";
@@ -165,12 +165,20 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
 
+            if (verifyRequest.SkipStep)
+            {
+                verifyRequest.SMSCode = await _userManager.GenerateChangePhoneNumberTokenAsync(user, verifyRequest.PhoneNumber);
+            }
+
             var result = await _userManager.ChangePhoneNumberAsync(user, verifyRequest.PhoneNumber, verifyRequest.SMSCode);
             if (result.Successful)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "UserVerficationManager_ValidateSMSAsync", "Success_ConfirmSMS",
                     new KeyValuePair<string, string>("phone", verifyRequest.PhoneNumber),
                     new KeyValuePair<string, string>("code", verifyRequest.SMSCode));
+
+                user.PhoneNumberConfirmedForBilling = true;
+                await _userManager.UpdateAsync(user);
 
                 return InvokeResult.Success;
             }
@@ -227,6 +235,7 @@ namespace LagoVista.UserAdmin.Managers
             var user = await _appUserRepo.FindByIdAsync(userId);
             user.PhoneNumber = "5555551212";
             user.PhoneNumberConfirmed = true;
+            user.PhoneNumberConfirmedForBilling = false;
             await _appUserRepo.UpdateAsync(user);
 
             return InvokeResult.Success;

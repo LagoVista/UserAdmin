@@ -11,7 +11,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
         Task AddSubscriptionAsync(Subscription subscription);
         Task UpdateSubscriptionAsync(Subscription subscription);
         Task DeleteSubscriptionAsync(Guid id);
-
+        Task DeleteSubscriptionsForOrgAsync(string orgId);
         Task<Subscription> GetTrialSubscriptionAsync(string orgId);
 
         Task<Subscription> GetSubscriptionAsync(Guid id, bool disableTracking = false);

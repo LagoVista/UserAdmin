@@ -7,6 +7,10 @@ namespace LagoVista.UserAdmin.Models.DTOs
     {
         [JsonProperty("appId")]
         public String AppId { get; set; }
+
+        [JsonProperty("orgId")]
+        public string OrgId { get; set; }
+
         [JsonProperty("appInstanceId")]
         public String AppInstanceId { get; set; }
         [JsonProperty("clientType")]

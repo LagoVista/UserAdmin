@@ -12,5 +12,8 @@ namespace LagoVista.UserAdmin.Models.DTOs
 
         [JsonProperty("phoneNumber")]
         public String PhoneNumber { get; set; }
+
+        [JsonProperty("skipStep")]
+        public bool SkipStep { get; set; }
     }
 }

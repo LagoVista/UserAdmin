@@ -751,8 +751,14 @@
     <value>Sorry, there was an error sending your reset password link, please try again later.</value>
   </data>
   <data name="Email_Verification_Body" xml:space="preserve">
-    <value>&lt;p&gt;Thank you for registering for access to NuvIoT.&lt;/p&gt; &lt;p&gt;To confirm your email address and complete the registration process, please click on this &lt;a href='[CALLBACK_URL]'&gt;Confirm Email&lt;/a&gt; link or copy and paste the link into your browser.&lt;/p&gt; 
+    <value>&lt;p&gt;Thank you for registering for access to NuvIoT.&lt;/p&gt; 
+
+&lt;p&gt;To confirm your email address and complete the registration process, please click on this &lt;a href='[CALLBACK_URL]'&gt;Confirm Email&lt;/a&gt; link or &lt;a href='[MOBILE_CALLBACK_URL]'&gt;mobile link&lt;/a&gt; on your mobile phone or Windows App.&lt;/p&gt;
+
+&lt;p&gt;You can also copy the link below into the address bar of your browser.&lt;/p&gt; 
+
 &lt;div style='font-family:consolas'&gt;[CALLBACK_URL]&lt;/div&gt;
+
 </value>
   </data>
   <data name="Email_Verification_Subject" xml:space="preserve">

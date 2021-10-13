@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Core.Exceptions;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.UserAdmin.Interfaces.Repos.Users;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -20,13 +21,17 @@ namespace LagoVista.UserAdmin.Managers
         readonly IPaymentCustomers _paymentCustomers;
         readonly ISubscriptionRepo _subscriptionRepo;
         readonly ISubscriptionResourceRepo _subscriptionResourceRepo;
+        readonly IAppUserRepo _appUserRepo;
+        readonly IOrganizationRepo _organizationRepo;
 
-        public SubscriptionManager(ISubscriptionRepo subscriptionRepo, IDependencyManager depManager, IPaymentCustomers paymentCustomers,
+        public SubscriptionManager(ISubscriptionRepo subscriptionRepo, IDependencyManager depManager, IPaymentCustomers paymentCustomers, IAppUserRepo appUserRepo, IOrganizationRepo organizationRepo,
             ISubscriptionResourceRepo subscriptionResourceRepo, ISecurity security, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
             _subscriptionRepo = subscriptionRepo ?? throw new ArgumentNullException(nameof(subscriptionRepo));
             _paymentCustomers = paymentCustomers ?? throw new ArgumentNullException(nameof(paymentCustomers));
             _subscriptionResourceRepo = subscriptionResourceRepo ?? throw new ArgumentNullException(nameof(subscriptionResourceRepo));
+            _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
+            _organizationRepo = organizationRepo ?? throw new ArgumentNullException(nameof(organizationRepo));
         }
 
         public async Task<InvokeResult> AddSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user)
@@ -158,6 +163,30 @@ namespace LagoVista.UserAdmin.Managers
             await _subscriptionRepo.UpdateSubscriptionAsync(subscription);
 
             return new InvokeResult();
+        }
+
+        public async Task<InvokeResult> DeleteSubscriptionsForOrgAsync(string orgId, EntityHeader org, EntityHeader user)
+        {
+            var hasBillingEvents = await _organizationRepo.HasBillingRecords(orgId);
+            if (hasBillingEvents)
+            {
+                return InvokeResult.FromError("Organization has billing events, can not remove.");
+            }
+
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+            var fullOrg = await _organizationRepo.GetOrganizationAsync(orgId);
+
+            await AuthorizeAsync(user, org, "DeleteAllSubscriptions", fullOrg);
+
+            if (!appUser.IsSystemAdmin) // Eventually if we need to delete all the data && ((org.Id != orgId) || (org.Id == orgId && !appUser.IsOrgAdmin)))
+            {
+                //throw new NotAuthorizedException("Must be system admin or belong to the org and be an org admin for the org that is to be deleted, neither of these are the case.");
+                throw new NotAuthorizedException("Must be a system admin to remove an organization.");
+            }
+
+            await _subscriptionRepo.DeleteSubscriptionsForOrgAsync(orgId);
+
+            return InvokeResult.Success;
         }
     }
 }

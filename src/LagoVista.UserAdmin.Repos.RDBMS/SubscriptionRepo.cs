@@ -66,10 +66,22 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
             return _dataContext.Subscription.Where(pc => pc.OrgId == orgId && pc.Key == key).AnyAsync();
         }
 
+
         public Task UpdateSubscriptionAsync(Subscription subscription)
         {
             _dataContext.Subscription.Update(subscription);
             return _dataContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteSubscriptionsForOrgAsync(string orgId)
+        {
+            var subscriptions = await _dataContext.Subscription.Where(pc => pc.OrgId == orgId).ToListAsync();
+            foreach (var subscription in subscriptions)
+            {
+                _dataContext.Subscription.Remove(subscription);
+            }
+
+            await _dataContext.SaveChangesAsync();
         }
     }
 }

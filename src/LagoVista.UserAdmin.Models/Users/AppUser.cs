@@ -118,6 +118,7 @@ namespace LagoVista.UserAdmin.Models.Users
         [FormField(LabelResource: UserAdminResources.Names.AppUser_PhoneNumber, FieldType: FieldTypes.Phone, ResourceType: typeof(UserAdminResources))]
         public string PhoneNumber { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
+        public bool PhoneNumberConfirmedForBilling { get; set; }
 
         [JsonIgnore()]
         public String Name

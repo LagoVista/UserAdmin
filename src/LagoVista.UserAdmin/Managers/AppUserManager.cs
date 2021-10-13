@@ -17,12 +17,14 @@ using LagoVista.Core;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Exceptions;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
+using System.Linq;
 
 namespace LagoVista.UserAdmin.Managers
 {
     public class AppUserManager : AppUserManagerReadOnly, IAppUserManager
     {
         private readonly IAppUserRepo _appUserRepo;
+        private readonly IOrganizationManager _orgManager;
         private readonly IAdminLogger _adminLogger;
         private readonly IAuthTokenManager _authTokenManager;
         private readonly IUserManager _userManager;
@@ -30,10 +32,13 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IUserVerficationManager _userVerificationmanager;
         private readonly IAppConfig _appConfig;
         private readonly IOrgUserRepo _orgUserRepo;
+        private readonly IOrganizationRepo _orgRepo;
 
-        public AppUserManager(IAppUserRepo appUserRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IOrgUserRepo orgUserRepo, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
-            IAuthTokenManager authTokenManager, IUserManager userManager, ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, depManager, security, logger, appConfig)
+        public AppUserManager(IAppUserRepo appUserRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IOrganizationManager orgManager, IOrgUserRepo orgUserRepo, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
+           IOrganizationRepo orgRepo, IAuthTokenManager authTokenManager, IUserManager userManager, ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, depManager, security, logger, appConfig)
         {
+            _orgRepo = orgRepo ?? throw new ArgumentNullException(nameof(orgRepo));
+            _orgManager = orgManager ?? throw new ArgumentNullException(nameof(orgManager));
             _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
             _orgUserRepo = orgUserRepo ?? throw new ArgumentNullException(nameof(orgUserRepo));
             _adminLogger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -65,11 +70,23 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> DeleteUserAsync(String id, EntityHeader org, EntityHeader deletedByUser)
         {
-            var appUser = await _appUserRepo.FindByIdAsync(id);
+            if (String.IsNullOrEmpty(id)) throw new ArgumentNullException(nameof(id));
 
-            foreach(var userOrg in appUser.Organizations)
+            var orgs = await _orgRepo.GetBillingContactOrgsForUserAsync(id);
+            if (orgs.Any())
             {
-                await _orgUserRepo.RemoveUserFromOrgAsync(userOrg.Id, id, deletedByUser);
+                var orgList = String.Join(",", orgs);
+                return InvokeResult.FromError($"Can not delete user, user is billing contact for the following org[s] {orgList}");
+            }
+
+            var appUser = await _appUserRepo.FindByIdAsync(id);
+            if (appUser == null) throw new RecordNotFoundException(nameof(AppUser), id);
+            await AuthorizeAsync(deletedByUser, org, "DeleteUser", appUser);
+
+            var userOrgs = await _orgUserRepo.GetOrgsForUserAsync(id);
+            foreach (var userOrg in userOrgs)
+            {
+                await _orgUserRepo.RemoveUserFromOrgAsync(userOrg.OrgId, id, deletedByUser);
             }
 
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "AppUserManager__DeleteuserAsync", $"{deletedByUser.Text} delete the user {appUser.Name}");
@@ -286,6 +303,7 @@ namespace LagoVista.UserAdmin.Managers
                 LastName = newUser.LastName,
             };
 
+            
             var identityResult = await _userManager.CreateAsync(appUser, newUser.Password);
             if (identityResult.Successful)
             {
@@ -294,6 +312,15 @@ namespace LagoVista.UserAdmin.Managers
                 if (autoLogin)
                 {
                     await _signInManager.SignInAsync(appUser);
+                }
+
+                if (!String.IsNullOrEmpty(newUser.OrgId))
+                {
+                    var org = await _orgRepo.GetOrganizationAsync(newUser.OrgId);
+                    var orgEH = new EntityHeader() { Id = newUser.OrgId, Text = newUser.FirstName + " " + newUser.LastName };
+                    await _orgManager.AddUserToOrgAsync(newUser.OrgId, appUser.Id, org.ToEntityHeader(), orgEH);
+                    appUser.CurrentOrganization = orgEH;
+                    await _userManager.UpdateAsync(appUser);
                 }
 
                 if (newUser.ClientType != "WEBAPP")
@@ -343,6 +370,7 @@ namespace LagoVista.UserAdmin.Managers
                         Roles = new List<EntityHeader>()
                     });
                 }
+
             }
             else
             {

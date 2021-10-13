@@ -11,6 +11,7 @@ using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin;
 using LagoVista.Core.Interfaces;
 using System.Linq;
+using LagoVista.Core.Models;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -95,9 +96,16 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             if (!string.IsNullOrEmpty(authRequest.OrgId))
             {
-                var userOrgs = await _orgManager.GetOrganizationsForUserAsync(appUser.Id, appUser.ToEntityHeader(), appUser.CurrentOrganization);
-                if (!userOrgs.Where(org => org.OrgId == authRequest.OrgId).Any())
-                    return InvokeResult<AuthResponse>.FromError($"User does not have access to {authRequest.OrgName}");
+                if (EntityHeader.IsNullOrEmpty(appUser.CurrentOrganization))
+                {
+                    return InvokeResult<AuthResponse>.FromError($"Sorry, you do not have access to the {authRequest.OrgName} organization.", "NOORGACESS");
+                }
+                else
+                {
+                    var userOrgs = await _orgManager.GetOrganizationsForUserAsync(appUser.Id, appUser.ToEntityHeader(), appUser.CurrentOrganization);
+                    if (!userOrgs.Where(org => org.OrgId == authRequest.OrgId).Any())
+                        return InvokeResult<AuthResponse>.FromError($"User does not have access to {authRequest.OrgName}");
+                }
             }
 
             if (String.IsNullOrEmpty(authRequest.AppInstanceId))
@@ -161,9 +169,16 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             if (!String.IsNullOrEmpty(authRequest.OrgId))
             {
-                var userOrgs = await _orgManager.GetOrganizationsForUserAsync(appUser.Id, appUser.ToEntityHeader(), appUser.CurrentOrganization);
-                if (!userOrgs.Where(org => org.OrgId == authRequest.OrgId).Any())
+                if (EntityHeader.IsNullOrEmpty(appUser.CurrentOrganization))
+                {
                     return InvokeResult<AuthResponse>.FromError($"User does not have access to {authRequest.OrgName}");
+                }
+                else
+                {
+                    var userOrgs = await _orgManager.GetOrganizationsForUserAsync(appUser.Id, appUser.ToEntityHeader(), appUser.CurrentOrganization);
+                    if (!userOrgs.Where(org => org.OrgId == authRequest.OrgId).Any())
+                        return InvokeResult<AuthResponse>.FromError($"Sorry, you do not have access to the {authRequest.OrgName} organization.", "NOORGACESS");
+                }
             }
 
             var updateLastRefreshTokenResult = (await _appInstanceManager.UpdateLastAccessTokenRefreshAsync(appUser.Id, authRequest));

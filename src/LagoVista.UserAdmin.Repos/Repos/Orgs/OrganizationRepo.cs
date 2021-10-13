@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using LagoVista.CloudStorage.DocumentDB;
-using LagoVista.Core.PlatformSupport;
 using System.Linq;
 using Microsoft.Azure.Documents;
 using LagoVista.UserAdmin.Models.Orgs;
@@ -9,6 +8,8 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using System;
 using LagoVista.Core.Models.UIMetaData;
+using System.Collections.Generic;
+using LagoVista.Core.Models;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
@@ -35,14 +36,20 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             await CreateDocumentAsync(org);
         }
 
-        public Task DeleteOrgAsync(string orgId)
+        public async Task DeleteOrgAsync(string orgId)
         {
-            return DeleteDocumentAsync(orgId);
+            await _rdbmsUserManager.DeleteOrgAsync(orgId);
+            await DeleteDocumentAsync(orgId);
         }
 
         public async Task<ListResponse<Organization>> GetAllOrgsAsync(ListRequest listRequest)
         {
-            return  await base.QueryAsync(qry => true, listRequest);
+            return await base.QueryAsync(qry => true, listRequest);
+        }
+
+        public Task<List<EntityHeader>> GetBillingContactOrgsForUserAsync(string userId)
+        {
+            return _rdbmsUserManager.GetBillingContactOrgsForUserAsync(userId);
         }
 
         public Task<Organization> GetOrganizationAsync(string id)
@@ -63,7 +70,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
                 var list = organization.ToList();
                 return list.Any();
             }
-            catch(DocumentClientException)
+            catch (DocumentClientException)
             {
                 /* If the collection doesn't exist, it will throw this exception */
                 return false;
@@ -80,6 +87,5 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             await _rdbmsUserManager.UpdateOrgAsync(org);
             await UpsertDocumentAsync(org);
         }
-
     }
 }

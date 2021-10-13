@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
-using LagoVista.UserAdmin.Models;
 using LagoVista.UserAdmin.Models.Orgs;
 
 namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
@@ -16,5 +16,6 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
         Task DeleteOrgAsync(string orgId);
         Task<bool> HasBillingRecords(string orgId);
         Task<ListResponse<Organization>> GetAllOrgsAsync(ListRequest listRequest);
+        Task<List<EntityHeader>> GetBillingContactOrgsForUserAsync(string userId);
     }
 }

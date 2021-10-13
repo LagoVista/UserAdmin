@@ -41,6 +41,7 @@ namespace LagoVista.UserAdmin.Managers
         readonly IAdminLogger _adminLogger;
         readonly IOrgInitializer _orgInitializer;
         readonly IOwnedObjectRepo _ownedObjectRepo;
+        readonly ISubscriptionManager _subscriptionManager;
         #endregion
 
         #region Ctor
@@ -59,6 +60,7 @@ namespace LagoVista.UserAdmin.Managers
             ISecurity security,
             IOrgInitializer orgInitializer,
             IOwnedObjectRepo ownedObjectRepo,
+            ISubscriptionManager subscriptionManager,
             IAdminLogger logger) : base(logger, appConfig, depManager, security)
         {
 
@@ -67,6 +69,7 @@ namespace LagoVista.UserAdmin.Managers
             _orgUserRepo = orgUserRepo;
             _locationRepo = locationRepo;
             _locationUserRepo = locationUserRepo;
+            _subscriptionManager = subscriptionManager;
 
             _orgRoleRepo = orgRoleRepo;
             _locationRoleRepo = locationRoleRepo;
@@ -762,18 +765,25 @@ namespace LagoVista.UserAdmin.Managers
         {
             var appUser = await _appUserRepo.FindByIdAsync(user.Id);
 
-            if(orgId == org.Id)
+            if (orgId == org.Id)
             {
                 await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Read, new SecurityHelper() { OrgId = orgId });
             }
             else if (!appUser.IsSystemAdmin) // Eventually if we need to delete all the data && ((org.Id != orgId) || (org.Id == orgId && !appUser.IsOrgAdmin)))
             {
                 //throw new NotAuthorizedException("Must be system admin or belong to the org and be an org admin for the org that is to be deleted, neither of these are the case.");
-                throw new NotAuthorizedException("Must be a system admin to check for billing records.");
+                throw new NotAuthorizedException("Must be a system admin to check to get users for a different organization.");
             }
-            
+
             var orgUsers = await _orgUserRepo.GetUsersForOrgAsync(orgId);
-            return await _appUserRepo.GetUserSummaryForListAsync(orgUsers);
+            if (orgUsers.Any())
+            {
+                return await _appUserRepo.GetUserSummaryForListAsync(orgUsers);
+            }
+            else
+            {
+                return new List<UserInfoSummary>();
+            }
         }
 
         public async Task<IEnumerable<UserInfoSummary>> GetActiveUsersForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user)
@@ -1050,6 +1060,8 @@ namespace LagoVista.UserAdmin.Managers
             var appUser = await _appUserRepo.FindByIdAsync(user.Id);
             var fullOrg = await _organizationRepo.GetOrganizationAsync(orgId);
 
+            await AuthorizeAsync(user, org, "DeleteOrganization", fullOrg);
+
             if (!appUser.IsSystemAdmin) // Eventually if we need to delete all the data && ((org.Id != orgId) || (org.Id == orgId && !appUser.IsOrgAdmin)))
             {
                 //throw new NotAuthorizedException("Must be system admin or belong to the org and be an org admin for the org that is to be deleted, neither of these are the case.");
@@ -1062,12 +1074,29 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult.FromError("Organization has billing events, can not remove.");
             }
 
+            // 1) Remove any users from the organization 
             var users = await _orgUserRepo.GetUsersForOrgAsync(orgId);
-
             foreach (var orgUser in users)
             {
                 await _orgUserRepo.RemoveUserFromOrgAsync(orgId, orgUser.UserId, user);
                 _adminLogger.AddCustomEvent(LogLevel.Message, "UserAdmin_DeleteOrgAsync_RemoveUserFromOrg", $"{user.Text} removed the user {orgUser.UserName} from {orgUser.OrganizationName}");
+            }
+
+            _adminLogger.AddCustomEvent(LogLevel.Message, "UserAdmin_DeleteOrgAsync", $"{user.Text} delete the user {fullOrg.Name} from system");
+
+            // 2) Remove subscriptions for the organization.
+            var removeSubscriptionsResult = await _subscriptionManager.DeleteSubscriptionsForOrgAsync(orgId, org, user);
+            if (!removeSubscriptionsResult.Successful)
+            {
+                return removeSubscriptionsResult;
+            }
+        
+            // 3) Delete the organization.
+            await _organizationRepo.DeleteOrgAsync(orgId);
+
+            // 4) go through any users, if they do not belong to any organizations, remove them.
+            foreach (var orgUser in users)
+            {
                 var orgUsers = await _orgUserRepo.GetOrgsForUserAsync(orgUser.UserId);
                 if (!orgUsers.Any())
                 {
@@ -1080,9 +1109,6 @@ namespace LagoVista.UserAdmin.Managers
                     _adminLogger.AddCustomEvent(LogLevel.Message, "UserAdmin_DeleteOrgAsync_DidNotDeleteUser", $"{user.Text} did not delete the user {orgUser.UserName} - {orgUser.Email}, user still belongs to orgs [{existingUserNames}].");
                 }
             }
-
-            _adminLogger.AddCustomEvent(LogLevel.Message, "UserAdmin_DeleteOrgAsync", $"{user.Text} delete the user {fullOrg.Name} from system");
-            await _organizationRepo.DeleteOrgAsync(orgId);
 
             return InvokeResult.Success;
         }

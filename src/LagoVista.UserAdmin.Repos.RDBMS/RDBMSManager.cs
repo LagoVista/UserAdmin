@@ -8,6 +8,8 @@ using LagoVista.UserAdmin.Models.Orgs;
 using System.Text;
 using System;
 using System.Data.SqlClient;
+using System.Collections.Generic;
+using LagoVista.Core.Models;
 
 namespace LagoVista.UserAdmin.Repos.RDBMS
 {
@@ -68,10 +70,18 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
         public async Task<InvokeResult> DeleteOrgAsync(string orgId)
         {
             var org = await _dataContext.Org.FindAsync(orgId);
-            _dataContext.Org.Remove(org);
-            await _dataContext.SaveChangesAsync();
+            if (org != null)
+            {
+                _dataContext.Org.Remove(org);
+                await _dataContext.SaveChangesAsync();
+            }
 
             return InvokeResult.Success;
+        }
+
+        public Task<List<EntityHeader>> GetBillingContactOrgsForUserAsync(string userId)
+        {
+            return Task.FromResult(_dataContext.Org.Where(org => org.OrgBillingContactId == userId).Select(org => new EntityHeader() { Id = org.OrgId, Text = org.OrgName }).ToList());
         }
 
         public async Task<bool> HasBillingRecords(string orgId)
