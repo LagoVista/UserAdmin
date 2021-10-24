@@ -17,6 +17,8 @@ using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LagoVista.UserAdmin.Models.Apps;
+using System.Collections.Generic;
+using LagoVista.UserAdmin.Models.Orgs;
 
 namespace LagoVista.UserAdmin.Tests.TokenTests
 {
@@ -32,6 +34,7 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
         Mock<IAuthRequestValidators> _authRequestValidators;
 
         AuthTokenManager _authTokenManager;
+        const string ORG_ID = "45C9DBB7B80E453890F9DF579DD7EB11";
 
         [TestInitialize]
         public async Task Init()
@@ -50,16 +53,22 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
                 RefreshExpiration = TimeSpan.FromDays(90),
             };
 
+          
             _authTokenManager = new AuthTokenManager(new Mock<IAppInstanceRepo>().Object, _orgManager.Object, _refreshTokenManager.Object,
-                _authRequestValidators.Object, _tokenHelper.Object, _appInstanceManager.Object, 
+                _authRequestValidators.Object, _tokenHelper.Object, _appInstanceManager.Object,
                 new Mock<IAdminLogger>().Object, _signInManager.Object, _userManager.Object);
 
             _appInstanceManager.Setup(ais => ais.UpdateLastLoginAsync(It.IsAny<string>(), It.IsAny<AuthRequest>())).ReturnsAsync(InvokeResult<AppInstance>.Create(new AppInstance("rowid", "userid")));
             _appInstanceManager.Setup(ais => ais.UpdateLastAccessTokenRefreshAsync(It.IsAny<string>(), It.IsAny<AuthRequest>())).ReturnsAsync(InvokeResult<AppInstance>.Create(new AppInstance("rowid", "userid")));
 
+            _orgManager.Setup(orm => orm.GetOrganizationsForUserAsync(It.IsAny<string>(), It.IsAny<EntityHeader>(), It.IsAny<EntityHeader>())).ReturnsAsync(new List<OrgUser>()
+            {
+                new OrgUser(ORG_ID,Guid.NewGuid().ToId())
+            });
+
             _signInManager.Setup(sim => sim.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(Task.FromResult(InvokeResult.Success));
             _userManager.Setup(usm => usm.FindByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { Id = Guid.NewGuid().ToId() }));
-            _userManager.Setup(usm => usm.FindByNameAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { Id = Guid.NewGuid().ToId() }));
+            _userManager.Setup(usm => usm.FindByNameAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { CurrentOrganization = EntityHeader.Create(ORG_ID, "dontcare"), Id = Guid.NewGuid().ToId() }));
             _refreshTokenManager.Setup(rtm => rtm.GenerateRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task<RefreshToken>.FromResult(InvokeResult<RefreshToken>.Create(new RefreshToken("XXXX"))));
             _authRequestValidators.Setup(arv => arv.ValidateAuthRequest(It.IsAny<AuthRequest>())).Returns(InvokeResult.Success);
             _authRequestValidators.Setup(arv => arv.ValidateAccessTokenGrant(It.IsAny<AuthRequest>())).Returns(InvokeResult.Success);
@@ -88,7 +97,7 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
                 DeviceId = "DEV001",
                 Email = "email@address.net",
                 GrantType = "password",
-                OrgId = "org12",
+                OrgId = ORG_ID,
                 OrgName = "orgname",
                 Password = "pwd",
                 UserName = "email@foo.net"
@@ -96,6 +105,10 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
             };
 
             var result = await _authTokenManager.AccessTokenGrantAsync(request);
+            foreach (var err in result.Errors)
+            {
+                Console.WriteLine(err.Message);
+            }
             Assert.IsTrue(result.Successful);
         }
 
@@ -111,7 +124,7 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
                 DeviceId = "DEV001",
                 Email = "email@address.net",
                 GrantType = "refreshtoken",
-                OrgId = "org12",
+                OrgId = ORG_ID,
                 OrgName = "orgname",
                 Password = "pwd",
                 UserName = "email@foo.net"
@@ -119,6 +132,10 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
             };
 
             var result = await _authTokenManager.RefreshTokenGrantAsync(request);
+            foreach (var err in result.Errors)
+            {
+                Console.WriteLine(err.Message);
+            }
             Assert.IsTrue(result.Successful);
         }
     }
