@@ -125,6 +125,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AppUser_RememberMe_InThisBrowser
 
 		public static string AppUser_RememberMe_InThisBrowser { get { return GetResourceString("AppUser_RememberMe_InThisBrowser"); } }
+//Resources:UserAdminResources:AppUser_TeamsAccountName
+
+		public static string AppUser_TeamsAccountName { get { return GetResourceString("AppUser_TeamsAccountName"); } }
 //Resources:UserAdminResources:AppUser_Title
 
 		public static string AppUser_Title { get { return GetResourceString("AppUser_Title"); } }
@@ -1033,6 +1036,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AppUser_PhoneVerificationCode = "AppUser_PhoneVerificationCode";
 			public const string AppUser_RememberMe = "AppUser_RememberMe";
 			public const string AppUser_RememberMe_InThisBrowser = "AppUser_RememberMe_InThisBrowser";
+			public const string AppUser_TeamsAccountName = "AppUser_TeamsAccountName";
 			public const string AppUser_Title = "AppUser_Title";
 			public const string AssetSet_Description = "AssetSet_Description";
 			public const string AssetSet_Help = "AssetSet_Help";

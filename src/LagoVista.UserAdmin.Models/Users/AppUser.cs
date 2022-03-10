@@ -114,6 +114,9 @@ namespace LagoVista.UserAdmin.Models.Users
         [FormField(LabelResource: UserAdminResources.Names.Appuser_IsAccountDisabled, FieldType: FieldTypes.CheckBox, IsUserEditable: false, ResourceType: typeof(UserAdminResources))]
         public bool IsAccountDisabled { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_TeamsAccountName, FieldType: FieldTypes.Text, IsUserEditable: true, ResourceType: typeof(UserAdminResources))]
+        public string TeamsAccountName { get; set; }
+
 
         [FormField(LabelResource: UserAdminResources.Names.AppUser_PhoneNumber, FieldType: FieldTypes.Phone, ResourceType: typeof(UserAdminResources))]
         public string PhoneNumber { get; set; }
@@ -196,7 +199,8 @@ namespace LagoVista.UserAdmin.Models.Users
                 LastUpdatedDate = LastUpdatedDate,
                 PhoneNumber = PhoneNumber,
                 PhoneNumberConfirmed = PhoneNumberConfirmed,
-                ProfileImageUrl = ProfileImageUrl
+                ProfileImageUrl = ProfileImageUrl,
+                TeamsAccountName = TeamsAccountName,
             };
         }
 
@@ -218,6 +222,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 PhoneNumber = PhoneNumber,
                 PhoneNumberConfirmed = PhoneNumberConfirmed,
                 ProfileImageUrl = ProfileImageUrl,
+                TeamsAccountName = TeamsAccountName,
                 Key = Id,
             };
         }

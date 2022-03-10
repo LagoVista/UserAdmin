@@ -126,6 +126,11 @@ namespace LagoVista.UserAdmin.Managers
             appUser.LastUpdatedBy = updatedByUser;
             appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
 
+            if(!String.IsNullOrEmpty(user.TeamsAccountName))
+            {
+                appUser.TeamsAccountName = user.TeamsAccountName;
+            }
+
             if (appUser.IsSystemAdmin != user.IsSystemAdmin)
             {
                 var updateByAppUser = await GetUserByIdAsync(updatedByUser.Id, org, updatedByUser);

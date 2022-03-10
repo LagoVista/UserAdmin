@@ -1079,4 +1079,7 @@
   <data name="ScheduledDowntime_ScheduleType_DayOfWeek" xml:space="preserve">
     <value>Day of Week</value>
   </data>
+  <data name="AppUser_TeamsAccountName" xml:space="preserve">
+    <value>Teams Account Name</value>
+  </data>
 </root>
