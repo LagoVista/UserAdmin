@@ -4,7 +4,7 @@
     {
         string Redirect { get;  }
         OAuthConfig GitHubOAuth { get; }
-        OAuthConfig LinkedinOAuth { get;  }
+        OAuthConfig LinkedInOAuth { get;  }
         OAuthConfig MicrosoftOAuth { get; }
         OAuthConfig GoogleOAuth { get;  }
     }
