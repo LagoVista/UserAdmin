@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using LagoVista.UserAdmin.Models.Users;
 using System.Security.Claims;
 using LagoVista.Core.Models;
+using System.Linq;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -10,9 +11,14 @@ namespace LagoVista.AspNetCore.Identity.Managers
     {
         public const string None = "-";
 
+        public const string Logintype = "com.lagovista.iot.logintype";
         public const string InstanceId = "com.lagovista.iot.instanceid";
         public const string InstanceName = "com.lagovista.iot.instancename";
-        
+        public const string Bio = "com.lagovista.iot.bio";
+        public const string Organization = "com.lagovista.iot.organization";
+        public const string Avatar = "com.lagovista.iot.avatar";
+        public const string ExternalAccountVerified = "com.lagovista.iot.externalaccount.verified";
+        public const string ExternalAccountName = "com.lagovista.iot.externalaccount.name";
         public const string CurrentUserId = "com.lagovista.iot.userid";
         public const string CurrentOrgName = "com.lagovista.iot.currentorgname";
         public const string CurrentOrgId = "com.lagovista.iot.currentorgid";
@@ -36,8 +42,10 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(user.FirstName) ? user.FirstName : None),
                 new Claim(ClaimTypes.Surname, !string.IsNullOrWhiteSpace(user.LastName) ? user.LastName : None),
                 new Claim(ClaimTypes.Email, user.Email),
+                new Claim(Avatar, user.ProfileImageUrl.ImageUrl),
                 new Claim(CurrentUserId, user.Id),
                 new Claim(IsPreviewUser, user.IsPreviewUser.ToString().ToLower()),
+                new Claim(ExternalAccountVerified, user.ExternalLogins.Any().ToString()),
                 new Claim(EmailVerified, user.EmailConfirmed.ToString()),
                 new Claim(PhoneVerfiied, user.PhoneNumberConfirmed.ToString()),
                 new Claim(IsSystemAdmin, user.IsSystemAdmin.ToString()),
@@ -68,7 +76,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(user.FirstName) ? user.FirstName : None),
                 new Claim(ClaimTypes.Surname, !string.IsNullOrWhiteSpace(user.LastName) ? user.LastName : None),
                 new Claim(ClaimTypes.Email, user.Email),
+                new Claim(Avatar, user.ProfileImageUrl.ImageUrl),
                 new Claim(CurrentUserId, user.Id),
+                new Claim(ExternalAccountVerified, user.ExternalLogins.Any().ToString()),
                 new Claim(IsPreviewUser, user.IsPreviewUser.ToString().ToLower()),
                 new Claim(EmailVerified, user.EmailConfirmed.ToString()),
                 new Claim(PhoneVerfiied, user.PhoneNumberConfirmed.ToString()),

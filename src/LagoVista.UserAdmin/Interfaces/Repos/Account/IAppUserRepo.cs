@@ -23,5 +23,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Users
         Task UpdateAsync(AppUser user);
         Task DeleteAsync(AppUser user);
         Task DeleteAsync(string userId);
+        Task<AppUser> GetUserByExternalLoginAsync(ExternalLoginTypes loginType, string id);
+        Task<AppUser> AssociateExternalLoginAsync(string userId, ExternalLogin external);
     }
 }

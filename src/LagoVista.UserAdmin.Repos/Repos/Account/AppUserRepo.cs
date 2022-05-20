@@ -1,4 +1,5 @@
 ﻿using LagoVista.CloudStorage.DocumentDB;
+using LagoVista.Core.Exceptions;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
@@ -42,7 +43,7 @@ namespace LagoVista.UserAdmin.Repos.Users
 
         public async Task DeleteAsync(AppUser user)
         {
-            await  DeleteDocumentAsync(user.Id);
+            await DeleteDocumentAsync(user.Id);
             await _rdbmsUserManager.DeleteAppUserAsync(user.Id);
         }
 
@@ -179,7 +180,7 @@ namespace LagoVista.UserAdmin.Repos.Users
                 PageCount = results.PageCount,
                 HasMoreRecords = results.HasMoreRecords,
                 PageIndex = results.PageIndex,
-                PageSize = results.PageSize,                 
+                PageSize = results.PageSize,
             };
         }
 
@@ -190,9 +191,52 @@ namespace LagoVista.UserAdmin.Repos.Users
         }
 
         public async Task<ListResponse<UserInfoSummary>> GetUsersWithoutOrgsAsync(ListRequest listRequest)
-        {       
+        {
             var users = (await QueryAsync(usr => (usr.Organizations == null || usr.Organizations.Count == 0), listRequest));
             return ListResponse<UserInfoSummary>.Create(users.Model.Select(usr => usr.ToUserInfoSummary(false, false)));
+        }
+
+        public async Task<AppUser> GetUserByExternalLoginAsync(ExternalLoginTypes loginType, string id)
+        {
+            if (String.IsNullOrEmpty(id))
+            {
+                throw new InvalidOperationException("Attempt to find user with null or empty user name.");
+            }
+
+            var user = (await QueryAsync(usr => usr.ExternalLogins != null && usr.ExternalLogins.Where(ext => ext.Provider.Value == loginType && ext.Id == id).Any())).FirstOrDefault();
+            if (user == null)
+            {
+                return null;
+            }
+
+            //TODO: THIS SUX, when deserializing the query it auto converts to date time, we want the json string
+            return await FindByIdAsync(user.Id);
+        }
+
+        public async Task<AppUser> AssociateExternalLoginAsync(string userId, ExternalLogin external)
+        {
+            if (String.IsNullOrEmpty(userId))
+            {
+                throw new InvalidOperationException("Attempt to find user with null or empty user name.");
+            }
+
+            var appUser = await FindByIdAsync(userId);
+            if (appUser == null)
+            {
+                throw new RecordNotFoundException(nameof(AppUser), userId);
+            }
+
+            await UpdateAsync(appUser);
+
+            var existing = appUser.ExternalLogins.Where(exs => exs.Provider.Value == external.Provider.Value).FirstOrDefault();
+            if (existing != null)
+            {
+                appUser.ExternalLogins.Remove(existing);
+            }
+
+            appUser.ExternalLogins.Add(external);
+            await UpdateAsync(appUser);
+            return appUser;
         }
     }
 }

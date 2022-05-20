@@ -72,6 +72,15 @@ namespace LagoVista.UserAdmin.Managers
         {
             if (String.IsNullOrEmpty(id)) throw new ArgumentNullException(nameof(id));
 
+            if(id != deletedByUser.Id)
+            {
+                var deletedUser = await _appUserRepo.FindByIdAsync(deletedByUser.Id);
+                if(!deletedUser.IsOrgAdmin)
+                {
+                    return InvokeResult.FromError($"Can not delete user, user deleting user must be the same user being deleted, or deleting user must be an org admin.");
+                }
+            }
+
             var orgs = await _orgRepo.GetBillingContactOrgsForUserAsync(id);
             if (orgs.Any())
             {
@@ -123,10 +132,12 @@ namespace LagoVista.UserAdmin.Managers
 
             if ((user.ProfileImageUrl != null)) appUser.ProfileImageUrl = user.ProfileImageUrl;
 
+            appUser.ShowWelcome = user.ShowWelcome;
+            appUser.Notes = user.Notes;
             appUser.LastUpdatedBy = updatedByUser;
             appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
 
-            if(!String.IsNullOrEmpty(user.TeamsAccountName))
+            if (!String.IsNullOrEmpty(user.TeamsAccountName))
             {
                 appUser.TeamsAccountName = user.TeamsAccountName;
             }
@@ -235,7 +246,8 @@ namespace LagoVista.UserAdmin.Managers
             return await _appUserRepo.GetAllUsersAsync(listRequest);
         }
 
-        public async Task<InvokeResult<AuthResponse>> CreateUserAsync(RegisterUser newUser, bool sendAuthEmail = true, bool autoLogin = true)
+
+        public async Task<InvokeResult<AuthResponse>> CreateUserAsync(RegisterUser newUser, bool sendAuthEmail = true, bool autoLogin = true, ExternalLogin externalLogin = null)
         {
             if (String.IsNullOrEmpty(newUser.Email))
             {
@@ -308,7 +320,14 @@ namespace LagoVista.UserAdmin.Managers
                 LastName = newUser.LastName,
             };
 
-            
+            if (externalLogin != null)
+            {
+                appUser.ExternalLogins.Add(externalLogin);
+                appUser.EmailConfirmed = true;
+                appUser.PhoneNumberConfirmed = true;
+                appUser.PhoneNumberConfirmedForBilling = false;
+            }
+
             var identityResult = await _userManager.CreateAsync(appUser, newUser.Password);
             if (identityResult.Successful)
             {
@@ -409,6 +428,21 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             return await _appUserRepo.GetUsersWithoutOrgsAsync(listRequest);
+        }
+
+        public Task<AppUser> AssociateExternalLoginAsync(string userId, ExternalLogin external, EntityHeader user)
+        {
+            if (userId != user.Id)
+            {
+                throw new NotAuthorizedException("User Id Mis-Match.");
+            }
+
+            return _appUserRepo.AssociateExternalLoginAsync(userId, external);
+        }
+
+        public Task<AppUser> GetUserByExternalLoginAsync(ExternalLoginTypes loginType, string id)
+        {
+            return _appUserRepo.GetUserByExternalLoginAsync(loginType, id);
         }
     }
 }

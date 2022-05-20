@@ -48,6 +48,7 @@ namespace LagoVista.UserAdmin.Models.Users
 
             Organizations = new List<EntityHeader>();
             CurrentOrganizationRoles = new List<EntityHeader>();
+            ExternalLogins = new List<ExternalLogin>();
         }
 
         public AppUser()
@@ -61,7 +62,14 @@ namespace LagoVista.UserAdmin.Models.Users
             };
 
             IsUserDevice = false;
+            ExternalLogins = new List<ExternalLogin>();
         }
+
+        public bool ShowWelcome { get; set; } = true;
+
+        public List<EntityHeader<string>> Notes { get; set; } = new List<EntityHeader<string>>();
+
+        public List<ExternalLogin> ExternalLogins { get; set; }
 
         public List<EntityHeader> Organizations { get; set; }
         public EntityHeader CurrentOrganization { get; set; }
@@ -201,6 +209,9 @@ namespace LagoVista.UserAdmin.Models.Users
                 PhoneNumberConfirmed = PhoneNumberConfirmed,
                 ProfileImageUrl = ProfileImageUrl,
                 TeamsAccountName = TeamsAccountName,
+                ExternalLogins = ExternalLogins,
+                ShowWelcome = ShowWelcome,
+                Notes = Notes,
             };
         }
 
