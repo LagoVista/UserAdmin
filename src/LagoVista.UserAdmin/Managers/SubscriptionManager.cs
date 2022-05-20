@@ -178,12 +178,6 @@ namespace LagoVista.UserAdmin.Managers
 
             await AuthorizeAsync(user, org, "DeleteAllSubscriptions", fullOrg);
 
-            if (!appUser.IsSystemAdmin) // Eventually if we need to delete all the data && ((org.Id != orgId) || (org.Id == orgId && !appUser.IsOrgAdmin)))
-            {
-                //throw new NotAuthorizedException("Must be system admin or belong to the org and be an org admin for the org that is to be deleted, neither of these are the case.");
-                throw new NotAuthorizedException("Must be a system admin to remove an organization.");
-            }
-
             await _subscriptionRepo.DeleteSubscriptionsForOrgAsync(orgId);
 
             return InvokeResult.Success;

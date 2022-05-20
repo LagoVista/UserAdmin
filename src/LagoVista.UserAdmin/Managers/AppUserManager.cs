@@ -33,9 +33,10 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IAppConfig _appConfig;
         private readonly IOrgUserRepo _orgUserRepo;
         private readonly IOrganizationRepo _orgRepo;
+        private readonly ISubscriptionManager _subscriptionManager;
 
         public AppUserManager(IAppUserRepo appUserRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IOrganizationManager orgManager, IOrgUserRepo orgUserRepo, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
-           IOrganizationRepo orgRepo, IAuthTokenManager authTokenManager, IUserManager userManager, ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, depManager, security, logger, appConfig)
+           IOrganizationRepo orgRepo, IAuthTokenManager authTokenManager, ISubscriptionManager subscriptionManager, IUserManager userManager, ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, depManager, security, logger, appConfig)
         {
             _orgRepo = orgRepo ?? throw new ArgumentNullException(nameof(orgRepo));
             _orgManager = orgManager ?? throw new ArgumentNullException(nameof(orgManager));
@@ -47,6 +48,7 @@ namespace LagoVista.UserAdmin.Managers
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
             _userVerificationmanager = userVerificationmanager ?? throw new ArgumentNullException(nameof(userVerificationmanager));
+            _subscriptionManager = subscriptionManager ?? throw new ArgumentNullException(nameof(subscriptionManager));
         }
 
         public async Task<InvokeResult> AddUserAsync(AppUser user, EntityHeader org, EntityHeader updatedByUser)
@@ -80,18 +82,28 @@ namespace LagoVista.UserAdmin.Managers
                     return InvokeResult.FromError($"Can not delete user, user deleting user must be the same user being deleted, or deleting user must be an org admin.");
                 }
             }
-
-            var orgs = await _orgRepo.GetBillingContactOrgsForUserAsync(id);
-            if (orgs.Any())
-            {
-                var orgList = String.Join(",", orgs);
-                return InvokeResult.FromError($"Can not delete user, user is billing contact for the following org[s] {orgList}");
-            }
-
+    
             var appUser = await _appUserRepo.FindByIdAsync(id);
             if (appUser == null) throw new RecordNotFoundException(nameof(AppUser), id);
-            await AuthorizeAsync(deletedByUser, org, "DeleteUser", appUser);
+            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Delete, deletedByUser, org);
 
+            var users = await _orgUserRepo.GetUsersForOrgAsync(org.Id);
+            if (users.Count() == 1 && users.First().UserId == id)
+            {
+                await _subscriptionManager.DeleteSubscriptionsForOrgAsync(org.Id, org, deletedByUser);
+                await _orgRepo.DeleteOrgAsync(org.Id);
+            }
+            else
+            {
+                var orgs = await _orgRepo.GetBillingContactOrgsForUserAsync(id);
+                if (orgs.Any())
+                {
+                    var orgList = String.Join(",", orgs);
+                    return InvokeResult.FromError($"Can not delete user, user is billing contact for the following org[s] {orgList}");
+                }
+            }
+
+         
             var userOrgs = await _orgUserRepo.GetOrgsForUserAsync(id);
             foreach (var userOrg in userOrgs)
             {
@@ -100,7 +112,6 @@ namespace LagoVista.UserAdmin.Managers
 
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "AppUserManager__DeleteuserAsync", $"{deletedByUser.Text} delete the user {appUser.Name}");
 
-            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Delete, deletedByUser, org);
             await _appUserRepo.DeleteAsync(appUser);
 
             return InvokeResult.Success;
