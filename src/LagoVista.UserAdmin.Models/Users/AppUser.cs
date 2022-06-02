@@ -77,6 +77,8 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public ImageDetails ProfileImageUrl { get; set; }
 
+        public string Bio { get; set; }
+
         private string _email;
         [FormField(LabelResource: UserAdminResources.Names.AppUser_Email, IsRequired: true, FieldType: FieldTypes.Email, ResourceType: typeof(UserAdminResources))]
         public string Email
