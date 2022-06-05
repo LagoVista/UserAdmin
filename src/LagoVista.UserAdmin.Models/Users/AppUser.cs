@@ -77,7 +77,10 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public ImageDetails ProfileImageUrl { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_Bio, FieldType: FieldTypes.MultiLineText, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public string Bio { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_UserTitle, FieldType:FieldTypes.Text, IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        public string Title { get; set; }
 
         private string _email;
         [FormField(LabelResource: UserAdminResources.Names.AppUser_Email, IsRequired: true, FieldType: FieldTypes.Email, ResourceType: typeof(UserAdminResources))]
@@ -127,11 +130,29 @@ namespace LagoVista.UserAdmin.Models.Users
         [FormField(LabelResource: UserAdminResources.Names.AppUser_TeamsAccountName, FieldType: FieldTypes.Text, IsUserEditable: true, ResourceType: typeof(UserAdminResources))]
         public string TeamsAccountName { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_Address1, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string Address1 { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_Address2, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string Address2 { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_City, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string City { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_StateProvince, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string State { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_Country, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string Country { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_PostalCode, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string PostalCode { get; set; }
+        public List<EntityHeader> MediaResources { get; set; } = new List<EntityHeader>();
 
         [FormField(LabelResource: UserAdminResources.Names.AppUser_PhoneNumber, FieldType: FieldTypes.Phone, ResourceType: typeof(UserAdminResources))]
         public string PhoneNumber { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
         public bool PhoneNumberConfirmedForBilling { get; set; }
+
+        public bool TermsAndConditionsAccepted { get; set; }
+        public string TermsAndConditionsAcceptedIPAddress { get; set; }
+        public string TermsAndConditionsAcceptedDateTime { get; set; }
+
 
         [JsonIgnore()]
         public String Name
@@ -201,6 +222,8 @@ namespace LagoVista.UserAdmin.Models.Users
                 IsAccountDisabled = IsAccountDisabled,
                 CurrentOrganization = CurrentOrganization,
                 Email = Email,
+                Bio = Bio,
+                Title = Title,
                 PrimaryDevice = PrimaryDevice,
                 DeviceConfiguration = DeviceConfiguration,
                 DeviceRepo = DeviceRepo,
@@ -208,12 +231,23 @@ namespace LagoVista.UserAdmin.Models.Users
                 LastUpdatedBy = LastUpdatedBy,
                 LastUpdatedDate = LastUpdatedDate,
                 PhoneNumber = PhoneNumber,
+                TermsAndConditionsAccepted = TermsAndConditionsAccepted,
+                TermsAndConditionsAcceptedDateTime = TermsAndConditionsAcceptedDateTime,
+                TermsAndConditionsAcceptedIPAddress = TermsAndConditionsAcceptedIPAddress,
+                UserName = UserName,
                 PhoneNumberConfirmed = PhoneNumberConfirmed,
                 ProfileImageUrl = ProfileImageUrl,
                 TeamsAccountName = TeamsAccountName,
                 ExternalLogins = ExternalLogins,
                 ShowWelcome = ShowWelcome,
                 Notes = Notes,
+                Address1 = Address1,
+                Address2 = Address2,
+                City = City,
+                State = State,
+                PostalCode = PostalCode,
+                Country = Country,
+                MediaResources = MediaResources
             };
         }
 

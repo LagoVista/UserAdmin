@@ -1082,4 +1082,28 @@
   <data name="AppUser_TeamsAccountName" xml:space="preserve">
     <value>Teams Account Name</value>
   </data>
+  <data name="AppUser_Address1" xml:space="preserve">
+    <value>Address 1</value>
+  </data>
+  <data name="AppUser_Address2" xml:space="preserve">
+    <value>Address 2</value>
+  </data>
+  <data name="AppUser_Bio" xml:space="preserve">
+    <value>Bio</value>
+  </data>
+  <data name="AppUser_City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="AppUser_Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="AppUser_PostalCode" xml:space="preserve">
+    <value>Postal Code</value>
+  </data>
+  <data name="AppUser_StateProvince" xml:space="preserve">
+    <value>State or Province</value>
+  </data>
+  <data name="AppUser_UserTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
 </root>

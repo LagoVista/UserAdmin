@@ -65,9 +65,24 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Admin_Contact
 
 		public static string Admin_Contact { get { return GetResourceString("Admin_Contact"); } }
+//Resources:UserAdminResources:AppUser_Address1
+
+		public static string AppUser_Address1 { get { return GetResourceString("AppUser_Address1"); } }
+//Resources:UserAdminResources:AppUser_Address2
+
+		public static string AppUser_Address2 { get { return GetResourceString("AppUser_Address2"); } }
+//Resources:UserAdminResources:AppUser_Bio
+
+		public static string AppUser_Bio { get { return GetResourceString("AppUser_Bio"); } }
+//Resources:UserAdminResources:AppUser_City
+
+		public static string AppUser_City { get { return GetResourceString("AppUser_City"); } }
 //Resources:UserAdminResources:AppUser_ConfirmPassword
 
 		public static string AppUser_ConfirmPassword { get { return GetResourceString("AppUser_ConfirmPassword"); } }
+//Resources:UserAdminResources:AppUser_Country
+
+		public static string AppUser_Country { get { return GetResourceString("AppUser_Country"); } }
 //Resources:UserAdminResources:AppUser_Description
 
 		public static string AppUser_Description { get { return GetResourceString("AppUser_Description"); } }
@@ -119,18 +134,27 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AppUser_PhoneVerificationCode
 
 		public static string AppUser_PhoneVerificationCode { get { return GetResourceString("AppUser_PhoneVerificationCode"); } }
+//Resources:UserAdminResources:AppUser_PostalCode
+
+		public static string AppUser_PostalCode { get { return GetResourceString("AppUser_PostalCode"); } }
 //Resources:UserAdminResources:AppUser_RememberMe
 
 		public static string AppUser_RememberMe { get { return GetResourceString("AppUser_RememberMe"); } }
 //Resources:UserAdminResources:AppUser_RememberMe_InThisBrowser
 
 		public static string AppUser_RememberMe_InThisBrowser { get { return GetResourceString("AppUser_RememberMe_InThisBrowser"); } }
+//Resources:UserAdminResources:AppUser_StateProvince
+
+		public static string AppUser_StateProvince { get { return GetResourceString("AppUser_StateProvince"); } }
 //Resources:UserAdminResources:AppUser_TeamsAccountName
 
 		public static string AppUser_TeamsAccountName { get { return GetResourceString("AppUser_TeamsAccountName"); } }
 //Resources:UserAdminResources:AppUser_Title
 
 		public static string AppUser_Title { get { return GetResourceString("AppUser_Title"); } }
+//Resources:UserAdminResources:AppUser_UserTitle
+
+		public static string AppUser_UserTitle { get { return GetResourceString("AppUser_UserTitle"); } }
 //Resources:UserAdminResources:AssetSet_Description
 
 		public static string AssetSet_Description { get { return GetResourceString("AssetSet_Description"); } }
@@ -1016,7 +1040,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AcceptInviteVM_Help = "AcceptInviteVM_Help";
 			public const string AcceptInviteVM_Title = "AcceptInviteVM_Title";
 			public const string Admin_Contact = "Admin_Contact";
+			public const string AppUser_Address1 = "AppUser_Address1";
+			public const string AppUser_Address2 = "AppUser_Address2";
+			public const string AppUser_Bio = "AppUser_Bio";
+			public const string AppUser_City = "AppUser_City";
 			public const string AppUser_ConfirmPassword = "AppUser_ConfirmPassword";
+			public const string AppUser_Country = "AppUser_Country";
 			public const string AppUser_Description = "AppUser_Description";
 			public const string AppUser_Email = "AppUser_Email";
 			public const string AppUser_FirstName = "AppUser_FirstName";
@@ -1034,10 +1063,13 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AppUser_PasswordConfirmPasswordMatch = "AppUser_PasswordConfirmPasswordMatch";
 			public const string AppUser_PhoneNumber = "AppUser_PhoneNumber";
 			public const string AppUser_PhoneVerificationCode = "AppUser_PhoneVerificationCode";
+			public const string AppUser_PostalCode = "AppUser_PostalCode";
 			public const string AppUser_RememberMe = "AppUser_RememberMe";
 			public const string AppUser_RememberMe_InThisBrowser = "AppUser_RememberMe_InThisBrowser";
+			public const string AppUser_StateProvince = "AppUser_StateProvince";
 			public const string AppUser_TeamsAccountName = "AppUser_TeamsAccountName";
 			public const string AppUser_Title = "AppUser_Title";
+			public const string AppUser_UserTitle = "AppUser_UserTitle";
 			public const string AssetSet_Description = "AssetSet_Description";
 			public const string AssetSet_Help = "AssetSet_Help";
 			public const string AssetSet_IsRestricted = "AssetSet_IsRestricted";

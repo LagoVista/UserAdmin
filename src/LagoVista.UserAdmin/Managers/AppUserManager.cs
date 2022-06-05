@@ -117,6 +117,31 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
+        public async Task<InvokeResult> UpdateUserAsync(CoreUserInfo user, EntityHeader org, EntityHeader updatedByUser)
+        {
+            ValidationCheck(user, Actions.Update);
+
+            var existingUser = await _appUserRepo.FindByIdAsync(user.Id);
+            existingUser.FirstName = user.FirstName;
+            existingUser.LastName = user.LastName;
+            existingUser.Bio =  user.Bio;
+            existingUser.Title = user.Title;
+            existingUser.Email = user.Email;
+            existingUser.PhoneNumber = user.PhoneNumber;
+            existingUser.TeamsAccountName = user.TeamsAccountName;
+            existingUser.Address1 = user.Address1;
+            existingUser.Address2 = user.Address2;
+            existingUser.City = user.City;
+            existingUser.State = user.State;
+            existingUser.PostalCode = user.PostalCode;
+            existingUser.Country = user.Country;
+
+            await AuthorizeAsync(existingUser, AuthorizeResult.AuthorizeActions.Update, updatedByUser, org);
+
+            await _appUserRepo.UpdateAsync(existingUser);
+
+            return InvokeResult.Success;
+        }
 
         public async Task<InvokeResult> UpdateUserAsync(AppUser user, EntityHeader org, EntityHeader updatedByUser)
         {
@@ -454,6 +479,28 @@ namespace LagoVista.UserAdmin.Managers
         public Task<AppUser> GetUserByExternalLoginAsync(ExternalLoginTypes loginType, string id)
         {
             return _appUserRepo.GetUserByExternalLoginAsync(loginType, id);
+        }
+
+        public async Task<InvokeResult> AddMediaResourceAsync(string userId, EntityHeader mediaResource, EntityHeader org, EntityHeader updatedByUser)
+        {
+            var user = await _appUserRepo.FindByIdAsync(userId);
+            await AuthorizeAsync(user, AuthorizeResult.AuthorizeActions.Update,  updatedByUser, org, nameof(AppUserManager.AddMediaResourceAsync));
+            user.MediaResources.Add(mediaResource);
+            await _appUserRepo.UpdateAsync(user);
+            
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult<AppUser>> AcceptTermsAndConditionsAsync(string ipAddress, EntityHeader org, EntityHeader userEH)
+        {
+            var user = await _appUserRepo.FindByIdAsync(userEH.Id);
+            await AuthorizeAsync(user, AuthorizeResult.AuthorizeActions.Update, userEH, org, nameof(AppUserManager.AcceptTermsAndConditionsAsync));
+            user.TermsAndConditionsAccepted = true;
+            user.TermsAndConditionsAcceptedDateTime = DateTime.UtcNow.ToJSONString();
+            user.TermsAndConditionsAcceptedIPAddress = ipAddress;
+            await _appUserRepo.UpdateAsync(user);
+
+            return InvokeResult<AppUser>.Create(user);
         }
     }
 }

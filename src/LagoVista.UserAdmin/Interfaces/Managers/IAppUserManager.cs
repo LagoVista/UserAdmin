@@ -31,8 +31,9 @@ namespace LagoVista.UserAdmin.Managers
         Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(EntityHeader org, EntityHeader user, ListRequest listRequest);
         Task<ListResponse<UserInfoSummary>> GetUsersWithoutOrgsAsync(EntityHeader user, ListRequest listRequest);
         Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(bool? emailConfirmed, bool? smsConfirmed, EntityHeader org, EntityHeader user, ListRequest listRequest);
+        Task<InvokeResult> AddMediaResourceAsync(string userId, EntityHeader mediaResource, EntityHeader org, EntityHeader updatedByUser);
         Task<InvokeResult> UpdateUserAsync(UserInfo user, EntityHeader org, EntityHeader updatedByUser);
-
+        Task<InvokeResult> UpdateUserAsync(CoreUserInfo user, EntityHeader org, EntityHeader updatedByUser);
         Task<InvokeResult> DeleteUserAsync(String id, EntityHeader org, EntityHeader deletedByUser);
         Task<InvokeResult> DisableAccountAsync(string userId, EntityHeader org, EntityHeader adminUser);
 
@@ -45,5 +46,6 @@ namespace LagoVista.UserAdmin.Managers
         Task<AppUser> AssociateExternalLoginAsync(string userId, ExternalLogin external, EntityHeader user);
 
         Task<AppUser> GetUserByExternalLoginAsync(ExternalLoginTypes loginType, string id);
+        Task<InvokeResult<AppUser>> AcceptTermsAndConditionsAsync(string ipAddress, EntityHeader org, EntityHeader userEH);
     }
 }
