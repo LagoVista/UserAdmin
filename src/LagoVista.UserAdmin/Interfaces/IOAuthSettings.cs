@@ -2,7 +2,8 @@
 {
     public interface IOAuthSettings
     {
-        string Redirect { get;  }
+        OAuthConfig FaceBookOAuth { get; }
+        OAuthConfig TwitterOAuth { get; }
         OAuthConfig GitHubOAuth { get; }
         OAuthConfig LinkedInOAuth { get;  }
         OAuthConfig MicrosoftOAuth { get; }
