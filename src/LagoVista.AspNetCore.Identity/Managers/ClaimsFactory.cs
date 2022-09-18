@@ -22,6 +22,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string CurrentUserId = "com.lagovista.iot.userid";
         public const string CurrentOrgName = "com.lagovista.iot.currentorgname";
         public const string CurrentOrgId = "com.lagovista.iot.currentorgid";
+        public const string OAuthToken = "com.lagovista.iot.oauth.token";
+        public const string OAuthTokenVerifier = "com.lagovista.iot.oauth.tokenverifier";
         public const string EmailVerified = "com.lagovista.iot.emailverified";
         public const string PhoneVerfiied = "com.lagovista.iot.phoneverified";
         public const string IsSystemAdmin = "com.lagovista.iot.issystemadmin";

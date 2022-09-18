@@ -34,9 +34,11 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IOrgUserRepo _orgUserRepo;
         private readonly IOrganizationRepo _orgRepo;
         private readonly ISubscriptionManager _subscriptionManager;
+        private readonly ISecureStorage _secureStorage;
 
         public AppUserManager(IAppUserRepo appUserRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IOrganizationManager orgManager, IOrgUserRepo orgUserRepo, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
-           IOrganizationRepo orgRepo, IAuthTokenManager authTokenManager, ISubscriptionManager subscriptionManager, IUserManager userManager, ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, depManager, security, logger, appConfig)
+           IOrganizationRepo orgRepo, IAuthTokenManager authTokenManager, ISubscriptionManager subscriptionManager, IUserManager userManager, ISecureStorage secureStorage,
+           ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, depManager, security, logger, appConfig)
         {
             _orgRepo = orgRepo ?? throw new ArgumentNullException(nameof(orgRepo));
             _orgManager = orgManager ?? throw new ArgumentNullException(nameof(orgManager));
@@ -74,15 +76,15 @@ namespace LagoVista.UserAdmin.Managers
         {
             if (String.IsNullOrEmpty(id)) throw new ArgumentNullException(nameof(id));
 
-            if(id != deletedByUser.Id)
+            if (id != deletedByUser.Id)
             {
                 var deletedUser = await _appUserRepo.FindByIdAsync(deletedByUser.Id);
-                if(!deletedUser.IsOrgAdmin)
+                if (!deletedUser.IsOrgAdmin)
                 {
                     return InvokeResult.FromError($"Can not delete user, user deleting user must be the same user being deleted, or deleting user must be an org admin.");
                 }
             }
-    
+
             var appUser = await _appUserRepo.FindByIdAsync(id);
             if (appUser == null) throw new RecordNotFoundException(nameof(AppUser), id);
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Delete, deletedByUser, org);
@@ -103,7 +105,7 @@ namespace LagoVista.UserAdmin.Managers
                 }
             }
 
-         
+
             var userOrgs = await _orgUserRepo.GetOrgsForUserAsync(id);
             foreach (var userOrg in userOrgs)
             {
@@ -124,7 +126,7 @@ namespace LagoVista.UserAdmin.Managers
             var existingUser = await _appUserRepo.FindByIdAsync(user.Id);
             existingUser.FirstName = user.FirstName;
             existingUser.LastName = user.LastName;
-            existingUser.Bio =  user.Bio;
+            existingUser.Bio = user.Bio;
             existingUser.Title = user.Title;
             existingUser.Email = user.Email;
             existingUser.PhoneNumber = user.PhoneNumber;
@@ -362,6 +364,20 @@ namespace LagoVista.UserAdmin.Managers
                 appUser.EmailConfirmed = true;
                 appUser.PhoneNumberConfirmed = true;
                 appUser.PhoneNumberConfirmedForBilling = false;
+
+                if (!String.IsNullOrEmpty(externalLogin.OAuthToken))
+                {
+                    var result = await _secureStorage.AddSecretAsync(user.ToEntityHeader(), externalLogin.OAuthToken);
+                    externalLogin.OAuthTokenSecretId = result.Result;
+                    externalLogin.OAuthToken = String.Empty;
+                }
+
+                if (!String.IsNullOrEmpty(externalLogin.OAuthTokenVerifier))
+                {
+                    var result = await _secureStorage.AddSecretAsync(user.ToEntityHeader(), externalLogin.OAuthTokenVerifier);
+                    externalLogin.OAuthTokenVerifierSecretId = result.Result;
+                    externalLogin.OAuthTokenVerifier = String.Empty;
+                }
             }
 
             var identityResult = await _userManager.CreateAsync(appUser, newUser.Password);
@@ -466,15 +482,47 @@ namespace LagoVista.UserAdmin.Managers
             return await _appUserRepo.GetUsersWithoutOrgsAsync(listRequest);
         }
 
-        public Task<AppUser> AssociateExternalLoginAsync(string userId, ExternalLogin external, EntityHeader user)
+        public async Task<AppUser> AssociateExternalLoginAsync(string userId, ExternalLogin external, EntityHeader user)
         {
             if (userId != user.Id)
             {
                 throw new NotAuthorizedException("User Id Mis-Match.");
             }
 
-            return _appUserRepo.AssociateExternalLoginAsync(userId, external);
+            if (!String.IsNullOrEmpty(external.OAuthToken))
+            {
+                var result = await _secureStorage.AddSecretAsync(user, external.OAuthToken);
+                external.OAuthTokenSecretId = result.Result;
+                external.OAuthToken = String.Empty;
+            }
+
+            if (!String.IsNullOrEmpty(external.OAuthTokenVerifier))
+            {
+                var result = await _secureStorage.AddSecretAsync(user, external.OAuthTokenVerifier);
+                external.OAuthTokenVerifierSecretId = result.Result;
+                external.OAuthTokenVerifier = String.Empty;
+            }
+
+            return await _appUserRepo.AssociateExternalLoginAsync(userId, external);
         }
+
+        public async Task<ExternalLogin> PopulateExternalLoginSecretsAsync(string userId, ExternalLogin external, EntityHeader user)
+        {
+            if (!String.IsNullOrEmpty(external.OAuthTokenSecretId))
+            {
+                var result = await _secureStorage.GetSecretAsync(user, external.OAuthTokenSecretId, user);
+                external.OAuthToken = result.Result;
+            }
+
+            if (!String.IsNullOrEmpty(external.OAuthTokenVerifierSecretId))
+            {
+                var result = await _secureStorage.GetSecretAsync(user, external.OAuthTokenVerifierSecretId, user);
+                external.OAuthTokenVerifier = result.Result;
+            }
+
+            return external;
+        }
+
 
         public Task<AppUser> GetUserByExternalLoginAsync(ExternalLoginTypes loginType, string id)
         {
@@ -484,10 +532,10 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<InvokeResult> AddMediaResourceAsync(string userId, EntityHeader mediaResource, EntityHeader org, EntityHeader updatedByUser)
         {
             var user = await _appUserRepo.FindByIdAsync(userId);
-            await AuthorizeAsync(user, AuthorizeResult.AuthorizeActions.Update,  updatedByUser, org, nameof(AppUserManager.AddMediaResourceAsync));
+            await AuthorizeAsync(user, AuthorizeResult.AuthorizeActions.Update, updatedByUser, org, nameof(AppUserManager.AddMediaResourceAsync));
             user.MediaResources.Add(mediaResource);
             await _appUserRepo.UpdateAsync(user);
-            
+
             return InvokeResult.Success;
         }
 
