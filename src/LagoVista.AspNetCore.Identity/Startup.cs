@@ -3,6 +3,7 @@ using LagoVista.AspNetCore.Identity.Managers;
 using LagoVista.AspNetCore.Identity.Services;
 using LagoVista.AspNetCore.Identity.Utils;
 using LagoVista.UserAdmin;
+using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +26,8 @@ namespace LagoVista.AspNetCore.Identity
             services.AddSingleton<ITokenHelper, TokenHelper>();
             services.AddSingleton<IOrgHelper, OrgHelper>();
             services.AddSingleton<IAuthRequestValidators, AuthRequestValidators>();
+
+            services.AddTransient<ITwitterAuthService, TwitterAuthServices>();
 
             services.AddSingleton<IAuthTokenManager, AuthTokenManager>();
             services.AddSingleton<IRefreshTokenManager, RefreshTokenManager>();

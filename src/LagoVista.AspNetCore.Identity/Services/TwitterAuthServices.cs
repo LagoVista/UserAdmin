@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Interfaces;
 using LagoVista.UserAdmin;
+using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Models.Security;
 using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.AspNetCore.Identity.Services
 {
-    public class TwitterAuthServices
+    public class TwitterAuthServices : ITwitterAuthService
     {
         private readonly IOAuthSettings _oauthSettings;
         private readonly IAppConfig _appConfig;
@@ -33,7 +34,7 @@ namespace LagoVista.AspNetCore.Identity.Services
         }
 
         private async Task<HttpResponseMessage> ExecuteRequestAsync(string url,
-                        HttpMethod httpMethod, RequestToken? accessToken = null,
+                        HttpMethod httpMethod, TwitterRequestToken? accessToken = null,
                         Dictionary<string, string> extraOAuthPairs = null,
                         Dictionary<string, string> queryParameters = null, Dictionary<string, string>? formData = null,
                         CancellationToken? cancellationToken = null)
@@ -122,9 +123,9 @@ namespace LagoVista.AspNetCore.Identity.Services
             return await client.SendAsync(request, cancellationToken ?? CancellationToken.None);
         }
 
-        public async Task<RequestToken> ObtainRequestTokenAsync(CancellationToken? token = null)
+        public async Task<TwitterRequestToken> ObtainRequestTokenAsync(CancellationToken? token = null)
         {
-            var callBackUri = $"https://127.0.0.1:5001/account/oauthtwitter/callback";
+            var callBackUri = $"https://127.0.0.1:5001/account/oauthtwitter/authorize/callback";
             var response = await ExecuteRequestAsync(REQUEST_TOKEN_ENDPOINT, HttpMethod.Post, 
                   extraOAuthPairs: new Dictionary<string, string> { {  "oauth_callback", callBackUri } });
 
@@ -137,7 +138,7 @@ namespace LagoVista.AspNetCore.Identity.Services
                 throw new Exception("Twitter oauth_callback_confirmed is not true.");
             }
 
-            return new RequestToken
+            return new TwitterRequestToken
             {
                 Token = Uri.UnescapeDataString(responseParameters["oauth_token"].ToString()),
                 TokenSecret = Uri.UnescapeDataString(responseParameters["oauth_token_secret"].ToString()),
@@ -145,7 +146,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             };
         }
 
-        public async Task<AccessToken> ObtainAccessTokenAsync(RequestToken token, string verifier, CancellationToken? cancellationToken = null)
+        public async Task<TwitterAccessToken> ObtainAccessTokenAsync(TwitterRequestToken token, string verifier, CancellationToken? cancellationToken = null)
         {
             // https://developer.twitter.com/en/docs/authentication/api-reference/access_token
 
@@ -161,7 +162,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             var responseText = await response.Content.ReadAsStringAsync(cancellationToken ?? CancellationToken.None);
             var responseParameters = new FormCollection(new FormReader(responseText).ReadForm());
 
-            return new AccessToken
+            return new TwitterAccessToken
             {
                 Token = Uri.UnescapeDataString(responseParameters["oauth_token"].ToString()),
                 TokenSecret = Uri.UnescapeDataString(responseParameters["oauth_token_secret"].ToString()),

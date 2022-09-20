@@ -231,10 +231,19 @@ namespace LagoVista.UserAdmin.Repos.Users
             var existing = appUser.ExternalLogins.Where(exs => exs.Provider.Value == external.Provider.Value).FirstOrDefault();
             if (existing != null)
             {
-                appUser.ExternalLogins.Remove(existing);
+                existing.Email = external.Email ?? existing.Email;
+                existing.OAuthToken = external.OAuthToken ?? existing.OAuthToken;
+                existing.OAuthTokenSecretId = external.OAuthTokenSecretId ?? existing.OAuthTokenSecretId;
+                existing.OAuthTokenVerifierSecretId = external.OAuthTokenVerifierSecretId ?? existing.OAuthTokenVerifierSecretId;
+                existing.FirstName = external.FirstName ?? existing.FirstName;
+                existing.LastName = external.LastName ?? existing.LastName;
+                existing.Organization = external.Organization ?? existing.Organization;
+            }
+            else
+            {
+                appUser.ExternalLogins.Add(external);
             }
 
-            appUser.ExternalLogins.Add(external);
             await UpdateAsync(appUser);
             return appUser;
         }

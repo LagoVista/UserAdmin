@@ -25,6 +25,8 @@ namespace LagoVista.UserAdmin.Tests
         public async Task BuildSignature()
         {
            var resut = await _twtter.ObtainRequestTokenAsync();
+            Console.WriteLine(resut.Token);
+        
         }
     
     }
