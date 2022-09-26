@@ -37,7 +37,7 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
         const string ORG_ID = "45C9DBB7B80E453890F9DF579DD7EB11";
 
         [TestInitialize]
-        public async Task Init()
+        public void Init()
         {
             _signInManager = new Mock<ISignInManager>();
             _userManager = new Mock<IUserManager>();

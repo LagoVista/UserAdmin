@@ -34,7 +34,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 			{
 				return await base.GenerateClaimsAsync(user);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				if (string.IsNullOrWhiteSpace(user.Email) || !user.Email.Contains("@"))
 				{

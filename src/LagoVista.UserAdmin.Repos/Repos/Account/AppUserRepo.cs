@@ -1,4 +1,5 @@
-﻿using LagoVista.CloudStorage.DocumentDB;
+﻿using LagoVista.CloudStorage;
+using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.Core.Exceptions;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
@@ -88,7 +89,7 @@ namespace LagoVista.UserAdmin.Repos.Users
 
         public async Task UpdateAsync(AppUser user)
         {
-            await Client.UpsertDocumentAsync(await GetCollectionDocumentsLinkAsync(), user);
+            await UpsertDocumentAsync(user);
             await _rdbmsUserManager.UpdateAppUserAsync(user);
         }
 
@@ -107,7 +108,7 @@ namespace LagoVista.UserAdmin.Repos.Users
         {
             var sqlParams = string.Empty;
             var idx = 0;
-            var paramCollection = new SqlParameterCollection();
+            var parameters  = new List<QueryParameter>();
             foreach (var orgUser in orgUsers)
             {
                 if (!String.IsNullOrEmpty(sqlParams))
@@ -117,7 +118,7 @@ namespace LagoVista.UserAdmin.Repos.Users
                 var paramName = $"@userId{idx++}";
 
                 sqlParams += paramName;
-                paramCollection.Add(new SqlParameter(paramName, orgUser.UserId));
+                parameters.Add(new QueryParameter(paramName, orgUser.UserId));
             }
 
             sqlParams.TrimEnd(',');
@@ -126,7 +127,7 @@ namespace LagoVista.UserAdmin.Repos.Users
             var query = $"SELECT * FROM c where c.id in ({sqlParams})";
 
             /* this sorta sux, but oh well */
-            var appUsers = await QueryAsync(query, paramCollection);
+            var appUsers = await QueryAsync(query, parameters.ToArray());
             var userSummaries = from appUser
                                 in appUsers
                                 join orgUser

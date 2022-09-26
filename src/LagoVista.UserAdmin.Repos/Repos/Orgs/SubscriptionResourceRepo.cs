@@ -35,45 +35,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
 
         public async Task<ListResponse<SubscriptionResource>> GetResourcesForSubscriptionAsync(Guid subscriptionId, ListRequest listRequest, string orgId)
         {
-            try
-            {
-                var options = new FeedOptions()
-                {
-                    MaxItemCount = (listRequest.PageSize == 0) ? 50 : listRequest.PageSize
-                };
-
-                if (!String.IsNullOrEmpty(listRequest.NextRowKey))
-                {
-                    options.RequestContinuation = listRequest.NextRowKey;
-                }
-
-                var documentLink = await GetCollectionDocumentsLinkAsync();
-
-                var docQuery = Client.CreateDocumentQuery<SubscriptionResource>(documentLink, options)
-                    .Where(res=>res.Subscription.Id == subscriptionId.ToString()).AsDocumentQuery();
-
-                var result = await docQuery.ExecuteNextAsync<SubscriptionResource>();
-                if (result == null)
-                {
-                    throw new Exception("Null Response from Query");
-                }
-
-                var listResponse = ListResponse<SubscriptionResource>.Create(result);
-                listResponse.NextRowKey = result.ResponseContinuation;
-                listResponse.PageSize = result.Count;
-                listResponse.HasMoreRecords = result.Count == listRequest.PageSize;
-                listResponse.PageIndex = listRequest.PageIndex;
-
-                return listResponse;
-            }
-            catch (Exception ex)
-            {
-                _logger.AddException("DocumentDBBase", ex, typeof(SubscriptionResource).Name.ToKVP("entityType"));
-
-                var listResponse = ListResponse<SubscriptionResource>.Create(new List<SubscriptionResource>());
-                listResponse.Errors.Add(new ErrorMessage(ex.Message));
-                return listResponse;
-            }
+            return await QueryAsync(sub => sub.Id == subscriptionId.ToString(), listRequest);
         }
     }
 }
