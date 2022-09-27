@@ -4,14 +4,8 @@ using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Models.Orgs;
-using Microsoft.Azure.Documents.Linq;
-using Microsoft.Azure.Documents.Client;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using LagoVista.Core;
-using System.Collections.Generic;
-using LagoVista.Core.Validation;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Orgs
 {

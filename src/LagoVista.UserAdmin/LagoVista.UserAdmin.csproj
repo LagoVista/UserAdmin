@@ -5,9 +5,9 @@
     <AssemblyOriginatorKeyFile>LagoVista.UserAdmin.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core" Version="2.1.1434.0352" />
-    <PackageReference Include="LagoVista.Core.Authentication" Version="2.1.1434.0352" />
-    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.1434.0352" />
+    <PackageReference Include="LagoVista.Core" Version="3.0.1959.1339" />
+    <PackageReference Include="LagoVista.Core.Authentication" Version="3.0.1959.1339" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="3.0.1959.1339" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
   <ItemGroup>

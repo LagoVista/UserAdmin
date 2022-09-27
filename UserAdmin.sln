@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31727.386
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{68AF24F5-D5E7-40F5-AE0A-594167F89A44}"
 EndProject
@@ -28,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.UserAdmin.Repos.R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.IoT.ProductStore", "src\LagoVista.IoT.ProductStore\LagoVista.IoT.ProductStore.csproj", "{947DFAF8-FD27-48AF-8498-C19827EFE154}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.UserAdmin.Models", "src\LagoVista.UserAdmin.Models\LagoVista.UserAdmin.Models.csproj", "{90D2B8E5-55D1-4CE3-B951-5F9EBC04E2BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.UserAdmin.Models", "src\LagoVista.UserAdmin.Models\LagoVista.UserAdmin.Models.csproj", "{90D2B8E5-55D1-4CE3-B951-5F9EBC04E2BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

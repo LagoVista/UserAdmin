@@ -2,8 +2,6 @@
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
-using MailKit.Net.Smtp;
-using MimeKit;
 using SendGrid.Helpers.Mail;
 using System;
 using System.Net.Mime;

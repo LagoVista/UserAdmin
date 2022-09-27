@@ -9,6 +9,7 @@ using Microsoft.Azure.Documents;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.IoT.Logging.Loggers;
+using Microsoft.Azure.Cosmos;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
@@ -54,7 +55,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
                 var organization = (await QueryAsync(loc => loc.Namespace == namespaceText && loc.Organization.Id == orgId));
                 return organization.ToList().Any();
             }
-            catch(DocumentClientException)
+            catch(CosmosException)
             {
                 /* If the collection doesn't exist, it will throw this exception */
                 return false;

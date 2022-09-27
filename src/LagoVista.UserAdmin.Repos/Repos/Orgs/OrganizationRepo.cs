@@ -10,6 +10,7 @@ using System;
 using LagoVista.Core.Models.UIMetaData;
 using System.Collections.Generic;
 using LagoVista.Core.Models;
+using Microsoft.Azure.Cosmos;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
@@ -70,7 +71,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
                 var list = organization.ToList();
                 return list.Any();
             }
-            catch (DocumentClientException)
+            catch (CosmosException)
             {
                 /* If the collection doesn't exist, it will throw this exception */
                 return false;
