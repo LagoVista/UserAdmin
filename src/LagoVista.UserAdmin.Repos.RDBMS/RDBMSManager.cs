@@ -7,7 +7,7 @@ using System.Linq;
 using LagoVista.UserAdmin.Models.Orgs;
 using System.Text;
 using System;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
 using LagoVista.Core.Models;
 
@@ -94,7 +94,7 @@ select subs.id
 ");
 
             var connectionString = $"Server=tcp:{_connectionSettings.DbConnectionSettings.Uri},1433;Initial Catalog={_connectionSettings.DbConnectionSettings.ResourceName};Persist Security Info=False;User ID={_connectionSettings.DbConnectionSettings.UserName};Password={_connectionSettings.DbConnectionSettings.Password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            using(var cn = new SqlConnection(connectionString))
+            using (var cn = new SqlConnection(connectionString))
             using(var cmd = new SqlCommand())
             {
                 cmd.Connection = cn;

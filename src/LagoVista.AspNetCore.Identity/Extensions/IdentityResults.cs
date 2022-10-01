@@ -21,10 +21,5 @@ namespace LagoVista.Core
 
             return InvokeResult.FromErrors(errs.ToArray());
         }
-
-        public static KeyValuePair<string,string> ToKVP(this string value, string key)
-        {
-            return new KeyValuePair<string, string>(key, value);
-        }
     }
 }

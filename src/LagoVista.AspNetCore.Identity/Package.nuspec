@@ -1,24 +1,38 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <id>LagoVista.AspNetCore.Identity</id>
     <title>LagoVista ASP.NET Core Identity Provider</title>
-    <version>3.0.1959.1339</version>
+    <version>3.0.1963.1145</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
+    <projectUrl>https://www.nuviot.com</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
     <description>ASP.NET Core Identity Provider with DocumentDB and Table Storage backend for LagoVista IoT, Devices and Home Automation Frameworks</description>
     <summary>ASP.NET Core Identity Provider with DocumentDB and Table Storage backend for LagoVista IoT, Devices and Home Automation Frameworks</summary>
-    <releaseNotes>Initial Unstable Release</releaseNotes>
-    <copyright>Copyright 2016</copyright>
+    <copyright>Copyright Software Logistics - 2022</copyright>
     <tags>HomeAutomation IoT</tags>
+    <icon>LagoVistaIcon.png</icon>
+    <releaseNotes>Build Date: 10/1/2022 3:45:22 PM UTC</releaseNotes>
+    <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
-      <dependency id="Twilio" version="5.8.1" />
+      <group targetFramework="net6.0">
+        <dependency id="LagoVista.IoT.Logging" version="3.0.1963.1145" />
+        <dependency id="SendGrid" version="9.28.1" />
+        <dependency id="System.ComponentModel.Annotations" version="5.0.0" />
+        <dependency id="Twilio" version="5.80.0" />
+        <dependency id="Newtonsoft.Json" version="13.0.1" />
+        <dependency id="LagoVista.Core" version="3.0.1963.1145" />
+        <dependency id="Microsoft.AspNetCore.Authentication.Twitter" version="6.0.9" />
+        <dependency id="LagoVista.Core.Authentication" version="3.0.1963.1145" />
+        <dependency id="LagoVista.UserAdmin" version="3.0.1963.1145" />
+      </group>
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\release\net5.0\*.dll" target="lib\net5.0" />
+    <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
+    <file src="bin\release\net6.0\LagoVista.AspNetCore.Identity.dll" target="lib\net6.0\LagoVista.AspNetCore.Identity.dll" />
+    <file src="bin\release\net6.0\LagoVista.AspNetCore.Identity.pdb" target="lib\net6.0\LagoVista.AspNetCore.Identity.pdb" />
   </files>
 </package>

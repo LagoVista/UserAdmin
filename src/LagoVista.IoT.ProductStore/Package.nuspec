@@ -1,21 +1,28 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <id>LagoVista.IoT.ProductStore</id>
     <title>LagoVista ASP.NET Core Identity Provider</title>
-    <version>3.0.1959.1339</version>
+    <version>3.0.1963.1145</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
+    <projectUrl>https://www.nuviot.com</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
     <description>Contains data structure and an interface for a manager to retrieve Product Offerings for the LagoVista Devices, IoT and Home Automation Framework </description>
     <summary>Contains data structure and an interface for a manager to retrieve Product Offerings, IoT and Home Automation Framework</summary>
-    <releaseNotes>Initial Unstable Release</releaseNotes>
-    <copyright>Copyright 2017</copyright>
+    <copyright>Copyright Software Logistics - 2022</copyright>
     <tags>HomeAutomation IoT</tags>
+    <icon>LagoVistaIcon.png</icon>
+    <releaseNotes>Build Date: 10/1/2022 3:45:22 PM UTC</releaseNotes>
+    <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
+    <dependencies>
+      <group targetFramework="netstandard2.1" />
+    </dependencies>
   </metadata>
   <files>
-    <file src="bin\release\netstandard2.1\*.dll" target="lib\netstandard2.1" />
+    <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
+    <file src="bin\release\netstandard2.1\LagoVista.IoT.ProductStore.dll" target="lib\netstandard2.1\LagoVista.IoT.ProductStore.dll" />
+    <file src="bin\release\netstandard2.1\LagoVista.IoT.ProductStore.pdb" target="lib\netstandard2.1\LagoVista.IoT.ProductStore.pdb" />
   </files>
 </package>

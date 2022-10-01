@@ -1,23 +1,32 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <id>LagoVista.UserAdmin.Models</id>
-    <version>3.0.1959.1339</version>
+    <version>3.0.1963.1145</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <title>LagoVista User Models</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
+    <projectUrl>https://www.nuviot.com</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
     <summary>User, Organization and Location Models for the LagoVista IoT, Devices and Home Automation Framework</summary>
     <description>User, Organization and Location Models for LagoVista IoT, Devices and Home Automation Framework</description>
-    <releaseNotes>Initial Unstable Release</releaseNotes>
-    <copyright>Copyright 2017</copyright>
+    <copyright>Copyright Software Logistics - 2022</copyright>
     <tags>HomeAutomation IoT Devices NuvIoT LagoVista</tags>
+    <icon>LagoVistaIcon.png</icon>
+    <releaseNotes>Build Date: 10/1/2022 3:45:22 PM UTC</releaseNotes>
+    <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
+      <group targetFramework="netstandard1.2">
+        <dependency id="LagoVista.Core" version="3.0.1963.1145" />
+        <dependency id="LagoVista.IoT.Logging" version="3.0.1963.1145" />
+        <dependency id="LagoVista.Core.Authentication" version="3.0.1963.1145" />
+      </group>
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\release\netstandard1.2\*.dll" target="lib\netstandard1.2" />
+    <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
+    <file src="bin\release\netstandard1.2\LagoVista.UserAdmin.Models.dll" target="lib\netstandard1.2\LagoVista.UserAdmin.Models.dll" />
+    <file src="bin\release\netstandard1.2\LagoVista.UserAdmin.Models.pdb" target="lib\netstandard1.2\LagoVista.UserAdmin.Models.pdb" />
   </files>
 </package>
