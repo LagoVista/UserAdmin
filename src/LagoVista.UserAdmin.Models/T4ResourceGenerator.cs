@@ -1,4 +1,4 @@
-﻿/*11/8/2022 7:00:22 PM*/
+﻿/*11/9/2022 8:31:10 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -689,6 +689,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Module_Help
 
 		public static string Module_Help { get { return GetResourceString("Module_Help"); } }
+//Resources:UserAdminResources:Module_RestrictByDefault
+
+		public static string Module_RestrictByDefault { get { return GetResourceString("Module_RestrictByDefault"); } }
+//Resources:UserAdminResources:Module_RestrictByDefault_Help
+
+		public static string Module_RestrictByDefault_Help { get { return GetResourceString("Module_RestrictByDefault_Help"); } }
 //Resources:UserAdminResources:Module_Title
 
 		public static string Module_Title { get { return GetResourceString("Module_Title"); } }
@@ -1300,6 +1306,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Module_CardSummary = "Module_CardSummary";
 			public const string Module_CardTitle = "Module_CardTitle";
 			public const string Module_Help = "Module_Help";
+			public const string Module_RestrictByDefault = "Module_RestrictByDefault";
+			public const string Module_RestrictByDefault_Help = "Module_RestrictByDefault_Help";
 			public const string Module_Title = "Module_Title";
 			public const string ModuleStatus_Alpha = "ModuleStatus_Alpha";
 			public const string ModuleStatus_Beta = "ModuleStatus_Beta";

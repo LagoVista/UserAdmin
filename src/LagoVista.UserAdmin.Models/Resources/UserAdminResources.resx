@@ -1160,4 +1160,10 @@
   <data name="Page_Title" xml:space="preserve">
     <value>User Interface Page</value>
   </data>
+  <data name="Module_RestrictByDefault" xml:space="preserve">
+    <value>Restrict by Default</value>
+  </data>
+  <data name="Module_RestrictByDefault_Help" xml:space="preserve">
+    <value>If Restrict by Default is checked access to this resource will only be available to users with System Admin or users that have been granted access to this resource by role.  If this is unchecked, any user will have access to this resource.</value>
+  </data>
 </root>

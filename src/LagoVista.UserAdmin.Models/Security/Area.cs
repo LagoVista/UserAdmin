@@ -45,6 +45,9 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Common_Status, IsRequired: true, FieldType: FieldTypes.Picker, EnumType: typeof(ModuleStatus), WaterMark: UserAdminResources.Names.ModuleStatus_Select, ResourceType: typeof(UserAdminResources))]
         public EntityHeader<ModuleStatus> Status { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Module_RestrictByDefault, HelpResource:UserAdminResources.Names.Module_RestrictByDefault_Help,  FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool RestrictByDefault { get; set; }
+
         public List<Page> Pages { get; set; } = new List<Page>();
     }
 }

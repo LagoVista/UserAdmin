@@ -8,6 +8,8 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
     {
         Task AddModuleAsync(Module module);
         Task<Module> GetModuleAsync(string id);
+        Task<Module> GetModuleByKeyAsync(string key);
+        Task<Module> GetModuleByKeyAsync(string key, string orgId);
         Task DeleteModuleAsync(string id);
         Task UpdateModuleAsync(Module module);
         Task<List<ModuleSummary>> GetAllModulesAsync();

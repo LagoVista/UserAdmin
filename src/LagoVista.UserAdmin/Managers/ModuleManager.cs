@@ -53,6 +53,13 @@ namespace LagoVista.UserAdmin.Managers
             return module;
         }
 
+        public async Task<Module> GetModuleByKeyAsync(string key, EntityHeader org, EntityHeader user)
+        {
+            var module = await _moduleRepo.GetModuleByKeyAsync(key);
+            await AuthorizeAsync(module, AuthorizeActions.Read, user, org);
+            return module;
+        }
+
         public async Task<InvokeResult> UpdateModuleAsync(Module module, EntityHeader org, EntityHeader user)
         {
             await AuthorizeAsync(module, AuthorizeActions.Update, user, org);

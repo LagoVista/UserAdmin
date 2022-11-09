@@ -14,8 +14,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
     {
         private readonly bool _shouldConsolidateCollections;
 
-        public ModuleRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
+        public ModuleRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }
@@ -44,6 +44,16 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
         public Task<Module> GetModuleAsync(string id)
         {
             return GetDocumentAsync(id);
+        }
+
+        public async Task<Module> GetModuleByKeyAsync(string key)
+        {
+            return (await QueryAsync(mod => mod.Key == key)).FirstOrDefault();
+        }
+
+        public async Task<Module> GetModuleByKeyAsync(string key, string orgId)
+        {
+            return (await QueryAsync(mod => mod.Key == key && mod.OwnerOrganization.Id == orgId)).FirstOrDefault();
         }
 
         public Task UpdateModuleAsync(Module module)
