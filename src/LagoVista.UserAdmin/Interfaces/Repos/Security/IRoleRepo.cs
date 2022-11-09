@@ -6,10 +6,10 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
 {
     public interface IRoleRepo : IDisposable
     {
-        Task AddRoleAsync(String orgId, Role role);
+        Task AddRoleAsync(Role role);
         Task InsertAsync(Role role);
 
-        Task RemoveAsync(string id, string etag = "*");
+        Task RemoveAsync(string id);
 
         Task<Role> GetAsync(string id);
 

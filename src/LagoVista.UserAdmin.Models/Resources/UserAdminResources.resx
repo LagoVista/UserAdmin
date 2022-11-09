@@ -1106,4 +1106,58 @@
   <data name="AppUser_UserTitle" xml:space="preserve">
     <value>Title</value>
   </data>
+  <data name="ModuleStatus_Alpha" xml:space="preserve">
+    <value>Alpha</value>
+  </data>
+  <data name="ModuleStatus_Beta" xml:space="preserve">
+    <value>Beta</value>
+  </data>
+  <data name="ModuleStatus_Development" xml:space="preserve">
+    <value>Development</value>
+  </data>
+  <data name="ModuleStatus_Live" xml:space="preserve">
+    <value>Live</value>
+  </data>
+  <data name="ModuleStatus_Preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="ModuleStatus_Retired" xml:space="preserve">
+    <value>Retired</value>
+  </data>
+  <data name="ModuleStatus_Select" xml:space="preserve">
+    <value>-select status-</value>
+  </data>
+  <data name="Module_CardIcon" xml:space="preserve">
+    <value>Card Icon</value>
+  </data>
+  <data name="Module_CardSummary" xml:space="preserve">
+    <value>Card Summary</value>
+  </data>
+  <data name="Module_CardTitle" xml:space="preserve">
+    <value>Card Title</value>
+  </data>
+  <data name="Area_Help" xml:space="preserve">
+    <value>An Area is used to organize different parts of a module and contains pages and features.</value>
+  </data>
+  <data name="Area_Title" xml:space="preserve">
+    <value>User Interface Area</value>
+  </data>
+  <data name="Feature_Help" xml:space="preserve">
+    <value>A feature is an element of a page to allow configuration of security.</value>
+  </data>
+  <data name="Feature_TItle" xml:space="preserve">
+    <value>Application Feature</value>
+  </data>
+  <data name="Module_Help" xml:space="preserve">
+    <value>A Module is a functional area of the the user interface, used to organize areas, pages and features</value>
+  </data>
+  <data name="Module_Title" xml:space="preserve">
+    <value>User Interface Module</value>
+  </data>
+  <data name="Page_Help" xml:space="preserve">
+    <value>A Page is user interface element.</value>
+  </data>
+  <data name="Page_Title" xml:space="preserve">
+    <value>User Interface Page</value>
+  </data>
 </root>

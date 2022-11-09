@@ -14,7 +14,8 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public String Name { get; set; }
 
-        public String OrganizationName { get; set; }
+        public bool IsPublic { get; set; }
+        public EntityHeader OwnerOrganization { get; set; }
 
         public EntityHeader ToEntityHeader()
         {

@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿/*11/8/2022 7:00:22 PM*/
+using System.Globalization;
 using System.Reflection;
 
 //Resources:UserAdminResources:AcceptInviteVM_Description
@@ -155,6 +156,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AppUser_UserTitle
 
 		public static string AppUser_UserTitle { get { return GetResourceString("AppUser_UserTitle"); } }
+//Resources:UserAdminResources:Area_Help
+
+		public static string Area_Help { get { return GetResourceString("Area_Help"); } }
+//Resources:UserAdminResources:Area_Title
+
+		public static string Area_Title { get { return GetResourceString("Area_Title"); } }
 //Resources:UserAdminResources:AssetSet_Description
 
 		public static string AssetSet_Description { get { return GetResourceString("AssetSet_Description"); } }
@@ -473,6 +480,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:ExternalLoginConfirmVM_Title
 
 		public static string ExternalLoginConfirmVM_Title { get { return GetResourceString("ExternalLoginConfirmVM_Title"); } }
+//Resources:UserAdminResources:Feature_Help
+
+		public static string Feature_Help { get { return GetResourceString("Feature_Help"); } }
+//Resources:UserAdminResources:Feature_TItle
+
+		public static string Feature_TItle { get { return GetResourceString("Feature_TItle"); } }
 //Resources:UserAdminResources:ForgotPasswordVM_Description
 
 		public static string ForgotPasswordVM_Description { get { return GetResourceString("ForgotPasswordVM_Description"); } }
@@ -664,6 +677,42 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:LoginVM_Title
 
 		public static string LoginVM_Title { get { return GetResourceString("LoginVM_Title"); } }
+//Resources:UserAdminResources:Module_CardIcon
+
+		public static string Module_CardIcon { get { return GetResourceString("Module_CardIcon"); } }
+//Resources:UserAdminResources:Module_CardSummary
+
+		public static string Module_CardSummary { get { return GetResourceString("Module_CardSummary"); } }
+//Resources:UserAdminResources:Module_CardTitle
+
+		public static string Module_CardTitle { get { return GetResourceString("Module_CardTitle"); } }
+//Resources:UserAdminResources:Module_Help
+
+		public static string Module_Help { get { return GetResourceString("Module_Help"); } }
+//Resources:UserAdminResources:Module_Title
+
+		public static string Module_Title { get { return GetResourceString("Module_Title"); } }
+//Resources:UserAdminResources:ModuleStatus_Alpha
+
+		public static string ModuleStatus_Alpha { get { return GetResourceString("ModuleStatus_Alpha"); } }
+//Resources:UserAdminResources:ModuleStatus_Beta
+
+		public static string ModuleStatus_Beta { get { return GetResourceString("ModuleStatus_Beta"); } }
+//Resources:UserAdminResources:ModuleStatus_Development
+
+		public static string ModuleStatus_Development { get { return GetResourceString("ModuleStatus_Development"); } }
+//Resources:UserAdminResources:ModuleStatus_Live
+
+		public static string ModuleStatus_Live { get { return GetResourceString("ModuleStatus_Live"); } }
+//Resources:UserAdminResources:ModuleStatus_Preview
+
+		public static string ModuleStatus_Preview { get { return GetResourceString("ModuleStatus_Preview"); } }
+//Resources:UserAdminResources:ModuleStatus_Retired
+
+		public static string ModuleStatus_Retired { get { return GetResourceString("ModuleStatus_Retired"); } }
+//Resources:UserAdminResources:ModuleStatus_Select
+
+		public static string ModuleStatus_Select { get { return GetResourceString("ModuleStatus_Select"); } }
 //Resources:UserAdminResources:Month_April
 
 		public static string Month_April { get { return GetResourceString("Month_April"); } }
@@ -808,6 +857,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:OrganizationVM_Title
 
 		public static string OrganizationVM_Title { get { return GetResourceString("OrganizationVM_Title"); } }
+//Resources:UserAdminResources:Page_Help
+
+		public static string Page_Help { get { return GetResourceString("Page_Help"); } }
+//Resources:UserAdminResources:Page_Title
+
+		public static string Page_Title { get { return GetResourceString("Page_Title"); } }
 //Resources:UserAdminResources:RegErr_ErrorSendingEmail
 
 		public static string RegErr_ErrorSendingEmail { get { return GetResourceString("RegErr_ErrorSendingEmail"); } }
@@ -1070,6 +1125,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AppUser_TeamsAccountName = "AppUser_TeamsAccountName";
 			public const string AppUser_Title = "AppUser_Title";
 			public const string AppUser_UserTitle = "AppUser_UserTitle";
+			public const string Area_Help = "Area_Help";
+			public const string Area_Title = "Area_Title";
 			public const string AssetSet_Description = "AssetSet_Description";
 			public const string AssetSet_Help = "AssetSet_Help";
 			public const string AssetSet_IsRestricted = "AssetSet_IsRestricted";
@@ -1176,6 +1233,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string ExternalLoginConfirmVM_Description = "ExternalLoginConfirmVM_Description";
 			public const string ExternalLoginConfirmVM_Help = "ExternalLoginConfirmVM_Help";
 			public const string ExternalLoginConfirmVM_Title = "ExternalLoginConfirmVM_Title";
+			public const string Feature_Help = "Feature_Help";
+			public const string Feature_TItle = "Feature_TItle";
 			public const string ForgotPasswordVM_Description = "ForgotPasswordVM_Description";
 			public const string ForgotPasswordVM_Help = "ForgotPasswordVM_Help";
 			public const string ForgotPasswordVM_Title = "ForgotPasswordVM_Title";
@@ -1237,6 +1296,18 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string LoginVM_Description = "LoginVM_Description";
 			public const string LoginVM_Help = "LoginVM_Help";
 			public const string LoginVM_Title = "LoginVM_Title";
+			public const string Module_CardIcon = "Module_CardIcon";
+			public const string Module_CardSummary = "Module_CardSummary";
+			public const string Module_CardTitle = "Module_CardTitle";
+			public const string Module_Help = "Module_Help";
+			public const string Module_Title = "Module_Title";
+			public const string ModuleStatus_Alpha = "ModuleStatus_Alpha";
+			public const string ModuleStatus_Beta = "ModuleStatus_Beta";
+			public const string ModuleStatus_Development = "ModuleStatus_Development";
+			public const string ModuleStatus_Live = "ModuleStatus_Live";
+			public const string ModuleStatus_Preview = "ModuleStatus_Preview";
+			public const string ModuleStatus_Retired = "ModuleStatus_Retired";
+			public const string ModuleStatus_Select = "ModuleStatus_Select";
 			public const string Month_April = "Month_April";
 			public const string Month_August = "Month_August";
 			public const string Month_December = "Month_December";
@@ -1285,6 +1356,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string OrganizationVM_Description = "OrganizationVM_Description";
 			public const string OrganizationVM_Help = "OrganizationVM_Help";
 			public const string OrganizationVM_Title = "OrganizationVM_Title";
+			public const string Page_Help = "Page_Help";
+			public const string Page_Title = "Page_Title";
 			public const string RegErr_ErrorSendingEmail = "RegErr_ErrorSendingEmail";
 			public const string RegErr_ErrorSendingPhoneNumber = "RegErr_ErrorSendingPhoneNumber";
 			public const string RegErr_InvalidEmailAddress = "RegErr_InvalidEmailAddress";
@@ -1362,5 +1435,5 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string VerifyUser_PhoneConfirmed = "VerifyUser_PhoneConfirmed";
 		}
 	}
- 
 }
+

@@ -18,10 +18,12 @@ namespace LagoVista.UserAdmin
             services.AddTransient<IScheduledDowntimeManager, ScheduledDowntimeManager>();
             services.AddTransient<IHolidaySetManager, HolidaySetManager>();
             services.AddTransient<ISubscriptionManager, SubscriptionManager>();
+            services.AddTransient<IModuleManager, ModuleManager>();
             services.AddTransient<IAppInstanceManager, AppInstanceManager>();
             services.AddTransient<IUserVerficationManager, UserVerficationManager>();
             services.AddTransient<IPasswordManager, PasswordManager>();
             services.AddTransient<IOrgUtils, OrgUtils>();
+            
             services.AddTransient<IDistributionManager, DistributionManager>();
         }
     }

@@ -5,6 +5,8 @@ using System;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.IoT.Logging.Loggers;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LagoVista.UserAdmin.Repos.Security
 {
@@ -15,9 +17,9 @@ namespace LagoVista.UserAdmin.Repos.Security
 
         }
 
-        public Task AddRoleAsync(string orgId, Role role)
+        public Task AddRoleAsync(Role role)
         {
-            throw new NotImplementedException();
+            return CreateDocumentAsync(role);
         }
 
         public Task<Role> GetAsync(string id)
@@ -25,12 +27,24 @@ namespace LagoVista.UserAdmin.Repos.Security
             return GetDocumentAsync(id);
         }
 
+        public async Task<List<Role>> GetAllPublicRoles()
+        {
+            var roles = await QueryAsync(role => role.IsPublic);
+            return roles.ToList();
+        }
+
+        public async Task<List<Role>> GetRolesForOrganization(string id)
+        {
+            var roles = await QueryAsync(role => role.OwnerOrganization.Id == id);
+            return roles.ToList();
+        }
+
         public Task InsertAsync(Role role)
         {
             return CreateDocumentAsync(role);
         }
 
-        public Task RemoveAsync(string id, string etag = "*")
+        public Task RemoveAsync(string id)
         {
             return DeleteDocumentAsync(id);
         }
