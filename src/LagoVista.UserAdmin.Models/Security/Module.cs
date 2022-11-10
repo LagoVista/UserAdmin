@@ -92,6 +92,7 @@ namespace LagoVista.UserAdmin.Models.Security
                 Name = Name,
                 CardIcon = CardIcon,
                 CardTitle = CardTitle,
+                CardSummary = CardSummary,
                 StatusLabel = Status.Text,
                 Status = Status.Id,
                 Key = Key,
@@ -105,6 +106,7 @@ namespace LagoVista.UserAdmin.Models.Security
     {
         public string CardIcon { get; set; }
         public string CardTitle { get; set; }
+        public string CardSummary { get; set; }
         public string StatusLabel { get; set; }
         public string Status { get; set; }
     }
