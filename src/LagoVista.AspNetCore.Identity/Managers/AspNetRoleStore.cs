@@ -29,13 +29,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public async Task<Role> FindByIdAsync(string roleId, CancellationToken token)
         {
-            return await _roleRepo.GetAsync(roleId);
+            return await _roleRepo.GetRoleAsync(roleId);
             
         }
 
         public async Task<Role> FindByNameAsync(string roleName, CancellationToken token)
         {
-            return await _roleRepo.GetAsync(roleName);
+            return await _roleRepo.GetRoleAsync(roleName);
         }
 
         public async Task<IdentityResult> UpdateAsync(Role role, CancellationToken token)

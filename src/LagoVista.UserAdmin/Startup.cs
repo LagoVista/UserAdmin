@@ -23,7 +23,7 @@ namespace LagoVista.UserAdmin
             services.AddTransient<IUserVerficationManager, UserVerficationManager>();
             services.AddTransient<IPasswordManager, PasswordManager>();
             services.AddTransient<IOrgUtils, OrgUtils>();
-            
+            services.AddTransient<IUserRoleManager, RoleManager>(); ;
             services.AddTransient<IDistributionManager, DistributionManager>();
         }
     }

@@ -12,9 +12,9 @@ namespace LagoVista.UserAdmin.Repos.Security
 {
     public class RoleRepo : DocumentDBRepoBase<Role>, IRoleRepo
     {
-        public RoleRepo(IUserAdminSettings settings, IAdminLogger logger) : base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger)
+        public RoleRepo(IUserAdminSettings settings, IAdminLogger logger) : 
+            base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger)
         {
-
         }
 
         public Task AddRoleAsync(Role role)
@@ -22,7 +22,7 @@ namespace LagoVista.UserAdmin.Repos.Security
             return CreateDocumentAsync(role);
         }
 
-        public Task<Role> GetAsync(string id)
+        public Task<Role> GetRoleAsync(string id)
         {
             return GetDocumentAsync(id);
         }
@@ -33,16 +33,17 @@ namespace LagoVista.UserAdmin.Repos.Security
             return roles.ToList();
         }
 
-        public async Task<List<Role>> GetRolesForOrganization(string id)
+        public async Task<List<RoleSummary>> GetRolesForOrganization(string id)
         {
             var roles = await QueryAsync(role => role.OwnerOrganization.Id == id);
-            return roles.ToList();
+            return roles.Select(rol => rol.CreateSummary()).OrderBy(rol => rol.Name).ToList();
         }
 
         public Task InsertAsync(Role role)
         {
             return CreateDocumentAsync(role);
         }
+
 
         public Task RemoveAsync(string id)
         {
@@ -52,6 +53,12 @@ namespace LagoVista.UserAdmin.Repos.Security
         public Task UpdateAsync(Role role)
         {
             return base.UpsertDocumentAsync(role);
+        }
+
+        public async Task<List<RoleSummary>> GetRolesAsync(string orgId)
+        {
+            var roles = await QueryAsync(role => role.OwnerOrganization.Id == orgId || role.IsPublic);
+            return roles.Select(rol=>rol.CreateSummary()).OrderBy(rol=>rol.Name).ToList();
         }
     }
 }

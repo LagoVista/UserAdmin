@@ -74,8 +74,11 @@ namespace LagoVista.UserAdmin.Models.Security
         public bool RestrictByDefault { get; set; }
 
 
+        [FormField(LabelResource: UserAdminResources.Names.Common_IsPublic, IsRequired: true, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool IsPublic { get; set; }
+
         public EntityHeader OwnerOrganization { get; set; }
+
         public EntityHeader OwnerUser { get; set; }
 
         public int SortOrder { get; set; }
