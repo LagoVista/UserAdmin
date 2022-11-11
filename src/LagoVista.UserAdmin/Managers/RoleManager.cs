@@ -5,6 +5,7 @@ using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
+using LagoVista.UserAdmin.Models.Security;
 using LagoVista.UserAdmin.Models.Users;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,19 @@ namespace LagoVista.UserAdmin.Managers
     internal class RoleManager : ManagerBase, IUserRoleManager
     {
         private readonly IRoleRepo _roleRepo;
+        private readonly IRoleAccessRepo _roleAccessRepo;
 
-        public RoleManager(IRoleRepo roleRepo, ILogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security) : base(logger, appConfig, dependencyManager, security)
+        public RoleManager(IRoleRepo roleRepo, IRoleAccessRepo roleAccessRepo, ILogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security) : base(logger, appConfig, dependencyManager, security)
         {
             _roleRepo = roleRepo ?? throw new ArgumentNullException(nameof(roleRepo));
+            _roleAccessRepo = roleAccessRepo ?? throw new ArgumentNullException(nameof(roleAccessRepo));
+        }
+
+        public async Task<InvokeResult> AddRoleAccess(RoleAccess access, EntityHeader org, EntityHeader user)
+        {
+            await AuthorizeOrgAccessAsync(user, org, typeof(RoleAccess), Actions.Create);
+            await _roleAccessRepo.AddRoleAccess(access);
+            return InvokeResult.Success;
         }
 
         public async Task<InvokeResult> AddRoleAsync(Role role, EntityHeader org, EntityHeader user)
@@ -29,6 +39,11 @@ namespace LagoVista.UserAdmin.Managers
             await _roleRepo.InsertAsync(role);
 
             return InvokeResult.Success;
+        }
+
+        public Task<List<RoleAccess>> GetRoleAccessAsync(string roleId, EntityHeader org, EntityHeader user)
+        {
+            return _roleAccessRepo.GetRoleAccessForRoleAsync(roleId, org.Id);
         }
 
         public async Task<Role> GetRoleAsync(string id, EntityHeader org, EntityHeader user)
@@ -44,6 +59,14 @@ namespace LagoVista.UserAdmin.Managers
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(Role), Actions.Read); 
             return await _roleRepo.GetRolesAsync(org.Id);
+        }
+
+        public async Task<InvokeResult> RevokeRoleAccess(string accessId, EntityHeader org, EntityHeader user)
+        {
+            await AuthorizeOrgAccessAsync(user, org, typeof(RoleAccess), Actions.Delete);
+            await _roleAccessRepo.RemoveRoleAccess(accessId, org.Id);
+
+            return InvokeResult.Success;
         }
 
         public async Task<InvokeResult> UpdateRoleAsync(Role role, EntityHeader org, EntityHeader user)
