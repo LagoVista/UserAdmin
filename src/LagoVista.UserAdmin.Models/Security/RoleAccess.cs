@@ -17,10 +17,10 @@ namespace LagoVista.UserAdmin.Models.Security
         public EntityHeader Page { get; set; }
         public EntityHeader Feature { get; set; }
 
-        public bool Create { get; set; }
-        public bool Read { get; set; }
-        public bool Update { get; set; }
-        public bool Delete { get; set; }
+        public int Create { get; set; }
+        public int Read { get; set; }
+        public int Update { get; set; }
+        public int Delete { get; set; }
         public string Other { get; set; }
 
 
@@ -33,10 +33,27 @@ namespace LagoVista.UserAdmin.Models.Security
 
                 RoleId = Role.Id,
                 RoleKey = Role.Key,
+                RoleName = Role.Text,
 
                 OrganizationId = Organization.Id,
-                OrganizationName = Organization.Id,
+                OrganizationName = Organization.Text,
 
+                ModuleId = Module?.Id,
+                ModuleKey = Module?.Key,
+                ModuleName = Module?.Text,
+
+                AreaId = Area?.Id,
+                AreaKey = Area?.Key,
+                AreaName  = Area?.Text,
+
+                PageId = Page?.Id,
+                PageKey = Page?.Key,
+                PageName = Page?.Text,
+
+                FeatureId = Feature?.Id,
+                FeatureKey = Feature?.Key,
+                FeatureName = Feature?.Text,
+                
                 IsPublic = IsPublic,
 
                 CreatedById = CreatedBy.Id,

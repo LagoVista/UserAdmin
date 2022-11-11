@@ -10,6 +10,7 @@ namespace LagoVista.UserAdmin.Models.DTOs
     {
         public string RoleId { get; set; }
         public string RoleKey { get; set; }
+        public string RoleName { get; set; }
         public bool IsPublic { get; set; }
 
         public string OrganizationId { get; set; }
@@ -21,37 +22,38 @@ namespace LagoVista.UserAdmin.Models.DTOs
         public string CreationDate { get; set; }
 
         public string ModuleId { get; set; }
+        public string ModuleKey { get; set; }
         public string ModuleName { get; set; }
 
         public string AreaId { get; set; }
+        public string AreaKey { get; set; }
         public string AreaName { get; set; }
 
         public string PageId { get; set; }
+        public string PageKey { get; set; }
         public string PageName { get; set; }
 
         public string FeatureId { get; set; }
+        public string FeatureKey { get; set; }
         public string FeatureName { get; set; }
 
-        public bool Create { get; set; }
-        public bool Read { get; set; }
-        public bool Update { get; set; }
-        public bool Delete { get; set; }
+        public int Create { get; set; }
+        public int Read { get; set; }
+        public int Update { get; set; }
+        public int Delete { get; set; }
         public string Other { get; set; }
 
         public RoleAccess ToRoleAccess()
         {
-            return new RoleAccess()
+            var roleAccess = new RoleAccess()
             {
                 Id = RowKey,
 
-                Role = EntityHeader.Create(RoleId, RoleKey),
+                Role = EntityHeader.Create(RoleId, RoleKey, RoleName),
                 Organization = EntityHeader.Create(OrganizationId, OrganizationName),
                 CreatedBy = EntityHeader.Create(CreatedById, CreatedByName),
 
-                Module = EntityHeader.Create(ModuleId, ModuleName),
-                Area = EntityHeader.Create(AreaId, AreaName),
-                Page = EntityHeader.Create(PageId, PageName),
-                Feature = EntityHeader.Create(FeatureId, FeatureName),
+                Module = EntityHeader.Create(ModuleId, ModuleKey, ModuleName),
 
                 CreationDate = CreationDate,
 
@@ -61,6 +63,24 @@ namespace LagoVista.UserAdmin.Models.DTOs
                 Delete = Delete,
                 Other = Other
             };
+
+            if (!String.IsNullOrEmpty(AreaId) && !String.IsNullOrEmpty(AreaKey) && !String.IsNullOrEmpty(AreaName))
+            {
+                roleAccess.Area = EntityHeader.Create(AreaId, AreaKey, AreaName);
+            }
+
+            if (!String.IsNullOrEmpty(PageId) && !String.IsNullOrEmpty(AreaKey) && !String.IsNullOrEmpty(AreaName))
+            {
+                roleAccess.Area = EntityHeader.Create(PageId, PageKey, PageName);
+            }
+
+            if (!String.IsNullOrEmpty(AreaId) && !String.IsNullOrEmpty(AreaKey) && !String.IsNullOrEmpty(AreaName))
+            {
+                roleAccess.Area = EntityHeader.Create(FeatureId, FeatureKey, FeatureName);
+            }
+
+
+            return roleAccess;
         }
     }
 }
