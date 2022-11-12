@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Managers
 {
-    internal class RoleManager : ManagerBase, IUserRoleManager
+    internal class RoleManager : ManagerBase, IRoleManager
     {
         private readonly IRoleRepo _roleRepo;
         private readonly IRoleAccessRepo _roleAccessRepo;
@@ -24,7 +24,7 @@ namespace LagoVista.UserAdmin.Managers
             _roleAccessRepo = roleAccessRepo ?? throw new ArgumentNullException(nameof(roleAccessRepo));
         }
 
-        public async Task<InvokeResult> AddRoleAccess(RoleAccess access, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> AddRoleAccessAsync(RoleAccess access, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(RoleAccess), Actions.Create);
             await _roleAccessRepo.AddRoleAccess(access);
@@ -61,7 +61,7 @@ namespace LagoVista.UserAdmin.Managers
             return await _roleRepo.GetRolesAsync(org.Id);
         }
 
-        public async Task<InvokeResult> RevokeRoleAccess(string accessId, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> RevokeRoleAccessAsync(string accessId, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(RoleAccess), Actions.Delete);
             await _roleAccessRepo.RemoveRoleAccess(accessId, org.Id);

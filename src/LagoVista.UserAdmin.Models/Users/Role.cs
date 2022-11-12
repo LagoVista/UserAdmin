@@ -40,7 +40,6 @@ namespace LagoVista.UserAdmin.Models.Users
             };
         }
 
-
         public EntityHeader ToEntityHeader()
         {
             return new EntityHeader()
