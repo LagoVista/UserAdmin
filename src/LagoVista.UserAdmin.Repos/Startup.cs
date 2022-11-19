@@ -13,6 +13,8 @@ using LagoVista.UserAdmin.Interfaces.Repos.Apps;
 using LagoVista.UserAdmin.Repos.Repos.Security;
 using LagoVista.Core.Interfaces;
 using LagoVista.UserAdmin.Repos.Repos.Orgs;
+using LagoVista.UserAdmin.Interfaces;
+using LagoVista.UserAdmin.Managers;
 
 namespace LagoVista.UserAdmin.Repos
 {
@@ -32,6 +34,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<ILocationRoleRepo, LocationRoleRepo>();
             services.AddTransient<IOrganizationRoleRepo, OrganizationRoleRepo>();
             services.AddTransient<IRoleRepo, RoleRepo>();
+            services.AddTransient<IUserRoleManager, UserRoleManager>();
             services.AddTransient<IModuleRepo, ModuleRepo>();
             services.AddTransient<IAccessLogRepo, AccessLogRepo>();
             services.AddTransient<IHolidaySetRepo, HolidaySetRepo>();

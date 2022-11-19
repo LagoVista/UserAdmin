@@ -12,10 +12,16 @@ namespace LagoVista.UserAdmin.Repos.Security
 {
     public class RoleRepo : DocumentDBRepoBase<Role>, IRoleRepo
     {
+
+        private bool _consolidateCollectoins;
+
         public RoleRepo(IUserAdminSettings settings, IAdminLogger logger) : 
             base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger)
         {
+            _consolidateCollectoins = settings.ShouldConsolidateCollections;
         }
+
+        protected override bool ShouldConsolidateCollections => _consolidateCollectoins;
 
         public Task AddRoleAsync(Role role)
         {

@@ -43,6 +43,7 @@ namespace LagoVista.UserAdmin.Models.Security
         public Module()
         {
             Status = EntityHeader<ModuleStatus>.Create(ModuleStatus.Development);
+            Features = new List<Feature>();
             Areas = new List<Area>();
         }
 
@@ -77,6 +78,19 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Common_IsPublic, IsRequired: true, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool IsPublic { get; set; }
 
+
+        [FormField(LabelResource: UserAdminResources.Names.Module_IsLegacyNGX, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool IsLegacyNGX { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Module_IsExternalLink, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool IsExternalLink { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Module_OpenInNewTab, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool OpenInNewPage { get; set;}
+
+        [FormField(LabelResource: UserAdminResources.Names.Module_Link, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string Link { get; set; }
+
         public EntityHeader OwnerOrganization { get; set; }
 
         public EntityHeader OwnerUser { get; set; }
@@ -84,6 +98,8 @@ namespace LagoVista.UserAdmin.Models.Security
         public int SortOrder { get; set; }
 
         public List<Area> Areas { get; set; }
+
+        public List<Feature> Features { get; set; }
 
 
 
@@ -101,6 +117,10 @@ namespace LagoVista.UserAdmin.Models.Security
                 Key = Key,
                 Description = Description,
                 IsPublic = IsPublic,
+                Link = Link,
+                IsExternalLink = IsExternalLink,
+                IsLegacyNGX =   IsLegacyNGX,
+                OpenInNewPage = OpenInNewPage
             };
         }
     }
@@ -112,5 +132,9 @@ namespace LagoVista.UserAdmin.Models.Security
         public string CardSummary { get; set; }
         public string StatusLabel { get; set; }
         public string Status { get; set; }
+        public bool OpenInNewPage { get; set; }
+        public string Link { get; set; }
+        public bool IsLegacyNGX { get; set; }
+        public bool IsExternalLink { get; set; }
     }
 }

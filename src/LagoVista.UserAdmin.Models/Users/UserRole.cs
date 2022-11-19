@@ -12,7 +12,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public EntityHeader User { get; set; }
         public EntityHeader Role { get; set; }
         public EntityHeader Organization { get; set; }
-        public string CreeatedOn { get; set; }
+        public string CreationDate { get; set; }
         public EntityHeader CreatedBy { get; set; }
 
         public UserRoleDTO ToDTO()
@@ -24,12 +24,15 @@ namespace LagoVista.UserAdmin.Models.Users
 
                 RoleId = Role.Id,
                 RoleKey = Role.Key,
+                RoleName = Role.Text,
 
                 UserId = User.Id,
                 UserName = User.Text,
 
                 OrganizationId = Organization.Id,
-                OrganizationName = Organization.Id,
+                OrganizationName = Organization.Text,
+
+                CreationDate = CreationDate,
 
                 CreatedById = CreatedBy.Id,
                 CreatedByName = CreatedBy.Text

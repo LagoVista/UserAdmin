@@ -1,4 +1,4 @@
-﻿/*11/9/2022 8:31:10 AM*/
+﻿/*11/13/2022 8:25:51 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -689,6 +689,18 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Module_Help
 
 		public static string Module_Help { get { return GetResourceString("Module_Help"); } }
+//Resources:UserAdminResources:Module_IsExternalLink
+
+		public static string Module_IsExternalLink { get { return GetResourceString("Module_IsExternalLink"); } }
+//Resources:UserAdminResources:Module_IsLegacyNGX
+
+		public static string Module_IsLegacyNGX { get { return GetResourceString("Module_IsLegacyNGX"); } }
+//Resources:UserAdminResources:Module_Link
+
+		public static string Module_Link { get { return GetResourceString("Module_Link"); } }
+//Resources:UserAdminResources:Module_OpenInNewTab
+
+		public static string Module_OpenInNewTab { get { return GetResourceString("Module_OpenInNewTab"); } }
 //Resources:UserAdminResources:Module_RestrictByDefault
 
 		public static string Module_RestrictByDefault { get { return GetResourceString("Module_RestrictByDefault"); } }
@@ -1306,6 +1318,10 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Module_CardSummary = "Module_CardSummary";
 			public const string Module_CardTitle = "Module_CardTitle";
 			public const string Module_Help = "Module_Help";
+			public const string Module_IsExternalLink = "Module_IsExternalLink";
+			public const string Module_IsLegacyNGX = "Module_IsLegacyNGX";
+			public const string Module_Link = "Module_Link";
+			public const string Module_OpenInNewTab = "Module_OpenInNewTab";
 			public const string Module_RestrictByDefault = "Module_RestrictByDefault";
 			public const string Module_RestrictByDefault_Help = "Module_RestrictByDefault_Help";
 			public const string Module_Title = "Module_Title";

@@ -16,6 +16,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
     {
         private readonly ICacheProvider _cacheProvider;
 
+
         public RoleAccessRepo(IUserAdminSettings settings, IAdminLogger logger, ICacheProvider cacheProvider) :
                base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {

@@ -11,7 +11,8 @@ namespace LagoVista.UserAdmin.Models.DTOs
         public string OrganizationName { get; set; }
         public string RoleId { get; set; }
         public string RoleKey { get; set; }
-        public string CreeatedOn { get; set; }
+        public string RoleName { get; set; }
+        public string CreationDate { get; set; }
         public string CreatedById { get; set; }
         public string CreatedByName { get; set; }
 
@@ -22,9 +23,9 @@ namespace LagoVista.UserAdmin.Models.DTOs
                 Id = RowKey,
                 User = EntityHeader.Create(UserId, UserName),
                 Organization = EntityHeader.Create(OrganizationId, OrganizationName),
-                Role = EntityHeader.Create(RoleId, RoleKey),
+                Role = EntityHeader.Create(RoleId, RoleKey, RoleName),
                 CreatedBy = EntityHeader.Create(CreatedById, CreatedByName),
-                CreeatedOn = CreeatedOn
+                CreationDate = CreationDate
             };
         }
 

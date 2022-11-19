@@ -4,11 +4,12 @@ using LagoVista.Core.Managers;
 using LagoVista.Core.Models;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
-using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Users;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,13 +45,39 @@ namespace LagoVista.UserAdmin.Managers
                 Organization = org,
                 Id = DateTime.UtcNow.ToInverseTicksRowKey(),
                 User = roleUser.ToEntityHeader(),
-                CreeatedOn = DateTime.UtcNow.ToJSONString(),
+                CreationDate = DateTime.UtcNow.ToJSONString(),
                 Role = role.ToEntityHeader(),
             };
 
             await _userRoleRepo.AddUserRole(appUserRole);
 
             return InvokeResult<UserRole>.Create(appUserRole);
+        }
+
+        public async Task<List<InvokeResult<UserRole>>> GrantUserRolesAsync(string userId, List<string> roles, EntityHeader org, EntityHeader user)
+        {
+            if (roles == null)
+                throw new ArgumentNullException(nameof(roles));
+
+            var existingRoles = await GetRolesForUserAsync(userId, org, user);
+
+            var addedRoles = new List<InvokeResult<UserRole>>();
+
+            foreach(var role in roles)
+            {
+                var existingRole = existingRoles.FirstOrDefault(ext => ext.Role.Id == role);
+
+                if (existingRole == null)
+                {
+                    addedRoles.Add( await GrantUserRoleAsync(userId, role, org, user));
+                }
+                else
+                {
+                    addedRoles.Add(InvokeResult<UserRole>.FromError($"Role {existingRole.Role.Text} already granted."));
+                }
+            }
+
+            return addedRoles;
         }
 
         public async Task<InvokeResult> RevokeUserRoleAsync(string userRoleId, EntityHeader org, EntityHeader user)

@@ -2,8 +2,6 @@
 using LagoVista.Core.Attributes;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
@@ -12,8 +10,17 @@ namespace LagoVista.UserAdmin.Models.Security
     {
         public string Id { get; set; } = Guid.NewGuid().ToId();
 
-        public string Name { get; set; }        
+        [FormField(LabelResource: UserAdminResources.Names.Common_Name, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string Name { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Common_Key, HelpResource: UserAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key,
+            RegExValidationMessageResource: UserAdminResources.Names.Common_Key_Validation, ResourceType: typeof(UserAdminResources), IsRequired: true)]
         public string Key { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public string Description { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Module_RestrictByDefault, HelpResource: UserAdminResources.Names.Module_RestrictByDefault_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool RestrictByDefault { get; set; }
     }
 }

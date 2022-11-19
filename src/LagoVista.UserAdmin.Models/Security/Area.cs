@@ -16,6 +16,7 @@ namespace LagoVista.UserAdmin.Models.Security
             Id = Guid.NewGuid().ToId();
             Pages = new List<Page>();
             Status = EntityHeader<ModuleStatus>.Create(ModuleStatus.Development);
+            Features = new List<Feature>();
         }
 
         public string Id { get; set; }
@@ -49,5 +50,7 @@ namespace LagoVista.UserAdmin.Models.Security
         public bool RestrictByDefault { get; set; }
 
         public List<Page> Pages { get; set; } = new List<Page>();
+
+        public List<Feature> Features = new List<Feature>();
     }
 }

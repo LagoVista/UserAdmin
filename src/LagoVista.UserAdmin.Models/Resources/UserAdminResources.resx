@@ -1166,4 +1166,16 @@
   <data name="Module_RestrictByDefault_Help" xml:space="preserve">
     <value>If Restrict by Default is checked access to this resource will only be available to users with System Admin or users that have been granted access to this resource by role.  If this is unchecked, any user will have access to this resource.</value>
   </data>
+  <data name="Module_IsExternalLink" xml:space="preserve">
+    <value>Is External Link</value>
+  </data>
+  <data name="Module_IsLegacyNGX" xml:space="preserve">
+    <value>Is Legacy NGX</value>
+  </data>
+  <data name="Module_Link" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="Module_OpenInNewTab" xml:space="preserve">
+    <value>Open in New Tab</value>
+  </data>
 </root>

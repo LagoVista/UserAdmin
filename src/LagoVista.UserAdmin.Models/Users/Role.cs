@@ -45,6 +45,7 @@ namespace LagoVista.UserAdmin.Models.Users
             return new EntityHeader()
             {
                 Id = Id,
+                Key = Key,
                 Text = Name
             };
         }
