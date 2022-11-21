@@ -61,6 +61,12 @@ namespace LagoVista.UserAdmin.Managers
             return await _roleRepo.GetRolesAsync(org.Id);
         }
 
+        public async Task<List<RoleSummary>> GetAssignableRolesAsync(EntityHeader org, EntityHeader user)
+        {
+            await AuthorizeOrgAccessAsync(user, org, typeof(Role), Actions.Read);
+            return await _roleRepo.GetAssignableRolesAsync(org.Id);
+        }
+
         public async Task<InvokeResult> RevokeRoleAccessAsync(string accessId, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(RoleAccess), Actions.Delete);

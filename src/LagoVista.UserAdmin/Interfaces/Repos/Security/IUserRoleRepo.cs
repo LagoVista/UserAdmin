@@ -8,6 +8,6 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
     {
         Task AddUserRole(UserRole role);
         Task RemoveUserRole(string userRoleId, string organizationId);
-        Task<List<UserRole>> GetRolesForUseAsyncr(string userId, string organizationId);
+        Task<List<UserRole>> GetRolesForUseAsync(string userId, string organizationId);
     }
 }

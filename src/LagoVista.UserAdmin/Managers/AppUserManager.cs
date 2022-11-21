@@ -35,10 +35,11 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IOrganizationRepo _orgRepo;
         private readonly ISubscriptionManager _subscriptionManager;
         private readonly ISecureStorage _secureStorage;
+        private readonly IUserRoleRepo _userRoleRepo;
 
-        public AppUserManager(IAppUserRepo appUserRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IOrganizationManager orgManager, IOrgUserRepo orgUserRepo, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
+        public AppUserManager(IAppUserRepo appUserRepo, IUserRoleRepo userRoleRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IOrganizationManager orgManager, IOrgUserRepo orgUserRepo, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
            IOrganizationRepo orgRepo, IAuthTokenManager authTokenManager, ISubscriptionManager subscriptionManager, IUserManager userManager, ISecureStorage secureStorage,
-           ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, depManager, security, logger, appConfig)
+           ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, userRoleRepo, depManager, security, logger, appConfig)
         {
             _orgRepo = orgRepo ?? throw new ArgumentNullException(nameof(orgRepo));
             _orgManager = orgManager ?? throw new ArgumentNullException(nameof(orgManager));

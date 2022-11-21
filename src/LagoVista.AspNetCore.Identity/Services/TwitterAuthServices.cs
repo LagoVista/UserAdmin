@@ -34,9 +34,9 @@ namespace LagoVista.AspNetCore.Identity.Services
         }
 
         private async Task<HttpResponseMessage> ExecuteRequestAsync(string url,
-                        HttpMethod httpMethod, TwitterRequestToken? accessToken = null,
+                        HttpMethod httpMethod, TwitterRequestToken accessToken = null,
                         Dictionary<string, string> extraOAuthPairs = null,
-                        Dictionary<string, string> queryParameters = null, Dictionary<string, string>? formData = null,
+                        Dictionary<string, string> queryParameters = null, Dictionary<string, string> formData = null,
                         CancellationToken? cancellationToken = null)
         {
             var authorizationParts = new SortedDictionary<string, string>(extraOAuthPairs ?? new Dictionary<string, string>())

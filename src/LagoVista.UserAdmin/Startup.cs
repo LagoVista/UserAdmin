@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Interfaces;
+using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Managers;
 
@@ -21,6 +22,7 @@ namespace LagoVista.UserAdmin
             services.AddTransient<IModuleManager, ModuleManager>();
             services.AddTransient<IAppInstanceManager, AppInstanceManager>();
             services.AddTransient<IUserVerficationManager, UserVerficationManager>();
+            services.AddTransient<IDefaultRoleList, DefaultRoleList>();
             services.AddTransient<IPasswordManager, PasswordManager>();
             services.AddTransient<IOrgUtils, OrgUtils>();
             services.AddTransient<IRoleManager, RoleManager>(); ;

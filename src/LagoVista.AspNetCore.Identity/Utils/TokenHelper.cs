@@ -18,25 +18,27 @@ using System.Threading.Tasks;
 using System.Linq;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.AspNetCore.Identity.Managers;
+using LagoVista.UserAdmin.Interfaces.Repos.Security;
 
 namespace LagoVista.AspNetCore.Identity.Utils
 {
     public class TokenHelper : ITokenHelper
     {
-        TokenAuthOptions _tokenOptions;
-        IClaimsFactory _claimsFactory;
-        IAdminLogger _adminLogger;
-        IOrgUserRepo _orgUserRepo;
+        private readonly TokenAuthOptions _tokenOptions;
+        private readonly IClaimsFactory _claimsFactory;
+        private readonly IAdminLogger _adminLogger;
+        private readonly IOrgUserRepo _orgUserRepo;
         private readonly IOrganizationManager _orgManager;
+        private readonly IUserRoleRepo _userRoleRepo;
 
-
-        public TokenHelper(TokenAuthOptions tokenOptions, IOrganizationManager orgManager, IOrgUserRepo orgUserRepo, IClaimsFactory claimsFactory, IAdminLogger adminLogger)
+        public TokenHelper(TokenAuthOptions tokenOptions, IUserRoleRepo userRoleRepo, IOrganizationManager orgManager, IOrgUserRepo orgUserRepo, IClaimsFactory claimsFactory, IAdminLogger adminLogger)
         {
-            _tokenOptions = tokenOptions;
-            _claimsFactory = claimsFactory;
-            _adminLogger = adminLogger;
-            _orgManager = orgManager;
-            _orgUserRepo = orgUserRepo;
+            _tokenOptions = tokenOptions ?? throw new ArgumentNullException(nameof(userRoleRepo));
+            _claimsFactory = claimsFactory ?? throw new ArgumentNullException(nameof(userRoleRepo));
+            _adminLogger = adminLogger ?? throw new ArgumentNullException(nameof(userRoleRepo));
+            _orgManager = orgManager ?? throw new ArgumentNullException(nameof(userRoleRepo));
+            _orgUserRepo = orgUserRepo ?? throw new ArgumentNullException(nameof(userRoleRepo));
+            _userRoleRepo = userRoleRepo ?? throw new ArgumentNullException(nameof(userRoleRepo));
         }
 
         public async Task<InvokeResult<AuthResponse>> GenerateAuthResponseAsync(AppUser appUser, AuthRequest authRequest, InvokeResult<RefreshToken> refreshTokenResponse)
@@ -61,7 +63,7 @@ namespace LagoVista.AspNetCore.Identity.Utils
             {
                 // we have already confirmed that the user has access to this org.
                 authResponse.Org = new Core.Models.EntityHeader() { Id = authRequest.OrgId, Text = authRequest.OrgName };
-                var orgRoles = await _orgManager.GetUsersRolesInOrgAsync(authRequest.OrgId, appUser.Id, appUser.CurrentOrganization, appUser.ToEntityHeader());
+                var orgRoles = await _userRoleRepo.GetRolesForUseAsync(appUser.Id, authRequest.OrgId);
                 authResponse.Roles = new List<EntityHeader>(orgRoles.Select(rle=>rle.ToEntityHeader()));
                 var isOrgAdmin = await  _orgUserRepo.IsUserOrgAdminAsync(authRequest.OrgId, authResponse.User.Id);
                 var isAppBuilder = await _orgUserRepo.IsAppBuilderAsync(authRequest.OrgId, authResponse.User.Id);

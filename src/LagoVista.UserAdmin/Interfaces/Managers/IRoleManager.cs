@@ -20,5 +20,6 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
         Task<InvokeResult> RevokeRoleAccessAsync(string accessId, EntityHeader org, EntityHeader user);
 
+        Task<List<RoleSummary>> GetAssignableRolesAsync(EntityHeader org, EntityHeader user);
     }
 }

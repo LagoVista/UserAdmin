@@ -7,18 +7,24 @@ using LagoVista.UserAdmin.Models.Users;
 using LagoVista.IoT.Logging.Loggers;
 using System.Collections.Generic;
 using System.Linq;
+using LagoVista.UserAdmin.Interfaces;
 
 namespace LagoVista.UserAdmin.Repos.Security
 {
     public class RoleRepo : DocumentDBRepoBase<Role>, IRoleRepo
     {
 
+        private readonly IDefaultRoleList _defaultRoleList;
+        private readonly IUserSecurityServices _securityService;
+
         private bool _consolidateCollectoins;
 
-        public RoleRepo(IUserAdminSettings settings, IAdminLogger logger) : 
+        public RoleRepo(IUserAdminSettings settings, IUserSecurityServices securityService, IDefaultRoleList defaultRoleList, IAdminLogger logger) : 
             base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger)
         {
             _consolidateCollectoins = settings.ShouldConsolidateCollections;
+            _defaultRoleList = defaultRoleList;
+            _securityService = securityService;
         }
 
         protected override bool ShouldConsolidateCollections => _consolidateCollectoins;
@@ -36,15 +42,13 @@ namespace LagoVista.UserAdmin.Repos.Security
         public async Task<List<Role>> GetAllPublicRoles()
         {
             var roles = await QueryAsync(role => role.IsPublic);
-            return roles.ToList();
+            var allRRoles = roles.ToList();
+            allRRoles.AddRange(_defaultRoleList.GetStandardRoles());
+
+            return allRRoles.OrderBy(rol => rol.Name).ToList();
         }
 
-        public async Task<List<RoleSummary>> GetRolesForOrganization(string id)
-        {
-            var roles = await QueryAsync(role => role.OwnerOrganization.Id == id);
-            return roles.Select(rol => rol.CreateSummary()).OrderBy(rol => rol.Name).ToList();
-        }
-
+       
         public Task InsertAsync(Role role)
         {
             return CreateDocumentAsync(role);
@@ -61,10 +65,19 @@ namespace LagoVista.UserAdmin.Repos.Security
             return base.UpsertDocumentAsync(role);
         }
 
-        public async Task<List<RoleSummary>> GetRolesAsync(string orgId)
+        public async Task<List<RoleSummary>> GetAssignableRolesAsync(string orgId)
         {
             var roles = await QueryAsync(role => role.OwnerOrganization.Id == orgId || role.IsPublic);
-            return roles.Select(rol=>rol.CreateSummary()).OrderBy(rol=>rol.Name).ToList();
+            var allRoles = roles.ToList();
+            allRoles.AddRange(_defaultRoleList.GetStandardRoles());
+
+            return allRoles.Select(rol => rol.CreateSummary()).OrderBy(rol => rol.Name).ToList();
+        }
+
+        public async Task<List<RoleSummary>> GetRolesAsync(string orgId)
+        {
+            var roles = await QueryAsync(role => role.OwnerOrganization.Id == orgId);
+            return roles.Select(rol => rol.CreateSummary()).OrderBy(rol => rol.Name).ToList();
         }
     }
 }

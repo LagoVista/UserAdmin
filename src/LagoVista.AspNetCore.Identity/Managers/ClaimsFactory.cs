@@ -64,7 +64,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             {
                 foreach (var role in user.CurrentOrganizationRoles)
                 {
-                    claims.Add(new Claim(ClaimTypes.Role, $"{role.Id}.{role.Text}"));
+                    claims.Add(new Claim(ClaimTypes.Role, role.Key));
                 }
             }
 
@@ -98,7 +98,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             {
                 foreach (var role in user.CurrentOrganizationRoles)
                 {
-                    claims.Add(new Claim(ClaimTypes.Role, $"{role.Id}.{role.Text}"));
+                    claims.Add(new Claim(ClaimTypes.Role, role.Key));
                 }
             }
 

@@ -38,5 +38,10 @@ namespace LagoVista.UserAdmin.Models.Users
                 CreatedByName = CreatedBy.Text
             };
         }
+
+        public EntityHeader ToEntityHeader()
+        {
+            return Role;
+        }
     }
 }

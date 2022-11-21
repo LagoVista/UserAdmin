@@ -5,6 +5,7 @@ using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Users;
@@ -22,13 +23,15 @@ namespace LagoVista.UserAdmin.Repos.Users
         private readonly bool _shouldConsolidateCollections;
         private readonly IRDBMSManager _rdbmsUserManager;
         private readonly IUserAdminSettings _adminSettings;
+        private readonly IUserRoleRepo _userRoleRepo;
 
-        public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserAdminSettings userAdminSettings, IAdminLogger logger) :
+        public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserRoleRepo userRoleRepo, IUserAdminSettings userAdminSettings, IAdminLogger logger) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
         {
             _adminSettings = userAdminSettings;
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
             _rdbmsUserManager = rdbmsUserManager;
+            _userRoleRepo = userRoleRepo;
         }
 
         protected override bool ShouldConsolidateCollections
@@ -48,9 +51,17 @@ namespace LagoVista.UserAdmin.Repos.Users
             await _rdbmsUserManager.DeleteAppUserAsync(user.Id);
         }
 
-        public Task<AppUser> FindByIdAsync(string id)
+        public async Task<AppUser> FindByIdAsync(string id)
         {
-            return GetDocumentAsync(id, false);
+            var appUser = await GetDocumentAsync(id, false);
+            if(appUser.CurrentOrganization != null)
+            {
+                var userRoles = await _userRoleRepo.GetRolesForUseAsync(id, appUser.CurrentOrganization.Id);
+                appUser.CurrentOrganizationRoles = userRoles.Select(role => role.ToEntityHeader()).ToList();
+            }
+
+            return appUser;
+        
         }
 
         public async Task<AppUser> FindByNameAsync(string userName)

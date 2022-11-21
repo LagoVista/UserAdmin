@@ -36,7 +36,6 @@ namespace LagoVista.UserAdmin.Managers
         readonly IEmailSender _emailSender;
         readonly IInviteUserRepo _inviteUserRepo;
         readonly ILocationRoleRepo _locationRoleRepo;
-        readonly IOrganizationRoleRepo _orgRoleRepo;
         readonly IAppUserRepo _appUserRepo;
         readonly IAdminLogger _adminLogger;
         readonly IOrgInitializer _orgInitializer;
@@ -52,7 +51,6 @@ namespace LagoVista.UserAdmin.Managers
             IInviteUserRepo inviteUserRepo,
             ILocationUserRepo locationUserRepo,
             ILocationRoleRepo locationRoleRepo,
-            IOrganizationRoleRepo orgRoleRepo,
             ISmsSender smsSender,
             IEmailSender emailSender,
             IAppConfig appConfig,
@@ -71,7 +69,6 @@ namespace LagoVista.UserAdmin.Managers
             _locationUserRepo = locationUserRepo;
             _subscriptionManager = subscriptionManager;
 
-            _orgRoleRepo = orgRoleRepo;
             _locationRoleRepo = locationRoleRepo;
             _smsSender = smsSender;
             _emailSender = emailSender;
@@ -891,63 +888,7 @@ namespace LagoVista.UserAdmin.Managers
             await _locationRepo.UpdateLocationAsync(locationFromStorage);
 
             return InvokeResult.Success;
-        }
-
-        public async Task<InvokeResult> AddUserRoleForOrgAsync(EntityHeader org, EntityHeader user, EntityHeader role, EntityHeader userOrg, EntityHeader addedBy)
-        {
-            await AuthorizeOrgAccessAsync(addedBy, userOrg, typeof(OrganizationUserRole), Actions.Create, new SecurityHelper { UserId = user.Id, OrgId = org.Id, RoleId = role.Id });
-            var orgUserRole = new OrganizationUserRole(org, user)
-            {
-                RoleName = role.Text,
-                RoleId = role.Id
-            };
-
-            await _orgRoleRepo.AddRoleForUserAsync(orgUserRole);
-
-            return InvokeResult.Success;
-        }
-
-        /// <summary>
-        /// Returns roles for a user in an org
-        /// </summary>
-        /// <param name="orgId"></param>
-        /// <param name="userId"></param>
-        /// <param name="org">Permissions</param>
-        /// <param name="user">Permissions</param>
-        /// <returns></returns>
-        public async Task<IEnumerable<OrganizationUserRole>> GetUsersRolesInOrgAsync(string orgId, string userId, EntityHeader org, EntityHeader user)
-        {
-            await AuthorizeOrgAccessAsync(user, org, typeof(OrganizationUserRole), Actions.Read, new SecurityHelper { OrgId = orgId, UserId = userId });
-            return await _orgRoleRepo.GetRolesForUserAsync(userId, orgId);
-        }
-
-        /// <summary>
-        /// Return Users that have a role in an org
-        /// </summary>
-        /// <param name="orgId"></param>
-        /// <param name="roleId"></param>
-        /// <param name="org">Permissions</param>
-        /// <param name="user">Permissions</param>
-        /// <returns></returns>
-        public async Task<IEnumerable<OrganizationUserRole>> GetUserWithRoleInOrgAsync(string orgId, string roleId, EntityHeader org, EntityHeader user)
-        {
-            await AuthorizeOrgAccessAsync(user, org, typeof(OrganizationUserRole), Actions.Read, new SecurityHelper { OrgId = orgId, RoleId = roleId });
-            return await _orgRoleRepo.GetUserForRoleAsync(orgId, roleId);
-        }
-
-        public async Task<InvokeResult> RevokeRoleForUserInOrgAsync(string orgId, string userId, string roleId, EntityHeader userOrg, EntityHeader revokedBy)
-        {
-            await AuthorizeOrgAccessAsync(revokedBy, userOrg, typeof(OrganizationUserRole), Actions.Delete, new SecurityHelper { OrgId = orgId, RoleId = roleId, UserId = userId });
-            await _orgRoleRepo.RevokeRoleForUserInOrgAsync(orgId, userId, roleId);
-            return InvokeResult.Success;
-        }
-
-        public async Task<InvokeResult> RevokeAllRolesForUserInOrgAsync(string orgId, string userId, EntityHeader org, EntityHeader revokedBy)
-        {
-            await AuthorizeOrgAccessAsync(revokedBy, org, typeof(OrganizationUserRole), Actions.Delete, new SecurityHelper { OrgId = orgId, UserId = userId });
-            await _orgRoleRepo.RevokeAllRolesForUserInOrgAsync(orgId, userId);
-            return InvokeResult.Success;
-        }
+        }       
         #endregion
 
         #region Location User

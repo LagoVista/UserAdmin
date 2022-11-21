@@ -1178,4 +1178,7 @@
   <data name="Module_OpenInNewTab" xml:space="preserve">
     <value>Open in New Tab</value>
   </data>
+  <data name="Role_IsSystemRole" xml:space="preserve">
+    <value>Is System Role</value>
+  </data>
 </root>

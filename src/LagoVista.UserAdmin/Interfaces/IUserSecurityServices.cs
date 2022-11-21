@@ -8,6 +8,6 @@ namespace LagoVista.UserAdmin.Interfaces
 {
     public interface IUserSecurityServices
     {
-        Task<List<EntityHeader>> GetRolesForUserAsync(string userId, string organization);
+        Task<List<string>> GetRolesForUserAsync(string userId, string organization);
     }
 }

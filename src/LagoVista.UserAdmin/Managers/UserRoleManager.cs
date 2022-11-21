@@ -21,24 +21,30 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IUserRoleRepo _userRoleRepo;
         private readonly IRoleRepo _roleRepo;
         private readonly IAppUserRepo _userRepo;
+        private readonly IDefaultRoleList _defaultRoleList;
+        
 
-        public UserRoleManager(IRoleRepo roleRepo, IUserRoleRepo userRoleRepo, IAppUserRepo appUserRepo, ILogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security) :
+        public UserRoleManager(IRoleRepo roleRepo, IUserRoleRepo userRoleRepo, IDefaultRoleList defaultRole, IAppUserRepo appUserRepo, ILogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security) :
             base(logger, appConfig, dependencyManager, security)
         {
             _userRoleRepo = userRoleRepo ?? throw new ArgumentNullException(nameof(userRoleRepo));
             _roleRepo = roleRepo ?? throw new ArgumentNullException(nameof(roleRepo));
             _userRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
+            _defaultRoleList = defaultRole ?? throw new ArgumentNullException(nameof(defaultRole));
         }
 
         public Task<List<UserRole>> GetRolesForUserAsync(string userId, EntityHeader org, EntityHeader user)
         {
-            return _userRoleRepo.GetRolesForUseAsyncr(userId, org.Id);
+            return _userRoleRepo.GetRolesForUseAsync(userId, org.Id);
         }
 
         public async Task<InvokeResult<UserRole>> GrantUserRoleAsync(string userId, string roleId, EntityHeader org, EntityHeader user)
         {
             var roleUser = await _userRepo.FindByIdAsync(userId);
-            var role = await _roleRepo.GetRoleAsync(roleId);
+            var role = _defaultRoleList.GetStandardRoles().FirstOrDefault(rl=>rl.Id == roleId);
+            if(role == null)
+                role = await _roleRepo.GetRoleAsync(roleId);
+            
             var appUserRole = new UserRole()
             {
                 CreatedBy = user,

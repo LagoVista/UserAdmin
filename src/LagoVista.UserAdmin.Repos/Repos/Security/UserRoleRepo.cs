@@ -21,7 +21,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             return InsertAsync(role.ToDTO());
         }
 
-        public async Task<List<UserRole>> GetRolesForUseAsyncr(string userId, string organizationId)
+        public async Task<List<UserRole>> GetRolesForUseAsync(string userId, string organizationId)
         {
             var results = await this.GetByFilterAsync(FilterOptions.Create(nameof(UserRoleDTO.UserId), FilterOptions.Operators.Equals, userId), FilterOptions.Create(nameof(UserRoleDTO.PartitionKey), FilterOptions.Operators.Equals, organizationId));
             return results.Select(usr => usr.ToUserRole()).OrderBy(usr => usr.Role.Text).ToList();

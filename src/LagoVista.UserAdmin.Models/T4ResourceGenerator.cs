@@ -1,4 +1,4 @@
-﻿/*11/13/2022 8:25:51 AM*/
+﻿/*11/20/2022 1:12:09 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -932,6 +932,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Role_Help
 
 		public static string Role_Help { get { return GetResourceString("Role_Help"); } }
+//Resources:UserAdminResources:Role_IsSystemRole
+
+		public static string Role_IsSystemRole { get { return GetResourceString("Role_IsSystemRole"); } }
 //Resources:UserAdminResources:Role_Title
 
 		public static string Role_Title { get { return GetResourceString("Role_Title"); } }
@@ -1399,6 +1402,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string ResetPassword_Title = "ResetPassword_Title";
 			public const string Role_Description = "Role_Description";
 			public const string Role_Help = "Role_Help";
+			public const string Role_IsSystemRole = "Role_IsSystemRole";
 			public const string Role_Title = "Role_Title";
 			public const string ScheduledDowntime_AllDay = "ScheduledDowntime_AllDay";
 			public const string ScheduledDowntime_Day = "ScheduledDowntime_Day";

@@ -11,20 +11,23 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using LagoVista.Core;
 using LagoVista.UserAdmin;
+using LagoVista.UserAdmin.Interfaces.Repos.Security;
+using System;
 
 namespace LagoVista.AspNetCore.Identity.Utils
 {
     public class OrgHelper : IOrgHelper
     {
-        IAdminLogger _adminLogger;
-        IOrganizationManager _orgManager;
-        IUserManager _userManager;
+        private readonly IAdminLogger _adminLogger;
+        private readonly IOrganizationManager _orgManager;
+        private readonly IUserManager _userManager;
+        private readonly IUserRoleRepo _userRoleRepo;
 
         public OrgHelper(IAdminLogger adminLogger, IOrganizationManager orgManager, IUserManager userManager)
         {
-            _adminLogger = adminLogger;
-            _orgManager = orgManager;
-            _userManager = userManager;
+            _adminLogger = adminLogger ?? throw new ArgumentNullException(nameof(adminLogger));
+            _orgManager = orgManager ?? throw new ArgumentNullException(nameof(adminLogger));
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(adminLogger));
         }
 
         public async Task<InvokeResult> SetUserOrgAsync(AuthRequest authRequest, AppUser appUser)
@@ -60,7 +63,7 @@ namespace LagoVista.AspNetCore.Identity.Utils
             appUser.IsOrgAdmin = switchToOrg.IsOrgAdmin;    
 
             // 3) Add the roles to the user for the org.
-            var orgRoles = await _orgManager.GetUsersRolesInOrgAsync(authRequest.OrgId, appUser.Id, appUser.CurrentOrganization, appUser.ToEntityHeader());
+            var orgRoles = await _userRoleRepo.GetRolesForUseAsync( appUser.Id, authRequest.OrgId);
             appUser.CurrentOrganizationRoles = new List<EntityHeader>();
             foreach (var orgRole in orgRoles)
             {
