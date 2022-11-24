@@ -68,7 +68,7 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Module_CardSummary, IsRequired: true, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public string CardSummary { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_Status, IsRequired: true, FieldType: FieldTypes.Picker, EnumType:typeof(ModuleStatus), WaterMark: UserAdminResources.Names.ModuleStatus_Select, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Status, IsRequired: true, FieldType: FieldTypes.Picker, EnumType: typeof(ModuleStatus), WaterMark: UserAdminResources.Names.ModuleStatus_Select, ResourceType: typeof(UserAdminResources))]
         public EntityHeader<ModuleStatus> Status { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Module_RestrictByDefault, HelpResource: UserAdminResources.Names.Module_RestrictByDefault_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
@@ -86,7 +86,7 @@ namespace LagoVista.UserAdmin.Models.Security
         public bool IsExternalLink { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Module_OpenInNewTab, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
-        public bool OpenInNewPage { get; set;}
+        public bool OpenInNewPage { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Module_Link, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string Link { get; set; }
@@ -101,6 +101,7 @@ namespace LagoVista.UserAdmin.Models.Security
 
         public List<Feature> Features { get; set; }
 
+        public UserAccess UserAccess {get; set;}
 
 
         public ModuleSummary CreateSummary()
@@ -120,7 +121,8 @@ namespace LagoVista.UserAdmin.Models.Security
                 Link = Link,
                 IsExternalLink = IsExternalLink,
                 IsLegacyNGX =   IsLegacyNGX,
-                OpenInNewPage = OpenInNewPage
+                OpenInNewPage = OpenInNewPage,
+                RestrictByDefault = RestrictByDefault
             };
         }
     }
@@ -136,5 +138,7 @@ namespace LagoVista.UserAdmin.Models.Security
         public string Link { get; set; }
         public bool IsLegacyNGX { get; set; }
         public bool IsExternalLink { get; set; }
+    
+        public bool RestrictByDefault { get; set; }
     }
 }

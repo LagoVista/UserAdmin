@@ -91,5 +91,11 @@ namespace LagoVista.UserAdmin.Managers
             await _userRoleRepo.RemoveUserRole(userRoleId, org.Id);
             return InvokeResult.Success;
         }
+
+        public async Task<bool> UserHasRoleAsync(string roleId, string userId, string orgId)
+        {
+            var roles = await _userRoleRepo.GetRolesForUseAsync(userId, orgId);
+            return roles.Any(rl=>rl.Role.Id == roleId);
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
         Task InsertAsync(Role role);
         Task RemoveAsync(string id);
         Task<Role> GetRoleAsync(string id);
+        Task<Role> GetRoleByKeyAsync(string key, string orgId);
         Task UpdateAsync(Role role);
         Task<List<RoleSummary>> GetRolesAsync(string orgId);
         Task<List<RoleSummary>> GetAssignableRolesAsync(string orgId);

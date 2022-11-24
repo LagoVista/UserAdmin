@@ -49,8 +49,9 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<Role> GetRoleAsync(string id, EntityHeader org, EntityHeader user)
         {
             var role = await _roleRepo.GetRoleAsync(id);
-
-            await AuthorizeAsync(role, AuthorizeResult.AuthorizeActions.Create, user, org);
+            
+            if(!role.IsSystemRole)
+                await AuthorizeAsync(role, AuthorizeResult.AuthorizeActions.Create, user, org);
 
             return role;
         }
@@ -77,6 +78,9 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> UpdateRoleAsync(Role role, EntityHeader org, EntityHeader user)
         {
+            if (role.IsSystemRole)
+                return InvokeResult.FromError("Can not update system role.");
+
             ValidationCheck(role, Actions.Create);
             await AuthorizeAsync(role, AuthorizeResult.AuthorizeActions.Update, user, org);
             

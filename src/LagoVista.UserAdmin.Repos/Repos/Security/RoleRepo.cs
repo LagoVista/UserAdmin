@@ -8,6 +8,8 @@ using LagoVista.IoT.Logging.Loggers;
 using System.Collections.Generic;
 using System.Linq;
 using LagoVista.UserAdmin.Interfaces;
+using LagoVista.CloudStorage;
+using Newtonsoft.Json;
 
 namespace LagoVista.UserAdmin.Repos.Security
 {
@@ -15,28 +17,33 @@ namespace LagoVista.UserAdmin.Repos.Security
     {
 
         private readonly IDefaultRoleList _defaultRoleList;
-        private readonly IUserSecurityServices _securityService;
+       
+        private readonly ICacheProvider _cacheProvider;
 
         private bool _consolidateCollectoins;
 
-        public RoleRepo(IUserAdminSettings settings, IUserSecurityServices securityService, IDefaultRoleList defaultRoleList, IAdminLogger logger) : 
-            base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger)
+        public RoleRepo(IUserAdminSettings settings, IDefaultRoleList defaultRoleList, IAdminLogger logger, ICacheProvider cacheProvider) : 
+            base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, cacheProvider)
         {
             _consolidateCollectoins = settings.ShouldConsolidateCollections;
             _defaultRoleList = defaultRoleList;
-            _securityService = securityService;
+            _cacheProvider = cacheProvider;
         }
 
         protected override bool ShouldConsolidateCollections => _consolidateCollectoins;
 
+        public async Task<Role> GetRoleAsync(string id)
+        {
+            var role = _defaultRoleList.GetStandardRoles().FirstOrDefault(rol => rol.Id == id);
+            if (role != null)
+                return role;
+
+            return await GetDocumentAsync(id);
+        }
+
         public Task AddRoleAsync(Role role)
         {
             return CreateDocumentAsync(role);
-        }
-
-        public Task<Role> GetRoleAsync(string id)
-        {
-            return GetDocumentAsync(id);
         }
 
         public async Task<List<Role>> GetAllPublicRoles()
@@ -60,9 +67,10 @@ namespace LagoVista.UserAdmin.Repos.Security
             return DeleteDocumentAsync(id);
         }
 
-        public Task UpdateAsync(Role role)
+        public async Task UpdateAsync(Role role)
         {
-            return base.UpsertDocumentAsync(role);
+            await _cacheProvider.RemoveAsync($"ROLEB_KEY_{role.Key}_{role.OwnerOrganization.Id}");
+            await base.UpsertDocumentAsync(role);
         }
 
         public async Task<List<RoleSummary>> GetAssignableRolesAsync(string orgId)
@@ -78,6 +86,28 @@ namespace LagoVista.UserAdmin.Repos.Security
         {
             var roles = await QueryAsync(role => role.OwnerOrganization.Id == orgId);
             return roles.Select(rol => rol.CreateSummary()).OrderBy(rol => rol.Name).ToList();
+        }
+
+        public async Task<Role> GetRoleByKeyAsync(string key, string orgId)
+        {
+            var role = _defaultRoleList.GetStandardRoles().SingleOrDefault(rol => rol.Key == key);
+            if (role == null)
+            {
+                var json = await _cacheProvider.GetAsync($"ROLEB_KEY_{key}_{orgId}");
+                if (!String.IsNullOrEmpty(json))
+                {
+                    role = JsonConvert.DeserializeObject<Role>(json);
+                }
+                else
+                {
+                    var roles = await QueryAsync(role => role.OwnerOrganization.Id == orgId && role.Key == key);
+                    role = roles.First();
+
+                    await _cacheProvider.AddAsync($"ROLEB_KEY_{key}_{orgId}", JsonConvert.SerializeObject(role));
+                }
+            }
+
+            return role;
         }
     }
 }

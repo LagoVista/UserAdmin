@@ -52,5 +52,8 @@ namespace LagoVista.UserAdmin.Models.Security
         public List<Page> Pages { get; set; } = new List<Page>();
 
         public List<Feature> Features = new List<Feature>();
+
+        public UserAccess UserAccess { get; set; }
+
     }
 }

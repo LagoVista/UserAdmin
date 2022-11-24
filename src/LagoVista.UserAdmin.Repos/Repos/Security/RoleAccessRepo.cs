@@ -41,8 +41,10 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             if (String.IsNullOrEmpty(json))
             {
                 var results = await this.GetByFilterAsync(FilterOptions.Create(nameof(RoleAccessDTO.RoleId), FilterOptions.Operators.Equals, roleId), FilterOptions.Create(nameof(UserRoleDTO.PartitionKey), FilterOptions.Operators.Equals, organizationId));
+                var roleAcess = results.Select(usr => usr.ToRoleAccess()).OrderBy(usr => usr.Role.Text).ToList();
+                json = JsonConvert.SerializeObject(roleAcess);
                 await _cacheProvider.AddAsync(CacheKey(roleId, organizationId), json);
-                return results.Select(usr => usr.ToRoleAccess()).OrderBy(usr => usr.Role.Text).ToList();
+                return roleAcess;
             }
             else
             {
@@ -53,7 +55,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
         public async Task RemoveRoleAccess(string roleAccessId, string organizationId)
         {
             var roleAccess = await GetAsync(roleAccessId, organizationId);
-            await _cacheProvider.RemoveAsync(CacheKey(roleAccess.RowKey, roleAccess.OrganizationId));
+            await _cacheProvider.RemoveAsync(CacheKey(roleAccess.RoleId, roleAccess.OrganizationId));
             await RemoveAsync(organizationId, roleAccessId);
         }
     }

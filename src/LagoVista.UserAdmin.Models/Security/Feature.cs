@@ -22,5 +22,8 @@ namespace LagoVista.UserAdmin.Models.Security
 
         [FormField(LabelResource: UserAdminResources.Names.Module_RestrictByDefault, HelpResource: UserAdminResources.Names.Module_RestrictByDefault_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool RestrictByDefault { get; set; }
+
+        public UserAccess UserAccess { get; set; }
+
     }
 }

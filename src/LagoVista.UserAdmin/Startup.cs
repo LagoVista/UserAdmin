@@ -24,6 +24,7 @@ namespace LagoVista.UserAdmin
             services.AddTransient<IUserVerficationManager, UserVerficationManager>();
             services.AddTransient<IDefaultRoleList, DefaultRoleList>();
             services.AddTransient<IPasswordManager, PasswordManager>();
+            services.AddTransient<IIUserAccessManager, UserAccessManager>();
             services.AddTransient<IOrgUtils, OrgUtils>();
             services.AddTransient<IRoleManager, RoleManager>(); ;
             services.AddTransient<IDistributionManager, DistributionManager>();
