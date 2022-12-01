@@ -20,6 +20,20 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public string Description { get; set; }
 
+
+
+        [FormField(LabelResource: UserAdminResources.Names.Feature_Icon, IsRequired: true, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources))]
+        public string Icon { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Feature_MenuTitle, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string MenuTitle { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Feature_Summary, IsRequired: true, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
+        public string Summary { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Menu_DoNotDisplay, HelpResource: UserAdminResources.Names.Menu_DoNotDisplay_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool DoNotDisplay { get; set; }
+
         [FormField(LabelResource: UserAdminResources.Names.Module_RestrictByDefault, HelpResource: UserAdminResources.Names.Module_RestrictByDefault_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool RestrictByDefault { get; set; }
 

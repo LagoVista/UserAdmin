@@ -1,4 +1,4 @@
-﻿/*11/20/2022 1:12:09 PM*/
+﻿/*11/26/2022 12:06:28 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -483,6 +483,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Feature_Help
 
 		public static string Feature_Help { get { return GetResourceString("Feature_Help"); } }
+//Resources:UserAdminResources:Feature_Icon
+
+		public static string Feature_Icon { get { return GetResourceString("Feature_Icon"); } }
+//Resources:UserAdminResources:Feature_MenuTitle
+
+		public static string Feature_MenuTitle { get { return GetResourceString("Feature_MenuTitle"); } }
+//Resources:UserAdminResources:Feature_Summary
+
+		public static string Feature_Summary { get { return GetResourceString("Feature_Summary"); } }
 //Resources:UserAdminResources:Feature_TItle
 
 		public static string Feature_TItle { get { return GetResourceString("Feature_TItle"); } }
@@ -677,6 +686,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:LoginVM_Title
 
 		public static string LoginVM_Title { get { return GetResourceString("LoginVM_Title"); } }
+//Resources:UserAdminResources:Menu_DoNotDisplay
+
+		public static string Menu_DoNotDisplay { get { return GetResourceString("Menu_DoNotDisplay"); } }
+//Resources:UserAdminResources:Menu_DoNotDisplay_Help
+
+		public static string Menu_DoNotDisplay_Help { get { return GetResourceString("Menu_DoNotDisplay_Help"); } }
 //Resources:UserAdminResources:Module_CardIcon
 
 		public static string Module_CardIcon { get { return GetResourceString("Module_CardIcon"); } }
@@ -1255,6 +1270,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string ExternalLoginConfirmVM_Help = "ExternalLoginConfirmVM_Help";
 			public const string ExternalLoginConfirmVM_Title = "ExternalLoginConfirmVM_Title";
 			public const string Feature_Help = "Feature_Help";
+			public const string Feature_Icon = "Feature_Icon";
+			public const string Feature_MenuTitle = "Feature_MenuTitle";
+			public const string Feature_Summary = "Feature_Summary";
 			public const string Feature_TItle = "Feature_TItle";
 			public const string ForgotPasswordVM_Description = "ForgotPasswordVM_Description";
 			public const string ForgotPasswordVM_Help = "ForgotPasswordVM_Help";
@@ -1317,6 +1335,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string LoginVM_Description = "LoginVM_Description";
 			public const string LoginVM_Help = "LoginVM_Help";
 			public const string LoginVM_Title = "LoginVM_Title";
+			public const string Menu_DoNotDisplay = "Menu_DoNotDisplay";
+			public const string Menu_DoNotDisplay_Help = "Menu_DoNotDisplay_Help";
 			public const string Module_CardIcon = "Module_CardIcon";
 			public const string Module_CardSummary = "Module_CardSummary";
 			public const string Module_CardTitle = "Module_CardTitle";

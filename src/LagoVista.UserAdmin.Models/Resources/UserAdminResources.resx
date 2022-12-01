@@ -1181,4 +1181,19 @@
   <data name="Role_IsSystemRole" xml:space="preserve">
     <value>Is System Role</value>
   </data>
+  <data name="Feature_Icon" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+  <data name="Feature_MenuTitle" xml:space="preserve">
+    <value>Menu Title</value>
+  </data>
+  <data name="Feature_Summary" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="Menu_DoNotDisplay" xml:space="preserve">
+    <value>Do Not Display</value>
+  </data>
+  <data name="Menu_DoNotDisplay_Help" xml:space="preserve">
+    <value>By default the rendering system automatically generates menus, if you need to manually render this, you can set to false.</value>
+  </data>
 </root>

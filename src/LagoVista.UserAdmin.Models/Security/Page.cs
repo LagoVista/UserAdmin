@@ -49,6 +49,11 @@ namespace LagoVista.UserAdmin.Models.Security
         public bool RestrictByDefault { get; set; }
 
 
+        [FormField(LabelResource: UserAdminResources.Names.Menu_DoNotDisplay, HelpResource: UserAdminResources.Names.Menu_DoNotDisplay_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool DoNotDisplay { get; set; }
+
+
+
         public List<Feature> Features { get; set; } = new List<Feature>();
 
         public UserAccess UserAccess { get; set; }
