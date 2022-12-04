@@ -5,7 +5,6 @@ using LagoVista.UserAdmin.Models.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Managers
@@ -26,6 +25,13 @@ namespace LagoVista.UserAdmin.Managers
         {
             var userAccessList = await _userSecurityService.GetRoleAccessForUserAsync(userId, orgId);
             var modules = await _moduleRepo.GetAllModulesAsync();
+  
+            var userRoles = await _userSecurityService.GetRolesForUserAsync(userId, orgId);
+            if(userRoles.Any(rol=>rol.Key == DefaultRoleList.OWNER))
+            {
+                return modules;
+            }
+            
             var userModules = new List<ModuleSummary>();
 
             userModules.AddRange(modules.Where(mod => !mod.RestrictByDefault));
