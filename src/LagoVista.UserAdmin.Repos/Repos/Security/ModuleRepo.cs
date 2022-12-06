@@ -41,13 +41,14 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
 
         public async Task DeleteModuleAsync(string id)
         {
-            await _cacheProvider.RemoveAsync(ALL_MODULES_CACHE_KEY);
             var module = await GetModuleAsync(id);
             if (module == null)
                 throw new ArgumentNullException(nameof(Module), id);
 
-            await _cacheProvider.RemoveAsync($"{MODULE_CACHE_KEY}_{module.Key}");
             await this.DeleteDocumentAsync(id);
+      
+            await _cacheProvider.RemoveAsync($"{MODULE_CACHE_KEY}_{module.Key}");
+            await _cacheProvider.RemoveAsync(ALL_MODULES_CACHE_KEY);
         }
 
         public async Task<List<ModuleSummary>> GetAllModulesAsync()
