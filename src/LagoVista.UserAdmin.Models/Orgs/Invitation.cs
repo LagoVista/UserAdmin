@@ -1,16 +1,15 @@
 ﻿using LagoVista.Core.Attributes;
-using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Resources;
-using LagoVista.UserAdmin.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Role_Title, UserAdminResources.Names.Role_Help, UserAdminResources.Names.Role_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
+    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Invitation_Title, UserAdminResources.Names.Invitation_Help, UserAdminResources.Names.Invitation_Description, 
+            EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
     public class Invitation : TableStorageEntity, IValidateable
     {
         public enum StatusTypes
