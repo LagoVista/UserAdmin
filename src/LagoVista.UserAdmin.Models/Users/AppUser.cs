@@ -154,6 +154,17 @@ namespace LagoVista.UserAdmin.Models.Users
         public string TermsAndConditionsAcceptedDateTime { get; set; }
 
 
+        public string PaymentAccount1 { get; set; }
+        public string RoutingAccount1 { get; set; }
+        public string PaymentAccount1Secureid { get; set; }
+        public string RoutingAccount1SecureId { get; set; }
+
+
+        public string PaymentAccount2 { get; set; }
+        public string RoutingAccount2 { get; set; }
+        public string PaymentAccount2Secureid { get; set; }
+        public string RoutingAccount2SecureId { get; set; }
+
         [JsonIgnore()]
         public String Name
         {

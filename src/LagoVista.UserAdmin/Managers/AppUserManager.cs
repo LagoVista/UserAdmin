@@ -37,7 +37,7 @@ namespace LagoVista.UserAdmin.Managers
         private readonly ISecureStorage _secureStorage;
         private readonly IUserRoleRepo _userRoleRepo;
 
-        public AppUserManager(IAppUserRepo appUserRepo, IUserRoleRepo userRoleRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IOrganizationManager orgManager, IOrgUserRepo orgUserRepo, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
+        public AppUserManager(IAppUserRepo appUserRepo,  IUserRoleRepo userRoleRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IOrganizationManager orgManager, IOrgUserRepo orgUserRepo, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
            IOrganizationRepo orgRepo, IAuthTokenManager authTokenManager, ISubscriptionManager subscriptionManager, IUserManager userManager, ISecureStorage secureStorage,
            ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, userRoleRepo, depManager, security, logger, appConfig)
         {
@@ -204,6 +204,84 @@ namespace LagoVista.UserAdmin.Managers
             ValidationCheck(appUser, Actions.Update);
 
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, updatedByUser, org);
+
+            await _appUserRepo.UpdateAsync(appUser);
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult<PaymenetAccounts>> GetPaymentAccountsAsync(string userId, PaymenetAccounts accounts, EntityHeader org, EntityHeader user)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(userId);
+            var paymentAccount = new PaymenetAccounts();
+
+            if (!string.IsNullOrEmpty(appUser.PaymentAccount1Secureid))
+            {
+                var result = await _secureStorage.GetSecretAsync(org, appUser.PaymentAccount1Secureid, user);
+                if (!result.Successful) return InvokeResult<PaymenetAccounts>.FromInvokeResult(result.ToInvokeResult());
+                paymentAccount.PaymentAccount1 = result.Result;
+            }
+
+            if (!string.IsNullOrEmpty(appUser.PaymentAccount2Secureid))
+            {
+                var result = await _secureStorage.GetSecretAsync(org, appUser.PaymentAccount2Secureid, user);
+                if (!result.Successful) return InvokeResult<PaymenetAccounts>.FromInvokeResult(result.ToInvokeResult());
+                paymentAccount.PaymentAccount2 = result.Result;
+            }
+
+            if (!string.IsNullOrEmpty(appUser.RoutingAccount1SecureId))
+            {
+                var result = await _secureStorage.GetSecretAsync(org, appUser.RoutingAccount1SecureId, user);
+                if (!result.Successful) return InvokeResult<PaymenetAccounts>.FromInvokeResult(result.ToInvokeResult());
+                paymentAccount.RoutingAccount1 = result.Result;
+            }
+
+            if (!string.IsNullOrEmpty(appUser.RoutingAccount2SecureId))
+            {
+                var result = await _secureStorage.GetSecretAsync(org, appUser.RoutingAccount2SecureId, user);
+                if (!result.Successful) return InvokeResult<PaymenetAccounts>.FromInvokeResult(result.ToInvokeResult());
+                paymentAccount.RoutingAccount2 = result.Result;
+            }
+
+            return InvokeResult<PaymenetAccounts>.Create(paymentAccount);
+        }
+
+
+        public async Task<InvokeResult> UpdatePaymentAccountsAsync(string userId, PaymenetAccounts accounts, EntityHeader org, EntityHeader user)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(userId);
+
+            if(!string.IsNullOrEmpty(accounts.PaymentAccount1))
+            {
+                var result = await _secureStorage.AddSecretAsync(org, accounts.PaymentAccount1);
+                if (!result.Successful) return result.ToInvokeResult();
+                appUser.PaymentAccount1Secureid = result.Result; 
+            }
+
+            if (!string.IsNullOrEmpty(accounts.PaymentAccount2))
+            {
+                var result = await _secureStorage.AddSecretAsync(org, accounts.PaymentAccount2);
+                if (!result.Successful) return result.ToInvokeResult();
+                appUser.PaymentAccount2Secureid = result.Result;
+            }
+
+            if (!string.IsNullOrEmpty(accounts.RoutingAccount1))
+            {
+                var result = await _secureStorage.AddSecretAsync(org, accounts.RoutingAccount1);
+                if (!result.Successful) return result.ToInvokeResult();
+                appUser.RoutingAccount1SecureId = result.Result;
+            }
+
+            if (!string.IsNullOrEmpty(accounts.RoutingAccount2))
+            {
+                var result = await _secureStorage.AddSecretAsync(org, accounts.RoutingAccount2);
+                if (!result.Successful) return result.ToInvokeResult();
+                appUser.RoutingAccount2SecureId = result.Result;
+            }
+
+            ValidationCheck(appUser, Actions.Update);
+
+            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, user, org);
 
             await _appUserRepo.UpdateAsync(appUser);
 
