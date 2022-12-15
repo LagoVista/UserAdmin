@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Users
 {
-    public class PaymenetAccounts
+    public class PaymentAccounts
     {
         public string PaymentAccount1 { get; set; }
         public string RoutingAccount1 { get; set; }

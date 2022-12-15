@@ -47,8 +47,8 @@ namespace LagoVista.UserAdmin.Managers
         Task<AppUser> GetUserByExternalLoginAsync(ExternalLoginTypes loginType, string id);
         Task<InvokeResult<AppUser>> AcceptTermsAndConditionsAsync(string ipAddress, EntityHeader org, EntityHeader userEH);
 
-        Task<InvokeResult<PaymenetAccounts>> GetPaymentAccountsAsync(string userId, PaymenetAccounts accounts, EntityHeader org, EntityHeader user);
+        Task<InvokeResult<PaymentAccounts>> GetPaymentAccountsAsync(string userId, EntityHeader org, EntityHeader user);
 
-        Task<InvokeResult> UpdatePaymentAccountsAsync(string userId, PaymenetAccounts accounts, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> UpdatePaymentAccountsAsync(string userId, PaymentAccounts accounts, EntityHeader org, EntityHeader user);
     }
 }

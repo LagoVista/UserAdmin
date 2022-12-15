@@ -52,6 +52,7 @@ namespace LagoVista.UserAdmin.Managers
             _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
             _userVerificationmanager = userVerificationmanager ?? throw new ArgumentNullException(nameof(userVerificationmanager));
             _subscriptionManager = subscriptionManager ?? throw new ArgumentNullException(nameof(subscriptionManager));
+            _secureStorage = secureStorage ?? throw new ArgumentNullException(nameof(secureStorage));
         }
 
         public async Task<InvokeResult> AddUserAsync(AppUser user, EntityHeader org, EntityHeader updatedByUser)
@@ -210,46 +211,51 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult<PaymenetAccounts>> GetPaymentAccountsAsync(string userId, PaymenetAccounts accounts, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult<PaymentAccounts>> GetPaymentAccountsAsync(string userId, EntityHeader org, EntityHeader user)
         {
             var appUser = await _appUserRepo.FindByIdAsync(userId);
-            var paymentAccount = new PaymenetAccounts();
+            var paymentAccount = new PaymentAccounts();
 
             if (!string.IsNullOrEmpty(appUser.PaymentAccount1Secureid))
             {
                 var result = await _secureStorage.GetSecretAsync(org, appUser.PaymentAccount1Secureid, user);
-                if (!result.Successful) return InvokeResult<PaymenetAccounts>.FromInvokeResult(result.ToInvokeResult());
+                if (!result.Successful) return InvokeResult<PaymentAccounts>.FromInvokeResult(result.ToInvokeResult());
                 paymentAccount.PaymentAccount1 = result.Result;
             }
 
             if (!string.IsNullOrEmpty(appUser.PaymentAccount2Secureid))
             {
                 var result = await _secureStorage.GetSecretAsync(org, appUser.PaymentAccount2Secureid, user);
-                if (!result.Successful) return InvokeResult<PaymenetAccounts>.FromInvokeResult(result.ToInvokeResult());
+                if (!result.Successful) return InvokeResult<PaymentAccounts>.FromInvokeResult(result.ToInvokeResult());
                 paymentAccount.PaymentAccount2 = result.Result;
             }
 
             if (!string.IsNullOrEmpty(appUser.RoutingAccount1SecureId))
             {
                 var result = await _secureStorage.GetSecretAsync(org, appUser.RoutingAccount1SecureId, user);
-                if (!result.Successful) return InvokeResult<PaymenetAccounts>.FromInvokeResult(result.ToInvokeResult());
+                if (!result.Successful) return InvokeResult<PaymentAccounts>.FromInvokeResult(result.ToInvokeResult());
                 paymentAccount.RoutingAccount1 = result.Result;
             }
 
             if (!string.IsNullOrEmpty(appUser.RoutingAccount2SecureId))
             {
                 var result = await _secureStorage.GetSecretAsync(org, appUser.RoutingAccount2SecureId, user);
-                if (!result.Successful) return InvokeResult<PaymenetAccounts>.FromInvokeResult(result.ToInvokeResult());
+                if (!result.Successful) return InvokeResult<PaymentAccounts>.FromInvokeResult(result.ToInvokeResult());
                 paymentAccount.RoutingAccount2 = result.Result;
             }
 
-            return InvokeResult<PaymenetAccounts>.Create(paymentAccount);
+            return InvokeResult<PaymentAccounts>.Create(paymentAccount);
         }
 
-
-        public async Task<InvokeResult> UpdatePaymentAccountsAsync(string userId, PaymenetAccounts accounts, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> UpdatePaymentAccountsAsync(string userId, PaymentAccounts accounts, EntityHeader org, EntityHeader user)
         {
+            if(accounts == null)
+                throw new ArgumentNullException(nameof(accounts));
+
             var appUser = await _appUserRepo.FindByIdAsync(userId);
+
+            if(appUser == null)
+                throw new RecordNotFoundException(nameof(appUser), userId);
 
             if(!string.IsNullOrEmpty(accounts.PaymentAccount1))
             {
