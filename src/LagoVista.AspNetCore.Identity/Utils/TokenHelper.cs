@@ -59,13 +59,13 @@ namespace LagoVista.AspNetCore.Identity.Utils
                 User = appUser.ToEntityHeader(),
             };
 
-            if(!String.IsNullOrEmpty(authRequest.OrgId))
+            if (!String.IsNullOrEmpty(authRequest.OrgId))
             {
                 // we have already confirmed that the user has access to this org.
                 authResponse.Org = new Core.Models.EntityHeader() { Id = authRequest.OrgId, Text = authRequest.OrgName };
                 var orgRoles = await _userRoleRepo.GetRolesForUseAsync(appUser.Id, authRequest.OrgId);
-                authResponse.Roles = new List<EntityHeader>(orgRoles.Select(rle=>rle.ToEntityHeader()));
-                var isOrgAdmin = await  _orgUserRepo.IsUserOrgAdminAsync(authRequest.OrgId, authResponse.User.Id);
+                authResponse.Roles = new List<EntityHeader>(orgRoles.Select(rle => rle.ToEntityHeader()));
+                var isOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(authRequest.OrgId, authResponse.User.Id);
                 var isAppBuilder = await _orgUserRepo.IsAppBuilderAsync(authRequest.OrgId, authResponse.User.Id);
                 authResponse.AccessToken = GetJWToken(appUser, authResponse.Org, isOrgAdmin, isAppBuilder, accessExpires, authRequest.AppInstanceId);
             }
@@ -79,10 +79,35 @@ namespace LagoVista.AspNetCore.Identity.Utils
             return InvokeResult<AuthResponse>.Create(authResponse);
         }
 
+        public Task<InvokeResult<AuthResponse>> GenerateAuthResponseAsync(AppUser appUser, string appInstanceId, InvokeResult<RefreshToken> refreshTokenResponse)
+        {
+            if (!refreshTokenResponse.Successful)
+            {
+                return Task.FromResult(InvokeResult<AuthResponse>.FromInvokeResult(refreshTokenResponse.ToInvokeResult()));
+            }
+
+            var accessExpires = DateTime.UtcNow.AddMinutes(_tokenOptions.AccessExpiration.TotalMinutes);
+
+            var authResponse = new AuthResponse()
+            {
+                AppInstanceId = appInstanceId,
+                AccessTokenExpiresUTC = accessExpires.ToJSONString(),
+                RefreshToken = refreshTokenResponse.Result.RowKey,
+                RefreshTokenExpiresUTC = refreshTokenResponse.Result.ExpiresUtc,
+                User = appUser.ToEntityHeader(),
+            };
+
+            authResponse.Roles = appUser.CurrentOrganizationRoles;
+            authResponse.Org = appUser.CurrentOrganization;
+            authResponse.AccessToken = GetJWToken(appUser, accessExpires, appInstanceId);
+
+            return Task.FromResult(InvokeResult<AuthResponse>.Create(authResponse));
+        }
+
         public string GetJWToken(AppUser user, DateTime accessExpires, string installationId)
         {
             var now = DateTime.UtcNow;
-            var claims = _claimsFactory.GetClaims(user);            
+            var claims = _claimsFactory.GetClaims(user);
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, NonceGenerator()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64));
 

@@ -28,6 +28,7 @@ namespace LagoVista.UserAdmin
             services.AddTransient<IOrgUtils, OrgUtils>();
             services.AddTransient<IRoleManager, RoleManager>(); ;
             services.AddTransient<IDistributionManager, DistributionManager>();
+            services.AddTransient<ISingleUseTokenManager, SingleUseTokenManager>();
         }
     }
 }

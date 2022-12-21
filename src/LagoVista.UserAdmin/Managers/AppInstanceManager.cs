@@ -24,7 +24,9 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult<AppInstance>> CreateForUserAsync(string appUserId, AuthRequest authRequest)
         {
-            authRequest.AppInstanceId = Guid.NewGuid().ToId();
+            if(String.IsNullOrEmpty(authRequest.AppInstanceId))
+                authRequest.AppInstanceId = Guid.NewGuid().ToId();
+
             var appInstance = new AppInstance(authRequest.AppInstanceId, appUserId);
 
             appInstance.UserId = appUserId;
@@ -86,5 +88,6 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult<AppInstance>.Create(appInstance);
             }
         }
+
     }
 }

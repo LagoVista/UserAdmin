@@ -1,4 +1,4 @@
-﻿/*11/26/2022 12:06:28 PM*/
+﻿/*12/20/2022 9:17:27 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -258,6 +258,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AuthError_NotSysAdmin
 
 		public static string AuthError_NotSysAdmin { get { return GetResourceString("AuthError_NotSysAdmin"); } }
+//Resources:UserAdminResources:AuthSingleuseToken_TokenNotFound
+
+		public static string AuthSingleuseToken_TokenNotFound { get { return GetResourceString("AuthSingleuseToken_TokenNotFound"); } }
+//Resources:UserAdminResources:AuthSingleuseToken_UserNotFound
+
+		public static string AuthSingleuseToken_UserNotFound { get { return GetResourceString("AuthSingleuseToken_UserNotFound"); } }
 //Resources:UserAdminResources:Billing_Contact
 
 		public static string Billing_Contact { get { return GetResourceString("Billing_Contact"); } }
@@ -1195,6 +1201,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AuthErr_UserIsNullForRefresh = "AuthErr_UserIsNullForRefresh";
 			public const string AuthErr_UserLockedOut = "AuthErr_UserLockedOut";
 			public const string AuthError_NotSysAdmin = "AuthError_NotSysAdmin";
+			public const string AuthSingleuseToken_TokenNotFound = "AuthSingleuseToken_TokenNotFound";
+			public const string AuthSingleuseToken_UserNotFound = "AuthSingleuseToken_UserNotFound";
 			public const string Billing_Contact = "Billing_Contact";
 			public const string ChangePasswordVM_Description = "ChangePasswordVM_Description";
 			public const string ChangePasswordVM_Help = "ChangePasswordVM_Help";

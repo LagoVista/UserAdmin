@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core.Authentication.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.DTOs;
+using LagoVista.UserAdmin.Models.Users;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin
@@ -15,5 +16,6 @@ namespace LagoVista.UserAdmin
         InvokeResult ValidatePasswordChangeRequest(ChangePassword changePassword, string userId);
         InvokeResult ValidateSendPasswordLinkRequest(SendResetPasswordLink sendRestPasswordLink);
         InvokeResult ValidateResetPasswordRequest(ResetPassword resetPassword);
+        InvokeResult ValidateSingleUseTokenGrant(AuthRequest authRequest);
     }
 }

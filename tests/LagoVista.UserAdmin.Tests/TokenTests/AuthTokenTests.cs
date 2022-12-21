@@ -54,7 +54,7 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
             };
 
           
-            _authTokenManager = new AuthTokenManager(new Mock<IAppInstanceRepo>().Object, _orgManager.Object, _refreshTokenManager.Object,
+            _authTokenManager = new AuthTokenManager(new Mock<IAppInstanceRepo>().Object, new Mock<ISingleUseTokenManager>().Object, _orgManager.Object, _refreshTokenManager.Object,
                 _authRequestValidators.Object, _tokenHelper.Object, _appInstanceManager.Object,
                 new Mock<IAdminLogger>().Object, _signInManager.Object, _userManager.Object);
 

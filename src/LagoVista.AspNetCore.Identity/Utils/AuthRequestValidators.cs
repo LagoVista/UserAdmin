@@ -13,6 +13,7 @@ using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.Core.Interfaces;
+using LagoVista.UserAdmin.Models.Users;
 
 namespace LagoVista.AspNetCore.Identity.Utils
 {
@@ -118,6 +119,29 @@ namespace LagoVista.AspNetCore.Identity.Utils
             if (String.IsNullOrEmpty(authRequest.AppInstanceId))
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateRefreshTokenGrant", UserAdminErrorCodes.AuthMissingAppInstanceId.Message);
+                return InvokeResult.FromErrors(UserAdminErrorCodes.AuthMissingAppInstanceId.ToErrorMessage());
+            }
+
+            return InvokeResult.Success;
+        }
+
+        public InvokeResult ValidateSingleUseTokenGrant(AuthRequest authRequest)
+        {
+            if (String.IsNullOrEmpty(authRequest.SingleUseToken))
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateSingleUseTokenGrant", UserAdminErrorCodes.AuthSingleuseToken_TokenNotFound.Message);
+                return InvokeResult.FromErrors(UserAdminErrorCodes.AuthSingleuseToken_TokenNotFound.ToErrorMessage());
+            }
+
+            if (String.IsNullOrEmpty(authRequest.UserId))
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateSingleUseTokenGrant", UserAdminErrorCodes.AuthSingleuseToken_UserNotFound.Message);
+                return InvokeResult.FromErrors(UserAdminErrorCodes.AuthSingleuseToken_UserNotFound.ToErrorMessage());
+            }
+
+            if (String.IsNullOrEmpty(authRequest.AppInstanceId))
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateSingleUseTokenGrant", UserAdminErrorCodes.AuthMissingAppInstanceId.Message);
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthMissingAppInstanceId.ToErrorMessage());
             }
 

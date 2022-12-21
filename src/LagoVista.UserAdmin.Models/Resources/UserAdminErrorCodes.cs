@@ -19,6 +19,8 @@ namespace LagoVista.UserAdmin.Resources
         public static ErrorCode AuthMissingRefreshToken => new ErrorCode() { Code = "AUTH009", Message = UserAdminResources.AuthErr_MissingRefreshToken };
         public static ErrorCode AuthRefrshTokenInvalidFormat => new ErrorCode() { Code = "AUTH010", Message = UserAdminResources.AuthErr_RefreshToken_InvalidFormat };
         public static ErrorCode AuthRefrshTokenNotFound => new ErrorCode() { Code = "AUTH011", Message = UserAdminResources.AuthErr_RefreshToken_NotFound };
+        public static ErrorCode AuthSingleuseToken_TokenNotFound => new ErrorCode() { Code = "AUTH039", Message = UserAdminResources.AuthSingleuseToken_TokenNotFound };
+        public static ErrorCode AuthSingleuseToken_UserNotFound => new ErrorCode() { Code = "AUTH040", Message = UserAdminResources.AuthSingleuseToken_UserNotFound };
 
         public static ErrorCode AuthMissingEmail => new ErrorCode() { Code = "AUTH012", Message = UserAdminResources.AuthErr_MissingEmailAddress };
         public static ErrorCode AuthMissingPassword => new ErrorCode() { Code = "AUTH013", Message = UserAdminResources.AuthErr_MissingPassword };

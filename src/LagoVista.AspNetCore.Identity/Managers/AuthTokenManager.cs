@@ -12,6 +12,7 @@ using LagoVista.UserAdmin;
 using LagoVista.Core.Interfaces;
 using System.Linq;
 using LagoVista.Core.Models;
+using LagoVista.UserAdmin.Models.Users;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -25,11 +26,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
         private readonly IAppInstanceManager _appInstanceManager;
         private readonly IAuthRequestValidators _authRequestValidators;
         private readonly IOrganizationManager _orgManager;
+        private readonly ISingleUseTokenManager _singleUseTokenManager;
 
         public const string GRANT_TYPE_PASSWORD = "password";
         public const string GRANT_TYPE_REFRESHTOKEN = "refreshtoken";
+        public const string GRANT_TYPE_SINGLEUSETOKEN = "single-use-token";
 
-        public AuthTokenManager(IAppInstanceRepo appInstanceRepo, IOrganizationManager orgManager,
+        public AuthTokenManager(IAppInstanceRepo appInstanceRepo, ISingleUseTokenManager singleUseTokenManager, IOrganizationManager orgManager,
                                 IRefreshTokenManager refreshTokenManager, IAuthRequestValidators authRequestValidators,
                                 ITokenHelper tokenHelper, IAppInstanceManager appInstanceManager,
                                 IAdminLogger adminLogger, ISignInManager signInManager, IUserManager userManager)
@@ -42,6 +45,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             _orgManager = orgManager;
             _authRequestValidators = authRequestValidators;
             _appInstanceManager = appInstanceManager;
+            _singleUseTokenManager = singleUseTokenManager;
         }
 
 
@@ -132,6 +136,47 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return authResponse;
         }
 
+        public async Task<InvokeResult<AuthResponse>> SingleUseTokenGrantAsync(AuthRequest authRequest)
+        {
+            Console.WriteLine("ai1: " + authRequest.AppInstanceId);
+
+            var refreshTokenRequestValidationResult = _authRequestValidators.ValidateSingleUseTokenGrant(authRequest);
+            if (!refreshTokenRequestValidationResult.Successful) return InvokeResult<AuthResponse>.FromInvokeResult(refreshTokenRequestValidationResult);
+
+            AppUser appUser = await _userManager.FindByIdAsync(authRequest.UserId);
+            if (appUser == null)
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_SingleUseTokenGrantAsync", UserAdminErrorCodes.AuthCouldNotFindUserAccount.Message, new KeyValuePair<string, string>("userId", authRequest.UserId));
+                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
+            }
+
+            if (appUser.IsAccountDisabled)
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_SingleUseTokenGrantAsync", "UserLogin Failed - Account Disabled", new KeyValuePair<string, string>("userId", authRequest.UserId));
+                return InvokeResult<AuthResponse>.FromError("Account Disabled.");
+            }
+
+            var result = await _singleUseTokenManager.ValidationAsync(authRequest.UserId, authRequest.SingleUseToken);
+            if(!result.Successful)
+            {
+                return InvokeResult<AuthResponse>.FromInvokeResult(result);
+            }
+            Console.WriteLine("ai1: " + authRequest.AppInstanceId);
+
+            var updateLastRefreshTokenResult = (await _appInstanceManager.UpdateLastLoginAsync(appUser.Id, authRequest));
+            if (updateLastRefreshTokenResult.Successful)
+            {
+                authRequest.AppInstanceId = updateLastRefreshTokenResult.Result.RowKey;
+                var refreshTokenResponse = await _refreshTokenManager.GenerateRefreshTokenAsync(authRequest.AppId, authRequest.AppInstanceId, appUser.Id);
+                _adminLogger.LogInvokeResult("AuthTokenManager_SingleUseTokenGrantAsync", refreshTokenResponse);
+                return await _tokenHelper.GenerateAuthResponseAsync(appUser, authRequest.AppInstanceId, refreshTokenResponse);
+            }
+            else
+            {
+                return InvokeResult<AuthResponse>.FromInvokeResult(updateLastRefreshTokenResult.ToInvokeResult());
+            }
+        }
+
         public async Task<InvokeResult<AuthResponse>> RefreshTokenGrantAsync(AuthRequest authRequest)
         {
             var requestValidationResult = _authRequestValidators.ValidateAuthRequest(authRequest);
@@ -153,8 +198,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             var refreshTokenRequestValidationResult = _authRequestValidators.ValidateRefreshTokenGrant(authRequest);
             if (!refreshTokenRequestValidationResult.Successful) return InvokeResult<AuthResponse>.FromInvokeResult(refreshTokenRequestValidationResult);
-
-            var appUser = await _userManager.FindByNameAsync(authRequest.UserName);
+            AppUser appUser =  await _userManager.FindByIdAsync(authRequest.UserName);
+            
             if (appUser == null)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_RefreshTokenGrantAsync", UserAdminErrorCodes.AuthCouldNotFindUserAccount.Message, new KeyValuePair<string, string>("id", userName));
@@ -193,6 +238,25 @@ namespace LagoVista.AspNetCore.Identity.Managers
             {
                 return InvokeResult<AuthResponse>.FromInvokeResult(updateLastRefreshTokenResult.ToInvokeResult());
             }
+        }
+
+        public async Task<InvokeResult<SingleUseToken>> GenerateOneTimeUseTokenAsync(string userId, TimeSpan? expires = null)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if(user == null)
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_GenerateOneTimeUseTokenAsync", "Single Time Use Failed could not find user", new KeyValuePair<string, string>("userId", userId));
+                return InvokeResult<SingleUseToken>.FromError($"User with id {userId} does not exist");
+            }
+
+            if(user.IsAccountDisabled)
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_GenerateOneTimeUseTokenAsync", "Single Time Use Failed, user account is disabled", new KeyValuePair<string, string>("userId", userId));
+                return InvokeResult<SingleUseToken>.FromError($"User with id {userId} account is disabled.");
+            }
+
+            var refreshTokenResponse = await _singleUseTokenManager.CreateAsync(userId, expires);
+            return refreshTokenResponse;
         }
     }
 }

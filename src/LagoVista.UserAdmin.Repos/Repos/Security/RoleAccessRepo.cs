@@ -21,7 +21,6 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
                base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
             _cacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
-
         }
 
         public string CacheKey(string roleId, string organizationId)

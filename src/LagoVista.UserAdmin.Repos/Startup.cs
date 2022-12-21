@@ -45,6 +45,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<IAppInstanceRepo, AppInstanceRepo>();
             services.AddTransient<IUserRoleRepo, UserRoleRepo>();
             services.AddTransient<IRoleAccessRepo, RoleAccessRepo>();
+            services.AddTransient<ISingleUseTokenRepo, SingleUseTokenRepo>();
             services.AddTransient<IDistributionListRepo, DistributionListRepo>();
             
             ErrorCodes.Register(typeof(UserAdminErrorCodes));

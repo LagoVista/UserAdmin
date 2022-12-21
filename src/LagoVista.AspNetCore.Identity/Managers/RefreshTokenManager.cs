@@ -9,7 +9,6 @@ using LagoVista.Core;
 using System.Threading.Tasks;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Resources;
-using LagoVista.AspNetCore.Identity.Interfaces;
 using LagoVista.UserAdmin;
 
 namespace LagoVista.AspNetCore.Identity.Managers
