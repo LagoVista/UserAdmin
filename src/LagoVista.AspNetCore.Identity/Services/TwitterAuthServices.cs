@@ -84,6 +84,13 @@ namespace LagoVista.AspNetCore.Identity.Services
             canonicalizedRequestBuilder.Append('&');
             canonicalizedRequestBuilder.Append(Uri.EscapeDataString(parameterString));
 
+            Console.WriteLine($"  Twitter Oauth statement: {canonicalizedRequestBuilder}");
+
+            foreach(var hdr in authorizationParts)
+            {
+                Console.WriteLine($"  hdr: {hdr.Key}={hdr.Value}");
+            }
+
             var signature = ComputeSignature(_oauthSettings.TwitterOAuth.Secret, accessToken?.TokenSecret, canonicalizedRequestBuilder.ToString());
             authorizationParts.Add("oauth_signature", signature);
 
@@ -111,6 +118,8 @@ namespace LagoVista.AspNetCore.Identity.Services
             var request = new HttpRequestMessage(httpMethod, url + queryString);
             request.Headers.Add("Authorization", authorizationHeaderBuilder.ToString());
 
+            Console.WriteLine("   Request To: " + request.RequestUri);
+
             // This header is so that the error response is also JSON - without it the success response is already JSON
             request.Headers.Add("Accept", "application/json");
 
@@ -125,7 +134,9 @@ namespace LagoVista.AspNetCore.Identity.Services
 
         public async Task<TwitterRequestToken> ObtainRequestTokenAsync(CancellationToken? token = null)
         {
-            var callBackUri = $"https://127.0.0.1:5001/account/oauthtwitter/authorize/callback";
+            var callBackUri = $"{_appConfig.WebAddress}/account/oauthtwitter/authorize/callback";
+            Console.Write($"Callback URI: {callBackUri}");
+            
             var response = await ExecuteRequestAsync(REQUEST_TOKEN_ENDPOINT, HttpMethod.Post, 
                   extraOAuthPairs: new Dictionary<string, string> { {  "oauth_callback", callBackUri } });
 
