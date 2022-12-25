@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard1.2</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>LagoVista.UserAdmin.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core.Authentication" Version="3.0.1963.1145" />
+    <PackageReference Include="LagoVista.Core.Authentication" Version="3.0.2048.0520" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.UserAdmin.Models\LagoVista.UserAdmin.Models.csproj" />

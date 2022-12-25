@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core;
 using LagoVista.Core.Attributes;
+using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
 
@@ -39,5 +40,9 @@ namespace LagoVista.UserAdmin.Models.Security
 
         public UserAccess UserAccess { get; set; }
 
+        public EntityHeader ToEntityHeader()
+        {
+            return EntityHeader.Create(Id, Key, Name);
+        }
     }
 }

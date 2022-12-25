@@ -69,12 +69,12 @@ namespace LagoVista.UserAdmin.Models.DTOs
                 roleAccess.Area = EntityHeader.Create(AreaId, AreaKey, AreaName);
             }
 
-            if (!String.IsNullOrEmpty(PageId) && !String.IsNullOrEmpty(AreaKey) && !String.IsNullOrEmpty(AreaName))
+            if (!String.IsNullOrEmpty(PageId) && !String.IsNullOrEmpty(PageKey) && !String.IsNullOrEmpty(PageName))
             {
                 roleAccess.Area = EntityHeader.Create(PageId, PageKey, PageName);
             }
 
-            if (!String.IsNullOrEmpty(AreaId) && !String.IsNullOrEmpty(AreaKey) && !String.IsNullOrEmpty(AreaName))
+            if (!String.IsNullOrEmpty(FeatureId) && !String.IsNullOrEmpty(FeatureKey) && !String.IsNullOrEmpty(FeatureName))
             {
                 roleAccess.Area = EntityHeader.Create(FeatureId, FeatureKey, FeatureName);
             }

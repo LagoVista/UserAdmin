@@ -1,44 +1,53 @@
-﻿using LagoVista.UserAdmin.Interfaces;
-using LagoVista.UserAdmin.Interfaces.Repos.Security;
-using LagoVista.UserAdmin.Managers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Tests.User
 {
     [TestClass]
-    public class ModuleAccessTests
+    public class ModuleAccessTests : SecurityBase
     {
-
-        UserAccessManager _accessManager;
-        Mock<IRoleRepo> _roleRepo = new Mock<IRoleRepo>();
-        Mock<IUserSecurityServices> _userSecurityService = new Mock<IUserSecurityServices>();
-        Mock<IModuleRepo> _moduleRepo = new Mock<IModuleRepo>();
-        Mock<IRoleAccessRepo> _roleAccessRepo = new Mock<IRoleAccessRepo>();
-
-        const string USER_ID = "9C33C709A60B4D539CB8031DA653B1BD";
-        const string ORG_ID = "2D04F767534A40F0BC40E15FF2804681";
-
-        [TestInitialize]
-        public void Init()
+        [TestMethod]
+        public async Task Should_Get_Non_Restricted_Module()
         {
-            _accessManager = new UserAccessManager(_userSecurityService.Object, _moduleRepo.Object);
+            _mod5.RestrictByDefault = false;
+            
+            var modules = await AccessManager.GetUserModulesAsync(USER_ID, ORG_ID);
 
-            _roleRepo.Setup(rol => rol.GetRoleByKeyAsync("role1", "dontcare")).ReturnsAsync(new Models.Users.Role() { Id = "ABC1234" });
-            _roleRepo.Setup(rol => rol.GetRoleByKeyAsync("role2", "dontcare")).ReturnsAsync(new Models.Users.Role() { Id = "DEF1234" });
-            _roleRepo.Setup(rol => rol.GetRoleByKeyAsync("role3", "dontcare")).ReturnsAsync(new Models.Users.Role() { Id = "GHI1234" });
+            AssertContainsModule(modules, _mod5);
+            AssertDoesNotContainsModule(modules, _mod1);
+            AssertDoesNotContainsModule(modules, _mod2);
+            AssertDoesNotContainsModule(modules, _mod3);
+            AssertDoesNotContainsModule(modules, _mod4);
         }
 
         [TestMethod]
-        public async Task GetModules()
+        public async Task Should_Get_Role_Added_Module()
         {
-            var modules = await _accessManager.GetUserModulesAsync(USER_ID, ORG_ID);
+            _mod5.RestrictByDefault = false;
+          
+            AddModuleAccess(_role1, _mod1);
+
+            var modules = await AccessManager.GetUserModulesAsync(USER_ID, ORG_ID);
+            AssertContainsModule(modules, _mod5);
+            AssertContainsModule(modules, _mod1);
+            AssertDoesNotContainsModule(modules, _mod2);
+            AssertDoesNotContainsModule(modules, _mod3);
+            AssertDoesNotContainsModule(modules, _mod4);
         }
 
+        [TestMethod]
+        public async Task Should_Remove_Non_Restricted_When_Disabled()
+        {
+            _mod5.RestrictByDefault = false;
+            
+            AddModuleAccess(_role1, _mod5, -1);
+
+            var modules = await AccessManager.GetUserModulesAsync(USER_ID, ORG_ID);
+            AssertDoesNotContainsModule(modules, _mod1);
+            AssertDoesNotContainsModule(modules, _mod2);
+            AssertDoesNotContainsModule(modules, _mod3);
+            AssertDoesNotContainsModule(modules, _mod4);
+            AssertDoesNotContainsModule(modules, _mod5);
+        }
     }
 }

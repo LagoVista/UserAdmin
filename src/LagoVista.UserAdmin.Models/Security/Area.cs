@@ -60,5 +60,9 @@ namespace LagoVista.UserAdmin.Models.Security
 
         public UserAccess UserAccess { get; set; }
 
+        public EntityHeader ToEntityHeader()
+        {
+            return EntityHeader.Create(Id, Key, Name);
+        }
     }
 }

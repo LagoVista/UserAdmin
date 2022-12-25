@@ -103,6 +103,16 @@ namespace LagoVista.UserAdmin.Models.Security
 
         public UserAccess UserAccess {get; set;}
 
+        public EntityHeader ToEntityHeader()
+        {
+            return new EntityHeader()
+            {
+                Id = Id,
+                Key = Key,
+                Text = Name
+            };
+        }
+
 
         public ModuleSummary CreateSummary()
         {
@@ -116,6 +126,7 @@ namespace LagoVista.UserAdmin.Models.Security
                 StatusLabel = Status.Text,
                 Status = Status.Id,
                 Key = Key,
+                SortOrder = SortOrder,
                 Description = Description,
                 IsPublic = IsPublic,
                 Link = Link,
@@ -138,7 +149,18 @@ namespace LagoVista.UserAdmin.Models.Security
         public string Link { get; set; }
         public bool IsLegacyNGX { get; set; }
         public bool IsExternalLink { get; set; }
-    
+   
+        public int SortOrder { get; set; }
         public bool RestrictByDefault { get; set; }
+
+        public EntityHeader ToEntityHeader()
+        {
+            return new EntityHeader()
+            {
+                Id = Id,
+                Key = Key,
+                Text = Name
+            };
+        }
     }
 }

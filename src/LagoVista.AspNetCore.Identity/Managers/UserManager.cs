@@ -17,7 +17,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
     public class UserManager : ManagerBase, IUserManager
     {
         private readonly UserManager<AppUser> _userManager;
-
+       
         public UserManager(UserManager<AppUser> userManager, IAdminLogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security) :
             base(logger, appConfig, dependencyManager, security)
         {
