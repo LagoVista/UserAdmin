@@ -38,7 +38,7 @@ namespace LagoVista.UserAdmin.Managers
                 throw new LagoVista.Core.Exceptions.RecordNotFoundException(nameof(AppUser), appUserId);
             }
 
-            var userRoles = await _userRoleRepo.GetRolesForUseAsync(appUserId, org.Id);
+            var userRoles = await _userRoleRepo.GetRolesForUserAsync(appUserId, org.Id);
 
             appUser.CurrentOrganizationRoles = userRoles.Select(ur => ur.ToEntityHeader()).ToList();
             appUser.PasswordHash = null;

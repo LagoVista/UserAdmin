@@ -63,7 +63,7 @@ namespace LagoVista.AspNetCore.Identity.Utils
             appUser.IsOrgAdmin = switchToOrg.IsOrgAdmin;    
 
             // 3) Add the roles to the user for the org.
-            var orgRoles = await _userRoleRepo.GetRolesForUseAsync( appUser.Id, authRequest.OrgId);
+            var orgRoles = await _userRoleRepo.GetRolesForUserAsync( appUser.Id, authRequest.OrgId);
             appUser.CurrentOrganizationRoles = new List<EntityHeader>();
             foreach (var orgRole in orgRoles)
             {

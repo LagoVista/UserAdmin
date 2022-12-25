@@ -101,6 +101,11 @@ namespace LagoVista.UserAdmin.Repos.Security
                 else
                 {
                     var roles = await QueryAsync(role => role.OwnerOrganization.Id == orgId && role.Key == key);
+                    if(!roles.Any())
+                    {
+                        throw new ArgumentOutOfRangeException($"Could not find role {key} in organization {orgId}");
+                    }
+                    
                     role = roles.First();
 
                     await _cacheProvider.AddAsync($"ROLEB_KEY_{key}_{orgId}", JsonConvert.SerializeObject(role));

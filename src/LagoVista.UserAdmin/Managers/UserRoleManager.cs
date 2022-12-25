@@ -35,7 +35,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public Task<List<UserRole>> GetRolesForUserAsync(string userId, EntityHeader org, EntityHeader user)
         {
-            return _userRoleRepo.GetRolesForUseAsync(userId, org.Id);
+            return _userRoleRepo.GetRolesForUserAsync(userId, org.Id);
         }
 
         public async Task<InvokeResult<UserRole>> GrantUserRoleAsync(string userId, string roleId, EntityHeader org, EntityHeader user)
@@ -94,7 +94,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<bool> UserHasRoleAsync(string roleId, string userId, string orgId)
         {
-            var roles = await _userRoleRepo.GetRolesForUseAsync(userId, orgId);
+            var roles = await _userRoleRepo.GetRolesForUserAsync(userId, orgId);
             return roles.Any(rl=>rl.Role.Id == roleId);
         }
     }

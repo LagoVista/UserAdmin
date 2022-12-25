@@ -56,7 +56,7 @@ namespace LagoVista.UserAdmin.Repos.Users
             var appUser = await GetDocumentAsync(id, false);
             if(appUser.CurrentOrganization != null)
             {
-                var userRoles = await _userRoleRepo.GetRolesForUseAsync(id, appUser.CurrentOrganization.Id);
+                var userRoles = await _userRoleRepo.GetRolesForUserAsync(id, appUser.CurrentOrganization.Id);
                 appUser.CurrentOrganizationRoles = userRoles.Select(role => role.ToEntityHeader()).ToList();
             }
 

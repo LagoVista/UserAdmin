@@ -63,7 +63,7 @@ namespace LagoVista.AspNetCore.Identity.Utils
             {
                 // we have already confirmed that the user has access to this org.
                 authResponse.Org = new Core.Models.EntityHeader() { Id = authRequest.OrgId, Text = authRequest.OrgName };
-                var orgRoles = await _userRoleRepo.GetRolesForUseAsync(appUser.Id, authRequest.OrgId);
+                var orgRoles = await _userRoleRepo.GetRolesForUserAsync(appUser.Id, authRequest.OrgId);
                 authResponse.Roles = new List<EntityHeader>(orgRoles.Select(rle => rle.ToEntityHeader()));
                 var isOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(authRequest.OrgId, authResponse.User.Id);
                 var isAppBuilder = await _orgUserRepo.IsAppBuilderAsync(authRequest.OrgId, authResponse.User.Id);
