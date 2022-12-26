@@ -216,7 +216,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             {
                 if (EntityHeader.IsNullOrEmpty(appUser.CurrentOrganization))
                 {
-                    return InvokeResult<AuthResponse>.FromError($"User does not have access to {authRequest.OrgName}");
+                    return InvokeResult<AuthResponse>.FromError($"App User does not have a current organization, no way to confirm access to {authRequest.OrgName} organization.");
                 }
                 else
                 {

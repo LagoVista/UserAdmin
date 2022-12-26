@@ -44,13 +44,13 @@ namespace LagoVista.UserAdmin.Managers
                     userModules.Add(module);
                 }
 
-                if(access.Read == -1)
+                if (access.Read == -1)
                 {
                     userModules.RemoveAll(mod => mod.Id == access.Module.Id);
                 }
             }
 
-            return userModules.OrderBy(mod=>mod.SortOrder).ToList();
+            return userModules.OrderBy(mod => mod.SortOrder).ToList();
         }
         public async Task<Module> GetUserModuleAsync(string moduleKey, string userId, string orgId)
         {
@@ -58,71 +58,56 @@ namespace LagoVista.UserAdmin.Managers
 
             var originalAreas = new List<Area>(module.Areas);
 
-            System.Console.WriteLine($"\tModule: {module.Key}");
 
             var userAccessList = await _userSecurityService.GetModuleRoleAccessForUserAsync(module.Id, userId, orgId);
-           
+
             foreach (var area in module.Areas)
             {
-                System.Console.WriteLine($"\t\tArea: {area.Key}");
                 if (!area.RestrictByDefault)
                 {
-                    System.Console.WriteLine($"\t\t- Not Restricted.");
+                    if (module.UserAccess == null)
+                        module.UserAccess = new UserAccess() { Read = UserAccess.Grant };
+
                     area.UserAccess = UserAccess.GetFullAccess();
+                }
 
-                    foreach (var page in area.Pages)
+                foreach (var page in area.Pages)
+                {
+
+                    if (!page.RestrictByDefault)
                     {
-                        System.Console.WriteLine($"\t\t\tPage: {page.Key}");
+                        if (module.UserAccess == null)
+                            module.UserAccess = new UserAccess() { Read = UserAccess.Grant };
 
-                        if (!page.RestrictByDefault)
-                        {
-                            System.Console.WriteLine($"\t\t\t - Not Restricted.");
+                        if (area.UserAccess == null)
+                            area.UserAccess = new UserAccess() { Read = UserAccess.Grant };
 
-                            page.UserAccess = UserAccess.GetFullAccess();
-                            foreach (var feature in page.Features)
-                            {
-                                if (!feature.RestrictByDefault)
-                                {
-                                    System.Console.WriteLine($"\t\t\t\t - Not Restricted.");
-                                    feature.UserAccess = UserAccess.GetFullAccess();
-                                }
-                                else
-                                {
-                                    feature.UserAccess = UserAccess.None();
-                                    System.Console.WriteLine($"\t\t\t\t - Restricted.");
-                                }
-                            }
-                        }
-                        else
+                        page.UserAccess = UserAccess.GetFullAccess();
+                    }
+
+                    foreach (var feature in page.Features)
+                    {
+                        if (!feature.RestrictByDefault)
                         {
-                            System.Console.WriteLine($"\t\t\t - Restricted.");
-                            page.UserAccess = UserAccess.None();
+                            if(page.UserAccess == null)
+                                page.UserAccess = new UserAccess() { Read = UserAccess.Grant };
+
+                            if (area.UserAccess == null)
+                                area.UserAccess = new UserAccess() { Read = UserAccess.Grant };
+
+                            if (module.UserAccess == null)
+                                module.UserAccess = new UserAccess() { Read = UserAccess.Grant };
+
+                            feature.UserAccess = UserAccess.GetFullAccess();
                         }
                     }
                 }
-                else
-                {
-                    System.Console.WriteLine($"\t\t - Restricted.");
-                    area.UserAccess = UserAccess.None();
-                }
             }
 
-
-
-            // Remove anything where there isn't default access.  
-            // role specfiic access will be added below.
-            module.Areas.RemoveAll(mod => !mod.UserAccess.Any());
-            foreach (var area in module.Areas)
-            {
-                area.Pages.RemoveAll(area => !area.UserAccess.Any());
-                foreach (var page in area.Pages)
-                    page.Features.RemoveAll(feature => !feature.UserAccess.Any());
-            }
-
+            System.Console.WriteLine($"------");
 
             foreach (var access in userAccessList)
             {
-
                 if (!EntityHeader.IsNullOrEmpty(access.Feature))
                 {
                     System.Console.WriteLine($"\tRole: {access.Role.Text} - Feature: {access.Feature.Text}.");
@@ -131,29 +116,25 @@ namespace LagoVista.UserAdmin.Managers
                     var page = area.Pages.Single(pge => pge.Id == access.Page.Id);
                     var feature = page.Features.Single(ftr => ftr.Id == access.Feature.Id);
 
-                    if (feature == null)
+                    if (feature.UserAccess == null)
                     {
-                        feature.UserAccess = new UserAccess()
-                        {
-                            Create = access.Create,
-                            Read = access.Read,
-                            Update = access.Update,
-                            Delete = access.Delete
-                        };
-
+                        feature.UserAccess = access.ToUserAccess();
                         System.Console.WriteLine($"\t\tAdded: {feature.UserAccess.Create}, {feature.UserAccess.Read}, {feature.UserAccess.Update}, {feature.UserAccess.Delete}.");
                     }
                     else
                     {
-                        feature.UserAccess.Create = access.Create == -1 || feature.UserAccess.Create == -1 ? -1 : access.Create == 0 ? feature.UserAccess.Create : 1;
-                        feature.UserAccess.Read = access.Read == -1 || feature.UserAccess.Read == -1 ? -1 : access.Read == 0 ? page.UserAccess.Read : 1;
-                        feature.UserAccess.Update = access.Update == -1 || feature.UserAccess.Update == -1 ? -1 : access.Update == 0 ? feature.UserAccess.Update : 1;
-                        feature.UserAccess.Delete = access.Delete == -1 || feature.UserAccess.Delete == -1 ? -1 : access.Delete == 0 ? feature.UserAccess.Delete : 1;
-
+                        feature.UserAccess = access.Merge(feature.UserAccess);
                         System.Console.WriteLine($"\t\tUpdated: {feature.UserAccess.Create}, {feature.UserAccess.Read}, {feature.UserAccess.Update}, {feature.UserAccess.Delete}.");
                     }
 
+                    if (page.UserAccess == null && feature.UserAccess.Any())
+                        page.UserAccess = new UserAccess() { Read = UserAccess.Grant };
 
+                    if (area.UserAccess == null && feature.UserAccess.Any())
+                        area.UserAccess = new UserAccess() { Read = UserAccess.Grant };
+
+                    if (module.UserAccess == null && feature.UserAccess.Any())
+                        module.UserAccess = new UserAccess() { Read = UserAccess.Grant };
                 }
                 else if (!EntityHeader.IsNullOrEmpty(access.Page))
                 {
@@ -163,25 +144,21 @@ namespace LagoVista.UserAdmin.Managers
                     var page = area.Pages.Single(pge => pge.Id == access.Page.Id);
                     if (page.UserAccess == null)
                     {
-                        page.UserAccess = new UserAccess()
-                        {
-                            Create = access.Create,
-                            Read = access.Read,
-                            Update = access.Update,
-                            Delete = access.Delete
-                        };
-
-                        System.Console.WriteLine($"\t\tAdded: {page.UserAccess.Create}, {page.UserAccess.Read}, {page.UserAccess.Update}, {page.Description}.");
+                        page.UserAccess = access.ToUserAccess();
+                        System.Console.WriteLine($"\t\tAdded: {page.UserAccess.Create}, {page.UserAccess.Read}, {page.UserAccess.Update}, {page.UserAccess.Delete}.");
                     }
                     else
                     {
-                        page.UserAccess.Create = access.Create == -1 || page.UserAccess.Create == -1 ? -1 : access.Create == 0 ? page.UserAccess.Create : 1;
-                        page.UserAccess.Read = access.Read == -1 || page.UserAccess.Read == -1 ? -1 : access.Read == 0 ? page.UserAccess.Read : 1;
-                        page.UserAccess.Update = access.Update == -1 || page.UserAccess.Update == -1 ? -1 : access.Update == 0 ? page.UserAccess.Update : 1;
-                        page.UserAccess.Delete = access.Delete == -1 || page.UserAccess.Delete == -1 ? -1 : access.Delete == 0 ? page.UserAccess.Delete : 1;
-
+                        page.UserAccess = access.Merge(page.UserAccess);
                         System.Console.WriteLine($"\t\tUpdated: {page.UserAccess.Create}, {page.UserAccess.Read}, {page.UserAccess.Update}, {page.UserAccess.Delete}.");
                     }
+
+                    if (area.UserAccess == null && page.UserAccess.Any())
+                        area.UserAccess = new UserAccess() { Read = UserAccess.Grant };
+
+                    if (module.UserAccess == null && page.UserAccess.Any())
+                        module.UserAccess = new UserAccess() { Read = UserAccess.Grant };
+
                 }
                 else if (!EntityHeader.IsNullOrEmpty(access.Area))
                 {
@@ -190,25 +167,18 @@ namespace LagoVista.UserAdmin.Managers
                     var area = module.Areas.Single(ara => ara.Id == access.Area.Id);
                     if (area.UserAccess == null)
                     {
-                        area.UserAccess = new UserAccess()
-                        {
-                            Create = access.Create,
-                            Read = access.Read,
-                            Update = access.Update,
-                            Delete = access.Delete
-                        };
+                        area.UserAccess = access.ToUserAccess();
 
-                        System.Console.WriteLine($"\t\tAdded: {area.UserAccess.Create}, {area.UserAccess.Read}, {area.UserAccess.Update}, {area.Description}.");
+                        System.Console.WriteLine($"\t\tAdded: {area.UserAccess.Create}, {area.UserAccess.Read}, {area.UserAccess.Update}, {area.UserAccess.Delete}.");
                     }
                     else
                     {
-                        area.UserAccess.Create = access.Create == -1 || area.UserAccess.Create == -1 ? -1 : access.Create == 0 ? area.UserAccess.Create : 1;
-                        area.UserAccess.Read = access.Read == -1 || area.UserAccess.Read == -1 ? -1 : access.Read == 0 ? area.UserAccess.Read : 1;
-                        area.UserAccess.Update = access.Update == -1 || area.UserAccess.Update == -1 ? -1 : access.Update == 0 ? area.UserAccess.Update : 1;
-                        area.UserAccess.Delete = access.Delete == -1 || area.UserAccess.Delete == -1 ? -1 : access.Delete == 0 ? area.UserAccess.Delete : 1;
-
+                        area.UserAccess = access.Merge(area.UserAccess);
                         System.Console.WriteLine($"\t\tUpdated: {area.UserAccess.Create}, {area.UserAccess.Read}, {area.UserAccess.Update}, {area.UserAccess.Delete}.");
                     }
+
+                    if(module.UserAccess == null && area.UserAccess.Any())
+                        module.UserAccess = new UserAccess() { Read = UserAccess.Grant };
                 }
                 else
                 {
@@ -216,42 +186,47 @@ namespace LagoVista.UserAdmin.Managers
 
                     if (module.UserAccess == null)
                     {
-                        module.UserAccess = new UserAccess()
-                        {
-                            Create = access.Create,
-                            Read = access.Read,
-                            Update = access.Update,
-                            Delete = access.Delete
-                        };
+                        module.UserAccess = access.ToUserAccess();
 
                         System.Console.WriteLine($"\t\tAdded: {module.UserAccess.Create}, {module.UserAccess.Read}, {module.UserAccess.Update}, {module.UserAccess.Delete}.");
                     }
                     else
                     {
-                        module.UserAccess.Create = access.Create == -1 || module.UserAccess.Create == -1 ? -1 : access.Create == 0 ? module.UserAccess.Create : 1;
-                        module.UserAccess.Read = access.Read == -1 || module.UserAccess.Read == -1 ? -1 : access.Read == 0 ? module.UserAccess.Read : 1;
-                        module.UserAccess.Update = access.Update == -1 || module.UserAccess.Update == -1 ? -1 : access.Update == 0 ? module.UserAccess.Update : 1;
-                        module.UserAccess.Delete = access.Delete == -1 || module.UserAccess.Delete == -1 ? -1 : access.Delete == 0 ? module.UserAccess.Delete : 1;
+                        module.UserAccess = access.Merge(module.UserAccess);
                         System.Console.WriteLine($"\t\tUpdated {module.UserAccess.Create}, {module.UserAccess.Read}, {module.UserAccess.Update}, {module.UserAccess.Delete}.");
                     }
                 }
             }
 
-            module.Areas.RemoveAll(mod => !mod.UserAccess.Any());
+            module.Areas.RemoveAll(mod => mod.UserAccess == null || !mod.UserAccess.Any());
             foreach (var area in module.Areas)
             {
-                area.Pages.RemoveAll(area => !area.UserAccess.Any());
+                area.Pages.RemoveAll(area => area.UserAccess == null || !area.UserAccess.Any());
                 foreach (var page in area.Pages)
-                    page.Features.RemoveAll(feature => !feature.UserAccess.Any());
+                    page.Features.RemoveAll(feature => feature.UserAccess == null || !feature.UserAccess.Any());
+            }
+
+            if(module.UserAccess == null)
+            {
+                module.UserAccess = UserAccess.None();
+            }
+
+            module.UserAccess.RevokeNotSet();
+            foreach(var area in module.Areas)
+            {
+                area.UserAccess.RevokeNotSet();
+                foreach(var page in area.Pages)
+                {
+                    page.UserAccess.RevokeNotSet();
+                    foreach(var feature in page.Features)
+                    {
+                        feature.UserAccess.RevokeNotSet();
+                    }
+                }
             }
 
             return module;
         }
 
-        private int Calculate(int? existingLevel, int? newLevel)
-        {
-
-            return newLevel.Value;
-        }
     }
 }

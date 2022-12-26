@@ -7,7 +7,7 @@ namespace LagoVista.UserAdmin.Models.Security
     public class UserAccess
     {
         public const int Revoke = -1;
-        public const int Inherit = 0;
+        public const int NotSpecified = 0;
         public const int Grant = 1;
 
         public int? Create { get; set; }
@@ -34,6 +34,17 @@ namespace LagoVista.UserAdmin.Models.Security
             };
         }
 
+        public static UserAccess GetNotSpecified()
+        {
+            return new UserAccess()
+            {
+                Create = UserAccess.NotSpecified,
+                Read = UserAccess.NotSpecified,
+                Update = UserAccess.NotSpecified,
+                Delete = UserAccess.NotSpecified,
+            };
+        }
+
         public static UserAccess None()
         {
             return new UserAccess()
@@ -43,6 +54,21 @@ namespace LagoVista.UserAdmin.Models.Security
                 Update = UserAccess.Revoke,
                 Delete = UserAccess.Revoke,
             };
+        }
+
+        public void RevokeNotSet()
+        {
+            if (!Create.HasValue || Create.Value == UserAccess.NotSpecified)
+                Create = UserAccess.Revoke;
+
+            if (!Read.HasValue || Read.Value == UserAccess.NotSpecified)
+                Read = UserAccess.Revoke;
+
+            if(!Update.HasValue || Update.Value == UserAccess.NotSpecified)
+                Update = UserAccess.Revoke;
+
+            if (!Delete.HasValue || Delete.Value == UserAccess.NotSpecified )
+                Delete = UserAccess.Revoke;
         }
     }
 }

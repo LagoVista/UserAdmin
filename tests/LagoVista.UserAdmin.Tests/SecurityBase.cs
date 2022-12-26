@@ -5,9 +5,11 @@ using LagoVista.UserAdmin.Models.Security;
 using LagoVista.UserAdmin.Models.Users;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Tests
 {
@@ -16,7 +18,7 @@ namespace LagoVista.UserAdmin.Tests
         UserAccessManager _accessManager;
         Mock<IRoleRepo> _roleRepo = new Mock<IRoleRepo>();
         Mock<IUserSecurityServices> _userSecurityService = new Mock<IUserSecurityServices>();
-        Mock<IModuleRepo> _moduleRepo = new Mock<IModuleRepo>();
+        IModuleRepo _moduleRepo = new InMemoryModuleRepo();
         Mock<IRoleAccessRepo> _roleAccessRepo = new Mock<IRoleAccessRepo>();
 
         List<Models.Security.RoleAccess> _roleAccess = new List<RoleAccess>();
@@ -122,10 +124,57 @@ namespace LagoVista.UserAdmin.Tests
             };
         }
 
+        private class InMemoryModuleRepo : IModuleRepo
+        {
+            private List<Module> _modules = new List<Module>();
+
+            public Task AddModuleAsync(Module module)
+            {
+                _modules.Add(module);
+                return Task.CompletedTask;
+            }
+
+            public Task DeleteModuleAsync(string id)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<List<ModuleSummary>> GetAllModulesAsync()
+            {
+                return Task.FromResult( _modules.Select(mod => mod.CreateSummary()).OrderBy(mod => mod.SortOrder).ToList());
+            }
+
+            public Task<Module> GetModuleAsync(string id)
+            {
+                return Task.FromResult(Clone(_modules.SingleOrDefault(mod => mod.Id == id)));
+            }
+
+            public Task<Module> GetModuleByKeyAsync(string key)
+            {
+                return Task.FromResult(Clone(_modules.SingleOrDefault(mod => mod.Key == key)));
+            }
+
+            public Task<Module> GetModuleByKeyAsync(string key, string orgId)
+            {
+                return Task.FromResult(_modules.SingleOrDefault(mod => mod.Key == key && mod.OwnerOrganization.Id == orgId));
+            }
+
+            public Task UpdateModuleAsync(Module module)
+            {
+                return Task.CompletedTask;
+            }
+
+            private Module Clone(Module module)
+            {
+                var json = JsonConvert.SerializeObject(module);
+                return JsonConvert.DeserializeObject<Module>(json);
+            }
+        }
+
         [TestInitialize]
         public void Init()
         {
-            _accessManager = new UserAccessManager(_userSecurityService.Object, _moduleRepo.Object);
+            _accessManager = new UserAccessManager(_userSecurityService.Object, _moduleRepo);
 
             _mod1 = AddModule("mod1_restrict", true, 1);
             _mod2 = AddModule("mod2_restrict", true, 2);
@@ -136,6 +185,8 @@ namespace LagoVista.UserAdmin.Tests
 
             var area = AddArea(_mod1, "area1");
             var page = AddPage(area, $"{area.Key}_page1");
+            AddFeature(page, $"{area.Key}_{page.Key}_f1");
+            AddFeature(page, $"{area.Key}_{page.Key}_f2");
             page = AddPage(area, $"{area.Key}_page2");
             AddFeature(page, $"{area.Key}_{page.Key}_f1");
             page = AddPage(area, $"{area.Key}_page3");
@@ -190,12 +241,11 @@ namespace LagoVista.UserAdmin.Tests
             _role4 = CreateRole("role4");
             _role5 = CreateRole("role5");
 
-            _moduleRepo.Setup(mod => mod.GetAllModulesAsync()).ReturnsAsync(_modules.Select(mod => mod.CreateSummary()).ToList());
-            _moduleRepo.Setup(mod => mod.GetModuleByKeyAsync(_mod1.Key)).ReturnsAsync(_mod1);
-            _moduleRepo.Setup(mod => mod.GetModuleByKeyAsync(_mod2.Key)).ReturnsAsync(_mod2);
-            _moduleRepo.Setup(mod => mod.GetModuleByKeyAsync(_mod3.Key)).ReturnsAsync(_mod3);
-            _moduleRepo.Setup(mod => mod.GetModuleByKeyAsync(_mod4.Key)).ReturnsAsync(_mod4);
-            _moduleRepo.Setup(mod => mod.GetModuleByKeyAsync(_mod5.Key)).ReturnsAsync(_mod5);
+            _moduleRepo.AddModuleAsync(_mod1);
+            _moduleRepo.AddModuleAsync(_mod2);
+            _moduleRepo.AddModuleAsync(_mod3);
+            _moduleRepo.AddModuleAsync(_mod4);
+            _moduleRepo.AddModuleAsync(_mod5);
 
             _userSecurityService.Setup(uss => uss.GetRoleAccessForUserAsync(USER_ID, ORG_ID)).ReturnsAsync(new List<Models.Security.RoleAccess>());
 
@@ -310,5 +360,14 @@ namespace LagoVista.UserAdmin.Tests
         }
 
         protected IIUserAccessManager AccessManager => _accessManager;
+
+        protected void ValidateUserAccess(UserAccess access, int create, int read, int update, int delete)
+        {
+            Assert.IsNotNull(access);
+            Assert.AreEqual(create, access.Create);
+            Assert.AreEqual(read, access.Read);
+            Assert.AreEqual(update, access.Update);
+            Assert.AreEqual(delete, access.Delete);
+        }
     }
 }

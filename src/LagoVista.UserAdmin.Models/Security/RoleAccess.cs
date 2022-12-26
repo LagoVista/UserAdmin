@@ -3,6 +3,14 @@ using LagoVista.UserAdmin.Models.DTOs;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
+    public enum AccessType
+    {
+        Module,
+        Area,
+        Page,
+        Feature
+    }
+
     public class RoleAccess
     {
         public string Id { get; set; }
@@ -44,7 +52,7 @@ namespace LagoVista.UserAdmin.Models.Security
 
                 AreaId = Area?.Id,
                 AreaKey = Area?.Key,
-                AreaName  = Area?.Text,
+                AreaName = Area?.Text,
 
                 PageId = Page?.Id,
                 PageKey = Page?.Key,
@@ -53,7 +61,7 @@ namespace LagoVista.UserAdmin.Models.Security
                 FeatureId = Feature?.Id,
                 FeatureKey = Feature?.Key,
                 FeatureName = Feature?.Text,
-                
+
                 IsPublic = IsPublic,
 
                 CreatedById = CreatedBy.Id,
@@ -65,6 +73,36 @@ namespace LagoVista.UserAdmin.Models.Security
                 Delete = Delete,
                 Other = Other
             };
+        }
+
+        public UserAccess ToUserAccess()
+        {
+            return new UserAccess()
+            {
+                Create = Create,
+                Read = Read,
+                Update = Update,
+                Delete = Delete,
+            };
+        }
+
+
+        private int? Calculate(int? existingLevel, int? newLevel)
+        {
+            if (!existingLevel.HasValue || existingLevel.Value == UserAccess.NotSpecified)
+                return newLevel.Value;
+
+
+            return newLevel.Value;
+        }
+
+        public UserAccess Merge(UserAccess access)
+        {
+            access.Create = Calculate(access.Create, Create);
+            access.Read = Calculate(access.Read, Read);
+            access.Update = Calculate(access.Update, Update);
+            access.Delete = Calculate(access.Delete, Delete);
+            return access;
         }
     }
 }

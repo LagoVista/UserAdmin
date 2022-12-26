@@ -52,7 +52,6 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
                 AccessExpiration = TimeSpan.FromMinutes(90),
                 RefreshExpiration = TimeSpan.FromDays(90),
             };
-
           
             _authTokenManager = new AuthTokenManager(new Mock<IAppInstanceRepo>().Object, new Mock<ISingleUseTokenManager>().Object, _orgManager.Object, _refreshTokenManager.Object,
                 _authRequestValidators.Object, _tokenHelper.Object, _appInstanceManager.Object,
@@ -67,7 +66,7 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
             });
 
             _signInManager.Setup(sim => sim.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(Task.FromResult(InvokeResult.Success));
-            _userManager.Setup(usm => usm.FindByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { Id = Guid.NewGuid().ToId() }));
+            _userManager.Setup(usm => usm.FindByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { Id = Guid.NewGuid().ToId(), CurrentOrganization = EntityHeader.Create(ORG_ID, "dontcare") }));
             _userManager.Setup(usm => usm.FindByNameAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { CurrentOrganization = EntityHeader.Create(ORG_ID, "dontcare"), Id = Guid.NewGuid().ToId() }));
             _refreshTokenManager.Setup(rtm => rtm.GenerateRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task<RefreshToken>.FromResult(InvokeResult<RefreshToken>.Create(new RefreshToken("XXXX"))));
             _authRequestValidators.Setup(arv => arv.ValidateAuthRequest(It.IsAny<AuthRequest>())).Returns(InvokeResult.Success);
