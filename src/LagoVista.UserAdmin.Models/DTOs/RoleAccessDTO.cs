@@ -71,7 +71,7 @@ namespace LagoVista.UserAdmin.Models.DTOs
 
             if (!String.IsNullOrEmpty(PageId) && !String.IsNullOrEmpty(PageKey) && !String.IsNullOrEmpty(PageName))
             {
-                roleAccess.Area = EntityHeader.Create(PageId, PageKey, PageName);
+                roleAccess.Page = EntityHeader.Create(PageId, PageKey, PageName);
             }
 
             if (!String.IsNullOrEmpty(FeatureId) && !String.IsNullOrEmpty(FeatureKey) && !String.IsNullOrEmpty(FeatureName))

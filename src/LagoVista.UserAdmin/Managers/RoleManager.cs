@@ -89,6 +89,40 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
+        public async Task<List<RoleAccess>> GetRoleAccessForModuleAsync(string moduleId, EntityHeader org, EntityHeader user)
+        {
+            await AuthorizeOrgAccessAsync(user, org, typeof(RoleAccess), Actions.Read);
+            return await _roleAccessRepo.GetRoleAccessForModuleAsync(moduleId, org.Id);
+        }
 
+        public async Task<List<RoleAccess>> GetRoleAccessForAreaAsync(string moduleId, string areaId, EntityHeader org, EntityHeader user)
+        {
+            await AuthorizeOrgAccessAsync(user, org, typeof(Role), Actions.Read);
+            return await _roleAccessRepo.GetRoleAccessForAreaAsync(moduleId, areaId, org.Id);
+        }
+
+        public async Task<List<RoleAccess>> GetRoleAccessForPageAsync(string moduleId,  string areaId, string pageId, EntityHeader org, EntityHeader user)
+        {
+            await AuthorizeOrgAccessAsync(user, org, typeof(Role), Actions.Read);
+            return await _roleAccessRepo.GetRoleAccessForPageAsync(moduleId, areaId, pageId, org.Id);
+        }
+
+        public async Task<List<RoleAccess>> GetRoleAccessForModuleFeatureAsync(string moduleId, string featureId, EntityHeader org, EntityHeader user)
+        {
+            await AuthorizeOrgAccessAsync(user, org, typeof(Role), Actions.Read);
+            return await _roleAccessRepo.GetRoleAccessForModuleFeatureAsync(moduleId, featureId, org.Id);
+        }
+
+        public async Task<List<RoleAccess>> GetRoleAccessForAreaFeatureAsync(string moduleId, string areaId, string featureId, EntityHeader org, EntityHeader user)
+        {
+            await AuthorizeOrgAccessAsync(user, org, typeof(Role), Actions.Read);
+            return await _roleAccessRepo.GetRoleAccessForAreaFeatureAsync(moduleId, areaId, featureId, org.Id);
+        }
+
+        public async Task<List<RoleAccess>> GetRoleAccessForPageFeatureAsync(string moduleId, string areaId, string pageId, string featureId, EntityHeader org, EntityHeader user)
+        {
+            await AuthorizeOrgAccessAsync(user, org, typeof(Role), Actions.Read);
+            return await _roleAccessRepo.GetRoleAccessForPageFeatureAsync(moduleId, areaId, pageId, featureId, org.Id);
+        }
     }
 }
