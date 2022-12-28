@@ -20,7 +20,6 @@ namespace LagoVista.UserAdmin.Managers
             _moduleRepo = moduleRepo ?? throw new ArgumentNullException(nameof(moduleRepo));
         }
 
-
         public async Task<List<ModuleSummary>> GetUserModulesAsync(string userId, string orgId)
         {
             var userAccessList = await _userSecurityService.GetRoleAccessForUserAsync(userId, orgId);
@@ -56,8 +55,11 @@ namespace LagoVista.UserAdmin.Managers
         {
             var module = await _moduleRepo.GetModuleByKeyAsync(moduleKey);
 
-            var originalAreas = new List<Area>(module.Areas);
+            var roles = await _userSecurityService.GetRolesForUserAsync(userId, orgId);
+            if (roles.Any(role => role.Key == DefaultRoleList.OWNER))
+                return module;
 
+            var originalAreas = new List<Area>(module.Areas);
 
             var userAccessList = await _userSecurityService.GetModuleRoleAccessForUserAsync(module.Id, userId, orgId);
 
