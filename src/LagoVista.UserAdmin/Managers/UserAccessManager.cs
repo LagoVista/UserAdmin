@@ -57,7 +57,33 @@ namespace LagoVista.UserAdmin.Managers
 
             var roles = await _userSecurityService.GetRolesForUserAsync(userId, orgId);
             if (roles.Any(role => role.Key == DefaultRoleList.OWNER))
+            {
+                module.UserAccess = UserAccess.GetFullAccess();
+                foreach(var area in module.Areas)
+                {
+                    area.UserAccess = UserAccess.GetFullAccess();
+                    foreach(var page in area.Pages)
+                    {
+                        page.UserAccess = UserAccess.GetFullAccess();
+                        foreach(var feature in page.Features)
+                        {
+                            feature.UserAccess = UserAccess.GetFullAccess();
+                        }
+                    }
+
+                    foreach(var feature in area.Features)
+                    {
+                        feature.UserAccess = UserAccess.GetFullAccess();
+                    }
+                }
+
+                foreach(var feature in module.Features)
+                {
+                    feature.UserAccess = UserAccess.GetFullAccess();
+                }
+
                 return module;
+            }
 
             var originalAreas = new List<Area>(module.Areas);
 
@@ -71,36 +97,36 @@ namespace LagoVista.UserAdmin.Managers
                         module.UserAccess = new UserAccess() { Read = UserAccess.Grant };
 
                     area.UserAccess = UserAccess.GetFullAccess();
-                }
 
-                foreach (var page in area.Pages)
-                {
-
-                    if (!page.RestrictByDefault)
+                    foreach (var page in area.Pages)
                     {
-                        if (module.UserAccess == null)
-                            module.UserAccess = new UserAccess() { Read = UserAccess.Grant };
 
-                        if (area.UserAccess == null)
-                            area.UserAccess = new UserAccess() { Read = UserAccess.Grant };
-
-                        page.UserAccess = UserAccess.GetFullAccess();
-                    }
-
-                    foreach (var feature in page.Features)
-                    {
-                        if (!feature.RestrictByDefault)
+                        if (!page.RestrictByDefault)
                         {
-                            if(page.UserAccess == null)
-                                page.UserAccess = new UserAccess() { Read = UserAccess.Grant };
+                            if (module.UserAccess == null)
+                                module.UserAccess = new UserAccess() { Read = UserAccess.Grant };
 
                             if (area.UserAccess == null)
                                 area.UserAccess = new UserAccess() { Read = UserAccess.Grant };
 
-                            if (module.UserAccess == null)
-                                module.UserAccess = new UserAccess() { Read = UserAccess.Grant };
+                            page.UserAccess = UserAccess.GetFullAccess();
 
-                            feature.UserAccess = UserAccess.GetFullAccess();
+                            foreach (var feature in page.Features)
+                            {
+                                if (!feature.RestrictByDefault)
+                                {
+                                    if (page.UserAccess == null)
+                                        page.UserAccess = new UserAccess() { Read = UserAccess.Grant };
+
+                                    if (area.UserAccess == null)
+                                        area.UserAccess = new UserAccess() { Read = UserAccess.Grant };
+
+                                    if (module.UserAccess == null)
+                                        module.UserAccess = new UserAccess() { Read = UserAccess.Grant };
+
+                                    feature.UserAccess = UserAccess.GetFullAccess();
+                                }
+                            }
                         }
                     }
                 }
