@@ -198,7 +198,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             var refreshTokenRequestValidationResult = _authRequestValidators.ValidateRefreshTokenGrant(authRequest);
             if (!refreshTokenRequestValidationResult.Successful) return InvokeResult<AuthResponse>.FromInvokeResult(refreshTokenRequestValidationResult);
-            AppUser appUser =  await _userManager.FindByIdAsync(authRequest.UserName);
+            AppUser appUser =  await _userManager.FindByEmailAsync(authRequest.UserName);
             
             if (appUser == null)
             {
