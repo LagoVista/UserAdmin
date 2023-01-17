@@ -54,7 +54,10 @@ namespace LagoVista.UserAdmin.Repos.Users
         public async Task<AppUser> FindByIdAsync(string id)
         {
             var appUser = await GetDocumentAsync(id, false);
-            if(appUser.CurrentOrganization != null)
+            if (appUser == null)
+                return null;
+            
+            if( appUser.CurrentOrganization != null)
             {
                 var userRoles = await _userRoleRepo.GetRolesForUserAsync(id, appUser.CurrentOrganization.Id);
                 appUser.CurrentOrganizationRoles = userRoles.Select(role => role.ToEntityHeader()).ToList();
