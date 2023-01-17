@@ -70,7 +70,7 @@ namespace LagoVista.UserAdmin.Managers
 
             var now = DateTime.UtcNow;
 
-            var expired = now < expireTimeStamp;
+            var expired = now > expireTimeStamp;
 
             if (expired)
                 return InvokeResult.FromError($"Single Use Token Expired - Expires: {expireTimeStamp} Now: {now}");
