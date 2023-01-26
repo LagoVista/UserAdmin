@@ -54,6 +54,8 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<Module> GetUserModuleAsync(string moduleKey, string userId, string orgId)
         {
             var module = await _moduleRepo.GetModuleByKeyAsync(moduleKey);
+            if (module == null)
+                throw new ArgumentException($"Invalid Module: {moduleKey}");
 
             var roles = await _userSecurityService.GetRolesForUserAsync(userId, orgId);
             if (roles.Any(role => role.Key == DefaultRoleList.OWNER))
