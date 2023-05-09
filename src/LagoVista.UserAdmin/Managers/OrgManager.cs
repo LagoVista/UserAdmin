@@ -22,25 +22,28 @@ using LagoVista.Core.Validation;
 using LagoVista.Core.Models.UIMetaData;
 using System.Text.RegularExpressions;
 using LagoVista.UserAdmin.Models.Resources;
+using LagoVista.UserAdmin.Interfaces;
 
 namespace LagoVista.UserAdmin.Managers
 {
     public class OrgManager : ManagerBase, IOrganizationManager
     {
         #region Fields
-        readonly IOrganizationRepo _organizationRepo;
-        readonly IOrgLocationRepo _locationRepo;
-        readonly IOrgUserRepo _orgUserRepo;
-        readonly ILocationUserRepo _locationUserRepo;
-        readonly ISmsSender _smsSender;
-        readonly IEmailSender _emailSender;
-        readonly IInviteUserRepo _inviteUserRepo;
-        readonly ILocationRoleRepo _locationRoleRepo;
-        readonly IAppUserRepo _appUserRepo;
-        readonly IAdminLogger _adminLogger;
-        readonly IOrgInitializer _orgInitializer;
-        readonly IOwnedObjectRepo _ownedObjectRepo;
-        readonly ISubscriptionManager _subscriptionManager;
+        private readonly IOrganizationRepo _organizationRepo;
+        private readonly IOrgLocationRepo _locationRepo;
+        private readonly IOrgUserRepo _orgUserRepo;
+        private readonly ILocationUserRepo _locationUserRepo;
+        private readonly ISmsSender _smsSender;
+        private readonly IUserRoleManager _useRoleManager;
+        private readonly IEmailSender _emailSender;
+        private readonly IInviteUserRepo _inviteUserRepo;
+        private readonly ILocationRoleRepo _locationRoleRepo;
+        private readonly IAppUserRepo _appUserRepo;
+        private readonly IAdminLogger _adminLogger;
+        private readonly IOrgInitializer _orgInitializer;
+        private readonly IOwnedObjectRepo _ownedObjectRepo;
+        private readonly ISubscriptionManager _subscriptionManager;
+        private readonly IDefaultRoleList _defaultRoleList;
         #endregion
 
         #region Ctor
@@ -57,7 +60,9 @@ namespace LagoVista.UserAdmin.Managers
             IDependencyManager depManager,
             ISecurity security,
             IOrgInitializer orgInitializer,
+            IDefaultRoleList defaultRoleList,
             IOwnedObjectRepo ownedObjectRepo,
+            IUserRoleManager useRoleManager,
             ISubscriptionManager subscriptionManager,
             IAdminLogger logger) : base(logger, appConfig, depManager, security)
         {
@@ -68,11 +73,12 @@ namespace LagoVista.UserAdmin.Managers
             _locationRepo = locationRepo;
             _locationUserRepo = locationUserRepo;
             _subscriptionManager = subscriptionManager;
-
+            _useRoleManager = useRoleManager;
             _locationRoleRepo = locationRoleRepo;
             _smsSender = smsSender;
             _emailSender = emailSender;
             _inviteUserRepo = inviteUserRepo;
+            _defaultRoleList = defaultRoleList;
             _adminLogger = logger;
             _orgInitializer = orgInitializer;
             _ownedObjectRepo = ownedObjectRepo;
@@ -112,6 +118,9 @@ namespace LagoVista.UserAdmin.Managers
 
             var currentUser = await _appUserRepo.FindByIdAsync(user.Id);
 
+            var ownerRoleId = _defaultRoleList.GetStandardRoles().Single(rl => rl.Key == DefaultRoleList.OWNER).Id;
+            await _userRoleManager.GrantUserRoleAsync(user.Id, ownerRoleId,organization.ToEntityHeader() , user);
+
             var addUserResult = await AddUserToOrgAsync(currentUser.ToEntityHeader(), organization.ToEntityHeader(), currentUser.ToEntityHeader(), true, true);
             if (!addUserResult.Successful)
             {
@@ -133,6 +142,7 @@ namespace LagoVista.UserAdmin.Managers
 
             /* Final update of the user */
             await _appUserRepo.UpdateAsync(currentUser);
+
 
             await _orgInitializer.Init(organization.ToEntityHeader(), currentUser.ToEntityHeader(), organizationViewModel.CreateGettingsStartedData);
 
