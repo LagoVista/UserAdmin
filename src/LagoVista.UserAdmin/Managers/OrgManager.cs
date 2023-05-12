@@ -34,7 +34,7 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IOrgUserRepo _orgUserRepo;
         private readonly ILocationUserRepo _locationUserRepo;
         private readonly ISmsSender _smsSender;
-        private readonly IUserRoleManager _useRoleManager;
+        private readonly IUserRoleManager _userRoleManager;
         private readonly IEmailSender _emailSender;
         private readonly IInviteUserRepo _inviteUserRepo;
         private readonly ILocationRoleRepo _locationRoleRepo;
@@ -73,7 +73,7 @@ namespace LagoVista.UserAdmin.Managers
             _locationRepo = locationRepo;
             _locationUserRepo = locationUserRepo;
             _subscriptionManager = subscriptionManager;
-            _useRoleManager = useRoleManager;
+            _userRoleManager = useRoleManager;
             _locationRoleRepo = locationRoleRepo;
             _smsSender = smsSender;
             _emailSender = emailSender;

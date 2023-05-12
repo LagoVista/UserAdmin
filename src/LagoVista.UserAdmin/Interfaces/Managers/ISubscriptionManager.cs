@@ -20,5 +20,6 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<ListResponse<SubscriptionResource>> GetResourcesForSubscriptionAsync(Guid subscriptionId, ListRequest listRequest, EntityHeader org, EntityHeader user);
         Task<IEnumerable<SubscriptionSummary>> GetSubscriptionsForOrgAsync(string orgId, EntityHeader user);
         Task<bool> QueryKeyInUseAsync(string key, EntityHeader org);
+        bool IsForInitialization { get; set; }
     }
 }
