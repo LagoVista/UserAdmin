@@ -369,6 +369,13 @@ namespace LagoVista.UserAdmin.Managers
             return await _appUserRepo.GetAllUsersAsync(listRequest);
         }
 
+        public async Task<ListResponse<UserInfoSummary>> GetActiveUsersAsync(EntityHeader org, EntityHeader user, ListRequest listRequest)
+        {
+            await AuthorizeAsync(user, org, "GetAllUsersAsync", nameof(AppUser));
+
+            return await _appUserRepo.GetActiveUsersAsync(listRequest);
+        }
+
 
         public async Task<InvokeResult<AuthResponse>> CreateUserAsync(RegisterUser newUser, bool sendAuthEmail = true, bool autoLogin = true, ExternalLogin externalLogin = null)
         {

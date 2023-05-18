@@ -12,6 +12,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Users
     {
         Task<IEnumerable<UserInfoSummary>> GetUserSummaryForListAsync(IEnumerable<OrgUser> orgUsers);
         Task<ListResponse<UserInfoSummary>> GetDeviceUsersAsync(string deviceRepoId, ListRequest listRequest);
+        Task<ListResponse<UserInfoSummary>> GetActiveUsersAsync(ListRequest listRequest);
         Task CreateAsync(AppUser user);
         Task<AppUser> FindByIdAsync(string userId);
         Task<AppUser> FindByNameAsync(string userName);

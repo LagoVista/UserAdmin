@@ -28,6 +28,7 @@ namespace LagoVista.UserAdmin.Managers
         Task<AppUser> GetUserByUserNameAsync(string userName, EntityHeader org, EntityHeader user);
 
         Task<DependentObjectCheckResult> CheckInUse(string id, EntityHeader org, EntityHeader user);
+        Task<ListResponse<UserInfoSummary>> GetActiveUsersAsync(EntityHeader org, EntityHeader user, ListRequest listRequest);
         Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(EntityHeader org, EntityHeader user, ListRequest listRequest);
         Task<ListResponse<UserInfoSummary>> GetUsersWithoutOrgsAsync(EntityHeader user, ListRequest listRequest);
         Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(bool? emailConfirmed, bool? smsConfirmed, EntityHeader org, EntityHeader user, ListRequest listRequest);

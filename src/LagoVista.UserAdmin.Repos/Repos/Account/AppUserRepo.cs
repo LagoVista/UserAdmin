@@ -157,7 +157,7 @@ namespace LagoVista.UserAdmin.Repos.Users
 
             return new ListResponse<UserInfoSummary>()
             {
-                Model = results.Model.Select(rec => rec.ToUserInfoSummary()),
+                Model = results.Model.Select(rec => rec.ToUserInfoSummary()).OrderBy(rec=>rec.Name),
                 NextPartitionKey = results.NextPartitionKey,
                 NextRowKey = results.NextRowKey,
                 PageCount = results.PageCount,
@@ -166,6 +166,23 @@ namespace LagoVista.UserAdmin.Repos.Users
                 PageSize = results.PageSize,
             };
         }
+
+        public async Task<ListResponse<UserInfoSummary>> GetActiveUsersAsync(ListRequest listRequest)
+        {
+            var results = await DescOrderQueryAsync(us => us.IsUserDevice == false && !us.IsAccountDisabled, us => us.CreationDate, listRequest);
+
+            return new ListResponse<UserInfoSummary>()
+            {
+                Model = results.Model.Select(rec => rec.ToUserInfoSummary()).OrderBy(rec => rec.Name),
+                NextPartitionKey = results.NextPartitionKey,
+                NextRowKey = results.NextRowKey,
+                PageCount = results.PageCount,
+                HasMoreRecords = results.HasMoreRecords,
+                PageIndex = results.PageIndex,
+                PageSize = results.PageSize,
+            };
+        }
+
 
         public async Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(ListRequest listRequest, bool? emailConfirmed, bool? phoneConfirmed)
         {
