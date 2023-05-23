@@ -459,14 +459,14 @@ namespace LagoVista.UserAdmin.Managers
 
                 if (!String.IsNullOrEmpty(externalLogin.OAuthToken))
                 {
-                    var result = await _secureStorage.AddSecretAsync(user.ToEntityHeader(), externalLogin.OAuthToken);
+                    var result = await _secureStorage.AddSecretAsync(appUser.ToEntityHeader(), externalLogin.OAuthToken);
                     externalLogin.OAuthTokenSecretId = result.Result;
                     externalLogin.OAuthToken = String.Empty;
                 }
 
                 if (!String.IsNullOrEmpty(externalLogin.OAuthTokenVerifier))
                 {
-                    var result = await _secureStorage.AddSecretAsync(user.ToEntityHeader(), externalLogin.OAuthTokenVerifier);
+                    var result = await _secureStorage.AddSecretAsync(appUser.ToEntityHeader(), externalLogin.OAuthTokenVerifier);
                     externalLogin.OAuthTokenVerifierSecretId = result.Result;
                     externalLogin.OAuthTokenVerifier = String.Empty;
                 }
@@ -597,6 +597,17 @@ namespace LagoVista.UserAdmin.Managers
 
             return await _appUserRepo.AssociateExternalLoginAsync(userId, external);
         }
+
+        public async Task<InvokeResult<AppUser>> RemoveExternalLoginAsync(string userId, string externalLoginId, EntityHeader user)
+        {
+            if (userId != user.Id)
+            {
+                throw new NotAuthorizedException("User Id Mis-Match.");
+            }
+
+            return InvokeResult<AppUser>.Create(await _appUserRepo.RemoveExternalLoginAsync(userId, externalLoginId));
+        }
+
 
         public async Task<ExternalLogin> PopulateExternalLoginSecretsAsync(string userId, ExternalLogin external, EntityHeader user)
         {

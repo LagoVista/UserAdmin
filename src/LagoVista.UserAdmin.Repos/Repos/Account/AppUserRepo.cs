@@ -1,5 +1,6 @@
 ﻿using LagoVista.CloudStorage;
 using LagoVista.CloudStorage.DocumentDB;
+using LagoVista.Core;
 using LagoVista.Core.Exceptions;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
@@ -244,6 +245,34 @@ namespace LagoVista.UserAdmin.Repos.Users
             //TODO: THIS SUX, when deserializing the query it auto converts to date time, we want the json string
             return await FindByIdAsync(user.Id);
         }
+        public async Task<AppUser> RemoveExternalLoginAsync(string userId, string externalLoginId)
+        {
+            if (String.IsNullOrEmpty(userId))
+            {
+                throw new InvalidOperationException("Attempt to find user with null or empty user name.");
+            }
+
+            var appUser = await FindByIdAsync(userId);
+            if (appUser == null)
+            {
+                throw new RecordNotFoundException(nameof(AppUser), userId);
+            }
+
+            var existing = appUser.ExternalLogins.Where(exs => exs.Id == externalLoginId).FirstOrDefault();
+            if(existing == null)
+            {
+                throw new RecordNotFoundException(nameof(ExternalLogin), externalLoginId);
+            }
+
+            appUser.ExternalLogins.Remove(existing);
+
+            appUser.LastUpdatedBy = appUser.ToEntityHeader();
+            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+
+            await UpdateAsync(appUser);
+            return appUser;
+        }
+
 
         public async Task<AppUser> AssociateExternalLoginAsync(string userId, ExternalLogin external)
         {
@@ -257,8 +286,6 @@ namespace LagoVista.UserAdmin.Repos.Users
             {
                 throw new RecordNotFoundException(nameof(AppUser), userId);
             }
-
-            await UpdateAsync(appUser);
 
             var existing = appUser.ExternalLogins.Where(exs => exs.Provider.Value == external.Provider.Value).FirstOrDefault();
             if (existing != null)
@@ -275,6 +302,9 @@ namespace LagoVista.UserAdmin.Repos.Users
             {
                 appUser.ExternalLogins.Add(external);
             }
+
+            appUser.LastUpdatedBy = appUser.ToEntityHeader();
+            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
 
             await UpdateAsync(appUser);
             return appUser;

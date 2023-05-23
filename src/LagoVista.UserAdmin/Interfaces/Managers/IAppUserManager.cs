@@ -45,6 +45,7 @@ namespace LagoVista.UserAdmin.Managers
         Task<ListResponse<UserInfoSummary>> GetDeviceUsersAsync(string deviceRepoId, EntityHeader org, EntityHeader user, ListRequest listRequest);
 
         Task<AppUser> AssociateExternalLoginAsync(string userId, ExternalLogin external, EntityHeader user);
+        Task<InvokeResult<AppUser>> RemoveExternalLoginAsync(string userId, string externalLoginId, EntityHeader user);
         Task<AppUser> GetUserByExternalLoginAsync(ExternalLoginTypes loginType, string id);
         Task<InvokeResult<AppUser>> AcceptTermsAndConditionsAsync(string ipAddress, EntityHeader org, EntityHeader userEH);
 
