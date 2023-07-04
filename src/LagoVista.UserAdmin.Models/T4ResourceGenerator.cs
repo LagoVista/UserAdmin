@@ -1,4 +1,4 @@
-﻿/*12/20/2022 9:17:27 PM*/
+﻿/*7/4/2023 11:13:56 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -267,6 +267,54 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Billing_Contact
 
 		public static string Billing_Contact { get { return GetResourceString("Billing_Contact"); } }
+//Resources:UserAdminResources:Calendar_AllDay
+
+		public static string Calendar_AllDay { get { return GetResourceString("Calendar_AllDay"); } }
+//Resources:UserAdminResources:Calendar_Date
+
+		public static string Calendar_Date { get { return GetResourceString("Calendar_Date"); } }
+//Resources:UserAdminResources:Calendar_Description
+
+		public static string Calendar_Description { get { return GetResourceString("Calendar_Description"); } }
+//Resources:UserAdminResources:Calendar_End
+
+		public static string Calendar_End { get { return GetResourceString("Calendar_End"); } }
+//Resources:UserAdminResources:Calendar_EventLink
+
+		public static string Calendar_EventLink { get { return GetResourceString("Calendar_EventLink"); } }
+//Resources:UserAdminResources:Calendar_EventType
+
+		public static string Calendar_EventType { get { return GetResourceString("Calendar_EventType"); } }
+//Resources:UserAdminResources:Calendar_EventType_Select
+
+		public static string Calendar_EventType_Select { get { return GetResourceString("Calendar_EventType_Select"); } }
+//Resources:UserAdminResources:Calendar_ObjectDescription
+
+		public static string Calendar_ObjectDescription { get { return GetResourceString("Calendar_ObjectDescription"); } }
+//Resources:UserAdminResources:Calendar_ObjectTitle
+
+		public static string Calendar_ObjectTitle { get { return GetResourceString("Calendar_ObjectTitle"); } }
+//Resources:UserAdminResources:Calendar_Start
+
+		public static string Calendar_Start { get { return GetResourceString("Calendar_Start"); } }
+//Resources:UserAdminResources:CalendarEvent_Title
+
+		public static string CalendarEvent_Title { get { return GetResourceString("CalendarEvent_Title"); } }
+//Resources:UserAdminResources:CalendarEventType_Holiday
+
+		public static string CalendarEventType_Holiday { get { return GetResourceString("CalendarEventType_Holiday"); } }
+//Resources:UserAdminResources:CalendarEventType_Networking
+
+		public static string CalendarEventType_Networking { get { return GetResourceString("CalendarEventType_Networking"); } }
+//Resources:UserAdminResources:CalendarEventType_Other
+
+		public static string CalendarEventType_Other { get { return GetResourceString("CalendarEventType_Other"); } }
+//Resources:UserAdminResources:CalendarEventType_OutOfOffice
+
+		public static string CalendarEventType_OutOfOffice { get { return GetResourceString("CalendarEventType_OutOfOffice"); } }
+//Resources:UserAdminResources:CalendarEventType_UserGroup
+
+		public static string CalendarEventType_UserGroup { get { return GetResourceString("CalendarEventType_UserGroup"); } }
 //Resources:UserAdminResources:ChangePasswordVM_Description
 
 		public static string ChangePasswordVM_Description { get { return GetResourceString("ChangePasswordVM_Description"); } }
@@ -1204,6 +1252,22 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AuthSingleuseToken_TokenNotFound = "AuthSingleuseToken_TokenNotFound";
 			public const string AuthSingleuseToken_UserNotFound = "AuthSingleuseToken_UserNotFound";
 			public const string Billing_Contact = "Billing_Contact";
+			public const string Calendar_AllDay = "Calendar_AllDay";
+			public const string Calendar_Date = "Calendar_Date";
+			public const string Calendar_Description = "Calendar_Description";
+			public const string Calendar_End = "Calendar_End";
+			public const string Calendar_EventLink = "Calendar_EventLink";
+			public const string Calendar_EventType = "Calendar_EventType";
+			public const string Calendar_EventType_Select = "Calendar_EventType_Select";
+			public const string Calendar_ObjectDescription = "Calendar_ObjectDescription";
+			public const string Calendar_ObjectTitle = "Calendar_ObjectTitle";
+			public const string Calendar_Start = "Calendar_Start";
+			public const string CalendarEvent_Title = "CalendarEvent_Title";
+			public const string CalendarEventType_Holiday = "CalendarEventType_Holiday";
+			public const string CalendarEventType_Networking = "CalendarEventType_Networking";
+			public const string CalendarEventType_Other = "CalendarEventType_Other";
+			public const string CalendarEventType_OutOfOffice = "CalendarEventType_OutOfOffice";
+			public const string CalendarEventType_UserGroup = "CalendarEventType_UserGroup";
 			public const string ChangePasswordVM_Description = "ChangePasswordVM_Description";
 			public const string ChangePasswordVM_Help = "ChangePasswordVM_Help";
 			public const string ChangePasswordVM_Title = "ChangePasswordVM_Title";
