@@ -97,8 +97,8 @@ namespace LagoVista.UserAdmin.Models.Calendar
                 if (String.IsNullOrEmpty(StartTime)) result.AddUserError("Start time is required if not an All Day event.");
                 if (String.IsNullOrEmpty(EndTime)) result.AddUserError("End time is required if not an All Day event.");
 
-                if (!String.IsNullOrEmpty(StartTime) && StartTime.IsValidTime()) result.AddUserError("Invalid start time.");
-                if (!String.IsNullOrEmpty(EndTime) && EndTime.IsValidTime()) result.AddUserError("Invalid start time.");
+                if (!String.IsNullOrEmpty(StartTime) && !StartTime.IsValidTime()) result.AddUserError("Invalid start time.");
+                if (!String.IsNullOrEmpty(EndTime) && !EndTime.IsValidTime()) result.AddUserError("Invalid End time.");
 
                 if (!String.IsNullOrEmpty(StartTime) && !String.IsNullOrEmpty(EndTime))
                 {
