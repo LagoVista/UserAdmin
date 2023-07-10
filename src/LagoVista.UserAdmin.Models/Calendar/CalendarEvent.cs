@@ -62,6 +62,8 @@ namespace LagoVista.UserAdmin.Models.Calendar
                 StartTime = StartTime,
                 EndTime = EndTime,
                 Name = Name,
+                EventType = EventType.Text,
+                EventTypeKey = EventType.Key
             };
         }
 
@@ -118,5 +120,8 @@ namespace LagoVista.UserAdmin.Models.Calendar
         public bool AllDay { get; set; }
         public string StartTime { get; set; }
         public string EndTime { get; set; }
+
+        public string EventTypeKey { get; set; }
+        public string EventType { get; set; }
     }
 }
