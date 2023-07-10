@@ -6,6 +6,7 @@
         OAuthConfig TwitterOAuth { get; }
         OAuthConfig GitHubOAuth { get; }
         OAuthConfig LinkedInOAuth { get;  }
+        OAuthConfig AmazonOAuth { get; }
         OAuthConfig MicrosoftOAuth { get; }
         OAuthConfig GoogleOAuth { get;  }
     }
