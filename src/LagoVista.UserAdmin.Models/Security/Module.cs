@@ -133,7 +133,9 @@ namespace LagoVista.UserAdmin.Models.Security
                 IsExternalLink = IsExternalLink,
                 IsLegacyNGX =   IsLegacyNGX,
                 OpenInNewPage = OpenInNewPage,
-                RestrictByDefault = RestrictByDefault
+                RestrictByDefault = RestrictByDefault,
+                OwnerOrgId = OwnerOrganization.Id
+
             };
         }
     }
@@ -150,6 +152,8 @@ namespace LagoVista.UserAdmin.Models.Security
         public bool IsLegacyNGX { get; set; }
         public bool IsExternalLink { get; set; }
    
+        public string OwnerOrgId { get; set; }
+
         public int SortOrder { get; set; }
         public bool RestrictByDefault { get; set; }
 

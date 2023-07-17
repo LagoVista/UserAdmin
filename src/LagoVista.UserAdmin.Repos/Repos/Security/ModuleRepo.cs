@@ -67,7 +67,12 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
                 Console.WriteLine($"[CACHE-HIT] - {ALL_MODULES_CACHE_KEY}");
                 return JsonConvert.DeserializeObject<List<ModuleSummary>>(allModulesJson);
             }
+        }
 
+        public async Task<List<ModuleSummary>> GetModulesForOrgAndPublicAsyncAsync(string orgId)
+        {
+            var modules = await GetAllModulesAsync();
+            return modules.Where(mod => mod.IsPublic || mod.OwnerOrgId == orgId).ToList();
         }
 
         public Task<Module> GetModuleAsync(string id)
@@ -98,6 +103,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
         {
             return (await QueryAsync(mod => mod.Key == key && mod.OwnerOrganization.Id == orgId)).FirstOrDefault();
         }
+
 
         public async Task UpdateModuleAsync(Module module)
         {

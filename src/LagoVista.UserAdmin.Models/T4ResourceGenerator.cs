@@ -1,4 +1,4 @@
-﻿/*7/4/2023 11:13:56 AM*/
+﻿/*7/17/2023 10:28:05 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -857,6 +857,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_Help
 
 		public static string Organization_Help { get { return GetResourceString("Organization_Help"); } }
+//Resources:UserAdminResources:Organization_LandingPage
+
+		public static string Organization_LandingPage { get { return GetResourceString("Organization_LandingPage"); } }
+//Resources:UserAdminResources:Organization_LandingPage_Help
+
+		public static string Organization_LandingPage_Help { get { return GetResourceString("Organization_LandingPage_Help"); } }
 //Resources:UserAdminResources:Organization_Location
 
 		public static string Organization_Location { get { return GetResourceString("Organization_Location"); } }
@@ -1446,6 +1452,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_CreateGettingStartedData_Help = "Organization_CreateGettingStartedData_Help";
 			public const string Organization_Description = "Organization_Description";
 			public const string Organization_Help = "Organization_Help";
+			public const string Organization_LandingPage = "Organization_LandingPage";
+			public const string Organization_LandingPage_Help = "Organization_LandingPage_Help";
 			public const string Organization_Location = "Organization_Location";
 			public const string Organization_Location_Description = "Organization_Location_Description";
 			public const string Organization_Location_Help = "Organization_Location_Help";

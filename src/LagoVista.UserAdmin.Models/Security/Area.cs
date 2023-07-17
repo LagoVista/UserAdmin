@@ -54,6 +54,14 @@ namespace LagoVista.UserAdmin.Models.Security
         public bool DoNotDisplay { get; set; }
 
 
+        [FormField(LabelResource: UserAdminResources.Names.Module_IsLegacyNGX, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool IsLegacyNGX { get; set; }
+
+
+        [FormField(LabelResource: UserAdminResources.Names.Module_Link, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string Link { get; set; }
+
+
         public List<Page> Pages { get; set; } = new List<Page>();
 
         public List<Feature> Features = new List<Feature>();

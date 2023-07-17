@@ -23,7 +23,7 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<List<ModuleSummary>> GetUserModulesAsync(string userId, string orgId)
         {
             var userAccessList = await _userSecurityService.GetRoleAccessForUserAsync(userId, orgId);
-            var modules = await _moduleRepo.GetAllModulesAsync();
+            var modules = await _moduleRepo.GetModulesForOrgAndPublicAsyncAsync(orgId);
 
             var userRoles = await _userSecurityService.GetRolesForUserAsync(userId, orgId);
             if (userRoles.Any(rol => rol.Key == DefaultRoleList.OWNER))

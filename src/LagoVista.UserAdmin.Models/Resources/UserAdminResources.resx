@@ -1250,4 +1250,10 @@
   <data name="Calendar_Start" xml:space="preserve">
     <value>Start Time</value>
   </data>
+  <data name="Organization_LandingPage" xml:space="preserve">
+    <value>Landing Page</value>
+  </data>
+  <data name="Organization_LandingPage_Help" xml:space="preserve">
+    <value>The default landing page for users logging in to NuvIoT is the standard portal that shows all the modules within NuvIoT for a user.  If you want to login to a different page, you can add the path here, the primary host name should still be https://www.nuviot.com though.</value>
+  </data>
 </root>

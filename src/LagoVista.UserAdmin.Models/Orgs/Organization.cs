@@ -33,8 +33,13 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader BillingContact { get; set; }
         [FormField(LabelResource: UserAdminResources.Names.Technical_Contact, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public EntityHeader TechnicalContact { get; set; }
+
         [FormField(LabelResource: UserAdminResources.Names.Organization_Locations, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public List<EntityHeader> Locations { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_LandingPage, HelpResource:UserAdminResources.Names.Organization_LandingPage_Help, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        public string LandingPage { get; set; }
+
         public bool IsPublic { get; set; }
         public EntityHeader OwnerOrganization { get; set; }
         public EntityHeader OwnerUser { get; set; }
