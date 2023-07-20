@@ -37,7 +37,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Organization_Locations, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public List<EntityHeader> Locations { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Organization_LandingPage, HelpResource:UserAdminResources.Names.Organization_LandingPage_Help, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Organization_LandingPage, HelpResource:UserAdminResources.Names.Organization_LandingPage_Help, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public string LandingPage { get; set; }
 
         public bool IsPublic { get; set; }
