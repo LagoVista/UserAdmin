@@ -699,6 +699,12 @@ namespace LagoVista.UserAdmin.Managers
             }
         }
 
+        public async Task<InvokeResult<string>> GetLandingPageForOrgAsync(string orgId)
+        {
+            var landingPage = await _organizationRepo.GetLandingPageFororgAsync(orgId);
+            return InvokeResult<string>.Create(landingPage);
+        }
+
         public async Task<InvokeResult> SetAppBuilderAsync(string userId, EntityHeader org, EntityHeader user)
         {
             var isUpdateUserOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(org.Id, user.Id);
@@ -1089,6 +1095,8 @@ namespace LagoVista.UserAdmin.Managers
 
             return await _ownedObjectRepo.GetOwnedObjectsForOrgAsync(orgId, request);
         }
+
+
         #endregion
     }
 

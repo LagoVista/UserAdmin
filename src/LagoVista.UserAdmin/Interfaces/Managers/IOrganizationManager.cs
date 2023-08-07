@@ -88,5 +88,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
         Task<InvokeResult> UpdateLocationAsync(UpdateLocationViewModel location, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateOrganizationAsync(UpdateOrganizationViewModel orgViewModel, EntityHeader org, EntityHeader user);
+
+        Task<InvokeResult<string>> GetLandingPageForOrgAsync(string orgid);
     }
 }

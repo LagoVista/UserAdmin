@@ -11,6 +11,7 @@ using LagoVista.Core.Models.UIMetaData;
 using System.Collections.Generic;
 using LagoVista.Core.Models;
 using Microsoft.Azure.Cosmos;
+using LagoVista.CloudStorage;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
@@ -18,12 +19,19 @@ namespace LagoVista.UserAdmin.Repos.Orgs
     {
         private readonly bool _shouldConsolidateCollections;
         private readonly IRDBMSManager _rdbmsUserManager;
+        private readonly ICacheProvider _cacheProvider;
 
-        public OrganizationRepo(IRDBMSManager rdbmsUserManager, IUserAdminSettings userAdminSettings, IAdminLogger logger) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
+        public OrganizationRepo(IRDBMSManager rdbmsUserManager, IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
             _rdbmsUserManager = rdbmsUserManager ?? throw new ArgumentNullException(nameof(rdbmsUserManager));
+            _cacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
+        }
+
+        private string GetCacheKey(String orgId)
+        {
+            return $"OrgForLandingPage_{orgId}";
         }
 
         protected override bool ShouldConsolidateCollections
@@ -51,6 +59,19 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         public Task<List<EntityHeader>> GetBillingContactOrgsForUserAsync(string userId)
         {
             return _rdbmsUserManager.GetBillingContactOrgsForUserAsync(userId);
+        }
+
+        public async Task<string> GetLandingPageFororgAsync(string orgId)
+        {
+            var landingPage = await _cacheProvider.GetAsync(GetCacheKey(orgId));
+            if(String.IsNullOrEmpty(landingPage))
+            {
+                var org = await GetOrganizationAsync(orgId);
+                landingPage = (String.IsNullOrEmpty(org.LandingPage)) ? "/home" : org.LandingPage;
+                await _cacheProvider.AddAsync(GetCacheKey(orgId), landingPage);
+            }
+
+            return landingPage;
         }
 
         public Task<Organization> GetOrganizationAsync(string id)
@@ -87,6 +108,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         {
             await _rdbmsUserManager.UpdateOrgAsync(org);
             await UpsertDocumentAsync(org);
+            await _cacheProvider.RemoveAsync(GetCacheKey(org.Id));
         }
     }
 }

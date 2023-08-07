@@ -17,5 +17,6 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
         Task<bool> HasBillingRecords(string orgId);
         Task<ListResponse<Organization>> GetAllOrgsAsync(ListRequest listRequest);
         Task<List<EntityHeader>> GetBillingContactOrgsForUserAsync(string userId);
+        Task<string> GetLandingPageFororgAsync(string orgId);
     }
 }
