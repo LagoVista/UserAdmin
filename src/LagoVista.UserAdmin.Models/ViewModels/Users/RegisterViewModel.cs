@@ -1,19 +1,19 @@
 ﻿using LagoVista.Core.Attributes;
-using System;
 using LagoVista.Core.Validation;
-using LagoVista.UserAdmin.Resources;
 using LagoVista.UserAdmin.Models;
 using LagoVista.UserAdmin.Models.Resources;
+using LagoVista.Core.Interfaces;
+using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.ViewModels.Users
 {
     [EntityDescription(Domains.UserViewModels, UserAdminResources.Names.RegisterVM_Title, UserAdminResources.Names.RegisterVM_Help, UserAdminResources.Names.RegisterVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
-    public class RegisterViewModel : IValidateable
+    public class RegisterViewModel : IValidateable, IFormDescriptor
     {
-        public String AppId { get; set; }
-        public String AppInstanceId { get; set; }
-        public String ClientType { get; set; }
-        public String DeviceId { get; set; }
+        public string AppId { get; set; }
+        public string AppInstanceId { get; set; }
+        public string ClientType { get; set; }
+        public string DeviceId { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.AppUser_FirstName, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string FirstName { get; set; }
@@ -29,5 +29,17 @@ namespace LagoVista.UserAdmin.ViewModels.Users
 
         [FormField(LabelResource: UserAdminResources.Names.AppUser_ConfirmPassword, CompareTo: nameof(Password), CompareToMsgResource: UserAdminResources.Names.AppUser_PasswordConfirmPasswordMatch, FieldType: FieldTypes.Password, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string ConfirmPassword { get; set; }
-    }
+
+		public List<string> GetFormFields()
+		{
+            return new List<string>()
+			{
+				nameof(FirstName),
+				nameof(LastName),
+				nameof(Email),
+				nameof(Password),
+				nameof(ConfirmPassword),
+			};
+		}
+	}
 }
