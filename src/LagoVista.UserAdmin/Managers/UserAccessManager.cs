@@ -28,6 +28,7 @@ namespace LagoVista.UserAdmin.Managers
             var userRoles = await _userSecurityService.GetRolesForUserAsync(userId, orgId);
             if (userRoles.Any(rol => rol.Key == DefaultRoleList.OWNER))
             {
+                Console.WriteLine($"[UserAccessmanager__GetUserModules] - User is owner will return all ({modules.Count}) modules");
                 return modules;
             }
 
@@ -48,6 +49,8 @@ namespace LagoVista.UserAdmin.Managers
                     userModules.RemoveAll(mod => mod.Id == access.Module.Id);
                 }
             }
+
+            Console.WriteLine($"[UserAccessmanager__GetUserModules] - Found ({modules.Count}) modules for user.");
 
             return userModules.OrderBy(mod => mod.SortOrder).ToList();
         }

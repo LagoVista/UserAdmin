@@ -56,7 +56,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             var allModulesJson = await _cacheProvider.GetAsync(ALL_MODULES_CACHE_KEY);
             if (String.IsNullOrEmpty(allModulesJson))
             {
-                Console.WriteLine($"[CACHE-MISS] - {ALL_MODULES_CACHE_KEY}");
+                Console.WriteLine($"[ModuleRepo__GetAllModules] - CACHE-MISS - {ALL_MODULES_CACHE_KEY}");
                 var lists = await QueryAsync(rec => true);
                 var summaries = lists.Select(mod => mod.CreateSummary()).ToList();
                 await _cacheProvider.AddAsync(ALL_MODULES_CACHE_KEY, JsonConvert.SerializeObject(summaries));
@@ -64,8 +64,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             }
             else
             {
-                Console.WriteLine($"[CACHE-HIT] - {ALL_MODULES_CACHE_KEY}");
-                return JsonConvert.DeserializeObject<List<ModuleSummary>>(allModulesJson);
+                var allModules = JsonConvert.DeserializeObject<List<ModuleSummary>>(allModulesJson);
+                Console.WriteLine($"[ModuleRepo__GetAllModules] - CACHE-HIT - {ALL_MODULES_CACHE_KEY} - has {allModules.Count} modules");
+                return allModules;
             }
         }
 
