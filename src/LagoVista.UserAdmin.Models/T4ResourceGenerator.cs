@@ -1,4 +1,4 @@
-﻿/*7/17/2023 10:28:05 AM*/
+﻿/*10/25/2023 11:53:59 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -851,6 +851,33 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_CreateGettingStartedData_Help
 
 		public static string Organization_CreateGettingStartedData_Help { get { return GetResourceString("Organization_CreateGettingStartedData_Help"); } }
+//Resources:UserAdminResources:Organization_DefaultContributor
+
+		public static string Organization_DefaultContributor { get { return GetResourceString("Organization_DefaultContributor"); } }
+//Resources:UserAdminResources:Organization_DefaultContributor_Help
+
+		public static string Organization_DefaultContributor_Help { get { return GetResourceString("Organization_DefaultContributor_Help"); } }
+//Resources:UserAdminResources:Organization_DefaultProjectAdminLead
+
+		public static string Organization_DefaultProjectAdminLead { get { return GetResourceString("Organization_DefaultProjectAdminLead"); } }
+//Resources:UserAdminResources:Organization_DefaultProjectAdminLead_Help
+
+		public static string Organization_DefaultProjectAdminLead_Help { get { return GetResourceString("Organization_DefaultProjectAdminLead_Help"); } }
+//Resources:UserAdminResources:Organization_DefaultProjectLead
+
+		public static string Organization_DefaultProjectLead { get { return GetResourceString("Organization_DefaultProjectLead"); } }
+//Resources:UserAdminResources:Organization_DefaultProjectLead_Help
+
+		public static string Organization_DefaultProjectLead_Help { get { return GetResourceString("Organization_DefaultProjectLead_Help"); } }
+//Resources:UserAdminResources:Organization_DefaultQAResource
+
+		public static string Organization_DefaultQAResource { get { return GetResourceString("Organization_DefaultQAResource"); } }
+//Resources:UserAdminResources:Organization_DefaultQAResource_Help
+
+		public static string Organization_DefaultQAResource_Help { get { return GetResourceString("Organization_DefaultQAResource_Help"); } }
+//Resources:UserAdminResources:Organization_DefaultResource_Watermark
+
+		public static string Organization_DefaultResource_Watermark { get { return GetResourceString("Organization_DefaultResource_Watermark"); } }
 //Resources:UserAdminResources:Organization_Description
 
 		public static string Organization_Description { get { return GetResourceString("Organization_Description"); } }
@@ -884,6 +911,18 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_NamespaceInUse
 
 		public static string Organization_NamespaceInUse { get { return GetResourceString("Organization_NamespaceInUse"); } }
+//Resources:UserAdminResources:Organization_OrgStatuses_Active
+
+		public static string Organization_OrgStatuses_Active { get { return GetResourceString("Organization_OrgStatuses_Active"); } }
+//Resources:UserAdminResources:Organization_OrgStatuses_Deactivated
+
+		public static string Organization_OrgStatuses_Deactivated { get { return GetResourceString("Organization_OrgStatuses_Deactivated"); } }
+//Resources:UserAdminResources:Organization_OrgStatuses_Spam
+
+		public static string Organization_OrgStatuses_Spam { get { return GetResourceString("Organization_OrgStatuses_Spam"); } }
+//Resources:UserAdminResources:Organization_Owner
+
+		public static string Organization_Owner { get { return GetResourceString("Organization_Owner"); } }
 //Resources:UserAdminResources:Organization_Primary_Location
 
 		public static string Organization_Primary_Location { get { return GetResourceString("Organization_Primary_Location"); } }
@@ -1450,6 +1489,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_CantCreate = "Organization_CantCreate";
 			public const string Organization_CreateGettingStartedData = "Organization_CreateGettingStartedData";
 			public const string Organization_CreateGettingStartedData_Help = "Organization_CreateGettingStartedData_Help";
+			public const string Organization_DefaultContributor = "Organization_DefaultContributor";
+			public const string Organization_DefaultContributor_Help = "Organization_DefaultContributor_Help";
+			public const string Organization_DefaultProjectAdminLead = "Organization_DefaultProjectAdminLead";
+			public const string Organization_DefaultProjectAdminLead_Help = "Organization_DefaultProjectAdminLead_Help";
+			public const string Organization_DefaultProjectLead = "Organization_DefaultProjectLead";
+			public const string Organization_DefaultProjectLead_Help = "Organization_DefaultProjectLead_Help";
+			public const string Organization_DefaultQAResource = "Organization_DefaultQAResource";
+			public const string Organization_DefaultQAResource_Help = "Organization_DefaultQAResource_Help";
+			public const string Organization_DefaultResource_Watermark = "Organization_DefaultResource_Watermark";
 			public const string Organization_Description = "Organization_Description";
 			public const string Organization_Help = "Organization_Help";
 			public const string Organization_LandingPage = "Organization_LandingPage";
@@ -1461,6 +1509,10 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_Locations = "Organization_Locations";
 			public const string Organization_Name = "Organization_Name";
 			public const string Organization_NamespaceInUse = "Organization_NamespaceInUse";
+			public const string Organization_OrgStatuses_Active = "Organization_OrgStatuses_Active";
+			public const string Organization_OrgStatuses_Deactivated = "Organization_OrgStatuses_Deactivated";
+			public const string Organization_OrgStatuses_Spam = "Organization_OrgStatuses_Spam";
+			public const string Organization_Owner = "Organization_Owner";
 			public const string Organization_Primary_Location = "Organization_Primary_Location";
 			public const string Organization_Status_Active = "Organization_Status_Active";
 			public const string Organization_Status_Active_BehindPayments = "Organization_Status_Active_BehindPayments";

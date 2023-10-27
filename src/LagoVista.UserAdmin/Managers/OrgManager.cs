@@ -112,6 +112,10 @@ namespace LagoVista.UserAdmin.Managers
             organization.TechnicalContact = user;
             organization.AdminContact = user;
             organization.BillingContact = user;
+            organization.DefaultProjectLead = user;
+            organization.DefaultProjectAdminLead = user;
+            organization.DefaultContributor = user;
+            organization.DefaultQAResource = user;
 
             /* Create the Organization in Storage */
             await _organizationRepo.AddOrganizationAsync(organization);
@@ -234,20 +238,7 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> UpdateOrganizationAsync(UpdateOrganizationViewModel orgViewModel, EntityHeader userOrg, EntityHeader user)
-        {
-            ValidationCheck(orgViewModel, Core.Validation.Actions.Update);
 
-            var org = await _organizationRepo.GetOrganizationAsync(orgViewModel.OrganziationId);
-            await AuthorizeAsync(org, AuthorizeResult.AuthorizeActions.Update, user, userOrg);
-
-            org.SetLastUpdatedFields(user);
-            ConcurrencyCheck(org, orgViewModel.LastUpdatedDate);
-
-            await _organizationRepo.UpdateOrganizationAsync(org);
-
-            return InvokeResult.Success;
-        }
 
         public async Task<UpdateOrganizationViewModel> GetUpdateOrganizationViewModel(string orgId, EntityHeader userOrg, EntityHeader user)
         {
@@ -262,6 +253,11 @@ namespace LagoVista.UserAdmin.Managers
             ValidateAuthParams(userOrg, user);
 
             var org = await _organizationRepo.GetOrganizationAsync(orgId);
+            if(EntityHeader.IsNullOrEmpty(org.Owner))
+            {
+                org.Owner = user;
+            }
+
             await AuthorizeAsync(org, AuthorizeResult.AuthorizeActions.Read, user, userOrg);
             return org;
         }

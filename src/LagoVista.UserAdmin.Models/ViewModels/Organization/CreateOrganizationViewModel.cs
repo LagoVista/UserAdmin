@@ -3,11 +3,13 @@ using LagoVista.Core.Validation;
 using System;
 using LagoVista.UserAdmin.Models;
 using LagoVista.UserAdmin.Models.Resources;
+using LagoVista.Core.Interfaces;
+using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.ViewModels.Organization
 {
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.CreateOrganizationVM_Title, UserAdminResources.Names.CreateOrganizationVM_Help, UserAdminResources.Names.CreateOrganizationVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
-    public class CreateOrganizationViewModel :  IValidateable
+    public class CreateOrganizationViewModel :  IValidateable, IFormDescriptor
     {
         [FormField(LabelResource: UserAdminResources.Names.Organization_Name, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string Name { get; set; }
@@ -20,6 +22,17 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Namespace, FieldType: FieldTypes.NameSpace, NamespaceType: NamespaceTypes.Organization, IsRequired: true, NamespaceUniqueMessageResource: UserAdminResources.Names.Organization_NamespaceInUse, ResourceType: typeof(UserAdminResources))]
         public String Namespace { get; set; }
+
+        public List<string> GetFormFields()
+        {
+            return new List<string>()
+            {
+                nameof(Name),
+                nameof(WebSite),
+                nameof(CreateGettingsStartedData),
+                nameof(Namespace),
+            };
+        }
 
         public void MapToOrganization(Models.Orgs.Organization organization)
         {
