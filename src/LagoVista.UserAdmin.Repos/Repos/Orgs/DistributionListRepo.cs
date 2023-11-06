@@ -40,19 +40,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
 
         public async Task<ListResponse<DistroListSummary>> GetDistroListsForOrgAsync(string orgId, ListRequest listRequest)
         {
-            var lists = await QueryAsync(rec => rec.OwnerOrganization.Id == orgId, listRequest);
-
-            return new ListResponse<DistroListSummary>()
-            {
-                Model = lists.Model.Select(dls => dls.CreateSummary()),
-                NextPartitionKey = lists.NextPartitionKey,
-                NextRowKey = lists.NextRowKey,
-                PageCount = lists.PageCount,
-                PageIndex = lists.PageIndex,
-                HasMoreRecords = lists.HasMoreRecords,
-                PageSize = lists.PageSize,
-                ResultId = lists.ResultId
-            };
+            var lists = await QueryAsync(rec => rec.OwnerOrganization.Id == orgId, rec => rec.Name, listRequest);
+            return ListResponse<DistroListSummary>.Create(lists.Model.Select(dls => dls.CreateSummary()), lists);
         }
 
         public async Task<bool> QueryKeyInUseAsync(string key, string orgId)

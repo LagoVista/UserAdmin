@@ -23,11 +23,12 @@ namespace LagoVista.AspNetCore.Identity.Utils
         private readonly IUserManager _userManager;
         private readonly IUserRoleRepo _userRoleRepo;
 
-        public OrgHelper(IAdminLogger adminLogger, IOrganizationManager orgManager, IUserManager userManager)
+        public OrgHelper(IAdminLogger adminLogger, IOrganizationManager orgManager, IUserManager userManager, IUserRoleRepo userRoleRepo)
         {
             _adminLogger = adminLogger ?? throw new ArgumentNullException(nameof(adminLogger));
-            _orgManager = orgManager ?? throw new ArgumentNullException(nameof(adminLogger));
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(adminLogger));
+            _orgManager = orgManager ?? throw new ArgumentNullException(nameof(orgManager));
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _userRoleRepo = userRoleRepo ?? throw new ArgumentNullException(nameof(userRoleRepo));
         }
 
         public async Task<InvokeResult> SetUserOrgAsync(AuthRequest authRequest, AppUser appUser)

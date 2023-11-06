@@ -154,7 +154,7 @@ namespace LagoVista.UserAdmin.Repos.Users
 
         public async Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(ListRequest listRequest)
         {
-            var results = await DescOrderQueryAsync(us => us.IsUserDevice == false, us => us.CreationDate, listRequest);
+            var results = await DescOrderQueryAsync(us => us.IsUserDevice == false, us => us.Name, listRequest);
 
             return new ListResponse<UserInfoSummary>()
             {
@@ -170,7 +170,7 @@ namespace LagoVista.UserAdmin.Repos.Users
 
         public async Task<ListResponse<UserInfoSummary>> GetActiveUsersAsync(ListRequest listRequest)
         {
-            var results = await DescOrderQueryAsync(us => us.IsUserDevice == false && !us.IsAccountDisabled, us => us.CreationDate, listRequest);
+            var results = await DescOrderQueryAsync(us => us.IsUserDevice == false && !us.IsAccountDisabled, us => us.Name, listRequest);
 
             return new ListResponse<UserInfoSummary>()
             {
@@ -203,7 +203,7 @@ namespace LagoVista.UserAdmin.Repos.Users
                 mthd = Expression.Lambda<Func<AppUser, bool>>(combined);
             }
 
-            var results = await DescOrderQueryAsync(mthd, us => us.CreationDate, listRequest);
+            var results = await DescOrderQueryAsync(mthd, us => us.Name, listRequest);
 
             return new ListResponse<UserInfoSummary>()
             {

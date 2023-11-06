@@ -7,9 +7,10 @@ using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.DistroList_Name
-        , UserAdminResources.Names.DistroList_Help, UserAdminResources.Names.DistroList_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class DistroList : UserAdminModelBase, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity
+    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.DistroList_Name, 
+        UserAdminResources.Names.DistroList_Help, UserAdminResources.Names.DistroList_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources),
+        GetListUrl: "/api/distros", SaveUrl:"/api/distro", GetUrl:"/api/distro/{id}", FactoryUrl:"/api/distro/factory", DeleteUrl:"/api/distro/{id}")]
+    public class DistroList : UserAdminModelBase, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity, IFormDescriptor
     {
         public DistroList()
         {
@@ -51,8 +52,21 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 Name = Name
             };
         }
+
+        public List<string> GetFormFields()
+        {
+            return new List<string>()
+            {
+               nameof(Name),
+               nameof(Key),
+               nameof(Description)
+            };
+        }
     }
 
+    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.DistroList_Name,
+         UserAdminResources.Names.DistroList_Help, UserAdminResources.Names.DistroList_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(UserAdminResources),
+         GetListUrl: "/api/distros", SaveUrl: "/api/distro", GetUrl: "/api/distro/{id}", FactoryUrl: "/api/distro/factory", DeleteUrl: "/api/distro/{id}")]
     public class DistroListSummary : SummaryData
     {
 
