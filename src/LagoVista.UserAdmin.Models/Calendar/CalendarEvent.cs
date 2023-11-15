@@ -28,7 +28,7 @@ namespace LagoVista.UserAdmin.Models.Calendar
 
     [EntityDescription(Domains.MiscDomain, UserAdminResources.Names.Calendar_ObjectTitle, UserAdminResources.Names.Calendar_ObjectDescription, UserAdminResources.Names.Calendar_ObjectDescription,
         EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources))]
-    public class CalendarEvent : UserAdminModelBase, IOwnedEntity, IValidateable
+    public class CalendarEvent : UserAdminModelBase, INamedEntity, IOwnedEntity, IValidateable
     {
         public const string CalendarEventType_Networking = "networking";
         public const string CalendarEventType_UserGroup = "usergroup";
