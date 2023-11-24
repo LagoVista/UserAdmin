@@ -5,6 +5,7 @@ using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Resources;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.Models
 {
@@ -29,5 +30,16 @@ namespace LagoVista.UserAdmin.Models
 
         [FormField(LabelResource: UserAdminResources.Names.Common_LastUpdatedBy, ResourceType: typeof(UserAdminResources), IsRequired: true, IsUserEditable: false)]
         public EntityHeader LastUpdatedBy { get; set; }
+
+        public List<EntityChangeSet> AuditHistory { get; set; } = new List<EntityChangeSet>();
+
+        public bool IsDeleted { get; set; }
+        public EntityHeader DeletedBy { get; set; }
+        public string DeletionDate { get; set; }
+        public bool IsDeprecated { get; set; }
+        public EntityHeader DeprecatedBy { get; set; }
+        public string DeprecationDate { get; set; }
+        public string DeprecationNotes { get; set; }
+
     }
 }

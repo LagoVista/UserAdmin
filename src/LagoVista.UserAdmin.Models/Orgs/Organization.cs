@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Attributes;
+﻿using LagoVista.Core;
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
@@ -23,7 +24,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Title, UserAdminResources.Names.Organization_Help,
         UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
         SaveUrl: "/api/org", GetUrl: "/api/org/{id}")]
-    public class Organization : UserAdminModelBase, INamedEntity, IValidateable, IOwnedEntity, IFormDescriptor
+    public class Organization : UserAdminModelBase, INamedEntity, IKeyedEntity, IValidateable, IOwnedEntity, IFormDescriptor
     {
         public const string Organization_OrgStatuses_Active = "active";
         public const string Organization_OrgStatuses_Deactivated = "deactivated";
@@ -33,7 +34,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
         {
             Locations = new List<EntityHeader>();
             OrgStatus = EntityHeader<OrgStatuses>.Create(OrgStatuses.Active);
-        }
+            Key = Guid.NewGuid().ToId();
+         }
+
+        public string Key { get; set; }
 
         [FormField(LabelResource:UserAdminResources.Names.Organization_Name, FieldType:FieldTypes.Text, IsRequired:true,ResourceType:typeof(UserAdminResources))]
         public string Name { get; set; }

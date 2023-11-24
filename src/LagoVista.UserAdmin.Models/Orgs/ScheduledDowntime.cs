@@ -85,7 +85,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.ScheduledDowntime_Title, UserAdminResources.Names.ScheduledDowntime_Help, 
                             UserAdminResources.Names.ScheduledDowntime_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class ScheduledDowntime : UserAdminModelBase, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity, ICloneable
+    public class ScheduledDowntime : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity, ICloneable
     {
         public const string DownTimeType_Holiday = "holiday";
         public const string DownTimeType_Maintenance = "maintenance";

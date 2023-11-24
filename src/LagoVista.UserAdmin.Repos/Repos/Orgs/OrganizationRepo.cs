@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using LagoVista.Core.Models;
 using Microsoft.Azure.Cosmos;
 using LagoVista.CloudStorage;
+using LagoVista.Core.Interfaces;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
@@ -21,8 +22,8 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         private readonly IRDBMSManager _rdbmsUserManager;
         private readonly ICacheProvider _cacheProvider;
 
-        public OrganizationRepo(IRDBMSManager rdbmsUserManager, IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider)
+        public OrganizationRepo(IRDBMSManager rdbmsUserManager, IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider, IDependencyManager dependencyMgr) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider, dependencyMgr)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
             _rdbmsUserManager = rdbmsUserManager ?? throw new ArgumentNullException(nameof(rdbmsUserManager));

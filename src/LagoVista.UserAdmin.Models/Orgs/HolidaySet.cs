@@ -11,7 +11,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 {
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.HolidaySet_Title, UserAdminResources.Names.HolidaySet_Help,
                           UserAdminResources.Names.HolidaySet_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class HolidaySet : UserAdminModelBase, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity
+    public class HolidaySet : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity
     {
         public HolidaySet()
         {

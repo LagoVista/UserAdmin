@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace LagoVista.UserAdmin.Models.Users
 {
     [EntityDescription(Domains.UserDomain, UserAdminResources.Names.Role_Title, UserAdminResources.Names.Role_Help, UserAdminResources.Names.Role_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class Role : UserAdminModelBase, IOwnedEntity, IValidateable, INamedEntity
+    public class Role : UserAdminModelBase, IKeyedEntity, IOwnedEntity, IValidateable, INamedEntity
     {
         
         [FormField(LabelResource: UserAdminResources.Names.Common_Name, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]

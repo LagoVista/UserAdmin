@@ -1,13 +1,9 @@
 ﻿using LagoVista.UserAdmin.Interfaces.Repos.Security;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 using LagoVista.UserAdmin.Models.Security;
 using System.Threading.Tasks;
-using LagoVista.CloudStorage.Storage;
 using LagoVista.CloudStorage.DocumentDB;
-using LagoVista.Core.PlatformSupport;
 using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Users

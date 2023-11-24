@@ -10,7 +10,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.DistroList_Name, 
         UserAdminResources.Names.DistroList_Help, UserAdminResources.Names.DistroList_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources),
         GetListUrl: "/api/distros", SaveUrl:"/api/distro", GetUrl:"/api/distro/{id}", FactoryUrl:"/api/distro/factory", DeleteUrl:"/api/distro/{id}")]
-    public class DistroList : UserAdminModelBase, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity, IFormDescriptor
+    public class DistroList : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity, IFormDescriptor
     {
         public DistroList()
         {

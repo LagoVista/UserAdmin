@@ -1,5 +1,6 @@
 ﻿using LagoVista.CloudStorage;
 using LagoVista.CloudStorage.Storage;
+using LagoVista.Core.Interfaces;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.DTOs;

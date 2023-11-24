@@ -187,7 +187,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             return Convert.ToInt64(secondsSinceUnixEpocStart.TotalSeconds).ToString(CultureInfo.InvariantCulture);
         }
 
-        private static string ComputeSignature(string consumerSecret, string? tokenSecret, string signatureData)
+        private static string ComputeSignature(string consumerSecret, string tokenSecret, string signatureData)
         {
             var key = Encoding.ASCII.GetBytes(
                 string.Format(CultureInfo.InvariantCulture,

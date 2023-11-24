@@ -8,7 +8,7 @@ using LagoVista.UserAdmin.Resources;
 namespace LagoVista.UserAdmin.Models.Orgs
 {
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Team_Title, UserAdminResources.Names.Team_Help, UserAdminResources.Names.Team_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class Team : UserAdminModelBase, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity
+    public class Team : UserAdminModelBase, INamedEntity, IKeyedEntity, IValidateable, IOwnedEntity, IDescriptionEntity
     {
         [FormField(LabelResource: UserAdminResources.Names.Common_Name, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string Name { get; set; }

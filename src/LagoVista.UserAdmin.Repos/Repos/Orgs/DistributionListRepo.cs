@@ -5,6 +5,7 @@ using LagoVista.UserAdmin.Models.Orgs;
 using System.Linq;
 using System.Threading.Tasks;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.Core.Interfaces;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Orgs
 {
@@ -12,8 +13,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
     {
         private readonly bool _shouldConsolidateCollections;
 
-        public DistributionListRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
+        public DistributionListRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger, IDependencyManager dependencyMgr) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, dependencyManager: dependencyMgr)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }

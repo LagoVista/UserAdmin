@@ -31,7 +31,7 @@ namespace LagoVista.UserAdmin.Models.Security
     }
 
     [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.Module_Title, UserAdminResources.Names.Module_Help, UserAdminResources.Names.Module_Help, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class Module : UserAdminModelBase, INamedEntity, IOwnedEntity, IValidateable
+    public class Module : UserAdminModelBase, IKeyedEntity, INamedEntity, IOwnedEntity, IValidateable
     {
         public const string ModuleStatus_Development = "development";
         public const string ModuleStatus_Preview = "preview";

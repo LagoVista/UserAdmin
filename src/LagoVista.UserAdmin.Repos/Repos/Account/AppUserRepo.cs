@@ -2,6 +2,7 @@
 using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.Core;
 using LagoVista.Core.Exceptions;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
@@ -26,8 +27,8 @@ namespace LagoVista.UserAdmin.Repos.Users
         private readonly IUserAdminSettings _adminSettings;
         private readonly IUserRoleRepo _userRoleRepo;
 
-        public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserRoleRepo userRoleRepo, IUserAdminSettings userAdminSettings, IAdminLogger logger) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
+        public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserRoleRepo userRoleRepo, IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider, IDependencyManager dependencyMgr) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider, dependencyManager: dependencyMgr)
         {
             _adminSettings = userAdminSettings;
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;

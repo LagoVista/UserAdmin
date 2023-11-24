@@ -1,4 +1,5 @@
 ﻿using LagoVista.CloudStorage.DocumentDB;
+using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Models.Orgs;

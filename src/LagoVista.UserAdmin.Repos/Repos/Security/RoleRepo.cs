@@ -10,6 +10,7 @@ using System.Linq;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.CloudStorage;
 using Newtonsoft.Json;
+using LagoVista.Core.Interfaces;
 
 namespace LagoVista.UserAdmin.Repos.Security
 {

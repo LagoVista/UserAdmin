@@ -28,7 +28,7 @@ namespace LagoVista.UserAdmin.Models.Calendar
 
     [EntityDescription(Domains.MiscDomain, UserAdminResources.Names.Calendar_ObjectTitle, UserAdminResources.Names.Calendar_ObjectDescription, UserAdminResources.Names.Calendar_ObjectDescription,
         EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources))]
-    public class CalendarEvent : UserAdminModelBase, INamedEntity, IOwnedEntity, IValidateable
+    public class CalendarEvent : UserAdminModelBase, IKeyedEntity, INamedEntity, IOwnedEntity, IValidateable
     {
         public const string CalendarEventType_Networking = "networking";
         public const string CalendarEventType_UserGroup = "usergroup";
@@ -39,6 +39,7 @@ namespace LagoVista.UserAdmin.Models.Calendar
         public CalendarEvent()
         {
             Id = Guid.NewGuid().ToId();
+            Key = Guid.NewGuid().ToId().ToLower();
         }
 
         [FormField(LabelResource: UserAdminResources.Names.Calendar_Date, FieldType: FieldTypes.Date, ResourceType: typeof(UserAdminResources), IsRequired: true, IsUserEditable: true)]
@@ -50,6 +51,8 @@ namespace LagoVista.UserAdmin.Models.Calendar
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Name, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string Name { get; set; }
+
+        public string Key { get; set; }
 
 
         public CalendarEventSummary CreateSummary()

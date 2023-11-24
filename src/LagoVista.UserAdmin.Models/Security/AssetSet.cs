@@ -8,7 +8,7 @@ using LagoVista.UserAdmin.Resources;
 namespace LagoVista.UserAdmin.Models.Security
 {
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.AssetSet_Title, UserAdminResources.Names.AssetSet_Help, UserAdminResources.Names.AssetSet_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class AssetSet : UserAdminModelBase, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity
+    public class AssetSet : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity
     {
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Name, IsRequired: true, ResourceType: typeof(UserAdminResources))]

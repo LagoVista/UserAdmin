@@ -12,11 +12,12 @@ using System.Collections.Generic;
 namespace LagoVista.UserAdmin.Models.Users
 {
     [EntityDescription(Domains.UserDomain, UserAdminResources.Names.AppUser_Title, UserAdminResources.Names.AppUser_Help, UserAdminResources.Names.AppUser_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class AppUser : UserAdminModelBase, INamedEntity, IValidateable, IOwnedEntity
+    public class AppUser : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity
     {
         public AppUser(String email, String createdBy)
         {
             Id = Guid.NewGuid().ToId();
+            Key = Guid.NewGuid().ToId(); 
             Email = email;
             UserName = email;
             CreatedBy = new EntityHeader()
@@ -66,6 +67,8 @@ namespace LagoVista.UserAdmin.Models.Users
         }
 
         public bool ShowWelcome { get; set; } = true;
+
+        public string Key { get; set; }
 
         public List<EntityHeader<string>> Notes { get; set; } = new List<EntityHeader<string>>();
 

@@ -41,10 +41,7 @@ namespace LagoVista.UserAdmin.Managers
                 var subscriptions = await GetSubscriptionsForOrgAsync(org.Id, user);
                 if (subscriptions.Where(sub => sub.Key == Subscription.SubscriptionKey_Trial).Any())
                 {
-                    throw new ValidationException("Invalid Data", new List<ErrorMessage>()
-                                    {
-                                        new ErrorMessage("Organization already has one trial subscription.")
-                                    });
+                    throw new ValidationException("Invalid Data", new List<ErrorMessage>(){new ErrorMessage("Organization already has one trial subscription.")});
                 }
                 else
                 {
@@ -76,24 +73,7 @@ namespace LagoVista.UserAdmin.Managers
             return new InvokeResult();
         }
 
-        public async Task<DependentObjectCheckResult> CheckInUseAsync(Guid id, EntityHeader org, EntityHeader user)
-        {
-            var subscription = await _subscriptionRepo.GetSubscriptionAsync(id);
-            await AuthorizeAsync(user, org, "getSubscription", subscription);
-
-            return await CheckForDepenenciesAsync(subscription);
-        }
-
-        public async Task<InvokeResult> DeleteSubscriptionAsync(Guid id, EntityHeader org, EntityHeader user)
-        {
-            var subscription = await _subscriptionRepo.GetSubscriptionAsync(id);
-            await AuthorizeAsync(user, org, "deleteSubscription", subscription);
-            await ConfirmNoDepenenciesAsync(subscription);
-
-            await _subscriptionRepo.DeleteSubscriptionAsync(subscription.Id);
-
-            return new InvokeResult();
-        }
+       
 
         public async Task<Subscription> GetTrialSubscriptionAsync(EntityHeader org, EntityHeader user)
         {

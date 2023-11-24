@@ -6,12 +6,18 @@ using LagoVista.Core.Validation;
 using System;
 using LagoVista.UserAdmin.Resources;
 using LagoVista.UserAdmin.Models.Resources;
+using LagoVista.Core;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Location_Title, UserAdminResources.Names.Organization_Location_Help, UserAdminResources.Names.Organization_Location_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class OrgLocation : UserAdminModelBase, INamedEntity, IValidateable, IOwnedEntity
+    public class OrgLocation : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity
     {
+        public OrgLocation()
+        {
+            Key = Guid.NewGuid().ToId();
+        }
+
         [FormField(LabelResource: UserAdminResources.Names.Organization, IsRequired:true, ResourceType: typeof(UserAdminResources))]
         public EntityHeader Organization { get; set; }
 
@@ -24,6 +30,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Location_LocationName, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public String Name { get; set; }
        
+        public string Key { get; set; }
+
         /// <summary>
         /// Latitude and longitude for this location
         /// </summary>
