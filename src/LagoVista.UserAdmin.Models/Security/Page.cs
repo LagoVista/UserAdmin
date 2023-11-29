@@ -16,6 +16,9 @@ namespace LagoVista.UserAdmin.Models.Security
             Features = new List<Feature>();
             Status = EntityHeader<ModuleStatus>.Create(ModuleStatus.Development);
             Id = Guid.NewGuid().ToId();
+            DesktopSupport = true;
+            PhoneSupport = true;
+            TabletSupport = true;
         }
 
         public int SortOrder { get; set; }
@@ -48,6 +51,13 @@ namespace LagoVista.UserAdmin.Models.Security
 
         [FormField(LabelResource: UserAdminResources.Names.Module_Link, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string Link { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Common_DesktopSupport, IsRequired: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool DesktopSupport { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.Common_PhoneSupport, IsRequired: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool PhoneSupport { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.Common_TabletSupport, IsRequired: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool TabletSupport { get; set; }
 
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Status, IsRequired: true, FieldType: FieldTypes.Picker, EnumType: typeof(ModuleStatus), WaterMark: UserAdminResources.Names.ModuleStatus_Select, ResourceType: typeof(UserAdminResources))]

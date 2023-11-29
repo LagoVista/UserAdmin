@@ -17,6 +17,9 @@ namespace LagoVista.UserAdmin.Models.Security
             Pages = new List<Page>();
             Status = EntityHeader<ModuleStatus>.Create(ModuleStatus.Development);
             Features = new List<Feature>();
+            DesktopSupport = true;
+            PhoneSupport = true;
+            TabletSupport = true;
         }
 
         public string Id { get; set; }
@@ -48,6 +51,13 @@ namespace LagoVista.UserAdmin.Models.Security
 
         [FormField(LabelResource: UserAdminResources.Names.Module_RestrictByDefault, HelpResource:UserAdminResources.Names.Module_RestrictByDefault_Help,  FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool RestrictByDefault { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Common_DesktopSupport, IsRequired: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool DesktopSupport { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.Common_PhoneSupport, IsRequired: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool PhoneSupport { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.Common_TabletSupport, IsRequired: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool TabletSupport { get; set; }
 
 
         [FormField(LabelResource: UserAdminResources.Names.Menu_DoNotDisplay, HelpResource: UserAdminResources.Names.Menu_DoNotDisplay_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]

@@ -1295,4 +1295,13 @@
   <data name="Organization_Owner" xml:space="preserve">
     <value>Owner</value>
   </data>
+  <data name="Common_DesktopSupport" xml:space="preserve">
+    <value>Display On Desktop</value>
+  </data>
+  <data name="Common_PhoneSupport" xml:space="preserve">
+    <value>Display on Phone</value>
+  </data>
+  <data name="Common_TabletSupport" xml:space="preserve">
+    <value>Display on Tablet</value>
+  </data>
 </root>

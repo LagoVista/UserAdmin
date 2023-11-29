@@ -1,4 +1,4 @@
-﻿/*10/25/2023 11:53:59 AM*/
+﻿/*11/29/2023 11:06:32 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -360,6 +360,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Common_Description
 
 		public static string Common_Description { get { return GetResourceString("Common_Description"); } }
+//Resources:UserAdminResources:Common_DesktopSupport
+
+		public static string Common_DesktopSupport { get { return GetResourceString("Common_DesktopSupport"); } }
 //Resources:UserAdminResources:Common_EmailAddress
 
 		public static string Common_EmailAddress { get { return GetResourceString("Common_EmailAddress"); } }
@@ -396,12 +399,18 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Common_PhoneNumber
 
 		public static string Common_PhoneNumber { get { return GetResourceString("Common_PhoneNumber"); } }
+//Resources:UserAdminResources:Common_PhoneSupport
+
+		public static string Common_PhoneSupport { get { return GetResourceString("Common_PhoneSupport"); } }
 //Resources:UserAdminResources:Common_Role
 
 		public static string Common_Role { get { return GetResourceString("Common_Role"); } }
 //Resources:UserAdminResources:Common_Status
 
 		public static string Common_Status { get { return GetResourceString("Common_Status"); } }
+//Resources:UserAdminResources:Common_TabletSupport
+
+		public static string Common_TabletSupport { get { return GetResourceString("Common_TabletSupport"); } }
 //Resources:UserAdminResources:CreateLocationVM_Description
 
 		public static string CreateLocationVM_Description { get { return GetResourceString("CreateLocationVM_Description"); } }
@@ -1328,6 +1337,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Common_CreatedBy = "Common_CreatedBy";
 			public const string Common_CreationDate = "Common_CreationDate";
 			public const string Common_Description = "Common_Description";
+			public const string Common_DesktopSupport = "Common_DesktopSupport";
 			public const string Common_EmailAddress = "Common_EmailAddress";
 			public const string Common_Id = "Common_Id";
 			public const string Common_IsPublic = "Common_IsPublic";
@@ -1340,8 +1350,10 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Common_Namespace = "Common_Namespace";
 			public const string Common_Notes = "Common_Notes";
 			public const string Common_PhoneNumber = "Common_PhoneNumber";
+			public const string Common_PhoneSupport = "Common_PhoneSupport";
 			public const string Common_Role = "Common_Role";
 			public const string Common_Status = "Common_Status";
+			public const string Common_TabletSupport = "Common_TabletSupport";
 			public const string CreateLocationVM_Description = "CreateLocationVM_Description";
 			public const string CreateLocationVM_Help = "CreateLocationVM_Help";
 			public const string CreateLocationVM_Title = "CreateLocationVM_Title";

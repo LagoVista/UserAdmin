@@ -45,6 +45,9 @@ namespace LagoVista.UserAdmin.Models.Security
             Status = EntityHeader<ModuleStatus>.Create(ModuleStatus.Development);
             Features = new List<Feature>();
             Areas = new List<Area>();
+            DesktopSupport = true;
+            PhoneSupport = true;
+            TabletSupport = true;
         }
 
 
@@ -78,6 +81,12 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Common_IsPublic, IsRequired: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool IsPublic { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Common_DesktopSupport, IsRequired: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool DesktopSupport { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.Common_PhoneSupport, IsRequired: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool PhoneSupport { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.Common_TabletSupport, IsRequired: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool TabletSupport { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Module_IsLegacyNGX, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool IsLegacyNGX { get; set; }
