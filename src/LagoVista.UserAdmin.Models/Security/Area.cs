@@ -17,6 +17,7 @@ namespace LagoVista.UserAdmin.Models.Security
             Pages = new List<Page>();
             Status = EntityHeader<ModuleStatus>.Create(ModuleStatus.Development);
             Features = new List<Feature>();
+            HelplResources = new List<HelpResource>();
             DesktopSupport = true;
             PhoneSupport = true;
             TabletSupport = true;
@@ -66,6 +67,10 @@ namespace LagoVista.UserAdmin.Models.Security
 
         [FormField(LabelResource: UserAdminResources.Names.Module_IsLegacyNGX, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool IsLegacyNGX { get; set; }
+
+
+        [FormField(LabelResource: UserAdminResources.Names.Module_HelpResources, FieldType: FieldTypes.ChildList, ResourceType: typeof(UserAdminResources))]
+        public List<HelpResource> HelplResources { get; set; }
 
 
         [FormField(LabelResource: UserAdminResources.Names.Module_Link, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]

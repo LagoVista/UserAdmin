@@ -3,12 +3,18 @@ using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
+using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
     [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.Feature_TItle, UserAdminResources.Names.Feature_Help, UserAdminResources.Names.Feature_Help, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
     public class Feature
     {
+        public Feature()
+        {
+            HelplResources = new List<HelpResource>();
+        }
+
         public string Id { get; set; } = Guid.NewGuid().ToId();
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Name, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
@@ -43,6 +49,10 @@ namespace LagoVista.UserAdmin.Models.Security
 
         [FormField(LabelResource: UserAdminResources.Names.Module_RestrictByDefault, HelpResource: UserAdminResources.Names.Module_RestrictByDefault_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool RestrictByDefault { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Module_HelpResources, FieldType: FieldTypes.ChildList, ResourceType: typeof(UserAdminResources))]
+        public List<HelpResource> HelplResources { get; set; }
+
 
         public UserAccess UserAccess { get; set; }
 

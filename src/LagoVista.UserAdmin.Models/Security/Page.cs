@@ -19,6 +19,7 @@ namespace LagoVista.UserAdmin.Models.Security
             DesktopSupport = true;
             PhoneSupport = true;
             TabletSupport = true;
+            HelplResources = new List<HelpResource>();
         }
 
         public int SortOrder { get; set; }
@@ -58,6 +59,10 @@ namespace LagoVista.UserAdmin.Models.Security
         public bool PhoneSupport { get; set; }
         [FormField(LabelResource: UserAdminResources.Names.Common_TabletSupport, IsRequired: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool TabletSupport { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Module_HelpResources, FieldType: FieldTypes.ChildList, ResourceType: typeof(UserAdminResources))]
+        public List<HelpResource> HelplResources { get; set; }
+
 
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Status, IsRequired: true, FieldType: FieldTypes.Picker, EnumType: typeof(ModuleStatus), WaterMark: UserAdminResources.Names.ModuleStatus_Select, ResourceType: typeof(UserAdminResources))]

@@ -1,4 +1,4 @@
-﻿/*11/29/2023 11:06:32 AM*/
+﻿/*12/4/2023 10:51:11 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -576,6 +576,27 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:GeoLocation_Title
 
 		public static string GeoLocation_Title { get { return GetResourceString("GeoLocation_Title"); } }
+//Resources:UserAdminResources:HelpResource_Description
+
+		public static string HelpResource_Description { get { return GetResourceString("HelpResource_Description"); } }
+//Resources:UserAdminResources:HelpResource_DisplayInline
+
+		public static string HelpResource_DisplayInline { get { return GetResourceString("HelpResource_DisplayInline"); } }
+//Resources:UserAdminResources:HelpResource_Guide
+
+		public static string HelpResource_Guide { get { return GetResourceString("HelpResource_Guide"); } }
+//Resources:UserAdminResources:HelpResource_Link
+
+		public static string HelpResource_Link { get { return GetResourceString("HelpResource_Link"); } }
+//Resources:UserAdminResources:HelpResource_SelectGuide
+
+		public static string HelpResource_SelectGuide { get { return GetResourceString("HelpResource_SelectGuide"); } }
+//Resources:UserAdminResources:HelpResource_Summary
+
+		public static string HelpResource_Summary { get { return GetResourceString("HelpResource_Summary"); } }
+//Resources:UserAdminResources:HelpResource_Title
+
+		public static string HelpResource_Title { get { return GetResourceString("HelpResource_Title"); } }
 //Resources:UserAdminResources:HolidaySet_Culture_Or_Country
 
 		public static string HolidaySet_Culture_Or_Country { get { return GetResourceString("HolidaySet_Culture_Or_Country"); } }
@@ -767,6 +788,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Module_Help
 
 		public static string Module_Help { get { return GetResourceString("Module_Help"); } }
+//Resources:UserAdminResources:Module_HelpResources
+
+		public static string Module_HelpResources { get { return GetResourceString("Module_HelpResources"); } }
 //Resources:UserAdminResources:Module_IsExternalLink
 
 		public static string Module_IsExternalLink { get { return GetResourceString("Module_IsExternalLink"); } }
@@ -1409,6 +1433,13 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string GeoLocation_Description = "GeoLocation_Description";
 			public const string GeoLocation_Help = "GeoLocation_Help";
 			public const string GeoLocation_Title = "GeoLocation_Title";
+			public const string HelpResource_Description = "HelpResource_Description";
+			public const string HelpResource_DisplayInline = "HelpResource_DisplayInline";
+			public const string HelpResource_Guide = "HelpResource_Guide";
+			public const string HelpResource_Link = "HelpResource_Link";
+			public const string HelpResource_SelectGuide = "HelpResource_SelectGuide";
+			public const string HelpResource_Summary = "HelpResource_Summary";
+			public const string HelpResource_Title = "HelpResource_Title";
 			public const string HolidaySet_Culture_Or_Country = "HolidaySet_Culture_Or_Country";
 			public const string HolidaySet_Description = "HolidaySet_Description";
 			public const string HolidaySet_Help = "HolidaySet_Help";
@@ -1470,6 +1501,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Module_CardSummary = "Module_CardSummary";
 			public const string Module_CardTitle = "Module_CardTitle";
 			public const string Module_Help = "Module_Help";
+			public const string Module_HelpResources = "Module_HelpResources";
 			public const string Module_IsExternalLink = "Module_IsExternalLink";
 			public const string Module_IsLegacyNGX = "Module_IsLegacyNGX";
 			public const string Module_Link = "Module_Link";

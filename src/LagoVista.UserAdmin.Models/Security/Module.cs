@@ -45,6 +45,7 @@ namespace LagoVista.UserAdmin.Models.Security
             Status = EntityHeader<ModuleStatus>.Create(ModuleStatus.Development);
             Features = new List<Feature>();
             Areas = new List<Area>();
+            HelplResources = new List<HelpResource>();
             DesktopSupport = true;
             PhoneSupport = true;
             TabletSupport = true;
@@ -99,6 +100,9 @@ namespace LagoVista.UserAdmin.Models.Security
 
         [FormField(LabelResource: UserAdminResources.Names.Module_Link, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string Link { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Module_HelpResources, FieldType: FieldTypes.ChildList, ResourceType: typeof(UserAdminResources))]
+        public List<HelpResource> HelplResources { get; set; }
 
         public EntityHeader OwnerOrganization { get; set; }
 
