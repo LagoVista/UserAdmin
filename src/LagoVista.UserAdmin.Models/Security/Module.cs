@@ -49,6 +49,7 @@ namespace LagoVista.UserAdmin.Models.Security
             DesktopSupport = true;
             PhoneSupport = true;
             TabletSupport = true;
+            AreaCategories = new List<UiCategory>();
         }
 
 
@@ -78,6 +79,11 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Module_RestrictByDefault, HelpResource: UserAdminResources.Names.Module_RestrictByDefault_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool RestrictByDefault { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Common_Category, WaterMark: UserAdminResources.Names.Common_Category_Select, IsRequired: false, FieldType: FieldTypes.OptionsList, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader UiCategory { get; set; }
+        
+        [FormField(LabelResource: UserAdminResources.Names.Module_AreaCategories, FieldType: FieldTypes.ChildListInline, FactoryUrl: "/api/module/uicategory/factory", ResourceType: typeof(UserAdminResources))]
+        public List<UiCategory> AreaCategories { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_IsPublic, IsRequired: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool IsPublic { get; set; }
@@ -147,8 +153,11 @@ namespace LagoVista.UserAdmin.Models.Security
                 IsLegacyNGX =   IsLegacyNGX,
                 OpenInNewPage = OpenInNewPage,
                 RestrictByDefault = RestrictByDefault,
-                OwnerOrgId = OwnerOrganization.Id
-
+                OwnerOrgId = OwnerOrganization.Id,
+                UiCategory = UiCategory,
+                DesktopSupport = DesktopSupport,
+                TabletSupport = TabletSupport,
+                PhoneSupport = PhoneSupport,
             };
         }
     }
@@ -164,6 +173,11 @@ namespace LagoVista.UserAdmin.Models.Security
         public string Link { get; set; }
         public bool IsLegacyNGX { get; set; }
         public bool IsExternalLink { get; set; }
+        public bool DesktopSupport { get; set; }
+        public bool PhoneSupport { get; set; }
+        public bool TabletSupport { get; set; }
+
+        public EntityHeader UiCategory { get; set; }
    
         public string OwnerOrgId { get; set; }
 

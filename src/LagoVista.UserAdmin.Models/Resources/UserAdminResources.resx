@@ -1328,4 +1328,43 @@
   <data name="Module_HelpResources" xml:space="preserve">
     <value>Help Resources</value>
   </data>
+  <data name="Area_PageCategories" xml:space="preserve">
+    <value>Page Categories</value>
+  </data>
+  <data name="Common_Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="Common_Category_Select" xml:space="preserve">
+    <value>-select category-</value>
+  </data>
+  <data name="ModuleCategory_Support" xml:space="preserve">
+    <value>Support</value>
+  </data>
+  <data name="ModuleCategory_Support_Summary" xml:space="preserve">
+    <value>Modules to support your IoT application</value>
+  </data>
+  <data name="ModuleCategory_Tools" xml:space="preserve">
+    <value>Tools</value>
+  </data>
+  <data name="ModuleCategory_Tools_Summary" xml:space="preserve">
+    <value>Tools to build your IoT Applications</value>
+  </data>
+  <data name="ModuleCateogry_EndUser" xml:space="preserve">
+    <value>End User</value>
+  </data>
+  <data name="ModuleCateogry_EndUser_Summary" xml:space="preserve">
+    <value>Modules that end users can use to work with data from your IoT application</value>
+  </data>
+  <data name="ModuleCateogry_Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Module_AreaCategories" xml:space="preserve">
+    <value>Area Categories</value>
+  </data>
+  <data name="UiCategory_Description" xml:space="preserve">
+    <value>A UI Category is a way of organizing launcher cards within the user interface.</value>
+  </data>
+  <data name="UiCateogry_Title" xml:space="preserve">
+    <value>UI Category</value>
+  </data>
 </root>

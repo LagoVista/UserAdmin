@@ -21,6 +21,7 @@ namespace LagoVista.UserAdmin.Models.Security
             DesktopSupport = true;
             PhoneSupport = true;
             TabletSupport = true;
+            PageCategories = new List<UiCategory>();
         }
 
         public string Id { get; set; }
@@ -59,6 +60,12 @@ namespace LagoVista.UserAdmin.Models.Security
         public bool PhoneSupport { get; set; }
         [FormField(LabelResource: UserAdminResources.Names.Common_TabletSupport, IsRequired: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool TabletSupport { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Common_Category, WaterMark: UserAdminResources.Names.Common_Category_Select, IsRequired: false, FieldType: FieldTypes.OptionsList, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader UiCategory { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Area_PageCategories, FieldType: FieldTypes.ChildListInline, FactoryUrl: "/api/module/uicategory/factory", ResourceType: typeof(UserAdminResources))]
+        public List<UiCategory> PageCategories { get; set; }
 
 
         [FormField(LabelResource: UserAdminResources.Names.Menu_DoNotDisplay, HelpResource: UserAdminResources.Names.Menu_DoNotDisplay_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]

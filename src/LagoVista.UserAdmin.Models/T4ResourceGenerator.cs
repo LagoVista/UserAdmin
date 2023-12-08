@@ -1,4 +1,4 @@
-﻿/*12/4/2023 10:51:11 AM*/
+﻿/*12/7/2023 6:40:43 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -159,6 +159,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Area_Help
 
 		public static string Area_Help { get { return GetResourceString("Area_Help"); } }
+//Resources:UserAdminResources:Area_PageCategories
+
+		public static string Area_PageCategories { get { return GetResourceString("Area_PageCategories"); } }
 //Resources:UserAdminResources:Area_Title
 
 		public static string Area_Title { get { return GetResourceString("Area_Title"); } }
@@ -351,6 +354,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:ClientApp_Title
 
 		public static string ClientApp_Title { get { return GetResourceString("ClientApp_Title"); } }
+//Resources:UserAdminResources:Common_Category
+
+		public static string Common_Category { get { return GetResourceString("Common_Category"); } }
+//Resources:UserAdminResources:Common_Category_Select
+
+		public static string Common_Category_Select { get { return GetResourceString("Common_Category_Select"); } }
 //Resources:UserAdminResources:Common_CreatedBy
 
 		public static string Common_CreatedBy { get { return GetResourceString("Common_CreatedBy"); } }
@@ -776,6 +785,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Menu_DoNotDisplay_Help
 
 		public static string Menu_DoNotDisplay_Help { get { return GetResourceString("Menu_DoNotDisplay_Help"); } }
+//Resources:UserAdminResources:Module_AreaCategories
+
+		public static string Module_AreaCategories { get { return GetResourceString("Module_AreaCategories"); } }
 //Resources:UserAdminResources:Module_CardIcon
 
 		public static string Module_CardIcon { get { return GetResourceString("Module_CardIcon"); } }
@@ -812,6 +824,27 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Module_Title
 
 		public static string Module_Title { get { return GetResourceString("Module_Title"); } }
+//Resources:UserAdminResources:ModuleCategory_Support
+
+		public static string ModuleCategory_Support { get { return GetResourceString("ModuleCategory_Support"); } }
+//Resources:UserAdminResources:ModuleCategory_Support_Summary
+
+		public static string ModuleCategory_Support_Summary { get { return GetResourceString("ModuleCategory_Support_Summary"); } }
+//Resources:UserAdminResources:ModuleCategory_Tools
+
+		public static string ModuleCategory_Tools { get { return GetResourceString("ModuleCategory_Tools"); } }
+//Resources:UserAdminResources:ModuleCategory_Tools_Summary
+
+		public static string ModuleCategory_Tools_Summary { get { return GetResourceString("ModuleCategory_Tools_Summary"); } }
+//Resources:UserAdminResources:ModuleCateogry_EndUser
+
+		public static string ModuleCateogry_EndUser { get { return GetResourceString("ModuleCateogry_EndUser"); } }
+//Resources:UserAdminResources:ModuleCateogry_EndUser_Summary
+
+		public static string ModuleCateogry_EndUser_Summary { get { return GetResourceString("ModuleCateogry_EndUser_Summary"); } }
+//Resources:UserAdminResources:ModuleCateogry_Other
+
+		public static string ModuleCateogry_Other { get { return GetResourceString("ModuleCateogry_Other"); } }
 //Resources:UserAdminResources:ModuleStatus_Alpha
 
 		public static string ModuleStatus_Alpha { get { return GetResourceString("ModuleStatus_Alpha"); } }
@@ -1205,6 +1238,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Technical_Contact
 
 		public static string Technical_Contact { get { return GetResourceString("Technical_Contact"); } }
+//Resources:UserAdminResources:UiCategory_Description
+
+		public static string UiCategory_Description { get { return GetResourceString("UiCategory_Description"); } }
+//Resources:UserAdminResources:UiCateogry_Title
+
+		public static string UiCateogry_Title { get { return GetResourceString("UiCateogry_Title"); } }
 //Resources:UserAdminResources:UpdateLocationVM_Help
 
 		public static string UpdateLocationVM_Help { get { return GetResourceString("UpdateLocationVM_Help"); } }
@@ -1294,6 +1333,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AppUser_Title = "AppUser_Title";
 			public const string AppUser_UserTitle = "AppUser_UserTitle";
 			public const string Area_Help = "Area_Help";
+			public const string Area_PageCategories = "Area_PageCategories";
 			public const string Area_Title = "Area_Title";
 			public const string AssetSet_Description = "AssetSet_Description";
 			public const string AssetSet_Help = "AssetSet_Help";
@@ -1358,6 +1398,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string ClientApp_Instance = "ClientApp_Instance";
 			public const string ClientApp_SelectInstance = "ClientApp_SelectInstance";
 			public const string ClientApp_Title = "ClientApp_Title";
+			public const string Common_Category = "Common_Category";
+			public const string Common_Category_Select = "Common_Category_Select";
 			public const string Common_CreatedBy = "Common_CreatedBy";
 			public const string Common_CreationDate = "Common_CreationDate";
 			public const string Common_Description = "Common_Description";
@@ -1497,6 +1539,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string LoginVM_Title = "LoginVM_Title";
 			public const string Menu_DoNotDisplay = "Menu_DoNotDisplay";
 			public const string Menu_DoNotDisplay_Help = "Menu_DoNotDisplay_Help";
+			public const string Module_AreaCategories = "Module_AreaCategories";
 			public const string Module_CardIcon = "Module_CardIcon";
 			public const string Module_CardSummary = "Module_CardSummary";
 			public const string Module_CardTitle = "Module_CardTitle";
@@ -1509,6 +1552,13 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Module_RestrictByDefault = "Module_RestrictByDefault";
 			public const string Module_RestrictByDefault_Help = "Module_RestrictByDefault_Help";
 			public const string Module_Title = "Module_Title";
+			public const string ModuleCategory_Support = "ModuleCategory_Support";
+			public const string ModuleCategory_Support_Summary = "ModuleCategory_Support_Summary";
+			public const string ModuleCategory_Tools = "ModuleCategory_Tools";
+			public const string ModuleCategory_Tools_Summary = "ModuleCategory_Tools_Summary";
+			public const string ModuleCateogry_EndUser = "ModuleCateogry_EndUser";
+			public const string ModuleCateogry_EndUser_Summary = "ModuleCateogry_EndUser_Summary";
+			public const string ModuleCateogry_Other = "ModuleCateogry_Other";
 			public const string ModuleStatus_Alpha = "ModuleStatus_Alpha";
 			public const string ModuleStatus_Beta = "ModuleStatus_Beta";
 			public const string ModuleStatus_Development = "ModuleStatus_Development";
@@ -1640,6 +1690,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Team_Help = "Team_Help";
 			public const string Team_Title = "Team_Title";
 			public const string Technical_Contact = "Technical_Contact";
+			public const string UiCategory_Description = "UiCategory_Description";
+			public const string UiCateogry_Title = "UiCateogry_Title";
 			public const string UpdateLocationVM_Help = "UpdateLocationVM_Help";
 			public const string UpdateLocationVM_Title = "UpdateLocationVM_Title";
 			public const string UpdateLocatoinVM_Description = "UpdateLocatoinVM_Description";

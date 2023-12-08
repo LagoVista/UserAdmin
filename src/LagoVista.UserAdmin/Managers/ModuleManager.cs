@@ -5,6 +5,7 @@ using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
+using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Models.Security;
 using System;
 using System.Collections.Generic;
@@ -58,6 +59,17 @@ namespace LagoVista.UserAdmin.Managers
             var module = await _moduleRepo.GetModuleByKeyAsync(key);
             await AuthorizeAsync(module, AuthorizeActions.Read, user, org);
             return module;
+        }
+
+        public List<UiCategory> GetTopLevelCategories()
+        {
+            return new List<UiCategory>()
+            {
+                new UiCategory() { Id = "CFC14BE40FDA4E9587EFA66502F05FDC", Key="tools", Name = UserAdminResources.ModuleCategory_Tools, Summary = UserAdminResources.ModuleCategory_Tools_Summary},
+                new UiCategory() { Id = "CFC14BE40FDA4E9587EFA66502F05FDC", Key="tools", Name = UserAdminResources.ModuleCategory_Support, Summary = UserAdminResources.ModuleCategory_Support_Summary},
+                new UiCategory() { Id = "CFC14BE40FDA4E9587EFA66502F05FDC", Key="tools", Name = UserAdminResources.ModuleCateogry_EndUser, Summary = UserAdminResources.ModuleCateogry_EndUser_Summary},
+                new UiCategory() { Id = "CFC14BE40FDA4E9587EFA66502F05FDC", Key="tools", Name = UserAdminResources.ModuleCateogry_Other},
+            };
         }
 
         public async Task<InvokeResult> UpdateModuleAsync(Module module, EntityHeader org, EntityHeader user)

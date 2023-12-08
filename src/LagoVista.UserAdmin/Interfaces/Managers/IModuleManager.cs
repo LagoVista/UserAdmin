@@ -14,5 +14,6 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> DeleteModuleAsync(string id, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateModuleAsync(Module module, EntityHeader org, EntityHeader user);
         Task<List<ModuleSummary>> GetAllModulesAsync(EntityHeader org, EntityHeader user);
+        List<UiCategory> GetTopLevelCategories();
     }
 }

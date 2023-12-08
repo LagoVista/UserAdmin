@@ -64,6 +64,9 @@ namespace LagoVista.UserAdmin.Models.Security
         public List<HelpResource> HelplResources { get; set; }
 
 
+        [FormField(LabelResource: UserAdminResources.Names.Common_Category, WaterMark: UserAdminResources.Names.Common_Category_Select, IsRequired: false, FieldType: FieldTypes.OptionsList, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader UiCategory { get; set; }
+
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Status, IsRequired: true, FieldType: FieldTypes.Picker, EnumType: typeof(ModuleStatus), WaterMark: UserAdminResources.Names.ModuleStatus_Select, ResourceType: typeof(UserAdminResources))]
         public EntityHeader<ModuleStatus> Status { get; set; }
