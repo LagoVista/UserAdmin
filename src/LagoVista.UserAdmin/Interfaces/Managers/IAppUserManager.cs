@@ -35,6 +35,7 @@ namespace LagoVista.UserAdmin.Managers
         Task<InvokeResult> AddMediaResourceAsync(string userId, EntityHeader mediaResource, EntityHeader org, EntityHeader updatedByUser);
         Task<InvokeResult> UpdateUserAsync(UserInfo user, EntityHeader org, EntityHeader updatedByUser);
         Task<InvokeResult> UpdateUserAsync(CoreUserInfo user, EntityHeader org, EntityHeader updatedByUser);
+        Task<InvokeResult> UpdateUserAsync(AppUser user, EntityHeader org, EntityHeader updatedByUser);
         Task<InvokeResult> DeleteUserAsync(String id, EntityHeader org, EntityHeader deletedByUser);
         Task<InvokeResult> DisableAccountAsync(string userId, EntityHeader org, EntityHeader adminUser);
 

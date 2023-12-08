@@ -3,9 +3,7 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Resources;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
@@ -30,8 +28,9 @@ namespace LagoVista.UserAdmin.Models.Security
         Retired,
     }
 
-    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.Module_Title, UserAdminResources.Names.Module_Help, UserAdminResources.Names.Module_Help, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class Module : UserAdminModelBase, IKeyedEntity, INamedEntity, IOwnedEntity, IValidateable
+    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.Module_Title, UserAdminResources.Names.Module_Help, UserAdminResources.Names.Module_Help, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
+        GetListUrl: "/api/modules", GetUrl: "/api/module/{id}", SaveUrl: "/api/module", DeleteUrl: "/api/module/{id}", FactoryUrl: "/api/module/factory")]
+    public class Module : UserAdminModelBase, IKeyedEntity, INamedEntity, IOwnedEntity, IValidateable, IFormDescriptor, IFormDescriptorCol2, IFormDescriptorBottom
     {
         public const string ModuleStatus_Development = "development";
         public const string ModuleStatus_Preview = "preview";
@@ -79,9 +78,9 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Module_RestrictByDefault, HelpResource: UserAdminResources.Names.Module_RestrictByDefault_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool RestrictByDefault { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_Category, WaterMark: UserAdminResources.Names.Common_Category_Select, IsRequired: false, FieldType: FieldTypes.OptionsList, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Category, WaterMark: UserAdminResources.Names.Common_Category_Select, IsRequired: false, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
         public EntityHeader UiCategory { get; set; }
-        
+
         [FormField(LabelResource: UserAdminResources.Names.Module_AreaCategories, FieldType: FieldTypes.ChildListInline, FactoryUrl: "/api/module/uicategory/factory", ResourceType: typeof(UserAdminResources))]
         public List<UiCategory> AreaCategories { get; set; }
 
@@ -114,13 +113,14 @@ namespace LagoVista.UserAdmin.Models.Security
 
         public EntityHeader OwnerUser { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Module_SortOrder, IsRequired:true, FieldType: FieldTypes.Integer, ResourceType: typeof(UserAdminResources))]
         public int SortOrder { get; set; }
 
         public List<Area> Areas { get; set; }
 
         public List<Feature> Features { get; set; }
 
-        public UserAccess UserAccess {get; set;}
+        public UserAccess UserAccess { get; set; }
 
         public EntityHeader ToEntityHeader()
         {
@@ -150,7 +150,7 @@ namespace LagoVista.UserAdmin.Models.Security
                 IsPublic = IsPublic,
                 Link = Link,
                 IsExternalLink = IsExternalLink,
-                IsLegacyNGX =   IsLegacyNGX,
+                IsLegacyNGX = IsLegacyNGX,
                 OpenInNewPage = OpenInNewPage,
                 RestrictByDefault = RestrictByDefault,
                 OwnerOrgId = OwnerOrganization.Id,
@@ -159,6 +159,45 @@ namespace LagoVista.UserAdmin.Models.Security
                 TabletSupport = TabletSupport,
                 PhoneSupport = PhoneSupport,
             };
+        }
+
+        public List<string> GetFormFieldsBottom()
+        {
+            return new List<string>()
+            {
+                nameof(AreaCategories)
+            };
+        }
+
+        public List<string> GetFormFieldsCol2()
+        {
+            return new List<string>()
+            {
+                nameof(Status),
+                nameof(SortOrder),
+                nameof(IsLegacyNGX),
+                nameof(Link),
+                nameof(IsExternalLink),
+                nameof(OpenInNewPage),
+                nameof(DesktopSupport),
+                nameof(TabletSupport),
+                nameof(PhoneSupport),
+                nameof(Description)
+            };
+        }
+
+        public List<string> GetFormFields()
+        {
+            return new List<string>() {
+                nameof(Name),
+                nameof(UiCategory),
+                nameof(Key),
+                nameof(IsPublic),
+                nameof(RestrictByDefault),
+                nameof(CardTitle),
+                nameof(CardIcon),
+                nameof(CardSummary),
+              };
         }
     }
 
@@ -178,7 +217,7 @@ namespace LagoVista.UserAdmin.Models.Security
         public bool TabletSupport { get; set; }
 
         public EntityHeader UiCategory { get; set; }
-   
+
         public string OwnerOrgId { get; set; }
 
         public int SortOrder { get; set; }

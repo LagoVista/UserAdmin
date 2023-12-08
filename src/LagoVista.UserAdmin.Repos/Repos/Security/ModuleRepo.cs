@@ -59,7 +59,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             {
                 Console.WriteLine($"[ModuleRepo__GetAllModules] - CACHE-MISS - {ALL_MODULES_CACHE_KEY}");
                 var lists = await QueryAsync(rec => true);
-                var summaries = lists.Select(mod => mod.CreateSummary()).ToList();
+                var summaries = lists.OrderBy(mod=>mod.SortOrder).Select(mod => mod.CreateSummary()).ToList();
                 await _cacheProvider.AddAsync(ALL_MODULES_CACHE_KEY, JsonConvert.SerializeObject(summaries));
                 return summaries;
             }

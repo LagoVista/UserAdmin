@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core;
 using LagoVista.Core.Attributes;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
@@ -8,7 +9,7 @@ using System.Collections.Generic;
 namespace LagoVista.UserAdmin.Models.Security
 {
     [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.Feature_TItle, UserAdminResources.Names.Feature_Help, UserAdminResources.Names.Feature_Help, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class Feature
+    public class Feature : IFormDescriptor, IFormDescriptorCol2
     {
         public Feature()
         {
@@ -53,8 +54,33 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Module_HelpResources, FieldType: FieldTypes.ChildList, ResourceType: typeof(UserAdminResources))]
         public List<HelpResource> HelplResources { get; set; }
 
+        public int SortOrder { get; set; }
+
 
         public UserAccess UserAccess { get; set; }
+
+        public List<string> GetFormFields()
+        {
+            return new List<string>()
+            {
+                nameof(Name),
+                nameof(Key),
+                nameof(RestrictByDefault),
+                nameof(MenuTitle),
+                nameof(Icon),
+                nameof(Summary)
+            };
+        }
+
+        public List<string> GetFormFieldsCol2()
+        {
+            return new List<string>() {
+                nameof(IsLegacyNGX),
+                nameof(Link),
+                nameof(DoNotDisplay),
+                nameof(Description),
+            };
+        }
 
         public EntityHeader ToEntityHeader()
         {

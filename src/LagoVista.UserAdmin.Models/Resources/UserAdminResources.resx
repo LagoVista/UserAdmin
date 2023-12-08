@@ -1137,7 +1137,7 @@
     <value>Card Title</value>
   </data>
   <data name="Area_Help" xml:space="preserve">
-    <value>An Area is used to organize different parts of a module and contains pages and features.</value>
+    <value>An Area allows you to group pages together into a logical organizational structure.  If an area does not contain any pages, the area may be used to represent a page within user interface.</value>
   </data>
   <data name="Area_Title" xml:space="preserve">
     <value>User Interface Area</value>
@@ -1149,13 +1149,13 @@
     <value>Application Feature</value>
   </data>
   <data name="Module_Help" xml:space="preserve">
-    <value>A Module is a functional area of the the user interface, used to organize areas, pages and features</value>
+    <value>Modules are top level components that can be used to organize the user interface. They are presented to the user as top level options for users to navigate to different parts of the application.</value>
   </data>
   <data name="Module_Title" xml:space="preserve">
     <value>User Interface Module</value>
   </data>
   <data name="Page_Help" xml:space="preserve">
-    <value>A Page is user interface element.</value>
+    <value>Features are aspects of a module, area or page that can be used in code to secure an activity or user interface component, they can also be used to render menus or a section of a user interface.</value>
   </data>
   <data name="Page_Title" xml:space="preserve">
     <value>User Interface Page</value>
@@ -1366,5 +1366,8 @@
   </data>
   <data name="UiCateogry_Title" xml:space="preserve">
     <value>UI Category</value>
+  </data>
+  <data name="Module_SortOrder" xml:space="preserve">
+    <value>Sort Order</value>
   </data>
 </root>

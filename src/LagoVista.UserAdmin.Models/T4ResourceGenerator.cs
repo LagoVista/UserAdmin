@@ -1,4 +1,4 @@
-﻿/*12/7/2023 6:40:43 PM*/
+﻿/*12/8/2023 9:55:20 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -821,6 +821,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Module_RestrictByDefault_Help
 
 		public static string Module_RestrictByDefault_Help { get { return GetResourceString("Module_RestrictByDefault_Help"); } }
+//Resources:UserAdminResources:Module_SortOrder
+
+		public static string Module_SortOrder { get { return GetResourceString("Module_SortOrder"); } }
 //Resources:UserAdminResources:Module_Title
 
 		public static string Module_Title { get { return GetResourceString("Module_Title"); } }
@@ -1551,6 +1554,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Module_OpenInNewTab = "Module_OpenInNewTab";
 			public const string Module_RestrictByDefault = "Module_RestrictByDefault";
 			public const string Module_RestrictByDefault_Help = "Module_RestrictByDefault_Help";
+			public const string Module_SortOrder = "Module_SortOrder";
 			public const string Module_Title = "Module_Title";
 			public const string ModuleCategory_Support = "ModuleCategory_Support";
 			public const string ModuleCategory_Support_Summary = "ModuleCategory_Support_Summary";

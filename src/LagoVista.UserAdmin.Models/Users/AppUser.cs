@@ -70,6 +70,8 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public string Key { get; set; }
 
+        public Dictionary<string, string> Preferences { get; set; } = new Dictionary<string, string>();
+
         public List<EntityHeader<string>> Notes { get; set; } = new List<EntityHeader<string>>();
 
         public List<ExternalLogin> ExternalLogins { get; set; }
@@ -155,6 +157,8 @@ namespace LagoVista.UserAdmin.Models.Users
         public bool TermsAndConditionsAccepted { get; set; }
         public string TermsAndConditionsAcceptedIPAddress { get; set; }
         public string TermsAndConditionsAcceptedDateTime { get; set; }
+
+        public bool AdvancedUser { get; set; }
 
 
         public string PaymentAccount1 { get; set; }

@@ -1,15 +1,16 @@
 ﻿using LagoVista.Core;
 using LagoVista.Core.Attributes;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
-    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.Page_Title, UserAdminResources.Names.Page_Help, UserAdminResources.Names.Page_Help, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class Page
+    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.Page_Title, UserAdminResources.Names.Page_Help, UserAdminResources.Names.Page_Help, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
+        FactoryUrl: "/api/module/page/factory")]
+    public class Page : IFormDescriptor, IFormDescriptorCol2
     {
         public Page()
         {
@@ -64,7 +65,7 @@ namespace LagoVista.UserAdmin.Models.Security
         public List<HelpResource> HelplResources { get; set; }
 
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_Category, WaterMark: UserAdminResources.Names.Common_Category_Select, IsRequired: false, FieldType: FieldTypes.OptionsList, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Category, WaterMark: UserAdminResources.Names.Common_Category_Select, IsRequired: false, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
         public EntityHeader UiCategory { get; set; }
 
 
@@ -78,11 +79,38 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Menu_DoNotDisplay, HelpResource: UserAdminResources.Names.Menu_DoNotDisplay_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool DoNotDisplay { get; set; }
 
-
-
         public List<Feature> Features { get; set; } = new List<Feature>();
 
         public UserAccess UserAccess { get; set; }
+
+        public List<string> GetFormFields()
+        {
+            return new List<string>()
+            {
+                nameof(Name),
+                nameof(UiCategory),
+                nameof(Key),
+                nameof(RestrictByDefault),
+                nameof(CardTitle),
+                nameof(CardIcon),
+                nameof(CardSummary),
+            }; 
+        }
+
+        public List<string> GetFormFieldsCol2()
+        {
+            return new List<string>()
+            {
+                nameof(Status),
+                nameof(DoNotDisplay),
+                nameof(IsLegacyNGX),
+                nameof(Link),
+                nameof(DesktopSupport),
+                nameof(TabletSupport),
+                nameof(PhoneSupport),
+                nameof(Description),
+            };
+        }
 
         public EntityHeader ToEntityHeader()
         {

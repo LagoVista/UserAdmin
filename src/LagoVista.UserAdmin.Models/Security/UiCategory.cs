@@ -5,7 +5,8 @@ using System;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
-    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.UiCateogry_Title, UserAdminResources.Names.UiCategory_Description, UserAdminResources.Names.UiCategory_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources))]
+    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.UiCateogry_Title, UserAdminResources.Names.UiCategory_Description, UserAdminResources.Names.UiCategory_Description,
+        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), FactoryUrl: "/api/module/uicategory/factory")]
     public class UiCategory
     {
         public UiCategory()
