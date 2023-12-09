@@ -1,13 +1,15 @@
 ﻿using LagoVista.Core;
 using LagoVista.Core.Attributes;
+using LagoVista.Core.Interfaces;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
+using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
     [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.UiCateogry_Title, UserAdminResources.Names.UiCategory_Description, UserAdminResources.Names.UiCategory_Description,
         EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), FactoryUrl: "/api/module/uicategory/factory")]
-    public class UiCategory
+    public class UiCategory : IFormDescriptor
     {
         public UiCategory()
         {
@@ -23,7 +25,22 @@ namespace LagoVista.UserAdmin.Models.Security
             RegExValidationMessageResource: UserAdminResources.Names.Common_Key_Validation, ResourceType: typeof(UserAdminResources), IsRequired: true)]
         public string Key { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.UiCategory_Icon, IsRequired: true, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources))]
+        public string Icon { get; set; }
+
+
         [FormField(LabelResource: UserAdminResources.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public string Summary { get; set; }
+
+        public List<string> GetFormFields()
+        {
+            return new List<string>()
+            {
+                 nameof(Name),
+                 nameof(Key),
+                 nameof(Icon),
+                 nameof(Summary),
+            };
+        }
     }
 }
