@@ -25,7 +25,8 @@ namespace LagoVista.UserAdmin.Models.Security
             RegExValidationMessageResource: UserAdminResources.Names.Common_Key_Validation, ResourceType: typeof(UserAdminResources), IsRequired: true)]
         public string Key { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.UiCategory_Icon, IsRequired: true, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.UiCategory_Icon, IsRequired: true, FieldType: FieldTypes.Icon, WaterMark: UserAdminResources.Names.UiCategory_Icon_Select,
+            ResourceType: typeof(UserAdminResources))]
         public string Icon { get; set; }
 
 

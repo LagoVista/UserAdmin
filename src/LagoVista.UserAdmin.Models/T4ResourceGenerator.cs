@@ -1,4 +1,4 @@
-﻿/*12/8/2023 1:36:54 PM*/
+﻿/*12/9/2023 6:08:00 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1247,6 +1247,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:UiCategory_Icon
 
 		public static string UiCategory_Icon { get { return GetResourceString("UiCategory_Icon"); } }
+//Resources:UserAdminResources:UiCategory_Icon_Select
+
+		public static string UiCategory_Icon_Select { get { return GetResourceString("UiCategory_Icon_Select"); } }
 //Resources:UserAdminResources:UiCateogry_Title
 
 		public static string UiCateogry_Title { get { return GetResourceString("UiCateogry_Title"); } }
@@ -1699,6 +1702,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Technical_Contact = "Technical_Contact";
 			public const string UiCategory_Description = "UiCategory_Description";
 			public const string UiCategory_Icon = "UiCategory_Icon";
+			public const string UiCategory_Icon_Select = "UiCategory_Icon_Select";
 			public const string UiCateogry_Title = "UiCateogry_Title";
 			public const string UpdateLocationVM_Help = "UpdateLocationVM_Help";
 			public const string UpdateLocationVM_Title = "UpdateLocationVM_Title";

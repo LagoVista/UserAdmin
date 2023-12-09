@@ -1373,4 +1373,7 @@
   <data name="UiCategory_Icon" xml:space="preserve">
     <value>Icon</value>
   </data>
+  <data name="UiCategory_Icon_Select" xml:space="preserve">
+    <value>-select icon-</value>
+  </data>
 </root>

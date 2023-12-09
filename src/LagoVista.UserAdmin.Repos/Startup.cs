@@ -16,6 +16,8 @@ using LagoVista.UserAdmin.Repos.Repos.Orgs;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Repos.Repos.Calendar;
+using LagoVista.UserAdmin.Interfaces.Repos.Account;
+using LagoVista.UserAdmin.Repos.Repos.Account;
 
 namespace LagoVista.UserAdmin.Repos
 {
@@ -49,7 +51,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<ISingleUseTokenRepo, SingleUseTokenRepo>();
             services.AddTransient<IDistributionListRepo, DistributionListRepo>();
             services.AddTransient<ICalendarRepo, CalendarRepo>();
-
+            services.AddTransient<IUserFavoritesRepo, UserFavoritesRepo>();
             ErrorCodes.Register(typeof(UserAdminErrorCodes));
         }
     }
