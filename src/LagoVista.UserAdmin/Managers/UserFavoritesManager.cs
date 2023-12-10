@@ -23,6 +23,11 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<UserFavorites> AddUserFavoriteAsync(EntityHeader user, EntityHeader org, UserFavorite favorite)
         {
             var userFavorites = await GetUserFavoritesAsync(user, org);
+
+            var existingFavorite = userFavorites.Favorites.SingleOrDefault(userFavorites => userFavorites.Id == favorite.Id);
+            if (existingFavorite != null)
+                userFavorites.Favorites.Remove(existingFavorite);
+
             userFavorites.Favorites.Add(favorite);
             userFavorites.LastUpdatedBy = user;
             userFavorites.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
@@ -35,7 +40,7 @@ namespace LagoVista.UserAdmin.Managers
             var result = await _userFavoritesRepo.GetUserFavoritesAsync(user.Id, org.Id);
             if (result != null)
                 return result;
-
+            
             var timeStamp = DateTime.UtcNow.ToJSONString();
             var userFavorites = new UserFavorites()
             {
@@ -60,9 +65,7 @@ namespace LagoVista.UserAdmin.Managers
             var userFavorite = userFavorites.Favorites.SingleOrDefault(userFavorites => userFavorites.Id == id);
             if (userFavorite != null)
             {
-                userFavorites.Favorites.Add(userFavorite);
-                userFavorites.LastUpdatedBy = user;
-                userFavorites.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+                userFavorites.Favorites.Remove(userFavorite);
                 await _userFavoritesRepo.UpdateUserFavoritesAsync(userFavorites);
             }
 

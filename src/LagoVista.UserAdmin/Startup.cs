@@ -30,6 +30,7 @@ namespace LagoVista.UserAdmin
             services.AddTransient<IDistributionManager, DistributionManager>();
             services.AddTransient<ISingleUseTokenManager, SingleUseTokenManager>();
             services.AddTransient<ICalendarManager, CalendarManager>();
+            services.AddTransient<IUserFavoritesManager, UserFavoritesManager>();
         }
     }
 }

@@ -12,6 +12,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public UserFavorites()
         {
             Id = Guid.NewGuid().ToId();
+            Favorites = new List<UserFavorite>();
         }
 
 
@@ -20,7 +21,6 @@ namespace LagoVista.UserAdmin.Models.Users
         public EntityHeader OwnerUser { get; set; }
         public bool IsPublic { get; set; }
         public string Name { get; set; }
-
         public List<UserFavorite> Favorites { get; set; }
     }
 
@@ -35,7 +35,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public string Id { get; set; }
 
         public string DateAdded { get; set; }
-
+        public List<string> Route { get; set; }
         public string Name { get; set; }
         public string Icon { get; set; }
         public string Link { get; set; }

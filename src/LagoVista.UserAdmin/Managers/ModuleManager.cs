@@ -65,10 +65,11 @@ namespace LagoVista.UserAdmin.Managers
         {
             return new List<UiCategory>()
             {
-                new UiCategory() { Id = "CFC14BE40FDA4E9587EFA66502F05FDC", Key="tools", Name = UserAdminResources.ModuleCategory_Tools, Summary = UserAdminResources.ModuleCategory_Tools_Summary},
-                new UiCategory() { Id = "CFC14BE40FDA4E9587EFA66502F05FDC", Key="tools", Name = UserAdminResources.ModuleCategory_Support, Summary = UserAdminResources.ModuleCategory_Support_Summary},
-                new UiCategory() { Id = "CFC14BE40FDA4E9587EFA66502F05FDC", Key="tools", Name = UserAdminResources.ModuleCateogry_EndUser, Summary = UserAdminResources.ModuleCateogry_EndUser_Summary},
-                new UiCategory() { Id = "CFC14BE40FDA4E9587EFA66502F05FDC", Key="tools", Name = UserAdminResources.ModuleCateogry_Other},
+                new UiCategory() { Id = "15C14BE40FDA4E9587EFA66502F05F16", Key="tools", Name = UserAdminResources.ModuleCategory_Tools, Summary = UserAdminResources.ModuleCategory_Tools_Summary},
+                new UiCategory() { Id = "26C14BE40FDA4E9587EFA66502F05F44", Key="support", Name = UserAdminResources.ModuleCategory_Support, Summary = UserAdminResources.ModuleCategory_Support_Summary},
+                new UiCategory() { Id = "37C14BE40FDA4E9587EFA66502F05F23", Key="enduser", Name = UserAdminResources.ModuleCateogry_EndUser, Summary = UserAdminResources.ModuleCateogry_EndUser_Summary},
+                new UiCategory() { Id = "48C14BE40FDA4E9587EFA66502F05F82", Icon="", Key="other", Name = UserAdminResources.ModuleCateogry_Other},
+
             };
         }
 
