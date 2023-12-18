@@ -1,13 +1,16 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Subscription_Title, UserAdminResources.Names.Subscription_Help, UserAdminResources.Names.Subscription_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class Subscription : IValidateable, IKeyedEntity, INamedEntity
+    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Subscription_Title, UserAdminResources.Names.Subscription_Help, 
+        UserAdminResources.Names.Subscription_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources),
+        GetListUrl: "/api/subscriptions", GetUrl: "/api/subscription/{id}", SaveUrl: "/api/subscription", FactoryUrl: "/api/subscription/factory")]
+    public class Subscription : IValidateable, IKeyedEntity, INamedEntity, ISummaryFactory
     {
         public const string Status_OK = "ok";
         public const string Status_FreeAccount = "freeaccount";
@@ -67,17 +70,26 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 Id = Id,
                 Name = Name,
                 PaymentTokenStatus = PaymentTokenStatus,
-                Key = Key
+                Key = Key,
+                Description = Description,
+                IsPublic = false
+                
             };
+        }
+
+        ISummaryData ISummaryFactory.CreateSummary()
+        {
+            return CreateSummary();
         }
     }
 
-    public class SubscriptionSummary
+    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Subscription_Title, UserAdminResources.Names.Subscription_Help,
+        UserAdminResources.Names.Subscription_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(UserAdminResources),
+        GetListUrl: "/api/subscriptions", GetUrl: "/api/subscription/{id}", SaveUrl: "/api/subscription", FactoryUrl: "/api/subscription/factory")]
+    public class SubscriptionSummary : SummaryData
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
+        public new Guid Id { get; set; }
         public string Status { get; set; }
         public string PaymentTokenStatus { get; set; }
-        public string Key { get; set; }
     }
 }
