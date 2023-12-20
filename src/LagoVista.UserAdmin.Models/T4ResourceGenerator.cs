@@ -1,4 +1,4 @@
-﻿/*12/9/2023 6:08:00 AM*/
+﻿/*12/19/2023 9:24:48 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1226,9 +1226,30 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Subscription_Help
 
 		public static string Subscription_Help { get { return GetResourceString("Subscription_Help"); } }
+//Resources:UserAdminResources:Subscription_PaymentMethod
+
+		public static string Subscription_PaymentMethod { get { return GetResourceString("Subscription_PaymentMethod"); } }
+//Resources:UserAdminResources:Subscription_PaymentMethod_Date
+
+		public static string Subscription_PaymentMethod_Date { get { return GetResourceString("Subscription_PaymentMethod_Date"); } }
+//Resources:UserAdminResources:Subscription_PaymentMethod_Expires
+
+		public static string Subscription_PaymentMethod_Expires { get { return GetResourceString("Subscription_PaymentMethod_Expires"); } }
+//Resources:UserAdminResources:Subscription_PaymentMethod_Help
+
+		public static string Subscription_PaymentMethod_Help { get { return GetResourceString("Subscription_PaymentMethod_Help"); } }
+//Resources:UserAdminResources:Subscription_PaymentMethod_Status
+
+		public static string Subscription_PaymentMethod_Status { get { return GetResourceString("Subscription_PaymentMethod_Status"); } }
+//Resources:UserAdminResources:Subscription_Status
+
+		public static string Subscription_Status { get { return GetResourceString("Subscription_Status"); } }
 //Resources:UserAdminResources:Subscription_Title
 
 		public static string Subscription_Title { get { return GetResourceString("Subscription_Title"); } }
+//Resources:UserAdminResources:Subscriptions_Title
+
+		public static string Subscriptions_Title { get { return GetResourceString("Subscriptions_Title"); } }
 //Resources:UserAdminResources:Team_Description
 
 		public static string Team_Description { get { return GetResourceString("Team_Description"); } }
@@ -1695,7 +1716,14 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string SMS_Verification_Body = "SMS_Verification_Body";
 			public const string Subscription_Description = "Subscription_Description";
 			public const string Subscription_Help = "Subscription_Help";
+			public const string Subscription_PaymentMethod = "Subscription_PaymentMethod";
+			public const string Subscription_PaymentMethod_Date = "Subscription_PaymentMethod_Date";
+			public const string Subscription_PaymentMethod_Expires = "Subscription_PaymentMethod_Expires";
+			public const string Subscription_PaymentMethod_Help = "Subscription_PaymentMethod_Help";
+			public const string Subscription_PaymentMethod_Status = "Subscription_PaymentMethod_Status";
+			public const string Subscription_Status = "Subscription_Status";
 			public const string Subscription_Title = "Subscription_Title";
+			public const string Subscriptions_Title = "Subscriptions_Title";
 			public const string Team_Description = "Team_Description";
 			public const string Team_Help = "Team_Help";
 			public const string Team_Title = "Team_Title";

@@ -621,10 +621,10 @@
     <value>The key must use only letters and numbers, and must be lowercase and must be between 3 and 20 characters.</value>
   </data>
   <data name="Subscription_Description" xml:space="preserve">
-    <value>A subscription is used to track usage of compute and storage resources</value>
+    <value>A subscription is used to track usage of compute and storage resources used by your application, it is also associated with a payment method that will be billed as per terms.</value>
   </data>
   <data name="Subscription_Help" xml:space="preserve">
-    <value>A subscription is used to track usage of compute and storage resources</value>
+    <value>A subscription is used to track usage of compute and storage resources used by your application, it is also associated with a payment method that will be billed as per terms.</value>
   </data>
   <data name="Subscription_Title" xml:space="preserve">
     <value>Subscription</value>
@@ -1375,5 +1375,26 @@
   </data>
   <data name="UiCategory_Icon_Select" xml:space="preserve">
     <value>-select icon-</value>
+  </data>
+  <data name="Subscriptions_Title" xml:space="preserve">
+    <value>Subscriptions</value>
+  </data>
+  <data name="Subscription_PaymentMethod" xml:space="preserve">
+    <value>Payment Method</value>
+  </data>
+  <data name="Subscription_PaymentMethod_Date" xml:space="preserve">
+    <value>Date Added</value>
+  </data>
+  <data name="Subscription_PaymentMethod_Expires" xml:space="preserve">
+    <value>Payment Method Expires</value>
+  </data>
+  <data name="Subscription_PaymentMethod_Help" xml:space="preserve">
+    <value>Your credit card information is safe. Your card number is never sent to or stored on our servers, we use Stripe to handle our payment processing.</value>
+  </data>
+  <data name="Subscription_PaymentMethod_Status" xml:space="preserve">
+    <value>Payment Method Status</value>
+  </data>
+  <data name="Subscription_Status" xml:space="preserve">
+    <value>Subscription Status</value>
   </data>
 </root>
