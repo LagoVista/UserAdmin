@@ -26,16 +26,26 @@ namespace LagoVista.UserAdmin.Managers
         {
             var mru = await GetMostRecentlyUsedAsync(org, user);
 
+            var existing = mru.All.SingleOrDefault(itm => itm.Route == mostRecentlyUsedItem.Route || itm.Link == mostRecentlyUsedItem.Link);
+            if (existing != null)
+                mru.All.Remove(existing);
+
             mru.All.Insert(0, mostRecentlyUsedItem);
             if(mru.All.Count > 30)
             {
                 mru.All.RemoveAt(30);
             }
-                
+          
             var module = mru.Modules.SingleOrDefault(mod => mod.ModuleKey == mostRecentlyUsedItem.ModuleKey);
             if(module == null)
             {
                 module = new MostRecentlyUsedModule() { ModuleKey = mostRecentlyUsedItem.ModuleKey };
+            }
+            else
+            {
+                var existingModMRU = module.Items.SingleOrDefault(itm => itm.Route == mostRecentlyUsedItem.Route || itm.Link == mostRecentlyUsedItem.Link);
+                if (existingModMRU != null)
+                    mru.All.Remove(existingModMRU);
             }
 
             module.Items.Insert(0, mostRecentlyUsedItem);
