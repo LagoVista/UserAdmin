@@ -73,9 +73,12 @@ namespace LagoVista.UserAdmin.Managers
                 var timeStamp = DateTime.UtcNow.ToJSONString();
                 mru = new MostRecentlyUsed()
                 {
-                    CreatedBy = user,
                     OwnerOrganization = org,
+                    OwnerUser = user,
+                    
                     IsPublic = false,
+
+                    CreatedBy = user,
                     CreationDate = timeStamp,
                     LastUpdatedDate = timeStamp,
                     LastUpdatedBy = user,

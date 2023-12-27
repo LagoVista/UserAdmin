@@ -22,7 +22,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
 
         public Task AddMostRecentlyUsedAsync(MostRecentlyUsed mostRecentlyUsed)
         {
-            mostRecentlyUsed.Id = MostRecentlyUsed.GenerateId(mostRecentlyUsed.OwnerOrganization, mostRecentlyUsed.OwnerUser);
+           mostRecentlyUsed.Id = MostRecentlyUsed.GenerateId(mostRecentlyUsed.OwnerOrganization, mostRecentlyUsed.OwnerUser);
            return CreateDocumentAsync(mostRecentlyUsed);
         }
 

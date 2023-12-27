@@ -13,23 +13,40 @@ namespace LagoVista.UserAdmin.Models.Users
         {
             Id = Guid.NewGuid().ToId();
             Favorites = new List<UserFavorite>();
+            Modules = new List<FavoritesByModule>();
         }
-
+          
         public string Key { get; set; }
         public EntityHeader OwnerOrganization { get; set; }
         public EntityHeader OwnerUser { get; set; }
         public bool IsPublic { get; set; }
         public string Name { get; set; }
         public List<UserFavorite> Favorites { get; set; }
+        
+        public List<FavoritesByModule> Modules { get; set; }
+        
         public static string GenerateId(EntityHeader org, EntityHeader user)
         {
-            return $"{org.Id}{user.Id}";
+            return $"{nameof(UserFavorites).ToLower()}-{org.Id}-{user.Id}";
         }
 
         public static string GenerateId(string orgId, string userId)
         {
-            return $"{orgId}{userId}";
+            return $"{nameof(UserFavorites).ToLower()}-{orgId}-{userId}";
         }
+    }
+
+    public class FavoritesByModule
+    {
+        public FavoritesByModule()
+        {
+            Id = Guid.NewGuid().ToId();
+            Items = new List<UserFavorite>();
+        }
+
+        public string Id { get; set; }
+        public string ModuleKey { get; set; }
+        public List<UserFavorite> Items { get; set; }
     }
 
     public class UserFavorite
@@ -41,7 +58,7 @@ namespace LagoVista.UserAdmin.Models.Users
         }
 
         public string Id { get; set; }
-
+        public string ModuleKey { get; set; }
         public string DateAdded { get; set; }
         public List<string> Route { get; set; }
         public string Name { get; set; }

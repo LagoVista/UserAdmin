@@ -29,7 +29,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
 
         public Task AddUserFavoritesAsync(UserFavorites userFavorites)
         {
-            userFavorites.Id = MostRecentlyUsed.GenerateId(userFavorites.OwnerOrganization, userFavorites.OwnerUser);
+            userFavorites.Id = UserFavorites.GenerateId(userFavorites.OwnerOrganization, userFavorites.OwnerUser);
             return CreateDocumentAsync(userFavorites);
         }
 

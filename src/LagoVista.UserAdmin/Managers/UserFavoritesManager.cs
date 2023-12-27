@@ -23,10 +23,30 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<UserFavorites> AddUserFavoriteAsync(EntityHeader user, EntityHeader org, UserFavorite favorite)
         {
             var userFavorites = await GetUserFavoritesAsync(user, org);
+            favorite.DateAdded = DateTime.UtcNow.ToJSONString();
 
             var existingFavorite = userFavorites.Favorites.SingleOrDefault(userFavorites => userFavorites.Id == favorite.Id);
             if (existingFavorite != null)
                 userFavorites.Favorites.Remove(existingFavorite);
+
+            if (!String.IsNullOrEmpty(favorite.ModuleKey))
+            {
+                var byModule = userFavorites.Modules.SingleOrDefault(mod => mod.ModuleKey == favorite.ModuleKey);
+                if (byModule == null)
+                {
+                    byModule = new FavoritesByModule()
+                    {
+                        ModuleKey = favorite.ModuleKey,
+                    };
+                    userFavorites.Modules.Add(byModule);
+                }
+
+                var existingByModule = byModule.Items.Where(mod=>mod.Link == favorite.Link).SingleOrDefault();
+                if (existingByModule != null)
+                    byModule.Items.Remove(existingByModule);
+
+                byModule.Items.Add(favorite); 
+            }
 
             userFavorites.Favorites.Add(favorite);
             userFavorites.LastUpdatedBy = user;
@@ -40,7 +60,7 @@ namespace LagoVista.UserAdmin.Managers
             var result = await _userFavoritesRepo.GetUserFavoritesAsync(user.Id, org.Id);
             if (result != null)
                 return result;
-            
+
             var timeStamp = DateTime.UtcNow.ToJSONString();
             var userFavorites = new UserFavorites()
             {
@@ -50,6 +70,7 @@ namespace LagoVista.UserAdmin.Managers
                 LastUpdatedDate = timeStamp,
                 OwnerOrganization = org,
                 OwnerUser = user,
+                IsPublic = false,
                 Name = $"{user.Text}/{org.Text} - Favorites"
             };
 
@@ -58,8 +79,6 @@ namespace LagoVista.UserAdmin.Managers
             return userFavorites;
         }
 
-
-
         public async Task<UserFavorites> RemoveUserFavoriteAsync(EntityHeader user, EntityHeader org, string id)
         {
             var userFavorites = await GetUserFavoritesAsync(user, org);
@@ -67,6 +86,16 @@ namespace LagoVista.UserAdmin.Managers
             if (userFavorite != null)
             {
                 userFavorites.Favorites.Remove(userFavorite);
+                if(!String.IsNullOrEmpty(userFavorite.ModuleKey))
+                {
+                    var byModule = userFavorites.Modules.SingleOrDefault(mod=>mod.ModuleKey == userFavorite.ModuleKey);
+                    if(byModule != null)
+                    {
+                        var existing = byModule.Items.FirstOrDefault(item => item.Id == id);
+                        if (existing != null)
+                            byModule.Items.Remove(existing);
+                    }
+                }  
                 await _userFavoritesRepo.UpdateUserFavoritesAsync(userFavorites);
             }
 
