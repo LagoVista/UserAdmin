@@ -8,6 +8,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
     {
         Task<UserFavorites> GetUserFavoritesAsync(EntityHeader user, EntityHeader org);
         Task<UserFavorites> AddUserFavoriteAsync(EntityHeader user, EntityHeader org, UserFavorite favorite);
+        Task<UserFavorites> UpdateUserFavoritesAsync(UserFavorites userFavorites, EntityHeader user, EntityHeader org);
         Task<UserFavorites> RemoveUserFavoriteAsync(EntityHeader user, EntityHeader org, string id);
     }
 }

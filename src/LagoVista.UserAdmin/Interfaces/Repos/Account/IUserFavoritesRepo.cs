@@ -7,6 +7,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Account
     {
         Task AddUserFavoritesAsync(UserFavorites userFavorites);
         Task UpdateUserFavoritesAsync(UserFavorites userFavorites);
+
         Task<UserFavorites> GetUserFavoritesAsync(string userId, string orgId);
     }
 }

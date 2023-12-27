@@ -44,7 +44,6 @@ namespace LagoVista.UserAdmin.Managers
             var timeStamp = DateTime.UtcNow.ToJSONString();
             var userFavorites = new UserFavorites()
             {
-                Id = Guid.NewGuid().ToId(),
                 CreatedBy = user,
                 CreationDate = timeStamp,
                 LastUpdatedBy = user,
@@ -59,6 +58,8 @@ namespace LagoVista.UserAdmin.Managers
             return userFavorites;
         }
 
+
+
         public async Task<UserFavorites> RemoveUserFavoriteAsync(EntityHeader user, EntityHeader org, string id)
         {
             var userFavorites = await GetUserFavoritesAsync(user, org);
@@ -69,6 +70,12 @@ namespace LagoVista.UserAdmin.Managers
                 await _userFavoritesRepo.UpdateUserFavoritesAsync(userFavorites);
             }
 
+            return userFavorites;
+        }
+
+        public async Task<UserFavorites> UpdateUserFavoritesAsync(UserFavorites userFavorites, EntityHeader user, EntityHeader org)
+        {
+            await _userFavoritesRepo.UpdateUserFavoritesAsync(userFavorites);
             return userFavorites;
         }
     }
