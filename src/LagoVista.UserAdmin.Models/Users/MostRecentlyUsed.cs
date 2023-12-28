@@ -27,12 +27,12 @@ namespace LagoVista.UserAdmin.Models.Users
     
         public static string GenerateId(EntityHeader org, EntityHeader user)
         {
-            return $"{nameof(MostRecentlyUsed).ToLower()}-{org.Id}-{user.Id}";
+            return $"{nameof(MostRecentlyUsed).ToLower()}-key-{org.Id}-{user.Id}";
         }
 
         public static string GenerateId(string orgId, string userId)
         {
-            return $"{nameof(MostRecentlyUsed).ToLower()}-{orgId}-{userId}";
+            return $"{nameof(MostRecentlyUsed).ToLower()}-key-{orgId}-{userId}";
         }
     }
 

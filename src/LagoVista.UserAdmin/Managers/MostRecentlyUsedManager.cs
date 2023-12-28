@@ -26,7 +26,7 @@ namespace LagoVista.UserAdmin.Managers
         {
             var mru = await GetMostRecentlyUsedAsync(org, user);
 
-            var existing = mru.All.SingleOrDefault(itm => itm.Route == mostRecentlyUsedItem.Route || itm.Link == mostRecentlyUsedItem.Link);
+            var existing = mru.All.SingleOrDefault(itm => itm.Link == mostRecentlyUsedItem.Link);
             if (existing != null)
                 mru.All.Remove(existing);
 
@@ -35,23 +35,27 @@ namespace LagoVista.UserAdmin.Managers
             {
                 mru.All.RemoveAt(30);
             }
-          
-            var module = mru.Modules.SingleOrDefault(mod => mod.ModuleKey == mostRecentlyUsedItem.ModuleKey);
-            if(module == null)
-            {
-                module = new MostRecentlyUsedModule() { ModuleKey = mostRecentlyUsedItem.ModuleKey };
-            }
-            else
-            {
-                var existingModMRU = module.Items.SingleOrDefault(itm => itm.Route == mostRecentlyUsedItem.Route || itm.Link == mostRecentlyUsedItem.Link);
-                if (existingModMRU != null)
-                    mru.All.Remove(existingModMRU);
-            }
 
-            module.Items.Insert(0, mostRecentlyUsedItem);
-            if (module.Items.Count > 30)
+            if (!String.IsNullOrEmpty(mostRecentlyUsedItem.ModuleKey))
             {
-                module.Items.RemoveAt(30);
+                var module = mru.Modules.SingleOrDefault(mod => mod.ModuleKey == mostRecentlyUsedItem.ModuleKey);
+                if (module == null)
+                {
+                    module = new MostRecentlyUsedModule() { ModuleKey = mostRecentlyUsedItem.ModuleKey };
+                    mru.Modules.Add(module);
+                }
+                else
+                {
+                    var existingModMRU = module.Items.SingleOrDefault(itm => itm.Link == mostRecentlyUsedItem.Link);
+                    if (existingModMRU != null)
+                        module.Items.Remove(existingModMRU);
+                }
+
+                module.Items.Insert(0, mostRecentlyUsedItem);
+                if (module.Items.Count > 30)
+                {
+                    module.Items.RemoveAt(30);
+                }
             }
 
             await _mruRepo.UpdateMostRecentlyUsedAsync(mru);
