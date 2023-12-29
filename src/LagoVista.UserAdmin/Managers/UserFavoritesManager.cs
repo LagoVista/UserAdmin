@@ -25,7 +25,7 @@ namespace LagoVista.UserAdmin.Managers
             var userFavorites = await GetUserFavoritesAsync(user, org);
             favorite.DateAdded = DateTime.UtcNow.ToJSONString();
 
-            var existingFavorite = userFavorites.Favorites.SingleOrDefault(userFavorites => userFavorites.Id == favorite.Id);
+            var existingFavorite = userFavorites.Favorites.SingleOrDefault(userFavorites => userFavorites.Link == favorite.Link);
             if (existingFavorite != null)
                 userFavorites.Favorites.Remove(existingFavorite);
 
@@ -41,11 +41,11 @@ namespace LagoVista.UserAdmin.Managers
                     userFavorites.Modules.Add(byModule);
                 }
 
-                var existingByModule = byModule.Items.Where(mod=>mod.Link == favorite.Link).SingleOrDefault();
+                var existingByModule = byModule.Items.Where(mod => mod.Link == favorite.Link).SingleOrDefault();
                 if (existingByModule != null)
                     byModule.Items.Remove(existingByModule);
 
-                byModule.Items.Add(favorite); 
+                byModule.Items.Add(favorite);
             }
 
             userFavorites.Favorites.Add(favorite);
@@ -86,18 +86,20 @@ namespace LagoVista.UserAdmin.Managers
             if (userFavorite != null)
             {
                 userFavorites.Favorites.Remove(userFavorite);
-                if(!String.IsNullOrEmpty(userFavorite.ModuleKey))
-                {
-                    var byModule = userFavorites.Modules.SingleOrDefault(mod=>mod.ModuleKey == userFavorite.ModuleKey);
-                    if(byModule != null)
-                    {
-                        var existing = byModule.Items.FirstOrDefault(item => item.Id == id);
-                        if (existing != null)
-                            byModule.Items.Remove(existing);
-                    }
-                }  
-                await _userFavoritesRepo.UpdateUserFavoritesAsync(userFavorites);
             }
+
+            if (!String.IsNullOrEmpty(userFavorite.ModuleKey))
+            {
+                var byModule = userFavorites.Modules.SingleOrDefault(mod => mod.ModuleKey == userFavorite.ModuleKey);
+                if (byModule != null)
+                {
+                    var existing = byModule.Items.FirstOrDefault(item => item.Id == id);
+                    if (existing != null)
+                        byModule.Items.Remove(existing);
+                }
+            }
+            await _userFavoritesRepo.UpdateUserFavoritesAsync(userFavorites);
+
 
             return userFavorites;
         }
