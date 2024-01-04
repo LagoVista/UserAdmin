@@ -1,6 +1,7 @@
 ﻿using LagoVista.CloudStorage;
 using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Security;
@@ -52,14 +53,14 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             await _cacheProvider.RemoveAsync(ALL_MODULES_CACHE_KEY);
         }
 
-        public async Task<List<ModuleSummary>> GetAllModulesAsync()
+        private async Task<List<ModuleSummary>> GetAll()
         {
             var allModulesJson = await _cacheProvider.GetAsync(ALL_MODULES_CACHE_KEY);
             if (String.IsNullOrEmpty(allModulesJson))
             {
                 Console.WriteLine($"[ModuleRepo__GetAllModules] - CACHE-MISS - {ALL_MODULES_CACHE_KEY}");
                 var lists = await QueryAsync(rec => true);
-                var summaries = lists.OrderBy(mod=>mod.SortOrder).Select(mod => mod.CreateSummary()).ToList();
+                var summaries = lists.OrderBy(mod => mod.SortOrder).Select(mod => mod.CreateSummary()).ToList();
                 await _cacheProvider.AddAsync(ALL_MODULES_CACHE_KEY, JsonConvert.SerializeObject(summaries));
                 return summaries;
             }
@@ -71,10 +72,19 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             }
         }
 
+        public async Task<ListResponse<ModuleSummary>> GetAllModulesAsync(string orgId, ListRequest listRequest)
+        {
+            var all = await GetAll();
+            return ListResponse<ModuleSummary>.Create(listRequest, 
+                all.Where(org => org.OwnerOrgId == orgId)
+                .OrderBy( mod=>mod.UiCategory?.Text).ThenBy(mod=>mod.SortOrder)
+                .Skip(listRequest.PageSize * (listRequest.PageIndex - 1)).Take(listRequest.PageSize));
+        }
+
         public async Task<List<ModuleSummary>> GetModulesForOrgAndPublicAsyncAsync(string orgId)
         {
-            var modules = await GetAllModulesAsync();
-            return modules.Where(mod => mod.IsPublic || mod.OwnerOrgId == orgId).ToList();
+            var modules = await GetAll();
+            return modules.Where(mod => mod.IsPublic || mod.OwnerOrgId == orgId).OrderBy(mod=>mod.UiCategory?.Text).ThenBy(mod=>mod.SortOrder).ToList();
         }
 
         public Task<Module> GetModuleAsync(string id)

@@ -1,4 +1,5 @@
-﻿using LagoVista.UserAdmin.Models.Security;
+﻿using LagoVista.Core.Models.UIMetaData;
+using LagoVista.UserAdmin.Models.Security;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
         Task<Module> GetModuleByKeyAsync(string key, string orgId);
         Task DeleteModuleAsync(string id);
         Task UpdateModuleAsync(Module module);
-        Task<List<ModuleSummary>> GetAllModulesAsync();
+        Task<ListResponse<ModuleSummary>> GetAllModulesAsync(string orgId, ListRequest listRequest);
         Task<List<ModuleSummary>> GetModulesForOrgAndPublicAsyncAsync(string orgId);
     }
 }

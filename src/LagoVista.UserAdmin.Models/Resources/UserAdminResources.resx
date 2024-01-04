@@ -1397,4 +1397,19 @@
   <data name="Subscription_Status" xml:space="preserve">
     <value>Subscription Status</value>
   </data>
+  <data name="ModuleCategory_Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="ModuleCategory_Admin_Summary" xml:space="preserve">
+    <value>General Management and Settings for NuvIoT</value>
+  </data>
+  <data name="ModuleCategory_IoT" xml:space="preserve">
+    <value>IoT</value>
+  </data>
+  <data name="ModuleCategory_IoT_Summary" xml:space="preserve">
+    <value>Build and Manage your IoT Applications</value>
+  </data>
+  <data name="Modules_Title" xml:space="preserve">
+    <value>Modules</value>
+  </data>
 </root>

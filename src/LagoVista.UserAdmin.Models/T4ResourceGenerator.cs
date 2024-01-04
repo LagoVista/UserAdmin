@@ -1,4 +1,4 @@
-﻿/*12/19/2023 9:24:48 AM*/
+﻿/*1/3/2024 5:40:55 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -827,6 +827,18 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Module_Title
 
 		public static string Module_Title { get { return GetResourceString("Module_Title"); } }
+//Resources:UserAdminResources:ModuleCategory_Admin
+
+		public static string ModuleCategory_Admin { get { return GetResourceString("ModuleCategory_Admin"); } }
+//Resources:UserAdminResources:ModuleCategory_Admin_Summary
+
+		public static string ModuleCategory_Admin_Summary { get { return GetResourceString("ModuleCategory_Admin_Summary"); } }
+//Resources:UserAdminResources:ModuleCategory_IoT
+
+		public static string ModuleCategory_IoT { get { return GetResourceString("ModuleCategory_IoT"); } }
+//Resources:UserAdminResources:ModuleCategory_IoT_Summary
+
+		public static string ModuleCategory_IoT_Summary { get { return GetResourceString("ModuleCategory_IoT_Summary"); } }
 //Resources:UserAdminResources:ModuleCategory_Support
 
 		public static string ModuleCategory_Support { get { return GetResourceString("ModuleCategory_Support"); } }
@@ -848,6 +860,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:ModuleCateogry_Other
 
 		public static string ModuleCateogry_Other { get { return GetResourceString("ModuleCateogry_Other"); } }
+//Resources:UserAdminResources:Modules_Title
+
+		public static string Modules_Title { get { return GetResourceString("Modules_Title"); } }
 //Resources:UserAdminResources:ModuleStatus_Alpha
 
 		public static string ModuleStatus_Alpha { get { return GetResourceString("ModuleStatus_Alpha"); } }
@@ -1583,6 +1598,10 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Module_RestrictByDefault_Help = "Module_RestrictByDefault_Help";
 			public const string Module_SortOrder = "Module_SortOrder";
 			public const string Module_Title = "Module_Title";
+			public const string ModuleCategory_Admin = "ModuleCategory_Admin";
+			public const string ModuleCategory_Admin_Summary = "ModuleCategory_Admin_Summary";
+			public const string ModuleCategory_IoT = "ModuleCategory_IoT";
+			public const string ModuleCategory_IoT_Summary = "ModuleCategory_IoT_Summary";
 			public const string ModuleCategory_Support = "ModuleCategory_Support";
 			public const string ModuleCategory_Support_Summary = "ModuleCategory_Support_Summary";
 			public const string ModuleCategory_Tools = "ModuleCategory_Tools";
@@ -1590,6 +1609,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string ModuleCateogry_EndUser = "ModuleCateogry_EndUser";
 			public const string ModuleCateogry_EndUser_Summary = "ModuleCateogry_EndUser_Summary";
 			public const string ModuleCateogry_Other = "ModuleCateogry_Other";
+			public const string Modules_Title = "Modules_Title";
 			public const string ModuleStatus_Alpha = "ModuleStatus_Alpha";
 			public const string ModuleStatus_Beta = "ModuleStatus_Beta";
 			public const string ModuleStatus_Development = "ModuleStatus_Development";

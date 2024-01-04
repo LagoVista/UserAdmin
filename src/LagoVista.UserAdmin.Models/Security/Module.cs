@@ -28,9 +28,10 @@ namespace LagoVista.UserAdmin.Models.Security
         Retired,
     }
 
-    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.Module_Title, UserAdminResources.Names.Module_Help, UserAdminResources.Names.Module_Help, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
+    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.Module_Title, UserAdminResources.Names.Module_Help, UserAdminResources.Names.Module_Help, 
+        EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources), Icon: "icon-ae-coding-metal",
         GetListUrl: "/api/modules", GetUrl: "/api/module/{id}", SaveUrl: "/api/module", DeleteUrl: "/api/module/{id}", FactoryUrl: "/api/module/factory")]
-    public class Module : UserAdminModelBase, IKeyedEntity, INamedEntity, IOwnedEntity, IValidateable, IFormDescriptor, IFormDescriptorCol2, IFormDescriptorBottom
+    public class Module : UserAdminModelBase, IKeyedEntity, INamedEntity, IOwnedEntity, IValidateable, IFormDescriptor, IFormDescriptorCol2, IFormDescriptorBottom, ISummaryFactory
     {
         public const string ModuleStatus_Development = "development";
         public const string ModuleStatus_Preview = "preview";
@@ -49,8 +50,8 @@ namespace LagoVista.UserAdmin.Models.Security
             PhoneSupport = true;
             TabletSupport = true;
             AreaCategories = new List<UiCategory>();
+            UiCategory = new EntityHeader() { Id = "48C14BE40FDA4E9587EFA66502F05F82", Key = "other", Text = "Other" }; 
         }
-
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Name, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string Name { get; set; }
@@ -199,8 +200,16 @@ namespace LagoVista.UserAdmin.Models.Security
                 nameof(CardSummary),
               };
         }
+
+        ISummaryData ISummaryFactory.CreateSummary()
+        {
+            return CreateSummary();
+        }
     }
 
+    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.Modules_Title, UserAdminResources.Names.Module_Help, UserAdminResources.Names.Module_Help,
+        EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources), Icon: "icon-ae-coding-metal",
+        GetListUrl: "/api/modules", GetUrl: "/api/module/{id}", SaveUrl: "/api/module", DeleteUrl: "/api/module/{id}", FactoryUrl: "/api/module/factory")]
     public class ModuleSummary : SummaryData
     {
         public string CardIcon { get; set; }

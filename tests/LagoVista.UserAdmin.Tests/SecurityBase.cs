@@ -1,4 +1,5 @@
-﻿using LagoVista.UserAdmin.Interfaces;
+﻿using LagoVista.Core.Models.UIMetaData;
+using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Security;
@@ -139,9 +140,9 @@ namespace LagoVista.UserAdmin.Tests
                 throw new NotImplementedException();
             }
 
-            public Task<List<ModuleSummary>> GetAllModulesAsync()
+            public Task<ListResponse<ModuleSummary>> GetAllModulesAsync(string orgId, ListRequest listRequest)
             {
-                return Task.FromResult( _modules.Select(mod => mod.CreateSummary()).OrderBy(mod => mod.SortOrder).ToList());
+                return Task.FromResult(ListResponse<ModuleSummary>.Create( _modules.Select(mod => mod.CreateSummary()).OrderBy(mod => mod.SortOrder).ToList()));
             }
 
             public Task<Module> GetModuleAsync(string id)

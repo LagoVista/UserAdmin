@@ -31,9 +31,9 @@ namespace LagoVista.UserAdmin.Managers
                 mru.All.Remove(existing);
 
             mru.All.Insert(0, mostRecentlyUsedItem);
-            if(mru.All.Count > 30)
+            if(mru.All.Count > 8)
             {
-                mru.All.RemoveAt(30);
+                mru.All.RemoveAt(8);
             }
 
             if (!String.IsNullOrEmpty(mostRecentlyUsedItem.ModuleKey))
@@ -52,9 +52,9 @@ namespace LagoVista.UserAdmin.Managers
                 }
 
                 module.Items.Insert(0, mostRecentlyUsedItem);
-                if (module.Items.Count > 30)
+                if (module.Items.Count > 8)
                 {
-                    module.Items.RemoveAt(30);
+                    module.Items.RemoveAt(8);
                 }
             }
 

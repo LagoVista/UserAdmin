@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Interfaces.Managers;
@@ -41,10 +42,10 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<List<ModuleSummary>> GetAllModulesAsync(EntityHeader org, EntityHeader user)
+        public async Task<ListResponse<ModuleSummary>> GetAllModulesAsync(ListRequest listRequest, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(Module));
-            return await _moduleRepo.GetAllModulesAsync();            
+            return await _moduleRepo.GetAllModulesAsync(org.Id, listRequest);            
         }
 
         public async Task<Module> GetModuleAsync(string id, EntityHeader org, EntityHeader user)
@@ -65,11 +66,12 @@ namespace LagoVista.UserAdmin.Managers
         {
             return new List<UiCategory>()
             {
+                new UiCategory() { Id = "15C14BE40FDA4E9587EFA66502F05F14", Key="iot", Name = UserAdminResources.ModuleCategory_IoT, Summary = UserAdminResources.ModuleCategory_IoT_Summary},
+                new UiCategory() { Id = "15C14BE40FDA4E9587EFA66502F05F15", Key="admin", Name = UserAdminResources.ModuleCategory_Admin, Summary = UserAdminResources.ModuleCategory_Admin_Summary},
                 new UiCategory() { Id = "15C14BE40FDA4E9587EFA66502F05F16", Key="tools", Name = UserAdminResources.ModuleCategory_Tools, Summary = UserAdminResources.ModuleCategory_Tools_Summary},
                 new UiCategory() { Id = "26C14BE40FDA4E9587EFA66502F05F44", Key="support", Name = UserAdminResources.ModuleCategory_Support, Summary = UserAdminResources.ModuleCategory_Support_Summary},
                 new UiCategory() { Id = "37C14BE40FDA4E9587EFA66502F05F23", Key="enduser", Name = UserAdminResources.ModuleCateogry_EndUser, Summary = UserAdminResources.ModuleCateogry_EndUser_Summary},
                 new UiCategory() { Id = "48C14BE40FDA4E9587EFA66502F05F82", Icon="", Key="other", Name = UserAdminResources.ModuleCateogry_Other},
-
             };
         }
 

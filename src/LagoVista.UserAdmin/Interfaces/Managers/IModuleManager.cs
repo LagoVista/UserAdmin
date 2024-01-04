@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Security;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<Module> GetModuleByKeyAsync(string key, EntityHeader org, EntityHeader user);
         Task<InvokeResult> DeleteModuleAsync(string id, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateModuleAsync(Module module, EntityHeader org, EntityHeader user);
-        Task<List<ModuleSummary>> GetAllModulesAsync(EntityHeader org, EntityHeader user);
+        Task<ListResponse<ModuleSummary>> GetAllModulesAsync(ListRequest listRequest, EntityHeader org, EntityHeader user);
         List<UiCategory> GetTopLevelCategories();
     }
 }
