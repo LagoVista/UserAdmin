@@ -57,8 +57,21 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<InvokeResult> AddUserAsync(AppUser user, EntityHeader org, EntityHeader updatedByUser)
         {
             ValidationCheck(user, Actions.Create);
-
             await AuthorizeAsync(user, AuthorizeResult.AuthorizeActions.Create, updatedByUser, org);
+
+            if (!String.IsNullOrEmpty(user.Ssn))
+            {
+                if (user.SsnSecretId != null)
+                    await _secureStorage.RemoveSecretAsync(org, user.SsnSecretId);
+
+                var result = await _secureStorage.AddSecretAsync(org, user.Ssn);
+                if (!result.Successful)
+                    return result.ToInvokeResult();
+
+                user.SsnSecretId = result.Result;
+                user.Ssn = null;
+            }
+
             await _appUserRepo.CreateAsync(user);
 
             return InvokeResult.Success;
@@ -139,6 +152,19 @@ namespace LagoVista.UserAdmin.Managers
             existingUser.PostalCode = user.PostalCode;
             existingUser.Country = user.Country;
 
+            if(!String.IsNullOrEmpty(existingUser.Ssn))
+            {
+                if (existingUser.SsnSecretId != null)
+                    await _secureStorage.RemoveSecretAsync(org, existingUser.SsnSecretId);
+
+                var result = await _secureStorage.AddSecretAsync(org, user.Ssn);
+                if (!result.Successful)
+                    return result.ToInvokeResult();
+
+                existingUser.SsnSecretId = result.Result;
+                existingUser.Ssn = null;
+            }
+
             await AuthorizeAsync(existingUser, AuthorizeResult.AuthorizeActions.Update, updatedByUser, org);
 
             await _appUserRepo.UpdateAsync(existingUser);
@@ -151,6 +177,19 @@ namespace LagoVista.UserAdmin.Managers
             ValidationCheck(user, Actions.Update);
 
             await AuthorizeAsync(user, AuthorizeResult.AuthorizeActions.Update, updatedByUser, org);
+
+            if (!String.IsNullOrEmpty(user.Ssn))
+            {
+                if (user.SsnSecretId != null)
+                    await _secureStorage.RemoveSecretAsync(org, user.SsnSecretId);
+
+                var result = await _secureStorage.AddSecretAsync(org, user.Ssn);
+                if (!result.Successful)
+                    return result.ToInvokeResult();
+
+                user.SsnSecretId = result.Result;
+                user.Ssn = null;
+            }
 
             await _appUserRepo.UpdateAsync(user);
 
@@ -204,6 +243,8 @@ namespace LagoVista.UserAdmin.Managers
             ValidationCheck(appUser, Actions.Update);
 
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, updatedByUser, org);
+
+
 
             await _appUserRepo.UpdateAsync(appUser);
 

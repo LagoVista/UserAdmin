@@ -27,6 +27,11 @@ namespace LagoVista.UserAdmin.Models.Users
         [FormField(LabelResource: UserAdminResources.Names.AppUser_PhoneNumber, FieldType: FieldTypes.Phone, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public string PhoneNumber { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_SSN, HelpResource: UserAdminResources.Names.AppUser_SSN_Help,
+   SecureIdFieldName: nameof(SsnSecretId), FieldType: FieldTypes.Secret, ResourceType: typeof(UserAdminResources))]
+        public string Ssn { get; set; }
+
+        public string SsnSecretId { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.AppUser_TeamsAccountName, FieldType: FieldTypes.Text, IsUserEditable: true, ResourceType: typeof(UserAdminResources))]
         public string TeamsAccountName { get; set; }

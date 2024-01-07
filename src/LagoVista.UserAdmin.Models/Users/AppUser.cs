@@ -135,10 +135,19 @@ namespace LagoVista.UserAdmin.Models.Users
         [FormField(LabelResource: UserAdminResources.Names.AppUser_TeamsAccountName, FieldType: FieldTypes.Text, IsUserEditable: true, ResourceType: typeof(UserAdminResources))]
         public string TeamsAccountName { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_SSN, HelpResource:UserAdminResources.Names.AppUser_SSN_Help, 
+           SecureIdFieldName:nameof(SsnSecretId), FieldType: FieldTypes.Secret, ResourceType: typeof(UserAdminResources))]
+        public string Ssn { get; set; }
+
+        public string SsnSecretId { get; set; }
+
         [FormField(LabelResource: UserAdminResources.Names.AppUser_Address1, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string Address1 { get; set; }
+      
         [FormField(LabelResource: UserAdminResources.Names.AppUser_Address2, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string Address2 { get; set; }
+        
+        
         [FormField(LabelResource: UserAdminResources.Names.AppUser_City, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string City { get; set; }
         [FormField(LabelResource: UserAdminResources.Names.AppUser_StateProvince, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]

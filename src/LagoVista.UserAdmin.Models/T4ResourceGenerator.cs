@@ -1,4 +1,4 @@
-﻿/*1/3/2024 5:40:55 AM*/
+﻿/*1/7/2024 9:55:39 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -144,6 +144,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AppUser_RememberMe_InThisBrowser
 
 		public static string AppUser_RememberMe_InThisBrowser { get { return GetResourceString("AppUser_RememberMe_InThisBrowser"); } }
+//Resources:UserAdminResources:AppUser_SSN
+
+		public static string AppUser_SSN { get { return GetResourceString("AppUser_SSN"); } }
+//Resources:UserAdminResources:AppUser_SSN_Help
+
+		public static string AppUser_SSN_Help { get { return GetResourceString("AppUser_SSN_Help"); } }
 //Resources:UserAdminResources:AppUser_StateProvince
 
 		public static string AppUser_StateProvince { get { return GetResourceString("AppUser_StateProvince"); } }
@@ -1373,6 +1379,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AppUser_PostalCode = "AppUser_PostalCode";
 			public const string AppUser_RememberMe = "AppUser_RememberMe";
 			public const string AppUser_RememberMe_InThisBrowser = "AppUser_RememberMe_InThisBrowser";
+			public const string AppUser_SSN = "AppUser_SSN";
+			public const string AppUser_SSN_Help = "AppUser_SSN_Help";
 			public const string AppUser_StateProvince = "AppUser_StateProvince";
 			public const string AppUser_TeamsAccountName = "AppUser_TeamsAccountName";
 			public const string AppUser_Title = "AppUser_Title";
