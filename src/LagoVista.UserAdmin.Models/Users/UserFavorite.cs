@@ -55,13 +55,17 @@ namespace LagoVista.UserAdmin.Models.Users
         {
             Id = Guid.NewGuid().ToId();
             DateAdded = DateTime.UtcNow.ToJSONString();
+            LastAccessed = DateTime.UtcNow.ToJSONString();
+            Type = "Module";
         }
 
         public string Id { get; set; }
         public string ModuleKey { get; set; }
         public string DateAdded { get; set; }
+        public string LastAccessed { get; set; }
         public List<string> Route { get; set; }
         public string Name { get; set; }
+        public string Type { get; set; }
         public string Summary { get; set; }
         public string Icon { get; set; }
         public string Link { get; set; }

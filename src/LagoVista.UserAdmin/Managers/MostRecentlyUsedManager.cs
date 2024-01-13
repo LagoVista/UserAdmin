@@ -16,7 +16,7 @@ namespace LagoVista.UserAdmin.Managers
     public class MostRecentlyUsedManager : ManagerBase, IMostRecentlyUsedManager
     {
         private readonly IMostRecentlyUsedRepo _mruRepo;
-        public MostRecentlyUsedManager(IMostRecentlyUsedRepo mruRepo, ILogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security) : 
+        public MostRecentlyUsedManager(IMostRecentlyUsedRepo mruRepo, ILogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security) :
             base(logger, appConfig, dependencyManager, security)
         {
             _mruRepo = mruRepo ?? throw new ArgumentNullException(nameof(mruRepo));
@@ -24,6 +24,9 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<MostRecentlyUsed> AddMostRecentlyUsedAsync(MostRecentlyUsedItem mostRecentlyUsedItem, EntityHeader org, EntityHeader user)
         {
+            mostRecentlyUsedItem.DateAdded = DateTime.UtcNow.ToJSONString();
+            mostRecentlyUsedItem.LastAccessed = DateTime.UtcNow.ToJSONString();
+
             var mru = await GetMostRecentlyUsedAsync(org, user);
 
             var existing = mru.All.SingleOrDefault(itm => itm.Link == mostRecentlyUsedItem.Link);
@@ -31,9 +34,9 @@ namespace LagoVista.UserAdmin.Managers
                 mru.All.Remove(existing);
 
             mru.All.Insert(0, mostRecentlyUsedItem);
-            if(mru.All.Count > 8)
+            if (mru.All.Count > 50)
             {
-                mru.All.RemoveAt(8);
+                mru.All.RemoveAt(50);
             }
 
             if (!String.IsNullOrEmpty(mostRecentlyUsedItem.ModuleKey))
@@ -52,9 +55,9 @@ namespace LagoVista.UserAdmin.Managers
                 }
 
                 module.Items.Insert(0, mostRecentlyUsedItem);
-                if (module.Items.Count > 8)
+                if (module.Items.Count > 50)
                 {
-                    module.Items.RemoveAt(8);
+                    module.Items.RemoveAt(50);
                 }
             }
 
@@ -79,7 +82,7 @@ namespace LagoVista.UserAdmin.Managers
                 {
                     OwnerOrganization = org,
                     OwnerUser = user,
-                    
+
                     IsPublic = false,
 
                     CreatedBy = user,
