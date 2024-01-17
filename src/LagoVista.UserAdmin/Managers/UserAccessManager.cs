@@ -234,7 +234,7 @@ namespace LagoVista.UserAdmin.Managers
             module.Areas.RemoveAll(mod => mod.UserAccess == null || !mod.UserAccess.Any());
             foreach (var area in module.Areas)
             {
-                area.Pages.RemoveAll(area => area.UserAccess == null || !area.UserAccess.Any());
+                area.Pages.RemoveAll(page => page.UserAccess == null || !page.UserAccess.Any());
                 foreach (var page in area.Pages)
                     page.Features.RemoveAll(feature => feature.UserAccess == null || !feature.UserAccess.Any());
             }
