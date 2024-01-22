@@ -137,7 +137,7 @@ namespace LagoVista.UserAdmin.Managers
                 }
             }
 
-            System.Console.WriteLine($"------");
+            System.Console.WriteLine($"Evaluating User Access List, Count: {userAccessList.Count} - Module Areas Count: {originalAreas.Count}");
 
             foreach (var access in userAccessList)
             {
@@ -145,9 +145,17 @@ namespace LagoVista.UserAdmin.Managers
                 {
                     System.Console.WriteLine($"\tRole: {access.Role.Text} - Feature: {access.Feature.Text}.");
 
-                    var area = originalAreas.Single(ara => ara.Id == access.Area.Id);
-                    var page = area.Pages.Single(pge => pge.Id == access.Page.Id);
-                    var feature = page.Features.Single(ftr => ftr.Id == access.Feature.Id);
+                    var area = originalAreas.SingleOrDefault(ara => ara.Id == access.Area.Id);
+                    if (area == null)
+                        throw new ArgumentNullException($"Could not find area: {access.Area.Text}.");
+
+                    var page = area.Pages.SingleOrDefault(pge => pge.Id == access.Page.Id);
+                    if (page == null)
+                        throw new ArgumentNullException($"Could not find page {access.Page.Text}, area: {access.Area.Text}.");
+
+                    var feature = page.Features.SingleOrDefault(ftr => ftr.Id == access.Feature.Id);
+                    if (feature == null)
+                        throw new ArgumentNullException($"Could not find feature {access.Feature.Text} in page {access.Page.Text}, area: {access.Area.Text}.");
 
                     if (feature.UserAccess == null)
                     {
@@ -173,8 +181,14 @@ namespace LagoVista.UserAdmin.Managers
                 {
                     System.Console.WriteLine($"\tRole: {access.Role.Text} - Page: {access.Page.Text}.");
 
-                    var area = originalAreas.Single(ara => ara.Id == access.Area.Id);
-                    var page = area.Pages.Single(pge => pge.Id == access.Page.Id);
+                    var area = originalAreas.SingleOrDefault(ara => ara.Id == access.Area.Id);
+                    if (area == null)
+                        throw new ArgumentNullException($"Could not find area: {access.Area.Text}.");
+
+                    var page = area.Pages.SingleOrDefault(pge => pge.Id == access.Page.Id);
+                    if(page == null)
+                        throw new ArgumentNullException($"Could not find page {access.Page.Text}, area: {access.Area.Text}.");
+
                     if (page.UserAccess == null)
                     {
                         page.UserAccess = access.ToUserAccess();
@@ -197,7 +211,10 @@ namespace LagoVista.UserAdmin.Managers
                 {
                     System.Console.WriteLine($"\tRole: {access.Role.Text} - Area: {access.Area.Text}.");
 
-                    var area = module.Areas.Single(ara => ara.Id == access.Area.Id);
+                    var area = module.Areas.SingleOrDefault(ara => ara.Id == access.Area.Id);
+                    if (area == null)
+                        throw new ArgumentNullException($"Could not find area: {access.Area.Text}.");
+
                     if (area.UserAccess == null)
                     {
                         area.UserAccess = access.ToUserAccess();
