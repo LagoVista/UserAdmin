@@ -145,17 +145,17 @@ namespace LagoVista.UserAdmin.Managers
                 {
                     System.Console.WriteLine($"\tRole: {access.Role.Text} - Feature: {access.Feature.Text}.");
 
-                    var area = originalAreas.SingleOrDefault(ara => ara.Id == access.Area.Id);
+                    var area = originalAreas.SingleOrDefault(ara => ara.Key == access.Area.Key);
                     if (area == null)
-                        throw new ArgumentNullException($"Could not find area: {access.Area.Text}.");
+                        throw new ArgumentNullException($"Could not find area: {access.Area.Text} when granting access to feature.");
 
-                    var page = area.Pages.SingleOrDefault(pge => pge.Id == access.Page.Id);
+                    var page = area.Pages.SingleOrDefault(pge => pge.Key == access.Page.Key);
                     if (page == null)
-                        throw new ArgumentNullException($"Could not find page {access.Page.Text}, area: {access.Area.Text}.");
+                        throw new ArgumentNullException($"Could not find page {access.Page.Text}, area: {access.Area.Text} when granting access to feature.");
 
-                    var feature = page.Features.SingleOrDefault(ftr => ftr.Id == access.Feature.Id);
+                    var feature = page.Features.SingleOrDefault(ftr => ftr.Key == access.Feature.Key);
                     if (feature == null)
-                        throw new ArgumentNullException($"Could not find feature {access.Feature.Text} in page {access.Page.Text}, area: {access.Area.Text}.");
+                        throw new ArgumentNullException($"Could not find feature {access.Feature.Text} in page {access.Page.Text}, area: {access.Area.Text} when granting access to feature.");
 
                     if (feature.UserAccess == null)
                     {
@@ -181,13 +181,13 @@ namespace LagoVista.UserAdmin.Managers
                 {
                     System.Console.WriteLine($"\tRole: {access.Role.Text} - Page: {access.Page.Text}.");
 
-                    var area = originalAreas.SingleOrDefault(ara => ara.Id == access.Area.Id);
+                    var area = originalAreas.SingleOrDefault(ara => ara.Key == access.Area.Key);
                     if (area == null)
-                        throw new ArgumentNullException($"Could not find area: {access.Area.Text}.");
+                        throw new ArgumentNullException($"Could not find area: {access.Area.Text} when granting access to page.");
 
-                    var page = area.Pages.SingleOrDefault(pge => pge.Id == access.Page.Id);
+                    var page = area.Pages.SingleOrDefault(pge => pge.Key == access.Page.Key);
                     if(page == null)
-                        throw new ArgumentNullException($"Could not find page {access.Page.Text}, area: {access.Area.Text}.");
+                        throw new ArgumentNullException($"Could not find page {access.Page.Text}, area: {access.Area.Text} when granting access to page.");
 
                     if (page.UserAccess == null)
                     {
@@ -211,9 +211,9 @@ namespace LagoVista.UserAdmin.Managers
                 {
                     System.Console.WriteLine($"\tRole: {access.Role.Text} - Area: {access.Area.Text}.");
 
-                    var area = module.Areas.SingleOrDefault(ara => ara.Id == access.Area.Id);
+                    var area = module.Areas.SingleOrDefault(ara => ara.Key == access.Area.Key);
                     if (area == null)
-                        throw new ArgumentNullException($"Could not find area: {access.Area.Text}.");
+                        throw new ArgumentNullException($"Could not find area: {access.Area.Text} when granting access to Area.");
 
                     if (area.UserAccess == null)
                     {
