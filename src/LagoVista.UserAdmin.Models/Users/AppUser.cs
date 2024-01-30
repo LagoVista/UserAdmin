@@ -268,6 +268,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 ExternalLogins = ExternalLogins,
                 ShowWelcome = ShowWelcome,
                 Notes = Notes,
+                SsnSecretId = SsnSecretId,
                 Address1 = Address1,
                 Address2 = Address2,
                 City = City,

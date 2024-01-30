@@ -1,9 +1,6 @@
-﻿using LagoVista.Core.Models;
-using LagoVista.UserAdmin.Models.Security;
+﻿using LagoVista.UserAdmin.Models.Security;
 using LagoVista.UserAdmin.Models.Users;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Interfaces
@@ -15,5 +12,6 @@ namespace LagoVista.UserAdmin.Interfaces
         Task<List<Role>> GetRolesForUserAsync(string userId, string orgId);
         Task<List<RoleAccess>> GetRoleAccessForUserAsync(string userId, string orgId);
         Task<List<RoleAccess>> GetModuleRoleAccessForUserAsync(string moduleId, string userId, string orgId);
+        Task AssertFinanceAdminAsync(string userId, string orgId);
     }
 }

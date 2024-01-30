@@ -61,10 +61,7 @@ namespace LagoVista.UserAdmin.Managers
 
             if (!String.IsNullOrEmpty(user.Ssn))
             {
-                if (user.SsnSecretId != null)
-                    await _secureStorage.RemoveSecretAsync(org, user.SsnSecretId);
-
-                var result = await _secureStorage.AddSecretAsync(org, user.Ssn);
+                var result = await _secureStorage.AddUserSecretAsync(user.ToEntityHeader(), user.Ssn);
                 if (!result.Successful)
                     return result.ToInvokeResult();
 
@@ -152,12 +149,17 @@ namespace LagoVista.UserAdmin.Managers
             existingUser.PostalCode = user.PostalCode;
             existingUser.Country = user.Country;
 
-            if(!String.IsNullOrEmpty(existingUser.Ssn))
+            if(!String.IsNullOrEmpty(user.Ssn))
             {
-                if (existingUser.SsnSecretId != null)
-                    await _secureStorage.RemoveSecretAsync(org, existingUser.SsnSecretId);
+                Console.WriteLine("[AppUserManager__UpdateUserAsync] - SSN Is Present, will add to secure storage.");
 
-                var result = await _secureStorage.AddSecretAsync(org, user.Ssn);
+                if (user.Id != updatedByUser.Id)
+                    await AuthorizeFinanceAdminAsync(updatedByUser, org, $"{nameof(UpdateUserAsync)}_Update_SSN_For_Other_User", user.Id);
+
+                if (existingUser.SsnSecretId != null)
+                    await _secureStorage.RemoveUserSecretAsync(existingUser.ToEntityHeader(), existingUser.SsnSecretId);
+
+                var result = await _secureStorage.AddUserSecretAsync(existingUser.ToEntityHeader(), user.Ssn);
                 if (!result.Successful)
                     return result.ToInvokeResult();
 
@@ -180,10 +182,15 @@ namespace LagoVista.UserAdmin.Managers
 
             if (!String.IsNullOrEmpty(user.Ssn))
             {
-                if (user.SsnSecretId != null)
-                    await _secureStorage.RemoveSecretAsync(org, user.SsnSecretId);
+                Console.WriteLine("[AppUserManager__UpdateUserAsync] - SSN Is Present, will add to secure storage.");
 
-                var result = await _secureStorage.AddSecretAsync(org, user.Ssn);
+                if (user.Id != updatedByUser.Id)
+                    await AuthorizeFinanceAdminAsync(updatedByUser, org, $"{nameof(UpdateUserAsync)}_Update_SSN_For_Other_User", user.Id);
+
+                if (user.SsnSecretId != null)
+                    await _secureStorage.RemoveUserSecretAsync(user.ToEntityHeader(), user.SsnSecretId);
+
+                var result = await _secureStorage.AddUserSecretAsync(user.ToEntityHeader(), user.Ssn);
                 if (!result.Successful)
                     return result.ToInvokeResult();
 
@@ -209,6 +216,24 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             if ((user.ProfileImageUrl != null)) appUser.ProfileImageUrl = user.ProfileImageUrl;
+
+            if(!String.IsNullOrEmpty(user.Ssn))
+            {
+                Console.WriteLine("[AppUserManager__UpdateUserAsync] - SSN Is Present, will add to secure storage.");
+
+                if (user.Id != updatedByUser.Id)
+                    await AuthorizeFinanceAdminAsync(updatedByUser, org, $"{nameof(UpdateUserAsync)}_Update_SSN_For_Other_User", user.Id);
+
+                if (appUser.SsnSecretId != null)
+                    await _secureStorage.RemoveUserSecretAsync(user.ToEntityHeader(), appUser.SsnSecretId);
+
+                var result = await _secureStorage.AddUserSecretAsync(user.ToEntityHeader(), user.Ssn);
+                if (!result.Successful)
+                    return result.ToInvokeResult();
+
+                appUser.SsnSecretId = result.Result;
+            }
+
 
             appUser.ShowWelcome = user.ShowWelcome;
             appUser.Notes = user.Notes;
@@ -244,8 +269,6 @@ namespace LagoVista.UserAdmin.Managers
 
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, updatedByUser, org);
 
-
-
             await _appUserRepo.UpdateAsync(appUser);
 
             return InvokeResult.Success;
@@ -255,6 +278,9 @@ namespace LagoVista.UserAdmin.Managers
         {
             var appUser = await _appUserRepo.FindByIdAsync(userId);
             var paymentAccount = new PaymentAccounts();
+
+            if (user.Id != userId)
+                await AuthorizeFinanceAdminAsync(user, org, $"{nameof(UpdateUserAsync)}_GetPaymentAccountsAsync_Other_User", user.Id);
 
             if (!string.IsNullOrEmpty(appUser.PaymentAccount1Secureid))
             {
@@ -289,7 +315,10 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> UpdatePaymentAccountsAsync(string userId, PaymentAccounts accounts, EntityHeader org, EntityHeader user)
         {
-            if(accounts == null)
+            if (user.Id != userId)
+                await AuthorizeFinanceAdminAsync(user, org, $"{nameof(UpdateUserAsync)}_UpdatePaymentAccountsAsync_Other_User", user.Id);
+
+            if (accounts == null)
                 throw new ArgumentNullException(nameof(accounts));
 
             var appUser = await _appUserRepo.FindByIdAsync(userId);
@@ -692,6 +721,21 @@ namespace LagoVista.UserAdmin.Managers
             await _appUserRepo.UpdateAsync(user);
 
             return InvokeResult<AppUser>.Create(user);
+        }
+
+        public async Task<InvokeResult<string>> GetUserSSNAsync(string userId, EntityHeader org, EntityHeader user)
+        {
+            if (user.Id != userId)
+                await AuthorizeFinanceAdminAsync(user, org, $"{nameof(UpdateUserAsync)}_Get_SSN_For_Other_User", user.Id);
+
+            var appUser = await _appUserRepo.FindByIdAsync(userId);
+            if (appUser == null)
+                return InvokeResult<string>.FromError($"Could not find user with id: {user.Id}");
+
+            if (String.IsNullOrEmpty(appUser.SsnSecretId))
+                return InvokeResult<string>.FromError($"{appUser.Name} does not have a SSN stored.");
+          
+            return await _secureStorage.GetUserSecretAsync(appUser.ToEntityHeader(), appUser.SsnSecretId);
         }
     }
 }

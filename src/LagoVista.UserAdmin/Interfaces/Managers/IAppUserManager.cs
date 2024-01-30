@@ -52,6 +52,8 @@ namespace LagoVista.UserAdmin.Managers
 
         Task<InvokeResult<PaymentAccounts>> GetPaymentAccountsAsync(string userId, EntityHeader org, EntityHeader user);
 
+        Task<InvokeResult<string>> GetUserSSNAsync(string userId, EntityHeader org, EntityHeader user);
+
         Task<InvokeResult> UpdatePaymentAccountsAsync(string userId, PaymentAccounts accounts, EntityHeader org, EntityHeader user);
     }
 }
