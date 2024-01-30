@@ -19,6 +19,7 @@ namespace LagoVista.IoT.ProductStore
         public string RemoteResourceId { get; set; }
 
         public decimal UnitCost { get; set; }
+        public decimal UnitPrice { get; set; }
 
         public string UnitType { get; set; }
     }
