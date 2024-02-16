@@ -23,7 +23,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Title, UserAdminResources.Names.Organization_Help,
         UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
         SaveUrl: "/api/org", GetUrl: "/api/org/{id}")]
-    public class Organization : UserAdminModelBase, INamedEntity, IKeyedEntity, IValidateable, IOwnedEntity, IFormDescriptor
+    public class Organization : UserAdminModelBase, INamedEntity, IKeyedEntity, IValidateable, IOwnedEntity, IFormDescriptor, IFormDescriptorCol2, IIconEntity
     {
         public const string Organization_OrgStatuses_Active = "active";
         public const string Organization_OrgStatuses_Deactivated = "deactivated";
@@ -34,6 +34,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
             Locations = new List<EntityHeader>();
             OrgStatus = EntityHeader<OrgStatuses>.Create(OrgStatuses.Active);
             Key = Guid.NewGuid().ToId();
+            
          }
 
         public string Key { get; set; }
@@ -55,6 +56,16 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader InitializationCompletedBy { get; set; }
 
         public EntityHeader<OrgStatuses> OrgStatus { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_TagLine, FieldType: FieldTypes.MediaResourceUpload, "/api/media/resource/public/upload", ResourceType: typeof(UserAdminResources))]
+        public string Logo { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_TagLine, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
+        
+        public string TagLine { get; set; }
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string Icon { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_Owner, FieldType: FieldTypes.UserPicker, IsRequired: true, IsUserEditable: true,
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
@@ -112,6 +123,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
             {
                 nameof(Name),
                 nameof(Namespace),
+                nameof(Icon),
                 nameof(Owner),
                 nameof(AdminContact),
                 nameof(BillingContact),
@@ -120,8 +132,17 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(DefaultProjectAdminLead),
                 nameof(DefaultContributor),
                 nameof(DefaultQAResource),
+            };
+        }
+
+        public List<string> GetFormFieldsCol2()
+        {
+            return new List<string>()
+            {
                 nameof(WebSite),
-                nameof(LandingPage),
+                nameof(LandingPage),              
+                nameof(Logo),
+                nameof(TagLine),
             };
         }
 

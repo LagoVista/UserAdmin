@@ -1418,4 +1418,13 @@
   <data name="AppUser_SSN_Help" xml:space="preserve">
     <value>Your Social Security Number is encrypted on the server.</value>
   </data>
+  <data name="Common_Icon" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+  <data name="Organization_Logo" xml:space="preserve">
+    <value>Logo</value>
+  </data>
+  <data name="Organization_TagLine" xml:space="preserve">
+    <value>Tag Line</value>
+  </data>
 </root>

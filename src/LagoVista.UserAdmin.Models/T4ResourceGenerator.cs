@@ -1,4 +1,4 @@
-﻿/*1/7/2024 9:55:39 AM*/
+﻿/*2/15/2024 12:15:03 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -381,6 +381,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Common_EmailAddress
 
 		public static string Common_EmailAddress { get { return GetResourceString("Common_EmailAddress"); } }
+//Resources:UserAdminResources:Common_Icon
+
+		public static string Common_Icon { get { return GetResourceString("Common_Icon"); } }
 //Resources:UserAdminResources:Common_Id
 
 		public static string Common_Id { get { return GetResourceString("Common_Id"); } }
@@ -995,6 +998,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_Locations
 
 		public static string Organization_Locations { get { return GetResourceString("Organization_Locations"); } }
+//Resources:UserAdminResources:Organization_Logo
+
+		public static string Organization_Logo { get { return GetResourceString("Organization_Logo"); } }
 //Resources:UserAdminResources:Organization_Name
 
 		public static string Organization_Name { get { return GetResourceString("Organization_Name"); } }
@@ -1025,6 +1031,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_Status_Archived
 
 		public static string Organization_Status_Archived { get { return GetResourceString("Organization_Status_Archived"); } }
+//Resources:UserAdminResources:Organization_TagLine
+
+		public static string Organization_TagLine { get { return GetResourceString("Organization_TagLine"); } }
 //Resources:UserAdminResources:Organization_Title
 
 		public static string Organization_Title { get { return GetResourceString("Organization_Title"); } }
@@ -1458,6 +1467,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Common_Description = "Common_Description";
 			public const string Common_DesktopSupport = "Common_DesktopSupport";
 			public const string Common_EmailAddress = "Common_EmailAddress";
+			public const string Common_Icon = "Common_Icon";
 			public const string Common_Id = "Common_Id";
 			public const string Common_IsPublic = "Common_IsPublic";
 			public const string Common_Key = "Common_Key";
@@ -1660,6 +1670,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_Location_Help = "Organization_Location_Help";
 			public const string Organization_Location_Title = "Organization_Location_Title";
 			public const string Organization_Locations = "Organization_Locations";
+			public const string Organization_Logo = "Organization_Logo";
 			public const string Organization_Name = "Organization_Name";
 			public const string Organization_NamespaceInUse = "Organization_NamespaceInUse";
 			public const string Organization_OrgStatuses_Active = "Organization_OrgStatuses_Active";
@@ -1670,6 +1681,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_Status_Active = "Organization_Status_Active";
 			public const string Organization_Status_Active_BehindPayments = "Organization_Status_Active_BehindPayments";
 			public const string Organization_Status_Archived = "Organization_Status_Archived";
+			public const string Organization_TagLine = "Organization_TagLine";
 			public const string Organization_Title = "Organization_Title";
 			public const string Organization_User_Description = "Organization_User_Description";
 			public const string Organization_User_Help = "Organization_User_Help";
