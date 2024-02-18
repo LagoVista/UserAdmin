@@ -57,7 +57,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public EntityHeader<OrgStatuses> OrgStatus { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Organization_TagLine, FieldType: FieldTypes.MediaResourceUpload, "/api/media/resource/public/upload", ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Organization_TagLine, FieldType: FieldTypes.MediaResourceUpload, UploadUrl: "/api/media/resource/public/upload", ResourceType: typeof(UserAdminResources))]
         public string Logo { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_TagLine, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
