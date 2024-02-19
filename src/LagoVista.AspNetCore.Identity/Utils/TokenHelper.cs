@@ -19,6 +19,7 @@ using System.Linq;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.AspNetCore.Identity.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
+using LagoVista.UserAdmin.Models.Auth;
 
 namespace LagoVista.AspNetCore.Identity.Utils
 {
@@ -56,6 +57,7 @@ namespace LagoVista.AspNetCore.Identity.Utils
                 AccessTokenExpiresUTC = accessExpires.ToJSONString(),
                 RefreshToken = refreshTokenResponse.Result.RowKey,
                 RefreshTokenExpiresUTC = refreshTokenResponse.Result.ExpiresUtc,
+                AppUser = appUser,
                 User = appUser.ToEntityHeader(),
             };
 
@@ -72,7 +74,7 @@ namespace LagoVista.AspNetCore.Identity.Utils
             else
             {
                 authResponse.Roles = appUser.CurrentOrganizationRoles;
-                authResponse.Org = appUser.CurrentOrganization;
+                authResponse.Org = appUser.CurrentOrganization.ToEntityHeader();
                 authResponse.AccessToken = GetJWToken(appUser, accessExpires, authRequest.AppInstanceId);
             }
 
@@ -94,11 +96,12 @@ namespace LagoVista.AspNetCore.Identity.Utils
                 AccessTokenExpiresUTC = accessExpires.ToJSONString(),
                 RefreshToken = refreshTokenResponse.Result.RowKey,
                 RefreshTokenExpiresUTC = refreshTokenResponse.Result.ExpiresUtc,
+                AppUser = appUser,
                 User = appUser.ToEntityHeader(),
             };
 
             authResponse.Roles = appUser.CurrentOrganizationRoles;
-            authResponse.Org = appUser.CurrentOrganization;
+            authResponse.Org = appUser.CurrentOrganization.ToEntityHeader();
             authResponse.AccessToken = GetJWToken(appUser, accessExpires, appInstanceId);
 
             return Task.FromResult(InvokeResult<AuthResponse>.Create(authResponse));

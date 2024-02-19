@@ -18,6 +18,7 @@ using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Exceptions;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using System.Linq;
+using LagoVista.UserAdmin.Models.Auth;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -387,7 +388,10 @@ namespace LagoVista.UserAdmin.Managers
             user.EmailConfirmed = true;
             user.PhoneNumberConfirmed = true;
             user.IsAccountDisabled = false;
-            user.CurrentOrganization = org;
+
+            var fullOrg = await _orgManager.GetOrganizationAsync(org.Id, org, approvingUser);
+
+            user.CurrentOrganization = fullOrg.CreateSummary();
 
             await _appUserRepo.UpdateAsync(user);
 
@@ -556,7 +560,7 @@ namespace LagoVista.UserAdmin.Managers
                     var org = await _orgRepo.GetOrganizationAsync(newUser.OrgId);
                     var orgEH = new EntityHeader() { Id = newUser.OrgId, Text = newUser.FirstName + " " + newUser.LastName };
                     await _orgManager.AddUserToOrgAsync(newUser.OrgId, appUser.Id, org.ToEntityHeader(), orgEH);
-                    appUser.CurrentOrganization = orgEH;
+                    appUser.CurrentOrganization = org.CreateSummary();
                     await _userManager.UpdateAsync(appUser);
                 }
 
@@ -603,6 +607,7 @@ namespace LagoVista.UserAdmin.Managers
                         AppInstanceId = "N/A",
                         RefreshTokenExpiresUTC = "N/A",
                         IsLockedOut = false,
+                        AppUser = appUser,
                         User = appUser.ToEntityHeader(),
                         Roles = new List<EntityHeader>()
                     });

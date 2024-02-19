@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Validation;
+using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.Users;
 using System.Threading.Tasks;
 
@@ -6,7 +7,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 {
     public interface ISignInManager
     {
-        Task<InvokeResult> PasswordSignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure);
+        Task<InvokeResult<UserLoginResponse>> PasswordSignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure);
 
         Task SignInAsync(AppUser user, bool isPersistent = false);
 

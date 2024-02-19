@@ -1427,4 +1427,7 @@
   <data name="Organization_TagLine" xml:space="preserve">
     <value>Tag Line</value>
   </data>
+  <data name="Organization_DefaultTheme" xml:space="preserve">
+    <value>Default Theme</value>
+  </data>
 </root>

@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core.Authentication.Models;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
+using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.Users;
 using System;
 using System.Threading.Tasks;

@@ -2,6 +2,7 @@
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
+using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Models.Users;
 using System;

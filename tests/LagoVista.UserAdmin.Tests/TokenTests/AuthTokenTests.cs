@@ -19,6 +19,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LagoVista.UserAdmin.Models.Apps;
 using System.Collections.Generic;
 using LagoVista.UserAdmin.Models.Orgs;
+using LagoVista.UserAdmin.Models.Auth;
 
 namespace LagoVista.UserAdmin.Tests.TokenTests
 {
@@ -65,9 +66,9 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
                 new OrgUser(ORG_ID,Guid.NewGuid().ToId())
             });
 
-            _signInManager.Setup(sim => sim.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(Task.FromResult(InvokeResult.Success));
-            _userManager.Setup(usm => usm.FindByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { Id = Guid.NewGuid().ToId(), CurrentOrganization = EntityHeader.Create(ORG_ID, "dontcare") }));
-            _userManager.Setup(usm => usm.FindByNameAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { CurrentOrganization = EntityHeader.Create(ORG_ID, "dontcare"), Id = Guid.NewGuid().ToId() }));
+            _signInManager.Setup(sim => sim.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(Task.FromResult(InvokeResult<UserLoginResponse>.Create(new UserLoginResponse())));
+            _userManager.Setup(usm => usm.FindByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { Id = Guid.NewGuid().ToId(), CurrentOrganization = new OrganizationSummary() { Id = ORG_ID, Name = "dontcare", Text = "dontcare" } }));
+            _userManager.Setup(usm => usm.FindByNameAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { CurrentOrganization = new OrganizationSummary() { Id = ORG_ID, Name = "dontcare", Text = "dontcare" } }));
             _refreshTokenManager.Setup(rtm => rtm.GenerateRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task<RefreshToken>.FromResult(InvokeResult<RefreshToken>.Create(new RefreshToken("XXXX"))));
             _authRequestValidators.Setup(arv => arv.ValidateAuthRequest(It.IsAny<AuthRequest>())).Returns(InvokeResult.Success);
             _authRequestValidators.Setup(arv => arv.ValidateAccessTokenGrant(It.IsAny<AuthRequest>())).Returns(InvokeResult.Success);

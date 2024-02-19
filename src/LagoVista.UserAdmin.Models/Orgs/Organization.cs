@@ -34,8 +34,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
             Locations = new List<EntityHeader>();
             OrgStatus = EntityHeader<OrgStatuses>.Create(OrgStatuses.Active);
             Key = Guid.NewGuid().ToId();
-            
-         }
+            DefaultTheme = "default";
+        }
 
         public string Key { get; set; }
 
@@ -61,8 +61,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public string Logo { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_TagLine, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
-        
         public string TagLine { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultTheme, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string DefaultTheme { get; set; }
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Icon { get; set; }
@@ -160,5 +162,36 @@ namespace LagoVista.UserAdmin.Models.Orgs
             return Namespace;
         }
 
+        public OrganizationSummary CreateSummary()
+        {
+            return new OrganizationSummary()
+            {
+                Id = Id,
+                Text = Name,
+                Name = Name,
+                Namespace = Namespace,
+                Icon = Icon,
+                TagLine = TagLine,
+                Logo = Logo,
+                DefaultTheme = DefaultTheme,
+            };
+        }
+    }
+
+    public class OrganizationSummary : IOrganizationSummary
+    {
+        public string Id { get; set; }
+        public string Text { get; set; }
+        public string Name { get; set; }
+        public string Namespace { get; set; }
+        public string Logo { get; set; }
+        public string Icon { get; set; }
+        public string TagLine { get; set; }
+        public string DefaultTheme { get; set; }
+    
+        public EntityHeader ToEntityHeader()
+        {
+            return EntityHeader.Create(Id, Text);
+        }
     }
 }

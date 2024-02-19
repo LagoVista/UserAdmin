@@ -4,6 +4,7 @@ using LagoVista.Core.Authentication.Models;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
+using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Resources;
 using Newtonsoft.Json;
 using System;
@@ -66,6 +67,8 @@ namespace LagoVista.UserAdmin.Models.Users
             ExternalLogins = new List<ExternalLogin>();
         }
 
+        public string LastLogin { get; set; }
+
         public bool ShowWelcome { get; set; } = true;
 
         public string Key { get; set; }
@@ -77,7 +80,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public List<ExternalLogin> ExternalLogins { get; set; }
 
         public List<EntityHeader> Organizations { get; set; }
-        public EntityHeader CurrentOrganization { get; set; }
+        public OrganizationSummary CurrentOrganization { get; set; }
         public List<EntityHeader> CurrentOrganizationRoles { get; set; }
 
         public ImageDetails ProfileImageUrl { get; set; }
@@ -247,7 +250,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 IsRuntimeUser = IsRuntimeuser,
                 IsUserDevice = IsUserDevice,
                 IsAccountDisabled = IsAccountDisabled,
-                CurrentOrganization = CurrentOrganization,
+                CurrentOrganization = CurrentOrganization.ToEntityHeader(),
                 Email = Email,
                 Bio = Bio,
                 Title = Title,

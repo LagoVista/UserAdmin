@@ -137,11 +137,11 @@ namespace LagoVista.UserAdmin.Managers
             currentUser.Organizations.Add(organization.ToEntityHeader());
 
             //In this case we are creating a new org for first time through, make sure they have all the correct privelages.
-            if (EntityHeader.IsNullOrEmpty(currentUser.CurrentOrganization))
+            if (currentUser.CurrentOrganization == null)
             {
                 currentUser.IsOrgAdmin = true;
                 currentUser.IsAppBuilder = true;
-                currentUser.CurrentOrganization = organization.ToEntityHeader();
+                currentUser.CurrentOrganization = organization.CreateSummary();
             }
 
             /* Final update of the user */
@@ -187,7 +187,7 @@ namespace LagoVista.UserAdmin.Managers
 
             var newOrg = await _organizationRepo.GetOrganizationAsync(newOrgId);
             var appUser = await _appUserRepo.FindByIdAsync(user.Id);
-            appUser.CurrentOrganization = newOrg.ToEntityHeader();
+            appUser.CurrentOrganization = newOrg.CreateSummary();
             appUser.IsOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(newOrgId, user.Id);
             appUser.IsAppBuilder = await _orgUserRepo.IsAppBuilderAsync(newOrgId, user.Id);
 
@@ -291,9 +291,9 @@ namespace LagoVista.UserAdmin.Managers
                 return result;
             }
 
-            if (acceptedUser.CurrentOrganization == null || acceptedUser.CurrentOrganization.IsEmpty())
+            if (acceptedUser.CurrentOrganization == null)
             {
-                acceptedUser.CurrentOrganization = orgHeader;
+                acceptedUser.CurrentOrganization = (await _organizationRepo.GetOrganizationAsync(invite.OrganizationId)).CreateSummary();
             }
 
             acceptedUser.Organizations.Add(orgHeader);

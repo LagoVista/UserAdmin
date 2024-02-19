@@ -1,4 +1,4 @@
-﻿/*2/15/2024 12:15:03 PM*/
+﻿/*2/19/2024 7:04:56 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -971,6 +971,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_DefaultResource_Watermark
 
 		public static string Organization_DefaultResource_Watermark { get { return GetResourceString("Organization_DefaultResource_Watermark"); } }
+//Resources:UserAdminResources:Organization_DefaultTheme
+
+		public static string Organization_DefaultTheme { get { return GetResourceString("Organization_DefaultTheme"); } }
 //Resources:UserAdminResources:Organization_Description
 
 		public static string Organization_Description { get { return GetResourceString("Organization_Description"); } }
@@ -1661,6 +1664,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_DefaultQAResource = "Organization_DefaultQAResource";
 			public const string Organization_DefaultQAResource_Help = "Organization_DefaultQAResource_Help";
 			public const string Organization_DefaultResource_Watermark = "Organization_DefaultResource_Watermark";
+			public const string Organization_DefaultTheme = "Organization_DefaultTheme";
 			public const string Organization_Description = "Organization_Description";
 			public const string Organization_Help = "Organization_Help";
 			public const string Organization_LandingPage = "Organization_LandingPage";

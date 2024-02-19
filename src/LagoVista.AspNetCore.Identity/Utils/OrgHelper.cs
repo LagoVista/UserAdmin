@@ -51,16 +51,13 @@ namespace LagoVista.AspNetCore.Identity.Utils
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthOrgNotAuthorized.ToErrorMessage());
             }
 
-            var oldOrgId = EntityHeader.IsNullOrEmpty(appUser.CurrentOrganization) ? "none" : appUser.CurrentOrganization.Id;
-            var oldOrgName = EntityHeader.IsNullOrEmpty(appUser.CurrentOrganization) ? "none" : appUser.CurrentOrganization.Text;            
+            var oldOrgId = null == appUser.CurrentOrganization ? "none" : appUser.CurrentOrganization.Id;
+            var oldOrgName = null == appUser.CurrentOrganization ? "none" : appUser.CurrentOrganization.Text;
+
+            var fullOrg = await _orgManager.GetOrganizationAsync(authRequest.OrgId, org, user);
 
             // 2) Change the org on the user object
-            appUser.CurrentOrganization = new EntityHeader()
-            {
-                Id = authRequest.OrgId,
-                Text = switchToOrg.OrganizationName,
-            };
-
+            appUser.CurrentOrganization = fullOrg.CreateSummary();
             appUser.IsOrgAdmin = switchToOrg.IsOrgAdmin;    
 
             // 3) Add the roles to the user for the org.

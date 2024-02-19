@@ -90,7 +90,7 @@ namespace LagoVista.UserAdmin.Managers
                      appUser.Id.ToKVP("appUserId"),
                      appUser.Email.ToKVP("toEmailAddress"));
 
-                var org = appUser.CurrentOrganization == null ? EntityHeader.Create(Guid.Empty.ToId(), "????") : appUser.CurrentOrganization;
+                var org = appUser.CurrentOrganization == null ? EntityHeader.Create(Guid.Empty.ToId(), "????") : appUser.CurrentOrganization.ToEntityHeader();
 
                 await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "SentResetPasswordLink", org, appUser.ToEntityHeader());
             }
@@ -121,7 +121,7 @@ namespace LagoVista.UserAdmin.Managers
                  appUser.Id.ToKVP("appUserId"),
                  appUser.Email.ToKVP("userEmailAddress"));
 
-                var org = appUser.CurrentOrganization == null ? EntityHeader.Create(Guid.Empty.ToId(), "????") : appUser.CurrentOrganization;
+                var org = appUser.CurrentOrganization == null ? EntityHeader.Create(Guid.Empty.ToId(), "????") : appUser.CurrentOrganization.ToEntityHeader();
                 await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "ChangePassword", org, appUser.ToEntityHeader());
             }
             else
@@ -158,7 +158,7 @@ namespace LagoVista.UserAdmin.Managers
                  appUser.Id.ToKVP("appUserId"),
                  appUser.Email.ToKVP("userEmailAddress"));
 
-                var org = appUser.CurrentOrganization == null ? EntityHeader.Create(Guid.Empty.ToId(), "????") : appUser.CurrentOrganization;
+                var org = appUser.CurrentOrganization == null ? EntityHeader.Create(Guid.Empty.ToId(), "????") : appUser.CurrentOrganization.ToEntityHeader();
                 await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "RestPassword", org, appUser.ToEntityHeader());
             }
             else
