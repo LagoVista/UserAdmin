@@ -84,7 +84,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
     }
 
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.ScheduledDowntime_Title, UserAdminResources.Names.ScheduledDowntime_Help, 
-                            UserAdminResources.Names.ScheduledDowntime_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
+                            UserAdminResources.Names.ScheduledDowntime_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
+                           FactoryUrl:"" )]
     public class ScheduledDowntime : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity, ICloneable
     {
         public const string DownTimeType_Holiday = "holiday";
@@ -166,7 +167,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.ScheduledDowntime_AllDay, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
         public bool AllDay { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.ScheduledDowntime_Periods, FieldType: FieldTypes.ChildList, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
+        [FormField(LabelResource: UserAdminResources.Names.ScheduledDowntime_Periods, FieldType: FieldTypes.ChildListInline, FactoryUrl: "/api/scheduleddowntime/period/factory", ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
         public List<ScheduledDowntimePeriod> Periods { get; set; }
 
         [CustomValidator]

@@ -93,7 +93,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public Task<ListResponse<HolidaySetSummary>> GetAllHolidaySets(EntityHeader org, EntityHeader user, ListRequest listRequest)
         {
-            return _repo.GetAllHolidaySetsAsync(listRequest);
+            return _repo.GetAllHolidaySetsAsync(org.Id, listRequest);
         }
 
         public async Task<HolidaySet> GetHolidaySetAsync(string holidaySetId, EntityHeader org, EntityHeader user)

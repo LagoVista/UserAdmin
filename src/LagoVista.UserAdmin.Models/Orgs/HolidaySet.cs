@@ -10,12 +10,14 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Orgs
 {
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.HolidaySet_Title, UserAdminResources.Names.HolidaySet_Help,
-                          UserAdminResources.Names.HolidaySet_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class HolidaySet : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity
+                          UserAdminResources.Names.HolidaySet_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources), Icon: "icon-ae-calendar",
+                          GetListUrl: "/api/holidaysets", GetUrl: "/api/holidayset/{id}", SaveUrl: "/api/holidayset", FactoryUrl: "/api/holidayset/factory", DeleteUrl: "/api/holidayset/{id}")]
+    public class HolidaySet : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity, IFormDescriptor, IFormDescriptorCol2, IIconEntity, ISummaryFactory
     {
         public HolidaySet()
         {
             Holidays = new List<ScheduledDowntime>();
+            Icon = "icon-ae-calendar";
         }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Name, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
@@ -32,7 +34,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public string CultureOrCountry { get; set; }
 
 
-        [FormField(LabelResource: UserAdminResources.Names.HolidaySet_Holidays, FieldType: FieldTypes.ChildList, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string Icon { get; set; }
+
+
+        [FormField(LabelResource: UserAdminResources.Names.HolidaySet_Holidays, FieldType: FieldTypes.ChildListInline, FactoryUrl: "/api/scheduleddowntime/factory", ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
         public List<ScheduledDowntime> Holidays { get; set; }
 
         public bool IsPublic { get; set; }
@@ -51,8 +57,33 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 CultureOrCountry = CultureOrCountry
             };
         }
+
+        public List<string> GetFormFields()
+        {
+            return new List<string>()
+            {
+                nameof(Name),
+                nameof(Key),
+                nameof(Icon),
+                nameof(CultureOrCountry),
+                nameof(Description)
+            };
+        }
+
+        public List<string> GetFormFieldsCol2()
+        {
+            return new List<string>() { nameof(Holidays) };
+        }
+
+        ISummaryData ISummaryFactory.CreateSummary()
+        {
+            return CreateSummary();
+        }
     }
 
+    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.HolidaySets_Title, UserAdminResources.Names.HolidaySet_Help,
+                          UserAdminResources.Names.HolidaySet_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(UserAdminResources), Icon: "icon-ae-calendar",
+                          GetListUrl: "/api/holidaysets", GetUrl: "/api/holidayset/{id}", SaveUrl: "/api/holidayset", FactoryUrl: "/api/holidayset/factory", DeleteUrl: "/api/holidayset/{id}")]
     public class HolidaySetSummary : SummaryData
     {
         public string CultureOrCountry {get; set;}

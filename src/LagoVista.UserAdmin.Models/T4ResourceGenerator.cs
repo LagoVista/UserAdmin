@@ -1,4 +1,4 @@
-﻿/*2/19/2024 7:04:56 AM*/
+﻿/*2/23/2024 3:57:51 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -480,6 +480,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:DistroList_Name
 
 		public static string DistroList_Name { get { return GetResourceString("DistroList_Name"); } }
+//Resources:UserAdminResources:DistroLists_Name
+
+		public static string DistroLists_Name { get { return GetResourceString("DistroLists_Name"); } }
 //Resources:UserAdminResources:DownTimeType_Admin
 
 		public static string DownTimeType_Admin { get { return GetResourceString("DownTimeType_Admin"); } }
@@ -630,6 +633,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:HolidaySet_Title
 
 		public static string HolidaySet_Title { get { return GetResourceString("HolidaySet_Title"); } }
+//Resources:UserAdminResources:HolidaySets_Title
+
+		public static string HolidaySets_Title { get { return GetResourceString("HolidaySets_Title"); } }
 //Resources:UserAdminResources:ImageDetails_Description
 
 		public static string ImageDetails_Description { get { return GetResourceString("ImageDetails_Description"); } }
@@ -1253,6 +1259,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:SMS_Verification_Body
 
 		public static string SMS_Verification_Body { get { return GetResourceString("SMS_Verification_Body"); } }
+//Resources:UserAdminResources:String1
+
+		public static string String1 { get { return GetResourceString("String1"); } }
 //Resources:UserAdminResources:Subscription_Description
 
 		public static string Subscription_Description { get { return GetResourceString("Subscription_Description"); } }
@@ -1503,6 +1512,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string DistroList_Description = "DistroList_Description";
 			public const string DistroList_Help = "DistroList_Help";
 			public const string DistroList_Name = "DistroList_Name";
+			public const string DistroLists_Name = "DistroLists_Name";
 			public const string DownTimeType_Admin = "DownTimeType_Admin";
 			public const string DownTimeType_Holiday = "DownTimeType_Holiday";
 			public const string DownTimeType_Other = "DownTimeType_Other";
@@ -1553,6 +1563,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string HolidaySet_Help = "HolidaySet_Help";
 			public const string HolidaySet_Holidays = "HolidaySet_Holidays";
 			public const string HolidaySet_Title = "HolidaySet_Title";
+			public const string HolidaySets_Title = "HolidaySets_Title";
 			public const string ImageDetails_Description = "ImageDetails_Description";
 			public const string ImageDetails_Help = "ImageDetails_Help";
 			public const string ImageDetails_Title = "ImageDetails_Title";
@@ -1758,6 +1769,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string SetPasswordVM_Title = "SetPasswordVM_Title";
 			public const string SMS_CouldNotVerify = "SMS_CouldNotVerify";
 			public const string SMS_Verification_Body = "SMS_Verification_Body";
+			public const string String1 = "String1";
 			public const string Subscription_Description = "Subscription_Description";
 			public const string Subscription_Help = "Subscription_Help";
 			public const string Subscription_PaymentMethod = "Subscription_PaymentMethod";

@@ -33,21 +33,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
             return DeleteDocumentAsync(id);
         }
 
-        public async Task<ListResponse<HolidaySetSummary>> GetAllHolidaySetsAsync(ListRequest listRequest)
+        public async Task<ListResponse<HolidaySetSummary>> GetAllHolidaySetsAsync(string orgId, ListRequest listRequest)
         {
-            var lists = await QueryAsync(rec => rec.IsPublic, listRequest);
-
-            return new ListResponse<HolidaySetSummary>()
-            {
-                Model = lists.Model.Select(dls => dls.CreateSummary()),
-                NextPartitionKey = lists.NextPartitionKey,
-                NextRowKey = lists.NextRowKey,
-                PageCount = lists.PageCount,
-                PageIndex = lists.PageIndex,
-                HasMoreRecords = lists.HasMoreRecords,
-                PageSize = lists.PageSize,
-                ResultId = lists.ResultId
-            };
+            return await QuerySummaryAsync<HolidaySetSummary, HolidaySet>(qry => qry.IsPublic || qry.OwnerOrganization.Id == orgId, qry => qry.Name, listRequest);
         }
 
         public Task<HolidaySet> GetHolidaySetAsync(string id)

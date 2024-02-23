@@ -903,10 +903,10 @@
     <value>When you create your organization it can be populated with a few objects that will help getting started a little easier.</value>
   </data>
   <data name="DistroList_Description" xml:space="preserve">
-    <value>A distribution list is a list of people that will be notifified when a certain event happen.</value>
+    <value>A distribution list refers to a compilation of users or email addresses within an organization. This list is designed to facilitate notifications when specific triggers occur, such as a device going offline or surpassing a predefined threshold. Essentially, it allows for efficient communication with a targeted group, ensuring that relevant parties are promptly informed of critical events or issues for swift response and resolution.</value>
   </data>
   <data name="DistroList_Help" xml:space="preserve">
-    <value>A distribution list is a list of people that will be notifified when a certain event happen.</value>
+    <value>A distribution list refers to a compilation of users or email addresses within an organization. This list is designed to facilitate notifications when specific triggers occur, such as a device going offline or surpassing a predefined threshold. Essentially, it allows for efficient communication with a targeted group, ensuring that relevant parties are promptly informed of critical events or issues for swift response and resolution.</value>
   </data>
   <data name="DistroList_Name" xml:space="preserve">
     <value>Distribution List</value>
@@ -1429,5 +1429,14 @@
   </data>
   <data name="Organization_DefaultTheme" xml:space="preserve">
     <value>Default Theme</value>
+  </data>
+  <data name="HolidaySets_Title" xml:space="preserve">
+    <value>Holiday Sets</value>
+  </data>
+  <data name="DistroLists_Name" xml:space="preserve">
+    <value>Distribution Lists</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value>Distribution LIsts</value>
   </data>
 </root>

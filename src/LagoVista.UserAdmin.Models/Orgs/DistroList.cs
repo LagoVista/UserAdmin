@@ -9,12 +9,13 @@ namespace LagoVista.UserAdmin.Models.Orgs
 {
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.DistroList_Name, 
         UserAdminResources.Names.DistroList_Help, UserAdminResources.Names.DistroList_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources),
-        GetListUrl: "/api/distros", SaveUrl:"/api/distro", GetUrl:"/api/distro/{id}", FactoryUrl:"/api/distro/factory", DeleteUrl:"/api/distro/{id}")]
+        Icon: "icon-pz-rating-star", GetListUrl: "/api/distros", SaveUrl:"/api/distro", GetUrl:"/api/distro/{id}", FactoryUrl:"/api/distro/factory", DeleteUrl:"/api/distro/{id}")]
     public class DistroList : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity, IFormDescriptor, IIconEntity, ICategorized
     {
         public DistroList()
         {
             AppUsers = new List<EntityHeader>();
+            Icon = "icon-pz-rating-star";
         }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Name, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
@@ -68,16 +69,16 @@ namespace LagoVista.UserAdmin.Models.Orgs
             {
                nameof(Name),
                nameof(Key),
-               nameof(Description),
+               nameof(Icon),
                nameof(Category),
-               nameof(AppUsers),
+               nameof(Description),
             };
         }
     }
 
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.DistroList_Name,
+    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.DistroLists_Name,
          UserAdminResources.Names.DistroList_Help, UserAdminResources.Names.DistroList_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(UserAdminResources),
-         GetListUrl: "/api/distros", SaveUrl: "/api/distro", GetUrl: "/api/distro/{id}", FactoryUrl: "/api/distro/factory", DeleteUrl: "/api/distro/{id}")]
+         Icon: "icon-pz-rating-star", GetListUrl: "/api/distros", SaveUrl: "/api/distro", GetUrl: "/api/distro/{id}", FactoryUrl: "/api/distro/factory", DeleteUrl: "/api/distro/{id}")]
     public class DistroListSummary : CategorizedSummaryData
     {
 

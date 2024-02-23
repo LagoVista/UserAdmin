@@ -13,7 +13,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
 
         Task<HolidaySet> GetHolidaySetAsync(String id);
 
-        Task<ListResponse<HolidaySetSummary>> GetAllHolidaySetsAsync(ListRequest listRequest);
+        Task<ListResponse<HolidaySetSummary>> GetAllHolidaySetsAsync(string orgId, ListRequest listRequest);
 
         Task<bool> QueryKeyInUseAsync(string key, string orgId);
     }
