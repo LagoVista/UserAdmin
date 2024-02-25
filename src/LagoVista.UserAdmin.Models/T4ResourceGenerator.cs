@@ -1,4 +1,4 @@
-﻿/*2/23/2024 3:57:51 PM*/
+﻿/*2/25/2024 9:22:21 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -498,6 +498,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:DownTimeType_Select
 
 		public static string DownTimeType_Select { get { return GetResourceString("DownTimeType_Select"); } }
+//Resources:UserAdminResources:DownTimeType_WorkWeek
+
+		public static string DownTimeType_WorkWeek { get { return GetResourceString("DownTimeType_WorkWeek"); } }
 //Resources:UserAdminResources:Email_ResetPassword_Body
 
 		public static string Email_ResetPassword_Body { get { return GetResourceString("Email_ResetPassword_Body"); } }
@@ -1169,6 +1172,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:ScheduledDowntime_DayOfWeek
 
 		public static string ScheduledDowntime_DayOfWeek { get { return GetResourceString("ScheduledDowntime_DayOfWeek"); } }
+//Resources:UserAdminResources:ScheduledDowntime_DayOfWeek_Select
+
+		public static string ScheduledDowntime_DayOfWeek_Select { get { return GetResourceString("ScheduledDowntime_DayOfWeek_Select"); } }
 //Resources:UserAdminResources:ScheduledDowntime_Description
 
 		public static string ScheduledDowntime_Description { get { return GetResourceString("ScheduledDowntime_Description"); } }
@@ -1220,18 +1226,42 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:ScheduledDowntimePeriod_End_Help
 
 		public static string ScheduledDowntimePeriod_End_Help { get { return GetResourceString("ScheduledDowntimePeriod_End_Help"); } }
+//Resources:UserAdminResources:ScheduledDowntimePeriod_EndOfDay
+
+		public static string ScheduledDowntimePeriod_EndOfDay { get { return GetResourceString("ScheduledDowntimePeriod_EndOfDay"); } }
+//Resources:UserAdminResources:ScheduledDowntimePeriod_EndOfDay_Help
+
+		public static string ScheduledDowntimePeriod_EndOfDay_Help { get { return GetResourceString("ScheduledDowntimePeriod_EndOfDay_Help"); } }
 //Resources:UserAdminResources:ScheduledDowntimePeriod_Help
 
 		public static string ScheduledDowntimePeriod_Help { get { return GetResourceString("ScheduledDowntimePeriod_Help"); } }
+//Resources:UserAdminResources:ScheduledDowntimePeriod_InvalidTimeFormat
+
+		public static string ScheduledDowntimePeriod_InvalidTimeFormat { get { return GetResourceString("ScheduledDowntimePeriod_InvalidTimeFormat"); } }
 //Resources:UserAdminResources:ScheduledDowntimePeriod_Start
 
 		public static string ScheduledDowntimePeriod_Start { get { return GetResourceString("ScheduledDowntimePeriod_Start"); } }
 //Resources:UserAdminResources:ScheduledDowntimePeriod_Start_Help
 
 		public static string ScheduledDowntimePeriod_Start_Help { get { return GetResourceString("ScheduledDowntimePeriod_Start_Help"); } }
+//Resources:UserAdminResources:ScheduledDowntimePeriod_StartOfDay
+
+		public static string ScheduledDowntimePeriod_StartOfDay { get { return GetResourceString("ScheduledDowntimePeriod_StartOfDay"); } }
+//Resources:UserAdminResources:ScheduledDowntimePeriod_StartOfDay_Help
+
+		public static string ScheduledDowntimePeriod_StartOfDay_Help { get { return GetResourceString("ScheduledDowntimePeriod_StartOfDay_Help"); } }
 //Resources:UserAdminResources:ScheduledDowntimePeriod_TItle
 
 		public static string ScheduledDowntimePeriod_TItle { get { return GetResourceString("ScheduledDowntimePeriod_TItle"); } }
+//Resources:UserAdminResources:ScheduledDowntimes_Title
+
+		public static string ScheduledDowntimes_Title { get { return GetResourceString("ScheduledDowntimes_Title"); } }
+//Resources:UserAdminResources:ScheduleType_WeekDay
+
+		public static string ScheduleType_WeekDay { get { return GetResourceString("ScheduleType_WeekDay"); } }
+//Resources:UserAdminResources:ScheduleType_WeekEnd
+
+		public static string ScheduleType_WeekEnd { get { return GetResourceString("ScheduleType_WeekEnd"); } }
 //Resources:UserAdminResources:ScheudledDowntime_Week
 
 		public static string ScheudledDowntime_Week { get { return GetResourceString("ScheudledDowntime_Week"); } }
@@ -1262,6 +1292,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:String1
 
 		public static string String1 { get { return GetResourceString("String1"); } }
+//Resources:UserAdminResources:String2
+
+		public static string String2 { get { return GetResourceString("String2"); } }
+//Resources:UserAdminResources:String3
+
+		public static string String3 { get { return GetResourceString("String3"); } }
 //Resources:UserAdminResources:Subscription_Description
 
 		public static string Subscription_Description { get { return GetResourceString("Subscription_Description"); } }
@@ -1518,6 +1554,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string DownTimeType_Other = "DownTimeType_Other";
 			public const string DownTimeType_ScheduledMaintenance = "DownTimeType_ScheduledMaintenance";
 			public const string DownTimeType_Select = "DownTimeType_Select";
+			public const string DownTimeType_WorkWeek = "DownTimeType_WorkWeek";
 			public const string Email_ResetPassword_Body = "Email_ResetPassword_Body";
 			public const string Email_ResetPassword_Subject = "Email_ResetPassword_Subject";
 			public const string Email_RestPassword_ErrorSending = "Email_RestPassword_ErrorSending";
@@ -1739,6 +1776,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string ScheduledDowntime_AllDay = "ScheduledDowntime_AllDay";
 			public const string ScheduledDowntime_Day = "ScheduledDowntime_Day";
 			public const string ScheduledDowntime_DayOfWeek = "ScheduledDowntime_DayOfWeek";
+			public const string ScheduledDowntime_DayOfWeek_Select = "ScheduledDowntime_DayOfWeek_Select";
 			public const string ScheduledDowntime_Description = "ScheduledDowntime_Description";
 			public const string ScheduledDowntime_DowntimeType = "ScheduledDowntime_DowntimeType";
 			public const string ScheduledDowntime_Help = "ScheduledDowntime_Help";
@@ -1756,10 +1794,18 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string ScheduledDowntimePeriod_Description = "ScheduledDowntimePeriod_Description";
 			public const string ScheduledDowntimePeriod_End = "ScheduledDowntimePeriod_End";
 			public const string ScheduledDowntimePeriod_End_Help = "ScheduledDowntimePeriod_End_Help";
+			public const string ScheduledDowntimePeriod_EndOfDay = "ScheduledDowntimePeriod_EndOfDay";
+			public const string ScheduledDowntimePeriod_EndOfDay_Help = "ScheduledDowntimePeriod_EndOfDay_Help";
 			public const string ScheduledDowntimePeriod_Help = "ScheduledDowntimePeriod_Help";
+			public const string ScheduledDowntimePeriod_InvalidTimeFormat = "ScheduledDowntimePeriod_InvalidTimeFormat";
 			public const string ScheduledDowntimePeriod_Start = "ScheduledDowntimePeriod_Start";
 			public const string ScheduledDowntimePeriod_Start_Help = "ScheduledDowntimePeriod_Start_Help";
+			public const string ScheduledDowntimePeriod_StartOfDay = "ScheduledDowntimePeriod_StartOfDay";
+			public const string ScheduledDowntimePeriod_StartOfDay_Help = "ScheduledDowntimePeriod_StartOfDay_Help";
 			public const string ScheduledDowntimePeriod_TItle = "ScheduledDowntimePeriod_TItle";
+			public const string ScheduledDowntimes_Title = "ScheduledDowntimes_Title";
+			public const string ScheduleType_WeekDay = "ScheduleType_WeekDay";
+			public const string ScheduleType_WeekEnd = "ScheduleType_WeekEnd";
 			public const string ScheudledDowntime_Week = "ScheudledDowntime_Week";
 			public const string SendCodeVM_Description = "SendCodeVM_Description";
 			public const string SendCodeVM_Help = "SendCodeVM_Help";
@@ -1770,6 +1816,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string SMS_CouldNotVerify = "SMS_CouldNotVerify";
 			public const string SMS_Verification_Body = "SMS_Verification_Body";
 			public const string String1 = "String1";
+			public const string String2 = "String2";
+			public const string String3 = "String3";
 			public const string Subscription_Description = "Subscription_Description";
 			public const string Subscription_Help = "Subscription_Help";
 			public const string Subscription_PaymentMethod = "Subscription_PaymentMethod";
