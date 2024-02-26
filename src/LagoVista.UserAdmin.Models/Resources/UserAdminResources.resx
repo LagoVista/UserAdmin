@@ -972,13 +972,13 @@
     <value>Day of Week</value>
   </data>
   <data name="ScheduledDowntime_Description" xml:space="preserve">
-    <value>Scheduled Downtime can be added for any days where operations may be halted.</value>
+    <value>Scheduled downtime refers to a planned period during which a system, service, or equipment is intentionally taken offline or unavailable for maintenance, upgrades, or other planned activities.  Adding scheduled downtime is useful so that users will not be notified if it is deteced that the devices are offline or do not send any messages.</value>
   </data>
   <data name="ScheduledDowntime_DowntimeType" xml:space="preserve">
     <value>Downtime Type</value>
   </data>
   <data name="ScheduledDowntime_Help" xml:space="preserve">
-    <value>Scheduled Downtime can be added for any days where operations may be halted.</value>
+    <value>Scheduled downtime refers to a planned period during which a system, service, or equipment is intentionally taken offline or unavailable for maintenance, upgrades, or other planned activities.  Adding scheduled downtime is useful so that users will not be notified if it is deteced that the devices are offline or do not send any messages.</value>
   </data>
   <data name="ScheduledDowntime_Month" xml:space="preserve">
     <value>Month</value>
@@ -1438,5 +1438,41 @@
   </data>
   <data name="String1" xml:space="preserve">
     <value>Distribution LIsts</value>
+  </data>
+  <data name="ScheduledDowntimes_Title" xml:space="preserve">
+    <value>Scheduled Downtimes</value>
+  </data>
+  <data name="String2" xml:space="preserve">
+    <value>Subscriptions</value>
+  </data>
+  <data name="String3" xml:space="preserve">
+    <value>-select day of week-</value>
+  </data>
+  <data name="ScheduledDowntime_DayOfWeek_Select" xml:space="preserve">
+    <value>-select day of week-</value>
+  </data>
+  <data name="DownTimeType_WorkWeek" xml:space="preserve">
+    <value>Work Week</value>
+  </data>
+  <data name="ScheduledDowntimePeriod_EndOfDay" xml:space="preserve">
+    <value>End of Day</value>
+  </data>
+  <data name="ScheduledDowntimePeriod_StartOfDay" xml:space="preserve">
+    <value>Start of Day</value>
+  </data>
+  <data name="ScheduledDowntimePeriod_EndOfDay_Help" xml:space="preserve">
+    <value>Select this option if thie scheduled down time should end at the end of the day (11:59 PM)</value>
+  </data>
+  <data name="ScheduledDowntimePeriod_InvalidTimeFormat" xml:space="preserve">
+    <value>Invalid Time Period, please specifiy a time with HHMM such as 1030 for 10:30 AM and 1530 for 3:30 PM</value>
+  </data>
+  <data name="ScheduledDowntimePeriod_StartOfDay_Help" xml:space="preserve">
+    <value>Select this option if thie scheduled down time should start at the start of the day (12:00 AM)</value>
+  </data>
+  <data name="ScheduleType_WeekDay" xml:space="preserve">
+    <value>Week Day</value>
+  </data>
+  <data name="ScheduleType_WeekEnd" xml:space="preserve">
+    <value>Week End</value>
   </data>
 </root>

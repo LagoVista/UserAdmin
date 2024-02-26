@@ -21,7 +21,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
 
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Title, UserAdminResources.Names.Organization_Help,
-        UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
+        UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+        EditUIUrl: "/organization/orgaccount", Icon: "icon-ae-building",
         SaveUrl: "/api/org", GetUrl: "/api/org/{id}")]
     public class Organization : UserAdminModelBase, INamedEntity, IKeyedEntity, IValidateable, IOwnedEntity, IFormDescriptor, IFormDescriptorCol2, IIconEntity
     {
@@ -35,6 +36,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
             OrgStatus = EntityHeader<OrgStatuses>.Create(OrgStatuses.Active);
             Key = Guid.NewGuid().ToId();
             DefaultTheme = "default";
+            Icon = "icon-ae-building";
         }
 
         public string Key { get; set; }
@@ -57,7 +59,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public EntityHeader<OrgStatuses> OrgStatus { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Organization_TagLine, FieldType: FieldTypes.MediaResourceUpload, UploadUrl: "/api/media/resource/public/upload", ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Organization_Logo, FieldType: FieldTypes.MediaResourceUpload, UploadUrl: "/api/media/resource/public/upload", ResourceType: typeof(UserAdminResources))]
         public string Logo { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_TagLine, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
@@ -141,6 +143,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         {
             return new List<string>()
             {
+                nameof(DefaultTheme),
                 nameof(WebSite),
                 nameof(LandingPage),              
                 nameof(Logo),

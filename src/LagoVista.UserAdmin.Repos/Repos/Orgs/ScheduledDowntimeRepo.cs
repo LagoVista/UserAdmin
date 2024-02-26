@@ -38,21 +38,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
             return GetDocumentAsync(id);
         }
 
-        public async Task<ListResponse<ScheduledDowntimeSummary>> GetScheduledDowntimesAsync(string orgId, ListRequest listRequest)
+        public Task<ListResponse<ScheduledDowntimeSummary>> GetScheduledDowntimesAsync(string orgId, ListRequest listRequest)
         {
-            var lists = await QueryAsync(rec => rec.OwnerOrganization.Id == orgId, listRequest);
-
-            return new ListResponse<ScheduledDowntimeSummary>()
-            {
-                Model = lists.Model.Select(dls => dls.CreateSummary()),
-                NextPartitionKey = lists.NextPartitionKey,
-                NextRowKey = lists.NextRowKey,
-                PageCount = lists.PageCount,
-                PageIndex = lists.PageIndex,
-                HasMoreRecords = lists.HasMoreRecords,
-                PageSize = lists.PageSize,
-                ResultId = lists.ResultId
-            };
+            return  QuerySummaryAsync<ScheduledDowntimeSummary, ScheduledDowntime>(rec => rec.OwnerOrganization.Id == orgId, rec=>rec.Name, listRequest);
         }
 
         public async Task<bool> QueryKeyInUseAsync(string key, string orgId)
