@@ -214,6 +214,8 @@ namespace LagoVista.UserAdmin.Models.Users
             return EntityHeader.Create(Id, $"{FirstName} ${LastName}");
         }
 
+        public int ViewedSystemNotificationIndex { get; set; }
+
         public bool IsPreviewUser { get; set; }
 
         public int AccessFailedCount { get; set; }

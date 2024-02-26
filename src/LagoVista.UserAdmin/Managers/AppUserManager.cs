@@ -742,5 +742,13 @@ namespace LagoVista.UserAdmin.Managers
           
             return await _secureStorage.GetUserSecretAsync(appUser.ToEntityHeader(), appUser.SsnSecretId);
         }
+
+        public async Task<InvokeResult> MarkUserViewedSystemSerialIndex(int idx, EntityHeader org, EntityHeader user)
+        {
+            var appUser = await _userManager.FindByIdAsync(user.Id);
+            appUser.ViewedSystemNotificationIndex = idx;
+            await _userManager.UpdateAsync(appUser);
+            return InvokeResult.Success;
+        }
     }
 }

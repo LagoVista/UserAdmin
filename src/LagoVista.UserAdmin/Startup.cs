@@ -2,7 +2,7 @@
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Managers;
-
+using LagoVista.UserAdmin.Models.Apps;
 
 namespace LagoVista.UserAdmin
 {
@@ -31,7 +31,9 @@ namespace LagoVista.UserAdmin
             services.AddTransient<ISingleUseTokenManager, SingleUseTokenManager>();
             services.AddTransient<ICalendarManager, CalendarManager>();
             services.AddTransient<IMostRecentlyUsedManager, MostRecentlyUsedManager>();
-            services.AddTransient<IUserFavoritesManager, UserFavoritesManager>();
+            services.AddTransient<IUserFavoritesManager, UserFavoritesManager>();            
+            services.AddTransient<ISystemNotificationManager, SystemNotificationManager>();
+            services.AddTransient<IAppUserInboxManager, AppUserInboxManager>();
         }
     }
 }

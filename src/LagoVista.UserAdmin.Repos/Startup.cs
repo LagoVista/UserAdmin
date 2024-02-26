@@ -53,6 +53,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<ICalendarRepo, CalendarRepo>();
             services.AddTransient<IMostRecentlyUsedRepo, MostRecentUsedRepo>();
             services.AddTransient<IUserFavoritesRepo, UserFavoritesRepo>();
+            services.AddTransient<IAppUserInboxRepo, AppUserIndboxRepo>();
             ErrorCodes.Register(typeof(UserAdminErrorCodes));
         }
     }
