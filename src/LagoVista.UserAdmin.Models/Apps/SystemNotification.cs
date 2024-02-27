@@ -37,10 +37,11 @@ namespace LagoVista.UserAdmin.Models.Apps
                 Summary = Summary,
                 Index = Index,
                 Viewed = true,
-                ParitionKey = PartitionKey,
+                PartitionKey = PartitionKey,
                 RowKey = RowKey,
                 Title = Title,
-                Type = "user",
+                Type = "system",
+                Scope = "system"
             };
         }
     }

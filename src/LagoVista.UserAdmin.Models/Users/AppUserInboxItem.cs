@@ -16,6 +16,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public String UserId { get; set; }
         public string OrgId { get; set; }
 
+        public string Type { get; set; }
         
         public string Icon { get; set; }
         public string Title { get; set; }
@@ -40,12 +41,13 @@ namespace LagoVista.UserAdmin.Models.Users
             {
                 Icon = Icon,
                 Link = Link,
+                Type = Type,
                 Summary = Summary,
-                ParitionKey = PartitionKey,
+                PartitionKey = PartitionKey,
                 RowKey = RowKey,
                 Title = Title,
                 Viewed = Viewed,
-                Type = "user",
+                Scope = "user",
             };
         }
     }
@@ -56,6 +58,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public EntityHeader ForUser { get; set; }
         public EntityHeader CreatedByUser { get; set; }
 
+        public string Type { get; set; }
         public string Title { get; set; }
         public string Icon { get; set; }
         public string Summary { get; set; }
@@ -72,6 +75,8 @@ namespace LagoVista.UserAdmin.Models.Users
 
                 UserId = ForUser.Id,
                 OrgId = Organiation.Id,
+
+                Type = Type,
 
                 Icon = Icon,
                 Title = Title,

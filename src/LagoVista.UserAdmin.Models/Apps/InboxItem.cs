@@ -7,8 +7,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
     public class InboxItem
     {
         public string RowKey { get; set; }
-        public string ParitionKey { get; set; }
+        public string PartitionKey { get; set; }
         public string Type { get; set; }
+        public string Scope { get; set; }
         public int? Index { get; set; }
         public bool Viewed { get; set; }
 

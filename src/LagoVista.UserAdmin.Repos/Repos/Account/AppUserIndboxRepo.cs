@@ -28,7 +28,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
         {
             var filteredItems = new List<FilterOptions>();
             if (unreadOnly)
-                filteredItems.Add(FilterOptions.Create(nameof(AppUserInboxItem.Viewed), FilterOptions.Operators.Equals, true) );
+                filteredItems.Add(FilterOptions.Create(nameof(AppUserInboxItem.Viewed), FilterOptions.Operators.Equals, "true") );
 
             return GetPagedResultsAsync(AppUserInboxItem.ConstructPartitionKey(orgId, userId), listRequest, filteredItems.ToArray());
         }
