@@ -13,6 +13,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
         public int? Index { get; set; }
         public bool Viewed { get; set; }
 
+        public string CreatedBy { get; set; }
+        public string CreationDate { get; set; }
+
         public string Title { get; set; }
         public string Icon { get; set; }
         public string Summary { get; set; }

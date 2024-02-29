@@ -14,5 +14,6 @@ namespace LagoVista.UserAdmin.Interfaces
         Task<InvokeResult<int>> GetAllInboxItemCountAsync(EntityHeader org, EntityHeader user);
         Task<ListResponse<InboxItem>> GetAllInboxItemsAsync(EntityHeader org, EntityHeader user, ListRequest listRequest);
         Task<ListResponse<AppUserInboxItem>> GetUnreadInboxItemsAsync(EntityHeader org, EntityHeader user, ListRequest listRequest);
+        Task<InvokeResult> DeleteItemAsync(string partitionKey, string rowKey, EntityHeader org, EntityHeader user);
     }
 }

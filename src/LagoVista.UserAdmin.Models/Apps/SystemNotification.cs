@@ -41,7 +41,9 @@ namespace LagoVista.UserAdmin.Models.Apps
                 RowKey = RowKey,
                 Title = Title,
                 Type = "system",
-                Scope = "system"
+                Scope = "system",
+                CreatedBy = CreatedBy,
+                CreationDate = CreationDate
             };
         }
     }

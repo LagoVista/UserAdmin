@@ -43,11 +43,13 @@ namespace LagoVista.UserAdmin.Models.Users
                 Link = Link,
                 Type = Type,
                 Summary = Summary,
-                PartitionKey = PartitionKey,
                 RowKey = RowKey,
+                PartitionKey = PartitionKey,
                 Title = Title,
                 Viewed = Viewed,
                 Scope = "user",
+                CreationDate = CreationDate,
+                CreatedBy = CreatedBy,
             };
         }
     }

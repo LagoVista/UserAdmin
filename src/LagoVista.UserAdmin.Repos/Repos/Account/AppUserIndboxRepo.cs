@@ -37,5 +37,10 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
         {
             return GetAsync(paritionKey, itemId);
         }
+
+        public Task DeleteItemAsync(string partitionKey, string rowKey)
+        {
+            return RemoveAsync(partitionKey, rowKey);
+        }
     }
 }

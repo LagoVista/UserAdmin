@@ -42,6 +42,13 @@ namespace LagoVista.UserAdmin.Models.Apps
             return InvokeResult.Success;
         }
 
+        public async Task<InvokeResult> DeleteItemAsync(string partitionKey, string rowKey, EntityHeader org, EntityHeader user)
+        {
+            await this._inboxRepo.DeleteItemAsync(partitionKey, rowKey);
+            return InvokeResult.Success;
+        }
+
+
         public async Task<InvokeResult<int>> GetAllInboxItemCountAsync(EntityHeader org, EntityHeader user)
         {
             var myItems = await _inboxRepo.GetInboxItemsAsync(org.Id, user.Id, ListRequest.Create());
@@ -63,7 +70,7 @@ namespace LagoVista.UserAdmin.Models.Apps
             var sysItems = await _systemNotificationRepo.GetSystemAndPublicNotifications(org.Id);
             allItems.AddRange(sysItems.Select(sys => sys.ToInboxItem()));
 
-            return ListResponse<InboxItem>.Create(allItems.OrderByDescending(itm=>itm.RowKey), myItems);
+            return ListResponse<InboxItem>.Create(allItems.OrderByDescending(itm=>itm.CreationDate), myItems);
         }
 
         public async Task<ListResponse<AppUserInboxItem>> GetUnreadInboxItemsAsync(EntityHeader org, EntityHeader user, ListRequest listRequest)
