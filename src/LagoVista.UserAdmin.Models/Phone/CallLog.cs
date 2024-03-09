@@ -17,5 +17,10 @@ namespace LagoVista.UserAdmin.Models.Phone
 
         public long? DurationSeconds { get; set; }
         public string RecordingUrl { get; set; }
+
+        public override string ToString()
+        {
+            return $"{CallLogId} {TimeStamp} - {FromName} {FromNumber} {ToNumber} {DurationSeconds} seconds - {RecordingUrl}";
+        }
     }
 }

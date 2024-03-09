@@ -5,7 +5,11 @@ using RingCentral;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using LagoVista.UserAdmin.Managers;
 using System.Threading.Tasks;
+using LagoVista.UserAdmin;
+using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 
 namespace RingCentralIntegrationTests
 {
@@ -16,8 +20,13 @@ namespace RingCentralIntegrationTests
         [SetUp]
         public async Task Setup()
         {
-            _rc = new RestClient(Environment.GetEnvironmentVariable("RC_CLIENT_ID"), Environment.GetEnvironmentVariable("RC_CLIENT_SECRET"), "https://platform.devtest.ringcentral.com");
-            await _rc.Authorize("RC_CLIENT_JWT");
+            var clientId = Environment.GetEnvironmentVariable("RC_CLIENT_ID");
+            var secret = Environment.GetEnvironmentVariable("RC_CLIENT_SECRET");
+            var url = Environment.GetEnvironmentVariable("RC_CLIENT_URL");
+            var jwt = Environment.GetEnvironmentVariable("RC_CLIENT_JWT");
+
+            _rc = new RestClient(clientId, secret, url);
+            await _rc.Authorize(jwt);
         }
 
         [Test]
@@ -47,10 +56,10 @@ namespace RingCentralIntegrationTests
 
             Console.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
 
-        
+
         }
 
-       [Test]
+        [Test]
         public async Task Test1()
         {
             var callLogResponse = await _rc.Restapi().Account().CallLog().List(new ReadCompanyCallLogParameters
@@ -64,7 +73,38 @@ namespace RingCentralIntegrationTests
 
 
             Debugger.Break();
-           
+
         }
+
+
+        [Test]
+        public async Task GetRecords()
+        {
+            var cm = new RingCentralManager(new Creds());
+            var contacts = await cm.GetPhoneContactsAsync("7274550530", ListRequest.Create(), EntityHeader.Create("id", "name"), EntityHeader.Create("id", "name"));
+            foreach(var contact in contacts.Model)
+            {
+                Console.WriteLine(contact);
+            }
+        }
+    }
+
+    public class Creds : IRingCentralCredentials
+    {
+        public Creds()
+        {
+            RingCentralClientId = Environment.GetEnvironmentVariable("RC_CLIENT_ID");
+            RingCentralClientSecret = Environment.GetEnvironmentVariable("RC_CLIENT_SECRET");
+            RingCentralUrl = Environment.GetEnvironmentVariable("RC_CLIENT_URL");
+            RingCentralJWT = Environment.GetEnvironmentVariable("RC_CLIENT_JWT");
+        }
+
+        public string RingCentralClientId { get; }
+
+        public string RingCentralClientSecret { get; }
+
+        public string RingCentralJWT { get; }
+
+        public string RingCentralUrl { get; }
     }
 }

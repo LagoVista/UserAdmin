@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Managers
 {
-    internal class RingCentralManager : ICallLogManager
+    public class RingCentralManager : ICallLogManager
     {
 
         private readonly IRingCentralCredentials _rcCredentials;
