@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31727.386
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{68AF24F5-D5E7-40F5-AE0A-594167F89A44}"
 EndProject
@@ -29,6 +29,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.IoT.ProductStore", "src\LagoVista.IoT.ProductStore\LagoVista.IoT.ProductStore.csproj", "{947DFAF8-FD27-48AF-8498-C19827EFE154}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.UserAdmin.Models", "src\LagoVista.UserAdmin.Models\LagoVista.UserAdmin.Models.csproj", "{90D2B8E5-55D1-4CE3-B951-5F9EBC04E2BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingCentralIntegrationTests", "Tests\RingCentralIntegrationTests\RingCentralIntegrationTests.csproj", "{C112D810-FE25-4A48-B564-A1F7496356EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +66,10 @@ Global
 		{90D2B8E5-55D1-4CE3-B951-5F9EBC04E2BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90D2B8E5-55D1-4CE3-B951-5F9EBC04E2BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90D2B8E5-55D1-4CE3-B951-5F9EBC04E2BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C112D810-FE25-4A48-B564-A1F7496356EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C112D810-FE25-4A48-B564-A1F7496356EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C112D810-FE25-4A48-B564-A1F7496356EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C112D810-FE25-4A48-B564-A1F7496356EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +82,7 @@ Global
 		{00AC9BA5-03B5-4CB8-BFD9-9607F58EDCB6} = {68AF24F5-D5E7-40F5-AE0A-594167F89A44}
 		{947DFAF8-FD27-48AF-8498-C19827EFE154} = {68AF24F5-D5E7-40F5-AE0A-594167F89A44}
 		{90D2B8E5-55D1-4CE3-B951-5F9EBC04E2BF} = {68AF24F5-D5E7-40F5-AE0A-594167F89A44}
+		{C112D810-FE25-4A48-B564-A1F7496356EF} = {0D569608-298B-46AE-82D3-8481FE044E10}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4D5218A2-6C29-4E31-9F29-C471835EF463}

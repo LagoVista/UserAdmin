@@ -327,7 +327,7 @@ namespace LagoVista.AspNetCore.Identity.Services
                 }
 
 				var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
-				await client.SendEmailAsync(msg);
+				var response = await client.SendEmailAsync(msg);
 
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "SendGridEmailServices_SendAsync", "EmailSent",
                     new System.Collections.Generic.KeyValuePair<string, string>("Subject", subject),

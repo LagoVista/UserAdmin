@@ -1,11 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>LagoVista.UserAdmin.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core.Authentication" Version="3.0.2048.0520" />
+    <PackageReference Include="LagoVista.Core.Authentication" Version="3.0.2487.1013" />
+    <PackageReference Include="RingCentral.Net" Version="6.1.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.UserAdmin.Models\LagoVista.UserAdmin.Models.csproj" />
