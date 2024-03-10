@@ -30,7 +30,7 @@ namespace RingCentralIntegrationTests
         }
 
         [Test]
-        public async Task Analysitcs()
+        public async Task Analytics()
         {
 
             var bodyParams = new AggregationRequest();
