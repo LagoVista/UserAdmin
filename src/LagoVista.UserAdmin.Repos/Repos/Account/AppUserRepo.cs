@@ -12,10 +12,13 @@ using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Users;
 using Microsoft.Azure.Documents;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.Users
@@ -26,6 +29,7 @@ namespace LagoVista.UserAdmin.Repos.Users
         private readonly IRDBMSManager _rdbmsUserManager;
         private readonly IUserAdminSettings _adminSettings;
         private readonly IUserRoleRepo _userRoleRepo;
+        private readonly ICacheProvider _cacheProvider;
 
         public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserRoleRepo userRoleRepo, IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider, IDependencyManager dependencyMgr) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider, dependencyManager: dependencyMgr)
@@ -34,6 +38,7 @@ namespace LagoVista.UserAdmin.Repos.Users
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
             _rdbmsUserManager = rdbmsUserManager;
             _userRoleRepo = userRoleRepo;
+            _cacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         protected override bool ShouldConsolidateCollections
@@ -120,11 +125,20 @@ namespace LagoVista.UserAdmin.Repos.Users
             return ListResponse<UserInfoSummary>.Create(users.Model.Select(usr => usr.ToUserInfoSummary(false, false)));
         }
 
+        public static string ByteArrayToString(byte[] ba)
+        {
+            var hex = new StringBuilder(ba.Length * 2);
+            foreach (byte b in ba)
+                hex.AppendFormat("{0:x2}", b);
+            return hex.ToString();
+        }
+
         public async Task<IEnumerable<UserInfoSummary>> GetUserSummaryForListAsync(IEnumerable<OrgUser> orgUsers)
         {
             var sqlParams = string.Empty;
             var idx = 0;
             var parameters  = new List<QueryParameter>();
+            var userIds = String.Empty;
             foreach (var orgUser in orgUsers)
             {
                 if (!String.IsNullOrEmpty(sqlParams))
@@ -135,22 +149,39 @@ namespace LagoVista.UserAdmin.Repos.Users
 
                 sqlParams += paramName;
                 parameters.Add(new QueryParameter(paramName, orgUser.UserId));
+                userIds += orgUser.UserId;
             }
+            
 
-            sqlParams.TrimEnd(',');
+            using (var md5 = MD5.Create())
+            {
+                sqlParams.TrimEnd(',');
+                var buffer = System.Text.ASCIIEncoding.ASCII.GetBytes(userIds);
+                var hash = md5.ComputeHash(buffer);
+                var key = ByteArrayToString(hash);
+                var json = await _cacheProvider.GetAsync(key);
+                if (!String.IsNullOrEmpty(json))
+                {
+                    return JsonConvert.DeserializeObject<IEnumerable<UserInfoSummary>>(json);
+                }
+               else
+                {
+                    //TODO: This seems kind of ugly...need to put more thought into this, this shouldn't be a query that is hit very often
+                    var query = $"SELECT * FROM c where c.id in ({sqlParams})";
 
-            //TODO: This seems kind of ugly...need to put more thought into this, this shouldn't be a query that is hit very often
-            var query = $"SELECT * FROM c where c.id in ({sqlParams})";
+                    /* this sorta sux, but oh well */
+                    var appUsers = await QueryAsync(query, parameters.ToArray());
+                    var userSummaries = from appUser
+                                        in appUsers
+                                        join orgUser
+                                        in orgUsers on appUser.Id equals orgUser.UserId
+                                        select appUser.ToUserInfoSummary(orgUser.IsOrgAdmin, orgUser.IsAppBuilder);
 
-            /* this sorta sux, but oh well */
-            var appUsers = await QueryAsync(query, parameters.ToArray());
-            var userSummaries = from appUser
-                                in appUsers
-                                join orgUser
-                                in orgUsers on appUser.Id equals orgUser.UserId
-                                select appUser.ToUserInfoSummary(orgUser.IsOrgAdmin, orgUser.IsAppBuilder);
-
-            return userSummaries;
+                    json = JsonConvert.SerializeObject(userSummaries);
+                    await _cacheProvider.AddAsync(key, json);
+                    return userSummaries;
+                }
+            }
         }
 
         public async Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(ListRequest listRequest)
