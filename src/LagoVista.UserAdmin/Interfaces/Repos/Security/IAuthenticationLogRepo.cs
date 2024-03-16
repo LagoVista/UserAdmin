@@ -1,29 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LagoVista.Core.Models.UIMetaData;
+using LagoVista.UserAdmin.Models.Security;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Interfaces.Repos.Security
 {
-    public enum AuthLogTypes
-    {
-        PasswordAuthSuccess,
-        PaswwordAuthFailed,
-        CreateEmailUser,
-        ManualOrgCreate,
-        OAuthRedirect,
-        OAuthCallback,
-        OAuthError,
-        OAuthCreateOrg,
-        OAuthCreateUser,
-        OAuthAppendUserLogin,
-        InviteUser,
-        RegisterUser,
-        AcceptInvite
-    }
 
     public interface IAuthenticationLogRepo
     {
-        Task WriteAsync(string userName, string userId, string orgId, string orgName, AuthLogTypes type, string extras, string errors);
+        Task AddAsync(AuthenticationLog authLog);
+        Task<ListResponse<AuthenticationLog>> GetAllAsync(ListRequest listRequest);
+        Task<ListResponse<AuthenticationLog>> GetAllAsync(string orgId, ListRequest listRequest);
+        Task<ListResponse<AuthenticationLog>> GetAsync(AuthLogTypes type, ListRequest listRequest);
+        Task<ListResponse<AuthenticationLog>> GetAsync(string orgId, AuthLogTypes type, ListRequest listRequest);
     }
 }

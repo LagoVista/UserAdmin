@@ -44,6 +44,7 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IOwnedObjectRepo _ownedObjectRepo;
         private readonly ISubscriptionManager _subscriptionManager;
         private readonly IDefaultRoleList _defaultRoleList;
+        private readonly IAuthenticationLogManager _authLogMgr;
         #endregion
 
         #region Ctor
@@ -63,10 +64,12 @@ namespace LagoVista.UserAdmin.Managers
             IDefaultRoleList defaultRoleList,
             IOwnedObjectRepo ownedObjectRepo,
             IUserRoleManager useRoleManager,
+            IAuthenticationLogManager authLogMgr,
             ISubscriptionManager subscriptionManager,
             IAdminLogger logger) : base(logger, appConfig, depManager, security)
         {
 
+            _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(authLogMgr));
             _appUserRepo = appUserRepo;
             _organizationRepo = organizationRepo;
             _orgUserRepo = orgUserRepo;
@@ -91,9 +94,9 @@ namespace LagoVista.UserAdmin.Managers
             return await _organizationRepo.QueryNamespaceInUseAsync(namespaceText);
         }
 
-        public async Task<InvokeResult> CreateNewOrganizationAsync(CreateOrganizationViewModel organizationViewModel, EntityHeader user)
+        public async Task<InvokeResult<Organization>> CreateNewOrganizationAsync(CreateOrganizationViewModel organizationViewModel, EntityHeader user)
         {
-            var result = new InvokeResult();
+            var result = new InvokeResult<Organization>();
 
             ValidationCheck(organizationViewModel, Core.Validation.Actions.Create);
 
@@ -121,6 +124,8 @@ namespace LagoVista.UserAdmin.Managers
             /* Create the Organization in Storage */
             await _organizationRepo.AddOrganizationAsync(organization);
 
+            await _authLogMgr.AddAsync(AuthLogTypes.CreateOrg, user.Id, user.Text, organization.Id, organization.Name);
+
             var currentUser = await _appUserRepo.FindByIdAsync(user.Id);
 
             var ownerRoleId = _defaultRoleList.GetStandardRoles().Single(rl => rl.Key == DefaultRoleList.OWNER).Id;
@@ -129,7 +134,7 @@ namespace LagoVista.UserAdmin.Managers
             var addUserResult = await AddUserToOrgAsync(currentUser.ToEntityHeader(), organization.ToEntityHeader(), currentUser.ToEntityHeader(), true, true);
             if (!addUserResult.Successful)
             {
-                return addUserResult;
+                return InvokeResult<Organization>.FromInvokeResult(addUserResult);
             }
 
             if (currentUser.Organizations == null) currentUser.Organizations = new List<EntityHeader>();
@@ -148,12 +153,11 @@ namespace LagoVista.UserAdmin.Managers
             /* Final update of the user */
             await _appUserRepo.UpdateAsync(currentUser);
 
-
             await _orgInitializer.Init(organization.ToEntityHeader(), currentUser.ToEntityHeader(), organizationViewModel.CreateGettingsStartedData);
 
             await LogEntityActionAsync(organization.Id, typeof(Organization).Name, "Created Organization", organization.ToEntityHeader(), user);
 
-            return result;
+            return InvokeResult<Organization>.Create(organization);
         }
 
         public async Task<InvokeResult> CreateOrganizationAsync(Organization newOrg, EntityHeader userOrg, EntityHeader user)
@@ -166,6 +170,8 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             ValidationCheck(newOrg, Core.Validation.Actions.Create);
+
+            await _authLogMgr.AddAsync(AuthLogTypes.ManualOrgCreate, user.Id, user.Text, newOrg.Id, newOrg.Name, newOrg.Namespace);
 
             await AuthorizeAsync(newOrg, AuthorizeResult.AuthorizeActions.Create, user, userOrg);
             await _organizationRepo.AddOrganizationAsync(newOrg);
@@ -194,6 +200,7 @@ namespace LagoVista.UserAdmin.Managers
 
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, user, org, "switchOrgs");
             await _appUserRepo.UpdateAsync(appUser);
+            await _authLogMgr.AddAsync(AuthLogTypes.ManualOrgCreate, user.Id, user.Text, newOrg.Id, newOrg.Name, extras: $"old orgid: {org.Id}, new orgid: {org.Text}");
 
             return InvokeResult<AppUser>.Create(appUser);
         }
@@ -583,6 +590,8 @@ namespace LagoVista.UserAdmin.Managers
 
             await _orgUserRepo.AddOrgUserAsync(user);
 
+            await _authLogMgr.AddAsync(AuthLogTypes.AddUserToOrg, userToAdd.Id, userToAdd.Text, org.Id, org.Text, extras: $"added by id: {addedBy.Id}, name: {addedBy.Text}");
+
             return result;
         }
 
@@ -629,6 +638,7 @@ namespace LagoVista.UserAdmin.Managers
             user.LastUpdatedDate = user.CreationDate;
 
             await _orgUserRepo.AddOrgUserAsync(user);
+            await _authLogMgr.AddAsync(AuthLogTypes.AddUserToOrg, appUser.Id, appUser.Name, org.Id, org.Name, extras: $"added by id: {addedBy.Id}, name: {addedBy.Text}");
 
             return InvokeResult.Success;
         }
@@ -653,6 +663,8 @@ namespace LagoVista.UserAdmin.Managers
                 await _appUserRepo.UpdateAsync(appUser);
 
                 await LogEntityActionAsync(userId, typeof(AppUser).Name, "SetAsOrgAdmin", org, user);
+
+                await _authLogMgr.AddAsync(AuthLogTypes.SetAsOrgAdmin, appUser.Id, appUser.Name, org.Id, org.Text, extras: $"set by id: {user.Id}, name: {user.Text}");
 
                 return InvokeResult.Success;
             }
@@ -685,8 +697,8 @@ namespace LagoVista.UserAdmin.Managers
                 appUser.IsAccountDisabled = false;
                 await _appUserRepo.UpdateAsync(appUser);
 
-
                 await LogEntityActionAsync(userId, typeof(AppUser).Name, "ClearAsOrgAdmin", org, user);
+                await _authLogMgr.AddAsync(AuthLogTypes.ClearOrgAdmin, appUser.Id, appUser.Name, org.Id, org.Text, extras: $"cleared by id: {user.Id}, name: {user.Text}");
 
                 return InvokeResult.Success;
             }

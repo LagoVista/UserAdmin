@@ -54,6 +54,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<IMostRecentlyUsedRepo, MostRecentUsedRepo>();
             services.AddTransient<IUserFavoritesRepo, UserFavoritesRepo>();
             services.AddTransient<IAppUserInboxRepo, AppUserIndboxRepo>();
+            services.AddTransient<IAuthenticationLogRepo, AuthenticationLogRepo>();
             services.AddTransient<ISystemNotificationsRepo, SystemNotificationsRepo>();
 
             ErrorCodes.Register(typeof(UserAdminErrorCodes));

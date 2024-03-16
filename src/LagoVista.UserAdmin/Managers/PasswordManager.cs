@@ -13,6 +13,7 @@ using LagoVista.Core;
 using System.Threading.Tasks;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Models.Resources;
+using LagoVista.UserAdmin.Models.Security;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -23,17 +24,19 @@ namespace LagoVista.UserAdmin.Managers
         IEmailSender _emailSender;
         IUserManager _userManager;
         IAuthRequestValidators _authRequestValidators;
+        private readonly IAuthenticationLogManager _authLogMgr;
 
         public const string ACTION_RESET_PASSWORD = "/Account/ResetPassword";
 
 
-        public PasswordManager(IAuthRequestValidators authRequestValidators, IUserManager userManager, IEmailSender emailSender, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
+        public PasswordManager(IAuthRequestValidators authRequestValidators, IUserManager userManager, IEmailSender emailSender, IDependencyManager depManager, ISecurity security, IAuthenticationLogManager authLogMgr, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
             _adminLogger = logger;
             _emailSender = emailSender;
             _appConfig = appConfig;
             _userManager = userManager;
             _authRequestValidators = authRequestValidators;
+            _authLogMgr = authLogMgr;
         }
 
         //In some cases, this will be called from API, we don't want to return API as part of the link.
@@ -123,6 +126,7 @@ namespace LagoVista.UserAdmin.Managers
 
                 var org = appUser.CurrentOrganization == null ? EntityHeader.Create(Guid.Empty.ToId(), "????") : appUser.CurrentOrganization.ToEntityHeader();
                 await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "ChangePassword", org, appUser.ToEntityHeader());
+                await _authLogMgr.AddAsync(AuthLogTypes.ChangePassword, appUser.Id, appUser.Name, org.Id, org.Text);
             }
             else
             {

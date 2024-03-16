@@ -27,7 +27,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> AddUserToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy, bool isOrgAdmin = false, bool isAppBuilder = false);
         Task<InvokeResult> AddUserToLocationAsync(string userId, string locationId, EntityHeader org, EntityHeader addedBy);
         Task<InvokeResult> AddLocationAsync(CreateLocationViewModel newLocation, EntityHeader org, EntityHeader user);
-        Task<InvokeResult> CreateNewOrganizationAsync(CreateOrganizationViewModel organizationViewModel, EntityHeader user);
+        Task<InvokeResult<Organization>> CreateNewOrganizationAsync(CreateOrganizationViewModel organizationViewModel, EntityHeader user);
 
         Task<InvokeResult> SetOrgAdminAsync(string userId, EntityHeader org, EntityHeader user);
 

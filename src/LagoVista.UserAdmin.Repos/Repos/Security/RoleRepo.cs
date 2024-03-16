@@ -21,17 +21,17 @@ namespace LagoVista.UserAdmin.Repos.Security
        
         private readonly ICacheProvider _cacheProvider;
 
-        private bool _consolidateCollectoins;
+        private bool _condolidateCollections;
 
         public RoleRepo(IUserAdminSettings settings, IDefaultRoleList defaultRoleList, IAdminLogger logger, ICacheProvider cacheProvider) : 
             base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, cacheProvider)
         {
-            _consolidateCollectoins = settings.ShouldConsolidateCollections;
+            _condolidateCollections = settings.ShouldConsolidateCollections;
             _defaultRoleList = defaultRoleList;
             _cacheProvider = cacheProvider;
         }
 
-        protected override bool ShouldConsolidateCollections => _consolidateCollectoins;
+        protected override bool ShouldConsolidateCollections => _condolidateCollections;
 
         public async Task<Role> GetRoleAsync(string id)
         {

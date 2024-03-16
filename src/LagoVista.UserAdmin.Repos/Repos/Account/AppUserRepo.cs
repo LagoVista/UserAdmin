@@ -30,8 +30,9 @@ namespace LagoVista.UserAdmin.Repos.Users
         private readonly IUserAdminSettings _adminSettings;
         private readonly IUserRoleRepo _userRoleRepo;
         private readonly ICacheProvider _cacheProvider;
+        private readonly IAuthenticationLogManager _authLogMgr;
 
-        public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserRoleRepo userRoleRepo, IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider, IDependencyManager dependencyMgr) :
+        public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserRoleRepo userRoleRepo, IUserAdminSettings userAdminSettings, IAdminLogger logger, IAuthenticationLogManager authLogMgr, ICacheProvider cacheProvider, IDependencyManager dependencyMgr) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider, dependencyManager: dependencyMgr)
         {
             _adminSettings = userAdminSettings;
@@ -39,6 +40,7 @@ namespace LagoVista.UserAdmin.Repos.Users
             _rdbmsUserManager = rdbmsUserManager;
             _userRoleRepo = userRoleRepo;
             _cacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
+            _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         protected override bool ShouldConsolidateCollections
@@ -318,6 +320,8 @@ namespace LagoVista.UserAdmin.Repos.Users
                 existing.FirstName = external.FirstName ?? existing.FirstName;
                 existing.LastName = external.LastName ?? existing.LastName;
                 existing.Organization = external.Organization ?? existing.Organization;
+
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.OAuthAppendUserLogin, userId, appUser.Name, oauthProvier: external.Provider.Text, extras: $"email: {external.Email}" );
             }
             else
             {

@@ -36,11 +36,13 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IOrganizationRepo _orgRepo;
         private readonly ISubscriptionManager _subscriptionManager;
         private readonly ISecureStorage _secureStorage;
+        private readonly IAuthenticationLogManager _authLogMgr;
         
         public AppUserManager(IAppUserRepo appUserRepo,  IUserRoleRepo userRoleRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IOrganizationManager orgManager, IOrgUserRepo orgUserRepo, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
            IOrganizationRepo orgRepo, IAuthTokenManager authTokenManager, ISubscriptionManager subscriptionManager, IUserManager userManager, ISecureStorage secureStorage,
-           ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, userRoleRepo, depManager, security, logger, appConfig)
+           IAuthenticationLogManager authLogMgr, ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, userRoleRepo, depManager, security, logger, appConfig)
         {
+            _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(authLogMgr));
             _orgRepo = orgRepo ?? throw new ArgumentNullException(nameof(orgRepo));
             _orgManager = orgManager ?? throw new ArgumentNullException(nameof(orgManager));
             _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
@@ -84,7 +86,7 @@ namespace LagoVista.UserAdmin.Managers
             return await CheckForDepenenciesAsync(appUser);
         }
 
-        public async Task<InvokeResult> DeleteUserAsync(String id, bool force, EntityHeader org, EntityHeader deletedByUser)
+        public async Task<InvokeResult> DeleteUserAsync(String id, EntityHeader org, EntityHeader deletedByUser)
         {
             if (String.IsNullOrEmpty(id)) throw new ArgumentNullException(nameof(id));
 
@@ -110,7 +112,7 @@ namespace LagoVista.UserAdmin.Managers
             else
             {
                 var orgs = await _orgRepo.GetBillingContactOrgsForUserAsync(id);
-                if (orgs.Any() && !force)
+                if (orgs.Any())
                 {
                     var orgList = String.Join(",", orgs);
                     return InvokeResult.FromError($"Can not delete user, user is billing contact for the following org[s] {orgList}");
@@ -384,6 +386,8 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult.FromError("Must be an org admin to automically approve a user.");
             }
 
+            
+
             var user = await _appUserRepo.FindByIdAsync(userId);
             user.EmailConfirmed = true;
             user.PhoneNumberConfirmed = true;
@@ -396,6 +400,7 @@ namespace LagoVista.UserAdmin.Managers
             await _appUserRepo.UpdateAsync(user);
 
             await LogEntityActionAsync(userId, typeof(AppUser).Name, "Auto Approved", org, approvingUser);
+            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.ManualApproveUser, userId, appUser.UserName, appUser.CurrentOrganization?.Id, appUser.CurrentOrganization?.Text);
 
             return InvokeResult.Success;
         }
@@ -424,6 +429,7 @@ namespace LagoVista.UserAdmin.Managers
             user.IsAccountDisabled = true;
             await _appUserRepo.UpdateAsync(user);
             await LogEntityActionAsync(userId, typeof(AppUser).Name, "Disabe User Account", org, adminUser);
+            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DisableUser, appUser.UserName, appUser.CurrentOrganization?.Id, appUser.CurrentOrganization?.Text);
 
             return InvokeResult.Success;
         }
@@ -543,11 +549,19 @@ namespace LagoVista.UserAdmin.Managers
                     externalLogin.OAuthTokenVerifierSecretId = result.Result;
                     externalLogin.OAuthTokenVerifier = String.Empty;
                 }
+
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.OAuthCreateUser, appUser.Id, appUser.UserName, oauthProvier: externalLogin.Provider.Text);
             }
+            else
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateEmailUser, appUser.Id, appUser.UserName);
 
             var identityResult = await _userManager.CreateAsync(appUser, newUser.Password);
+
+
             if (identityResult.Successful)
             {
+                
+
                 await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "New User Registered", null, appUser.ToEntityHeader());
 
                 if (autoLogin)
@@ -616,6 +630,7 @@ namespace LagoVista.UserAdmin.Managers
             }
             else
             {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, appUser.Id, appUser.UserName, errors: identityResult.Errors.First().Message);
                 return InvokeResult<AuthResponse>.FromInvokeResult(identityResult);
             }
         }
@@ -667,7 +682,7 @@ namespace LagoVista.UserAdmin.Managers
                 var result = await _secureStorage.AddSecretAsync(user, external.OAuthTokenVerifier);
                 external.OAuthTokenVerifierSecretId = result.Result;
                 external.OAuthTokenVerifier = String.Empty;
-            }
+            }            
 
             return await _appUserRepo.AssociateExternalLoginAsync(userId, external);
         }
@@ -678,6 +693,8 @@ namespace LagoVista.UserAdmin.Managers
             {
                 throw new NotAuthorizedException("User Id Mis-Match.");
             }
+
+            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.OAuthRemoveUserLogin, user.Id, user.Text);
 
             return InvokeResult<AppUser>.Create(await _appUserRepo.RemoveExternalLoginAsync(userId, externalLoginId));
         }
@@ -724,6 +741,8 @@ namespace LagoVista.UserAdmin.Managers
             user.TermsAndConditionsAcceptedDateTime = DateTime.UtcNow.ToJSONString();
             user.TermsAndConditionsAcceptedIPAddress = ipAddress;
             await _appUserRepo.UpdateAsync(user);
+
+            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.AcceptTermsAndConditions, userEH.Id, userEH.Text,  extras:$"ip:{ipAddress}");
 
             return InvokeResult<AppUser>.Create(user);
         }

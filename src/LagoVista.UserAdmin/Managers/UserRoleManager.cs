@@ -13,6 +13,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using LagoVista.UserAdmin.Interfaces.Managers;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -22,15 +23,16 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IRoleRepo _roleRepo;
         private readonly IAppUserRepo _userRepo;
         private readonly IDefaultRoleList _defaultRoleList;
-        
+        private readonly IAuthenticationLogManager _authLogMgr;
 
-        public UserRoleManager(IRoleRepo roleRepo, IUserRoleRepo userRoleRepo, IDefaultRoleList defaultRole, IAppUserRepo appUserRepo, ILogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security) :
+        public UserRoleManager(IRoleRepo roleRepo, IUserRoleRepo userRoleRepo, IDefaultRoleList defaultRole, IAppUserRepo appUserRepo, ILogger logger, IAppConfig appConfig, IAuthenticationLogManager authLogMgr, IDependencyManager dependencyManager, ISecurity security) :
             base(logger, appConfig, dependencyManager, security)
         {
             _userRoleRepo = userRoleRepo ?? throw new ArgumentNullException(nameof(userRoleRepo));
             _roleRepo = roleRepo ?? throw new ArgumentNullException(nameof(roleRepo));
             _userRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
             _defaultRoleList = defaultRole ?? throw new ArgumentNullException(nameof(defaultRole));
+            _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(authLogMgr));
         }
 
         public Task<List<UserRole>> GetRolesForUserAsync(string userId, EntityHeader org, EntityHeader user)
@@ -57,25 +59,34 @@ namespace LagoVista.UserAdmin.Managers
 
             await _userRoleRepo.AddUserRole(appUserRole);
 
+            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.GrantRole, userId, roleUser.Name, org.Id, org.Text, extras: $"granted role: {role.Name} by user id: {user.Id} name: {user.Text}");
+
             return InvokeResult<UserRole>.Create(appUserRole);
         }
 
-        public async Task<List<InvokeResult<UserRole>>> GrantUserRolesAsync(string userId, List<string> roles, EntityHeader org, EntityHeader user)
+        public async Task<List<InvokeResult<UserRole>>> GrantUserRolesAsync(string userId, List<string> roleIds, EntityHeader org, EntityHeader user)
         {
-            if (roles == null)
-                throw new ArgumentNullException(nameof(roles));
+            if (roleIds == null)
+                throw new ArgumentNullException(nameof(roleIds));
 
             var existingRoles = await GetRolesForUserAsync(userId, org, user);
 
             var addedRoles = new List<InvokeResult<UserRole>>();
 
-            foreach(var role in roles)
+            var roleUser = await _userRepo.FindByIdAsync(userId);
+
+            foreach(var roleId in roleIds)
             {
-                var existingRole = existingRoles.FirstOrDefault(ext => ext.Role.Id == role);
+                var existingRole = existingRoles.FirstOrDefault(ext => ext.Role.Id == roleId);
 
                 if (existingRole == null)
                 {
-                    addedRoles.Add( await GrantUserRoleAsync(userId, role, org, user));
+                    var role = _defaultRoleList.GetStandardRoles().FirstOrDefault(rl => rl.Id == roleId);
+                    if (role == null)
+                        role = await _roleRepo.GetRoleAsync(roleId);
+
+                    addedRoles.Add( await GrantUserRoleAsync(userId, roleId, org, user));
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.GrantRole, userId, roleUser.Name, org.Id, org.Text, extras: $"granted role: {role.Name} by user id: {user.Id} name: {user.Text}");
                 }
                 else
                 {
@@ -88,7 +99,12 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> RevokeUserRoleAsync(string userRoleId, EntityHeader org, EntityHeader user)
         {
+            var role = await _userRoleRepo.GetRoleAssignmentAsync(userRoleId, org.Id);
+
             await _userRoleRepo.RemoveUserRole(userRoleId, org.Id);
+
+            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.RevokeRole, role.User.Id, role.User.Text, role.Organization.Id, role.Organization.Text, extras: $"removed role: {role.Role.Text} by user id: {user.Id} name: {user.Text}");
+
             return InvokeResult.Success;
         }
 

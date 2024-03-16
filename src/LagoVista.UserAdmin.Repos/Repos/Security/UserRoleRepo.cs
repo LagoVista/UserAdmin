@@ -21,6 +21,11 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             return InsertAsync(role.ToDTO());
         }
 
+        public async Task<UserRole> GetRoleAssignmentAsync(string userRoleId, string organizationId)
+        {
+            return (await GetAsync(organizationId, userRoleId)).ToUserRole();
+        }
+
         public async Task<List<UserRole>> GetRolesForUserAsync(string userId, string organizationId)
         {
             var results = await this.GetByFilterAsync(FilterOptions.Create(nameof(UserRoleDTO.UserId), FilterOptions.Operators.Equals, userId), 
