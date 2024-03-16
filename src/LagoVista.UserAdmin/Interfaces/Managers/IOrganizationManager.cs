@@ -60,7 +60,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<ListResponse<Invitation>> GetActiveInvitationsForOrgAsync(ListRequest request, EntityHeader org, EntityHeader user);
         Task<bool> GetIsInvigationActiveAsync(string inviteId);
 
-        Task<ListResponse<Organization>> GetAllOrgsAsync(EntityHeader org, EntityHeader user, ListRequest listRequest);
+        Task<ListResponse<OrganizationSummary>> GetAllOrgsAsync(EntityHeader org, EntityHeader user, ListRequest listRequest);
        
         Task<Invitation> GetInvitationAsync(string inviteId);
 

@@ -15,7 +15,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
         Task<bool> QueryNamespaceInUseAsync(string namespaceText);
         Task DeleteOrgAsync(string orgId);
         Task<bool> HasBillingRecords(string orgId);
-        Task<ListResponse<Organization>> GetAllOrgsAsync(ListRequest listRequest);
+        Task<ListResponse<OrganizationSummary>> GetAllOrgsAsync(ListRequest listRequest);
         Task<List<EntityHeader>> GetBillingContactOrgsForUserAsync(string userId);
         Task<string> GetLandingPageFororgAsync(string orgId);
     }

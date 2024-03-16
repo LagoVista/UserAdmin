@@ -13,7 +13,7 @@ using System.Collections.Generic;
 namespace LagoVista.UserAdmin.Models.Users
 {
     [EntityDescription(Domains.UserDomain, UserAdminResources.Names.AppUser_Title, UserAdminResources.Names.AppUser_Help, UserAdminResources.Names.AppUser_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class AppUser : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity
+    public class AppUser : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, ISummaryFactory
     {
         public AppUser(String email, String createdBy)
         {
@@ -285,7 +285,7 @@ namespace LagoVista.UserAdmin.Models.Users
             };
         }
 
-        public UserInfoSummary ToUserInfoSummary(bool isOrgAdmin = false, bool isAppBuilder = false)
+        public UserInfoSummary CreateSummary(bool isOrgAdmin = false, bool isAppBuilder = false)
         {
             return new UserInfoSummary()
             {
@@ -306,6 +306,11 @@ namespace LagoVista.UserAdmin.Models.Users
                 TeamsAccountName = TeamsAccountName,
                 Key = Id,
             };
+        }
+
+        public ISummaryData CreateSummary()
+        {
+            return CreateSummary();
         }
     }
 }

@@ -52,9 +52,9 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             await DeleteDocumentAsync(orgId);
         }
 
-        public async Task<ListResponse<Organization>> GetAllOrgsAsync(ListRequest listRequest)
+        public async Task<ListResponse<OrganizationSummary>> GetAllOrgsAsync(ListRequest listRequest)
         {
-            return await base.QueryAsync(qry => true, listRequest);
+            return await base.QuerySummaryAsync<OrganizationSummary, Organization>(qry => true, org => org.Name, listRequest);
         }
 
         public Task<List<EntityHeader>> GetBillingContactOrgsForUserAsync(string userId)

@@ -84,7 +84,7 @@ namespace LagoVista.UserAdmin.Managers
             return await CheckForDepenenciesAsync(appUser);
         }
 
-        public async Task<InvokeResult> DeleteUserAsync(String id, EntityHeader org, EntityHeader deletedByUser)
+        public async Task<InvokeResult> DeleteUserAsync(String id, bool force, EntityHeader org, EntityHeader deletedByUser)
         {
             if (String.IsNullOrEmpty(id)) throw new ArgumentNullException(nameof(id));
 
@@ -110,7 +110,7 @@ namespace LagoVista.UserAdmin.Managers
             else
             {
                 var orgs = await _orgRepo.GetBillingContactOrgsForUserAsync(id);
-                if (orgs.Any())
+                if (orgs.Any() && !force)
                 {
                     var orgList = String.Join(",", orgs);
                     return InvokeResult.FromError($"Can not delete user, user is billing contact for the following org[s] {orgList}");

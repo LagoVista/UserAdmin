@@ -24,7 +24,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
         EditUIUrl: "/organization/orgaccount", Icon: "icon-ae-building",
         SaveUrl: "/api/org", GetUrl: "/api/org/{id}")]
-    public class Organization : UserAdminModelBase, INamedEntity, IKeyedEntity, IValidateable, IOwnedEntity, IFormDescriptor, IFormDescriptorCol2, IIconEntity
+    public class Organization : UserAdminModelBase, INamedEntity, IKeyedEntity, IValidateable, IOwnedEntity, IFormDescriptor, IFormDescriptorCol2, IIconEntity, ISummaryFactory
     {
         public const string Organization_OrgStatuses_Active = "active";
         public const string Organization_OrgStatuses_Deactivated = "deactivated";
@@ -179,16 +179,19 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 DefaultTheme = DefaultTheme,
             };
         }
+
+        ISummaryData ISummaryFactory.CreateSummary()
+        {
+            return CreateSummary();
+        }
     }
 
-    public class OrganizationSummary : IOrganizationSummary
+    public class OrganizationSummary : SummaryData, IOrganizationSummary 
     {
         public string Id { get; set; }
         public string Text { get; set; }
-        public string Name { get; set; }
         public string Namespace { get; set; }
         public string Logo { get; set; }
-        public string Icon { get; set; }
         public string TagLine { get; set; }
         public string DefaultTheme { get; set; }
     

@@ -116,6 +116,7 @@ namespace LagoVista.UserAdmin.Managers
             organization.DefaultProjectAdminLead = user;
             organization.DefaultContributor = user;
             organization.DefaultQAResource = user;
+            organization.Owner = user;
 
             /* Create the Organization in Storage */
             await _organizationRepo.AddOrganizationAsync(organization);
@@ -1066,7 +1067,7 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<ListResponse<Organization>> GetAllOrgsAsync(EntityHeader org, EntityHeader user, ListRequest listRequest)
+        public async Task<ListResponse<OrganizationSummary>> GetAllOrgsAsync(EntityHeader org, EntityHeader user, ListRequest listRequest)
         {
             var appUser = await _appUserRepo.FindByIdAsync(user.Id);
 
