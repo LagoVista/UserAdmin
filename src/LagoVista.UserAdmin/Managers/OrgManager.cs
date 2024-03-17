@@ -200,7 +200,7 @@ namespace LagoVista.UserAdmin.Managers
 
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, user, org, "switchOrgs");
             await _appUserRepo.UpdateAsync(appUser);
-            await _authLogMgr.AddAsync(AuthLogTypes.ManualOrgCreate, user.Id, user.Text, newOrg.Id, newOrg.Name, extras: $"old orgid: {org.Id}, new orgid: {org.Text}");
+            await _authLogMgr.AddAsync(AuthLogTypes.ChangeOrg, user.Id, user.Text, newOrg.Id, newOrg.Name, extras: $"old orgid: {org.Id}, new orgid: {org.Text}");
 
             return InvokeResult<AppUser>.Create(appUser);
         }
