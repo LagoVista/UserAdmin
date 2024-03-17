@@ -153,7 +153,7 @@ namespace LagoVista.UserAdmin.Managers
             /* Final update of the user */
             await _appUserRepo.UpdateAsync(currentUser);
 
-            await _orgInitializer.Init(organization.ToEntityHeader(), currentUser.ToEntityHeader(), organizationViewModel.CreateGettingsStartedData);
+            await _orgInitializer.Init(organization.ToEntityHeader(), currentUser.ToEntityHeader(), organizationViewModel.CreateGettingStartedData);
 
             await LogEntityActionAsync(organization.Id, typeof(Organization).Name, "Created Organization", organization.ToEntityHeader(), user);
 
