@@ -123,8 +123,7 @@ namespace LagoVista.UserAdmin.Repos.Users
 
         public async Task<ListResponse<UserInfoSummary>> GetDeviceUsersAsync(string deviceRepoId, ListRequest listRequest)
         {
-            var users = await QueryAsync(usr => usr.IsUserDevice == true && usr.DeviceRepo != null && usr.DeviceRepo.Id == deviceRepoId, listRequest);
-            return ListResponse<UserInfoSummary>.Create(users.Model.Select(usr => usr.CreateSummary(false, false)));
+            return await QuerySummaryAsync<UserInfoSummary, AppUser>(usr => usr.IsUserDevice == true && usr.DeviceRepo != null && usr.DeviceRepo.Id == deviceRepoId, usr=>usr.Name, listRequest);
         }
 
         public static string ByteArrayToString(byte[] ba)
@@ -193,18 +192,7 @@ namespace LagoVista.UserAdmin.Repos.Users
 
         public async Task<ListResponse<UserInfoSummary>> GetActiveUsersAsync(ListRequest listRequest)
         {
-            var results = await DescOrderQueryAsync(us => us.IsUserDevice == false && !us.IsAccountDisabled, us => us.Name, listRequest);
-
-            return new ListResponse<UserInfoSummary>()
-            {
-                Model = results.Model.Select(rec => rec.CreateSummary(false, false)).OrderBy(rec => rec.Name),
-                NextPartitionKey = results.NextPartitionKey,
-                NextRowKey = results.NextRowKey,
-                PageCount = results.PageCount,
-                HasMoreRecords = results.HasMoreRecords,
-                PageIndex = results.PageIndex,
-                PageSize = results.PageSize,
-            };
+            return await QuerySummaryAsync<UserInfoSummary, AppUser>(us => us.IsUserDevice == false && !us.IsAccountDisabled, us => us.Name, listRequest);
         }
 
 
@@ -226,18 +214,7 @@ namespace LagoVista.UserAdmin.Repos.Users
                 mthd = Expression.Lambda<Func<AppUser, bool>>(combined);
             }
 
-            var results = await DescOrderQueryAsync(mthd, us => us.Name, listRequest);
-
-            return new ListResponse<UserInfoSummary>()
-            {
-                Model = results.Model.Select(rec => rec.CreateSummary(false, false)),
-                NextPartitionKey = results.NextPartitionKey,
-                NextRowKey = results.NextRowKey,
-                PageCount = results.PageCount,
-                HasMoreRecords = results.HasMoreRecords,
-                PageIndex = results.PageIndex,
-                PageSize = results.PageSize,
-            };
+            return await QuerySummaryAsync<UserInfoSummary, AppUser>(mthd, us => us.Name, listRequest);
         }
 
         public async Task DeleteAsync(string userId)
@@ -248,8 +225,7 @@ namespace LagoVista.UserAdmin.Repos.Users
 
         public async Task<ListResponse<UserInfoSummary>> GetUsersWithoutOrgsAsync(ListRequest listRequest)
         {
-            var users = (await QueryAsync(usr => (usr.Organizations == null || usr.Organizations.Count == 0), listRequest));
-            return ListResponse<UserInfoSummary>.Create(users.Model.Select(usr => usr.CreateSummary(false, false)));
+            return (await QuerySummaryAsync<UserInfoSummary, AppUser>(usr => (usr.Organizations == null || usr.Organizations.Count == 0), us=>us.Name, listRequest));
         }
 
         public async Task<AppUser> GetUserByExternalLoginAsync(ExternalLoginTypes loginType, string id)

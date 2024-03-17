@@ -1475,4 +1475,10 @@
   <data name="ScheduleType_WeekEnd" xml:space="preserve">
     <value>Week End</value>
   </data>
+  <data name="AuthenticationLogs_Description" xml:space="preserve">
+    <value>Provides details about authentication events within NuvIoT</value>
+  </data>
+  <data name="AuthenticationLogs_Title" xml:space="preserve">
+    <value>Authentication Logs</value>
+  </data>
 </root>

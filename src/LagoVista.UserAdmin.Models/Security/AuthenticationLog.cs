@@ -1,8 +1,9 @@
 ﻿using LagoVista.Core;
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
+using LagoVista.IoT.Logging.Resources;
+using LagoVista.UserAdmin.Models.Resources;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
@@ -44,12 +45,15 @@ namespace LagoVista.UserAdmin.Models.Security
         RevokeRole,
     }
 
+    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.AuthenticationLogs_Title, LoggingResources.Names.LogRecord_Description,
+       UserAdminResources.Names.AuthenticationLogs_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources),
+        GetListUrl: "/sys/auth/log", ListUIUrl: "/sysadmin/areas/logs", Icon: "icon-ae-coding-laptop")]
     public class AuthenticationLog : TableStorageEntity
     {
         public AuthenticationLog(AuthLogTypes authType)
         {
             AuthType = authType.ToString();
-            PartitionKey = Enum.GetName(typeof(AuthLogTypes), authType).ToString().ToLower(); ;
+            PartitionKey = DateTime.UtcNow.ToDateOnly();
             RowKey = DateTime.Now.ToInverseTicksRowKey();
             TimeStamp = DateTime.UtcNow.ToJSONString();
         }

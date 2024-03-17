@@ -1,4 +1,4 @@
-﻿/*2/25/2024 9:22:21 AM*/
+﻿/*3/17/2024 10:47:42 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -186,6 +186,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AssetSet_Title
 
 		public static string AssetSet_Title { get { return GetResourceString("AssetSet_Title"); } }
+//Resources:UserAdminResources:AuthenticationLogs_Description
+
+		public static string AuthenticationLogs_Description { get { return GetResourceString("AuthenticationLogs_Description"); } }
+//Resources:UserAdminResources:AuthenticationLogs_Title
+
+		public static string AuthenticationLogs_Title { get { return GetResourceString("AuthenticationLogs_Title"); } }
 //Resources:UserAdminResources:AuthErr_AuthRequestNull
 
 		public static string AuthErr_AuthRequestNull { get { return GetResourceString("AuthErr_AuthRequestNull"); } }
@@ -1450,6 +1456,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AssetSet_IsRestricted = "AssetSet_IsRestricted";
 			public const string AssetSet_IsRestricted_Help = "AssetSet_IsRestricted_Help";
 			public const string AssetSet_Title = "AssetSet_Title";
+			public const string AuthenticationLogs_Description = "AuthenticationLogs_Description";
+			public const string AuthenticationLogs_Title = "AuthenticationLogs_Title";
 			public const string AuthErr_AuthRequestNull = "AuthErr_AuthRequestNull";
 			public const string AuthErr_CanNotRemoveSelfFromOrgAdmin = "AuthErr_CanNotRemoveSelfFromOrgAdmin";
 			public const string AuthErr_CouldNotFindUser = "AuthErr_CouldNotFindUser";
