@@ -53,7 +53,7 @@ namespace LagoVista.UserAdmin.Models.Security
         public AuthenticationLog(AuthLogTypes authType)
         {
             AuthType = authType.ToString();
-            PartitionKey = DateTime.UtcNow.ToDateOnly();
+            PartitionKey = DateTime.UtcNow.ToDateOnly().Replace("/","");
             RowKey = DateTime.Now.ToInverseTicksRowKey();
             TimeStamp = DateTime.UtcNow.ToJSONString();
         }

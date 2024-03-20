@@ -66,6 +66,15 @@ namespace LagoVista.UserAdmin.Models.Apps
             var myItems = await _inboxRepo.GetInboxItemsAsync(org.Id, user.Id, listRequest);
             var allItems = new List<InboxItem>();
             allItems.AddRange(myItems.Model.Select(mod => mod.ToInboxItem()));
+            foreach (var item in myItems.Model)
+            {
+                if (!item.Viewed)
+                {
+                    item.Viewed = true;
+                    item.ViewedTimeStamp = DateTime.UtcNow.ToJSONString();
+                    await this._inboxRepo.UpdateInboxItemAsync(item);
+                }
+            }
 
             var sysItems = await _systemNotificationRepo.GetSystemAndPublicNotifications(org.Id);
             allItems.AddRange(sysItems.Select(sys => sys.ToInboxItem()));
