@@ -30,6 +30,18 @@ namespace LagoVista.AspNetCore.Identity.Services
 		public string name { get; set; }
     }
 
+		public class SendGridSegmentRequest
+        {
+			public string name { get; set; }
+			public string query_dsl { get; set; }
+        }
+
+		public class SendGridSegmentResponse
+        {
+			public string id { get; set; }
+			public string name { get; set; }
+        }
+
 	private class SendGridContact
 	{
 			public SendGridContact(Contact contact, EntityHeader org)
@@ -506,6 +518,35 @@ namespace LagoVista.AspNetCore.Identity.Services
 			var sendGridContact = new SendGridContact(contact, org);
 			var result = await RegisterContactAsync(sendGridContact);
 			return result;
+		}
+
+        public async Task<InvokeResult<string>> CreateEmailListAsync(string listName, string customField, string id)
+        {
+			var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
+
+			var segmentRequest = new SendGridSegmentRequest()
+			{
+				name = listName,
+				query_dsl = $"SELECT c.contact_id, c.updated_at FROM contact_data as c where c.{customField} = '{id}' "
+			};
+
+			var json = JsonConvert.SerializeObject(segmentRequest);
+
+			var response = await client.RequestAsync(
+				method: SendGridClient.Method.POST,
+				urlPath: "marketing/segments/2.0",
+				requestBody: json
+			);
+
+			var result = await response.Body.ReadAsStringAsync();
+			var listResponse = JsonConvert.DeserializeObject<SendGridListResponse>(result);
+
+			Console.WriteLine(json);
+			Console.WriteLine(result);
+			Console.WriteLine(response.StatusCode);
+			Console.WriteLine(response.Headers.ToString());
+
+			return InvokeResult<string>.Create(listResponse.id);
 		}
     }
 }

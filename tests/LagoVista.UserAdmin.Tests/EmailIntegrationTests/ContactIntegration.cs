@@ -54,7 +54,10 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
         [TestMethod]
         public async Task AddList()
         {
-            var result = await _emailSenderService.CreateEmailListAsync("Test List2");
+            var customField = "industry_id";
+            var id = "abc123";
+
+            var result = await _emailSenderService.CreateEmailListAsync("Test Industry", customField, id);
 
             Console.WriteLine(result.Result);
 
