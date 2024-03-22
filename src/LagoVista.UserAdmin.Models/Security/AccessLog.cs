@@ -10,7 +10,7 @@ namespace LagoVista.UserAdmin.Models.Security
         {
             RowKey = DateTime.Now.ToInverseTicksRowKey();
             Resource = resource;
-            PartitionKey = resourceId;
+            PartitionKey = resourceId.Replace("-", "");
             ResourceId = resourceId;
             DateStamp = DateTime.Now.ToJSONString();
         }

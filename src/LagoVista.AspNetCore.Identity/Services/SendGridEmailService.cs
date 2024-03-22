@@ -1,9 +1,13 @@
 ﻿using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using Newtonsoft.Json;
+using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
+using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
 
@@ -15,6 +19,79 @@ namespace LagoVista.AspNetCore.Identity.Services
         IAppConfig _appConfig;
         IAdminLogger _adminLogger;
 
+	private class SendGridListResponse
+	{
+		public string name { get; set; }
+		public string id { get; set; }
+	}
+
+	public class SendGridListRequest
+    {
+		public string name { get; set; }
+    }
+
+	private class SendGridContact
+	{
+			public SendGridContact(Contact contact, EntityHeader org)
+			{
+				email = contact.Email;
+				first_name = contact.FirstName;
+				last_name = contact.LastName;
+				phone_number = contact.Phone;
+
+				custom_fields.organization = org.Text;
+				custom_fields.organization_id = org.Id;
+				custom_fields.nuviot_contact_id = contact.Id;
+			}
+
+			public SendGridContact(Contact contact, Company company)
+            {
+				email = contact.Email;
+				first_name = contact.FirstName;
+				last_name = contact.LastName;
+				phone_number = contact.Phone;
+				city = company.City;
+				state_province_region = company.State;
+				postal_code = company.Zip;
+
+				custom_fields.industry = company.Industry?.Text ?? "?";
+				custom_fields.industry_id = company.Industry?.Id ?? "?";
+				custom_fields.organization = company.OwnerOrganization.Text;
+				custom_fields.organization_id = company.OwnerOrganization?.Id;
+				custom_fields.nuviot_contact_id = contact.Id;
+				custom_fields.company = company.Name;
+				custom_fields.company_id = company.Id;
+            }
+
+			public string email { get; set; }
+
+			public string first_name { get; set; }
+			public string last_name { get; set; }
+			
+			public string city { get; set; }
+			public string state_province_region { get; set; }
+			public string postal_code { get; set; }
+			public string country { get; set; }
+			public string phone_number { get; set; }
+
+
+			public SendGridContactCustomFields custom_fields
+			{
+				get; set;
+			} = new SendGridContactCustomFields();
+		}
+
+		public class SendGridContactCustomFields
+		{
+			public string company { get; set; } = "?";
+			public string company_id { get; set; } = "?";
+			public string industry { get; set; } = "?";
+			public string industry_id { get; set; } = "?";
+			public string nuviot_contact_id { get; set; } = "";
+			public string organization { get; set; } = "";
+			public string organization_id { get; set; } = "";
+		}
+
         public SendGridEmailService(ILagoVistaAspNetCoreIdentityProviderSettings settings, IAppConfig appConfig, IAdminLogger adminLogger)
         {
             _settings = settings;
@@ -22,7 +99,77 @@ namespace LagoVista.AspNetCore.Identity.Services
             _adminLogger = adminLogger;
         }
 
-        public async Task<InvokeResult> SendAsync(string email, string subject, string body)
+        private async Task<InvokeResult<string>> RegisterContactAsync(SendGridContact contact)
+        {
+			var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
+
+			var contacts = new List<SendGridContact>();
+			contacts.Add(contact);
+
+			var json = JsonConvert.SerializeObject(contacts);
+
+			json = @$"{{""contacts"":{json}}}";
+
+			Console.WriteLine(json);
+
+			var response = await client.RequestAsync(
+				method: SendGridClient.Method.PUT,
+				urlPath: "marketing/contacts",
+				requestBody: json
+				);
+
+			var result = await response.Body.ReadAsStringAsync();
+
+			Console.WriteLine(response.StatusCode);
+			Console.WriteLine(response.Headers.ToString());
+
+			return InvokeResult<string>.Create(result);
+		}
+
+
+		public async Task<InvokeResult<string>> CreateEmailListAsync(string listName)
+		{
+			var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
+
+			var listRequest = new SendGridListRequest()
+			{
+				name = listName
+			};
+
+			var response = await client.RequestAsync(
+				method: SendGridClient.Method.POST,
+				urlPath: "marketing/lists",
+				requestBody: JsonConvert.SerializeObject(listRequest)
+			); 
+
+			var result = await response.Body.ReadAsStringAsync();
+			var listResponse = JsonConvert.DeserializeObject<SendGridListResponse>(result);
+
+			Console.WriteLine(response.StatusCode);
+			Console.WriteLine(response.Headers.ToString());
+
+			return InvokeResult<string>.Create(listResponse.id);
+		}
+
+
+		public async Task<InvokeResult> AddContactToListAsync(string listId, string contactId)
+		{
+			var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
+			var response = await client.RequestAsync(
+				method: SendGridClient.Method.POST,
+				urlPath: $"contactdb/lists/{listId}/recipients/{contactId}"
+			);
+
+			var result = await response.Body.ReadAsStringAsync();
+
+			Console.WriteLine(response.StatusCode);
+			Console.WriteLine(result);
+			Console.WriteLine(response.Headers.ToString());
+
+			return InvokeResult.Success;
+		}
+
+		public async Task<InvokeResult> SendAsync(string email, string subject, string body)
         {
 
             try
@@ -345,5 +492,20 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
 
         }
+
+        public async Task<InvokeResult<string>> RegisterContactAsync(Contact contact, Company company)
+        {
+			var sendGridContact = new SendGridContact(contact, company);
+
+			var result = await RegisterContactAsync(sendGridContact);
+			return result;
+		}
+
+        public async Task<InvokeResult<string>> RegisterContactAsync(Contact contact, EntityHeader org)
+        {
+			var sendGridContact = new SendGridContact(contact, org);
+			var result = await RegisterContactAsync(sendGridContact);
+			return result;
+		}
     }
 }
