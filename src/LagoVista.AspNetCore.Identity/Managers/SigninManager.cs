@@ -78,10 +78,14 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public async Task<InvokeResult<UserLoginResponse>> PasswordSignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure)
         {
+            var response = new UserLoginResponse();
+
             var signIn = UserSignInMetrics.WithLabels(nameof(PasswordSignInAsync));
             UserLoginAttempts.Inc();
 
             var appUser = await _userManager.FindByEmailAsync(userName);
+            response.AddAuthMetric("Got User");
+
             if (appUser == null)
             {
                 await LogEntityActionAsync(userName, typeof(AppUser).Name, $"Could not find user with account [{userName}].", EntityHeader.Create("unkonwn", "unknown"), EntityHeader.Create(userName, userName));
@@ -97,6 +101,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             var signInResult = await _signinManager.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
 
+            response.AddAuthMetric("Password Sign In");
+
             if (signInResult.Succeeded)
             {
                 if (appUser.IsAccountDisabled)
@@ -110,20 +116,29 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 if (appUser.CurrentOrganization != null)
                 {
                     var org = await _organizationRepo.GetOrganizationAsync(appUser.CurrentOrganization.Id);
+                    response.AddAuthMetric("Loaded Organization");
+
                     if (org.CreatedBy.Id == appUser.Id)
                     {
                         Console.WriteLine("SignInManager__PasswordSignInAsync; User created organization, is an owner.");
 
                         var ownerRoleId = _defaultRoleList.GetStandardRoles().Single(rl => rl.Key == DefaultRoleList.OWNER).Id;
+                        response.AddAuthMetric("Got Owner Role Id");
+
                         var hasOwnerRole = await _userRoleManager.UserHasRoleAsync(ownerRoleId, appUser.Id, appUser.CurrentOrganization.Id);
+                        response.AddAuthMetric("Check User Has Owner Role");
+
                         if (!hasOwnerRole)
                         {
                             System.Console.WriteLine("SignInManager__PasswordSignInAsync; User not owner, adding as role.");
                             await _userRoleManager.GrantUserRoleAsync(appUser.Id, ownerRoleId, appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
+                            response.AddAuthMetric("Grant User Role");
                         }
                         else
                         {
+                            response.AddAuthMetric("User was owner, don't need to add role");
                             System.Console.WriteLine("SignInManager__PasswordSignInAsync; User already an owner, no need to add role.");
+
                         }
                     }
                     else
@@ -132,6 +147,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                     }
 
                     var isOrgAdmin = await _orgManager.IsUserOrgAdminAsync(appUser.CurrentOrganization.Id, appUser.Id);
+                    response.AddAuthMetric("Check if User is Admin");
                     if (isOrgAdmin != appUser.IsOrgAdmin)
                     {
                         appUser.IsOrgAdmin = isOrgAdmin;
@@ -143,20 +159,23 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 appUser.LastLogin = DateTime.UtcNow.ToJSONString();
                 // we can bypass the manager here, we are updating the current user if they are logged in, should not require any security.
                 await _appUserRepo.UpdateAsync(appUser);
-            
+                response.AddAuthMetric("Update user");
+
                 await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
                 signIn.Dispose();
                 UserLoginSuccess.Inc();
 
                 var favs = await _userFavoritesManager.GetUserFavoritesAsync(appUser.ToEntityHeader(), appUser.CurrentOrganization.ToEntityHeader());
-                var mrus = await _mostRecentlyUsedManager.GetMostRecentlyUsedAsync(appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
+                response.AddAuthMetric("Add FAVs");
 
-                return InvokeResult<UserLoginResponse>.Create(new UserLoginResponse()
-                {
-                    User = appUser,
-                    Favorites = favs,
-                    MostRecentlyUsed = mrus
-                });
+                var mrus = await _mostRecentlyUsedManager.GetMostRecentlyUsedAsync(appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
+                response.AddAuthMetric("Add MRUs");
+
+                response.User = appUser;
+                response.Favorites = favs;
+                response.MostRecentlyUsed = mrus;
+
+                return InvokeResult<UserLoginResponse>.Create(response);
             }
 
             if (signInResult.IsLockedOut)
