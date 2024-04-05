@@ -6,6 +6,8 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 {
     public interface IEmailSender
     {
+        Task<InvokeResult<string>> SendAsync(Email email);
+
         Task<InvokeResult> SendAsync(string email, string subject, string message);
         Task<InvokeResult<string>> RegisterContactAsync(Contact contact, Company company);
         Task<InvokeResult<string>> RegisterContactAsync(Contact contact, EntityHeader org);

@@ -71,5 +71,21 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
         {
             var result = await _emailSenderService.AddContactToListAsync("da786a80-5f53-4077-9ee6-fdd415146e24", "eee130d5-dbb7-4f3a-9943-88ec38641bc8");
         }
+
+        [TestMethod]
+        public async Task SendEmail()
+        {
+            var result = await _emailSenderService.SendAsync(new Email()
+            {
+                To = new System.Collections.Generic.List<EmailAddress>() { new EmailAddress() { Address = "kevinw@slsys.net", Name = "Keivn" } },
+                Subject = "Test Message",
+                From = new EmailAddress() {  Address = "alerts@nuviot.com", Name= "ALerts"},
+                Content = "Hi Kevin",
+            });
+
+
+            Assert.IsTrue(result.Successful);
+            Console.WriteLine(result.Result); 
+        }
     }
 }

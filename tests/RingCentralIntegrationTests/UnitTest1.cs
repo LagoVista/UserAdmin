@@ -20,9 +20,13 @@ namespace RingCentralIntegrationTests
         [SetUp]
         public async Task Setup()
         {
-            var clientId = Environment.GetEnvironmentVariable("RC_CLIENT_ID");
-            var secret = Environment.GetEnvironmentVariable("RC_CLIENT_SECRET");
+            //var clientId = Environment.GetEnvironmentVariable("RC_CLIENT_ID");
+            //var secret = Environment.GetEnvironmentVariable("RC_CLIENT_SECRET");
             var url = Environment.GetEnvironmentVariable("RC_CLIENT_URL");
+
+            var clientId = Environment.GetEnvironmentVariable("RC_CLIENT_ID_WH");
+            var secret = Environment.GetEnvironmentVariable("RC_CLIENT_SECRET_WH");
+
             var jwt = Environment.GetEnvironmentVariable("RC_CLIENT_JWT");
 
             _rc = new RestClient(clientId, secret, url);
@@ -86,6 +90,23 @@ namespace RingCentralIntegrationTests
             {
                 Console.WriteLine(contact);
             }
+        }
+
+        [Test]
+        public async Task Subscribe()
+        {
+            var bodyParams = new CreateSubscriptionRequest();
+            bodyParams.eventFilters = new[] { "/restapi/v1.0/account/~/telephony/sessions" };
+            bodyParams.deliveryMode = new NotificationDeliveryModeRequest
+            {
+                transportType = "WebHook",
+                address = "https://www.nuviot.com/webhooks/AA2C78499D0140A5A9CE4B7581EF9691/ringcentral"
+            };
+            bodyParams.expiresIn = 60*60*24*365;
+
+            var resp = await _rc.Restapi().Subscription().Post(bodyParams);
+            Console.WriteLine("Subscription Id: " + resp.id);
+            Console.WriteLine("Ready to receive incoming SMS via WebHook.");
         }
     }
 

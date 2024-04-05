@@ -2,12 +2,14 @@
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 
@@ -162,8 +164,6 @@ namespace LagoVista.AspNetCore.Identity.Services
 
 			return InvokeResult<string>.Create(listResponse.id);
 		}
-
-
 		public async Task<InvokeResult> AddContactToListAsync(string listId, string contactId)
 		{
 			var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
@@ -476,7 +476,7 @@ namespace LagoVista.AspNetCore.Identity.Services
 
 				var msg = new SendGridMessage();
 				msg.AddTo(email);
-				msg.From = new EmailAddress(_settings.SmtpFrom, "NuvIoT Notifications") ;
+				msg.From = new SendGrid.Helpers.Mail.EmailAddress(_settings.SmtpFrom, "NuvIoT Notifications") ;
 				msg.Subject = subject;
 				msg.AddContent(MediaTypeNames.Text.Html, body);
 
@@ -548,5 +548,28 @@ namespace LagoVista.AspNetCore.Identity.Services
 
 			return InvokeResult<string>.Create(listResponse.id);
 		}
-    }
+
+        public async Task<InvokeResult<string>> SendAsync(Email email)
+        {
+			var msg = new SendGridMessage();
+			foreach(var addr in email.To)
+				msg.AddTo(addr.Address, addr.Name);
+			
+			msg.From = new SendGrid.Helpers.Mail.EmailAddress(email.From.Address, email.From.Name);
+		
+			if(email.ReplyTo != null && email.ReplyTo.Address != email.From.Address)		
+				msg.ReplyTo = new SendGrid.Helpers.Mail.EmailAddress(email.ReplyTo.Address, email.ReplyTo.Name);
+	
+			msg.Subject = email.Subject;
+
+			msg.AddContent(MediaTypeNames.Text.Html, email.Content);
+
+			var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
+			var response = await client.SendEmailAsync(msg);
+
+			var messageIds = response.Headers.GetValues("X-Message-Id");
+
+			return InvokeResult<string>.Create(messageIds.FirstOrDefault());
+		}
+	}
 }
