@@ -15,37 +15,37 @@ using System.Threading.Tasks;
 
 namespace LagoVista.AspNetCore.Identity.Services
 {
-    public class SendGridEmailService : IEmailSender
-    {
-        ILagoVistaAspNetCoreIdentityProviderSettings _settings;
-        IAppConfig _appConfig;
-        IAdminLogger _adminLogger;
-
-	private class SendGridListResponse
+	public class SendGridEmailService : IEmailSender
 	{
-		public string name { get; set; }
-		public string id { get; set; }
-	}
+		ILagoVistaAspNetCoreIdentityProviderSettings _settings;
+		IAppConfig _appConfig;
+		IAdminLogger _adminLogger;
 
-	public class SendGridListRequest
-    {
-		public string name { get; set; }
-    }
+		private class SendGridListResponse
+		{
+			public string name { get; set; }
+			public string id { get; set; }
+		}
+
+		public class SendGridListRequest
+		{
+			public string name { get; set; }
+		}
 
 		public class SendGridSegmentRequest
-        {
+		{
 			public string name { get; set; }
 			public string query_dsl { get; set; }
-        }
+		}
 
 		public class SendGridSegmentResponse
-        {
+		{
 			public string id { get; set; }
 			public string name { get; set; }
-        }
+		}
 
-	private class SendGridContact
-	{
+		private class SendGridContact
+		{
 			public SendGridContact(Contact contact, EntityHeader org)
 			{
 				email = contact.Email;
@@ -59,7 +59,7 @@ namespace LagoVista.AspNetCore.Identity.Services
 			}
 
 			public SendGridContact(Contact contact, Company company)
-            {
+			{
 				email = contact.Email;
 				first_name = contact.FirstName;
 				last_name = contact.LastName;
@@ -75,13 +75,13 @@ namespace LagoVista.AspNetCore.Identity.Services
 				custom_fields.nuviot_contact_id = contact.Id;
 				custom_fields.company = company.Name;
 				custom_fields.company_id = company.Id;
-            }
+			}
 
 			public string email { get; set; }
 
 			public string first_name { get; set; }
 			public string last_name { get; set; }
-			
+
 			public string city { get; set; }
 			public string state_province_region { get; set; }
 			public string postal_code { get; set; }
@@ -106,15 +106,15 @@ namespace LagoVista.AspNetCore.Identity.Services
 			public string organization_id { get; set; } = "";
 		}
 
-        public SendGridEmailService(ILagoVistaAspNetCoreIdentityProviderSettings settings, IAppConfig appConfig, IAdminLogger adminLogger)
-        {
-            _settings = settings;
-            _appConfig = appConfig;
-            _adminLogger = adminLogger;
-        }
+		public SendGridEmailService(ILagoVistaAspNetCoreIdentityProviderSettings settings, IAppConfig appConfig, IAdminLogger adminLogger)
+		{
+			_settings = settings;
+			_appConfig = appConfig;
+			_adminLogger = adminLogger;
+		}
 
-        private async Task<InvokeResult<string>> RegisterContactAsync(SendGridContact contact)
-        {
+		private async Task<InvokeResult<string>> RegisterContactAsync(SendGridContact contact)
+		{
 			var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
 
 			var contacts = new List<SendGridContact>();
@@ -154,7 +154,7 @@ namespace LagoVista.AspNetCore.Identity.Services
 				method: SendGridClient.Method.POST,
 				urlPath: "marketing/lists",
 				requestBody: JsonConvert.SerializeObject(listRequest)
-			); 
+			);
 
 			var result = await response.Body.ReadAsStringAsync();
 			var listResponse = JsonConvert.DeserializeObject<SendGridListResponse>(result);
@@ -182,11 +182,11 @@ namespace LagoVista.AspNetCore.Identity.Services
 		}
 
 		public async Task<InvokeResult> SendAsync(string email, string subject, string body)
-        {
+		{
 
-            try
-            {
-                body = $@"
+			try
+			{
+				body = $@"
 <!DOCTYPE html PUBLIC ""-//W3C//DTD XHTML 1.0 Strict//EN"" ""http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd""><html xmlns=""http://www.w3.org/1999/xhtml""><head>
 <meta name=""viewport"" content=""width=device-width, initial-scale=1, minium-scale=1, maxium-scale=1"">
 	<title>NuvIoT - IoT Eneablement Platform</title>
@@ -476,52 +476,52 @@ namespace LagoVista.AspNetCore.Identity.Services
 
 				var msg = new SendGridMessage();
 				msg.AddTo(email);
-				msg.From = new SendGrid.Helpers.Mail.EmailAddress(_settings.SmtpFrom, "NuvIoT Notifications") ;
+				msg.From = new SendGrid.Helpers.Mail.EmailAddress(_settings.SmtpFrom, "NuvIoT Notifications");
 				msg.Subject = subject;
 				msg.AddContent(MediaTypeNames.Text.Html, body);
 
-				if(String.IsNullOrEmpty(_settings.SmtpServer.Password))
-                {
+				if (String.IsNullOrEmpty(_settings.SmtpServer.Password))
+				{
 					throw new ArgumentNullException("SMTP Server API Key (SendGrid) is null or empty");
-                }
+				}
 
 				var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
 				var response = await client.SendEmailAsync(msg);
 
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "SendGridEmailServices_SendAsync", "EmailSent",
-                    new System.Collections.Generic.KeyValuePair<string, string>("Subject", subject),
-                    new System.Collections.Generic.KeyValuePair<string, string>("to", email));
+				_adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "SendGridEmailServices_SendAsync", "EmailSent",
+					new System.Collections.Generic.KeyValuePair<string, string>("Subject", subject),
+					new System.Collections.Generic.KeyValuePair<string, string>("to", email));
 
-                return InvokeResult.Success;
-            }
-            catch (Exception ex)
-            {
-                _adminLogger.AddException("SendGridEmailServices_SendAsync", ex,
-                    new System.Collections.Generic.KeyValuePair<string, string>("Subject", subject),
-                    new System.Collections.Generic.KeyValuePair<string, string>("to", email));
+				return InvokeResult.Success;
+			}
+			catch (Exception ex)
+			{
+				_adminLogger.AddException("SendGridEmailServices_SendAsync", ex,
+					new System.Collections.Generic.KeyValuePair<string, string>("Subject", subject),
+					new System.Collections.Generic.KeyValuePair<string, string>("to", email));
 
-                return InvokeResult.FromException("SendGridEmailServices_SendAsync", ex);
-            }
+				return InvokeResult.FromException("SendGridEmailServices_SendAsync", ex);
+			}
 
-        }
+		}
 
-        public async Task<InvokeResult<string>> RegisterContactAsync(Contact contact, Company company)
-        {
+		public async Task<InvokeResult<string>> RegisterContactAsync(Contact contact, Company company)
+		{
 			var sendGridContact = new SendGridContact(contact, company);
 
 			var result = await RegisterContactAsync(sendGridContact);
 			return result;
 		}
 
-        public async Task<InvokeResult<string>> RegisterContactAsync(Contact contact, EntityHeader org)
-        {
+		public async Task<InvokeResult<string>> RegisterContactAsync(Contact contact, EntityHeader org)
+		{
 			var sendGridContact = new SendGridContact(contact, org);
 			var result = await RegisterContactAsync(sendGridContact);
 			return result;
 		}
 
-        public async Task<InvokeResult<string>> CreateEmailListAsync(string listName, string customField, string id)
-        {
+		public async Task<InvokeResult<string>> CreateEmailListAsync(string listName, string customField, string id)
+		{
 			var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
 
 			var segmentRequest = new SendGridSegmentRequest()
@@ -549,17 +549,17 @@ namespace LagoVista.AspNetCore.Identity.Services
 			return InvokeResult<string>.Create(listResponse.id);
 		}
 
-        public async Task<InvokeResult<string>> SendAsync(Email email)
-        {
+		public async Task<InvokeResult<string>> SendAsync(Email email)
+		{
 			var msg = new SendGridMessage();
-			foreach(var addr in email.To)
+			foreach (var addr in email.To)
 				msg.AddTo(addr.Address, addr.Name);
-			
+
 			msg.From = new SendGrid.Helpers.Mail.EmailAddress(email.From.Address, email.From.Name);
-		
-			if(email.ReplyTo != null && email.ReplyTo.Address != email.From.Address)		
+
+			if (email.ReplyTo != null && email.ReplyTo.Address != email.From.Address)
 				msg.ReplyTo = new SendGrid.Helpers.Mail.EmailAddress(email.ReplyTo.Address, email.ReplyTo.Name);
-	
+
 			msg.Subject = email.Subject;
 
 			msg.AddContent(MediaTypeNames.Text.Html, email.Content);
@@ -567,9 +567,15 @@ namespace LagoVista.AspNetCore.Identity.Services
 			var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
 			var response = await client.SendEmailAsync(msg);
 
-			var messageIds = response.Headers.GetValues("X-Message-Id");
-
-			return InvokeResult<string>.Create(messageIds.FirstOrDefault());
+			if (response.IsSuccessStatusCode)
+			{
+				var messageIds = response.Headers.GetValues("X-Message-Id");
+				return InvokeResult<string>.Create(messageIds.FirstOrDefault());
+			}
+			else {
+				var body = await response.Body.ReadAsStringAsync();				
+				return InvokeResult<string>.FromError(String.IsNullOrEmpty(body) ? response.StatusCode.ToString() : body);
+			}
 		}
 	}
 }
