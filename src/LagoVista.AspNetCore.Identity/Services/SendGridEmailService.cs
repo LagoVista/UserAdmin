@@ -70,7 +70,8 @@ namespace LagoVista.AspNetCore.Identity.Services
 
 				custom_fields.industry = company.Industry?.Text ?? "?";
 				custom_fields.industry_id = company.Industry?.Id ?? "?";
-				custom_fields.organization = company.OwnerOrganization.Text;
+                custom_fields.niche_id = company.IndustryNiche?.Id ?? "?";
+                custom_fields.organization = company.OwnerOrganization.Text;
 				custom_fields.organization_id = company.OwnerOrganization?.Id;
 				custom_fields.nuviot_contact_id = contact.Id;
 				custom_fields.company = company.Name;
@@ -101,6 +102,7 @@ namespace LagoVista.AspNetCore.Identity.Services
 			public string company_id { get; set; } = "?";
 			public string industry { get; set; } = "?";
 			public string industry_id { get; set; } = "?";
+			public string niche_id { get; set; } = "?";
 			public string nuviot_contact_id { get; set; } = "";
 			public string organization { get; set; } = "";
 			public string organization_id { get; set; } = "";
