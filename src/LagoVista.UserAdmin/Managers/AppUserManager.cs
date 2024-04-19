@@ -516,7 +516,7 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegMissingPassword.ToErrorMessage());
             }
 
-            var emailRegEx = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            var emailRegEx = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,12})+)$");
             if (!emailRegEx.Match(newUser.Email).Success)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateUserAsync", UserAdminErrorCodes.RegInvalidEmailAddress.Message);

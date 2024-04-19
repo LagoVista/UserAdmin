@@ -481,7 +481,7 @@ namespace LagoVista.UserAdmin.Managers
             }
 
 
-            var emailRegEx = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            var emailRegEx = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,12})+)$");
             if (!emailRegEx.Match(inviteViewModel.Email).Success)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "OrgManager_InviteUserAsync", UserAdminErrorCodes.InviteEmailIsInvalid.Message);
