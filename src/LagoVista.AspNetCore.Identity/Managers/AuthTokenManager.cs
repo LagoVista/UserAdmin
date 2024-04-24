@@ -139,7 +139,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public async Task<InvokeResult<AuthResponse>> SingleUseTokenGrantAsync(AuthRequest authRequest)
         {
-            Console.WriteLine("ai1: " + authRequest.AppInstanceId);
+            _adminLogger.Trace($"[AuthTOkenManager__SingleUseTokenGrantAsync] App Instance {authRequest.AppInstanceId}");
 
             var refreshTokenRequestValidationResult = _authRequestValidators.ValidateSingleUseTokenGrant(authRequest);
             if (!refreshTokenRequestValidationResult.Successful) return InvokeResult<AuthResponse>.FromInvokeResult(refreshTokenRequestValidationResult);
@@ -162,7 +162,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             {
                 return InvokeResult<AuthResponse>.FromInvokeResult(result);
             }
-            Console.WriteLine("ai1: " + authRequest.AppInstanceId);
+            _adminLogger.Trace($"[AuthTOkenManager__SingleUseTokenGrantAsync] App Instance {authRequest.AppInstanceId}");
 
             var updateLastRefreshTokenResult = (await _appInstanceManager.UpdateLastLoginAsync(appUser.Id, authRequest));
             if (updateLastRefreshTokenResult.Successful)

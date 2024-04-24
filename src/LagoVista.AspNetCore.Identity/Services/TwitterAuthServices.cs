@@ -1,4 +1,6 @@
-﻿using LagoVista.Core.Interfaces;
+﻿using LagoVista.Core.Authentication.Models;
+using LagoVista.Core.Interfaces;
+using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Models.Security;
@@ -23,14 +25,16 @@ namespace LagoVista.AspNetCore.Identity.Services
     {
         private readonly IOAuthSettings _oauthSettings;
         private readonly IAppConfig _appConfig;
+        private readonly IAdminLogger _adminLogger;
 
         const string REQUEST_TOKEN_ENDPOINT = "https://api.twitter.com/oauth/request_token";
         const string ACCESS_TOKEN_ENDPOINT = "https://api.twitter.com/oauth/access_token";
 
-        public TwitterAuthServices(IOAuthSettings oauthSettings, IAppConfig appConfig)
+        public TwitterAuthServices(IOAuthSettings oauthSettings, IAppConfig appConfig, IAdminLogger adminLogger)
         {
             _oauthSettings = oauthSettings ?? throw new ArgumentNullException(nameof(oauthSettings));
             _appConfig = appConfig;
+            _adminLogger = adminLogger;
         }
 
         private async Task<HttpResponseMessage> ExecuteRequestAsync(string url,
@@ -84,11 +88,11 @@ namespace LagoVista.AspNetCore.Identity.Services
             canonicalizedRequestBuilder.Append('&');
             canonicalizedRequestBuilder.Append(Uri.EscapeDataString(parameterString));
 
-            Console.WriteLine($"  Twitter Oauth statement: {canonicalizedRequestBuilder}");
+            _adminLogger.Trace($"[AuthTOkenManager__ExecuteRequestAsync] OAUth Statement {canonicalizedRequestBuilder}");
 
             foreach(var hdr in authorizationParts)
             {
-                Console.WriteLine($"  hdr: {hdr.Key}={hdr.Value}");
+                _adminLogger.Trace($"\t\t[AuthTOkenManager__ExecuteRequestAsync] hdr: {hdr.Key}={hdr.Value}");
             }
 
             var signature = ComputeSignature(_oauthSettings.TwitterOAuth.Secret, accessToken?.TokenSecret, canonicalizedRequestBuilder.ToString());
@@ -118,7 +122,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             var request = new HttpRequestMessage(httpMethod, url + queryString);
             request.Headers.Add("Authorization", authorizationHeaderBuilder.ToString());
 
-            Console.WriteLine("   Request To: " + request.RequestUri);
+            _adminLogger.Trace($"[AuthTOkenManager__ExecuteRequestAsync] Request To: {request.RequestUri}");
 
             // This header is so that the error response is also JSON - without it the success response is already JSON
             request.Headers.Add("Accept", "application/json");
@@ -135,8 +139,9 @@ namespace LagoVista.AspNetCore.Identity.Services
         public async Task<TwitterRequestToken> ObtainRequestTokenAsync(CancellationToken? token = null)
         {
             var callBackUri = $"{_appConfig.WebAddress}/account/oauthtwitter/authorize/callback";
-            Console.Write($"Callback URI: {callBackUri}");
-            
+
+            _adminLogger.Trace($"[AuthTOkenManager__ObtainRequestTokenAsync] Callback URI:  {callBackUri}");
+
             var response = await ExecuteRequestAsync(REQUEST_TOKEN_ENDPOINT, HttpMethod.Post, 
                   extraOAuthPairs: new Dictionary<string, string> { {  "oauth_callback", callBackUri } });
 

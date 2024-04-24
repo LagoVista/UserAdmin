@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Models;
+using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Security;
@@ -13,11 +14,13 @@ namespace LagoVista.UserAdmin.Managers
     {
         private readonly IUserSecurityServices _userSecurityService;
         private readonly IModuleRepo _moduleRepo;
+        private readonly IAdminLogger _adminLogger;
 
-        public UserAccessManager(IUserSecurityServices userSecurityService, IModuleRepo moduleRepo)
+        public UserAccessManager(IUserSecurityServices userSecurityService, IModuleRepo moduleRepo, IAdminLogger adminLogger)
         {
             _userSecurityService = userSecurityService ?? throw new ArgumentNullException(nameof(userSecurityService));
             _moduleRepo = moduleRepo ?? throw new ArgumentNullException(nameof(moduleRepo));
+            _adminLogger = adminLogger ?? throw new ArgumentNullException(nameof(adminLogger));
         }
 
         public async Task<List<ModuleSummary>> GetUserModulesAsync(string userId, string orgId)
@@ -28,7 +31,7 @@ namespace LagoVista.UserAdmin.Managers
             var userRoles = await _userSecurityService.GetRolesForUserAsync(userId, orgId);
             if (userRoles.Any(rol => rol.Key == DefaultRoleList.OWNER))
             {
-                Console.WriteLine($"[UserAccessmanager__GetUserModules] - User is owner will return all ({modules.Count}) modules");
+                _adminLogger.Trace($"[UserAccessmanager__GetUserModules] - User is owner will return all ({modules.Count}) modules");
                 return modules;
             }
 
@@ -50,7 +53,7 @@ namespace LagoVista.UserAdmin.Managers
                 }
             }
 
-            Console.WriteLine($"[UserAccessmanager__GetUserModules] - Found ({modules.Count}) modules for user.");
+            _adminLogger.Trace($"[UserAccessmanager__GetUserModules] - Found ({modules.Count}) modules for user.");
 
             return userModules.OrderBy(mod => mod.SortOrder).ToList();
         }
@@ -137,13 +140,13 @@ namespace LagoVista.UserAdmin.Managers
                 }
             }
 
-            System.Console.WriteLine($"Evaluating User Access List, Count: {userAccessList.Count} - Module Areas Count: {originalAreas.Count}");
+            _adminLogger.Trace($"Evaluating User Access List, Count: {userAccessList.Count} - Module Areas Count: {originalAreas.Count}");
 
             foreach (var access in userAccessList)
             {
                 if (!EntityHeader.IsNullOrEmpty(access.Feature))
                 {
-                    System.Console.WriteLine($"\tRole: {access.Role.Text} - Feature: {access.Feature.Text}.");
+                    _adminLogger.Trace($"\tRole: {access.Role.Text} - Feature: {access.Feature.Text}.");
 
                     var area = originalAreas.SingleOrDefault(ara => ara.Key == access.Area.Key);
                     if (area == null)
@@ -160,12 +163,12 @@ namespace LagoVista.UserAdmin.Managers
                     if (feature.UserAccess == null)
                     {
                         feature.UserAccess = access.ToUserAccess();
-                        System.Console.WriteLine($"\t\tAdded: {feature.UserAccess.Create}, {feature.UserAccess.Read}, {feature.UserAccess.Update}, {feature.UserAccess.Delete}.");
+                        _adminLogger.Trace($"\t\tAdded: {feature.UserAccess.Create}, {feature.UserAccess.Read}, {feature.UserAccess.Update}, {feature.UserAccess.Delete}.");
                     }
                     else
                     {
                         feature.UserAccess = access.Merge(feature.UserAccess);
-                        System.Console.WriteLine($"\t\tUpdated: {feature.UserAccess.Create}, {feature.UserAccess.Read}, {feature.UserAccess.Update}, {feature.UserAccess.Delete}.");
+                        _adminLogger.Trace($"\t\tUpdated: {feature.UserAccess.Create}, {feature.UserAccess.Read}, {feature.UserAccess.Update}, {feature.UserAccess.Delete}.");
                     }
 
                     if (page.UserAccess == null && feature.UserAccess.Any())
@@ -179,7 +182,7 @@ namespace LagoVista.UserAdmin.Managers
                 }
                 else if (!EntityHeader.IsNullOrEmpty(access.Page))
                 {
-                    System.Console.WriteLine($"\tRole: {access.Role.Text} - Page: {access.Page.Text}.");
+                    _adminLogger.Trace($"\tRole: {access.Role.Text} - Page: {access.Page.Text}.");
 
                     var area = originalAreas.SingleOrDefault(ara => ara.Key == access.Area.Key);
                     if (area == null)
@@ -192,12 +195,12 @@ namespace LagoVista.UserAdmin.Managers
                     if (page.UserAccess == null)
                     {
                         page.UserAccess = access.ToUserAccess();
-                        System.Console.WriteLine($"\t\tAdded: {page.UserAccess.Create}, {page.UserAccess.Read}, {page.UserAccess.Update}, {page.UserAccess.Delete}.");
+                        _adminLogger.Trace($"\t\tAdded: {page.UserAccess.Create}, {page.UserAccess.Read}, {page.UserAccess.Update}, {page.UserAccess.Delete}.");
                     }
                     else
                     {
                         page.UserAccess = access.Merge(page.UserAccess);
-                        System.Console.WriteLine($"\t\tUpdated: {page.UserAccess.Create}, {page.UserAccess.Read}, {page.UserAccess.Update}, {page.UserAccess.Delete}.");
+                        _adminLogger.Trace($"\t\tUpdated: {page.UserAccess.Create}, {page.UserAccess.Read}, {page.UserAccess.Update}, {page.UserAccess.Delete}.");
                     }
 
                     if (area.UserAccess == null && page.UserAccess.Any())
@@ -209,7 +212,7 @@ namespace LagoVista.UserAdmin.Managers
                 }
                 else if (!EntityHeader.IsNullOrEmpty(access.Area))
                 {
-                    System.Console.WriteLine($"\tRole: {access.Role.Text} - Area: {access.Area.Text}.");
+                    _adminLogger.Trace($"\tRole: {access.Role.Text} - Area: {access.Area.Text}.");
 
                     var area = module.Areas.SingleOrDefault(ara => ara.Key == access.Area.Key);
                     if (area == null)
@@ -219,12 +222,12 @@ namespace LagoVista.UserAdmin.Managers
                     {
                         area.UserAccess = access.ToUserAccess();
 
-                        System.Console.WriteLine($"\t\tAdded: {area.UserAccess.Create}, {area.UserAccess.Read}, {area.UserAccess.Update}, {area.UserAccess.Delete}.");
+                        _adminLogger.Trace($"\t\tAdded: {area.UserAccess.Create}, {area.UserAccess.Read}, {area.UserAccess.Update}, {area.UserAccess.Delete}.");
                     }
                     else
                     {
                         area.UserAccess = access.Merge(area.UserAccess);
-                        System.Console.WriteLine($"\t\tUpdated: {area.UserAccess.Create}, {area.UserAccess.Read}, {area.UserAccess.Update}, {area.UserAccess.Delete}.");
+                        _adminLogger.Trace($"\t\tUpdated: {area.UserAccess.Create}, {area.UserAccess.Read}, {area.UserAccess.Update}, {area.UserAccess.Delete}.");
                     }
 
                     if(module.UserAccess == null && area.UserAccess.Any())
@@ -232,18 +235,18 @@ namespace LagoVista.UserAdmin.Managers
                 }
                 else
                 {
-                    System.Console.WriteLine($"\tRole: {access.Role.Text} - Module: {access.Module.Text}.");
+                    _adminLogger.Trace($"\tRole: {access.Role.Text} - Module: {access.Module.Text}.");
 
                     if (module.UserAccess == null)
                     {
                         module.UserAccess = access.ToUserAccess();
 
-                        System.Console.WriteLine($"\t\tAdded: {module.UserAccess.Create}, {module.UserAccess.Read}, {module.UserAccess.Update}, {module.UserAccess.Delete}.");
+                        _adminLogger.Trace($"\t\tAdded: {module.UserAccess.Create}, {module.UserAccess.Read}, {module.UserAccess.Update}, {module.UserAccess.Delete}.");
                     }
                     else
                     {
                         module.UserAccess = access.Merge(module.UserAccess);
-                        System.Console.WriteLine($"\t\tUpdated {module.UserAccess.Create}, {module.UserAccess.Read}, {module.UserAccess.Update}, {module.UserAccess.Delete}.");
+                        _adminLogger.Trace($"\t\tUpdated {module.UserAccess.Create}, {module.UserAccess.Read}, {module.UserAccess.Update}, {module.UserAccess.Delete}.");
                     }
                 }
             }

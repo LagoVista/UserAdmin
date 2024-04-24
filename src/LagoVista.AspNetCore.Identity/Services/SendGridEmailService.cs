@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Interfaces;
+﻿using LagoVista.Core;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
@@ -11,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.AspNetCore.Identity.Services
@@ -125,9 +127,7 @@ namespace LagoVista.AspNetCore.Identity.Services
 			var json = JsonConvert.SerializeObject(contacts);
 
 			json = @$"{{""contacts"":{json}}}";
-
-			Console.WriteLine(json);
-
+		
 			var response = await client.RequestAsync(
 				method: SendGridClient.Method.PUT,
 				urlPath: "marketing/contacts",
@@ -136,8 +136,7 @@ namespace LagoVista.AspNetCore.Identity.Services
 
 			var result = await response.Body.ReadAsStringAsync();
 
-			Console.WriteLine(response.StatusCode);
-			Console.WriteLine(response.Headers.ToString());
+			_adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[SendGridEmailService__RegisterContactAsync]", $"Contact: {contact.email}", response.StatusCode.ToString().ToKVP("statusCode"));
 
 			return InvokeResult<string>.Create(result);
 		}
@@ -161,8 +160,8 @@ namespace LagoVista.AspNetCore.Identity.Services
 			var result = await response.Body.ReadAsStringAsync();
 			var listResponse = JsonConvert.DeserializeObject<SendGridListResponse>(result);
 
-			Console.WriteLine(response.StatusCode);
-			Console.WriteLine(response.Headers.ToString());
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[SendGridEmailService__CreateEmailListAsync]", $"List: {listName}", response.StatusCode.ToString().ToKVP("statusCode"));
+
 
 			return InvokeResult<string>.Create(listResponse.id);
 		}
@@ -176,9 +175,11 @@ namespace LagoVista.AspNetCore.Identity.Services
 
 			var result = await response.Body.ReadAsStringAsync();
 
-			Console.WriteLine(response.StatusCode);
-			Console.WriteLine(result);
-			Console.WriteLine(response.Headers.ToString());
+			var bldr = new StringBuilder();
+			foreach (var header in response.Headers)
+				bldr.Append($"{header.Key} - {String.Join(',', header.Value)}");
+
+			_adminLogger.Trace($"[SendGridEmailService__AddContactToListAsync] Status Code {response.StatusCode} - {result} - Headers: {bldr}");
 
 			return InvokeResult.Success;
 		}
@@ -543,10 +544,8 @@ namespace LagoVista.AspNetCore.Identity.Services
 			var result = await response.Body.ReadAsStringAsync();
 			var listResponse = JsonConvert.DeserializeObject<SendGridListResponse>(result);
 
-			Console.WriteLine(json);
-			Console.WriteLine(result);
-			Console.WriteLine(response.StatusCode);
-			Console.WriteLine(response.Headers.ToString());
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[SendGridEmailService__CreateEmailListAsync]", $"List: {listName}", listName.ToKVP("listName"), customField.ToKVP("customField"), response.StatusCode.ToString().ToKVP("statusCode"));
+            
 
 			return InvokeResult<string>.Create(listResponse.id);
 		}
@@ -575,8 +574,9 @@ namespace LagoVista.AspNetCore.Identity.Services
 				return InvokeResult<string>.Create(messageIds.FirstOrDefault());
 			}
 			else {
-				var body = await response.Body.ReadAsStringAsync();				
-				return InvokeResult<string>.FromError(String.IsNullOrEmpty(body) ? response.StatusCode.ToString() : body);
+				var body = await response.Body.ReadAsStringAsync();
+                _adminLogger.AddError("[SendGridEmailService__CreateEmailListAsync]", body, response.StatusCode.ToString().ToKVP("statusCode"));
+                return InvokeResult<string>.FromError(String.IsNullOrEmpty(body) ? response.StatusCode.ToString() : body);
 			}
 		}
 	}

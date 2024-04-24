@@ -72,7 +72,7 @@ namespace LagoVista.UserAdmin.Managers
                 new Role() { Id=  "ACDC1BADF00D1CAFEF12CE0FF55F2B19", IsPublic = true, IsSystemRole = true, Name = "Accounting", AuthorizedGranterRoles = new List<string> {DefaultRoleList.OWNER},  Key=DefaultRoleList.ACCOUNTING, Description="Process payroll and maintain a list of accounts." },
                 new Role() { Id=  "ACDC1BADF00D1CAFEF12CE0FF55F2B20", IsPublic = true, IsSystemRole = true, Name = "Book Keeping", AuthorizedGranterRoles = new List<string> {DefaultRoleList.OWNER, DefaultRoleList.ACCOUNTING},  Key=DefaultRoleList.BOOKKEEPING, Description="Can enter and maintain data used within accounts." },
 
-                new Role() { Id=  "ACDC1BADF00D1CAFEF12CE0FF55F2B21", IsPublic = true, IsSystemRole = true, Name = "User Admin",  AuthorizedGranterRoles = new List<string> {DefaultRoleList.OWNER},  Key=DefaultRoleList.USER_ADMIN, Description="User Admin can create new accounts." },
+                
 
                 new Role() { Id=  "ACDC1BADF00D1CAFEF12CE0FF55F2B22", IsPublic = true, IsSystemRole = true, Name = "Time Billing", AuthorizedGranterRoles = new List<string> {DefaultRoleList.OWNER, DefaultRoleList.USER_ADMIN},  Key=DefaultRoleList.TIME_BILLING, Description="Can create and manage assets ossociated with an IoT application." },
                 new Role() { Id=  "ACDC1BADF00D1CAFEF12CE0FF55F2B23", IsPublic = true, IsSystemRole = true, Name = "Expense Billing",  AuthorizedGranterRoles = new List<string> {DefaultRoleList.OWNER, DefaultRoleList.USER_ADMIN},  Key=DefaultRoleList.EXPENSE_BILLING, Description="Can create and manage assets ossociated with an IoT application." },

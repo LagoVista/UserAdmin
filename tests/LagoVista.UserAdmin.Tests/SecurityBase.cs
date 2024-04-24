@@ -1,4 +1,6 @@
 ﻿using LagoVista.Core.Models.UIMetaData;
+using LagoVista.IoT.Logging.Loggers;
+using LagoVista.IoT.Logging.Utils;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Managers;
@@ -180,7 +182,7 @@ namespace LagoVista.UserAdmin.Tests
         [TestInitialize]
         public void Init()
         {
-            _accessManager = new UserAccessManager(_userSecurityService.Object, _moduleRepo);
+            _accessManager = new UserAccessManager(_userSecurityService.Object, _moduleRepo, new AdminLogger(new ConsoleLogWriter()));
 
             _mod1 = AddModule("mod1_restrict", true, 1);
             _mod2 = AddModule("mod2_restrict", true, 2);

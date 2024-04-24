@@ -154,8 +154,7 @@ namespace LagoVista.UserAdmin.Managers
 
             if(!String.IsNullOrEmpty(user.Ssn))
             {
-                Console.WriteLine("[AppUserManager__UpdateUserAsync] - SSN Is Present, will add to secure storage.");
-
+                
                 if (user.Id != updatedByUser.Id)
                     await AuthorizeFinanceAdminAsync(updatedByUser, org, $"{nameof(UpdateUserAsync)}_Update_SSN_For_Other_User", user.Id);
 
@@ -185,8 +184,7 @@ namespace LagoVista.UserAdmin.Managers
 
             if (!String.IsNullOrEmpty(user.Ssn))
             {
-                Console.WriteLine("[AppUserManager__UpdateUserAsync] - SSN Is Present, will add to secure storage.");
-
+                
                 if (user.Id != updatedByUser.Id)
                     await AuthorizeFinanceAdminAsync(updatedByUser, org, $"{nameof(UpdateUserAsync)}_Update_SSN_For_Other_User", user.Id);
 
@@ -222,8 +220,6 @@ namespace LagoVista.UserAdmin.Managers
 
             if(!String.IsNullOrEmpty(user.Ssn))
             {
-                Console.WriteLine("[AppUserManager__UpdateUserAsync] - SSN Is Present, will add to secure storage.");
-
                 if (user.Id != updatedByUser.Id)
                     await AuthorizeFinanceAdminAsync(updatedByUser, org, $"{nameof(UpdateUserAsync)}_Update_SSN_For_Other_User", user.Id);
 

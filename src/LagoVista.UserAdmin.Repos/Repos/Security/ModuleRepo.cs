@@ -22,12 +22,14 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
         private readonly bool _shouldConsolidateCollections;
 
         private ICacheProvider _cacheProvider;
+        private IAdminLogger _adminLogger;
 
         public ModuleRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
             this._cacheProvider = cacheProvider!;
+            this._adminLogger = logger;
         }
 
         protected override bool ShouldConsolidateCollections
@@ -58,7 +60,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             var allModulesJson = await _cacheProvider.GetAsync(ALL_MODULES_CACHE_KEY);
             if (String.IsNullOrEmpty(allModulesJson))
             {
-                Console.WriteLine($"[ModuleRepo__GetAllModules] - CACHE-MISS - {ALL_MODULES_CACHE_KEY}");
+                _adminLogger.Trace($"[ModuleRepo__GetAllModules] - CACHE-MISS - {ALL_MODULES_CACHE_KEY}");
                 var lists = await QueryAsync(rec => true);
                 var summaries = lists.OrderBy(mod => mod.SortOrder).Select(mod => mod.CreateSummary()).ToList();
                 await _cacheProvider.AddAsync(ALL_MODULES_CACHE_KEY, JsonConvert.SerializeObject(summaries));
@@ -67,7 +69,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             else
             {
                 var allModules = JsonConvert.DeserializeObject<List<ModuleSummary>>(allModulesJson);
-                Console.WriteLine($"[ModuleRepo__GetAllModules] - CACHE-HIT - {ALL_MODULES_CACHE_KEY} - has {allModules.Count} modules");
+                _adminLogger.Trace($"[ModuleRepo__GetAllModules] - CACHE-HIT - {ALL_MODULES_CACHE_KEY} - has {allModules.Count} modules");
                 return allModules;
             }
         }

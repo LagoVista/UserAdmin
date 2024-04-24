@@ -1,9 +1,13 @@
-﻿using LagoVista.Core.Models;
+﻿using LagoVista.Core;
+using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Security;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Managers
@@ -11,10 +15,12 @@ namespace LagoVista.UserAdmin.Managers
     public class AuthenticationLogManager : IAuthenticationLogManager
     {
         private IAuthenticationLogRepo _authLogRepo;
+        private IAdminLogger _adminLogger;
 
-        public AuthenticationLogManager(IAuthenticationLogRepo authLogRepo)
+        public AuthenticationLogManager(IAuthenticationLogRepo authLogRepo, IAdminLogger adminLogger)
         {
             _authLogRepo = authLogRepo ?? throw new ArgumentNullException(nameof(authLogRepo));
+            _adminLogger = adminLogger ?? throw new ArgumentNullException(nameof(adminLogger));
         }
 
         public Task AddAsync(AuthenticationLog authLog)
@@ -34,6 +40,11 @@ namespace LagoVista.UserAdmin.Managers
                 Extras = extras,
                 OAuthProvider = oauthProvier
             };
+
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AuthLog]", "Authentication Log",
+                userId.ToKVP("userId"), userName.ToKVP("username"), orgId.ToKVP("orgId"), orgName.ToKVP("orgName"), errors.ToKVP("errors"),
+                extras.ToKVP("extras"), oauthProvier.ToKVP("oauthProvider")
+                ); 
 
             return AddAsync(auth);
         }

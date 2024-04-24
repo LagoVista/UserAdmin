@@ -11,6 +11,7 @@ using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
 using LagoVista.Core.Models;
 using System.Diagnostics;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.UserAdmin.Repos.RDBMS
 {
@@ -18,9 +19,11 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
     {
         private readonly UserAdminDataContext _dataContext;
         private readonly IRDBMSConnectionSettings _connectionSettings;
-        public RDBMSManager(UserAdminDataContext dataContext, IRDBMSConnectionSettings connectionSettings)
+        private readonly IAdminLogger _adminLogger;
+        public RDBMSManager(UserAdminDataContext dataContext, IRDBMSConnectionSettings connectionSettings, IAdminLogger adminLogger)
         {
             _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
+            _adminLogger = adminLogger;
             _connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
         }
 
@@ -113,14 +116,14 @@ select subs.id
         public async Task<InvokeResult> UpdateAppUserAsync(AppUser user)
         {
             var sw = Stopwatch.StartNew();
-            var loadedUser = _dataContext.AppUser.Where(usr => usr.AppUserId == user.Id).FirstOrDefault();
-            Console.WriteLine($"[RDBMSManager__UpdateAppuserAsync] Found User: {sw.ElapsedMilliseconds}ms");
+            var loadedUser = _dataContext.AppUser.Where(usr => usr.AppUserId == user.Id).FirstOrDefault();            
+            _adminLogger.Trace($"[RDBMSManager__UpdateAppuserAsync] Found User: {sw.ElapsedMilliseconds}ms");
             loadedUser.FullName = user.Name;
             loadedUser.LastUpdatedDate = user.LastUpdatedDate.ToDateTime();
 
             _dataContext.AppUser.Update(loadedUser);            
             await _dataContext.SaveChangesAsync();
-            Console.WriteLine($"[RDBMSManager__UpdateAppuserAsync] Updated User: {sw.ElapsedMilliseconds}ms");
+            _adminLogger.Trace($"[RDBMSManager__UpdateAppuserAsync] Updated User: {sw.ElapsedMilliseconds}ms");
             return InvokeResult.Success;
         }
 

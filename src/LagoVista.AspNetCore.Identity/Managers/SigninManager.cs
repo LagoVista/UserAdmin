@@ -94,7 +94,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 return InvokeResult<UserLoginResponse>.FromError($"SignInManager__PasswordSignInAsync;  Could not find user [{userName}].");
             }
 
-            Console.WriteLine($"SignInManager__PasswordSignInAsync; User: {userName}");
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[SignInManager__PasswordSignInAsync]", "User Login", userName.ToKVP("userName"));
 
             if (string.IsNullOrEmpty(userName)) return InvokeResult<UserLoginResponse>.FromError($"User name is a required field [{userName}].");
             if (string.IsNullOrEmpty(password)) return InvokeResult<UserLoginResponse>.FromError($"Password is a required field [{userName}].");
@@ -120,7 +120,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
                     if (org.CreatedBy.Id == appUser.Id)
                     {
-                        Console.WriteLine("SignInManager__PasswordSignInAsync; User created organization, is an owner.");
+                        _adminLogger.Trace("SignInManager__PasswordSignInAsync; User created organization, is an owner.");
 
                         var ownerRoleId = _defaultRoleList.GetStandardRoles().Single(rl => rl.Key == DefaultRoleList.OWNER).Id;
                         response.AddAuthMetric("Got Owner Role Id");
@@ -130,20 +130,20 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
                         if (!hasOwnerRole)
                         {
-                            System.Console.WriteLine("SignInManager__PasswordSignInAsync; User not owner, adding as role.");
+                            _adminLogger.Trace("SignInManager__PasswordSignInAsync; User not owner, adding as role.");
                             await _userRoleManager.GrantUserRoleAsync(appUser.Id, ownerRoleId, appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
                             response.AddAuthMetric("Grant User Role");
                         }
                         else
                         {
                             response.AddAuthMetric("User was owner, don't need to add role");
-                            System.Console.WriteLine("SignInManager__PasswordSignInAsync; User already an owner, no need to add role.");
+                            _adminLogger.Trace("SignInManager__PasswordSignInAsync; User already an owner, no need to add role.");
 
                         }
                     }
                     else
                     {
-                        System.Console.WriteLine("SignInManager__PasswordSignInAsync; User did not create organization, thus is not an owner.");
+                        _adminLogger.Trace("SignInManager__PasswordSignInAsync; User did not create organization, thus is not an owner.");
                     }
 
                     var isOrgAdmin = await _orgManager.IsUserOrgAdminAsync(appUser.CurrentOrganization.Id, appUser.Id);
@@ -191,7 +191,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
 
 
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AccessTokenGrantAsync", UserAdminErrorCodes.AuthInvalidCredentials.Message, new KeyValuePair<string, string>("email", userName));
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "[AuthTokenManager_AccessTokenGrantAsync]", UserAdminErrorCodes.AuthInvalidCredentials.Message, new KeyValuePair<string, string>("email", userName));
             signIn.Dispose();
             UserLoginSuccess.Inc();
 
