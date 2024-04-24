@@ -161,6 +161,10 @@ namespace LagoVista.UserAdmin.Models.Users
         public string PostalCode { get; set; }
         public List<EntityHeader> MediaResources { get; set; } = new List<EntityHeader>();
 
+
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_EmailSignature, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(UserAdminResources))]
+        public string EmailSignature { get; set; }
+
         [FormField(LabelResource: UserAdminResources.Names.AppUser_PhoneNumber, FieldType: FieldTypes.Phone, ResourceType: typeof(UserAdminResources))]
         public string PhoneNumber { get; set; }
         public bool PhoneNumberConfirmed { get; set; }

@@ -1,4 +1,4 @@
-﻿/*3/17/2024 10:47:42 AM*/
+﻿/*4/24/2024 5:49:02 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -90,6 +90,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AppUser_Email
 
 		public static string AppUser_Email { get { return GetResourceString("AppUser_Email"); } }
+//Resources:UserAdminResources:AppUser_EmailSignature
+
+		public static string AppUser_EmailSignature { get { return GetResourceString("AppUser_EmailSignature"); } }
 //Resources:UserAdminResources:AppUser_FirstName
 
 		public static string AppUser_FirstName { get { return GetResourceString("AppUser_FirstName"); } }
@@ -1424,6 +1427,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AppUser_Country = "AppUser_Country";
 			public const string AppUser_Description = "AppUser_Description";
 			public const string AppUser_Email = "AppUser_Email";
+			public const string AppUser_EmailSignature = "AppUser_EmailSignature";
 			public const string AppUser_FirstName = "AppUser_FirstName";
 			public const string AppUser_Help = "AppUser_Help";
 			public const string Appuser_IsAccountDisabled = "Appuser_IsAccountDisabled";
