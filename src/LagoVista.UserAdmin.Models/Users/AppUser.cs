@@ -279,6 +279,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 Notes = Notes,
                 SsnSecretId = SsnSecretId,
                 Address1 = Address1,
+                EmailSignature = EmailSignature,
                 Address2 = Address2,
                 City = City,
                 State = State,

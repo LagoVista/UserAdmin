@@ -140,6 +140,7 @@ namespace LagoVista.UserAdmin.Managers
             var existingUser = await _appUserRepo.FindByIdAsync(user.Id);
             existingUser.FirstName = user.FirstName;
             existingUser.LastName = user.LastName;
+            existingUser.EmailSignature = user.EmailSignature;
             existingUser.Bio = user.Bio;
             existingUser.Title = user.Title;
             existingUser.Email = user.Email;
@@ -208,6 +209,7 @@ namespace LagoVista.UserAdmin.Managers
         {
             var appUser = await _appUserRepo.FindByIdAsync(user.Id);
 
+            if (!string.IsNullOrEmpty(user.EmailSignature)) appUser.EmailSignature = user.EmailSignature;
             if (!String.IsNullOrEmpty(user.FirstName)) appUser.FirstName = user.FirstName;
             if (!String.IsNullOrEmpty(user.LastName)) appUser.LastName = user.LastName;
             if (!String.IsNullOrEmpty(user.PhoneNumber))

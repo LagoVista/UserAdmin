@@ -49,5 +49,8 @@ namespace LagoVista.UserAdmin.Models.Users
         [FormField(LabelResource: UserAdminResources.Names.AppUser_PostalCode, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string PostalCode { get; set; }
 
+
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_EmailSignature, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(UserAdminResources))]
+        public string EmailSignature { get; set; }
     }
 }
