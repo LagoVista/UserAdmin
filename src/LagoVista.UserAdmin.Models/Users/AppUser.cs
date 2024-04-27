@@ -256,7 +256,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 IsRuntimeUser = IsRuntimeuser,
                 IsUserDevice = IsUserDevice,
                 IsAccountDisabled = IsAccountDisabled,
-                CurrentOrganization = CurrentOrganization.ToEntityHeader(),
+                CurrentOrganization = CurrentOrganization?.ToEntityHeader(),
                 Email = Email,
                 Bio = Bio,
                 Title = Title,
