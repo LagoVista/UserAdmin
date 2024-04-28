@@ -7,7 +7,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 {
     public interface ISignInManager
     {
-        Task<InvokeResult<UserLoginResponse>> PasswordSignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure);
+        Task<InvokeResult<UserLoginResponse>> PasswordSignInAsync(AuthLoginRequest loginRequest);
 
         Task SignInAsync(AppUser user, bool isPersistent = false);
 

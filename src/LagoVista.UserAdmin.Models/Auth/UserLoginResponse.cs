@@ -28,6 +28,9 @@ namespace LagoVista.UserAdmin.Models.Auth
             _sw = Stopwatch.StartNew();
         }
 
+        public string ResponseMessage { get; set; }
+
+        public string RedirectPage { get; set; }
 
         public class Metric
         {

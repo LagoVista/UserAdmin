@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.UserAdmin.Models.Auth;
 
 namespace LagoVista.UserAdmin.Interfaces.Managers
 {
@@ -22,8 +23,9 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> UpdateLocationAsync(OrgLocation location, EntityHeader org, EntityHeader user);
 
 
-        Task<InvokeResult> AcceptInvitationAsync(AcceptInviteViewModel acceptInviteViewModel, string acceptedUserId);
-        Task<InvokeResult> AcceptInvitationAsync(string inviteId, EntityHeader orgHeader, EntityHeader user);
+        Task<InvokeResult<AcceptInviteResponse>> AcceptInvitationAsync(string inviteId, AppUser appoUser);
+        Task<InvokeResult<AcceptInviteResponse>> AcceptInvitationAsync(string inviteId, string appoUserId);
+
         Task<InvokeResult> AddUserToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy, bool isOrgAdmin = false, bool isAppBuilder = false);
         Task<InvokeResult> AddUserToLocationAsync(string userId, string locationId, EntityHeader org, EntityHeader addedBy);
         Task<InvokeResult> AddLocationAsync(CreateLocationViewModel newLocation, EntityHeader org, EntityHeader user);
@@ -63,9 +65,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<ListResponse<OrganizationSummary>> GetAllOrgsAsync(EntityHeader org, EntityHeader user, ListRequest listRequest);
        
         Task<Invitation> GetInvitationAsync(string inviteId);
-
-        Task<InvokeResult> AcceptInvitationAsync(string inviteId, string acceptedUserId);
-
+       
         Task<InvokeResult> ResendInvitationAsync(string inviteId, EntityHeader org, EntityHeader user);
 
         Task<IEnumerable<OrgLocation>> GetLocationsForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user);

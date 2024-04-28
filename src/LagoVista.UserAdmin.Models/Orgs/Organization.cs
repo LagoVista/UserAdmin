@@ -172,6 +172,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 Id = Id,
                 Text = Name,
                 Name = Name,
+                LandingPage = LandingPage,
                 Namespace = Namespace,
                 Icon = Icon,
                 TagLine = TagLine,
@@ -194,7 +195,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public string Logo { get; set; }
         public string TagLine { get; set; }
         public string DefaultTheme { get; set; }
-    
+   
+        public string LandingPage { get; set; }
+
         public EntityHeader ToEntityHeader()
         {
             return EntityHeader.Create(Id, Text);

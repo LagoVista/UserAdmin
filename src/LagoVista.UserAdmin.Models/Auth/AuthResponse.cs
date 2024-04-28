@@ -1,8 +1,6 @@
 ﻿using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models.Users;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Auth
 {

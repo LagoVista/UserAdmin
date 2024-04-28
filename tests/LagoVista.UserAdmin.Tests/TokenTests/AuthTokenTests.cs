@@ -66,7 +66,7 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
                 new OrgUser(ORG_ID,Guid.NewGuid().ToId())
             });
 
-            _signInManager.Setup(sim => sim.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(Task.FromResult(InvokeResult<UserLoginResponse>.Create(new UserLoginResponse())));
+            _signInManager.Setup(sim => sim.PasswordSignInAsync(It.IsAny<AuthLoginRequest>())).Returns(Task.FromResult(InvokeResult<UserLoginResponse>.Create(new UserLoginResponse())));
             _userManager.Setup(usm => usm.FindByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { Id = Guid.NewGuid().ToId(), CurrentOrganization = new OrganizationSummary() { Id = ORG_ID, Name = "dontcare", Text = "dontcare" } }));
             _userManager.Setup(usm => usm.FindByNameAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { CurrentOrganization = new OrganizationSummary() { Id = ORG_ID, Name = "dontcare", Text = "dontcare" } }));
             _refreshTokenManager.Setup(rtm => rtm.GenerateRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task<RefreshToken>.FromResult(InvokeResult<RefreshToken>.Create(new RefreshToken("XXXX"))));

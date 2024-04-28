@@ -11,6 +11,7 @@ namespace LagoVista.UserAdmin.Models.Security
     {
         PasswordAuthSuccess,
         PaswwordAuthFailed,
+        PasswordAuthUserNotFound,
         CreateEmailUser,
         CreateUserError,
         ManualApproveUser,
@@ -47,6 +48,7 @@ namespace LagoVista.UserAdmin.Models.Security
         InviteUser,
         RegisterUser,
         AcceptInvite,
+        AcceptInviteFailed,
         DeleteUser,
         DeleteOrg,
         DisableUser,

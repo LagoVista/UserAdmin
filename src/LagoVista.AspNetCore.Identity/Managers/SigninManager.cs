@@ -33,6 +33,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         private readonly IOrganizationRepo _organizationRepo;
         private readonly IUserFavoritesManager _userFavoritesManager;
         private readonly IMostRecentlyUsedManager _mostRecentlyUsedManager;
+        private readonly IAuthenticationLogManager _authLogManager;
 
 
         private static readonly Histogram UserSignInMetrics = Metrics.CreateHistogram("nuviot_user_sign_in", "Use Sign In Metrics.",
@@ -49,7 +50,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public SignInManager(IAdminLogger adminLogger, IDefaultRoleList defaultRoleList, IUserRoleManager roleManager, IDependencyManager depManager,
                             IUserFavoritesManager userFavoritesManager, IMostRecentlyUsedManager mostRecentlyUsedManager, IAppUserRepo appUserRepo,
-                             ISecurity security, IAppConfig appConfig, IUserManager userManager, IOrganizationManager orgManager, IOrganizationRepo orgRepo,
+                            IAuthenticationLogManager authenticationLogManager, ISecurity security, IAppConfig appConfig, IUserManager userManager, IOrganizationManager orgManager, IOrganizationRepo orgRepo,
                              SignInManager<AppUser> signInManager)
             : base(adminLogger, appConfig, depManager, security)
         {
@@ -63,6 +64,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             _organizationRepo = orgRepo;
             _userFavoritesManager = userFavoritesManager;
             _mostRecentlyUsedManager = mostRecentlyUsedManager;
+            _authLogManager = authenticationLogManager;
         }
 
         public Task SignInAsync(AppUser user, bool isPersistent = false)
@@ -76,30 +78,31 @@ namespace LagoVista.AspNetCore.Identity.Managers
             await _signinManager.SignInAsync(appUser, true);
         }
 
-        public async Task<InvokeResult<UserLoginResponse>> PasswordSignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure)
+        public async Task<InvokeResult<UserLoginResponse>> PasswordSignInAsync(AuthLoginRequest loginRequest)
         {
             var response = new UserLoginResponse();
+
+            if (string.IsNullOrEmpty(loginRequest.UserName)) return InvokeResult<UserLoginResponse>.FromError($"User name is a required field [{loginRequest.UserName}].");
+            if (string.IsNullOrEmpty(loginRequest.Password)) return InvokeResult<UserLoginResponse>.FromError($"Password is a required field [{loginRequest.UserName}].");
 
             var signIn = UserSignInMetrics.WithLabels(nameof(PasswordSignInAsync));
             UserLoginAttempts.Inc();
 
-            var appUser = await _userManager.FindByEmailAsync(userName);
+            var appUser = await _userManager.FindByEmailAsync(loginRequest.UserName);
             response.AddAuthMetric("Got User");
 
             if (appUser == null)
             {
-                await LogEntityActionAsync(userName, typeof(AppUser).Name, $"Could not find user with account [{userName}].", EntityHeader.Create("unkonwn", "unknown"), EntityHeader.Create(userName, userName));
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthUserNotFound, loginRequest.UserName);
+                await LogEntityActionAsync(loginRequest.UserName, typeof(AppUser).Name, $"Could not find user with account [{loginRequest.UserName}].", EntityHeader.Create("unkonwn", "unknown"), EntityHeader.Create(loginRequest.UserName, loginRequest.UserName));
                 UserLoginFailures.Inc();
                 signIn.Dispose();
-                return InvokeResult<UserLoginResponse>.FromError($"SignInManager__PasswordSignInAsync;  Could not find user [{userName}].");
+                return InvokeResult<UserLoginResponse>.FromError($"SignInManager__PasswordSignInAsync;  Could not find user [{loginRequest.UserName}].");
             }
 
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[SignInManager__PasswordSignInAsync]", "User Login", userName.ToKVP("userName"));
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[SignInManager__PasswordSignInAsync]", "User Login", loginRequest.UserName.ToKVP("loginRequest.UserName"));
 
-            if (string.IsNullOrEmpty(userName)) return InvokeResult<UserLoginResponse>.FromError($"User name is a required field [{userName}].");
-            if (string.IsNullOrEmpty(password)) return InvokeResult<UserLoginResponse>.FromError($"Password is a required field [{userName}].");
-
-            var signInResult = await _signinManager.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
+            var signInResult = await _signinManager.PasswordSignInAsync(loginRequest.UserName, loginRequest.Password, loginRequest.RememberMe, loginRequest.LockoutOnFailure);
 
             response.AddAuthMetric("Password Sign In");
 
@@ -107,14 +110,24 @@ namespace LagoVista.AspNetCore.Identity.Managers
             {
                 if (appUser.IsAccountDisabled)
                 {
+                    await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PaswwordAuthFailed, loginRequest.UserName, appUser.Id, extras:"Account Disabled");
                     await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed - Account Disabled", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
                     UserLoginFailures.Inc();
                     signIn.Dispose();
-                    return InvokeResult<UserLoginResponse>.FromError($"Account [{userName}] is disabled.");
+                    return InvokeResult<UserLoginResponse>.FromError($"Account [{loginRequest.UserName}] is disabled.");
+                }
+
+                if(!String.IsNullOrEmpty(loginRequest.InviteId))
+                {
+                    var acceptInviteResult = await _orgManager.AcceptInvitationAsync(loginRequest.InviteId, appUser);
+                    response.RedirectPage = acceptInviteResult.Result.RedirectPage;
+                    response.ResponseMessage = acceptInviteResult.Result.ResponseMessage;
                 }
 
                 if (appUser.CurrentOrganization != null)
                 {
+                    await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthSuccess, appUser.Id, appUser.UserName, appUser.CurrentOrganization.Id, appUser.CurrentOrganization.Text);
+
                     var org = await _organizationRepo.GetOrganizationAsync(appUser.CurrentOrganization.Id);
                     response.AddAuthMetric("Loaded Organization");
 
@@ -153,8 +166,31 @@ namespace LagoVista.AspNetCore.Identity.Managers
                         appUser.IsOrgAdmin = isOrgAdmin;
                     }
 
+                    if (String.IsNullOrEmpty(response.RedirectPage))
+                    {
+                        if (!String.IsNullOrEmpty(org.LandingPage))
+                        {
+                            response.RedirectPage = org.LandingPage;
+                        }
+                        else if (appUser.ShowWelcome)
+                        {
+                            response.RedirectPage = "/home/welcome";
+                        }
+                        else
+                        {
+                            response.RedirectPage = "/home";
+                        }
+                    }
+
                     appUser.CurrentOrganization = org.CreateSummary();
                 }
+                else
+                {
+                    response.RedirectPage = "/auth/org/createdefault";
+                }
+
+                if (!appUser.EmailConfirmed)
+                    response.RedirectPage = "/auth/confirmemail";
 
                 appUser.LastLogin = DateTime.UtcNow.ToJSONString();
                 // we can bypass the manager here, we are updating the current user if they are logged in, should not require any security.
@@ -182,7 +218,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             {
                 await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed - Locked Out", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
 
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AccessTokenGrantAsync", UserAdminErrorCodes.AuthUserLockedOut.Message, new KeyValuePair<string, string>("email", userName));
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AccessTokenGrantAsync", UserAdminErrorCodes.AuthUserLockedOut.Message, new KeyValuePair<string, string>("email", loginRequest.UserName));
                 signIn.Dispose();
                 UserLoginFailures.Inc();
                 return InvokeResult<UserLoginResponse>.FromErrors(UserAdminErrorCodes.AuthUserLockedOut.ToErrorMessage());
@@ -191,7 +227,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
 
 
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "[AuthTokenManager_AccessTokenGrantAsync]", UserAdminErrorCodes.AuthInvalidCredentials.Message, new KeyValuePair<string, string>("email", userName));
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "[AuthTokenManager_AccessTokenGrantAsync]", UserAdminErrorCodes.AuthInvalidCredentials.Message, new KeyValuePair<string, string>("email", loginRequest.UserName));
             signIn.Dispose();
             UserLoginSuccess.Inc();
 

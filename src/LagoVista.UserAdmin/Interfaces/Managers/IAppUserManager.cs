@@ -42,7 +42,7 @@ namespace LagoVista.UserAdmin.Managers
 
         Task<IEnumerable<EntityHeader>> SearchUsers(string firstName, string lastName, EntityHeader searchedBy);
 
-        Task<InvokeResult<AuthResponse>> CreateUserAsync(RegisterUser newUser, bool sendAuthEmail = true, bool autoLogin = true, ExternalLogin externalLogin = null);
+        Task<InvokeResult<CreateUserResponse>> CreateUserAsync(RegisterUser newUser, bool sendAuthEmail = true, bool autoLogin = true, ExternalLogin externalLogin = null);
 
         Task<ListResponse<UserInfoSummary>> GetDeviceUsersAsync(string deviceRepoId, EntityHeader org, EntityHeader user, ListRequest listRequest);
 

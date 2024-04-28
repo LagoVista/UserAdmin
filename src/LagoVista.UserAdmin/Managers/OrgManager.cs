@@ -23,6 +23,7 @@ using LagoVista.Core.Models.UIMetaData;
 using System.Text.RegularExpressions;
 using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Interfaces;
+using LagoVista.UserAdmin.Models.Auth;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -272,12 +273,12 @@ namespace LagoVista.UserAdmin.Managers
         #endregion
 
         #region Invite User
-        public async Task<InvokeResult> AcceptInvitationAsync(string inviteId, string acceptedUserId)
+        public async Task<InvokeResult<AcceptInviteResponse>> AcceptInvitationAsync(string inviteId, AppUser acceptedUser)
         {
             var invite = await _inviteUserRepo.GetInvitationAsync(inviteId);
             if (!invite.IsActive())
             {
-                return InvokeResult.FromErrors(Resources.UserAdminErrorCodes.AuthInviteNotActive.ToErrorMessage());
+                return InvokeResult<AcceptInviteResponse>.FromErrors(Resources.UserAdminErrorCodes.AuthInviteNotActive.ToErrorMessage());
             }
 
             invite.Accepted = true;
@@ -285,18 +286,19 @@ namespace LagoVista.UserAdmin.Managers
             invite.DateAccepted = DateTime.UtcNow.ToJSONString();
             await _inviteUserRepo.UpdateInvitationAsync(invite);
 
-            var acceptedUser = await _appUserRepo.FindByIdAsync(acceptedUserId);
             var invitingUser = EntityHeader.Create(invite.InvitedById, invite.InvitedByName);
             var orgHeader = EntityHeader.Create(invite.OrganizationId, invite.OrganizationName);
 
-            await LogEntityActionAsync(acceptedUserId, typeof(AppUser).Name, "Accepted Invitation to: " + invite.OrganizationName, orgHeader, acceptedUser.ToEntityHeader());
+            await LogEntityActionAsync(acceptedUser.Id, typeof(AppUser).Name, "Accepted Invitation to: " + invite.OrganizationName, orgHeader, acceptedUser.ToEntityHeader());
             await LogEntityActionAsync(invite.InvitedById, typeof(AppUser).Name, "Accepted Invitation to: " + invite.OrganizationName, orgHeader, acceptedUser.ToEntityHeader());
             await LogEntityActionAsync(invite.OrganizationId, typeof(AppUser).Name, $"User {acceptedUser.FirstName} {acceptedUser.LastName} accepted invitation to organization", orgHeader, acceptedUser.ToEntityHeader());
 
             var result = await AddUserToOrgAsync(acceptedUser.ToEntityHeader(), orgHeader, invitingUser);
             if (!result.Successful)
             {
-                return result;
+                await _authLogMgr.AddAsync(AuthLogTypes.AcceptInviteFailed, acceptedUser, extras: result.ErrorMessage);
+
+                return InvokeResult<AcceptInviteResponse>.FromInvokeResult(result);
             }
 
             if (acceptedUser.CurrentOrganization == null)
@@ -308,42 +310,21 @@ namespace LagoVista.UserAdmin.Managers
 
             await _appUserRepo.UpdateAsync(acceptedUser);
 
-            return InvokeResult.Success;
+            var msg = $"Congratulations! You have accepted the invitation from {invite.InvitedByName} to the {invite.OrganizationName} organization. ";
+            if (acceptedUser.CurrentOrganization.Id != invite.OrganizationId)
+                msg += "To switch to this organization, click on Change Organizations from the Main Menu";
+
+            return InvokeResult<AcceptInviteResponse>.Create(new AcceptInviteResponse()
+            {
+                RedirectPage = "/auth/invite/accepted",
+                ResponseMessage = msg
+            }); 
         }
 
-        public Task<InvokeResult> AcceptInvitationAsync(AcceptInviteViewModel acceptInviteViewModel, String acceptedUserId)
+        public async Task<InvokeResult<AcceptInviteResponse>> AcceptInvitationAsync(string inviteId, string userId)
         {
-            return AcceptInvitationAsync(acceptInviteViewModel.InvitedById, acceptedUserId);
-        }
-
-        public async Task<InvokeResult> AcceptInvitationAsync(string inviteId, EntityHeader orgHeader, EntityHeader user)
-        {
-            var invite = await _inviteUserRepo.GetInvitationAsync(inviteId);
-            if (invite == null)
-            {
-                return "Could Not Find Invitation".ToInvokeResult();
-            }
-
-            if (invite.Accepted)
-            {
-                return "This invitation has already been accepted".ToInvokeResult();
-            }
-
-            invite.Accepted = true;
-            invite.Status = Invitation.StatusTypes.Accepted;
-            invite.DateAccepted = DateTime.UtcNow.ToJSONString();
-
-            var newOrgHeader = new EntityHeader()
-            {
-                Id = invite.OrganizationId,
-                Text = invite.OrganizationName
-            };
-
-            await _inviteUserRepo.UpdateInvitationAsync(invite);
-
-            var invitingUser = EntityHeader.Create(invite.InvitedById, invite.InvitedByName);
-
-            return await AddUserToOrgAsync(user, newOrgHeader, invitingUser);
+            var appUser = await _appUserRepo.FindByIdAsync(userId);
+            return await AcceptInvitationAsync(inviteId, appUser);
         }
 
         public Task<Invitation> GetInvitationAsync(String invigtationId)

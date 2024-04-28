@@ -80,8 +80,16 @@ namespace LagoVista.AspNetCore.Identity.Managers
                     break;
             }
 
-            var signInRequest = await _signInManager.PasswordSignInAsync(userName, password, true, false);
-            if (!signInRequest.Successful) return InvokeResult<AuthResponse>.FromInvokeResult(signInRequest.ToInvokeResult());
+            var signInRequest = new AuthLoginRequest()
+            {
+                UserName = userName,
+                Password = password,
+                RememberMe = true,
+                LockoutOnFailure = false
+            };
+
+            var signInResponse = await _signInManager.PasswordSignInAsync(signInRequest);
+            if (!signInResponse.Successful) return InvokeResult<AuthResponse>.FromInvokeResult(signInResponse.ToInvokeResult());
 
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "AuthTokenManager_AccessTokenGrantAsync", "UserLoggedIn", new KeyValuePair<string, string>("email", userName));
 

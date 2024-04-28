@@ -19,6 +19,7 @@ using LagoVista.Core.Exceptions;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using System.Linq;
 using LagoVista.UserAdmin.Models.Auth;
+using LagoVista.Core.Models.ML;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -37,8 +38,8 @@ namespace LagoVista.UserAdmin.Managers
         private readonly ISubscriptionManager _subscriptionManager;
         private readonly ISecureStorage _secureStorage;
         private readonly IAuthenticationLogManager _authLogMgr;
-        
-        public AppUserManager(IAppUserRepo appUserRepo,  IUserRoleRepo userRoleRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IOrganizationManager orgManager, IOrgUserRepo orgUserRepo, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
+
+        public AppUserManager(IAppUserRepo appUserRepo, IUserRoleRepo userRoleRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IOrganizationManager orgManager, IOrgUserRepo orgUserRepo, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
            IOrganizationRepo orgRepo, IAuthTokenManager authTokenManager, ISubscriptionManager subscriptionManager, IUserManager userManager, ISecureStorage secureStorage,
            IAuthenticationLogManager authLogMgr, ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, userRoleRepo, depManager, security, logger, appConfig)
         {
@@ -153,9 +154,9 @@ namespace LagoVista.UserAdmin.Managers
             existingUser.PostalCode = user.PostalCode;
             existingUser.Country = user.Country;
 
-            if(!String.IsNullOrEmpty(user.Ssn))
+            if (!String.IsNullOrEmpty(user.Ssn))
             {
-                
+
                 if (user.Id != updatedByUser.Id)
                     await AuthorizeFinanceAdminAsync(updatedByUser, org, $"{nameof(UpdateUserAsync)}_Update_SSN_For_Other_User", user.Id);
 
@@ -185,7 +186,7 @@ namespace LagoVista.UserAdmin.Managers
 
             if (!String.IsNullOrEmpty(user.Ssn))
             {
-                
+
                 if (user.Id != updatedByUser.Id)
                     await AuthorizeFinanceAdminAsync(updatedByUser, org, $"{nameof(UpdateUserAsync)}_Update_SSN_For_Other_User", user.Id);
 
@@ -220,7 +221,7 @@ namespace LagoVista.UserAdmin.Managers
 
             if ((user.ProfileImageUrl != null)) appUser.ProfileImageUrl = user.ProfileImageUrl;
 
-            if(!String.IsNullOrEmpty(user.Ssn))
+            if (!String.IsNullOrEmpty(user.Ssn))
             {
                 if (user.Id != updatedByUser.Id)
                     await AuthorizeFinanceAdminAsync(updatedByUser, org, $"{nameof(UpdateUserAsync)}_Update_SSN_For_Other_User", user.Id);
@@ -324,14 +325,14 @@ namespace LagoVista.UserAdmin.Managers
 
             var appUser = await _appUserRepo.FindByIdAsync(userId);
 
-            if(appUser == null)
+            if (appUser == null)
                 throw new RecordNotFoundException(nameof(appUser), userId);
 
-            if(!string.IsNullOrEmpty(accounts.PaymentAccount1))
+            if (!string.IsNullOrEmpty(accounts.PaymentAccount1))
             {
                 var result = await _secureStorage.AddSecretAsync(org, accounts.PaymentAccount1);
                 if (!result.Successful) return result.ToInvokeResult();
-                appUser.PaymentAccount1Secureid = result.Result; 
+                appUser.PaymentAccount1Secureid = result.Result;
             }
 
             if (!string.IsNullOrEmpty(accounts.PaymentAccount2))
@@ -384,7 +385,7 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult.FromError("Must be an org admin to automically approve a user.");
             }
 
-            
+
 
             var user = await _appUserRepo.FindByIdAsync(userId);
             user.EmailConfirmed = true;
@@ -454,71 +455,79 @@ namespace LagoVista.UserAdmin.Managers
         }
 
 
-        public async Task<InvokeResult<AuthResponse>> CreateUserAsync(RegisterUser newUser, bool sendAuthEmail = true, bool autoLogin = true, ExternalLogin externalLogin = null)
+        public async Task<InvokeResult<CreateUserResponse>> CreateUserAsync(RegisterUser newUser, bool sendAuthEmail = true, bool autoLogin = true, ExternalLogin externalLogin = null)
         {
             if (String.IsNullOrEmpty(newUser.Email))
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateUserAsync", UserAdminErrorCodes.RegMissingEmail.Message);
-                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegMissingEmail.ToErrorMessage());
+                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegMissingEmail.ToErrorMessage());
             }
 
             var user = await _appUserRepo.FindByEmailAsync(newUser.Email);
             if (user != null)
             {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Email already exists");
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateUserAsync", UserAdminErrorCodes.RegErrorUserExists.Message);
                 if (sendAuthEmail)
                 {
-                    return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegErrorUserExists.ToErrorMessage());
+                    return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegErrorUserExists.ToErrorMessage());
                 }
                 else
                 {
-                    return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegisterUserExists_3rdParty.ToErrorMessage());
+                    return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegisterUserExists_3rdParty.ToErrorMessage());
                 }
             }
 
             /* Need to check all these, if any fail, we want to aboart, we need to refactor this into the UserAdmin module :( */
             if (String.IsNullOrEmpty(newUser.AppId))
             {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing app id");
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateUserAsync", UserAdminErrorCodes.AuthMissingAppId.Message);
-                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthMissingAppId.ToErrorMessage());
+                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.AuthMissingAppId.ToErrorMessage());
             }
 
             if (String.IsNullOrEmpty(newUser.ClientType))
             {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing client type");
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateUserAsync", UserAdminErrorCodes.AuthMissingClientType.Message);
-                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthMissingClientType.ToErrorMessage());
+                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.AuthMissingClientType.ToErrorMessage());
             }
 
             if (String.IsNullOrEmpty(newUser.DeviceId))
             {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing device id");
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateUserAsync", UserAdminErrorCodes.AuthMissingDeviceId.Message);
-                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthMissingDeviceId.ToErrorMessage());
+                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.AuthMissingDeviceId.ToErrorMessage());
             }
 
             if (String.IsNullOrEmpty(newUser.FirstName))
             {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing first name");
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateUserAsync", UserAdminErrorCodes.RegMissingFirstLastName.Message);
-                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegMissingFirstLastName.ToErrorMessage());
+                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegMissingFirstLastName.ToErrorMessage());
             }
 
             if (String.IsNullOrEmpty(newUser.LastName))
             {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing last name");
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateUserAsync", UserAdminErrorCodes.RegMissingLastName.Message);
-                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegMissingLastName.ToErrorMessage());
+                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegMissingLastName.ToErrorMessage());
             }
 
 
             if (String.IsNullOrEmpty(newUser.Password))
             {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing password");
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateUserAsync", UserAdminErrorCodes.RegMissingPassword.Message);
-                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegMissingPassword.ToErrorMessage());
+                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegMissingPassword.ToErrorMessage());
             }
 
             var emailRegEx = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,12})+)$");
             if (!emailRegEx.Match(newUser.Email).Success)
             {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: $"Invalid Email Address [{newUser.Email}]");
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateUserAsync", UserAdminErrorCodes.RegInvalidEmailAddress.Message);
-                return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.RegInvalidEmailAddress.ToErrorMessage());
+                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegInvalidEmailAddress.ToErrorMessage());
             }
 
             var appUser = new AppUser(newUser.Email, $"{newUser.FirstName} {newUser.LastName}")
@@ -551,85 +560,91 @@ namespace LagoVista.UserAdmin.Managers
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.OAuthCreateUser, appUser.Id, appUser.UserName, oauthProvier: externalLogin.Provider.Text);
             }
             else
+            {
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateEmailUser, appUser.Id, appUser.UserName);
+            }
 
             var identityResult = await _userManager.CreateAsync(appUser, newUser.Password);
-
-
-            if (identityResult.Successful)
+            if (!identityResult.Successful)
             {
-                
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, appUser.Id, appUser.UserName, errors: identityResult.ErrorMessage);
+                return InvokeResult<CreateUserResponse>.FromInvokeResult(identityResult);
+            }
 
-                await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "New User Registered", null, appUser.ToEntityHeader());
+            var createUserResponse = new CreateUserResponse()
+            {
+                AccessToken = "N/A",
+                AccessTokenExpiresUTC = "N/A",
+                RefreshToken = "N/A",
+                AppInstanceId = "N/A",
+                RefreshTokenExpiresUTC = "N/A",
+                IsLockedOut = false,
+                AppUser = appUser,
+                User = appUser.ToEntityHeader(),
+                Roles = new List<EntityHeader>(),
+                RedirectPage = "/auth/org/createdefault"
+            };
 
-                if (autoLogin)
+            if (!String.IsNullOrEmpty(newUser.InviteId))
+            {
+                var response = await _orgManager.AcceptInvitationAsync(newUser.InviteId, appUser);
+
+                createUserResponse.RedirectPage = response.Result.RedirectPage;
+                createUserResponse.ResponseMessage = response.Result.ResponseMessage;
+            }
+
+            await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "New User Registered", null, appUser.ToEntityHeader());
+
+            if (autoLogin)
+            {
+                await _signInManager.SignInAsync(appUser);
+            }
+
+            if (!String.IsNullOrEmpty(newUser.OrgId))
+            {
+                var org = await _orgRepo.GetOrganizationAsync(newUser.OrgId);
+                var orgEH = new EntityHeader() { Id = newUser.OrgId, Text = newUser.FirstName + " " + newUser.LastName };
+                await _orgManager.AddUserToOrgAsync(newUser.OrgId, appUser.Id, org.ToEntityHeader(), orgEH);
+                appUser.CurrentOrganization = org.CreateSummary();
+                await _userManager.UpdateAsync(appUser);
+            }
+
+            if (newUser.ClientType != "WEBAPP")
+            {
+                var authRequest = new AuthRequest()
                 {
-                    await _signInManager.SignInAsync(appUser);
-                }
+                    AppId = newUser.AppId,
+                    DeviceId = newUser.DeviceId,
+                    AppInstanceId = newUser.AppInstanceId,
+                    ClientType = newUser.ClientType,
+                    GrantType = "password",
+                    Email = newUser.Email,
+                    UserName = newUser.Email,
+                    Password = newUser.Password,
+                };
 
-                if (!String.IsNullOrEmpty(newUser.OrgId))
+                var tokenResponse = await _authTokenManager.AccessTokenGrantAsync(authRequest);
+                if (tokenResponse.Successful)
                 {
-                    var org = await _orgRepo.GetOrganizationAsync(newUser.OrgId);
-                    var orgEH = new EntityHeader() { Id = newUser.OrgId, Text = newUser.FirstName + " " + newUser.LastName };
-                    await _orgManager.AddUserToOrgAsync(newUser.OrgId, appUser.Id, org.ToEntityHeader(), orgEH);
-                    appUser.CurrentOrganization = org.CreateSummary();
-                    await _userManager.UpdateAsync(appUser);
-                }
-
-                if (newUser.ClientType != "WEBAPP")
-                {
-                    var authRequest = new AuthRequest()
-                    {
-                        AppId = newUser.AppId,
-                        DeviceId = newUser.DeviceId,
-                        AppInstanceId = newUser.AppInstanceId,
-                        ClientType = newUser.ClientType,
-                        GrantType = "password",
-                        Email = newUser.Email,
-                        UserName = newUser.Email,
-                        Password = newUser.Password,
-                    };
-
-                    var tokenResponse = await _authTokenManager.AccessTokenGrantAsync(authRequest);
-                    if (tokenResponse.Successful)
-                    {
-                        await _userVerificationmanager.SendConfirmationEmailAsync(null, appUser.ToEntityHeader());
-                        return InvokeResult<AuthResponse>.Create(tokenResponse.Result);
-                    }
-                    else
-                    {
-                        var failedValidationResult = new InvokeResult<AuthResponse>();
-                        failedValidationResult.Concat(tokenResponse);
-                        return failedValidationResult;
-                    }
+                    await _userVerificationmanager.SendConfirmationEmailAsync(null, appUser.ToEntityHeader());
+                    return InvokeResult<CreateUserResponse>.Create(CreateUserResponse.FromAuthResponse(tokenResponse.Result));
                 }
                 else
                 {
-                    if (sendAuthEmail)
-                    {
-                        await _userVerificationmanager.SendConfirmationEmailAsync(null, appUser.ToEntityHeader());
-                    }
-
-                    /* If we are logging in as web app, none of this applies */
-                    return InvokeResult<AuthResponse>.Create(new AuthResponse()
-                    {
-                        AccessToken = "N/A",
-                        AccessTokenExpiresUTC = "N/A",
-                        RefreshToken = "N/A",
-                        AppInstanceId = "N/A",
-                        RefreshTokenExpiresUTC = "N/A",
-                        IsLockedOut = false,
-                        AppUser = appUser,
-                        User = appUser.ToEntityHeader(),
-                        Roles = new List<EntityHeader>()
-                    });
+                    var failedValidationResult = new InvokeResult<CreateUserResponse>();
+                    failedValidationResult.Concat(tokenResponse);
+                    return failedValidationResult;
                 }
-
             }
             else
             {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, appUser.Id, appUser.UserName, errors: identityResult.Errors.First().Message);
-                return InvokeResult<AuthResponse>.FromInvokeResult(identityResult);
+                if (sendAuthEmail)
+                {
+                    await _userVerificationmanager.SendConfirmationEmailAsync(null, appUser.ToEntityHeader());
+                }
+
+                /* If we are logging in as web app, none of this applies */
+                return InvokeResult<CreateUserResponse>.Create(createUserResponse);
             }
         }
 
@@ -680,7 +695,7 @@ namespace LagoVista.UserAdmin.Managers
                 var result = await _secureStorage.AddSecretAsync(user, external.OAuthTokenVerifier);
                 external.OAuthTokenVerifierSecretId = result.Result;
                 external.OAuthTokenVerifier = String.Empty;
-            }            
+            }
 
             return await _appUserRepo.AssociateExternalLoginAsync(userId, external);
         }
@@ -740,7 +755,7 @@ namespace LagoVista.UserAdmin.Managers
             user.TermsAndConditionsAcceptedIPAddress = ipAddress;
             await _appUserRepo.UpdateAsync(user);
 
-            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.AcceptTermsAndConditions, userEH.Id, userEH.Text,  extras:$"ip:{ipAddress}");
+            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.AcceptTermsAndConditions, userEH.Id, userEH.Text, extras: $"ip:{ipAddress}");
 
             return InvokeResult<AppUser>.Create(user);
         }
@@ -756,7 +771,7 @@ namespace LagoVista.UserAdmin.Managers
 
             if (String.IsNullOrEmpty(appUser.SsnSecretId))
                 return InvokeResult<string>.FromError($"{appUser.Name} does not have a SSN stored.");
-          
+
             return await _secureStorage.GetUserSecretAsync(appUser.ToEntityHeader(), appUser.SsnSecretId);
         }
 
