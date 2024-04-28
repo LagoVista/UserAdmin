@@ -22,6 +22,7 @@ namespace LagoVista.UserAdmin.Models.Security
         UserPasswordLogin,
         UserLogout,
         UserPasswordFailedLogin,
+        OAuthInitiate,
         OAuthRedirect,
         OAuthCallback,
         OAuthError,
@@ -29,11 +30,20 @@ namespace LagoVista.UserAdmin.Models.Security
         OAuthCreateUser,
         OAuthAppendUserLogin,
         OAuthRemoveUserLogin,
+        OAuthFinalizeLogin,
         OAuthLogin,
+        OAuthAccessDefined,
+        OAuthFault,
+        OAuthAccessTicketReceived,
+        OAuthCreatingTicket,        
+        OAuthBackChannelHandler,
+        OAuthBackChannelHandlerSuccess,
+        OAuthBackChannelHandlerFailure,
         AddUserToOrg,
         SetAsOrgAdmin,
         ClearOrgAdmin,
-        ChangePassword,
+        ChangePasswordSuccess,
+        ChangePasswordFailed,
         InviteUser,
         RegisterUser,
         AcceptInvite,
@@ -43,6 +53,15 @@ namespace LagoVista.UserAdmin.Models.Security
         AcceptTermsAndConditions,
         GrantRole,
         RevokeRole,
+        ConfirmEmailSuccess,
+        ConfirmEmailFailed,
+        ConfirmPhoneSuccess,
+        ConfirmPhoneFailed,
+        SendPasswordResetLink,
+        ResetPasswordSuccess,
+        ResetPasswordFailed,
+        SetSystemAdminNotAuthorized,
+        SetSystemAdmin,
     }
 
     [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.AuthenticationLogs_Title, LoggingResources.Names.LogRecord_Description,
@@ -62,6 +81,8 @@ namespace LagoVista.UserAdmin.Models.Security
         {
 
         }
+
+        public string RedirectUri { get; set; }
 
         public string UserName { get; set; }
         public string UserId { get; set; }

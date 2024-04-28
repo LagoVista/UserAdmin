@@ -215,7 +215,7 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public EntityHeader ToEntityHeader()
         {
-            return EntityHeader.Create(Id, $"{FirstName} ${LastName}");
+            return EntityHeader.Create(Id, $"{FirstName} {LastName}");
         }
 
         public int ViewedSystemNotificationIndex { get; set; }

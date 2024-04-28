@@ -5,9 +5,8 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Security;
+using LagoVista.UserAdmin.Models.Users;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Managers
@@ -28,7 +27,7 @@ namespace LagoVista.UserAdmin.Managers
             return _authLogRepo.AddAsync(authLog);
         }
 
-        public Task AddAsync(AuthLogTypes type, string userId = "?", string userName = "?", string orgId = "?", string orgName = "?", string oauthProvier = "", string errors = "", string extras = "")
+        public Task AddAsync(AuthLogTypes type, string userId = "?", string userName = "?", string orgId = "?", string orgName = "?", string oauthProvier = "", string errors = "", string extras = "", string redirectUri = "")
         {
             var auth = new AuthenticationLog(type)
             {
@@ -47,6 +46,17 @@ namespace LagoVista.UserAdmin.Managers
                 ); 
 
             return AddAsync(auth);
+        }
+
+        public Task AddAsync(AuthLogTypes type, EntityHeader user = null, EntityHeader org = null, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "")
+        {
+            return AddAsync(type, user?.Id, user?.Text, org?.Id, org?.Text, oauthProvider, errors, extras, redirectUri);
+        }
+
+        public Task AddAsync(AuthLogTypes type, AppUser user, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "")
+        {
+            return AddAsync(type, user?.Id, user?.UserName, user.CurrentOrganization?.Id, user.CurrentOrganization?.Text, oauthProvider, errors, extras, redirectUri);
+            
         }
 
         public Task<ListResponse<AuthenticationLog>> GetAllAsync(ListRequest listRequest, EntityHeader org, EntityHeader user)

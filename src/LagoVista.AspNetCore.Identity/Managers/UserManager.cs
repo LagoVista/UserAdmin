@@ -10,6 +10,7 @@ using LagoVista.Core.Managers;
 using LagoVista.Core.Interfaces;
 using LagoVista.UserAdmin.Resources;
 using LagoVista.IoT.Logging.Loggers;
+using System.Linq;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -17,11 +18,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
     public class UserManager : ManagerBase, IUserManager
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly IAuthenticationLogManager _authLogManager;
        
-        public UserManager(UserManager<AppUser> userManager, IAdminLogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security) :
+        public UserManager(UserManager<AppUser> userManager, IAuthenticationLogManager authlogManager, IAdminLogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security) :
             base(logger, appConfig, dependencyManager, security)
         {
             _userManager = userManager;
+            _authLogManager = authlogManager;
         }
 
         public Task<AppUser> FindByIdAsync(string id)
@@ -80,10 +83,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if(result.Succeeded)
             {
                 await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "ConfirmedPhoneNumber", user.CurrentOrganization.ToEntityHeader(), user.ToEntityHeader());
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ConfirmEmailSuccess, user);
             }
             else
             {
                 await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "FailedConfirmingPhoneNumber", user.CurrentOrganization.ToEntityHeader(), user.ToEntityHeader());
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ConfirmEmailFailed, user, extras: result.Errors.First().Description);
             }
 
             return result.ToInvokeResult();
@@ -96,11 +101,15 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (result.Succeeded)
             {
                 await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "ConfirmedEmail", user.CurrentOrganization.ToEntityHeader(), user.ToEntityHeader());
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ConfirmEmailSuccess, user);
             }
             else
             {
                 await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "FailedConfirmingEmail", user.CurrentOrganization.ToEntityHeader(), user.ToEntityHeader());
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ConfirmEmailFailed, user, extras: result.Errors.First().Description);
             }
+
+            
 
             return result.ToInvokeResult();
         }
@@ -111,11 +120,15 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (result.Succeeded)
             {
                 await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "ChangedPassword", user.CurrentOrganization.ToEntityHeader(), user.ToEntityHeader());
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ChangePasswordSuccess, user);
             }
             else
             {
                 await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "FailedChangePasswordAttempt", user.CurrentOrganization.ToEntityHeader(), user.ToEntityHeader());
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ChangePasswordFailed, user, extras: result.Errors.First().Description);
             }
+
+            
 
             return result.ToInvokeResult();
         }
@@ -128,6 +141,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public async Task<string> GeneratePasswordResetTokenAsync(AppUser user)
         {
             await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "RequestPassordChange", user.CurrentOrganization.ToEntityHeader(), user.ToEntityHeader());
+            await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.SendPasswordResetLink, user);
             return await _userManager.GeneratePasswordResetTokenAsync(user);
         }
 
@@ -137,10 +151,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (result.Succeeded)
             {
                 await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "PasswordReset", user.CurrentOrganization.ToEntityHeader(), user.ToEntityHeader());
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ResetPasswordSuccess, user);
             }
             else
             {
                 await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "FailedAttemptToResetPassword", user.CurrentOrganization.ToEntityHeader(), user.ToEntityHeader());
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ResetPasswordFailed, user, extras: result.Errors.First().Description);
             }
 
             return result.ToInvokeResult();
@@ -151,7 +167,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var updateByUser = await _userManager.FindByIdAsync(user.Id);
             if(!updateByUser.IsSystemAdmin)
             {
-                return InvokeResult.FromErrors(UserAdminErrorCodes.AuthNotSysAdmin.ToErrorMessage());
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.SetSystemAdminNotAuthorized, user, extras: $"Attempt by user id: {user.Id} {user.Text}");
+                return InvokeResult.FromErrors(UserAdminErrorCodes.AuthNotSysAdmin.ToErrorMessage());                
             }
 
             var updatedUser = await _userManager.FindByIdAsync(userId);
@@ -163,6 +180,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             await _userManager.UpdateAsync(updateByUser);
 
             await LogEntityActionAsync(userId, typeof(AppUser).Name, "SetAsSystemAdmin", org, user);
+            await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.SetSystemAdmin, user, extras: $"By user id: {user.Id} {user.Text}");
 
             return InvokeResult.Success;
         }

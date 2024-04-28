@@ -126,7 +126,7 @@ namespace LagoVista.UserAdmin.Managers
 
                 var org = appUser.CurrentOrganization == null ? EntityHeader.Create(Guid.Empty.ToId(), "????") : appUser.CurrentOrganization.ToEntityHeader();
                 await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "ChangePassword", org, appUser.ToEntityHeader());
-                await _authLogMgr.AddAsync(AuthLogTypes.ChangePassword, appUser.Id, appUser.Name, org.Id, org.Text);
+                await _authLogMgr.AddAsync(AuthLogTypes.ChangePasswordSuccess, appUser.Id, appUser.Name, org.Id, org.Text);
             }
             else
             {
