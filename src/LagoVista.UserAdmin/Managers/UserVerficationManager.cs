@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using LagoVista.Core;
 using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
+using LagoVista.Core.Models.ML;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -24,10 +25,12 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly IAppUserRepo _appUserRepo;
+        private readonly IAuthenticationLogManager _authLogMgr;
 
-        public UserVerficationManager(IAdminLogger adminLogger, IUserManager userMananger, IAppConfig appConfig, ISmsSender smsSender, IAppUserRepo appUserRepo,
+        public UserVerficationManager(IAdminLogger adminLogger, IUserManager userMananger, IAppConfig appConfig, ISmsSender smsSender, IAppUserRepo appUserRepo, IAuthenticationLogManager authLogManager,
                                     IEmailSender emailSender, IDependencyManager depManager, ISecurity security) : base(adminLogger, appConfig, depManager, security)
         {
+            _authLogMgr = authLogManager ?? throw new ArgumentNullException(nameof(authLogManager));
             _smsSender = smsSender ?? throw new ArgumentNullException(nameof(smsSender));
             _adminLogger = adminLogger ?? throw new ArgumentNullException(nameof(adminLogger));
             _userManager = userMananger ?? throw new ArgumentNullException(nameof(userMananger));
@@ -80,6 +83,7 @@ namespace LagoVista.UserAdmin.Managers
             var appUser = await _userManager.FindByIdAsync(userHeader.Id);
             if (appUser == null)
             {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendEmailConfirmFailed, userId: userHeader.Id, userName: userHeader.Text, extras: $"Could not find user with id: {userHeader.Id}");
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserVerifyController_SendConfirmationEmailAsync", "Could not get current user.");
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
@@ -88,8 +92,6 @@ namespace LagoVista.UserAdmin.Managers
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
                 var encodedToken = System.Net.WebUtility.UrlEncode(token);
-
-
 
                 var callbackUrl = $"{GetWebURI()}/Account/Verify?userId={appUser.Id}&code={encodedToken}";
                 var mobileCallbackUrl = $"nuviot:confirmemail/?userId={appUser.Id}&code={encodedToken}";
@@ -110,6 +112,8 @@ namespace LagoVista.UserAdmin.Managers
                     new KeyValuePair<string, string>("token", token),
                     new KeyValuePair<string, string>("toUserId", appUser.Id),
                     new KeyValuePair<string, string>("toEmail", appUser.Email));
+
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendEmailConfirmSuccess, userId: userHeader.Id, userName: userHeader.Text);
                 return result;
 
             }
@@ -118,6 +122,8 @@ namespace LagoVista.UserAdmin.Managers
                 _adminLogger.AddException("UserVerficationManager_SendConfirmationEmailAsync", ex,
                    new KeyValuePair<string, string>("toUserId", appUser.Id),
                    new KeyValuePair<string, string>("toEmail", appUser.Email));
+
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendEmailConfirmFailed, userId: userHeader.Id, userName: userHeader.Text, extras: ex.Message);
 
                 return InvokeResult.FromErrors(UserAdminErrorCodes.RegErrorSendingEmail.ToErrorMessage(), new ErrorMessage() { Message = ex.Message });
             }
@@ -128,12 +134,15 @@ namespace LagoVista.UserAdmin.Managers
             if (String.IsNullOrEmpty(sendSMSCode.PhoneNumber))
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserVerficationManager_SendSMSCodeAsync", UserAdminErrorCodes.RegMissingEmail.Message);
+
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendSMSConfirmFailed, userId: userHeader.Id, userName: userHeader.Text, extras: $"Empty Phone Number");
                 return InvokeResult.FromErrors(UserAdminErrorCodes.RegMissingPhoneNumber.ToErrorMessage());
             }
 
             var user = await _userManager.FindByIdAsync(userHeader.Id);
             if (user == null)
             {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendSMSConfirmFailed, userId: userHeader.Id, userName: userHeader.Text, extras: $"Could not find user with id: {userHeader.Id}");
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserVerficationManager_SendSMSCodeAsync", "Could not get current user.");
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
@@ -142,16 +151,25 @@ namespace LagoVista.UserAdmin.Managers
             {
                 var code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, sendSMSCode.PhoneNumber);
                 var result = await _smsSender.SendAsync(sendSMSCode.PhoneNumber, UserAdminResources.SMS_Verification_Body.Replace("[CODE]", code).Replace("[APP_NAME]", _appConfig.AppName));
+                user.PhoneNumber = sendSMSCode.PhoneNumber;
+                user.PhoneNumberConfirmed = true;
+                user.PhoneNumberConfirmedForBilling = false;
+
+                await _userManager.UpdateAsync(user);
 
                 _adminLogger.LogInvokeResult("UserVerficationManager_SendSMSCodeAsync", result,
                     new KeyValuePair<string, string>("phone", sendSMSCode.PhoneNumber),
                     new KeyValuePair<string, string>("code", code));
 
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendSMSConfirmSuccess, userId: userHeader.Id, userName: userHeader.Text);
                 return result;
             }
             catch (Exception ex)
             {
                 _adminLogger.AddException("UserVerficationManager_SendSMSCodeAsync", ex);
+
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendSMSConfirmFailed, userId: userHeader.Id, userName: userHeader.Text, extras: ex.Message);
+
                 return InvokeResult.FromErrors(UserAdminErrorCodes.RegErrorSendingSMS.ToErrorMessage(), new ErrorMessage() { Message = ex.Message });
             }
         }
@@ -161,6 +179,7 @@ namespace LagoVista.UserAdmin.Managers
             var user = await _userManager.FindByIdAsync(userHeader.Id);
             if (user == null)
             {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SMSConfirmFailed, userId: userHeader.Id, userName: userHeader.Text, extras: $"Could not find user with id: {userHeader.Id}");
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserVerficationManager_ValidateSMSAsync", "Could not get current user.");
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
@@ -170,20 +189,33 @@ namespace LagoVista.UserAdmin.Managers
                 verifyRequest.SMSCode = await _userManager.GenerateChangePhoneNumberTokenAsync(user, verifyRequest.PhoneNumber);
             }
 
-            var result = await _userManager.ChangePhoneNumberAsync(user, verifyRequest.PhoneNumber, verifyRequest.SMSCode);
+            if(!String.IsNullOrEmpty(verifyRequest.PhoneNumber) && user.PhoneNumber != verifyRequest.PhoneNumber )
+            {
+                var errorMessage = $"Phone numbers do not match: Sent to SMS Code: {user.PhoneNumber} - {verifyRequest.PhoneNumber}";
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SMSConfirmFailed, userId: userHeader.Id, userName: userHeader.Text, extras: errorMessage);
+                return InvokeResult.FromError(errorMessage);
+            }
+
+            var result = await _userManager.ChangePhoneNumberAsync(user, user.PhoneNumber, verifyRequest.SMSCode);
             if (result.Successful)
             {
+                await _authLogMgr.AddAsync(verifyRequest.SkipStep ? Models.Security.AuthLogTypes.SMSConfirmedBypass : Models.Security.AuthLogTypes.SMSConfirmSuccess, userId: userHeader.Id, userName: userHeader.Text);
+
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "UserVerficationManager_ValidateSMSAsync", "Success_ConfirmSMS",
                     new KeyValuePair<string, string>("phone", verifyRequest.PhoneNumber),
                     new KeyValuePair<string, string>("code", verifyRequest.SMSCode));
 
-                user.PhoneNumberConfirmedForBilling = true;
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SMSConfirmSuccess, userId: userHeader.Id, userName: userHeader.Text);
+
+                user.PhoneNumberConfirmedForBilling = !verifyRequest.SkipStep;
                 await _userManager.UpdateAsync(user);
 
                 return InvokeResult.Success;
             }
             else
             {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SMSConfirmFailed, userId: userHeader.Id, userName: userHeader.Text, extras: result.ErrorMessage);
+
                 _adminLogger.LogInvokeResult("UserVerficationManager_ValidateEmailAsync", result,
                     new KeyValuePair<string, string>("phone", verifyRequest.PhoneNumber),
                     new KeyValuePair<string, string>("sentToken", verifyRequest.SMSCode));
@@ -197,6 +229,7 @@ namespace LagoVista.UserAdmin.Managers
             var appUser = await _userManager.FindByIdAsync(userHeader.Id);
             if (appUser == null)
             {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.EmailConfirmFailed, userId: userHeader.Id, userName: userHeader.Text, extras: $"Could not find user with id: {userHeader.Id}");
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserVerficationManager_ValidateEmailAsync", "Could not get current user.");
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
@@ -212,6 +245,8 @@ namespace LagoVista.UserAdmin.Managers
             var result = await _userManager.ConfirmEmailAsync(appUser, confirmemaildto.ReceivedCode);
             if (result.Successful)
             {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.EmailConfirmSuccess, userId: userHeader.Id, userName: userHeader.Text);
+
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "UserVerficationManager_ValidateEmailAsync", "Success_ConfirmEmail",
                     new KeyValuePair<string, string>("userId", appUser.Id),
                     new KeyValuePair<string, string>("code", confirmemaildto.ReceivedCode));
@@ -220,6 +255,8 @@ namespace LagoVista.UserAdmin.Managers
             }
             else
             {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.EmailConfirmFailed, userId: userHeader.Id, userName: userHeader.Text, extras: result.ErrorMessage);
+
                 _adminLogger.LogInvokeResult("UserVerficationManager_ValidateEmailAsync", result,
                     new KeyValuePair<string, string>("userId", appUser.Id),
                     new KeyValuePair<string, string>("sentToken", confirmemaildto.ReceivedCode));
@@ -237,6 +274,8 @@ namespace LagoVista.UserAdmin.Managers
             user.PhoneNumberConfirmed = true;
             user.PhoneNumberConfirmedForBilling = false;
             await _appUserRepo.UpdateAsync(user);
+
+            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SMSConfirmedBypass, userId: userHeader.Id, userName: userHeader.Text);
 
             return InvokeResult.Success;
         }

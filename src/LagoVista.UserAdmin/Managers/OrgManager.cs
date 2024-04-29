@@ -316,7 +316,7 @@ namespace LagoVista.UserAdmin.Managers
 
             return InvokeResult<AcceptInviteResponse>.Create(new AcceptInviteResponse()
             {
-                RedirectPage = "/auth/invite/accepted",
+                RedirectPage = CommonLinks.InviteAccepted,
                 ResponseMessage = msg
             }); 
         }

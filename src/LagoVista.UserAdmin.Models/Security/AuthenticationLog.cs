@@ -64,6 +64,19 @@ namespace LagoVista.UserAdmin.Models.Security
         ResetPasswordFailed,
         SetSystemAdminNotAuthorized,
         SetSystemAdmin,
+
+        SendEmailConfirmSuccess,
+        SendEmailConfirmFailed,
+
+        EmailConfirmSuccess,
+        EmailConfirmFailed,
+
+        SendSMSConfirmSuccess,
+        SendSMSConfirmFailed,
+
+        SMSConfirmedBypass,
+        SMSConfirmSuccess,
+        SMSConfirmFailed,
     }
 
     [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.AuthenticationLogs_Title, LoggingResources.Names.LogRecord_Description,

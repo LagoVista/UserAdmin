@@ -189,7 +189,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
     public class OrganizationSummary : SummaryData, IOrganizationSummary 
     {
-        public string Id { get; set; }
         public string Text { get; set; }
         public string Namespace { get; set; }
         public string Logo { get; set; }

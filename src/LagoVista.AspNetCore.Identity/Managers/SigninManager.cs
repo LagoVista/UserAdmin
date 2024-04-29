@@ -4,6 +4,7 @@ using LagoVista.Core.Managers;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
@@ -174,11 +175,11 @@ namespace LagoVista.AspNetCore.Identity.Managers
                         }
                         else if (appUser.ShowWelcome)
                         {
-                            response.RedirectPage = "/home/welcome";
+                            response.RedirectPage = CommonLinks.HomeWelcome;
                         }
                         else
                         {
-                            response.RedirectPage = "/home";
+                            response.RedirectPage = CommonLinks.Home;
                         }
                     }
 
@@ -186,30 +187,36 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 }
                 else
                 {
-                    response.RedirectPage = "/auth/org/createdefault";
+                    response.RedirectPage = CommonLinks.CreateDefaultOrg;
                 }
 
                 if (!appUser.EmailConfirmed)
-                    response.RedirectPage = "/auth/confirmemail";
+                    response.RedirectPage = CommonLinks.ConfirmEmail;
 
                 appUser.LastLogin = DateTime.UtcNow.ToJSONString();
                 // we can bypass the manager here, we are updating the current user if they are logged in, should not require any security.
                 await _appUserRepo.UpdateAsync(appUser);
                 response.AddAuthMetric("Update user");
 
-                await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
+                
                 signIn.Dispose();
                 UserLoginSuccess.Inc();
 
-                var favs = await _userFavoritesManager.GetUserFavoritesAsync(appUser.ToEntityHeader(), appUser.CurrentOrganization.ToEntityHeader());
-                response.AddAuthMetric("Add FAVs");
+                if (appUser.CurrentOrganization != null)
+                {
+                    await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
 
-                var mrus = await _mostRecentlyUsedManager.GetMostRecentlyUsedAsync(appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
-                response.AddAuthMetric("Add MRUs");
+                    var favs = await _userFavoritesManager.GetUserFavoritesAsync(appUser.ToEntityHeader(), appUser.CurrentOrganization.ToEntityHeader());
+                    response.AddAuthMetric("Add FAVs");
+
+                    var mrus = await _mostRecentlyUsedManager.GetMostRecentlyUsedAsync(appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
+                    response.AddAuthMetric("Add MRUs");
+
+                    response.Favorites = favs;
+                    response.MostRecentlyUsed = mrus;
+                }
 
                 response.User = appUser;
-                response.Favorites = favs;
-                response.MostRecentlyUsed = mrus;
 
                 return InvokeResult<UserLoginResponse>.Create(response);
             }

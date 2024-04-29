@@ -74,7 +74,7 @@ namespace LagoVista.AspNetCore.Identity.Utils
             else
             {
                 authResponse.Roles = appUser.CurrentOrganizationRoles;
-                authResponse.Org = appUser.CurrentOrganization.ToEntityHeader();
+                authResponse.Org = appUser.CurrentOrganization?.ToEntityHeader();
                 authResponse.AccessToken = GetJWToken(appUser, accessExpires, authRequest.AppInstanceId);
             }
 
