@@ -232,7 +232,7 @@ namespace LagoVista.UserAdmin.Repos.Users
         {
             if (String.IsNullOrEmpty(id))
             {
-                throw new InvalidOperationException("Attempt to find user with null or empty user name.");
+                throw new InvalidOperationException($"Attempt to find user with null or empty external login id for provider: {loginType}.");
             }
 
             var user = (await QueryAsync(usr => usr.ExternalLogins != null && usr.ExternalLogins.Where(ext => ext.Provider.Value == loginType && ext.Id == id).Any())).FirstOrDefault();

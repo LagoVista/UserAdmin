@@ -27,7 +27,7 @@ namespace LagoVista.UserAdmin.Managers
             return _authLogRepo.AddAsync(authLog);
         }
 
-        public Task AddAsync(AuthLogTypes type, string userId = "?", string userName = "?", string orgId = "?", string orgName = "?", string oauthProvier = "", string errors = "", string extras = "", string redirectUri = "")
+        public Task AddAsync(AuthLogTypes type, string userId = "?", string userName = "?", string orgId = "?", string orgName = "?", string oauthProvier = "", string errors = "", string extras = "", string redirectUri = "none", string inviteId = "none")
         {
             var auth = new AuthenticationLog(type)
             {
@@ -37,7 +37,9 @@ namespace LagoVista.UserAdmin.Managers
                 OrgName = orgName,
                 Errors = errors,
                 Extras = extras,
-                OAuthProvider = oauthProvier
+                InviteId  = inviteId,
+                OAuthProvider = oauthProvier,
+                RedirectUri = redirectUri
             };
 
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AuthLog]", "Authentication Log",
@@ -48,14 +50,14 @@ namespace LagoVista.UserAdmin.Managers
             return AddAsync(auth);
         }
 
-        public Task AddAsync(AuthLogTypes type, EntityHeader user = null, EntityHeader org = null, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "")
+        public Task AddAsync(AuthLogTypes type, EntityHeader user = null, EntityHeader org = null, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none")
         {
-            return AddAsync(type, user?.Id, user?.Text, org?.Id, org?.Text, oauthProvider, errors, extras, redirectUri);
+            return AddAsync(type, user?.Id, user?.Text, org?.Id, org?.Text, oauthProvider, errors, extras, redirectUri, inviteId);
         }
 
-        public Task AddAsync(AuthLogTypes type, AppUser user, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "")
+        public Task AddAsync(AuthLogTypes type, AppUser user, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none")
         {
-            return AddAsync(type, user?.Id, user?.UserName, user.CurrentOrganization?.Id, user.CurrentOrganization?.Text, oauthProvider, errors, extras, redirectUri);
+            return AddAsync(type, user?.Id, user?.UserName, user.CurrentOrganization?.Id, user.CurrentOrganization?.Text, oauthProvider, errors, extras, redirectUri, inviteId);
             
         }
 

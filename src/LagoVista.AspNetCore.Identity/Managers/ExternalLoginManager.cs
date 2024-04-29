@@ -129,14 +129,9 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] User: {appUser.Email}");
-            await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizeLogin, appUser);
+            await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizeLogin, appUser, oauthProvider: provider);
 
             await _signInManager.SignInAsync(appUser, false);
-
-            var returnPath = cookies["ReturnPath"];
-            //Response.Cookies.Delete("ReturnPath");
-            //Response.Cookies.Delete("Identity.External");
-            //Response.Cookies.Append("authenticated", "true");
 
             if (!String.IsNullOrEmpty(returnUrl))
             {
@@ -192,13 +187,10 @@ namespace LagoVista.UserAdmin.Managers
                     }
                 }
                 else
+                {
+                    await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizeLogin, appUser, oauthProvider: provider, extras: $"Return URL Provided", redirectUri: returnUrl);
                     return InvokeResult<string>.Create(returnUrl);
-            }
-            else if (!String.IsNullOrEmpty(returnPath))
-            {
-                _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] - Web - has Return URL: {returnPath}");
-                await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizeLogin, appUser, oauthProvider: provider, extras: $"Web - Deep Link", redirectUri: returnPath);
-                return InvokeResult<string>.Create(returnPath);
+                }
             }
             // user does exist and is configured properly.
             else if (appUser.ShowWelcome)
@@ -229,8 +221,11 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult<string>> HandleExternalLogin(ExternalLogin externalLoginInfo, Dictionary<string, string> cookies, string inviteId, string returnUrl = null)
         {
-            if (externalLoginInfo.Provider.Value == ExternalLoginTypes.SLTesting && _appConfig.Environment != Environments.Development)
-                throw new NotSupportedException("OAuth Provider SL Testing is only available in the development environment");
+            if (externalLoginInfo.Provider.Value == ExternalLoginTypes.SLTesting && 
+                (_appConfig.Environment != Environments.Development &&
+                 _appConfig.Environment != Environments.Local &&
+                 _appConfig.Environment != Environments.LocalDevelopment))
+                throw new NotSupportedException($"OAuth Provider SL Testing is only available in the development environment, currently in {_appConfig.Environment}.");
 
             if (!externalLoginInfo.Provider.HasValue)
                 throw new ArgumentNullException("externalLogin.Provider");

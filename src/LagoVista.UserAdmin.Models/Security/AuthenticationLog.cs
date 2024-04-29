@@ -97,6 +97,8 @@ namespace LagoVista.UserAdmin.Models.Security
 
         }
 
+        public string InviteId { get; set; }
+
         public string RedirectUri { get; set; }
 
         public string UserName { get; set; }

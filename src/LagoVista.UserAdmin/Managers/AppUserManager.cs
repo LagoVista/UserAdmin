@@ -582,7 +582,7 @@ namespace LagoVista.UserAdmin.Managers
                 AppUser = appUser,
                 User = appUser.ToEntityHeader(),
                 Roles = new List<EntityHeader>(),
-                RedirectPage = "/auth/org/createdefault"
+                RedirectPage = CommonLinks.CreateDefaultOrg
             };
 
             if (!String.IsNullOrEmpty(newUser.InviteId))
