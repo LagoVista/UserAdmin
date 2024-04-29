@@ -539,8 +539,6 @@ namespace LagoVista.UserAdmin.Managers
             if (externalLogin != null)
             {
                 appUser.ExternalLogins.Add(externalLogin);
-                appUser.EmailConfirmed = true;
-                appUser.PhoneNumberConfirmed = true;
                 appUser.PhoneNumberConfirmedForBilling = false;
 
                 if (!String.IsNullOrEmpty(externalLogin.OAuthToken))

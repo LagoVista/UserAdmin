@@ -46,6 +46,7 @@ namespace LagoVista.UserAdmin.Managers
         private readonly ISubscriptionManager _subscriptionManager;
         private readonly IDefaultRoleList _defaultRoleList;
         private readonly IAuthenticationLogManager _authLogMgr;
+        private readonly IBackgroundServiceTaskQueue _taskQueue;
         #endregion
 
         #region Ctor
@@ -61,9 +62,11 @@ namespace LagoVista.UserAdmin.Managers
             IAppConfig appConfig,
             IDependencyManager depManager,
             ISecurity security,
+            IBackgroundServiceTaskQueue taskQueue,
             IOrgInitializer orgInitializer,
             IDefaultRoleList defaultRoleList,
-            IOwnedObjectRepo ownedObjectRepo,
+            
+        IOwnedObjectRepo ownedObjectRepo,
             IUserRoleManager useRoleManager,
             IAuthenticationLogManager authLogMgr,
             ISubscriptionManager subscriptionManager,
@@ -86,6 +89,7 @@ namespace LagoVista.UserAdmin.Managers
             _adminLogger = logger;
             _orgInitializer = orgInitializer;
             _ownedObjectRepo = ownedObjectRepo;
+            _taskQueue = taskQueue ?? throw new ArgumentNullException(nameof(taskQueue));
         }
         #endregion
 
@@ -125,7 +129,7 @@ namespace LagoVista.UserAdmin.Managers
             /* Create the Organization in Storage */
             await _organizationRepo.AddOrganizationAsync(organization);
 
-            await _authLogMgr.AddAsync(AuthLogTypes.CreateOrg, user.Id, user.Text, organization.Id, organization.Name);
+            await _authLogMgr.AddAsync(AuthLogTypes.CreatingOrg, user.Id, user.Text, organization.Id, organization.Name);
 
             var currentUser = await _appUserRepo.FindByIdAsync(user.Id);
 
@@ -154,9 +158,17 @@ namespace LagoVista.UserAdmin.Managers
             /* Final update of the user */
             await _appUserRepo.UpdateAsync(currentUser);
 
+            /* This isn't working correctly so for now, just do inline, want to background it at some point */
+            //await _taskQueue.QueueBackgroundWorkItemAsync(async (token) =>
+            //{
+            await _authLogMgr.AddAsync(AuthLogTypes.PopulatingNewOrg, user.Id, user.Text, organization.Id, organization.Name);
             await _orgInitializer.Init(organization.ToEntityHeader(), currentUser.ToEntityHeader(), organizationViewModel.CreateGettingStartedData);
+            await _authLogMgr.AddAsync(AuthLogTypes.PopulatedNewOrg, user.Id, user.Text, organization.Id, organization.Name);
+            //});
 
             await LogEntityActionAsync(organization.Id, typeof(Organization).Name, "Created Organization", organization.ToEntityHeader(), user);
+
+            await _authLogMgr.AddAsync(AuthLogTypes.CreatedOrg, user.Id, user.Text, organization.Id, organization.Name);
 
             return InvokeResult<Organization>.Create(organization);
         }

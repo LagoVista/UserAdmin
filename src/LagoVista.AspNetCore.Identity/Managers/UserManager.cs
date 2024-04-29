@@ -82,12 +82,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var result = await _userManager.ChangePhoneNumberAsync(user, phone, token);
             if(result.Succeeded)
             {
-                await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "ConfirmedPhoneNumber", user.CurrentOrganization.ToEntityHeader(), user.ToEntityHeader());
+                await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "ConfirmedPhoneNumber", user.CurrentOrganization?.ToEntityHeader(), user.ToEntityHeader());
                 await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ConfirmEmailSuccess, user);
             }
             else
             {
-                await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "FailedConfirmingPhoneNumber", user.CurrentOrganization.ToEntityHeader(), user.ToEntityHeader());
+                await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "FailedConfirmingPhoneNumber", user.CurrentOrganization?.ToEntityHeader(), user.ToEntityHeader());
                 await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ConfirmEmailFailed, user, extras: result.Errors.First().Description);
             }
 
@@ -100,12 +100,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
-                await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "ConfirmedEmail", user.CurrentOrganization.ToEntityHeader(), user.ToEntityHeader());
+                await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "ConfirmedEmail", user.CurrentOrganization?.ToEntityHeader(), user.ToEntityHeader());
                 await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ConfirmEmailSuccess, user);
             }
             else
             {
-                await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "FailedConfirmingEmail", user.CurrentOrganization.ToEntityHeader(), user.ToEntityHeader());
+                await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "FailedConfirmingEmail", user.CurrentOrganization?.ToEntityHeader(), user.ToEntityHeader());
                 await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ConfirmEmailFailed, user, extras: result.Errors.First().Description);
             }
 
@@ -119,16 +119,14 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var result = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
             if (result.Succeeded)
             {
-                await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "ChangedPassword", user.CurrentOrganization.ToEntityHeader(), user.ToEntityHeader());
+                await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "ChangedPassword", user.CurrentOrganization?.ToEntityHeader(), user.ToEntityHeader());
                 await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ChangePasswordSuccess, user);
             }
             else
             {
-                await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "FailedChangePasswordAttempt", user.CurrentOrganization.ToEntityHeader(), user.ToEntityHeader());
+                await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "FailedChangePasswordAttempt", user.CurrentOrganization?.ToEntityHeader(), user.ToEntityHeader());
                 await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ChangePasswordFailed, user, extras: result.Errors.First().Description);
-            }
-
-            
+            }            
 
             return result.ToInvokeResult();
         }
@@ -140,7 +138,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public async Task<string> GeneratePasswordResetTokenAsync(AppUser user)
         {
-            await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "RequestPassordChange", user.CurrentOrganization.ToEntityHeader(), user.ToEntityHeader());
+            await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "RequestPassordChange", user.CurrentOrganization?.ToEntityHeader(), user.ToEntityHeader());
             await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.SendPasswordResetLink, user);
             return await _userManager.GeneratePasswordResetTokenAsync(user);
         }
@@ -150,7 +148,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
             if (result.Succeeded)
             {
-                await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "PasswordReset", user.CurrentOrganization.ToEntityHeader(), user.ToEntityHeader());
+                await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "PasswordReset", user.CurrentOrganization?.ToEntityHeader(), user.ToEntityHeader());
                 await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ResetPasswordSuccess, user);
             }
             else

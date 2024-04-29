@@ -193,17 +193,23 @@ namespace LagoVista.UserAdmin.Managers
                 }
             }
             // user does exist and is configured properly.
+            else if(!appUser.EmailConfirmed)
+            {
+                _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] - Web - Welcome View");
+                await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizeLogin, appUser, oauthProvider: provider, extras: $"Web - Welcome View", redirectUri: "/home/welcome");
+                return InvokeResult<string>.Create(CommonLinks.ConfirmEmail);
+            }
             else if (appUser.ShowWelcome)
             {
                 _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] - Web - Welcome View");
                 await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizeLogin, appUser, oauthProvider: provider, extras: $"Web - Welcome View", redirectUri: "/home/welcome");                
-                return InvokeResult<string>.Create("/home/welcome");
+                return InvokeResult<string>.Create(CommonLinks.HomeWelcome);
             }
             else
             {
                 _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] - Web - Return Home View");
                 await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizeLogin, appUser, oauthProvider: provider, extras: $"Web - Home", redirectUri: "/home");
-                return InvokeResult<string>.Create("/home");
+                return InvokeResult<string>.Create(CommonLinks.Home);
             }
         }
 
@@ -263,6 +269,13 @@ namespace LagoVista.UserAdmin.Managers
                 appUser = await _signInManager.UserManager.FindByEmailAsync(externalLoginInfo.Email);
                 await _authLogManager.AddAsync(AuthLogTypes.OAuthAppendUserLogin, appUser.Id, appUser.Name, oauthProvier: externalLoginInfo.Provider.Text, extras: $"found by email, associating oauth account with email {externalLoginInfo.Email} and logging in.");
 
+                if (!appUser.EmailConfirmed)
+                    returnUrl = CommonLinks.ConfirmEmail;
+                else if (appUser.CurrentOrganization == null)
+                    returnUrl = CommonLinks.CreateDefaultOrg;
+                else if (!String.IsNullOrEmpty(appUser.CurrentOrganization.LandingPage) && appUser.EmailConfirmed)
+                    returnUrl = appUser.CurrentOrganization.LandingPage;
+
                 return await FinalizeExternalLogin(appUser, cookies, externalLoginInfo.Provider.Text, inviteId, returnUrl);
             }
             else
@@ -291,39 +304,37 @@ namespace LagoVista.UserAdmin.Managers
                     return InvokeResult<string>.Create($"/auth/error?{result.ErrorMessage}");
                 }
 
-                appUser = result.Result.AppUser;
-                if (!String.IsNullOrEmpty(result.Result.RedirectPage))
-                    returnUrl = result.Result.RedirectPage;
+                appUser = result.Result.AppUser;                
+                returnUrl = CommonLinks.ConfirmEmail;
 
                 await _authLogManager.AddAsync(AuthLogTypes.OAuthCreateUser, result.Result.User.Id, result.Result.User.Text, oauthProvier: externalLoginInfo.Provider.Text, extras: $"New User Created: {newUser.FirstName} {newUser.LastName} - {newUser.Email}");
                 _adminLogger.Trace($"[OAUTH_HandleEXternalLogin] - Created new user: {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value} - {externalLoginInfo.Email} - {newUser.FirstName} {newUser.LastName}");
+                //if (appUser.CurrentOrganization == null)
+                //{
+                //    var inUse = true;
+                //    var idx = 0;
+                //    var baseName = String.Join("", externalLoginInfo.LastName.Where(c => Char.IsLetter(c))).ToLower();
+                //    var orgNamespace = baseName;
+                //    while (inUse)
+                //    {
+                //        orgNamespace = baseName + (idx > 0 ? idx.ToString() : String.Empty);
+                //        inUse = await _orgManager.QueryOrgNamespaceInUseAsync(orgNamespace);
+                //        idx++;
+                //    }
 
-                if (appUser.CurrentOrganization == null)
-                {
-                    var inUse = true;
-                    var idx = 0;
-                    var baseName = String.Join("", externalLoginInfo.LastName.Where(c => Char.IsLetter(c))).ToLower();
-                    var orgNamespace = baseName;
-                    while (inUse)
-                    {
-                        orgNamespace = baseName + (idx > 0 ? idx.ToString() : String.Empty);
-                        inUse = await _orgManager.QueryOrgNamespaceInUseAsync(orgNamespace);
-                        idx++;
-                    }
+                //    _adminLogger.Trace($"[OAUTH_HandleEXternalLogin] - Found/Created Available OrgNamespace {orgNamespace}");
 
-                    _adminLogger.Trace($"[OAUTH_HandleEXternalLogin] - Found/Created Available OrgNamespace {orgNamespace}");
+                //    var newOrg = new UserAdmin.ViewModels.Organization.CreateOrganizationViewModel()
+                //    {
+                //        Namespace = orgNamespace,
+                //        Name = $"{newUser.LastName} Organization"
+                //    };
 
-                    var newOrg = new UserAdmin.ViewModels.Organization.CreateOrganizationViewModel()
-                    {
-                        Namespace = orgNamespace,
-                        Name = $"{newUser.LastName} Organization"
-                    };
-
-                    var orgResult = await _orgManager.CreateNewOrganizationAsync(newOrg, result.Result.User);
-                    _adminLogger.Trace($"[OAUTH_HandleEXternalLogin] - Created New Organization {newOrg.Name} - {orgNamespace}");
-                    await _authLogManager.AddAsync(AuthLogTypes.OAuthCreateOrg, result.Result.User.Id, result.Result.User.Text, orgResult.Result.Id, orgResult.Result.Name, oauthProvier: externalLoginInfo.Provider.Text, extras: $"Org Created for New User: {newOrg.Name} ({orgNamespace})");
-                    appUser = await _appUserManager.GetUserByExternalLoginAsync(externalLoginInfo.Provider.Value, externalLoginInfo.Id);
-                }
+                //    var orgResult = await _orgManager.CreateNewOrganizationAsync(newOrg, result.Result.User);
+                //    _adminLogger.Trace($"[OAUTH_HandleEXternalLogin] - Created New Organization {newOrg.Name} - {orgNamespace}");
+                //    await _authLogManager.AddAsync(AuthLogTypes.OAuthCreateOrg, result.Result.User.Id, result.Result.User.Text, orgResult.Result.Id, orgResult.Result.Name, oauthProvier: externalLoginInfo.Provider.Text, extras: $"Org Created for New User: {newOrg.Name} ({orgNamespace})");
+                //    appUser = await _appUserManager.GetUserByExternalLoginAsync(externalLoginInfo.Provider.Value, externalLoginInfo.Id);
+                //}
 
                 return await FinalizeExternalLogin(appUser, cookies, inviteId, externalLoginInfo.Provider.Text, returnUrl);
             }
