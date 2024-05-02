@@ -18,11 +18,13 @@ namespace LagoVista.UserAdmin.Managers
     {
         private readonly IAppUserRepo _appUserRepo;
         private readonly IUserRoleRepo _userRoleRepo;
+        private readonly IAppConfig _appConfig;
 
         public AppUserManagerReadOnly(IAppUserRepo appUserRepo, IUserRoleRepo userRoleRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
             _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
             _userRoleRepo = userRoleRepo ?? throw new ArgumentNullException(nameof(userRoleRepo));
+            _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appUserRepo));
         }
 
         public async Task<AppUser> GetUserByIdAsync(string appUserId, EntityHeader org, EntityHeader requestedByUser)
@@ -55,7 +57,9 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<AppUser> GetUserByUserNameAsync(string userName, EntityHeader org, EntityHeader requestedByUser)
         {
             var appUser = await _appUserRepo.FindByNameAsync(userName);
-            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Read, requestedByUser, org);
+            
+            if(_appConfig.Environment == Environments.Production)
+                await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Read, requestedByUser, org);
 
             appUser.PasswordHash = null;
             return appUser;

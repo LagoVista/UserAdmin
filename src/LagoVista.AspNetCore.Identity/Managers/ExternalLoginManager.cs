@@ -336,7 +336,7 @@ namespace LagoVista.UserAdmin.Managers
                 //    appUser = await _appUserManager.GetUserByExternalLoginAsync(externalLoginInfo.Provider.Value, externalLoginInfo.Id);
                 //}
 
-                return await FinalizeExternalLogin(appUser, cookies, inviteId, externalLoginInfo.Provider.Text, returnUrl);
+                return await FinalizeExternalLogin(appUser, cookies, externalLoginInfo.Provider.Text, inviteId, returnUrl);
             }
         }
 

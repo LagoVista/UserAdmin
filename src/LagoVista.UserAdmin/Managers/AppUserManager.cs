@@ -102,30 +102,41 @@ namespace LagoVista.UserAdmin.Managers
 
             var appUser = await _appUserRepo.FindByIdAsync(id);
             if (appUser == null) throw new RecordNotFoundException(nameof(AppUser), id);
-            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Delete, deletedByUser, org);
 
-            var users = await _orgUserRepo.GetUsersForOrgAsync(org.Id);
-            if (users.Count() == 1 && users.First().UserId == id)
+            // If the user new registered an organization we still want to delete them, they just didn't make it
+            // very far in the process.
+            if (appUser.CurrentOrganization != null)
             {
-                await _subscriptionManager.DeleteSubscriptionsForOrgAsync(org.Id, org, deletedByUser);
-                await _orgRepo.DeleteOrgAsync(org.Id);
-            }
-            else
-            {
-                var orgs = await _orgRepo.GetBillingContactOrgsForUserAsync(id);
-                if (orgs.Any())
+                org = appUser.CurrentOrganization.ToEntityHeader();
+                await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Delete, deletedByUser, org);
+
+                var users = await _orgUserRepo.GetUsersForOrgAsync(org.Id);
+                if (users.Count() == 1 && users.First().UserId == id)
                 {
-                    var orgList = String.Join(",", orgs);
-                    return InvokeResult.FromError($"Can not delete user, user is billing contact for the following org[s] {orgList}");
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.RemoveAllSubscriptionsForOrg, appUser, extras: $"Org: {appUser.CurrentOrganization}");
+                    await _subscriptionManager.DeleteSubscriptionsForOrgAsync(org.Id, org, deletedByUser);
+                    await _orgRepo.DeleteOrgAsync(org.Id);
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeleteOrg, appUser, extras: $"Org: {appUser.CurrentOrganization}");
+                }
+                else
+                {
+                    var orgs = await _orgRepo.GetBillingContactOrgsForUserAsync(id);
+                    if (orgs.Any())
+                    {
+                        var orgList = String.Join(",", orgs);
+                        return InvokeResult.FromError($"Can not delete user, user is billing contact for the following org[s] {orgList}");
+                    }
+                }
+
+                var userOrgs = await _orgUserRepo.GetOrgsForUserAsync(id);
+                foreach (var userOrg in userOrgs)
+                {
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.RemoveUserFromOrg, appUser, extras: $"Org: {appUser.CurrentOrganization}");
+                    await _orgUserRepo.RemoveUserFromOrgAsync(userOrg.OrgId, id, deletedByUser);
                 }
             }
 
-
-            var userOrgs = await _orgUserRepo.GetOrgsForUserAsync(id);
-            foreach (var userOrg in userOrgs)
-            {
-                await _orgUserRepo.RemoveUserFromOrgAsync(userOrg.OrgId, id, deletedByUser);
-            }
+            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeleteUser, appUser);
 
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "AppUserManager__DeleteuserAsync", $"{deletedByUser.Text} delete the user {appUser.Name}");
 

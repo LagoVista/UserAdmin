@@ -54,6 +54,7 @@ namespace LagoVista.UserAdmin.Models.Security
         AcceptInviteFailed,
         DeleteUser,
         DeleteOrg,
+        RemoveUserFromOrg,
         DisableUser,
         AcceptTermsAndConditions,
         GrantRole,
@@ -67,6 +68,10 @@ namespace LagoVista.UserAdmin.Models.Security
         ResetPasswordFailed,
         SetSystemAdminNotAuthorized,
         SetSystemAdmin,
+
+        AddSubscription,
+        RemoveSubscription,
+        RemoveAllSubscriptionsForOrg,
 
         SendEmailConfirmSuccess,
         SendEmailConfirmFailed,

@@ -255,24 +255,19 @@ namespace LagoVista.UserAdmin.Managers
                  appUser.Email.ToKVP("toEmailAddress"));
 #endif 
 
-
             var result = await _userManager.ConfirmEmailAsync(appUser, confirmemaildto.ReceivedCode);
             if (result.Successful)
             {
                 await _signInManager.SignInAsync(appUser);
 
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.EmailConfirmSuccess, userId: userHeader.Id, userName: userHeader.Text);
-
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "UserVerficationManager_ValidateEmailAsync", "Success_ConfirmEmail",
                     new KeyValuePair<string, string>("userId", appUser.Id),
                     new KeyValuePair<string, string>("code", confirmemaildto.ReceivedCode));
 
-                return InvokeResult.Success;
+                return InvokeResult.SuccessRedirect(CommonLinks.CreateDefaultOrg);
             }
             else
             {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.EmailConfirmFailed, userId: userHeader.Id, userName: userHeader.Text, extras: result.ErrorMessage);
-
                 _adminLogger.LogInvokeResult("UserVerficationManager_ValidateEmailAsync", result,
                     new KeyValuePair<string, string>("userId", appUser.Id),
                     new KeyValuePair<string, string>("sentToken", confirmemaildto.ReceivedCode));

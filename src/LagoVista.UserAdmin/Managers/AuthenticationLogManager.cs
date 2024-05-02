@@ -44,21 +44,31 @@ namespace LagoVista.UserAdmin.Managers
 
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AuthLog]", "Authentication Log",
                 userId.ToKVP("userId"), userName.ToKVP("username"), orgId.ToKVP("orgId"), orgName.ToKVP("orgName"), errors.ToKVP("errors"),
-                extras.ToKVP("extras"), oauthProvier.ToKVP("oauthProvider")
-                ); 
+                extras.ToKVP("extras"), oauthProvier.ToKVP("oauthProvider")); 
 
             return AddAsync(auth);
         }
 
         public Task AddAsync(AuthLogTypes type, EntityHeader user = null, EntityHeader org = null, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none")
         {
-            return AddAsync(type, user?.Id, user?.Text, org?.Id, org?.Text, oauthProvider, errors, extras, redirectUri, inviteId);
+            var orgId = org == null ? "?" : org.Id;
+            var orgName = org == null ? "?" : org.Text;
+
+            var userId = user == null ? "?" : user.Id;
+            var userName = user == null ? "?" : user.Text;
+
+            return AddAsync(type, userId, userName, orgId, orgName, oauthProvider, errors, extras, redirectUri, inviteId);
         }
 
         public Task AddAsync(AuthLogTypes type, AppUser user, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none")
         {
-            return AddAsync(type, user?.Id, user?.UserName, user.CurrentOrganization?.Id, user.CurrentOrganization?.Text, oauthProvider, errors, extras, redirectUri, inviteId);
-            
+            var orgId = user.CurrentOrganization == null ? "?" : user.CurrentOrganization.Id;
+            var orgName = user.CurrentOrganization == null ? "?" : user.CurrentOrganization.Text;
+
+            var userId = user == null ? "?" : user.Id;
+            var userName = user == null ? "?" : user.UserName;
+
+            return AddAsync(type, userId, userName, orgId, orgName, oauthProvider, errors, extras, redirectUri, inviteId);
         }
 
         public Task<ListResponse<AuthenticationLog>> GetAllAsync(ListRequest listRequest, EntityHeader org, EntityHeader user)
