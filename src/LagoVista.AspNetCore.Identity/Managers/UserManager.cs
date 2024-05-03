@@ -83,12 +83,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if(result.Succeeded)
             {
                 await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "ConfirmedPhoneNumber", user.CurrentOrganization?.ToEntityHeader(), user.ToEntityHeader());
-                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ConfirmEmailSuccess, user);
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ConfirmPhoneSuccess, user);
             }
             else
             {
                 await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "FailedConfirmingPhoneNumber", user.CurrentOrganization?.ToEntityHeader(), user.ToEntityHeader());
-                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ConfirmEmailFailed, user, extras: result.Errors.First().Description);
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ConfirmPhoneFailed, user, extras: result.Errors.First().Description);
             }
 
             return result.ToInvokeResult();

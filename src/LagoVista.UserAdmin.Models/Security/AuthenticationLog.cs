@@ -12,8 +12,12 @@ namespace LagoVista.UserAdmin.Models.Security
         PasswordAuthSuccess,
         PaswwordAuthFailed,
         PasswordAuthUserNotFound,
+       
         CreateEmailUser,
+        CreateExernalLoginUser,
+        CreateUserSuccess,
         CreateUserError,
+
         ManualApproveUser,
         EmailValidated,
         PhoneValidated,
@@ -31,7 +35,6 @@ namespace LagoVista.UserAdmin.Models.Security
         OAuthCallback,
         OAuthError,
         OAuthCreateOrg,
-        OAuthCreateUser,
         OAuthAppendUserLogin,
         OAuthRemoveUserLogin,
         OAuthFinalizeLogin,
@@ -68,6 +71,18 @@ namespace LagoVista.UserAdmin.Models.Security
         ResetPasswordFailed,
         SetSystemAdminNotAuthorized,
         SetSystemAdmin,
+
+        AccessTokenGrant,
+        AccessTokenGrantSuccess,
+        AccessTokenGrantFailure,
+
+        SingleUseTokenGrant,
+        SingleUseTokenGrantSuccess,
+        SingleUseTokenGrantFailure,
+
+        RefreshTokenGrant,
+        RefreshTokenGrantSuccess,
+        RefreshTokenGrantFailed,
 
         AddSubscription,
         RemoveSubscription,

@@ -307,7 +307,6 @@ namespace LagoVista.UserAdmin.Managers
                 appUser = result.Result.AppUser;                
                 returnUrl = CommonLinks.ConfirmEmail;
 
-                await _authLogManager.AddAsync(AuthLogTypes.OAuthCreateUser, result.Result.User.Id, result.Result.User.Text, oauthProvier: externalLoginInfo.Provider.Text, extras: $"New User Created: {newUser.FirstName} {newUser.LastName} - {newUser.Email}");
                 _adminLogger.Trace($"[OAUTH_HandleEXternalLogin] - Created new user: {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value} - {externalLoginInfo.Email} - {newUser.FirstName} {newUser.LastName}");
                 //if (appUser.CurrentOrganization == null)
                 //{

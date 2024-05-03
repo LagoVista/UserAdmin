@@ -466,12 +466,44 @@ namespace LagoVista.UserAdmin.Managers
         }
 
 
-        public async Task<InvokeResult<CreateUserResponse>> CreateUserAsync(RegisterUser newUser, bool sendAuthEmail = true, bool autoLogin = true, ExternalLogin externalLogin = null)
+        bool IsValidEmail(string email)
+        {
+            var trimmedEmail = email.Trim();
+
+            if (trimmedEmail.EndsWith("."))
+            {
+                return false; 
+            }
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == trimmedEmail;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<InvokeResult<CreateUserResponse>> CreateUserAsync(RegisterUser newUser, bool autoLogin = true, bool sendConfirmEmail = true, ExternalLogin externalLogin = null)
         {
             if (String.IsNullOrEmpty(newUser.Email))
             {
+                await _authLogMgr.AddAsync(externalLogin == null ? Models.Security.AuthLogTypes.CreateEmailUser : Models.Security.AuthLogTypes.CreateExernalLoginUser, userName: "NOT PROVIDED", extras: $"Client Type: {newUser.ClientType}.");
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: "?", errors: "Email address not provided.");
+
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateUserAsync", UserAdminErrorCodes.RegMissingEmail.Message);
                 return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegMissingEmail.ToErrorMessage());
+            }
+
+            newUser.Email = newUser.Email.Trim();
+
+            await _authLogMgr.AddAsync(externalLogin == null ? Models.Security.AuthLogTypes.CreateEmailUser : Models.Security.AuthLogTypes.CreateExernalLoginUser, 
+                userName: newUser.Email, oauthProvier: externalLogin?.Provider.ToString(), extras: $"Client Type: {newUser.ClientType}.");
+            if (!IsValidEmail(newUser.Email))
+            {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Invalid email address");
+                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.AuthEmailInvalidFormat.ToErrorMessage());
             }
 
             var user = await _appUserRepo.FindByEmailAsync(newUser.Email);
@@ -479,7 +511,7 @@ namespace LagoVista.UserAdmin.Managers
             {
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Email already exists");
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateUserAsync", UserAdminErrorCodes.RegErrorUserExists.Message);
-                if (sendAuthEmail)
+                if (externalLogin == null)
                 {
                     return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegErrorUserExists.ToErrorMessage());
                 }
@@ -565,14 +597,8 @@ namespace LagoVista.UserAdmin.Managers
                     externalLogin.OAuthTokenVerifierSecretId = result.Result;
                     externalLogin.OAuthTokenVerifier = String.Empty;
                 }
-
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.OAuthCreateUser, appUser.Id, appUser.UserName, oauthProvier: externalLogin.Provider.Text);
             }
-            else
-            {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateEmailUser, appUser.Id, appUser.UserName);
-            }
-
+         
             var identityResult = await _userManager.CreateAsync(appUser, newUser.Password);
             if (!identityResult.Successful)
             {
@@ -591,7 +617,7 @@ namespace LagoVista.UserAdmin.Managers
                 AppUser = appUser,
                 User = appUser.ToEntityHeader(),
                 Roles = new List<EntityHeader>(),
-                RedirectPage = CommonLinks.CreateDefaultOrg
+                RedirectPage = CommonLinks.ConfirmEmail
             };
 
             if (!String.IsNullOrEmpty(newUser.InviteId))
@@ -618,6 +644,15 @@ namespace LagoVista.UserAdmin.Managers
                 await _userManager.UpdateAsync(appUser);
             }
 
+            if (sendConfirmEmail)
+            {
+                var sendEmailResult = await _userVerificationmanager.SendConfirmationEmailAsync(null, appUser.ToEntityHeader());
+                if(!sendEmailResult.Successful)
+                {
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, appUser, errors: sendEmailResult.ErrorMessage, extras: $"Submitted by client: {newUser.ClientType}.");
+                    return InvokeResult<CreateUserResponse>.FromInvokeResult(sendEmailResult.ToInvokeResult());                }
+            }
+
             if (newUser.ClientType != "WEBAPP")
             {
                 var authRequest = new AuthRequest()
@@ -633,27 +668,24 @@ namespace LagoVista.UserAdmin.Managers
                 };
 
                 var tokenResponse = await _authTokenManager.AccessTokenGrantAsync(authRequest);
-                if (tokenResponse.Successful)
+                if (!tokenResponse.Successful)
                 {
-                    await _userVerificationmanager.SendConfirmationEmailAsync(null, appUser.ToEntityHeader());
-                    return InvokeResult<CreateUserResponse>.Create(CreateUserResponse.FromAuthResponse(tokenResponse.Result));
-                }
-                else
-                {
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, appUser, errors: tokenResponse.ErrorMessage, extras: $"Client Type: {newUser.ClientType}.");
                     var failedValidationResult = new InvokeResult<CreateUserResponse>();
                     failedValidationResult.Concat(tokenResponse);
                     return failedValidationResult;
                 }
+           
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserSuccess, appUser, extras: $"Submitted by client: {newUser.ClientType}.");
+                
+                return InvokeResult<CreateUserResponse>.Create(CreateUserResponse.FromAuthResponse(tokenResponse.Result), createUserResponse.RedirectPage);
             }
             else
             {
-                if (sendAuthEmail)
-                {
-                    await _userVerificationmanager.SendConfirmationEmailAsync(null, appUser.ToEntityHeader());
-                }
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserSuccess, appUser, extras: $"Submitted by client: {newUser.ClientType}.");
 
                 /* If we are logging in as web app, none of this applies */
-                return InvokeResult<CreateUserResponse>.Create(createUserResponse);
+                return InvokeResult<CreateUserResponse>.Create(createUserResponse, createUserResponse.RedirectPage);
             }
         }
 
