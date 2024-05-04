@@ -91,8 +91,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(IsAppBuilder, isAppBuilder.ToString()),
                 new Claim(IsUserDevice, user.IsUserDevice.ToString()),
                 new Claim(IsFinancceAdmin, user.IsFinanceAdmin.ToString()),
-                new Claim(CurrentOrgName, org.Text),
-                new Claim(CurrentOrgId, org.Id),
+                new Claim(CurrentOrgName, org == null ? None : org.Text),
+                new Claim(CurrentOrgId, org == null ? None : org.Id),
+
                 new Claim(CurrentUserProfilePictureurl, user.ProfileImageUrl.ImageUrl),
             };
 

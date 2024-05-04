@@ -93,7 +93,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var signInResponse = await _signInManager.PasswordSignInAsync(signInRequest);
             if (!signInResponse.Successful)
             {
-                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AccessTokenGrant, userName: userName);
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AccessTokenGrantFailure, userName: userName);
                 await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AccessTokenGrantFailure, userName: userName, errors: signInResponse.ErrorMessage);
 
                 return InvokeResult<AuthResponse>.FromInvokeResult(signInResponse.ToInvokeResult());
@@ -104,7 +104,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var appUser = await _userManager.FindByNameAsync(userName);
             if (appUser == null)
             {
-                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AccessTokenGrant, userName: userName);
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AccessTokenGrantFailure, userName: userName);
                 await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AccessTokenGrantFailure, userName: userName, errors:" Could not find user");
 
                 /* Should really never, ever happen, but well...let's track it */
@@ -174,10 +174,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
         {
             _adminLogger.Trace($"[AuthTOkenManager__SingleUseTokenGrantAsync] App Instance {authRequest.AppInstanceId}");
 
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.SingleUseTokenGrant, userName: authRequest.UserName, userId: authRequest.UserId);
+
             var refreshTokenRequestValidationResult = _authRequestValidators.ValidateSingleUseTokenGrant(authRequest);
             if (!refreshTokenRequestValidationResult.Successful)
             {
-                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.SingleUseTokenGrant, userName: authRequest.UserName, userId: authRequest.UserId);
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.SingleUseTokenGrantFailure, userName: authRequest.UserName, userId: authRequest.UserId);
                 await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.SingleUseTokenGrantFailure, userName: authRequest.UserName, userId: authRequest.UserId, errors: refreshTokenRequestValidationResult.ErrorMessage);
                 return InvokeResult<AuthResponse>.FromInvokeResult(refreshTokenRequestValidationResult);
             }
@@ -185,7 +187,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             AppUser appUser = await _userManager.FindByIdAsync(authRequest.UserId);
             if (appUser == null)
             {
-                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.SingleUseTokenGrant, userName: authRequest.UserName, userId: authRequest.UserId);
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.SingleUseTokenGrantFailure, userName: authRequest.UserName, userId: authRequest.UserId);
                 await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.SingleUseTokenGrantFailure, userId: authRequest.UserId, errors: "Could not find user");
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_SingleUseTokenGrantAsync", UserAdminErrorCodes.AuthCouldNotFindUserAccount.Message, new KeyValuePair<string, string>("userId", authRequest.UserId));
                 return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());

@@ -157,19 +157,19 @@ namespace LagoVista.UserAdmin.Managers
                         }
                         else if (appUser.CurrentOrganization == null)
                         {
-                            var redirectUrl = $"{rootScheme}welcome?userid={singleUseToken.Result.UserId}&token={singleUseToken.Result.Token}&page=createorg";
+                            var redirectUrl = $"{rootScheme}createorg?userid={singleUseToken.Result.UserId}&token={singleUseToken.Result.Token}";
                             await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizeLogin, appUser, oauthProvider: provider, extras: $"Mobile - Create Org", redirectUri: redirectUrl);
                             return InvokeResult<string>.Create(redirectUrl);
                         }
                         else if (!appUser.EmailConfirmed)
                         {
-                            var redirectUrl = $"{rootScheme}welcome?userid={singleUseToken.Result.UserId}&token={singleUseToken.Result.Token}&page=confirmemail";
+                            var redirectUrl = $"{rootScheme}confirmemail?userid={singleUseToken.Result.UserId}&token={singleUseToken.Result.Token}";
                             await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizeLogin, appUser, oauthProvider: provider, extras: $"Mobile - Confirm Email", redirectUri: redirectUrl);
                             return InvokeResult<string>.Create(redirectUrl);
                         }
                         else if (appUser.ShowWelcome)
                         {
-                            var redirectUrl = $"{rootScheme}welcome?userid={singleUseToken.Result.UserId}&token={singleUseToken.Result.Token}&page=welcome";
+                            var redirectUrl = $"{rootScheme}welcome?userid={singleUseToken.Result.UserId}&token={singleUseToken.Result.Token}";
                             _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] - Mobile - Welcome View: {redirectUrl}");
                             await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizeLogin, appUser, oauthProvider: provider, extras: $"Mobile - Show Welcome", redirectUri: redirectUrl);
                             return InvokeResult<string>.Create(redirectUrl);

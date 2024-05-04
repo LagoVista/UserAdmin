@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Resources;
 using LagoVista.UserAdmin;
+using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Models.Apps;
+using RingCentral;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -19,31 +22,53 @@ namespace LagoVista.AspNetCore.Identity.Managers
         IAdminLogger _adminLogger;
         TokenAuthOptions _tokenOptions;
         IAuthRequestValidators _authRequestValidators;
+        IAuthenticationLogManager _authLogManager;
 
-        public RefreshTokenManager(TokenAuthOptions tokenOptions, IAuthRequestValidators authRequestValidators, IRefreshTokenRepo refreshTokenRepo, IAdminLogger adminLogger)
+        public RefreshTokenManager(TokenAuthOptions tokenOptions, IAuthenticationLogManager authLogManager, IAuthRequestValidators authRequestValidators, IRefreshTokenRepo refreshTokenRepo, IAdminLogger adminLogger)
         {
             _refreshTokenRepo = refreshTokenRepo;
             _adminLogger = adminLogger;
             _tokenOptions = tokenOptions;
             _authRequestValidators = authRequestValidators;
+            _authLogManager = authLogManager;
         }
 
         public async Task<InvokeResult<RefreshToken>> GenerateRefreshTokenAsync(string appId, string appInstanceId, string userId)
         {
-            var refreshToken = new RefreshToken(userId);
-            refreshToken.RowKey = DateTime.UtcNow.ToInverseTicksRowKey();
-            refreshToken.AppId = appId;
-            refreshToken.AppInstanceId = appInstanceId;
-            refreshToken.IssuedUtc = DateTime.UtcNow.ToJSONString();
-            refreshToken.ExpiresUtc = (DateTime.UtcNow + _tokenOptions.RefreshExpiration).ToJSONString();
-            await _refreshTokenRepo.SaveRefreshTokenAsync(refreshToken);
+            try
+            {
+                if (string.IsNullOrEmpty(appId)) throw new ArgumentNullException(nameof(appId));
+                if (string.IsNullOrEmpty(appInstanceId)) throw new ArgumentNullException(nameof(appInstanceId));
+                if (string.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
 
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "RefreshTokenManager_GenerateRefreshTokenAsync", "RefreshTokenGenerated",
-                new KeyValuePair<string, string>("authAppId", appId),
-                new KeyValuePair<string, string>("authAppInstanceId", appInstanceId),
-                new KeyValuePair<string, string>("authUserId", userId));
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.GenerateRefreshToken, userId: userId);
 
-            return InvokeResult<RefreshToken>.Create(refreshToken);
+                var refreshToken = new RefreshToken(userId);
+                refreshToken.RowKey = DateTime.UtcNow.ToInverseTicksRowKey();
+                refreshToken.AppId = appId;
+                refreshToken.AppInstanceId = appInstanceId;
+                refreshToken.IssuedUtc = DateTime.UtcNow.ToJSONString();
+                refreshToken.ExpiresUtc = (DateTime.UtcNow + _tokenOptions.RefreshExpiration).ToJSONString();
+                await _refreshTokenRepo.SaveRefreshTokenAsync(refreshToken);
+
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "RefreshTokenManager_GenerateRefreshTokenAsync", "RefreshTokenGenerated",
+                    new KeyValuePair<string, string>("authAppId", appId),
+                    new KeyValuePair<string, string>("authAppInstanceId", appInstanceId),
+                    new KeyValuePair<string, string>("authUserId", userId));
+
+
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.GenerateRefreshTokenSuccess, userId: userId);
+
+                return InvokeResult<RefreshToken>.Create(refreshToken);
+            }
+            catch(Exception ex)
+            {
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.GenerateRefreshTokenFailed, userId: userId);
+                _adminLogger.AddException("[RefreshTokenManager__GenerateRefreshTokenAsync]", ex, new KeyValuePair<string, string>("authAppId", appId),
+                    new KeyValuePair<string, string>("authAppInstanceId", appInstanceId),
+                    new KeyValuePair<string, string>("authUserId", userId));
+                return InvokeResult<RefreshToken>.FromException("[RefreshTokenManager__GenerateRefreshTokenAsync]", ex);
+            }
         }
 
         public Task<RefreshToken> GetRefreshTokenAsync(string refreshTokenId, string userId)
@@ -53,36 +78,61 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public async Task<InvokeResult<RefreshToken>> RenewRefreshTokenAsync(RefreshToken oldRefreshToken)
         {
-            if (oldRefreshToken == null)
+            try
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "RefreshTokenManager_RenewRefreshTokenAsync", UserAdminErrorCodes.AuthMissingRefreshToken.Message);
-                return InvokeResult<RefreshToken>.FromErrors(UserAdminErrorCodes.AuthMissingRefreshToken.ToErrorMessage());
-            }
+                if (oldRefreshToken == null)
+                {
+                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "RefreshTokenManager_RenewRefreshTokenAsync", UserAdminErrorCodes.AuthMissingRefreshToken.Message);
 
-            var validateRefreshTokenResult = await _authRequestValidators.ValidateRefreshTokenAsync(oldRefreshToken.RowKey, oldRefreshToken.PartitionKey);
-            if (!validateRefreshTokenResult.Successful)
+                    await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.RenewRefreshTokenFailed, userId: "?", errors:"Old Refresh Token Null.");
+
+                    return InvokeResult<RefreshToken>.FromErrors(UserAdminErrorCodes.AuthMissingRefreshToken.ToErrorMessage());
+                }
+
+                var validateRefreshTokenResult = await _authRequestValidators.ValidateRefreshTokenAsync(oldRefreshToken.RowKey, oldRefreshToken.PartitionKey);
+                if (!validateRefreshTokenResult.Successful)
+                {
+                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "RefreshTokenManager_RenewRefreshTokenAsync", UserAdminErrorCodes.AuthRefreshTokenExpired.Message,
+                        new KeyValuePair<string, string>("authAppId", oldRefreshToken.AppId),
+                        new KeyValuePair<string, string>("authAppInstanceId", oldRefreshToken.AppInstanceId),
+                        new KeyValuePair<string, string>("authUserId", oldRefreshToken.PartitionKey));
+
+                    await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.RenewRefreshTokenFailed, userId: oldRefreshToken.PartitionKey, errors: $"Could not validate existing refresh token: {validateRefreshTokenResult.ErrorMessage}");
+
+                    await _refreshTokenRepo.RemoveRefreshTokenAsync(oldRefreshToken.RowKey, oldRefreshToken.PartitionKey);
+                    return InvokeResult<RefreshToken>.FromErrors(UserAdminErrorCodes.AuthRefreshTokenExpired.ToErrorMessage());
+                }
+
+                var newRefreshToken = await GenerateRefreshTokenAsync(oldRefreshToken.AppId, oldRefreshToken.AppInstanceId, oldRefreshToken.PartitionKey);
+                if (newRefreshToken.Successful)
+                {
+                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "RefreshTokenManager_RenewRefreshTokenAsync", "RefrehTokenRenewed",
+                        new KeyValuePair<string, string>("authAppId", oldRefreshToken.AppId),
+                        new KeyValuePair<string, string>("authAppInstanceId", oldRefreshToken.AppInstanceId),
+                        new KeyValuePair<string, string>("authUserId", oldRefreshToken.PartitionKey));
+
+                    await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.RenewRefreshTokenSuccess, userId: oldRefreshToken.PartitionKey, extras: $"AppId: {oldRefreshToken.AppId}");
+
+                    await _refreshTokenRepo.RemoveRefreshTokenAsync(oldRefreshToken.RowKey, oldRefreshToken.PartitionKey);
+                }
+                else
+                {
+                    await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.RenewRefreshTokenFailed, userId: oldRefreshToken.PartitionKey, errors: $"Could not validate existing refresh token: {validateRefreshTokenResult.ErrorMessage}; AppId: {oldRefreshToken.AppId}");
+                }
+
+                return newRefreshToken;
+            }
+            catch(Exception ex)
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "RefreshTokenManager_RenewRefreshTokenAsync", UserAdminErrorCodes.AuthRefreshTokenExpired.Message,
-                    new KeyValuePair<string, string>("authAppId", oldRefreshToken.AppId),
-                    new KeyValuePair<string, string>("authAppInstanceId", oldRefreshToken.AppInstanceId),
-                    new KeyValuePair<string, string>("authUserId", oldRefreshToken.PartitionKey));
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "[RefreshTokenManager_RenewRefreshTokenAsync]", "RefrehTokenRenewed",
+                      new KeyValuePair<string, string>("authAppId", oldRefreshToken.AppId),
+                      new KeyValuePair<string, string>("authAppInstanceId", oldRefreshToken.AppInstanceId),
+                      new KeyValuePair<string, string>("authUserId", oldRefreshToken.PartitionKey));
 
-                await _refreshTokenRepo.RemoveRefreshTokenAsync(oldRefreshToken.RowKey, oldRefreshToken.PartitionKey);
-                return InvokeResult<RefreshToken>.FromErrors(UserAdminErrorCodes.AuthRefreshTokenExpired.ToErrorMessage());
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.RenewRefreshTokenFailed, userId: oldRefreshToken.PartitionKey, errors: ex.Message, extras: $"RowKey: {oldRefreshToken.RowKey} AppId: {oldRefreshToken.AppId}");
+
+                return InvokeResult<RefreshToken>.FromException("[RefreshTokenManager_RenewRefreshTokenAsync]",ex);
             }
-
-            var newRefreshToken = await GenerateRefreshTokenAsync(oldRefreshToken.AppId, oldRefreshToken.AppInstanceId, oldRefreshToken.PartitionKey);
-            if (newRefreshToken.Successful)
-            {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "RefreshTokenManager_RenewRefreshTokenAsync", "RefrehTokenRenewed",
-                    new KeyValuePair<string, string>("authAppId", oldRefreshToken.AppId),
-                    new KeyValuePair<string, string>("authAppInstanceId", oldRefreshToken.AppInstanceId),
-                    new KeyValuePair<string, string>("authUserId", oldRefreshToken.PartitionKey));
-
-                await _refreshTokenRepo.RemoveRefreshTokenAsync(oldRefreshToken.RowKey, oldRefreshToken.PartitionKey);
-            }
-
-            return newRefreshToken;
         }
 
         public async Task<InvokeResult<RefreshToken>> RenewRefreshTokenAsync(string refreshTokenId, string userId)

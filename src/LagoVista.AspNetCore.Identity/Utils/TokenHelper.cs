@@ -83,25 +83,34 @@ namespace LagoVista.AspNetCore.Identity.Utils
 
         public Task<InvokeResult<AuthResponse>> GenerateAuthResponseAsync(AppUser appUser, string appInstanceId, InvokeResult<RefreshToken> refreshTokenResponse)
         {
+            if (appUser == null) throw new ArgumentNullException(nameof(appUser));
+
+
             if (!refreshTokenResponse.Successful)
             {
                 return Task.FromResult(InvokeResult<AuthResponse>.FromInvokeResult(refreshTokenResponse.ToInvokeResult()));
             }
 
-            var accessExpires = DateTime.UtcNow.AddMinutes(_tokenOptions.AccessExpiration.TotalMinutes);
+            var accessExpires = DateTime.UtcNow.AddMinutes(_tokenOptions.AccessExpiration!.TotalMinutes);
 
             var authResponse = new AuthResponse()
             {
                 AppInstanceId = appInstanceId,
-                AccessTokenExpiresUTC = accessExpires.ToJSONString(),
-                RefreshToken = refreshTokenResponse.Result.RowKey,
-                RefreshTokenExpiresUTC = refreshTokenResponse.Result.ExpiresUtc,
+                AccessTokenExpiresUTC = accessExpires!.ToJSONString(),
+                RefreshToken = refreshTokenResponse.Result!.RowKey,
+                RefreshTokenExpiresUTC = refreshTokenResponse.Result!.ExpiresUtc,
                 AppUser = appUser,
                 User = appUser.ToEntityHeader(),
             };
 
-            authResponse.Roles = appUser.CurrentOrganizationRoles;
-            authResponse.Org = appUser.CurrentOrganization.ToEntityHeader();
+            if (appUser.CurrentOrganizationRoles != null)
+                authResponse.Roles = appUser.CurrentOrganizationRoles;
+            else
+                authResponse.Roles = new List<EntityHeader>(); ;
+
+            if(appUser.CurrentOrganization != null)
+                authResponse.Org = appUser.CurrentOrganization.ToEntityHeader();
+
             authResponse.AccessToken = GetJWToken(appUser, accessExpires, appInstanceId);
 
             return Task.FromResult(InvokeResult<AuthResponse>.Create(authResponse));

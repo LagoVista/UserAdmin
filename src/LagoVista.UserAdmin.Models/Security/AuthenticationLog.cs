@@ -72,6 +72,14 @@ namespace LagoVista.UserAdmin.Models.Security
         SetSystemAdminNotAuthorized,
         SetSystemAdmin,
 
+        GenerateRefreshToken,
+        GenerateRefreshTokenSuccess,
+        GenerateRefreshTokenFailed,
+
+        RenewRefreshToken,
+        RenewRefreshTokenSuccess,
+        RenewRefreshTokenFailed,
+
         AccessTokenGrant,
         AccessTokenGrantSuccess,
         AccessTokenGrantFailure,
