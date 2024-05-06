@@ -9,6 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.10.4" />
+    <PackageReference Include="LagoVista.IoT.SecurityManager" Version="3.0.2544.1653" />
     <PackageReference Include="Microsoft.Graph" Version="5.44.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="Moq" Version="4.18.2" />
@@ -19,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\LagoVista.AspNetCore.Identity\LagoVista.AspNetCore.Identity.csproj" />
+    <ProjectReference Include="..\..\src\LagoVista.UserAdmin.Repos\LagoVista.UserAdmin.Repos.csproj" />
     <ProjectReference Include="..\..\src\LagoVista.UserAdmin\LagoVista.UserAdmin.csproj" />
   </ItemGroup>
   <ItemGroup>
