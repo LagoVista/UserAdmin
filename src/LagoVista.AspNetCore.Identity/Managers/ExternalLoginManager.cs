@@ -28,7 +28,9 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IAppUserManager _appUserManager;
         private readonly IOrganizationManager _orgManager;
         private readonly IAppConfig _appConfig;
-        public ExternalLoginManager(ITwitterAuthService twitterAuthorization, SignInManager<AppUser> signInManager, IAppConfig appConfig, IAuthTokenManager authTokenManager, IOrganizationManager orgManager, IAdminLogger adminLogger, IAuthenticationLogManager authLogManager,
+        private readonly IUserVerficationManager _userVerficationManager;
+
+        public ExternalLoginManager(ITwitterAuthService twitterAuthorization, SignInManager<AppUser> signInManager, IAppConfig appConfig, IUserVerficationManager userVerficationManager, IAuthTokenManager authTokenManager, IOrganizationManager orgManager, IAdminLogger adminLogger, IAuthenticationLogManager authLogManager,
                                    IAppUserManager appUserManager)
         {
             _twitterAuthorization = twitterAuthorization ?? throw new ArgumentNullException(nameof(twitterAuthorization));
@@ -39,6 +41,7 @@ namespace LagoVista.UserAdmin.Managers
             _orgManager = orgManager ?? throw new ArgumentNullException(nameof(orgManager));
             _appUserManager = appUserManager ?? throw new ArgumentNullException(nameof(appUserManager));
             _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
+            _userVerficationManager = userVerficationManager ?? throw new ArgumentNullException(nameof(userVerficationManager));
         }
 
         public async Task<ExternalLogin> GetExternalLoginAsync(ExternalLoginInfo loginInfo)
@@ -151,20 +154,22 @@ namespace LagoVista.UserAdmin.Managers
                     {
                         if (!String.IsNullOrEmpty(inviteId))
                         {
+                            await _userVerficationManager.SendConfirmationEmailAsync(appUser.ToEntityHeader());
+
                             var redirectUrl = $"{rootScheme}acceptinvite?userid={singleUseToken.Result.UserId}&token={singleUseToken.Result.Token}&inviteid={inviteId}&page=acceptinvite";                            
                             await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizeLogin, appUser, inviteId:inviteId, oauthProvider: provider, extras: $"Mobile - Accept Invite", redirectUri: redirectUrl);
-                            return InvokeResult<string>.Create(redirectUrl);
-                        }
-                        else if (appUser.CurrentOrganization == null)
-                        {
-                            var redirectUrl = $"{rootScheme}createorg?userid={singleUseToken.Result.UserId}&token={singleUseToken.Result.Token}";
-                            await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizeLogin, appUser, oauthProvider: provider, extras: $"Mobile - Create Org", redirectUri: redirectUrl);
                             return InvokeResult<string>.Create(redirectUrl);
                         }
                         else if (!appUser.EmailConfirmed)
                         {
                             var redirectUrl = $"{rootScheme}confirmemail?userid={singleUseToken.Result.UserId}&token={singleUseToken.Result.Token}";
                             await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizeLogin, appUser, oauthProvider: provider, extras: $"Mobile - Confirm Email", redirectUri: redirectUrl);
+                            return InvokeResult<string>.Create(redirectUrl);
+                        }
+                        else if (appUser.CurrentOrganization == null)
+                        {
+                            var redirectUrl = $"{rootScheme}createorg?userid={singleUseToken.Result.UserId}&token={singleUseToken.Result.Token}";
+                            await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizeLogin, appUser, oauthProvider: provider, extras: $"Mobile - Create Org", redirectUri: redirectUrl);
                             return InvokeResult<string>.Create(redirectUrl);
                         }
                         else if (appUser.ShowWelcome)

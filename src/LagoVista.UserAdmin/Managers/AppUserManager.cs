@@ -485,7 +485,7 @@ namespace LagoVista.UserAdmin.Managers
             }
         }
 
-        public async Task<InvokeResult<CreateUserResponse>> CreateUserAsync(RegisterUser newUser, bool autoLogin = true, bool sendConfirmEmail = true, ExternalLogin externalLogin = null)
+        public async Task<InvokeResult<CreateUserResponse>> CreateUserAsync(RegisterUser newUser, bool autoLogin = true, ExternalLogin externalLogin = null)
         {
             if (String.IsNullOrEmpty(newUser.Email))
             {
@@ -644,13 +644,11 @@ namespace LagoVista.UserAdmin.Managers
                 await _userManager.UpdateAsync(appUser);
             }
 
-            if (sendConfirmEmail)
+            var sendEmailResult = await _userVerificationmanager.SendConfirmationEmailAsync(appUser.ToEntityHeader());
+            if(!sendEmailResult.Successful)
             {
-                var sendEmailResult = await _userVerificationmanager.SendConfirmationEmailAsync(null, appUser.ToEntityHeader());
-                if(!sendEmailResult.Successful)
-                {
-                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, appUser, errors: sendEmailResult.ErrorMessage, extras: $"Submitted by client: {newUser.ClientType}.");
-                    return InvokeResult<CreateUserResponse>.FromInvokeResult(sendEmailResult.ToInvokeResult());                }
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, appUser, errors: sendEmailResult.ErrorMessage, extras: $"Submitted by client: {newUser.ClientType}.");
+                return InvokeResult<CreateUserResponse>.FromInvokeResult(sendEmailResult.ToInvokeResult());             
             }
 
             if (newUser.ClientType != "WEBAPP")

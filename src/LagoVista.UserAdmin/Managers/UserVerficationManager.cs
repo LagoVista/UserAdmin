@@ -41,7 +41,7 @@ namespace LagoVista.UserAdmin.Managers
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
         }
 
-        public async Task<InvokeResult> CheckConfirmedAsync(EntityHeader orgHeader, EntityHeader userHeader)
+        public async Task<InvokeResult> CheckConfirmedAsync(EntityHeader userHeader)
         {
             /* This will only take the current user id so we don't have to do any security checks, not really confidential info anyways */
             var user = await _userManager.FindByIdAsync(userHeader.Id);
@@ -80,7 +80,7 @@ namespace LagoVista.UserAdmin.Managers
             return environment;
         }
 
-        public async Task<InvokeResult<string>> SendConfirmationEmailAsync(EntityHeader orgHeader, EntityHeader userHeader)
+        public async Task<InvokeResult<string>> SendConfirmationEmailAsync(EntityHeader userHeader)
         {
             var appUser = await _userManager.FindByIdAsync(userHeader.Id);
             if (appUser == null)
@@ -137,7 +137,7 @@ namespace LagoVista.UserAdmin.Managers
             }
         }
 
-        public async Task<InvokeResult<string>> SendSMSCodeAsync(VerfiyPhoneNumber sendSMSCode, EntityHeader orgHeader, EntityHeader userHeader)
+        public async Task<InvokeResult<string>> SendSMSCodeAsync(VerfiyPhoneNumber sendSMSCode, EntityHeader userHeader)
         {
             if (String.IsNullOrEmpty(sendSMSCode.PhoneNumber))
             {
@@ -275,7 +275,7 @@ namespace LagoVista.UserAdmin.Managers
             }
         }
 
-        public async Task<InvokeResult> SetUserSMSValidated(string userId, EntityHeader orgHeader, EntityHeader userHeader)
+        public async Task<InvokeResult> SetUserSMSValidated(string userId, EntityHeader userHeader)
         {
             var appUser = await _appUserRepo.FindByIdAsync(userHeader.Id);
             if (!appUser.IsSystemAdmin) return InvokeResult.FromError("Must be a system admin to set a users phone number as verified.");
