@@ -24,6 +24,7 @@ using System.Text.RegularExpressions;
 using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Models.Auth;
+using RingCentral;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -367,15 +368,25 @@ namespace LagoVista.UserAdmin.Managers
 
             var invite = await _inviteUserRepo.GetInvitationAsync(inviteId);
 
+            await _authLogMgr.AddAsync(AuthLogTypes.ResendOrgInvitation, userId: user.Id, userName: user.Text, extras: $"Re-Send invite to org {invite.OrganizationName} to {invite.Email} by {user.Text}");
+
             await AuthorizeAsync(user, org, "ResendInvite", invite);
 
-            await SendInvitationAsync(invite, invite.OrganizationName, user);
+            var result = await SendInvitationAsync(invite, invite.OrganizationName, user);
+            if (result.Successful)
+            {
+                await _authLogMgr.AddAsync(AuthLogTypes.ResendOrgInvitationSuccess, userId: user.Id, userName: user.Text, extras: $"Re-Send invite to org {invite.OrganizationName} to {invite.Email} by {user.Text}");
 
-            invite.DateSent = DateTime.Now.ToJSONString();
-            invite.Status = Invitation.StatusTypes.Resent;
-            await _inviteUserRepo.UpdateInvitationAsync(invite);
+                invite.DateSent = DateTime.Now.ToJSONString();
+                invite.Status = Invitation.StatusTypes.Resent;
+                await _inviteUserRepo.UpdateInvitationAsync(invite);
+            }
+            else
+            {
+                await _authLogMgr.AddAsync(AuthLogTypes.ResendOrgInvitationFailed, userId: user.Id, userName: user.Text, extras: $"Re-Send invite to org {invite.OrganizationName} to {invite.Email} by {user.Text}");
+            }
 
-            return InvokeResult.Success;
+            return result;
         }
 
         public async Task<InvokeResult> RevokeInvitationAsync(String inviteId, EntityHeader org, EntityHeader user)
@@ -441,25 +452,30 @@ namespace LagoVista.UserAdmin.Managers
             return environment;
         }
 
-        private async Task SendInvitationAsync(Invitation inviteModel, string orgName, EntityHeader user)
+        private async Task<InvokeResult> SendInvitationAsync(Invitation inviteModel, string orgName, EntityHeader user)
         {
+            await _authLogMgr.AddAsync(AuthLogTypes.SendOrgInvitationSuccess, userId: user.Id, userName: user.Text, extras: $"Send invite to org {orgName} to {inviteModel.Email} by {user.Text}");
 
             var subject = UserAdminResources.Invite_Greeting_Subject.Replace(Tokens.APP_NAME, AppConfig.AppName).Replace(Tokens.ORG_NAME, orgName);
             var message = UserAdminResources.InviteUser_Greeting_Message.Replace(Tokens.USERS_FULL_NAME, user.Text).Replace(Tokens.ORG_NAME, orgName).Replace(Tokens.APP_NAME, AppConfig.AppName);
             message += $"<br /><br />{inviteModel.Message}<br /><br />";
-            var acceptLink = $"{GetWebURI()}/account/acceptinvite/{inviteModel.RowKey}";
+            var acceptLink = $"{GetWebURI()}/api/auth/invite/accept/{inviteModel.RowKey}";
             var mobileAcceptLink = $"nuviot://acceptinvite?inviteId={inviteModel.RowKey}";
 
             message += UserAdminResources.InviteUser_ClickHere.Replace("[ACCEPT_LINK]", acceptLink).Replace("[MOBILE_ACCEPT_LINK]", mobileAcceptLink);
 
-            await _emailSender.SendAsync(inviteModel.Email, subject, message);
+            var result = await _emailSender.SendAsync(inviteModel.Email, subject, message);
+            if (result.Successful)
+                await _authLogMgr.AddAsync(AuthLogTypes.SendOrgInvitationSuccess, userId: user.Id, userName: user.Text, extras: $"Send invite to org {orgName} to {inviteModel.Email} by {user.Text}");
+            else
+                await _authLogMgr.AddAsync(AuthLogTypes.SendEmailConfirmFailed, userId: user.Id, userName: user.Text, errors: result.ErrorMessage, extras: $"Send invite to org {orgName} to {inviteModel.Email} by {user.Text}");
+
+            return result;
         }
 
         public async Task<InvokeResult<Invitation>> InviteUserAsync(Models.DTOs.InviteUser inviteViewModel, EntityHeader org, EntityHeader user)
         {
-
             ValidateAuthParams(org, user);
-
 
             if (inviteViewModel == null)
             {

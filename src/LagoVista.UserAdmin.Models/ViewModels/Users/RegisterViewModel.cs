@@ -14,6 +14,8 @@ namespace LagoVista.UserAdmin.ViewModels.Users
         public string AppInstanceId { get; set; }
         public string ClientType { get; set; }
         public string DeviceId { get; set; }
+        public string InviteId { get; set; }
+
 
         [FormField(LabelResource: UserAdminResources.Names.AppUser_FirstName, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string FirstName { get; set; }

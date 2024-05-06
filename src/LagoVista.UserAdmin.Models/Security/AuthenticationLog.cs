@@ -108,6 +108,14 @@ namespace LagoVista.UserAdmin.Models.Security
         SMSConfirmedBypass,
         SMSConfirmSuccess,
         SMSConfirmFailed,
+
+        SendOrgInvitation,
+        SendOrgInvitationSuccess,
+        SendOrgInvitationFailed,
+
+        ResendOrgInvitation,
+        ResendOrgInvitationSuccess,
+        ResendOrgInvitationFailed,
     }
 
     [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.AuthenticationLogs_Title, LoggingResources.Names.LogRecord_Description,

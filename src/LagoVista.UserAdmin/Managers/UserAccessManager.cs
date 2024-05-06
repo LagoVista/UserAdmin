@@ -103,7 +103,7 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             var originalAreas = new List<Area>(module.Areas);
-            var userAccessList = await _userSecurityService.d(module.Id, userId, orgId);
+            var userAccessList = await _userSecurityService.GetModuleRoleAccessForUserAsync(module.Id, userId, orgId);
             
             foreach (var area in module.Areas)
             {
