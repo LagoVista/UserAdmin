@@ -26,7 +26,7 @@ namespace LagoVista.UserAdmin.Managers
         IAuthRequestValidators _authRequestValidators;
         private readonly IAuthenticationLogManager _authLogMgr;
 
-        public const string ACTION_RESET_PASSWORD = "/Account/ResetPassword";
+        public const string ACTION_RESET_PASSWORD = "/auth/resetpassword";
 
 
         public PasswordManager(IAuthRequestValidators authRequestValidators, IUserManager userManager, IEmailSender emailSender, IDependencyManager depManager, ISecurity security, IAuthenticationLogManager authLogMgr, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)

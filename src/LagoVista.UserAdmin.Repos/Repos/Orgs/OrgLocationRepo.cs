@@ -10,6 +10,7 @@ using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.IoT.Logging.Loggers;
 using Microsoft.Azure.Cosmos;
+using LagoVista.Core.Models.UIMetaData;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
@@ -43,10 +44,6 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             return GetDocumentAsync(id);
         }
 
-        public Task<IEnumerable<OrgLocation>> GetOrganizationLocationAsync(String orgId)
-        {
-            return QueryAsync(act => act.Organization.Id == orgId);
-        }
 
         public async Task<bool> QueryNamespaceInUseAsync(string orgId, string namespaceText)
         {
@@ -60,6 +57,11 @@ namespace LagoVista.UserAdmin.Repos.Orgs
                 /* If the collection doesn't exist, it will throw this exception */
                 return false;
             }
+        }
+
+        public Task<ListResponse<OrgLocationSummary>> GetOrganizationLocationAsync(string orgId, ListRequest listRequest)
+        {
+            return QuerySummaryAsync<OrgLocationSummary, OrgLocation>(ol => ol.Organization.Id == orgId, ol => ol.Name, listRequest);
         }
     }
 }

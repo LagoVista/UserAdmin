@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using LagoVista.UserAdmin.Models.Orgs;
+using LagoVista.Core.Models.UIMetaData;
 
 namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
 {
@@ -10,7 +11,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
         Task AddLocationAsync(OrgLocation orgLocation);
         Task<OrgLocation> GetLocationAsync(string id);
         Task UpdateLocationAsync(OrgLocation orgLocation);
-        Task<IEnumerable<OrgLocation>> GetOrganizationLocationAsync(String orgId);
+        Task<ListResponse<OrgLocationSummary>> GetOrganizationLocationAsync(String orgId, ListRequest listRequest);
         Task<bool> QueryNamespaceInUseAsync(string orgId, string namespaceText);
     }
 }

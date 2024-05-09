@@ -15,7 +15,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
     {
         public DistroList()
         {
-            AppUsers = new List<EntityHeader>();
+            AppUsers = new List<DistributionContact>();
             Icon = "icon-pz-rating-star";
         }
 
@@ -40,7 +40,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader OwnerOrganization { get; set; }
         public EntityHeader OwnerUser { get; set; }
 
-        public List<EntityHeader> AppUsers { get; set; }
+        public List<DistributionContact> AppUsers { get; set; }
 
         [CustomValidator]
         public void Validate(ValidationResult result, Actions action)

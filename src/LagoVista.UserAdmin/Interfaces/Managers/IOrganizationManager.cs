@@ -19,8 +19,6 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> CreateOrganizationAsync(Organization newOrg, EntityHeader userOrg, EntityHeader user);
         Task<InvokeResult> UpdateOrganizationAsync(Organization org, EntityHeader userOrg, EntityHeader user);
 
-        Task<InvokeResult> CreateLocationAsync(OrgLocation location, EntityHeader org, EntityHeader user);
-        Task<InvokeResult> UpdateLocationAsync(OrgLocation location, EntityHeader org, EntityHeader user);
 
 
         Task<InvokeResult<AcceptInviteResponse>> AcceptInvitationAsync(string inviteId, AppUser appoUser);
@@ -28,7 +26,8 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
         Task<InvokeResult> AddUserToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy, bool isOrgAdmin = false, bool isAppBuilder = false);
         Task<InvokeResult> AddUserToLocationAsync(string userId, string locationId, EntityHeader org, EntityHeader addedBy);
-        Task<InvokeResult> AddLocationAsync(CreateLocationViewModel newLocation, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> AddLocationAsync(OrgLocation newLocation, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> UpdateLocationAsync(OrgLocation location, EntityHeader org, EntityHeader user);
         Task<InvokeResult<Organization>> CreateNewOrganizationAsync(CreateOrganizationViewModel organizationViewModel, EntityHeader user);
 
         Task<InvokeResult> SetOrgAdminAsync(string userId, EntityHeader org, EntityHeader user);
@@ -51,7 +50,6 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult<AppUser>> ChangeOrgsAsync(string newOrgId, EntityHeader org, EntityHeader user);
 
         Task DeclineInvitationAsync(String inviteId);
-        CreateLocationViewModel GetCreateLocationViewModel(EntityHeader org, EntityHeader user);
         Task<IEnumerable<LocationUserRole>> GetRolesForUserInLocationAsync(string locationId, string userId, EntityHeader org, EntityHeader user);
         Task<IEnumerable<LocationUser>> GetUsersForLocationAsync(string locationId, EntityHeader org, EntityHeader user);
         Task<IEnumerable<UserInfoSummary>> GetUsersForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user);
@@ -68,11 +66,11 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
        
         Task<InvokeResult> ResendInvitationAsync(string inviteId, EntityHeader org, EntityHeader user);
 
-        Task<IEnumerable<OrgLocation>> GetLocationsForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user);
+        Task<ListResponse<OrgLocationSummary>> GetLocationsForOrganizationsAsync(ListRequest listRequest, EntityHeader org, EntityHeader user);
+        Task<OrgLocation> GetOrgLocationAsync(string id, EntityHeader org, EntityHeader user);
         Task<IEnumerable<LocationUser>> GetLocationsForUserAsync(string userId, EntityHeader org, EntityHeader user);
         Task<Organization> GetOrganizationAsync(string ogId, EntityHeader org, EntityHeader user);
         Task<IEnumerable<OrgUser>> GetOrganizationsForUserAsync(string userId, EntityHeader org, EntityHeader user);
-        Task<UpdateLocationViewModel> GetUpdateLocationViewModelAsync(string locationId, EntityHeader org, EntityHeader user);
         Task<UpdateOrganizationViewModel> GetUpdateOrganizationViewModel(string orgId, EntityHeader org, EntityHeader user);
         Task<InvokeResult<Invitation>> InviteUserAsync(InviteUser inviteViewModel, EntityHeader orgEntityHeader, EntityHeader userEntityHeader);
 
@@ -84,9 +82,6 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> RemoveUserFromOrganizationAsync(string orgId, string userId, EntityHeader org, EntityHeader removedBy);
 
         Task<InvokeResult> RevokeInvitationAsync(string inviteId, EntityHeader org, EntityHeader user);
-
-
-        Task<InvokeResult> UpdateLocationAsync(UpdateLocationViewModel location, EntityHeader org, EntityHeader user);
 
         Task<InvokeResult<string>> GetLandingPageForOrgAsync(string orgid);
     }

@@ -91,6 +91,13 @@ namespace LagoVista.UserAdmin.Models.Orgs
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark,  ResourceType: typeof(UserAdminResources))]
         public EntityHeader TechnicalContact { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultRepo, FieldType: FieldTypes.EntityHeaderPicker, IsRequired: false, EntityHeaderPickerUrl: "/api/devicerepos",
+            WaterMark: UserAdminResources.Names.Organization_DefaultRepo_Select, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader DefaultDeviceRepository { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultInstance, FieldType: FieldTypes.EntityHeaderPicker, IsRequired: false, EntityHeaderPickerUrl: "/api/deployment/instances",
+            WaterMark: UserAdminResources.Names.Organization_DefaultInstance_Select, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader DefaultInstance { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultProjectLead, HelpResource: UserAdminResources.Names.Organization_DefaultProjectLead_Help, FieldType: FieldTypes.UserPicker,
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, IsRequired: false, ResourceType: typeof(UserAdminResources))]
@@ -145,7 +152,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
             {
                 nameof(DefaultTheme),
                 nameof(WebSite),
-                nameof(LandingPage),              
+                nameof(LandingPage), 
+                nameof(DefaultDeviceRepository),
+                nameof(DefaultInstance),
                 nameof(Logo),
                 nameof(TagLine),
             };

@@ -1484,4 +1484,28 @@
   <data name="AppUser_EmailSignature" xml:space="preserve">
     <value>Email Signature</value>
   </data>
+  <data name="Location_RoomNumber" xml:space="preserve">
+    <value>Room Number</value>
+  </data>
+  <data name="Organization_DefaultInstance" xml:space="preserve">
+    <value>Default Instance</value>
+  </data>
+  <data name="Organization_DefaultInstance_Select" xml:space="preserve">
+    <value>-select default device instance-</value>
+  </data>
+  <data name="Organization_DefaultRepo" xml:space="preserve">
+    <value>Default Device Repository</value>
+  </data>
+  <data name="Organization_DefaultRepo_Select" xml:space="preserve">
+    <value>-select default device repository-</value>
+  </data>
+  <data name="Organization_Locations_Title" xml:space="preserve">
+    <value>Locations</value>
+  </data>
+  <data name="OrgLocation_AdminContact_Select" xml:space="preserve">
+    <value>-select admin contact-</value>
+  </data>
+  <data name="OrgLocation_TechnicalContact_Select" xml:space="preserve">
+    <value>-select technical contact-</value>
+  </data>
 </root>

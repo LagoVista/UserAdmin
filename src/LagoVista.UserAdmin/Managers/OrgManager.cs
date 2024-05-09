@@ -240,16 +240,6 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> CreateLocationAsync(OrgLocation location, EntityHeader org, EntityHeader user)
-        {
-            ValidationCheck(location, Core.Validation.Actions.Create);
-
-            await AuthorizeAsync(location, AuthorizeResult.AuthorizeActions.Create, user, org);
-            await _locationRepo.AddLocationAsync(location);
-
-            return InvokeResult.Success;
-        }
-
         public async Task<InvokeResult> UpdateLocationAsync(OrgLocation location, EntityHeader org, EntityHeader user)
         {
             ValidationCheck(location, Core.Validation.Actions.Update);
@@ -259,8 +249,6 @@ namespace LagoVista.UserAdmin.Managers
 
             return InvokeResult.Success;
         }
-
-
 
         public async Task<UpdateOrganizationViewModel> GetUpdateOrganizationViewModel(string orgId, EntityHeader userOrg, EntityHeader user)
         {
@@ -852,41 +840,23 @@ namespace LagoVista.UserAdmin.Managers
             return await _locationRepo.QueryNamespaceInUseAsync(orgId, namespaceText);
         }
 
-        public async Task<IEnumerable<OrgLocation>> GetLocationsForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user)
+        public async Task<ListResponse<OrgLocationSummary>> GetLocationsForOrganizationsAsync(ListRequest listRequest, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeOrgAccessAsync(user, org, typeof(OrgLocation), Actions.Read, new SecurityHelper { OrgId = orgId });
-            return (await _locationRepo.GetOrganizationLocationAsync(orgId)).ToList();
+            await AuthorizeOrgAccessAsync(user, org, typeof(OrgLocation), Actions.Read, new SecurityHelper { OrgId = org.Id });
+            return await _locationRepo.GetOrganizationLocationAsync(org.Id, listRequest);
         }
 
-        public async Task<InvokeResult> AddLocationAsync(CreateLocationViewModel newLocation, EntityHeader org, EntityHeader user)
+        public async Task<OrgLocation> GetOrgLocationAsync(string id, EntityHeader org, EntityHeader user)
         {
-            var location = new OrgLocation();
-            newLocation.MapToOrganizationLocation(location);
+            await AuthorizeOrgAccessAsync(user, org, typeof(OrgLocation), Actions.Read, new SecurityHelper { OrgId = org.Id });
 
-            location.IsPublic = false;
-            location.Organization = org;
-            location.OwnerOrganization = org;
-            if (EntityHeader.IsNullOrEmpty(location.AdminContact)) location.AdminContact = user;
-            if (EntityHeader.IsNullOrEmpty(location.TechnicalContact)) location.TechnicalContact = user;
-
-            SetCreatedBy(location, user);
-
-            ValidationCheck(location, Core.Validation.Actions.Create);
-
-            await AuthorizeAsync(location, AuthorizeResult.AuthorizeActions.Create, user, org);
-
-            await _locationRepo.AddLocationAsync(location);
-
-            return InvokeResult.Success;
+            return await _locationRepo.GetLocationAsync(id);
         }
 
         public async Task<InvokeResult> AddLocationAsync(OrgLocation location, EntityHeader org, EntityHeader user)
         {
-            location.IsPublic = false;
             location.OwnerOrganization = org;
             location.Organization = org;
-            if (EntityHeader.IsNullOrEmpty(location.AdminContact)) location.AdminContact = user;
-            if (EntityHeader.IsNullOrEmpty(location.TechnicalContact)) location.TechnicalContact = user;
 
             SetCreatedBy(location, user);
 
@@ -897,32 +867,7 @@ namespace LagoVista.UserAdmin.Managers
             await _locationRepo.AddLocationAsync(location);
 
             return InvokeResult.Success;
-        }
-
-        public CreateLocationViewModel GetCreateLocationViewModel(EntityHeader org, EntityHeader user)
-        {
-            return CreateLocationViewModel.CreateNew(org, user);
-        }
-
-        public async Task<UpdateLocationViewModel> GetUpdateLocationViewModelAsync(String locationId, EntityHeader org, EntityHeader user)
-        {
-            var location = await _locationRepo.GetLocationAsync(locationId);
-            return UpdateLocationViewModel.CreateForOrganizationLocation(location);
-        }
-
-        public async Task<InvokeResult> UpdateLocationAsync(UpdateLocationViewModel location, EntityHeader org, EntityHeader user)
-        {
-            var locationFromStorage = await _locationRepo.GetLocationAsync(location.LocationId);
-            ConcurrencyCheck(locationFromStorage, location.LastUpdatedDate);
-            SetLastUpdated(locationFromStorage, user);
-
-            ValidationCheck(location, Core.Validation.Actions.Update);
-            await AuthorizeAsync(locationFromStorage, AuthorizeResult.AuthorizeActions.Update, user, org);
-
-            await _locationRepo.UpdateLocationAsync(locationFromStorage);
-
-            return InvokeResult.Success;
-        }       
+        }      
         #endregion
 
         #region Location User
