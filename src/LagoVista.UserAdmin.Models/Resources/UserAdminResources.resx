@@ -1508,4 +1508,13 @@
   <data name="OrgLocation_TechnicalContact_Select" xml:space="preserve">
     <value>-select technical contact-</value>
   </data>
+  <data name="DistributionList_ExternalContacts" xml:space="preserve">
+    <value>External Contacts</value>
+  </data>
+  <data name="ExternalContact_SendEmail" xml:space="preserve">
+    <value>Send Email</value>
+  </data>
+  <data name="ExternalContact_SendSMS" xml:space="preserve">
+    <value>Send SMS</value>
+  </data>
 </root>

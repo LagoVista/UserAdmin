@@ -1,4 +1,4 @@
-﻿/*5/9/2024 9:14:11 AM*/
+﻿/*5/10/2024 11:03:56 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -480,6 +480,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:DayOfWeek_Wednesday
 
 		public static string DayOfWeek_Wednesday { get { return GetResourceString("DayOfWeek_Wednesday"); } }
+//Resources:UserAdminResources:DistributionList_ExternalContacts
+
+		public static string DistributionList_ExternalContacts { get { return GetResourceString("DistributionList_ExternalContacts"); } }
 //Resources:UserAdminResources:DistroList_Description
 
 		public static string DistroList_Description { get { return GetResourceString("DistroList_Description"); } }
@@ -567,6 +570,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:ErrInvitation_CantFind
 
 		public static string ErrInvitation_CantFind { get { return GetResourceString("ErrInvitation_CantFind"); } }
+//Resources:UserAdminResources:ExternalContact_SendEmail
+
+		public static string ExternalContact_SendEmail { get { return GetResourceString("ExternalContact_SendEmail"); } }
+//Resources:UserAdminResources:ExternalContact_SendSMS
+
+		public static string ExternalContact_SendSMS { get { return GetResourceString("ExternalContact_SendSMS"); } }
 //Resources:UserAdminResources:ExternalLoginConfirmVM_Description
 
 		public static string ExternalLoginConfirmVM_Description { get { return GetResourceString("ExternalLoginConfirmVM_Description"); } }
@@ -1581,6 +1590,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string DayOfWeek_Thursday = "DayOfWeek_Thursday";
 			public const string DayOfWeek_Tuesday = "DayOfWeek_Tuesday";
 			public const string DayOfWeek_Wednesday = "DayOfWeek_Wednesday";
+			public const string DistributionList_ExternalContacts = "DistributionList_ExternalContacts";
 			public const string DistroList_Description = "DistroList_Description";
 			public const string DistroList_Help = "DistroList_Help";
 			public const string DistroList_Name = "DistroList_Name";
@@ -1610,6 +1620,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Err_UserId_DoesNotMatch = "Err_UserId_DoesNotMatch";
 			public const string ErrInvitation_AlreayAccepted = "ErrInvitation_AlreayAccepted";
 			public const string ErrInvitation_CantFind = "ErrInvitation_CantFind";
+			public const string ExternalContact_SendEmail = "ExternalContact_SendEmail";
+			public const string ExternalContact_SendSMS = "ExternalContact_SendSMS";
 			public const string ExternalLoginConfirmVM_Description = "ExternalLoginConfirmVM_Description";
 			public const string ExternalLoginConfirmVM_Help = "ExternalLoginConfirmVM_Help";
 			public const string ExternalLoginConfirmVM_Title = "ExternalLoginConfirmVM_Title";

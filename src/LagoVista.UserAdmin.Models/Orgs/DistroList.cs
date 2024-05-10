@@ -15,7 +15,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
     {
         public DistroList()
         {
-            AppUsers = new List<DistributionContact>();
             Icon = "icon-pz-rating-star";
         }
 
@@ -40,7 +39,13 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader OwnerOrganization { get; set; }
         public EntityHeader OwnerUser { get; set; }
 
-        public List<DistributionContact> AppUsers { get; set; }
+            
+        public List<EntityHeader> AppUsers { get; set; } = new List<EntityHeader>();
+
+        [FormField(LabelResource: UserAdminResources.Names.DistributionList_ExternalContacts, IsRequired: false, ChildListDisplayMember:"firstName", FieldType: FieldTypes.ChildListInline, EntityHeaderPickerUrl: "/api/distro/externalcontact/factory", ResourceType: typeof(UserAdminResources))]
+        public List<ExternalContact> ExternalContacts { get; set; } = new List<ExternalContact>();
+
+
 
         [CustomValidator]
         public void Validate(ValidationResult result, Actions action)
@@ -74,6 +79,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                nameof(Icon),
                nameof(Category),
                nameof(Description),
+               nameof(ExternalContacts),
             };
         }
     }
