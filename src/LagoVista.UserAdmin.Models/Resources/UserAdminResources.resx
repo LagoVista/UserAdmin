@@ -369,10 +369,10 @@
     <value>Locations</value>
   </data>
   <data name="Organization_Location_Description" xml:space="preserve">
-    <value>An Organization can have Many Locations.  Locations are used to furhter organize resources.</value>
+    <value>Locations are part of an Organization and can be used to organize resources.</value>
   </data>
   <data name="Organization_Location_Help" xml:space="preserve">
-    <value>An Organization can have Many Locations.  Locations are used to furhter organize resources.</value>
+    <value>Locations are part of an Organization and can be used to organize resources.</value>
   </data>
   <data name="Organization_Location_Title" xml:space="preserve">
     <value>Organization Location</value>
