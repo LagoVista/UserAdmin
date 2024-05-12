@@ -8,6 +8,8 @@ using LagoVista.UserAdmin.Resources;
 using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.Core;
 using System.Collections.Generic;
+using System.Threading;
+using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
@@ -195,6 +197,31 @@ namespace LagoVista.UserAdmin.Models.Orgs
         ISummaryData ISummaryFactory.CreateSummary()
         {
             return CreateSummary();
+        }
+
+
+        public string ToHTML()
+        {
+            var bldr = new StringBuilder();
+
+            bldr.Append($"{Name}<br/>");
+            if(!String.IsNullOrEmpty(Addr1))
+                bldr.Append($"{Addr1}<br/>");
+            if (!String.IsNullOrEmpty(Addr2))
+                bldr.Append($"{Addr2}<br/>");
+            if (!String.IsNullOrEmpty(RoomNumber))
+                bldr.Append($"{UserAdminResources.Location_RoomNumber}: {RoomNumber}<br/>");
+
+            if (!String.IsNullOrEmpty(City))
+                bldr.Append(City);
+
+            if (!String.IsNullOrEmpty(StateProvince))
+                bldr.Append(StateProvince);
+
+            if (!String.IsNullOrEmpty(City) || !String.IsNullOrEmpty(StateProvince))
+                bldr.Append("<br />");
+
+            return bldr.ToString();
         }
     }
 
