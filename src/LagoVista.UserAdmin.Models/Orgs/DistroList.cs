@@ -50,7 +50,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [CustomValidator]
         public void Validate(ValidationResult result, Actions action)
         {
-            if (AppUsers.Count == 0)
+            if (AppUsers.Count == 0 && ExternalContacts.Count == 0)
             {
                 result.AddUserError("Must have at least one person on the distribution list.");
             }
