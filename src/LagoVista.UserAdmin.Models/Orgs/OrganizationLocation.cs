@@ -111,16 +111,15 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader TechnicalContact { get; set; }
 
 
+        [FormField(LabelResource: UserAdminResources.Names.Common_Notes, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(UserAdminResources))]
+        public string Notes { get; set; }
+      
         /// <summary>
         /// A description that can be added to this location
         /// </summary>
         [FormField(LabelResource: UserAdminResources.Names.Common_Description, FieldType:FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public String Description { get; set; }
-        /// <summary>
-        /// Notes that can be added to this location
-        /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Common_Notes, FieldType:FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
-        public String Notes { get; set; }
+       
         public bool IsPublic { get; set; }
         public EntityHeader OwnerOrganization { get; set; }
         public EntityHeader OwnerUser { get; set; }
@@ -156,7 +155,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(City),
                 nameof(StateProvince),
                 nameof(Country),
-                nameof(Description),
             };
         }
 
@@ -166,6 +164,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
             {
                 nameof(AdminContact),
                 nameof(TechnicalContact),
+                nameof(Description),
+                nameof(Notes),
             };
         }
 
@@ -220,6 +220,13 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
             if (!String.IsNullOrEmpty(City) || !String.IsNullOrEmpty(StateProvince))
                 bldr.Append("<br />");
+
+
+            if (!String.IsNullOrEmpty(Description))
+                bldr.Append($"<div>{Description}</div>");
+
+            if (!String.IsNullOrEmpty(Notes))
+                bldr.Append($"<div>{Notes}</div>");
 
             return bldr.ToString();
         }
