@@ -107,9 +107,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             {
                 await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "FailedConfirmingEmail", user.CurrentOrganization?.ToEntityHeader(), user.ToEntityHeader());
                 await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ConfirmEmailFailed, user, extras: result.Errors.First().Description);
-            }
-
-            
+            }            
 
             return result.ToInvokeResult();
         }

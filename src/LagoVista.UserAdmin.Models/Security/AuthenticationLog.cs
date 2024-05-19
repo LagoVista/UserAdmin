@@ -136,6 +136,8 @@ namespace LagoVista.UserAdmin.Models.Security
 
         }
 
+        public string IPAddress { get; set; }
+
         public string InviteId { get; set; }
 
         public string RedirectUri { get; set; }

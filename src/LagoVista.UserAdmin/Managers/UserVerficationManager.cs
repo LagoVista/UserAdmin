@@ -86,20 +86,26 @@ namespace LagoVista.UserAdmin.Managers
             if (appUser == null)
             {
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendEmailConfirmFailed, userId: userHeader.Id, userName: userHeader.Text, extras: $"Could not find user with id: {userHeader.Id}");
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserVerifyController_SendConfirmationEmailAsync", "Could not get current user.");
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "[UserVerifyManager__SendConfirmationEmailAsync]", "Could not get current user.");
                 return InvokeResult<string>.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
 
             try
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
+                Console.WriteLine($"[UserVerficationManager_SendConfirmationEmailAsync] Raw Token: [{token}]");
+
                 var encodedToken = System.Net.WebUtility.UrlEncode(token);
 
-                var callbackUrl = $"{GetWebURI()}/auth/email/confirm/{appUser.Id}?code={encodedToken}";
+                Console.WriteLine($"[UserVerficationManager_SendConfirmationEmailAsync] Encoded Token: [{encodedToken}]");
+
+                Console.WriteLine($"[UserVerficationManager_SendConfirmationEmailAsync] Decoded Token: [{System.Net.WebUtility.UrlDecode(encodedToken)}]");
+
+                var callbackUrl = $"{GetWebURI()}/api/verify/email?userid={appUser.Id}?code={encodedToken}";
                 var mobileCallbackUrl = $"nuviot:confirmemail/?userId={appUser.Id}&code={encodedToken}";
 
 #if DEBUG
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "UserVerifyController_SendConfirmationEmailAsync", "SentToken",
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[UserVerifyManager_SendConfirmationEmailAsync]", "SentToken",
                      token.ToKVP("token"),
                      appUser.Id.ToKVP("appUserId"),
                      encodedToken.ToKVP("encodedToken"),
@@ -110,7 +116,7 @@ namespace LagoVista.UserAdmin.Managers
                 var body = UserAdminResources.Email_Verification_Body.Replace("[CALLBACK_URL]", callbackUrl).Replace("[MOBILE_CALLBACK_URL]", mobileCallbackUrl);
                 var result = await _emailSender.SendAsync(appUser.Email, subject, body);
 
-                _adminLogger.LogInvokeResult("UserVerficationManager_SendConfirmationEmailAsync", result,
+                _adminLogger.LogInvokeResult("[UserVerficationManager_SendConfirmationEmailAsync]", result,
                     new KeyValuePair<string, string>("token", token),
                     new KeyValuePair<string, string>("toUserId", appUser.Id),
                     new KeyValuePair<string, string>("toEmail", appUser.Email));

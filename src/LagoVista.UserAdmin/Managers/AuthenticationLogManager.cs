@@ -6,6 +6,7 @@ using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Security;
 using LagoVista.UserAdmin.Models.Users;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading.Tasks;
 
@@ -16,10 +17,13 @@ namespace LagoVista.UserAdmin.Managers
         private IAuthenticationLogRepo _authLogRepo;
         private IAdminLogger _adminLogger;
 
-        public AuthenticationLogManager(IAuthenticationLogRepo authLogRepo, IAdminLogger adminLogger)
+        private IHttpContextAccessor _httpContextAccessor;
+
+        public AuthenticationLogManager(IHttpContextAccessor httpContextAccessor, IAuthenticationLogRepo authLogRepo, IAdminLogger adminLogger)
         {
             _authLogRepo = authLogRepo ?? throw new ArgumentNullException(nameof(authLogRepo));
             _adminLogger = adminLogger ?? throw new ArgumentNullException(nameof(adminLogger));
+            _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
 
         public Task AddAsync(AuthenticationLog authLog)
@@ -29,11 +33,14 @@ namespace LagoVista.UserAdmin.Managers
 
         public Task AddAsync(AuthLogTypes type, string userId = "?", string userName = "?", string orgId = "?", string orgName = "?", string oauthProvier = "", string errors = "", string extras = "", string redirectUri = "none", string inviteId = "none")
         {
+            String ip = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+
             var auth = new AuthenticationLog(type)
             {
                 UserId = userId,
                 UserName = userName,
                 OrgId = orgId,
+                IPAddress = ip,
                 OrgName = orgName,
                 Errors = errors,
                 Extras = extras,
