@@ -36,6 +36,7 @@ namespace LagoVista.UserAdmin
             services.AddTransient<IAppUserInboxManager, AppUserInboxManager>();
             services.AddTransient<ICallLogManager, RingCentralManager>();
             services.AddTransient<IAuthenticationLogManager, AuthenticationLogManager>();
+            services.AddTransient<ILocationDiagramManager, LocationDiagramManager>();
         }
     }
 }

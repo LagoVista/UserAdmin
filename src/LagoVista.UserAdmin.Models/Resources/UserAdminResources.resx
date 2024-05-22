@@ -1517,4 +1517,31 @@
   <data name="ExternalContact_SendSMS" xml:space="preserve">
     <value>Send SMS</value>
   </data>
+  <data name="LocationDiagrams_Description" xml:space="preserve">
+    <value>A location diagram is a drawing that represents a phsyical location</value>
+  </data>
+  <data name="LocationDiagrams_Title" xml:space="preserve">
+    <value>Location Diagrams</value>
+  </data>
+  <data name="LocationDiagram_BaseLocation" xml:space="preserve">
+    <value>Base Location</value>
+  </data>
+  <data name="LocationDiagram_BaseLocation_Help" xml:space="preserve">
+    <value>The Base Location is the top level location that hosts all the sub locations or rooms within this diagram.</value>
+  </data>
+  <data name="LocationDiagram_Shape" xml:space="preserve">
+    <value>Location Diagram Shape</value>
+  </data>
+  <data name="LocationDiagram_Shape_Help" xml:space="preserve">
+    <value>The Location Diagram Shape is a shape on a location diagram that could represent a room or an object.  </value>
+  </data>
+  <data name="LocationDiagram_Shape_Location" xml:space="preserve">
+    <value>Org Location</value>
+  </data>
+  <data name="LocationDiagram_Shape_Location_Help" xml:space="preserve">
+    <value>The location within the organization that this shape or room represents</value>
+  </data>
+  <data name="LocationDiagram_Title" xml:space="preserve">
+    <value>Location Diagram</value>
+  </data>
 </root>

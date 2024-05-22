@@ -1,4 +1,4 @@
-﻿/*5/10/2024 11:03:56 AM*/
+﻿/*5/22/2024 6:08:13 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -779,6 +779,33 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Location_State
 
 		public static string Location_State { get { return GetResourceString("Location_State"); } }
+//Resources:UserAdminResources:LocationDiagram_BaseLocation
+
+		public static string LocationDiagram_BaseLocation { get { return GetResourceString("LocationDiagram_BaseLocation"); } }
+//Resources:UserAdminResources:LocationDiagram_BaseLocation_Help
+
+		public static string LocationDiagram_BaseLocation_Help { get { return GetResourceString("LocationDiagram_BaseLocation_Help"); } }
+//Resources:UserAdminResources:LocationDiagram_Shape
+
+		public static string LocationDiagram_Shape { get { return GetResourceString("LocationDiagram_Shape"); } }
+//Resources:UserAdminResources:LocationDiagram_Shape_Help
+
+		public static string LocationDiagram_Shape_Help { get { return GetResourceString("LocationDiagram_Shape_Help"); } }
+//Resources:UserAdminResources:LocationDiagram_Shape_Location
+
+		public static string LocationDiagram_Shape_Location { get { return GetResourceString("LocationDiagram_Shape_Location"); } }
+//Resources:UserAdminResources:LocationDiagram_Shape_Location_Help
+
+		public static string LocationDiagram_Shape_Location_Help { get { return GetResourceString("LocationDiagram_Shape_Location_Help"); } }
+//Resources:UserAdminResources:LocationDiagram_Title
+
+		public static string LocationDiagram_Title { get { return GetResourceString("LocationDiagram_Title"); } }
+//Resources:UserAdminResources:LocationDiagrams_Description
+
+		public static string LocationDiagrams_Description { get { return GetResourceString("LocationDiagrams_Description"); } }
+//Resources:UserAdminResources:LocationDiagrams_Title
+
+		public static string LocationDiagrams_Title { get { return GetResourceString("LocationDiagrams_Title"); } }
 //Resources:UserAdminResources:LocationNamespace_Help
 
 		public static string LocationNamespace_Help { get { return GetResourceString("LocationNamespace_Help"); } }
@@ -1687,6 +1714,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Location_PostalCode = "Location_PostalCode";
 			public const string Location_RoomNumber = "Location_RoomNumber";
 			public const string Location_State = "Location_State";
+			public const string LocationDiagram_BaseLocation = "LocationDiagram_BaseLocation";
+			public const string LocationDiagram_BaseLocation_Help = "LocationDiagram_BaseLocation_Help";
+			public const string LocationDiagram_Shape = "LocationDiagram_Shape";
+			public const string LocationDiagram_Shape_Help = "LocationDiagram_Shape_Help";
+			public const string LocationDiagram_Shape_Location = "LocationDiagram_Shape_Location";
+			public const string LocationDiagram_Shape_Location_Help = "LocationDiagram_Shape_Location_Help";
+			public const string LocationDiagram_Title = "LocationDiagram_Title";
+			public const string LocationDiagrams_Description = "LocationDiagrams_Description";
+			public const string LocationDiagrams_Title = "LocationDiagrams_Title";
 			public const string LocationNamespace_Help = "LocationNamespace_Help";
 			public const string LocationUser_Description = "LocationUser_Description";
 			public const string LocationUser_Help = "LocationUser_Help";
