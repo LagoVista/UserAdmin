@@ -23,8 +23,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Common_Notes, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(UserAdminResources))]
         public string Notes { get; set; }
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.LocationDiagram_BaseLocation, HelpResource: Resources.UserAdminResources.Names.LocationDiagram_BaseLocation_Help, FieldType: FieldTypes.OrgLocationPicker, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
-        public EntityHeader BaseLocation { get; set; }
+        [FormField(LabelResource: Resources.UserAdminResources.Names.LocationDiagram_BaseLocation, HelpResource: Resources.UserAdminResources.Names.LocationDiagram_BaseLocation_Help, 
+           WaterMark:UserAdminResources.Names.Common_SelectLocation,  FieldType: FieldTypes.OrgLocationPicker, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
+        public EntityHeader Location { get; set; }
 
 
         public int InitialZoom { get; set; }
@@ -40,7 +41,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 Id = Id,
                 Name = Name,
                 Key = Key,
-                BaseLocation = BaseLocation,
+                Location = Location,
                 IsPublic = false
             };
         }
@@ -52,7 +53,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(Name),
                 nameof(Key),
                 nameof(Icon),
-                nameof(BaseLocation),                
+                nameof(Location),                
                 nameof(Notes),                
             };
         }
@@ -85,13 +86,13 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Icon { get; set; }
 
-        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Name, FieldType: FieldTypes.OrgLocationPicker, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true, IsUserEditable: true)]
+        [FormField(LabelResource: UserAdminResources.Names.LocationDiagram_Shape_Location, WaterMark: UserAdminResources.Names.Common_SelectLocation,
+            HelpResource:UserAdminResources.Names.LocationDiagram_Shape_Location_Help, FieldType: FieldTypes.OrgLocationPicker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
         public EntityHeader Location { get; set; }
 
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Notes, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(UserAdminResources))]
         public string Notes { get; set; }
-
 
         public int X { get; set; }
         public int Y { get; set; }
@@ -119,6 +120,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
                GetListUrl: "/api/org/location/diagrams", GetUrl: "/api/org/location/diagram/{id}", SaveUrl: "/api/org/location/diagram", FactoryUrl: "/api/org/location/diagram")]
     public class LocationDiagramSummary : SummaryData
     {
-        public EntityHeader BaseLocation { get; set; }
+        public EntityHeader Location { get; set; }
     }
 }

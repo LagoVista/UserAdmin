@@ -1,4 +1,4 @@
-﻿/*5/22/2024 6:08:13 PM*/
+﻿/*5/23/2024 7:11:44 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -432,6 +432,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Common_Role
 
 		public static string Common_Role { get { return GetResourceString("Common_Role"); } }
+//Resources:UserAdminResources:Common_SelectDevice
+
+		public static string Common_SelectDevice { get { return GetResourceString("Common_SelectDevice"); } }
+//Resources:UserAdminResources:Common_SelectLocation
+
+		public static string Common_SelectLocation { get { return GetResourceString("Common_SelectLocation"); } }
 //Resources:UserAdminResources:Common_Status
 
 		public static string Common_Status { get { return GetResourceString("Common_Status"); } }
@@ -1601,6 +1607,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Common_PhoneNumber = "Common_PhoneNumber";
 			public const string Common_PhoneSupport = "Common_PhoneSupport";
 			public const string Common_Role = "Common_Role";
+			public const string Common_SelectDevice = "Common_SelectDevice";
+			public const string Common_SelectLocation = "Common_SelectLocation";
 			public const string Common_Status = "Common_Status";
 			public const string Common_TabletSupport = "Common_TabletSupport";
 			public const string CreateLocationVM_Description = "CreateLocationVM_Description";

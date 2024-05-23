@@ -1544,4 +1544,10 @@
   <data name="LocationDiagram_Title" xml:space="preserve">
     <value>Location Diagram</value>
   </data>
+  <data name="Common_SelectDevice" xml:space="preserve">
+    <value>-select device-</value>
+  </data>
+  <data name="Common_SelectLocation" xml:space="preserve">
+    <value>-select location-</value>
+  </data>
 </root>
