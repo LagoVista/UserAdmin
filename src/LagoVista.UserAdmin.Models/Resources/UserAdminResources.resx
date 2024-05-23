@@ -1550,4 +1550,43 @@
   <data name="Common_SelectLocation" xml:space="preserve">
     <value>-select location-</value>
   </data>
+  <data name="LocationDiagram_Height" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="LocationDiagram_Left" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="LocationDiagram_Top" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="LocationDiagram_Width" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="ShapeType" xml:space="preserve">
+    <value>Shape Type</value>
+  </data>
+  <data name="ShapeType_Building" xml:space="preserve">
+    <value>Building</value>
+  </data>
+  <data name="ShapeType_Closet" xml:space="preserve">
+    <value>Closet</value>
+  </data>
+  <data name="ShapeType_Door" xml:space="preserve">
+    <value>Door</value>
+  </data>
+  <data name="ShapeType_ExternalEntrance" xml:space="preserve">
+    <value>External Entrance</value>
+  </data>
+  <data name="ShapeType_ParkingLot" xml:space="preserve">
+    <value>Parking Lot</value>
+  </data>
+  <data name="ShapeType_Room" xml:space="preserve">
+    <value>Room</value>
+  </data>
+  <data name="ShapeType_Select" xml:space="preserve">
+    <value>-select shape type-</value>
+  </data>
+  <data name="ShapeType_Window" xml:space="preserve">
+    <value>Window</value>
+  </data>
 </root>

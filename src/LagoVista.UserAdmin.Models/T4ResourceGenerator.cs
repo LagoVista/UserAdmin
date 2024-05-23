@@ -1,4 +1,4 @@
-﻿/*5/23/2024 7:11:44 AM*/
+﻿/*5/23/2024 5:41:39 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -791,6 +791,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:LocationDiagram_BaseLocation_Help
 
 		public static string LocationDiagram_BaseLocation_Help { get { return GetResourceString("LocationDiagram_BaseLocation_Help"); } }
+//Resources:UserAdminResources:LocationDiagram_Height
+
+		public static string LocationDiagram_Height { get { return GetResourceString("LocationDiagram_Height"); } }
+//Resources:UserAdminResources:LocationDiagram_Left
+
+		public static string LocationDiagram_Left { get { return GetResourceString("LocationDiagram_Left"); } }
 //Resources:UserAdminResources:LocationDiagram_Shape
 
 		public static string LocationDiagram_Shape { get { return GetResourceString("LocationDiagram_Shape"); } }
@@ -806,6 +812,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:LocationDiagram_Title
 
 		public static string LocationDiagram_Title { get { return GetResourceString("LocationDiagram_Title"); } }
+//Resources:UserAdminResources:LocationDiagram_Top
+
+		public static string LocationDiagram_Top { get { return GetResourceString("LocationDiagram_Top"); } }
+//Resources:UserAdminResources:LocationDiagram_Width
+
+		public static string LocationDiagram_Width { get { return GetResourceString("LocationDiagram_Width"); } }
 //Resources:UserAdminResources:LocationDiagrams_Description
 
 		public static string LocationDiagrams_Description { get { return GetResourceString("LocationDiagrams_Description"); } }
@@ -1358,6 +1370,33 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:SetPasswordVM_Title
 
 		public static string SetPasswordVM_Title { get { return GetResourceString("SetPasswordVM_Title"); } }
+//Resources:UserAdminResources:ShapeType
+
+		public static string ShapeType { get { return GetResourceString("ShapeType"); } }
+//Resources:UserAdminResources:ShapeType_Building
+
+		public static string ShapeType_Building { get { return GetResourceString("ShapeType_Building"); } }
+//Resources:UserAdminResources:ShapeType_Closet
+
+		public static string ShapeType_Closet { get { return GetResourceString("ShapeType_Closet"); } }
+//Resources:UserAdminResources:ShapeType_Door
+
+		public static string ShapeType_Door { get { return GetResourceString("ShapeType_Door"); } }
+//Resources:UserAdminResources:ShapeType_ExternalEntrance
+
+		public static string ShapeType_ExternalEntrance { get { return GetResourceString("ShapeType_ExternalEntrance"); } }
+//Resources:UserAdminResources:ShapeType_ParkingLot
+
+		public static string ShapeType_ParkingLot { get { return GetResourceString("ShapeType_ParkingLot"); } }
+//Resources:UserAdminResources:ShapeType_Room
+
+		public static string ShapeType_Room { get { return GetResourceString("ShapeType_Room"); } }
+//Resources:UserAdminResources:ShapeType_Select
+
+		public static string ShapeType_Select { get { return GetResourceString("ShapeType_Select"); } }
+//Resources:UserAdminResources:ShapeType_Window
+
+		public static string ShapeType_Window { get { return GetResourceString("ShapeType_Window"); } }
 //Resources:UserAdminResources:SMS_CouldNotVerify
 
 		public static string SMS_CouldNotVerify { get { return GetResourceString("SMS_CouldNotVerify"); } }
@@ -1724,11 +1763,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Location_State = "Location_State";
 			public const string LocationDiagram_BaseLocation = "LocationDiagram_BaseLocation";
 			public const string LocationDiagram_BaseLocation_Help = "LocationDiagram_BaseLocation_Help";
+			public const string LocationDiagram_Height = "LocationDiagram_Height";
+			public const string LocationDiagram_Left = "LocationDiagram_Left";
 			public const string LocationDiagram_Shape = "LocationDiagram_Shape";
 			public const string LocationDiagram_Shape_Help = "LocationDiagram_Shape_Help";
 			public const string LocationDiagram_Shape_Location = "LocationDiagram_Shape_Location";
 			public const string LocationDiagram_Shape_Location_Help = "LocationDiagram_Shape_Location_Help";
 			public const string LocationDiagram_Title = "LocationDiagram_Title";
+			public const string LocationDiagram_Top = "LocationDiagram_Top";
+			public const string LocationDiagram_Width = "LocationDiagram_Width";
 			public const string LocationDiagrams_Description = "LocationDiagrams_Description";
 			public const string LocationDiagrams_Title = "LocationDiagrams_Title";
 			public const string LocationNamespace_Help = "LocationNamespace_Help";
@@ -1913,6 +1956,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string SetPasswordVM_Description = "SetPasswordVM_Description";
 			public const string SetPasswordVM_Help = "SetPasswordVM_Help";
 			public const string SetPasswordVM_Title = "SetPasswordVM_Title";
+			public const string ShapeType = "ShapeType";
+			public const string ShapeType_Building = "ShapeType_Building";
+			public const string ShapeType_Closet = "ShapeType_Closet";
+			public const string ShapeType_Door = "ShapeType_Door";
+			public const string ShapeType_ExternalEntrance = "ShapeType_ExternalEntrance";
+			public const string ShapeType_ParkingLot = "ShapeType_ParkingLot";
+			public const string ShapeType_Room = "ShapeType_Room";
+			public const string ShapeType_Select = "ShapeType_Select";
+			public const string ShapeType_Window = "ShapeType_Window";
 			public const string SMS_CouldNotVerify = "SMS_CouldNotVerify";
 			public const string SMS_Verification_Body = "SMS_Verification_Body";
 			public const string String1 = "String1";
