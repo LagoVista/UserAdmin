@@ -1,4 +1,4 @@
-﻿/*5/23/2024 5:41:39 PM*/
+﻿/*5/24/2024 8:58:19 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1370,12 +1370,33 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:SetPasswordVM_Title
 
 		public static string SetPasswordVM_Title { get { return GetResourceString("SetPasswordVM_Title"); } }
+//Resources:UserAdminResources:Shape_Fill
+
+		public static string Shape_Fill { get { return GetResourceString("Shape_Fill"); } }
+//Resources:UserAdminResources:Shape_FlipX
+
+		public static string Shape_FlipX { get { return GetResourceString("Shape_FlipX"); } }
+//Resources:UserAdminResources:Shape_FlipY
+
+		public static string Shape_FlipY { get { return GetResourceString("Shape_FlipY"); } }
+//Resources:UserAdminResources:Shape_Rotation
+
+		public static string Shape_Rotation { get { return GetResourceString("Shape_Rotation"); } }
+//Resources:UserAdminResources:Shape_Scale
+
+		public static string Shape_Scale { get { return GetResourceString("Shape_Scale"); } }
+//Resources:UserAdminResources:Shape_Stroke
+
+		public static string Shape_Stroke { get { return GetResourceString("Shape_Stroke"); } }
 //Resources:UserAdminResources:ShapeType
 
 		public static string ShapeType { get { return GetResourceString("ShapeType"); } }
 //Resources:UserAdminResources:ShapeType_Building
 
 		public static string ShapeType_Building { get { return GetResourceString("ShapeType_Building"); } }
+//Resources:UserAdminResources:ShapeType_Circle
+
+		public static string ShapeType_Circle { get { return GetResourceString("ShapeType_Circle"); } }
 //Resources:UserAdminResources:ShapeType_Closet
 
 		public static string ShapeType_Closet { get { return GetResourceString("ShapeType_Closet"); } }
@@ -1956,8 +1977,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string SetPasswordVM_Description = "SetPasswordVM_Description";
 			public const string SetPasswordVM_Help = "SetPasswordVM_Help";
 			public const string SetPasswordVM_Title = "SetPasswordVM_Title";
+			public const string Shape_Fill = "Shape_Fill";
+			public const string Shape_FlipX = "Shape_FlipX";
+			public const string Shape_FlipY = "Shape_FlipY";
+			public const string Shape_Rotation = "Shape_Rotation";
+			public const string Shape_Scale = "Shape_Scale";
+			public const string Shape_Stroke = "Shape_Stroke";
 			public const string ShapeType = "ShapeType";
 			public const string ShapeType_Building = "ShapeType_Building";
+			public const string ShapeType_Circle = "ShapeType_Circle";
 			public const string ShapeType_Closet = "ShapeType_Closet";
 			public const string ShapeType_Door = "ShapeType_Door";
 			public const string ShapeType_ExternalEntrance = "ShapeType_ExternalEntrance";

@@ -1589,4 +1589,25 @@
   <data name="ShapeType_Window" xml:space="preserve">
     <value>Window</value>
   </data>
+  <data name="ShapeType_Circle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Shape_Fill" xml:space="preserve">
+    <value>Fill</value>
+  </data>
+  <data name="Shape_FlipX" xml:space="preserve">
+    <value>Flip X</value>
+  </data>
+  <data name="Shape_FlipY" xml:space="preserve">
+    <value>Flip Y</value>
+  </data>
+  <data name="Shape_Rotation" xml:space="preserve">
+    <value>Rotation</value>
+  </data>
+  <data name="Shape_Scale" xml:space="preserve">
+    <value>Scale</value>
+  </data>
+  <data name="Shape_Stroke" xml:space="preserve">
+    <value>Stroke</value>
+  </data>
 </root>
