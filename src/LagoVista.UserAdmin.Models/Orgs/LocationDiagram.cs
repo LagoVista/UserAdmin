@@ -46,7 +46,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
             FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public double Height { get; set; }
 
+        [FormField(LabelResource: Resources.UserAdminResources.Names.LocationDiagram_Shapes, FieldType: FieldTypes.ChildList, ResourceType: typeof(UserAdminResources))]
         public List<LocationDiagramShape> Shapes { get; set; } = new List<LocationDiagramShape>();
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.LocationDiagram_Groups, FieldType: FieldTypes.ChildList, ResourceType: typeof(UserAdminResources))]
+        public List<LocationDiagramShapeGroup> Groups { get; set; } = new List<LocationDiagramShapeGroup>();
 
         public LocationDiagramSummary CreateSummary()
         {
@@ -101,7 +105,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.LocationDiagram_Shape, UserAdminResources.Names.LocationDiagram_Shape_Help, UserAdminResources.Names.LocationDiagram_Shape_Help,
         EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "icon-ae-ecommerce-1", FactoryUrl: "/api/org/location/diagram/shape/factory")]
-    public class LocationDiagramShape : IFormDescriptor
+    public class LocationDiagramShape : IValidateable, IFormDescriptor
     {
         public const string ShapeType_Room = "room";
         public const string ShapeType_ParkingLot = "parkinglot";
@@ -187,6 +191,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public List<int> Points { get; set; } = new List<int>();
 
         public LocationDiagram Details { get; set; }
+        
 
         public List<string> GetFormFields()
         {
@@ -208,6 +213,35 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(Notes),
             };
         }
+    }
+
+    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.LocationDiagramShapeGroup_Title, UserAdminResources.Names.LocationDiagramShapeGroup_Description, UserAdminResources.Names.LocationDiagramShapeGroup_Description, 
+            EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "ico-pz-worldwide-1",
+             FactoryUrl: "/api/org/location/diagram/group")]
+    public class LocationDiagramShapeGroup : IValidateable
+    {
+
+        public LocationDiagramShapeGroup()
+        {
+            Id = Guid.NewGuid().ToId();
+        }
+
+        public string Id { get; set; }
+
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Name, FieldType: FieldTypes.Text, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true, IsUserEditable: true)]
+        public string Name { get; set; }
+
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Key, HelpResource: LagoVistaCommonStrings.Names.Common_Key_Help, FieldType: FieldTypes.Key,
+            RegExValidationMessageResource: LagoVistaCommonStrings.Names.Common_Key_Validation, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true)]
+        public string Key { get; set; }
+
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string Icon { get; set; }
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.LocationDiagramShapeGroup_Shapes, FieldType: FieldTypes.ChildList, ResourceType: typeof(UserAdminResources))]
+        public List<EntityHeader> Shapes { get; set; } = new List<EntityHeader>();
+
     }
 
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.LocationDiagrams_Title, UserAdminResources.Names.LocationDiagrams_Description, UserAdminResources.Names.LocationDiagrams_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "ico-pz-worldwide-1",

@@ -1,4 +1,4 @@
-﻿/*5/24/2024 8:58:19 AM*/
+﻿/*5/24/2024 11:42:29 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -791,6 +791,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:LocationDiagram_BaseLocation_Help
 
 		public static string LocationDiagram_BaseLocation_Help { get { return GetResourceString("LocationDiagram_BaseLocation_Help"); } }
+//Resources:UserAdminResources:LocationDiagram_Groups
+
+		public static string LocationDiagram_Groups { get { return GetResourceString("LocationDiagram_Groups"); } }
 //Resources:UserAdminResources:LocationDiagram_Height
 
 		public static string LocationDiagram_Height { get { return GetResourceString("LocationDiagram_Height"); } }
@@ -809,6 +812,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:LocationDiagram_Shape_Location_Help
 
 		public static string LocationDiagram_Shape_Location_Help { get { return GetResourceString("LocationDiagram_Shape_Location_Help"); } }
+//Resources:UserAdminResources:LocationDiagram_Shapes
+
+		public static string LocationDiagram_Shapes { get { return GetResourceString("LocationDiagram_Shapes"); } }
 //Resources:UserAdminResources:LocationDiagram_Title
 
 		public static string LocationDiagram_Title { get { return GetResourceString("LocationDiagram_Title"); } }
@@ -824,6 +830,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:LocationDiagrams_Title
 
 		public static string LocationDiagrams_Title { get { return GetResourceString("LocationDiagrams_Title"); } }
+//Resources:UserAdminResources:LocationDiagramShapeGroup_Description
+
+		public static string LocationDiagramShapeGroup_Description { get { return GetResourceString("LocationDiagramShapeGroup_Description"); } }
+//Resources:UserAdminResources:LocationDiagramShapeGroup_Shapes
+
+		public static string LocationDiagramShapeGroup_Shapes { get { return GetResourceString("LocationDiagramShapeGroup_Shapes"); } }
+//Resources:UserAdminResources:LocationDiagramShapeGroup_Title
+
+		public static string LocationDiagramShapeGroup_Title { get { return GetResourceString("LocationDiagramShapeGroup_Title"); } }
 //Resources:UserAdminResources:LocationNamespace_Help
 
 		public static string LocationNamespace_Help { get { return GetResourceString("LocationNamespace_Help"); } }
@@ -1784,17 +1799,22 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Location_State = "Location_State";
 			public const string LocationDiagram_BaseLocation = "LocationDiagram_BaseLocation";
 			public const string LocationDiagram_BaseLocation_Help = "LocationDiagram_BaseLocation_Help";
+			public const string LocationDiagram_Groups = "LocationDiagram_Groups";
 			public const string LocationDiagram_Height = "LocationDiagram_Height";
 			public const string LocationDiagram_Left = "LocationDiagram_Left";
 			public const string LocationDiagram_Shape = "LocationDiagram_Shape";
 			public const string LocationDiagram_Shape_Help = "LocationDiagram_Shape_Help";
 			public const string LocationDiagram_Shape_Location = "LocationDiagram_Shape_Location";
 			public const string LocationDiagram_Shape_Location_Help = "LocationDiagram_Shape_Location_Help";
+			public const string LocationDiagram_Shapes = "LocationDiagram_Shapes";
 			public const string LocationDiagram_Title = "LocationDiagram_Title";
 			public const string LocationDiagram_Top = "LocationDiagram_Top";
 			public const string LocationDiagram_Width = "LocationDiagram_Width";
 			public const string LocationDiagrams_Description = "LocationDiagrams_Description";
 			public const string LocationDiagrams_Title = "LocationDiagrams_Title";
+			public const string LocationDiagramShapeGroup_Description = "LocationDiagramShapeGroup_Description";
+			public const string LocationDiagramShapeGroup_Shapes = "LocationDiagramShapeGroup_Shapes";
+			public const string LocationDiagramShapeGroup_Title = "LocationDiagramShapeGroup_Title";
 			public const string LocationNamespace_Help = "LocationNamespace_Help";
 			public const string LocationUser_Description = "LocationUser_Description";
 			public const string LocationUser_Help = "LocationUser_Help";

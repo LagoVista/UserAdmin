@@ -1610,4 +1610,19 @@
   <data name="Shape_Stroke" xml:space="preserve">
     <value>Stroke</value>
   </data>
+  <data name="LocationDiagramShapeGroup_Description" xml:space="preserve">
+    <value>A group of shapes that are grouped together.</value>
+  </data>
+  <data name="LocationDiagramShapeGroup_Shapes" xml:space="preserve">
+    <value>Shapes</value>
+  </data>
+  <data name="LocationDiagramShapeGroup_Title" xml:space="preserve">
+    <value>Shape Group</value>
+  </data>
+  <data name="LocationDiagram_Groups" xml:space="preserve">
+    <value>Grouips</value>
+  </data>
+  <data name="LocationDiagram_Shapes" xml:space="preserve">
+    <value>Shapes</value>
+  </data>
 </root>
