@@ -3,9 +3,6 @@ using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Models.Orgs;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Orgs
@@ -28,6 +25,11 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
         public Task AddLocationDiagramAsync(LocationDiagram diagramLocation)
         {
             return CreateDocumentAsync(diagramLocation);
+        }
+
+        public Task DeleteLocationDiagramAsync(string id)
+        {
+            return DeleteDocumentAsync(id);
         }
 
         public Task<LocationDiagram> GetLocationDiagramAsync(string id)

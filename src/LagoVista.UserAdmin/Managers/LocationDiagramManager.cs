@@ -31,6 +31,14 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
+        public async Task<InvokeResult> DeleteLocationDiagramAsync(string id, EntityHeader org, EntityHeader user)
+        {
+            var locationDiagram = await _locationDiagramRepo.GetLocationDiagramAsync(id);
+            await AuthorizeAsync(locationDiagram, AuthorizeResult.AuthorizeActions.Delete, user, org);
+            await _locationDiagramRepo.DeleteLocationDiagramAsync(id);
+            return InvokeResult.Success;
+        }
+
         public async Task<LocationDiagram> GetLocationDiagramAsync(string id, EntityHeader org, EntityHeader user)
         {
             var diagram = await _locationDiagramRepo.GetLocationDiagramAsync(id);

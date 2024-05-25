@@ -1,4 +1,4 @@
-﻿/*5/24/2024 11:42:29 AM*/
+﻿/*5/25/2024 9:01:48 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -797,6 +797,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:LocationDiagram_Height
 
 		public static string LocationDiagram_Height { get { return GetResourceString("LocationDiagram_Height"); } }
+//Resources:UserAdminResources:LocationDiagram_Layers
+
+		public static string LocationDiagram_Layers { get { return GetResourceString("LocationDiagram_Layers"); } }
 //Resources:UserAdminResources:LocationDiagram_Left
 
 		public static string LocationDiagram_Left { get { return GetResourceString("LocationDiagram_Left"); } }
@@ -824,6 +827,24 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:LocationDiagram_Width
 
 		public static string LocationDiagram_Width { get { return GetResourceString("LocationDiagram_Width"); } }
+//Resources:UserAdminResources:LocationDiagramLayer_Description
+
+		public static string LocationDiagramLayer_Description { get { return GetResourceString("LocationDiagramLayer_Description"); } }
+//Resources:UserAdminResources:LocationDiagramLayer_Groups
+
+		public static string LocationDiagramLayer_Groups { get { return GetResourceString("LocationDiagramLayer_Groups"); } }
+//Resources:UserAdminResources:LocationDiagramLayer_Locked
+
+		public static string LocationDiagramLayer_Locked { get { return GetResourceString("LocationDiagramLayer_Locked"); } }
+//Resources:UserAdminResources:LocationDiagramLayer_Shapes
+
+		public static string LocationDiagramLayer_Shapes { get { return GetResourceString("LocationDiagramLayer_Shapes"); } }
+//Resources:UserAdminResources:LocationDiagramLayer_Title
+
+		public static string LocationDiagramLayer_Title { get { return GetResourceString("LocationDiagramLayer_Title"); } }
+//Resources:UserAdminResources:LocationDiagramLayer_Visible
+
+		public static string LocationDiagramLayer_Visible { get { return GetResourceString("LocationDiagramLayer_Visible"); } }
 //Resources:UserAdminResources:LocationDiagrams_Description
 
 		public static string LocationDiagrams_Description { get { return GetResourceString("LocationDiagrams_Description"); } }
@@ -833,6 +854,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:LocationDiagramShapeGroup_Description
 
 		public static string LocationDiagramShapeGroup_Description { get { return GetResourceString("LocationDiagramShapeGroup_Description"); } }
+//Resources:UserAdminResources:LocationDiagramShapeGroup_Help
+
+		public static string LocationDiagramShapeGroup_Help { get { return GetResourceString("LocationDiagramShapeGroup_Help"); } }
 //Resources:UserAdminResources:LocationDiagramShapeGroup_Shapes
 
 		public static string LocationDiagramShapeGroup_Shapes { get { return GetResourceString("LocationDiagramShapeGroup_Shapes"); } }
@@ -1394,6 +1418,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Shape_FlipY
 
 		public static string Shape_FlipY { get { return GetResourceString("Shape_FlipY"); } }
+//Resources:UserAdminResources:Shape_Locked
+
+		public static string Shape_Locked { get { return GetResourceString("Shape_Locked"); } }
 //Resources:UserAdminResources:Shape_Rotation
 
 		public static string Shape_Rotation { get { return GetResourceString("Shape_Rotation"); } }
@@ -1424,6 +1451,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:ShapeType_ParkingLot
 
 		public static string ShapeType_ParkingLot { get { return GetResourceString("ShapeType_ParkingLot"); } }
+//Resources:UserAdminResources:ShapeType_Polygon
+
+		public static string ShapeType_Polygon { get { return GetResourceString("ShapeType_Polygon"); } }
 //Resources:UserAdminResources:ShapeType_Room
 
 		public static string ShapeType_Room { get { return GetResourceString("ShapeType_Room"); } }
@@ -1439,15 +1469,6 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:SMS_Verification_Body
 
 		public static string SMS_Verification_Body { get { return GetResourceString("SMS_Verification_Body"); } }
-//Resources:UserAdminResources:String1
-
-		public static string String1 { get { return GetResourceString("String1"); } }
-//Resources:UserAdminResources:String2
-
-		public static string String2 { get { return GetResourceString("String2"); } }
-//Resources:UserAdminResources:String3
-
-		public static string String3 { get { return GetResourceString("String3"); } }
 //Resources:UserAdminResources:Subscription_Description
 
 		public static string Subscription_Description { get { return GetResourceString("Subscription_Description"); } }
@@ -1801,6 +1822,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string LocationDiagram_BaseLocation_Help = "LocationDiagram_BaseLocation_Help";
 			public const string LocationDiagram_Groups = "LocationDiagram_Groups";
 			public const string LocationDiagram_Height = "LocationDiagram_Height";
+			public const string LocationDiagram_Layers = "LocationDiagram_Layers";
 			public const string LocationDiagram_Left = "LocationDiagram_Left";
 			public const string LocationDiagram_Shape = "LocationDiagram_Shape";
 			public const string LocationDiagram_Shape_Help = "LocationDiagram_Shape_Help";
@@ -1810,9 +1832,16 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string LocationDiagram_Title = "LocationDiagram_Title";
 			public const string LocationDiagram_Top = "LocationDiagram_Top";
 			public const string LocationDiagram_Width = "LocationDiagram_Width";
+			public const string LocationDiagramLayer_Description = "LocationDiagramLayer_Description";
+			public const string LocationDiagramLayer_Groups = "LocationDiagramLayer_Groups";
+			public const string LocationDiagramLayer_Locked = "LocationDiagramLayer_Locked";
+			public const string LocationDiagramLayer_Shapes = "LocationDiagramLayer_Shapes";
+			public const string LocationDiagramLayer_Title = "LocationDiagramLayer_Title";
+			public const string LocationDiagramLayer_Visible = "LocationDiagramLayer_Visible";
 			public const string LocationDiagrams_Description = "LocationDiagrams_Description";
 			public const string LocationDiagrams_Title = "LocationDiagrams_Title";
 			public const string LocationDiagramShapeGroup_Description = "LocationDiagramShapeGroup_Description";
+			public const string LocationDiagramShapeGroup_Help = "LocationDiagramShapeGroup_Help";
 			public const string LocationDiagramShapeGroup_Shapes = "LocationDiagramShapeGroup_Shapes";
 			public const string LocationDiagramShapeGroup_Title = "LocationDiagramShapeGroup_Title";
 			public const string LocationNamespace_Help = "LocationNamespace_Help";
@@ -2000,6 +2029,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Shape_Fill = "Shape_Fill";
 			public const string Shape_FlipX = "Shape_FlipX";
 			public const string Shape_FlipY = "Shape_FlipY";
+			public const string Shape_Locked = "Shape_Locked";
 			public const string Shape_Rotation = "Shape_Rotation";
 			public const string Shape_Scale = "Shape_Scale";
 			public const string Shape_Stroke = "Shape_Stroke";
@@ -2010,14 +2040,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string ShapeType_Door = "ShapeType_Door";
 			public const string ShapeType_ExternalEntrance = "ShapeType_ExternalEntrance";
 			public const string ShapeType_ParkingLot = "ShapeType_ParkingLot";
+			public const string ShapeType_Polygon = "ShapeType_Polygon";
 			public const string ShapeType_Room = "ShapeType_Room";
 			public const string ShapeType_Select = "ShapeType_Select";
 			public const string ShapeType_Window = "ShapeType_Window";
 			public const string SMS_CouldNotVerify = "SMS_CouldNotVerify";
 			public const string SMS_Verification_Body = "SMS_Verification_Body";
-			public const string String1 = "String1";
-			public const string String2 = "String2";
-			public const string String3 = "String3";
 			public const string Subscription_Description = "Subscription_Description";
 			public const string Subscription_Help = "Subscription_Help";
 			public const string Subscription_PaymentMethod = "Subscription_PaymentMethod";

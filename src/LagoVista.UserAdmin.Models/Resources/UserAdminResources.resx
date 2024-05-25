@@ -1436,17 +1436,8 @@
   <data name="DistroLists_Name" xml:space="preserve">
     <value>Distribution Lists</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value>Distribution LIsts</value>
-  </data>
   <data name="ScheduledDowntimes_Title" xml:space="preserve">
     <value>Scheduled Downtimes</value>
-  </data>
-  <data name="String2" xml:space="preserve">
-    <value>Subscriptions</value>
-  </data>
-  <data name="String3" xml:space="preserve">
-    <value>-select day of week-</value>
   </data>
   <data name="ScheduledDowntime_DayOfWeek_Select" xml:space="preserve">
     <value>-select day of week-</value>
@@ -1590,7 +1581,7 @@
     <value>Window</value>
   </data>
   <data name="ShapeType_Circle" xml:space="preserve">
-    <value />
+    <value>Circle</value>
   </data>
   <data name="Shape_Fill" xml:space="preserve">
     <value>Fill</value>
@@ -1624,5 +1615,35 @@
   </data>
   <data name="LocationDiagram_Shapes" xml:space="preserve">
     <value>Shapes</value>
+  </data>
+  <data name="LocationDiagramLayer_Description" xml:space="preserve">
+    <value>A layer is a collection of shapes</value>
+  </data>
+  <data name="LocationDiagramLayer_Shapes" xml:space="preserve">
+    <value>Shapes</value>
+  </data>
+  <data name="LocationDiagramLayer_Title" xml:space="preserve">
+    <value>Diagram Layer</value>
+  </data>
+  <data name="LocationDiagramShapeGroup_Help" xml:space="preserve">
+    <value>A group of shapes hat can be acted on together</value>
+  </data>
+  <data name="LocationDiagram_Layers" xml:space="preserve">
+    <value>Layers</value>
+  </data>
+  <data name="LocationDiagramLayer_Groups" xml:space="preserve">
+    <value>Groups</value>
+  </data>
+  <data name="LocationDiagramLayer_Locked" xml:space="preserve">
+    <value>Locked</value>
+  </data>
+  <data name="LocationDiagramLayer_Visible" xml:space="preserve">
+    <value>Visible</value>
+  </data>
+  <data name="ShapeType_Polygon" xml:space="preserve">
+    <value>Polygon</value>
+  </data>
+  <data name="Shape_Locked" xml:space="preserve">
+    <value>Locked</value>
   </data>
 </root>
