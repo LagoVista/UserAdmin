@@ -292,7 +292,7 @@ namespace LagoVista.UserAdmin.Managers
                 await _authLogManager.AddAsync(AuthLogTypes.OAuthAppendUserLogin, appUser.Id, appUser.Name, oauthProvier: externalLoginInfo.Provider.Text, extras: $"found by email, associating oauth account with email {externalLoginInfo.Email} and logging in.");
 
                 if (!appUser.EmailConfirmed)
-                    returnUrl = CommonLinks.ConfirmEmail;
+                    returnUrl = $"{CommonLinks.ConfirmEmail}?email={externalLoginInfo.Email}";
                 else if (appUser.CurrentOrganization == null)
                     returnUrl = CommonLinks.CreateDefaultOrg;
                 else if (!String.IsNullOrEmpty(appUser.CurrentOrganization.LandingPage) && appUser.EmailConfirmed)

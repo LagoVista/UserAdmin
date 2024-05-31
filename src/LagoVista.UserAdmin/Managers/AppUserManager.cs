@@ -20,6 +20,7 @@ using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using System.Linq;
 using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.Core.Models.ML;
+using System.Diagnostics;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -96,12 +97,15 @@ namespace LagoVista.UserAdmin.Managers
                 var deletedUser = await _appUserRepo.FindByIdAsync(deletedByUser.Id);
                 if (!deletedUser.IsOrgAdmin)
                 {
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeleteUserFailed,deletedByUser, org,  extras: $"User deleting user must be the same user being deleted, or deleting user must be an org admin, userid: {id}.");
                     return InvokeResult.FromError($"Can not delete user, user deleting user must be the same user being deleted, or deleting user must be an org admin.");
                 }
             }
 
             var appUser = await _appUserRepo.FindByIdAsync(id);
             if (appUser == null) throw new RecordNotFoundException(nameof(AppUser), id);
+
+            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletingUser, appUser);
 
             // If the user new registered an organization we still want to delete them, they just didn't make it
             // very far in the process.
@@ -113,10 +117,11 @@ namespace LagoVista.UserAdmin.Managers
                 var users = await _orgUserRepo.GetUsersForOrgAsync(org.Id);
                 if (users.Count() == 1 && users.First().UserId == id)
                 {
-                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.RemoveAllSubscriptionsForOrg, appUser, extras: $"Org: {appUser.CurrentOrganization}");
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletingOrg, appUser, extras: $"Org: {appUser.CurrentOrganization.Text}");
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.RemoveAllSubscriptionsForOrg, appUser, extras: $"Org: {appUser.CurrentOrganization.Text}");
                     await _subscriptionManager.DeleteSubscriptionsForOrgAsync(org.Id, org, deletedByUser);
                     await _orgRepo.DeleteOrgAsync(org.Id);
-                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeleteOrg, appUser, extras: $"Org: {appUser.CurrentOrganization}");
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletedOrg, appUser, extras: $"Org: {appUser.CurrentOrganization.Text}");
                 }
                 else
                 {
@@ -124,6 +129,7 @@ namespace LagoVista.UserAdmin.Managers
                     if (orgs.Any())
                     {
                         var orgList = String.Join(",", orgs);
+                        await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeleteUserFailed, appUser, extras: $"Org: {appUser.CurrentOrganization.Text} user is billing contact for the following org[s] {orgList}\"");
                         return InvokeResult.FromError($"Can not delete user, user is billing contact for the following org[s] {orgList}");
                     }
                 }
@@ -131,16 +137,16 @@ namespace LagoVista.UserAdmin.Managers
                 var userOrgs = await _orgUserRepo.GetOrgsForUserAsync(id);
                 foreach (var userOrg in userOrgs)
                 {
-                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.RemoveUserFromOrg, appUser, extras: $"Org: {appUser.CurrentOrganization}");
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.RemoveUserFromOrg, appUser, extras: $"Org: {appUser.CurrentOrganization.Text}");
                     await _orgUserRepo.RemoveUserFromOrgAsync(userOrg.OrgId, id, deletedByUser);
                 }
             }
 
-            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeleteUser, appUser);
-
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "AppUserManager__DeleteuserAsync", $"{deletedByUser.Text} delete the user {appUser.Name}");
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserManager__DeleteUserAsync]", $"\"[AppUserManager__DeleteUserAsync] - [{deletedByUser.Text}] deleted the user [{appUser.Name}]");
 
             await _appUserRepo.DeleteAsync(appUser);
+
+            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletedUser, appUser);
 
             return InvokeResult.Success;
         }
@@ -617,7 +623,7 @@ namespace LagoVista.UserAdmin.Managers
                 AppUser = appUser,
                 User = appUser.ToEntityHeader(),
                 Roles = new List<EntityHeader>(),
-                RedirectPage = CommonLinks.ConfirmEmail
+                RedirectPage = $"{CommonLinks.ConfirmEmail}?{appUser.Email}"
             };
 
             if (!String.IsNullOrEmpty(newUser.InviteId))

@@ -9,6 +9,7 @@ namespace LagoVista.UserAdmin.Models.Security
 {
     public enum AuthLogTypes
     {
+        PasswordAuthStart,
         PasswordAuthSuccess,
         PaswwordAuthFailed,
         PasswordAuthUserNotFound,
@@ -25,6 +26,7 @@ namespace LagoVista.UserAdmin.Models.Security
         ChangeOrg,
         CreatingOrg,
         CreatedOrg,
+        AssignedCurrentOrgToUser,
         PopulatingNewOrg,
         PopulatedNewOrg,
         UserPasswordLogin,
@@ -55,8 +57,14 @@ namespace LagoVista.UserAdmin.Models.Security
         RegisterUser,
         AcceptInvite,
         AcceptInviteFailed,
-        DeleteUser,
-        DeleteOrg,
+        
+        DeletingUser,
+        DeleteUserFailed,
+        DeletedUser,
+
+        DeletingOrg,
+        DeletedOrg,
+
         RemoveUserFromOrg,
         DisableUser,
         AcceptTermsAndConditions,
@@ -96,6 +104,7 @@ namespace LagoVista.UserAdmin.Models.Security
         RemoveSubscription,
         RemoveAllSubscriptionsForOrg,
 
+        SendingEmailConfirm,
         SendEmailConfirmSuccess,
         SendEmailConfirmFailed,
 

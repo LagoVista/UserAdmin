@@ -22,7 +22,8 @@ namespace LagoVista.UserAdmin
 
         public const string CreatingOrganization = "/auth/org/creating";
 
-        public const string ForgotPassword = "/auth/email/confirm";
+        public const string ForgotPasswordSent = "/auth/password/forgot/sent";
+
         public const string AcceptInviteId = "/auth/invite/accept/{inviteid}";
         public const string InviteAccepted = "/auth/invite/accepted";
 

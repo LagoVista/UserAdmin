@@ -56,8 +56,22 @@ namespace LagoVista.UserAdmin.Repos.Users
 
         public async Task DeleteAsync(AppUser user)
         {
-            await DeleteDocumentAsync(user.Id);
-            await _rdbmsUserManager.DeleteAppUserAsync(user.Id);
+            try
+            {
+                await DeleteDocumentAsync(user.Id);
+                await _rdbmsUserManager.DeleteAppUserAsync(user.Id);
+            }
+            catch(Exception ex)
+            {
+                var msg = new StringBuilder();
+                msg.Append(ex.Message);
+                if (ex.InnerException != null)
+                    msg.Append($";{ex.InnerException.Message}");
+
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeleteUserFailed, user, errors: msg.ToString());
+
+                throw;
+            }
         }
 
         public async Task<AppUser> FindByIdAsync(string id)

@@ -93,6 +93,7 @@ namespace LagoVista.UserAdmin.Managers
             try
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendingEmailConfirm, userId: userHeader.Id, userName: userHeader.Text, extras: $"Raw Token={token}");
                 Console.WriteLine($"[UserVerficationManager_SendConfirmationEmailAsync] Raw Token: [{token}]");
 
                 var encodedToken = System.Net.WebUtility.UrlEncode(token);
@@ -101,7 +102,7 @@ namespace LagoVista.UserAdmin.Managers
 
                 Console.WriteLine($"[UserVerficationManager_SendConfirmationEmailAsync] Decoded Token: [{System.Net.WebUtility.UrlDecode(encodedToken)}]");
 
-                var callbackUrl = $"{GetWebURI()}/api/verify/email?userid={appUser.Id}?code={encodedToken}";
+                var callbackUrl = $"{GetWebURI()}/api/verify/email?userid={appUser.Id}&code={encodedToken}";
                 var mobileCallbackUrl = $"nuviot:confirmemail/?userId={appUser.Id}&code={encodedToken}";
 
 #if DEBUG

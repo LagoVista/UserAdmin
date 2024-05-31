@@ -86,6 +86,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (string.IsNullOrEmpty(loginRequest.UserName)) return InvokeResult<UserLoginResponse>.FromError($"User name is a required field [{loginRequest.UserName}].");
             if (string.IsNullOrEmpty(loginRequest.Password)) return InvokeResult<UserLoginResponse>.FromError($"Password is a required field [{loginRequest.UserName}].");
 
+            await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthStart, userName: loginRequest.UserName, inviteId:loginRequest.InviteId);
+
             var signIn = UserSignInMetrics.WithLabels(nameof(PasswordSignInAsync));
             UserLoginAttempts.Inc();
 
@@ -118,11 +120,19 @@ namespace LagoVista.AspNetCore.Identity.Managers
                     return InvokeResult<UserLoginResponse>.FromError($"Account [{loginRequest.UserName}] is disabled.");
                 }
 
-                if(!String.IsNullOrEmpty(loginRequest.InviteId))
+                if (!String.IsNullOrEmpty(loginRequest.InviteId))
                 {
                     var acceptInviteResult = await _orgManager.AcceptInvitationAsync(loginRequest.InviteId, appUser);
-                    response.RedirectPage = acceptInviteResult.Result.RedirectPage;
-                    response.ResponseMessage = acceptInviteResult.Result.ResponseMessage;
+                    if (acceptInviteResult.Successful)
+                    {
+                        response.RedirectPage = acceptInviteResult.Result.RedirectPage;
+                        response.ResponseMessage = acceptInviteResult.Result.ResponseMessage;
+                    }
+                    else
+                    {
+                        await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AcceptInviteFailed, appUser, errors: acceptInviteResult.ErrorMessage, inviteId: loginRequest.InviteId);
+                        return InvokeResult<UserLoginResponse>.FromErrors(acceptInviteResult.Errors.ToArray());
+                    }
                 }
 
                 if (appUser.CurrentOrganization != null)

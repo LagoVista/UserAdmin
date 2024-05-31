@@ -96,7 +96,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public async Task<InvokeResult> ConfirmEmailAsync(AppUser user, string token)
         {
-
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
@@ -106,7 +105,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             else
             {
                 await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "FailedConfirmingEmail", user.CurrentOrganization?.ToEntityHeader(), user.ToEntityHeader());
-                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ConfirmEmailFailed, user, extras: result.Errors.First().Description);
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ConfirmEmailFailed, user, extras: $"{result.Errors.First().Description};token={token}");
             }            
 
             return result.ToInvokeResult();

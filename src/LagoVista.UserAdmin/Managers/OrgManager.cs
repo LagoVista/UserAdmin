@@ -154,6 +154,7 @@ namespace LagoVista.UserAdmin.Managers
                 currentUser.IsOrgAdmin = true;
                 currentUser.IsAppBuilder = true;
                 currentUser.CurrentOrganization = organization.CreateSummary();
+                await _authLogMgr.AddAsync(AuthLogTypes.AssignedCurrentOrgToUser, user.Id, user.Text, organization.Id, organization.Name);
             }
 
             /* Final update of the user */
@@ -189,6 +190,8 @@ namespace LagoVista.UserAdmin.Managers
 
             await AuthorizeAsync(newOrg, AuthorizeResult.AuthorizeActions.Create, user, userOrg);
             await _organizationRepo.AddOrganizationAsync(newOrg);
+
+            await _orgInitializer.Init(newOrg.ToEntityHeader(), user, true);
 
             return InvokeResult.Success;
         }
@@ -277,7 +280,8 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<InvokeResult<AcceptInviteResponse>> AcceptInvitationAsync(string inviteId, AppUser acceptedUser)
         {
             var invite = await _inviteUserRepo.GetInvitationAsync(inviteId);
-            if (!invite.IsActive())
+
+            if (invite == null || !invite.IsActive())
             {
                 return InvokeResult<AcceptInviteResponse>.FromErrors(Resources.UserAdminErrorCodes.AuthInviteNotActive.ToErrorMessage());
             }
@@ -821,8 +825,22 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> RemoveUserFromOrganizationAsync(string orgId, string userId, EntityHeader org, EntityHeader user)
         {
+            if (org.Id != orgId)
+                return InvokeResult.FromError("Org Mismatch, can only remove users from current organization.");
+
             await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Delete, new SecurityHelper { OrgId = orgId, UserId = userId });
+
+            var appUser = await _appUserRepo.FindByIdAsync(userId);
+            var existingOrg = appUser.Organizations.FirstOrDefault(org => org.Id == orgId);
+            if(existingOrg != null)
+            {
+                appUser.Organizations.Remove(existingOrg);
+                await _appUserRepo.UpdateAsync(appUser);
+            }
+            
             await _orgUserRepo.RemoveUserFromOrgAsync(orgId, userId, user);
+            await _authLogMgr.AddAsync(AuthLogTypes.RemoveUserFromOrg, appUser.ToEntityHeader(), org, $"Remove user [{appUser.Name}] from the [{org.Text}] by user [{user.Text}]");
+
             return InvokeResult.Success;
 
         }

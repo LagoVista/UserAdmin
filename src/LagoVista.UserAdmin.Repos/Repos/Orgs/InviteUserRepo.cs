@@ -7,6 +7,7 @@ using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Core.Models.UIMetaData;
 using System;
+using LagoVista.Core.Models;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
