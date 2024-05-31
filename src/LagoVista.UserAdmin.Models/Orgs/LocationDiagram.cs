@@ -192,7 +192,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.Shape_Fill, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Fill { get; set; }
-        public List<int> Points { get; set; } = new List<int>();
+        public List<ShapePoint> Points { get; set; } = new List<ShapePoint>();
 
         public LocationDiagram Details { get; set; }
         
@@ -315,6 +315,12 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(Description)
             };
         }
+    }
+
+    public class ShapePoint
+    {
+        public double X { get; set; }
+        public double Y { get; set; }
     }
 
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.LocationDiagrams_Title, UserAdminResources.Names.LocationDiagrams_Description, UserAdminResources.Names.LocationDiagrams_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "ico-pz-worldwide-1",
