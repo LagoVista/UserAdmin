@@ -283,6 +283,8 @@ namespace LagoVista.UserAdmin.Managers
 
             if (invite == null || !invite.IsActive())
             {
+                var reason = invite == null ? "Could not load invite" : $"Status: {invite.Status}";
+                await _authLogMgr.AddAsync(AuthLogTypes.AcceptInviteFailed, acceptedUser, inviteId: inviteId, extras: $"Accept not valid to be accepted, Status: {reason}.");
                 return InvokeResult<AcceptInviteResponse>.FromErrors(Resources.UserAdminErrorCodes.AuthInviteNotActive.ToErrorMessage());
             }
 
@@ -301,23 +303,22 @@ namespace LagoVista.UserAdmin.Managers
             var result = await AddUserToOrgAsync(acceptedUser.ToEntityHeader(), orgHeader, invitingUser);
             if (!result.Successful)
             {
-                await _authLogMgr.AddAsync(AuthLogTypes.AcceptInviteFailed, acceptedUser, extras: result.ErrorMessage);
-
+                await _authLogMgr.AddAsync(AuthLogTypes.AcceptInviteFailed, acceptedUser, inviteId: inviteId, extras: result.ErrorMessage);
                 return InvokeResult<AcceptInviteResponse>.FromInvokeResult(result);
             }
-
-            if (acceptedUser.CurrentOrganization == null)
-            {
-                acceptedUser.CurrentOrganization = (await _organizationRepo.GetOrganizationAsync(invite.OrganizationId)).CreateSummary();
-            }
+            
+            acceptedUser.CurrentOrganization = (await _organizationRepo.GetOrganizationAsync(invite.OrganizationId)).CreateSummary();
+            var existing = acceptedUser.Organizations.FirstOrDefault(org => org.Id == invite.OrganizationId);
+            if(existing != null)
+                acceptedUser.Organizations.Remove(existing);
 
             acceptedUser.Organizations.Add(orgHeader);
 
             await _appUserRepo.UpdateAsync(acceptedUser);
 
             var msg = $"Congratulations! You have accepted the invitation from {invite.InvitedByName} to the {invite.OrganizationName} organization. ";
-            if (acceptedUser.CurrentOrganization.Id != invite.OrganizationId)
-                msg += "To switch to this organization, click on Change Organizations from the Main Menu";
+
+            await _authLogMgr.AddAsync(AuthLogTypes.AcceptedInvite, acceptedUser.ToEntityHeader(), acceptedUser.CurrentOrganization.ToEntityHeader(), inviteId: inviteId);
 
             return InvokeResult<AcceptInviteResponse>.Create(new AcceptInviteResponse()
             {
@@ -511,7 +512,7 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             var existingInvite = await _inviteUserRepo.GetInviteByOrgIdAndEmailAsync(org.Id, inviteViewModel.Email);
-            if (existingInvite != null)
+            if (existingInvite != null && existingInvite.Status != Invitation.StatusTypes.Accepted)
             {
                 existingInvite.Status = Invitation.StatusTypes.Replaced;
                 await _inviteUserRepo.UpdateInvitationAsync(existingInvite);

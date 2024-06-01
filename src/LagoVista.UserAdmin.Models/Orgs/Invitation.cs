@@ -63,7 +63,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public bool IsActive()
         {
-            return Status == StatusTypes.Replaced || Status == StatusTypes.Resent || Status == StatusTypes.Sent;
+            return Status == StatusTypes.Replaced || Status == StatusTypes.Resent || Status == StatusTypes.Sent || Status == StatusTypes.Resent;
         }
     }
 }

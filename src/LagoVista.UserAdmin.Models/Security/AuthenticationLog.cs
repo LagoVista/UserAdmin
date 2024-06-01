@@ -55,7 +55,10 @@ namespace LagoVista.UserAdmin.Models.Security
         ChangePasswordFailed,
         InviteUser,
         RegisterUser,
-        AcceptInvite,
+
+
+        AcceptingInvite,
+        AcceptedInvite,
         AcceptInviteFailed,
         
         DeletingUser,
