@@ -71,6 +71,8 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<IEnumerable<LocationUser>> GetLocationsForUserAsync(string userId, EntityHeader org, EntityHeader user);
         Task<Organization> GetOrganizationAsync(string ogId, EntityHeader org, EntityHeader user);
         Task<IEnumerable<OrgUser>> GetOrganizationsForUserAsync(string userId, EntityHeader org, EntityHeader user);
+
+        Task<InvokeResult> ClearOrgUserCache(EntityHeader org, EntityHeader user);
         Task<UpdateOrganizationViewModel> GetUpdateOrganizationViewModel(string orgId, EntityHeader org, EntityHeader user);
         Task<InvokeResult<Invitation>> InviteUserAsync(InviteUser inviteViewModel, EntityHeader orgEntityHeader, EntityHeader userEntityHeader);
 

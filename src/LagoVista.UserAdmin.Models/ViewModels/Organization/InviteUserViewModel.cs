@@ -6,7 +6,8 @@ using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.ViewModels.Organization
 {
-    [EntityDescription(Domains.OrganizationViewModels, UserAdminResources.Names.InviteUserVM_Title, UserAdminResources.Names.InviteUserVM_Help, UserAdminResources.Names.InviteUserVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(Domains.OrganizationViewModels, UserAdminResources.Names.InviteUserVM_Title, UserAdminResources.Names.InviteUserVM_Help, 
+        UserAdminResources.Names.InviteUserVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class InviteUserViewModel : IFormDescriptor
     {
         [FormField(LabelResource: UserAdminResources.Names.Common_EmailAddress, FieldType: FieldTypes.Email, IsRequired: true, ResourceType: typeof(UserAdminResources))]

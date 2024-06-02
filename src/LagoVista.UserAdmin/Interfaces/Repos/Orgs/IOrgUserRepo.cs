@@ -18,5 +18,6 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
         Task<bool> IsAppBuilderAsync(string orgId, string userId);
         Task<OrgUser> GetOrgUserAsync(string orgId, string userId);
         Task UpdateOrgUserAsync(OrgUser orgUser);
+        Task ClearOrgCacheAsync(string orgId);
     }
 }

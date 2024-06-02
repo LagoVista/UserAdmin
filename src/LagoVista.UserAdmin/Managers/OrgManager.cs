@@ -1078,6 +1078,13 @@ namespace LagoVista.UserAdmin.Managers
             return await _ownedObjectRepo.GetOwnedObjectsForOrgAsync(orgId, request);
         }
 
+        public async Task<InvokeResult> ClearOrgUserCache(EntityHeader org, EntityHeader user)
+        {
+            // mainly used for testing...
+            await _orgUserRepo.ClearOrgCacheAsync(org.Id);
+            return InvokeResult.Success;
+        }
+
 
         #endregion
     }

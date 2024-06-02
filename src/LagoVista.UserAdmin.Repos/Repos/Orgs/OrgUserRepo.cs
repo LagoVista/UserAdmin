@@ -43,6 +43,8 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             return GetByFilterAsync(FilterOptions.Create(nameof(OrgUser.UserId), FilterOptions.Operators.Equals, userId));
         }
 
+
+
         public async Task<IEnumerable<OrgUser>> GetUsersForOrgAsync(string orgId)
         {
             var json = await _cacheProvider.GetAsync(GetCacheKey(orgId));
@@ -97,6 +99,11 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         {
             var orgUser = await GetOrgUserAsync(orgId, userId);
             return orgUser.IsAppBuilder;
+        }
+
+        public async Task ClearOrgCacheAsync(string orgId)
+        {
+            await _cacheProvider.RemoveAsync(GetCacheKey(orgId));
         }
     }
 }
