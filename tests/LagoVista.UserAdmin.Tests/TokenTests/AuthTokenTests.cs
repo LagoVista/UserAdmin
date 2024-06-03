@@ -20,6 +20,7 @@ using LagoVista.UserAdmin.Models.Apps;
 using System.Collections.Generic;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Auth;
+using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 
 namespace LagoVista.UserAdmin.Tests.TokenTests
 {
@@ -55,7 +56,7 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
             };
           
             _authTokenManager = new AuthTokenManager(new Mock<IAppInstanceRepo>().Object, new Mock<IAuthenticationLogManager>().Object, new Mock<ISingleUseTokenManager>().Object, _orgManager.Object, _refreshTokenManager.Object,
-                _authRequestValidators.Object, _tokenHelper.Object, _appInstanceManager.Object,
+                _authRequestValidators.Object, new Mock<IOrganizationRepo>().Object, _tokenHelper.Object, _appInstanceManager.Object,
                 new Mock<IAdminLogger>().Object, _signInManager.Object, _userManager.Object);
 
             _appInstanceManager.Setup(ais => ais.UpdateLastLoginAsync(It.IsAny<string>(), It.IsAny<AuthRequest>())).ReturnsAsync(InvokeResult<AppInstance>.Create(new AppInstance("rowid", "userid")));

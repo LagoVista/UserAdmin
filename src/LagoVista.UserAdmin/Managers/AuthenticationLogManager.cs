@@ -38,7 +38,7 @@ namespace LagoVista.UserAdmin.Managers
             var auth = new AuthenticationLog(type)
             {
                 UserId = userId,
-                UserName = userName,
+                UserName = userName.ToLower(),
                 OrgId = orgId,
                 IPAddress = ip,
                 OrgName = orgName,

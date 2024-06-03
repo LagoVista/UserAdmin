@@ -29,5 +29,7 @@ namespace LagoVista.UserAdmin.Models.Auth
         public EntityHeader User { get; set; }
         public EntityHeader Org { get; set; }
         public List<EntityHeader> Roles { get; set; }
+
+        public string RedirectUri { get; set; }
     }
 }

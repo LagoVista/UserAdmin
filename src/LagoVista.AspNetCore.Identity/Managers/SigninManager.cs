@@ -127,6 +127,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
                     {
                         response.RedirectPage = acceptInviteResult.Result.RedirectPage;
                         response.ResponseMessage = acceptInviteResult.Result.ResponseMessage;
+
+                        // now much sure we sign in with the new org after accepting the invite.
+                        await SignInAsync(appUser);
                     }
                     else
                     {
@@ -135,10 +138,23 @@ namespace LagoVista.AspNetCore.Identity.Managers
                     }
                 }
 
+                // if current org is null, make an attempt to load another org this person
+                // may already exist in, likely will fail...but we'll deal with that later on.
+                if(appUser.CurrentOrganization == null)
+                {
+                    var firstExisitng = appUser.Organizations.FirstOrDefault();
+                    if(firstExisitng != null)
+                    {
+                        await _orgManager.ChangeOrgsAsync(firstExisitng.Id, firstExisitng, appUser);
+                    } 
+                    else if(String.IsNullOrEmpty(response.RedirectPage))
+                    {
+
+                    }
+                }
+
                 if (appUser.CurrentOrganization != null)
                 {
-                    await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthSuccess, appUser.Id, appUser.UserName, appUser.CurrentOrganization.Id, appUser.CurrentOrganization.Text);
-
                     var org = await _organizationRepo.GetOrganizationAsync(appUser.CurrentOrganization.Id);
                     response.AddAuthMetric("Loaded Organization");
 
@@ -200,14 +216,17 @@ namespace LagoVista.AspNetCore.Identity.Managers
                     response.RedirectPage = CommonLinks.CreateDefaultOrg;
                 }
 
-                if (!appUser.EmailConfirmed)
-                    response.RedirectPage = CommonLinks.ConfirmEmail;
+                if(String.IsNullOrEmpty(response.RedirectPage)) {
+                    if(appUser.CurrentOrganization == null)
+                        response.RedirectPage = CommonLinks.CreatingOrganization;
+                    else if (!appUser.EmailConfirmed)
+                        response.RedirectPage = $"{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}";
+                }
 
                 appUser.LastLogin = DateTime.UtcNow.ToJSONString();
                 // we can bypass the manager here, we are updating the current user if they are logged in, should not require any security.
                 await _appUserRepo.UpdateAsync(appUser);
                 response.AddAuthMetric("Update user");
-
                 
                 signIn.Dispose();
                 UserLoginSuccess.Inc();
@@ -228,12 +247,15 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
                 response.User = appUser;
 
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthSuccess, appUser, inviteId:loginRequest.InviteId, redirectUri: response.RedirectPage);
+
                 return InvokeResult<UserLoginResponse>.Create(response);
             }
 
             if (signInResult.IsLockedOut)
             {
                 await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed - Locked Out", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PaswwordAuthFailed, appUser, errors: "User is locked out.");
 
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AccessTokenGrantAsync", UserAdminErrorCodes.AuthUserLockedOut.Message, new KeyValuePair<string, string>("email", loginRequest.UserName));
                 signIn.Dispose();
@@ -248,6 +270,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             signIn.Dispose();
             UserLoginSuccess.Inc();
 
+            await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PaswwordAuthFailed, appUser, errors: "Likely invalid credentials.");
 
             return InvokeResult<UserLoginResponse>.FromErrors(UserAdminErrorCodes.AuthInvalidCredentials.ToErrorMessage());
         }

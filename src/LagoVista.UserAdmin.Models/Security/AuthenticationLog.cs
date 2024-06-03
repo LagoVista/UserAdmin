@@ -39,7 +39,8 @@ namespace LagoVista.UserAdmin.Models.Security
         OAuthCreateOrg,
         OAuthAppendUserLogin,
         OAuthRemoveUserLogin,
-        OAuthFinalizeLogin,
+        OAuthFinalizinLogin,
+        OAuthFinalizedLogin,
         OAuthLogin,
         OAuthAccessDefined,
         OAuthFault,
@@ -105,7 +106,8 @@ namespace LagoVista.UserAdmin.Models.Security
 
         AddSubscription,
         RemoveSubscription,
-        RemoveAllSubscriptionsForOrg,
+        RemovingAllSubscriptionsForOrg,
+        RemovedAllSubscriptionsForOrg,
 
         SendingEmailConfirm,
         SendEmailConfirmSuccess,
@@ -121,7 +123,7 @@ namespace LagoVista.UserAdmin.Models.Security
         SMSConfirmSuccess,
         SMSConfirmFailed,
 
-        SendOrgInvitation,
+        SendingOrgInvitation,
         SendOrgInvitationSuccess,
         SendOrgInvitationFailed,
 

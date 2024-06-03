@@ -14,6 +14,7 @@ using System.Linq;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Models.Auth;
+using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -29,13 +30,14 @@ namespace LagoVista.AspNetCore.Identity.Managers
         private readonly IOrganizationManager _orgManager;
         private readonly ISingleUseTokenManager _singleUseTokenManager;
         private readonly IAuthenticationLogManager _authLogMgr;
+        private readonly IOrganizationRepo _orgRepo;
 
         public const string GRANT_TYPE_PASSWORD = "password";
         public const string GRANT_TYPE_REFRESHTOKEN = "refreshtoken";
         public const string GRANT_TYPE_SINGLEUSETOKEN = "single-use-token";
 
         public AuthTokenManager(IAppInstanceRepo appInstanceRepo, IAuthenticationLogManager authLogMgr, ISingleUseTokenManager singleUseTokenManager, IOrganizationManager orgManager,
-                                IRefreshTokenManager refreshTokenManager, IAuthRequestValidators authRequestValidators,
+                                IRefreshTokenManager refreshTokenManager, IAuthRequestValidators authRequestValidators, IOrganizationRepo organizationRepo,
                                 ITokenHelper tokenHelper, IAppInstanceManager appInstanceManager,
                                 IAdminLogger adminLogger, ISignInManager signInManager, IUserManager userManager)
         {
@@ -45,6 +47,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             _signInManager = signInManager;
             _userManager = userManager;
             _orgManager = orgManager;
+            _orgRepo = organizationRepo;
             _authRequestValidators = authRequestValidators;
             _appInstanceManager = appInstanceManager;
             _singleUseTokenManager = singleUseTokenManager;
@@ -87,13 +90,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 UserName = userName,
                 Password = password,
                 RememberMe = true,
-                LockoutOnFailure = false
+                LockoutOnFailure = false,
+                InviteId = authRequest.InviteId
             };
 
             var signInResponse = await _signInManager.PasswordSignInAsync(signInRequest);
             if (!signInResponse.Successful)
             {
-                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AccessTokenGrantFailure, userName: userName);
                 await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AccessTokenGrantFailure, userName: userName, errors: signInResponse.ErrorMessage);
 
                 return InvokeResult<AuthResponse>.FromInvokeResult(signInResponse.ToInvokeResult());
@@ -104,10 +107,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var appUser = await _userManager.FindByNameAsync(userName);
             if (appUser == null)
             {
-                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AccessTokenGrantFailure, userName: userName);
-                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AccessTokenGrantFailure, userName: userName, errors:" Could not find user");
-
                 /* Should really never, ever happen, but well...let's track it */
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AccessTokenGrantFailure, userName: userName, errors:" Could not find user");                
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "pAuthTokenManager_AccessTokenGrantAsync[", UserAdminErrorCodes.AuthCouldNotFindUserAccount.Message, new KeyValuePair<string, string>("email", userName));
                 return InvokeResult<AuthResponse>.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
@@ -163,7 +164,10 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var authResponse = await _tokenHelper.GenerateAuthResponseAsync(appUser, authRequest, refreshTokenResponse);
 
             if(authResponse.Successful)
-                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AccessTokenGrant, appUser);
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AccessTokenGrantSuccess, appUser, redirectUri: authResponse.RedirectURL);
+
+            }                
             else
                 await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AccessTokenGrantFailure, appUser, authResponse.ErrorMessage);
 

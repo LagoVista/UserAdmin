@@ -48,6 +48,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<bool> IsUserAppBuildernAsync(string orgId, string userId);
 
         Task<InvokeResult<AppUser>> ChangeOrgsAsync(string newOrgId, EntityHeader org, EntityHeader user);
+        Task<InvokeResult<AppUser>> ChangeOrgsAsync(string newOrgId, EntityHeader org, AppUser user);
 
         Task DeclineInvitationAsync(String inviteId);
         Task<IEnumerable<LocationUserRole>> GetRolesForUserInLocationAsync(string locationId, string userId, EntityHeader org, EntityHeader user);

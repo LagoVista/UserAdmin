@@ -58,6 +58,11 @@ namespace LagoVista.UserAdmin.Managers
         {
             var appUser = await _appUserRepo.FindByNameAsync(userName);
             
+            if(appUser == null)
+            {
+                return null;
+            }
+
             // we use this for integration tests in the dev environment, shouldn't be a security hole.
             if(_appConfig.Environment == Environments.Production ||
                 _appConfig.Environment == Environments.Staging)

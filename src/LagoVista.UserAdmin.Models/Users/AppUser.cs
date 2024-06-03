@@ -73,6 +73,8 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public string Key { get; set; }
 
+        public bool HasGeneratedPassword { get; set; }
+
         public Dictionary<string, string> Preferences { get; set; } = new Dictionary<string, string>();
 
         public List<EntityHeader<string>> Notes { get; set; } = new List<EntityHeader<string>>();

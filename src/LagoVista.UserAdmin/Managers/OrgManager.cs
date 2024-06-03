@@ -196,6 +196,13 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
+        /// <summary>
+        /// Loads a user changes and will save a new version of the user.
+        /// </summary>
+        /// <param name="newOrgId"></param>
+        /// <param name="org"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public async Task<InvokeResult<AppUser>> ChangeOrgsAsync(string newOrgId, EntityHeader org, EntityHeader user)
         {
             if (newOrgId == org.Id)
@@ -221,6 +228,39 @@ namespace LagoVista.UserAdmin.Managers
 
             return InvokeResult<AppUser>.Create(appUser);
         }
+
+        /// <summary>
+        /// Changes the organization of a user that is already loaded from the database.
+        /// </summary>
+        /// <param name="newOrgId"></param>
+        /// <param name="org"></param>
+        /// <param name="appUser"></param>
+        /// <returns></returns>
+        public async Task<InvokeResult<AppUser>> ChangeOrgsAsync(string newOrgId, EntityHeader org, AppUser appUser)
+        {
+            if (newOrgId == org.Id)
+            {
+                return InvokeResult<AppUser>.FromErrors(UserAdminErrorCodes.AuthAlreadyInOrg.ToErrorMessage());
+            }
+
+            var hasAccess = await _orgUserRepo.QueryOrgHasUserAsync(newOrgId, appUser.Id);
+            if (!hasAccess)
+            {
+                return InvokeResult<AppUser>.FromErrors(UserAdminErrorCodes.AuthOrgNotAuthorized.ToErrorMessage());
+            }
+
+            var newOrg = await _organizationRepo.GetOrganizationAsync(newOrgId);
+            appUser.CurrentOrganization = newOrg.CreateSummary();
+            appUser.IsOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(newOrgId, appUser.Id);
+            appUser.IsAppBuilder = await _orgUserRepo.IsAppBuilderAsync(newOrgId, appUser.Id);
+
+            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, appUser.ToEntityHeader(), org, "switchOrgs");
+            await _appUserRepo.UpdateAsync(appUser);
+            await _authLogMgr.AddAsync(AuthLogTypes.ChangeOrg, appUser.Id, appUser.Name, newOrg.Id, newOrg.Name, extras: $"old orgid: {org.Id}, new orgid: {org.Text}");
+
+            return InvokeResult<AppUser>.Create(appUser);
+        }
+
 
         public Task<bool> IsUserOrgAdminAsync(string orgId, string userId)
         {
@@ -322,7 +362,7 @@ namespace LagoVista.UserAdmin.Managers
 
             return InvokeResult<AcceptInviteResponse>.Create(new AcceptInviteResponse()
             {
-                RedirectPage = CommonLinks.InviteAccepted,
+                RedirectPage = $"{CommonLinks.InviteAccepted}?inviteid={inviteId}&emailconfirmed={acceptedUser.EmailConfirmed.ToString().ToLower()}",
                 ResponseMessage = msg
             }); 
         }
@@ -447,7 +487,7 @@ namespace LagoVista.UserAdmin.Managers
 
         private async Task<InvokeResult> SendInvitationAsync(Invitation inviteModel, string orgName, EntityHeader user)
         {
-            await _authLogMgr.AddAsync(AuthLogTypes.SendOrgInvitationSuccess, userId: user.Id, userName: user.Text, extras: $"Send invite to org {orgName} to {inviteModel.Email} by {user.Text}");
+            await _authLogMgr.AddAsync(AuthLogTypes.SendingOrgInvitation, userId: user.Id, userName: user.Text, orgId: inviteModel.OrganizationId, orgName: orgName, extras: $"Sending invite to org {orgName} to {inviteModel.Email} by {user.Text}");
 
             var subject = UserAdminResources.Invite_Greeting_Subject.Replace(Tokens.APP_NAME, AppConfig.AppName).Replace(Tokens.ORG_NAME, orgName);
             var message = UserAdminResources.InviteUser_Greeting_Message.Replace(Tokens.USERS_FULL_NAME, user.Text).Replace(Tokens.ORG_NAME, orgName).Replace(Tokens.APP_NAME, AppConfig.AppName);
@@ -459,9 +499,9 @@ namespace LagoVista.UserAdmin.Managers
 
             var result = await _emailSender.SendAsync(inviteModel.Email, subject, message);
             if (result.Successful)
-                await _authLogMgr.AddAsync(AuthLogTypes.SendOrgInvitationSuccess, userId: user.Id, userName: user.Text, extras: $"Send invite to org {orgName} to {inviteModel.Email} by {user.Text}");
+                await _authLogMgr.AddAsync(AuthLogTypes.SendOrgInvitationSuccess, userId: user.Id, userName: user.Text, orgId: inviteModel.OrganizationId, orgName: orgName, extras: $"Sent invite to org {orgName} to {inviteModel.Email} by {user.Text}");
             else
-                await _authLogMgr.AddAsync(AuthLogTypes.SendEmailConfirmFailed, userId: user.Id, userName: user.Text, errors: result.ErrorMessage, extras: $"Send invite to org {orgName} to {inviteModel.Email} by {user.Text}");
+                await _authLogMgr.AddAsync(AuthLogTypes.SendEmailConfirmFailed, userId: user.Id, userName: user.Text, orgId: inviteModel.OrganizationId, orgName: orgName, errors: result.ErrorMessage, extras: $"Sent invite to org {orgName} to {inviteModel.Email} by {user.Text}");
 
             return result;
         }

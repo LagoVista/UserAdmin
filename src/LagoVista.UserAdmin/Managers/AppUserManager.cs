@@ -21,6 +21,8 @@ using System.Linq;
 using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.Core.Models.ML;
 using System.Diagnostics;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -95,58 +97,68 @@ namespace LagoVista.UserAdmin.Managers
             if (id != deletedByUser.Id)
             {
                 var deletedUser = await _appUserRepo.FindByIdAsync(deletedByUser.Id);
-                if (!deletedUser.IsOrgAdmin)
+                if (!deletedUser.IsOrgAdmin && !deletedUser.IsSystemAdmin)
                 {
-                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeleteUserFailed,deletedByUser, org,  extras: $"User deleting user must be the same user being deleted, or deleting user must be an org admin, userid: {id}.");
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletingUser, deletedByUser, org, extras: $"User Id: {id}");
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeleteUserFailed, deletedByUser, org,  extras: $"User deleting user must be the same user being deleted, or deleting user must be an org admin, userid: {id}.");
                     return InvokeResult.FromError($"Can not delete user, user deleting user must be the same user being deleted, or deleting user must be an org admin.");
                 }
             }
 
             var appUser = await _appUserRepo.FindByIdAsync(id);
-            if (appUser == null) throw new RecordNotFoundException(nameof(AppUser), id);
-
-            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletingUser, appUser);
-
-            // If the user new registered an organization we still want to delete them, they just didn't make it
-            // very far in the process.
-            if (appUser.CurrentOrganization != null)
+            if (appUser == null)
             {
-                org = appUser.CurrentOrganization.ToEntityHeader();
-                await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Delete, deletedByUser, org);
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletingUser, deletedByUser, org, extras: $"User Id: {id}");
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeleteUserFailed, deletedByUser, org, errors:"User Not FOund", extras: $"Could not find User Id: {appUser.Id}");
 
-                var users = await _orgUserRepo.GetUsersForOrgAsync(org.Id);
+                throw new RecordNotFoundException(nameof(AppUser), id);
+            }
+
+            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletingUser, deletedByUser, org, extras:$"Deleting user: {appUser.Name}, User Id: {appUser.Id}");
+
+            var cantDeleteReason = new StringBuilder();
+
+            var billingContactOrgs = await _orgRepo.GetBillingContactOrgsForUserAsync(id);
+            var orgsToDelete = new List<EntityHeader>();
+            foreach (var userOrg in appUser.Organizations)
+            {
+                var users = await _orgUserRepo.GetUsersForOrgAsync(userOrg.Id);
                 if (users.Count() == 1 && users.First().UserId == id)
                 {
-                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletingOrg, appUser, extras: $"Org: {appUser.CurrentOrganization.Text}");
-                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.RemoveAllSubscriptionsForOrg, appUser, extras: $"Org: {appUser.CurrentOrganization.Text}");
-                    await _subscriptionManager.DeleteSubscriptionsForOrgAsync(org.Id, org, deletedByUser);
-                    await _orgRepo.DeleteOrgAsync(org.Id);
-                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletedOrg, appUser, extras: $"Org: {appUser.CurrentOrganization.Text}");
+                    if (await _orgRepo.HasBillingRecords(userOrg.Id))
+                        cantDeleteReason.AppendLine($"Can not delete user, user is only contact for the organization {userOrg.Text} and can't remove the oranization.");
+                    else
+                        orgsToDelete.Add(userOrg);
                 }
                 else
                 {
-                    var orgs = await _orgRepo.GetBillingContactOrgsForUserAsync(id);
-                    if (orgs.Any())
-                    {
-                        var orgList = String.Join(",", orgs);
-                        await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeleteUserFailed, appUser, extras: $"Org: {appUser.CurrentOrganization.Text} user is billing contact for the following org[s] {orgList}\"");
-                        return InvokeResult.FromError($"Can not delete user, user is billing contact for the following org[s] {orgList}");
-                    }
+                    if(billingContactOrgs.Any(org => org.Id == userOrg.Id))
+                        cantDeleteReason.AppendLine($"Can not delete user, user is billing contact for the organization [{userOrg.Text}].");
                 }
+            }
 
-                var userOrgs = await _orgUserRepo.GetOrgsForUserAsync(id);
-                foreach (var userOrg in userOrgs)
-                {
-                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.RemoveUserFromOrg, appUser, extras: $"Org: {appUser.CurrentOrganization.Text}");
-                    await _orgUserRepo.RemoveUserFromOrgAsync(userOrg.OrgId, id, deletedByUser);
-                }
+            if(cantDeleteReason.Length > 0)
+            {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletedUser, deletedByUser, org, errors:cantDeleteReason.ToString(), extras: $"Coudl not delete user: {appUser.Name}, User Id: {appUser.Id}");
+                return InvokeResult.FromError(cantDeleteReason.ToString());
+            }
+
+            foreach(var orgToDelete in orgsToDelete)
+            {                
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.RemovingAllSubscriptionsForOrg, appUser.ToEntityHeader(), orgToDelete);
+                await _subscriptionManager.DeleteSubscriptionsForOrgAsync(orgToDelete.Id, org, deletedByUser);
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.RemovedAllSubscriptionsForOrg, appUser.ToEntityHeader(), orgToDelete);
+
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletingOrg, appUser, extras: $"Org: {orgToDelete.Text}");
+                await _orgRepo.DeleteOrgAsync(orgToDelete.Id);
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletedOrg, appUser, extras: $"Org: {orgToDelete.Text}");
             }
 
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserManager__DeleteUserAsync]", $"\"[AppUserManager__DeleteUserAsync] - [{deletedByUser.Text}] deleted the user [{appUser.Name}]");
 
             await _appUserRepo.DeleteAsync(appUser);
 
-            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletedUser, appUser);
+            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletedUser, deletedByUser, org, extras: $"Deleted user: {appUser.Name}, User Id: {appUser.Id}");
 
             return InvokeResult.Success;
         }
@@ -563,7 +575,6 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegMissingLastName.ToErrorMessage());
             }
 
-
             if (String.IsNullOrEmpty(newUser.Password))
             {
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing password");
@@ -589,6 +600,7 @@ namespace LagoVista.UserAdmin.Managers
             {
                 appUser.ExternalLogins.Add(externalLogin);
                 appUser.PhoneNumberConfirmedForBilling = false;
+                appUser.HasGeneratedPassword = true;
 
                 if (!String.IsNullOrEmpty(externalLogin.OAuthToken))
                 {
@@ -604,6 +616,8 @@ namespace LagoVista.UserAdmin.Managers
                     externalLogin.OAuthTokenVerifier = String.Empty;
                 }
             }
+            else
+                appUser.HasGeneratedPassword = false;
          
             var identityResult = await _userManager.CreateAsync(appUser, newUser.Password);
             if (!identityResult.Successful)
@@ -623,7 +637,7 @@ namespace LagoVista.UserAdmin.Managers
                 AppUser = appUser,
                 User = appUser.ToEntityHeader(),
                 Roles = new List<EntityHeader>(),
-                RedirectPage = $"{CommonLinks.ConfirmEmail}?{appUser.Email}"
+                RedirectPage = $"{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}"
             };
 
             if (!String.IsNullOrEmpty(newUser.InviteId))
@@ -641,15 +655,18 @@ namespace LagoVista.UserAdmin.Managers
                 await _signInManager.SignInAsync(appUser);
             }
 
+            // this is if we create a user by registering them, they will not get an invite but they should be added to the org.
             if (!String.IsNullOrEmpty(newUser.OrgId))
             {
                 var org = await _orgRepo.GetOrganizationAsync(newUser.OrgId);
                 var orgEH = new EntityHeader() { Id = newUser.OrgId, Text = newUser.FirstName + " " + newUser.LastName };
                 await _orgManager.AddUserToOrgAsync(newUser.OrgId, appUser.Id, org.ToEntityHeader(), orgEH);
-                appUser.CurrentOrganization = org.CreateSummary();
-                await _userManager.UpdateAsync(appUser);
+                appUser.CurrentOrganization = org.CreateSummary();                
             }
 
+            await _appUserRepo.UpdateAsync(appUser);
+
+            // In all cases when a user gets setup we need them to validate the email, even if it is manually setup.
             var sendEmailResult = await _userVerificationmanager.SendConfirmationEmailAsync(appUser.ToEntityHeader());
             if(!sendEmailResult.Successful)
             {
@@ -680,13 +697,13 @@ namespace LagoVista.UserAdmin.Managers
                     return failedValidationResult;
                 }
            
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserSuccess, appUser, extras: $"Submitted by client: {newUser.ClientType}.");
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserSuccess, appUser, redirectUri:createUserResponse.RedirectPage, extras: $"Submitted by client: {newUser.ClientType}.");
                 
                 return InvokeResult<CreateUserResponse>.Create(CreateUserResponse.FromAuthResponse(tokenResponse.Result), createUserResponse.RedirectPage);
             }
             else
             {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserSuccess, appUser, extras: $"Submitted by client: {newUser.ClientType}.");
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserSuccess, appUser, redirectUri: createUserResponse.RedirectPage, extras: $"Submitted by client: {newUser.ClientType}.");
 
                 /* If we are logging in as web app, none of this applies */
                 return InvokeResult<CreateUserResponse>.Create(createUserResponse, createUserResponse.RedirectPage);
