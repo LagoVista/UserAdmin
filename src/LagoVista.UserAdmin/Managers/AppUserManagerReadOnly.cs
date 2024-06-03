@@ -58,14 +58,15 @@ namespace LagoVista.UserAdmin.Managers
         {
             var appUser = await _appUserRepo.FindByNameAsync(userName);
             
-            if(_appConfig.Environment == Environments.Production)
+            // we use this for integration tests in the dev environment, shouldn't be a security hole.
+            if(_appConfig.Environment == Environments.Production ||
+                _appConfig.Environment == Environments.Staging)
                 await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Read, requestedByUser, org);
 
             appUser.PasswordHash = null;
             return appUser;
         }
         public Task<IEnumerable<EntityHeader>> SearchUsers(string firstName, string lastName, EntityHeader searchedBy)
-
         {
             throw new NotImplementedException();
         }
