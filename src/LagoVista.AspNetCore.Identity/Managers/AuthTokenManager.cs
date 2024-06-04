@@ -176,7 +176,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public async Task<InvokeResult<AuthResponse>> SingleUseTokenGrantAsync(AuthRequest authRequest)
         {
-            _adminLogger.Trace($"[AuthTOkenManager__SingleUseTokenGrantAsync] App Instance {authRequest.AppInstanceId}");
+            _adminLogger.Trace($"[AuthTokenManager__SingleUseTokenGrantAsync] App Instance {authRequest.AppInstanceId}");
 
             await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.SingleUseTokenGrant, userName: authRequest.UserName, userId: authRequest.UserId);
 

@@ -118,6 +118,7 @@ namespace LagoVista.UserAdmin.Managers
                 var result = await _emailSender.SendAsync(appUser.Email, subject, body);
 
                 _adminLogger.LogInvokeResult("[UserVerficationManager_SendConfirmationEmailAsync]", result,
+                    new KeyValuePair<string, string>("callbackLink", callbackUrl),
                     new KeyValuePair<string, string>("token", token),
                     new KeyValuePair<string, string>("toUserId", appUser.Id),
                     new KeyValuePair<string, string>("toEmail", appUser.Email));

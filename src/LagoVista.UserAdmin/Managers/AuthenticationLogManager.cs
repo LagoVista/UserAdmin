@@ -35,6 +35,9 @@ namespace LagoVista.UserAdmin.Managers
         {
             String ip = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
 
+            if (userName == null)
+                userName = "?";
+
             var auth = new AuthenticationLog(type)
             {
                 UserId = userId,

@@ -124,7 +124,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             }
             catch(Exception ex)
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "[RefreshTokenManager_RenewRefreshTokenAsync]", "RefrehTokenRenewed",
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "[RefreshTokenManager_RenewRefreshTokenAsync]", "RefrehTokenRenewed Failed",
                       new KeyValuePair<string, string>("authAppId", oldRefreshToken.AppId),
                       new KeyValuePair<string, string>("authAppInstanceId", oldRefreshToken.AppInstanceId),
                       new KeyValuePair<string, string>("authUserId", oldRefreshToken.PartitionKey));
