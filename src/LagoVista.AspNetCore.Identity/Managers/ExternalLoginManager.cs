@@ -147,7 +147,7 @@ namespace LagoVista.UserAdmin.Managers
                     }
 
                     var ipAddr = cookies.ContainsKey("expo_dev_ip_addr") ? cookies["expo_dev_ip_addr"].Replace("-", ".") : String.Empty;
-                    var rootScheme = String.IsNullOrEmpty(ipAddr) ? $"{scheme}://" : $"exp://{ipAddr}:19000/--/";
+                    var rootScheme = String.IsNullOrEmpty(ipAddr) ? $"{scheme}://" : $"exp+device-mgr://{ipAddr}:8081/--/";
 
                     var singleUseToken = await _authTokenManager.GenerateOneTimeUseTokenAsync(appUser.Id);
                     if (singleUseToken.Successful)
