@@ -74,7 +74,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             }
         }
 
-        public async Task<ListResponse<ModuleSummary>> GetAllModulesAsync(string orgId, ListRequest listRequest)
+        public async Task<ListResponse<ModuleSummary>> GetAllModulesForOrgAsync(string orgId, ListRequest listRequest)
         {
             var all = await GetAll();
             return ListResponse<ModuleSummary>.Create(listRequest, 
@@ -124,6 +124,11 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             await _cacheProvider.RemoveAsync(ALL_MODULES_CACHE_KEY);
             await _cacheProvider.RemoveAsync($"{MODULE_CACHE_KEY}_{module.Key}");
             await this.UpsertDocumentAsync(module);
+        }
+
+        public async Task<ListResponse<ModuleSummary>> GetAllModulesAsync(ListRequest listRequest)
+        {
+            return ListResponse<ModuleSummary>.Create((await GetAll()).OrderBy(mod=>mod.Name));
         }
     }
 }

@@ -144,7 +144,12 @@ namespace LagoVista.UserAdmin.Tests
                 throw new NotImplementedException();
             }
 
-            public Task<ListResponse<ModuleSummary>> GetAllModulesAsync(string orgId, ListRequest listRequest)
+            public Task<ListResponse<ModuleSummary>> GetAllModulesAsync(ListRequest listRequest)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<ListResponse<ModuleSummary>> GetAllModulesForOrgAsync(string orgId, ListRequest listRequest)
             {
                 return Task.FromResult(ListResponse<ModuleSummary>.Create( _modules.Select(mod => mod.CreateSummary()).OrderBy(mod => mod.SortOrder).ToList()));
             }

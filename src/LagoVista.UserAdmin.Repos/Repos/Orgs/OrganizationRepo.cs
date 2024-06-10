@@ -111,5 +111,10 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             await UpsertDocumentAsync(org);
             await _cacheProvider.RemoveAsync(GetCacheKey(org.Id));
         }
+
+        public Task<ListResponse<OrganizationSummary>> GetAllOrgsAsync(string orgSearch, ListRequest listRequest)
+        {
+            return QuerySummaryAsync<OrganizationSummary, Organization>(org=>org.Name.ToLower().Contains(orgSearch.ToLower()), org => org.Name, listRequest);
+        }
     }
 }

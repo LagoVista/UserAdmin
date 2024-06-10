@@ -130,6 +130,12 @@ namespace LagoVista.UserAdmin.Models.Security
         ResendOrgInvitation,
         ResendOrgInvitationSuccess,
         ResendOrgInvitationFailed,
+
+        SysAdminGetAllOrgs,
+        SysAdminSearchAllOrgs,
+        SysAdminGetOwnedObjects,
+        SysAdminGetOrg,
+        SysAdminUpdateOrg,
     }
 
     [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.AuthenticationLogs_Title, LoggingResources.Names.LogRecord_Description,

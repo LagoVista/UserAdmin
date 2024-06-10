@@ -62,7 +62,8 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<bool> GetIsInvigationActiveAsync(string inviteId);
 
         Task<ListResponse<OrganizationSummary>> GetAllOrgsAsync(EntityHeader org, EntityHeader user, ListRequest listRequest);
-       
+        Task<ListResponse<OrganizationSummary>> SearchAllOrgsAsync(string searchOrgName, EntityHeader user, ListRequest listRequest);
+
         Task<Invitation> GetInvitationAsync(string inviteId);
        
         Task<InvokeResult> ResendInvitationAsync(string inviteId, EntityHeader org, EntityHeader user);
@@ -87,5 +88,8 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> RevokeInvitationAsync(string inviteId, EntityHeader org, EntityHeader user);
 
         Task<InvokeResult<string>> GetLandingPageForOrgAsync(string orgid);
+
+        Task<InvokeResult<Organization>> SysAdminGetOrgAsync(string orgId, EntityHeader user);
+        Task<InvokeResult> SysAdminUpdateOrgAsync(Organization org, EntityHeader user);
     }
 }

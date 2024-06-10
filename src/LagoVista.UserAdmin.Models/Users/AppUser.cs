@@ -287,6 +287,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 State = State,
                 PostalCode = PostalCode,
                 Country = Country,
+                LastLogin = LastLogin,
                 Roles = CurrentOrganizationRoles,
                 MediaResources = MediaResources
             };

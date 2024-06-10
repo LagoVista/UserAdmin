@@ -18,10 +18,12 @@ namespace LagoVista.UserAdmin.Managers
     public class ModuleManager : ManagerBase, IModuleManager
     {
         private IModuleRepo _moduleRepo;
+        private IUserManager _userManager;
 
-        public ModuleManager(IModuleRepo moduleRepo, ILogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security) : base(logger, appConfig, dependencyManager, security)
+        public ModuleManager(IModuleRepo moduleRepo, IUserManager userManager, ILogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security) : base(logger, appConfig, dependencyManager, security)
         {
             _moduleRepo = moduleRepo ?? throw new ArgumentNullException(nameof(moduleRepo));
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
         public async Task<InvokeResult> AddModuleAsync(Module module, EntityHeader org, EntityHeader user)
@@ -45,7 +47,7 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<ListResponse<ModuleSummary>> GetAllModulesAsync(ListRequest listRequest, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(Module));
-            return await _moduleRepo.GetAllModulesAsync(org.Id, listRequest);            
+            return await _moduleRepo.GetAllModulesForOrgAsync(org.Id, listRequest);            
         }
 
         public async Task<Module> GetModuleAsync(string id, EntityHeader org, EntityHeader user)
@@ -82,6 +84,17 @@ namespace LagoVista.UserAdmin.Managers
             await _moduleRepo.UpdateModuleAsync(module);
 
             return InvokeResult.Success;
+        }
+
+        public async Task<ListResponse<ModuleSummary>> GetAllModulesAsync(EntityHeader user, ListRequest listRequest)
+        {
+            var editingUser = await _userManager.FindByIdAsync(user.Id);
+            if (!editingUser.IsSystemAdmin)
+            {
+                return ListResponse<ModuleSummary>.FromErrors(new ErrorMessage() { Message = "Must be a System Admin to load all modules" });
+            }
+
+            return await _moduleRepo.GetAllModulesAsync(listRequest);
         }
     }
 }

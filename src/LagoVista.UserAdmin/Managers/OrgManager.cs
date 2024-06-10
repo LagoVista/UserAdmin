@@ -1105,6 +1105,19 @@ namespace LagoVista.UserAdmin.Managers
             return await _organizationRepo.GetAllOrgsAsync(listRequest);
         }
 
+        public async Task<ListResponse<OrganizationSummary>> SearchAllOrgsAsync(string searchOrgName, EntityHeader user, ListRequest listRequest)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+
+            if (!appUser.IsSystemAdmin) // Eventually if we need to delete all the data && ((org.Id != orgId) || (org.Id == orgId && !appUser.IsOrgAdmin)))
+            {
+                //throw new NotAuthorizedException("Must be system admin or belong to the org and be an org admin for the org that is to be deleted, neither of these are the case.");
+                throw new NotAuthorizedException("Must be a system admin to get all organizations.");
+            }
+
+            return await _organizationRepo.GetAllOrgsAsync(searchOrgName, listRequest);
+        }
+
         public async Task<ListResponse<OwnedObject>> GetOwnedObjectsForOrgAsync(string orgId, ListRequest request, EntityHeader org, EntityHeader user)
         {
             var appUser = await _appUserRepo.FindByIdAsync(user.Id);
@@ -1115,7 +1128,39 @@ namespace LagoVista.UserAdmin.Managers
                 throw new NotAuthorizedException("Must be a system admin to query owned objects for org.");
             }
 
+            var orgValue = await _organizationRepo.GetOrganizationAsync(orgId);
+            await _authLogMgr.AddAsync(AuthLogTypes.SysAdminGetOwnedObjects, user, extras: $"Update Org: ${orgValue.Name} - ${orgValue.Id}");
             return await _ownedObjectRepo.GetOwnedObjectsForOrgAsync(orgId, request);
+        }
+
+        public async Task<InvokeResult<Organization>> SysAdminGetOrgAsync(string orgId, EntityHeader user)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+
+            if (!appUser.IsSystemAdmin) // Eventually if we need to delete all the data && ((org.Id != orgId) || (org.Id == orgId && !appUser.IsOrgAdmin)))
+            {
+                //throw new NotAuthorizedException("Must be system admin or belong to the org and be an org admin for the org that is to be deleted, neither of these are the case.");
+                throw new NotAuthorizedException("Must be a system admin get other org.");
+            }
+
+            var org = await _organizationRepo.GetOrganizationAsync(orgId);
+            await _authLogMgr.AddAsync(AuthLogTypes.SysAdminUpdateOrg, user, extras: $"Update Org: ${org.Name} - ${org.Id}");
+            return InvokeResult<Organization>.Create(org);
+        }
+
+        public async Task<InvokeResult> SysAdminUpdateOrgAsync(Organization org, EntityHeader user)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+
+            if (!appUser.IsSystemAdmin) // Eventually if we need to delete all the data && ((org.Id != orgId) || (org.Id == orgId && !appUser.IsOrgAdmin)))
+            {
+                //throw new NotAuthorizedException("Must be system admin or belong to the org and be an org admin for the org that is to be deleted, neither of these are the case.");
+                throw new NotAuthorizedException("Must be a system admin to update org.");
+            }
+
+            await _authLogMgr.AddAsync(AuthLogTypes.SysAdminUpdateOrg, user, extras: $"Update Org: ${org.Name} - ${org.Id}");
+            await _organizationRepo.UpdateOrganizationAsync(org);
+            return InvokeResult.Success;
         }
 
         public async Task<InvokeResult> ClearOrgUserCache(EntityHeader org, EntityHeader user)
