@@ -4,8 +4,10 @@ using LagoVista.IoT;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Logging.Utils;
 using LagoVista.UserAdmin.Interfaces;
+using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Managers;
+using LagoVista.UserAdmin.Repos.Orgs;
 using LagoVista.UserAdmin.Repos.Repos.Security;
 using LagoVista.UserAdmin.Repos.Security;
 using Microsoft.AspNetCore.Http;
@@ -26,6 +28,7 @@ namespace LagoVista.UserAdmin.Tests.User
 
         IIUserAccessManager _accessMangager;
         IRoleAccessRepo _roleAccessRepo;
+        IOrganizationRepo _orgRepo;
 
         [TestInitialize]
         public void Init()
@@ -46,12 +49,13 @@ namespace LagoVista.UserAdmin.Tests.User
             
             var adminLogger = new AdminLogger(new ConsoleLogWriter());
             _roleAccessRepo = new RoleAccessRepo(new AdminConnectivitySettings(), adminLogger, cacheProvider);
+            _orgRepo = new Mock<IOrganizationRepo>().Object;
             // To run this live, you will need to forward reference SecurityUserService nuget in the AppSupport package, the
             // reference for this is in the test .csproj file but you will likely need to adjust the nuget version.
             //var securityManager = new SecurityUserService(httpContext.Object, new RoleRepo(new AdminConnectivitySettings(), new DefaultRoleList(), adminLogger, cacheProvider), new UserRoleRepo(new AdminConnectivitySettings(), adminLogger), _roleAccessRepo);
             var securityManager = new Mock<IUserSecurityServices>();
 
-            _accessMangager = new UserAccessManager(securityManager.Object, new ModuleRepo(new AdminConnectivitySettings(), adminLogger, cacheProvider), adminLogger);
+            _accessMangager = new UserAccessManager(securityManager.Object, _orgRepo, new ModuleRepo(new AdminConnectivitySettings(), adminLogger, cacheProvider), adminLogger);
         }
 
         [TestMethod]

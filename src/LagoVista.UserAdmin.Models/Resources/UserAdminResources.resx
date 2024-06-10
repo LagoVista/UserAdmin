@@ -1646,4 +1646,7 @@
   <data name="Shape_Locked" xml:space="preserve">
     <value>Locked</value>
   </data>
+  <data name="Organizations_Title" xml:space="preserve">
+    <value>Organizations</value>
+  </data>
 </root>

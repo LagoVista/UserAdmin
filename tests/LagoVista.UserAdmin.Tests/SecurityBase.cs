@@ -2,6 +2,7 @@
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Logging.Utils;
 using LagoVista.UserAdmin.Interfaces;
+using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Security;
@@ -20,6 +21,7 @@ namespace LagoVista.UserAdmin.Tests
     {
         UserAccessManager _accessManager;
         Mock<IRoleRepo> _roleRepo = new Mock<IRoleRepo>();
+        Mock<IOrganizationRepo> _orgRepo = new Mock<IOrganizationRepo>();
         Mock<IUserSecurityServices> _userSecurityService = new Mock<IUserSecurityServices>();
         IModuleRepo _moduleRepo = new InMemoryModuleRepo();
         Mock<IRoleAccessRepo> _roleAccessRepo = new Mock<IRoleAccessRepo>();
@@ -182,7 +184,7 @@ namespace LagoVista.UserAdmin.Tests
         [TestInitialize]
         public void Init()
         {
-            _accessManager = new UserAccessManager(_userSecurityService.Object, _moduleRepo, new AdminLogger(new ConsoleLogWriter()));
+            _accessManager = new UserAccessManager(_userSecurityService.Object, _orgRepo.Object, _moduleRepo,  new AdminLogger(new ConsoleLogWriter()));
 
             _mod1 = AddModule("mod1_restrict", true, 1);
             _mod2 = AddModule("mod2_restrict", true, 2);

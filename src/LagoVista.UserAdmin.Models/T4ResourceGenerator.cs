@@ -1,4 +1,4 @@
-﻿/*5/25/2024 9:01:48 AM*/
+﻿/*6/7/2024 10:44:33 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1196,6 +1196,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:OrganizationNamespace_Help
 
 		public static string OrganizationNamespace_Help { get { return GetResourceString("OrganizationNamespace_Help"); } }
+//Resources:UserAdminResources:Organizations_Title
+
+		public static string Organizations_Title { get { return GetResourceString("Organizations_Title"); } }
 //Resources:UserAdminResources:OrganizationUser_CouldntAdd
 
 		public static string OrganizationUser_CouldntAdd { get { return GetResourceString("OrganizationUser_CouldntAdd"); } }
@@ -1955,6 +1958,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string OrganizationDetailVM_Title = "OrganizationDetailVM_Title";
 			public const string OrganizationLocation_NamespaceInUse = "OrganizationLocation_NamespaceInUse";
 			public const string OrganizationNamespace_Help = "OrganizationNamespace_Help";
+			public const string Organizations_Title = "Organizations_Title";
 			public const string OrganizationUser_CouldntAdd = "OrganizationUser_CouldntAdd";
 			public const string OrganizationUser_UserExists = "OrganizationUser_UserExists";
 			public const string OrganizationUserRole_Description = "OrganizationUserRole_Description";

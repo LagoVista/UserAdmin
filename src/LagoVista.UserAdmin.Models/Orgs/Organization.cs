@@ -4,6 +4,7 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Resources;
+using LagoVista.UserAdmin.Models.Security;
 using System;
 using System.Collections.Generic;
 
@@ -115,6 +116,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public EntityHeader DefaultQAResource { get; set; }
 
+        public List<ModuleSummary> AdditionalModules { get; set; } = new List<ModuleSummary>();
 
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_Locations, IsRequired: true, ResourceType: typeof(UserAdminResources))]
@@ -196,6 +198,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
         }
     }
 
+    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organizations_Title, UserAdminResources.Names.Organization_Help,
+     UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+     EditUIUrl: "/organization/orgaccount", Icon: "icon-ae-building",
+     SaveUrl: "/api/org", GetUrl: "/api/org/{id}")]
     public class OrganizationSummary : SummaryData, IOrganizationSummary 
     {
         public string Text { get; set; }

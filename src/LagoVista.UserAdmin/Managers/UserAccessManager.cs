@@ -3,6 +3,7 @@
 using LagoVista.Core.Models;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces;
+using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Security;
 using System;
@@ -18,19 +19,22 @@ namespace LagoVista.UserAdmin.Managers
 
         private readonly IUserSecurityServices _userSecurityService;
         private readonly IModuleRepo _moduleRepo;
-        private readonly IAdminLogger _adminLogger;
+        private readonly IOrganizationRepo _orgRepo;
 
-        public UserAccessManager(IUserSecurityServices userSecurityService, IModuleRepo moduleRepo, IAdminLogger adminLogger)
+        public UserAccessManager(IUserSecurityServices userSecurityService, IOrganizationRepo orgRepo, IModuleRepo moduleRepo, IAdminLogger adminLogger)
         {
             _userSecurityService = userSecurityService ?? throw new ArgumentNullException(nameof(userSecurityService));
             _moduleRepo = moduleRepo ?? throw new ArgumentNullException(nameof(moduleRepo));
-            _adminLogger = adminLogger ?? throw new ArgumentNullException(nameof(adminLogger));
+            _orgRepo = orgRepo ??  throw new ArgumentException(nameof(orgRepo));
         }
 
         public async Task<List<ModuleSummary>> GetUserModulesAsync(string userId, string orgId)
         {
             var userAccessList = await _userSecurityService.GetRoleAccessForUserAsync(userId, orgId);
             var modules = await _moduleRepo.GetModulesForOrgAndPublicAsyncAsync(orgId);
+            var org = await _orgRepo.GetOrganizationAsync(orgId);
+            modules.AddRange(org.AdditionalModules);
+            modules = modules.OrderBy(mod => mod.SortOrder).ToList();
 
             var userRoles = await _userSecurityService.GetRolesForUserAsync(userId, orgId);
             if (userRoles.Any(rol => rol.Key == DefaultRoleList.OWNER))
