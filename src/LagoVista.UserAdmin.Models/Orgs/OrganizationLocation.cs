@@ -55,6 +55,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public IGeoLocation GeoLocation { get; set; }
 
 
+
         [FormField(LabelResource: UserAdminResources.Names.Location_RoomNumber, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public string RoomNumber { get; set; }
 
@@ -119,6 +120,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
         /// </summary>
         [FormField(LabelResource: UserAdminResources.Names.Common_Description, FieldType:FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public String Description { get; set; }
+
+        public List<OrgLocationDiagramReference> DiagramReferences { get; set; } = new List<OrgLocationDiagramReference>();
        
         public bool IsPublic { get; set; }
         public EntityHeader OwnerOrganization { get; set; }
@@ -241,5 +244,19 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public string RoomNumber { get; set; }
         public string City { get; set; }
         public string StateProvince { get; set; }
+    }
+
+    public class OrgLocationDiagramReference
+    {
+        public OrgLocationDiagramReference()
+        {
+            Id = Guid.NewGuid().ToId();
+        }
+
+        public string Id { get; set; }
+        public EntityHeader LocatioNDiagram { get; set; }
+        public EntityHeader LocationDiagramLayer { get; set; }
+        public EntityHeader LocationDiagramShape { get; set; }
+
     }
 }
