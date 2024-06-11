@@ -189,6 +189,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 TagLine = TagLine,
                 Logo = Logo,
                 DefaultTheme = DefaultTheme,
+                DefaultInstance = DefaultInstance,
+                DefaultDeviceRepository = DefaultDeviceRepository
             };
         }
 
@@ -208,13 +210,14 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public string Namespace { get; set; }
         public string Logo { get; set; }
         public string TagLine { get; set; }
-        public string DefaultTheme { get; set; }
-   
+        public string DefaultTheme { get; set; }   
         public string LandingPage { get; set; }
+        public EntityHeader DefaultDeviceRepository { get; set; }
+        public EntityHeader DefaultInstance { get; set; }
 
         public EntityHeader ToEntityHeader()
         {
-            return EntityHeader.Create(Id, Text);
+            return EntityHeader.Create(Id, Namespace, Text);
         }
     }
 }

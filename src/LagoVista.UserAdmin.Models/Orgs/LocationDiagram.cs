@@ -253,7 +253,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public bool Visible { get; set; } = true;
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.LocationDiagramLayer_Shapes, FieldType: FieldTypes.ChildList, ResourceType: typeof(UserAdminResources))]
-        public List<LocationDiagramShape    > Shapes { get; set; } = new List<LocationDiagramShape>();
+        public List<LocationDiagramShape> Shapes { get; set; } = new List<LocationDiagramShape>();
      
         [FormField(LabelResource: Resources.UserAdminResources.Names.LocationDiagramLayer_Groups, FieldType: FieldTypes.ChildList, ResourceType: typeof(UserAdminResources))]
         public List<LocationDiagramShapeGroup> Groups { get; set; } = new List<LocationDiagramShapeGroup>();

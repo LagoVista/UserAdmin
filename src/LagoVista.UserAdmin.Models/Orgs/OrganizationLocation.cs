@@ -10,6 +10,7 @@ using LagoVista.Core;
 using System.Collections.Generic;
 using System.Threading;
 using System.Text;
+using System.Linq;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
@@ -203,7 +204,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         }
 
 
-        public string ToHTML()
+        public string ToHTML(string site)
         {
             var bldr = new StringBuilder();
 
@@ -231,6 +232,15 @@ namespace LagoVista.UserAdmin.Models.Orgs
             if (!String.IsNullOrEmpty(Notes))
                 bldr.Append($"<div>{Notes}</div>");
 
+            if (DiagramReferences.Any())
+            {
+                bldr.Append($"<h3>Diagrams</h3>");
+                foreach (var diagram in DiagramReferences)
+                {
+                    bldr.Append($"<div><a href='${site}/public/diagram/{diagram.LocationDiagram.Id}/{diagram.LocationDiagramLayer.Id}/{diagram.LocationDiagramShape.Id}'>{diagram.LocationDiagram.Text}/{diagram.LocationDiagramShape.Text}/{diagram.LocationDiagramShape.Text}</a></div>");
+                }
+            }
+
             return bldr.ToString();
         }
     }
@@ -254,7 +264,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         }
 
         public string Id { get; set; }
-        public EntityHeader LocatioNDiagram { get; set; }
+        public EntityHeader LocationDiagram { get; set; }
         public EntityHeader LocationDiagramLayer { get; set; }
         public EntityHeader LocationDiagramShape { get; set; }
 
