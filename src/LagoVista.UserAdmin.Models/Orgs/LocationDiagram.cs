@@ -13,13 +13,13 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Orgs
 {
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.LocationDiagram_Title, UserAdminResources.Names.LocationDiagrams_Description, UserAdminResources.Names.LocationDiagrams_Description,
-        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "icon-fo-gallery-1", GetListUrl: "/api/org/location/diagrams", DeleteUrl: "/api/org/location/diagram/{id}", 
+        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "icon-pz-worldwide-1", GetListUrl: "/api/org/location/diagrams", DeleteUrl: "/api/org/location/diagram/{id}", 
         GetUrl: "/api/org/location/diagram/{id}", SaveUrl: "/api/org/location/diagram", FactoryUrl: "/api/org/location/diagram")]
     public class LocationDiagram : EntityBase, IValidateable, ISummaryFactory, IFormDescriptor
     {
         public LocationDiagram()
         {
-            Icon = "icon-fo-gallery-1";
+            Icon = "icon-pz-worldwide-1";
             Width = 1024;
             Height = 1024;
         }
@@ -323,7 +323,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public double Y { get; set; }
     }
 
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.LocationDiagrams_Title, UserAdminResources.Names.LocationDiagrams_Description, UserAdminResources.Names.LocationDiagrams_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "ico-pz-worldwide-1",
+    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.LocationDiagrams_Title, UserAdminResources.Names.LocationDiagrams_Description, UserAdminResources.Names.LocationDiagrams_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "icon-pz-worldwide-1",
                GetListUrl: "/api/org/location/diagrams", GetUrl: "/api/org/location/diagram/{id}", DeleteUrl: "/api/org/location/diagram/{id}", SaveUrl: "/api/org/location/diagram", FactoryUrl: "/api/org/location/diagram")]
     public class LocationDiagramSummary : SummaryData
     {
