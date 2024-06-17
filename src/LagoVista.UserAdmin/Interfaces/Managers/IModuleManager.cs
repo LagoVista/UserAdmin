@@ -16,6 +16,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> UpdateModuleAsync(Module module, EntityHeader org, EntityHeader user);
         Task<ListResponse<ModuleSummary>> GetAllModulesAsync(ListRequest listRequest, EntityHeader org, EntityHeader user);
         Task<ListResponse<ModuleSummary>> GetAllModulesAsync(EntityHeader user, ListRequest listRequest);
+        Task<ListResponse<ModuleSummary>> SysAdminGetModuleAsync(string orgId, EntityHeader user);
         List<UiCategory> GetTopLevelCategories();
     }
 }

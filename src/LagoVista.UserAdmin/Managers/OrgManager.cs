@@ -1158,6 +1158,9 @@ namespace LagoVista.UserAdmin.Managers
                 throw new NotAuthorizedException("Must be a system admin to update org.");
             }
 
+            if (EntityHeader.IsNullOrEmpty(org.Owner))
+                org.Owner = org.CreatedBy;
+
             await _authLogMgr.AddAsync(AuthLogTypes.SysAdminUpdateOrg, user, extras: $"Update Org: ${org.Name} - ${org.Id}");
             await _organizationRepo.UpdateOrganizationAsync(org);
             return InvokeResult.Success;

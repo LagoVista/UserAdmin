@@ -57,6 +57,16 @@ namespace LagoVista.UserAdmin.Managers
             return module;
         }
 
+        public async Task<ListResponse<ModuleSummary>> SysAdminGetModuleAsync(string orgId, EntityHeader user)
+        {
+            var editingUser = await _userManager.FindByIdAsync(user.Id);
+            if (!editingUser.IsSystemAdmin)
+            {
+                return ListResponse<ModuleSummary>.FromErrors(new ErrorMessage() { Message = "Must be a System Admin to load all module by org" });
+            }
+            return ListResponse<ModuleSummary>.Create( await _moduleRepo.GetModulesForOrgAndPublicAsyncAsync(orgId));
+        }
+
         public async Task<Module> GetModuleByKeyAsync(string key, EntityHeader org, EntityHeader user)
         {
             var module = await _moduleRepo.GetModuleByKeyAsync(key);
