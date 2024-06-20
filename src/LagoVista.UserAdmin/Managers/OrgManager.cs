@@ -325,7 +325,9 @@ namespace LagoVista.UserAdmin.Managers
             {
                 var reason = invite == null ? "Could not load invite" : $"Status: {invite.Status}";
                 await _authLogMgr.AddAsync(AuthLogTypes.AcceptInviteFailed, acceptedUser, inviteId: inviteId, extras: $"Accept not valid to be accepted, Status: {reason}.");
-                return InvokeResult<AcceptInviteResponse>.FromErrors(Resources.UserAdminErrorCodes.AuthInviteNotActive.ToErrorMessage());
+                var acceptResult = InvokeResult<AcceptInviteResponse>.FromErrors(UserAdminErrorCodes.AuthInviteNotActive.ToErrorMessage());
+                acceptResult.RedirectURL = $"{CommonLinks.InviteAcceptedFailed}?err={acceptResult.ErrorMessage}";
+                return acceptResult;
             }
 
             invite.Accepted = true;
@@ -344,7 +346,9 @@ namespace LagoVista.UserAdmin.Managers
             if (!result.Successful)
             {
                 await _authLogMgr.AddAsync(AuthLogTypes.AcceptInviteFailed, acceptedUser, inviteId: inviteId, extras: result.ErrorMessage);
-                return InvokeResult<AcceptInviteResponse>.FromInvokeResult(result);
+                var acceptResult = InvokeResult<AcceptInviteResponse>.FromInvokeResult(result);
+                acceptResult.RedirectURL = $"{CommonLinks.InviteAcceptedFailed}?err={result.ErrorMessage}";
+                return acceptResult;
             }
             
             acceptedUser.CurrentOrganization = (await _organizationRepo.GetOrganizationAsync(invite.OrganizationId)).CreateSummary();

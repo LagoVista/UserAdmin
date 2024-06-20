@@ -26,6 +26,7 @@ namespace LagoVista.UserAdmin
 
         public const string AcceptInviteId = "/auth/invite/accept/{inviteid}";
         public const string InviteAccepted = "/auth/invite/accepted";
+        public const string InviteAcceptedFailed = "/auth/invite/failed";
 
         public const string OAuthFault = "/auth/oauth/fault";
         public const string OAuthAccessDenied = "/auth/oauth/accessdenied";
