@@ -1649,4 +1649,7 @@
   <data name="Organizations_Title" xml:space="preserve">
     <value>Organizations</value>
   </data>
+  <data name="OrgLocation_PhoneNumber" xml:space="preserve">
+    <value>Primary Phone Number</value>
+  </data>
 </root>

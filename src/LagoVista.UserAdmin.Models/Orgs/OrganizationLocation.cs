@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Text;
 using System.Linq;
+using LagoVista.Core.Models.Geo;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
@@ -53,8 +54,12 @@ namespace LagoVista.UserAdmin.Models.Orgs
         /// Latitude and longitude for this location
         /// </summary>
         [FormField(LabelResource: UserAdminResources.Names.Location_GeoLocation, FieldType: FieldTypes.GeoLocation, IsRequired: false, ResourceType: typeof(UserAdminResources))]
-        public IGeoLocation GeoLocation { get; set; }
+        public GeoLocation GeoLocation { get; set; }
 
+
+        [FormField(LabelResource: UserAdminResources.Names.OrgLocation_PhoneNumber, FieldType: FieldTypes.Phone, IsRequired: false, ResourceType: typeof(UserAdminResources))]
+
+        public string PhoneNumber { get; set; }
 
 
         [FormField(LabelResource: UserAdminResources.Names.Location_RoomNumber, IsRequired: false, ResourceType: typeof(UserAdminResources))]
@@ -141,7 +146,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 City = City,
                 StateProvince = StateProvince,
                 RoomNumber = RoomNumber,
-                AdminContact = AdminContact
+                AdminContact = AdminContact,
+                NumberDevices = Devices.Count
             };
         }        
 
@@ -168,6 +174,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
             {
                 nameof(AdminContact),
                 nameof(TechnicalContact),
+                nameof(GeoLocation),
+                nameof(PhoneNumber),
                 nameof(Description),
                 nameof(Notes),
             };
@@ -209,7 +217,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
             var bldr = new StringBuilder();
 
             bldr.Append($"{Name}<br/>");
-            if(!String.IsNullOrEmpty(Addr1))
+
+            if (!String.IsNullOrEmpty(PhoneNumber))
+                bldr.Append($"<a href='tel:{PhoneNumber}'>{PhoneNumber}<br/>");
+
+            if (!String.IsNullOrEmpty(Addr1))
                 bldr.Append($"{Addr1}<br/>");
             if (!String.IsNullOrEmpty(Addr2))
                 bldr.Append($"{Addr2}<br/>");
@@ -225,6 +237,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
             if (!String.IsNullOrEmpty(City) || !String.IsNullOrEmpty(StateProvince))
                 bldr.Append("<br />");
 
+            if (GeoLocation != null && GeoLocation.Latitude.HasValue && GeoLocation.Longitude.HasValue)
+                bldr.Append($"<a href='https://www.google.com/maps/search/?api=1&query={GeoLocation.Latitude},{GeoLocation.Longitude}'>View on Map</a>");
 
             if (!String.IsNullOrEmpty(Description))
                 bldr.Append($"<div>{Description}</div>");
@@ -237,7 +251,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 bldr.Append($"<h3>Diagrams</h3>");
                 foreach (var diagram in DiagramReferences)
                 {
-                    bldr.Append($"<div><a href='${site}/public/diagram/{diagram.LocationDiagram.Id}/{diagram.LocationDiagramLayer.Id}/{diagram.LocationDiagramShape.Id}'>{diagram.LocationDiagram.Text}/{diagram.LocationDiagramShape.Text}/{diagram.LocationDiagramShape.Text}</a></div>");
+                    bldr.Append($"<div><a href='{site}/public/diagram/{diagram.LocationDiagram.Id}/{diagram.LocationDiagramLayer.Id}/{diagram.LocationDiagramShape.Id}'>{diagram.LocationDiagram.Text}/{diagram.LocationDiagramShape.Text}/{diagram.LocationDiagramShape.Text}</a></div>");
                 }
             }
 
@@ -254,6 +268,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public string RoomNumber { get; set; }
         public string City { get; set; }
         public string StateProvince { get; set; }
+
+        public int NumberDevices { get; set; }
     }
 
     public class OrgLocationDiagramReference
