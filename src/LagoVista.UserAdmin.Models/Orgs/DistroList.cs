@@ -2,16 +2,17 @@
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
+using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Models.Resources;
 using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.DistroList_Name, 
+    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.DistroList_Name,
         UserAdminResources.Names.DistroList_Help, UserAdminResources.Names.DistroList_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
         ListUIUrl: "/organization/distrolists", CreateUIUrl: "/organization/distrolist/add", EditUIUrl: "/organization/distrolist/{id}",
-        Icon: "icon-pz-rating-star", GetListUrl: "/api/distros", SaveUrl:"/api/distro", GetUrl:"/api/distro/{id}", FactoryUrl:"/api/distro/factory", DeleteUrl:"/api/distro/{id}")]
-    public class DistroList : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity, IFormDescriptor, IIconEntity, ICategorized
+        Icon: "icon-pz-rating-star", GetListUrl: "/api/distros", SaveUrl: "/api/distro", GetUrl: "/api/distro/{id}", FactoryUrl: "/api/distro/factory", DeleteUrl: "/api/distro/{id}")]
+    public class DistroList : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity, IFormDescriptor, IIconEntity, ICategorized, IFormAdditionalActions
     {
         public DistroList()
         {
@@ -32,19 +33,20 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public string Icon { get; set; }
 
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_Description, IsRequired: false, FieldType:FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public string Description { get; set; }
 
         public bool IsPublic { get; set; }
         public EntityHeader OwnerOrganization { get; set; }
         public EntityHeader OwnerUser { get; set; }
 
-            
-        public List<EntityHeader> AppUsers { get; set; } = new List<EntityHeader>();
 
-        [FormField(LabelResource: UserAdminResources.Names.DistributionList_ExternalContacts, IsRequired: false, ChildListDisplayMember:"firstName", FieldType: FieldTypes.ChildListInline, EntityHeaderPickerUrl: "/api/distro/externalcontact/factory", ResourceType: typeof(UserAdminResources))]
+        public List<AppUserContact> AppUsers { get; set; } = new List<AppUserContact>();
+
+
+
+        [FormField(LabelResource: UserAdminResources.Names.DistributionList_ExternalContacts, IsRequired: false, ChildListDisplayMember: "firstName", FieldType: FieldTypes.ChildListInline, EntityHeaderPickerUrl: "/api/distro/externalcontact/factory", ResourceType: typeof(UserAdminResources))]
         public List<ExternalContact> ExternalContacts { get; set; } = new List<ExternalContact>();
-
 
 
         [CustomValidator]
@@ -82,6 +84,22 @@ namespace LagoVista.UserAdmin.Models.Orgs
                nameof(ExternalContacts),
             };
         }
+
+        public List<FormAdditionalAction> GetAdditionalActions()
+        {
+            return new List<FormAdditionalAction>()
+            {
+                new FormAdditionalAction()
+                {
+                     ForEdit = true,
+                     ForCreate = false,
+                      Key = "confirm",
+                      Title = "Confirm",
+                       Icon = "fa-check"
+
+                }
+            };
+        }
     }
 
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.DistroLists_Name,
@@ -91,4 +109,12 @@ namespace LagoVista.UserAdmin.Models.Orgs
     {
 
     }
+
+    public class AppUserContact : EntityHeader
+    {
+        public string EmailConfirmedTimeStamp { get; set; }
+        public string SmsConfirmedTimeStamp { get; set; }
+    }
 }
+
+

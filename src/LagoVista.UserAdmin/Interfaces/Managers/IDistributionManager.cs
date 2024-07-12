@@ -17,5 +17,8 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<DependentObjectCheckResult> CheckInUse(string id, EntityHeader org, EntityHeader user);
         Task SendEmailNotification(string subject, string message, string distroListId, EntityHeader org, EntityHeader user);
         Task SendSmsNotification(string message, string distroListId, EntityHeader org, EntityHeader user);
+        Task<InvokeResult<string>> ConfirmAppUserAsync(string distroListId, string appUserId, string contactMethod);
+        Task<InvokeResult<string>> ConfirmExternalContact(string distroListId, string externalContactId, string contactMethod);
+        Task<InvokeResult> SendTestAsync(string id, EntityHeader org, EntityHeader user);
     }
 }

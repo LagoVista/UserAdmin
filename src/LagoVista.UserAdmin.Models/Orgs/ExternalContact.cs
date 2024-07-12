@@ -4,6 +4,7 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Resources;
+using LagoVista.UserAdmin.Models.Users;
 using System;
 using System.Collections.Generic;
 
@@ -44,6 +45,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Common_Notes, FieldType:FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public string Notes { get; set; }
 
+        public string EmailConfirmedTimeStamp { get; set; }
+
+        public string SmsConfirmedTimeStamp { get; set; }
+
         public FormConditionals GetConditionalFields()
         {
             return new FormConditionals()
@@ -69,6 +74,22 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 }
             };
         }
+
+        [CustomValidator]
+        public void Validate(ValidationResult result, Actions action)
+        {
+            if (SendEmail && String.IsNullOrEmpty(Email))
+            {
+                result.AddUserError("To send an email to this contact you must provide their email address.");
+            }
+
+            if(SendSMS && String.IsNullOrEmpty(Phone))
+            {
+                result.AddUserError("To send an SMS message to this contact you must provide their phone number.");
+            }            
+        }
+
+
 
         public List<string> GetFormFields()
         {
