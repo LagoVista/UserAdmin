@@ -2,6 +2,8 @@
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Orgs;
+using LagoVista.UserAdmin.Models.Users;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Interfaces.Managers
@@ -20,5 +22,8 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult<string>> ConfirmAppUserAsync(string distroListId, string appUserId, string contactMethod);
         Task<InvokeResult<string>> ConfirmExternalContact(string distroListId, string externalContactId, string contactMethod);
         Task<InvokeResult> SendTestAsync(string id, EntityHeader org, EntityHeader user);
+        Task<List<NotificationContact>> GetAllContactsAsync(EntityHeader distributionList, List<NotificationContact> contacts = null);
+        Task<List<NotificationContact>> GetAllContactsAsync(string distributionListId, List<NotificationContact> contacts = null);
+        Task<List<NotificationContact>> AddContactAsync(EntityHeader user, List<NotificationContact> contacts = null);
     }
 }

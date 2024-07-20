@@ -23,6 +23,7 @@ using LagoVista.Core.Models.ML;
 using System.Diagnostics;
 using System.Text;
 using System.Security.Cryptography;
+using RingCentral;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -842,6 +843,35 @@ namespace LagoVista.UserAdmin.Managers
             var appUser = await _userManager.FindByIdAsync(user.Id);
             appUser.ViewedSystemNotificationIndex = idx;
             await _userManager.UpdateAsync(appUser);
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> AddPushNotificationChannel(string userId, PushNotificationChannel channel, EntityHeader org, EntityHeader user)
+        {
+            var appUser = await _userManager.FindByIdAsync(userId);
+            await AuthorizeAsync(user, org, "Add Push Notification Channel", userId);
+
+            if (!appUser.PushNotificationChannels.Any(pn => pn.Token == channel.Token))
+            {
+                appUser.PushNotificationChannels.Add(channel);
+                await _userManager.UpdateAsync(appUser);
+            }
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> RemovePushNotificationChannel(string userId, PushNotificationChannel channel, EntityHeader org, EntityHeader user)
+        {
+            var appUser = await _userManager.FindByIdAsync(userId);
+            await AuthorizeAsync(user, org, "Remvoe Push Notification Channel", userId);
+
+            var existingChannel = appUser.PushNotificationChannels.FirstOrDefault(pn => pn.Token == channel.Token);
+            if(existingChannel != null)
+            {
+                appUser.PushNotificationChannels.Remove(existingChannel);
+                await _userManager.UpdateAsync(appUser);
+            }
+
             return InvokeResult.Success;
         }
     }

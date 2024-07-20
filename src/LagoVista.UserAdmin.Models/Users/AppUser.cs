@@ -320,5 +320,7 @@ namespace LagoVista.UserAdmin.Models.Users
         {
             return CreateSummary();
         }
+
+        public List<PushNotificationChannel> PushNotificationChannels { get; set; } = new List<PushNotificationChannel>();
     }
 }

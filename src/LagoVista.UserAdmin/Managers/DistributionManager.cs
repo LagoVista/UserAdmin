@@ -13,6 +13,7 @@ using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Users;
 using RingCentral;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static LagoVista.Core.Models.AuthorizeResult;
@@ -30,7 +31,7 @@ namespace LagoVista.UserAdmin.Managers
         private readonly ILogger _logger;
 
         public DistributionManager(IEmailSender emailSender, ISmsSender smsSender, IDistributionListRepo distroListRepo, ILinkShortener linkShortner,
-            IAppUserRepo appUserRepo,  ILogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security) :
+            IAppUserRepo appUserRepo, ILogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security) :
             base(logger, appConfig, dependencyManager, security)
         {
             _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
@@ -89,7 +90,7 @@ namespace LagoVista.UserAdmin.Managers
 
             var smsMessage = $"Please confirm your phone number as part of the {distroList.Name} distribution list. {confirmLink}";
 
-            foreach(var usr in distroList.AppUsers)
+            foreach (var usr in distroList.AppUsers)
             {
                 _logger.Trace($"[DistributionManager__SendTestAsync] - Send App User Notification {usr.Text}");
 
@@ -106,10 +107,10 @@ namespace LagoVista.UserAdmin.Managers
                 }
             }
 
-            foreach(var contact in distroList.ExternalContacts)
+            foreach (var contact in distroList.ExternalContacts)
             {
                 _logger.Trace($"[DistributionManager__SendTestAsync] - Send External Contact Notification {contact.FirstName} {contact.LastName}");
-                
+
                 if (contact.SendEmail)
                 {
                     var emailLink = await _linkShortner.ShortenLinkAsync($"{_appConfig.WebAddress}/api/distro/{id}/confirm/external/{contact.Id}/email");
@@ -117,11 +118,11 @@ namespace LagoVista.UserAdmin.Managers
                     _logger.Trace($"[DistributionManager__SendTestAsync] - Send External Contact Email {contact.Email}");
                 }
 
-                if(contact.SendSMS)
-                { 
-                    var smsLink = await _linkShortner.ShortenLinkAsync( $"{_appConfig.WebAddress}/api/distro/{id}/confirm/external/{contact.Id}/sms");
+                if (contact.SendSMS)
+                {
+                    var smsLink = await _linkShortner.ShortenLinkAsync($"{_appConfig.WebAddress}/api/distro/{id}/confirm/external/{contact.Id}/sms");
                     await _smsSender.SendAsync(contact.Phone, smsMessage.Replace(confirmLink, smsLink.Result));
-                    _logger.Trace($"[DistributionManager__SendTestAsync] - Send External Contact Text {contact.Phone}"); 
+                    _logger.Trace($"[DistributionManager__SendTestAsync] - Send External Contact Text {contact.Phone}");
                 }
             }
 
@@ -148,9 +149,9 @@ namespace LagoVista.UserAdmin.Managers
 
             return InvokeResult<string>.Create("Sorry could not find a user with those id.");
 
-           }
+        }
 
-            public async Task<InvokeResult<string>> ConfirmAppUserAsync(string distroListId, string appUserId, string contactMethod)
+        public async Task<InvokeResult<string>> ConfirmAppUserAsync(string distroListId, string appUserId, string contactMethod)
         {
             var distroList = await _distroListRepo.GetDistroListAsync(distroListId);
 
@@ -158,7 +159,8 @@ namespace LagoVista.UserAdmin.Managers
             if (users != null)
             {
                 var contactDescription = "?";
-                if (contactMethod == "email") {
+                if (contactMethod == "email")
+                {
                     users.EmailConfirmedTimeStamp = DateTime.UtcNow.ToJSONString();
                     contactDescription = "email address";
                 }
@@ -167,7 +169,7 @@ namespace LagoVista.UserAdmin.Managers
                     users.SmsConfirmedTimeStamp = DateTime.UtcNow.ToJSONString();
                     contactDescription = "phone number";
                 }
-               
+
                 await _distroListRepo.UpdateDistroListAsync(distroList);
 
                 return InvokeResult<string>.Create($"<div><h4>Thank you {users.Text} for confirming your {contactDescription} address in the {distroList.Name} distribution group.</div>");
@@ -179,7 +181,7 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<ListResponse<DistroListSummary>> GetListsForOrgAsync(EntityHeader org, EntityHeader user, ListRequest listRequest)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(DistroList), Actions.Read);
-            return await  _distroListRepo.GetDistroListsForOrgAsync(org.Id, listRequest);
+            return await _distroListRepo.GetDistroListsForOrgAsync(org.Id, listRequest);
         }
 
         public Task<bool> QueryKeyInUseAsync(string key, string orgId)
@@ -218,5 +220,96 @@ namespace LagoVista.UserAdmin.Managers
             await _distroListRepo.UpdateDistroListAsync(list);
             return InvokeResult.Success;
         }
+
+        public async Task<List<NotificationContact>> GetAllContactsAsync(EntityHeader distributionList, List<NotificationContact> contacts = null)
+        {
+            if (contacts == null)
+                contacts = new List<NotificationContact>();
+
+            if (!EntityHeader.IsNullOrEmpty(distributionList))
+            {
+                var distroList = await _distroListRepo.GetDistroListAsync(distributionList.Id);
+                contacts.AddRange(distroList.AppUsers.Select(ap => new NotificationContact { Name = ap.Text, AppUserId = ap.Id }));
+                contacts.AddRange(distroList.ExternalContacts.Select(ap => new NotificationContact 
+                { Name = $"{ap.FirstName} {ap.LastName}", Email = ap.SendEmail ? ap.Email.ToLower() : null, Phone = ap.SendSMS ? ap.Phone : null,}));
+            }
+
+            var uniqueAppUsers = contacts.Where(p => !String.IsNullOrEmpty(p.AppUserId)).GroupBy(p => p.AppUserId).Select(p => p.First()).ToList();
+            foreach (var usr in uniqueAppUsers)
+            {
+                var appUser = await _appuserRepo.FindByIdAsync(usr.AppUserId);
+                if (appUser != null)
+                {
+                    foreach (var cnt in contacts)
+                    {
+                        if (usr.AppUserId == cnt.AppUserId)
+                        {
+                            cnt.Email = appUser.Email.ToLower();
+                            cnt.Phone = appUser.PhoneNumber;
+                            cnt.PushNotificationChannels = appUser.PushNotificationChannels;
+                        }
+                    }
+                }
+            }
+
+            return contacts
+                .GroupBy(p => new { p.Email, p.Phone })
+                .Select(g => g.First()).ToList();
+        }
+
+        public async Task<List<NotificationContact>> GetAllContactsAsync(string distributionListId, List<NotificationContact> contacts = null)
+        {
+            if (contacts == null)
+                contacts = new List<NotificationContact>();
+
+            if (!String.IsNullOrEmpty(distributionListId))
+            {
+                var distroList = await _distroListRepo.GetDistroListAsync(distributionListId);
+                contacts.AddRange(distroList.AppUsers.Select(ap => new NotificationContact { Name = ap.Text, AppUserId = ap.Id }));
+                contacts.AddRange(distroList.ExternalContacts.Select(ap => new NotificationContact
+                { Name = $"{ap.FirstName} {ap.LastName}", Email = ap.SendEmail ? ap.Email.ToLower() : null, Phone = ap.SendSMS ? ap.Phone : null, }));
+            }
+
+            var uniqueAppUsers = contacts.Where(p => !String.IsNullOrEmpty(p.AppUserId)).GroupBy(p => p.AppUserId).Select(p => p.First()).ToList();
+            foreach (var usr in uniqueAppUsers)
+            {
+                var appUser = await _appuserRepo.FindByIdAsync(usr.AppUserId);
+                if (appUser != null)
+                {
+                    foreach (var cnt in contacts)
+                    {
+                        if (usr.AppUserId == cnt.AppUserId)
+                        {
+                            cnt.Email = appUser.Email.ToLower();
+                            cnt.Phone = appUser.PhoneNumber;
+                            cnt.PushNotificationChannels = appUser.PushNotificationChannels;
+                        }
+                    }
+                }
+            }
+
+            return contacts
+                .GroupBy(p => new { p.Email, p.Phone })
+                .Select(g => g.First()).ToList();
+        }
+
+        public async Task<List<NotificationContact>> AddContactAsync(EntityHeader user, List<NotificationContact> contacts = null)
+        {
+            if (contacts == null)
+                contacts = new List<NotificationContact>();
+
+            var appUser = await _appuserRepo.FindByIdAsync(user.Id);
+            if (appUser != null)
+            {
+                var contact = new NotificationContact { Name = appUser.Name, Email = appUser.Email, Phone = appUser.PhoneNumber, AppUserId = appUser.Id, PushNotificationChannels = appUser.PushNotificationChannels };
+                contacts.Add(contact);
+            }
+
+            return contacts
+                .GroupBy(p => new { p.Email, p.Phone })
+                .Select(g => g.First()).ToList();
+        }
+
+
     }
 }
