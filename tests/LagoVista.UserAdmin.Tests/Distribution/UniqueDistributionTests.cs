@@ -126,7 +126,40 @@ namespace LagoVista.UserAdmin.Tests.Distribution
 
             var allContacts = await _distorMgr.GetAllContactsAsync("dist1");
             Assert.AreEqual(9, allContacts.Count);
-           foreach(var contact in allContacts)
+            foreach(var contact in allContacts)
+            {
+                Console.WriteLine($"{contact.Name}, {contact.Email}, {contact.Phone}");
+            }
+        }
+
+        [TestMethod]
+        public async Task Should_Ignore_Dup_Emails_Across_Lists()
+        {
+            var au1 = GenerateAppuser();
+            var au2 = GenerateAppuser();
+            var au3 = GenerateAppuser();
+            var au4 = GenerateAppuser();
+            var au5 = GenerateAppuser();
+            var au6 = GenerateAppuser();
+
+            var userListOne = new System.Collections.Generic.List<AppUserContact>() { au1, au2, au3, au4 };
+            var userListTwo = new System.Collections.Generic.List<AppUserContact>() { au3, au4, au5, au6 };
+
+            var ec1 = GenerateExternalContact();
+            var ec2 = GenerateExternalContact();
+            var ec3 = GenerateExternalContact();
+            var ec4 = GenerateExternalContact();
+            var ec5 = GenerateExternalContact();
+
+            var contacts = new System.Collections.Generic.List<ExternalContact>() { ec1, ec2, ec3, ec4, ec5 };
+
+            AddDistributionList("dist1", "Distro List 1", userListOne, contacts);
+            AddDistributionList("dist2", "Distro List 1", userListTwo, new System.Collections.Generic.List<ExternalContact>());
+
+            var allContacts = await _distorMgr.GetAllContactsAsync("dist1");
+            allContacts = await _distorMgr.GetAllContactsAsync("dist2", allContacts);
+            Assert.AreEqual(11, allContacts.Count);
+            foreach (var contact in allContacts)
             {
                 Console.WriteLine($"{contact.Name}, {contact.Email}, {contact.Phone}");
             }
