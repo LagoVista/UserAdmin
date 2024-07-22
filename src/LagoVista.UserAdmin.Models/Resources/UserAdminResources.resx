@@ -1652,4 +1652,7 @@
   <data name="OrgLocation_PhoneNumber" xml:space="preserve">
     <value>Primary Phone Number</value>
   </data>
+  <data name="Organization_IsForProductLine" xml:space="preserve">
+    <value>Is for Product Line</value>
+  </data>
 </root>

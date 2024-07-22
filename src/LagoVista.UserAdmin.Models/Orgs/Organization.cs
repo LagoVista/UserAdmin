@@ -116,6 +116,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public EntityHeader DefaultQAResource { get; set; }
 
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_IsForProductLine, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool IsForProductLine { get; set; }
+
         public List<ModuleSummary> AdditionalModules { get; set; } = new List<ModuleSummary>();
 
 

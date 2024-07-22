@@ -126,6 +126,7 @@ namespace LagoVista.UserAdmin.Managers
             organization.DefaultContributor = user;
             organization.DefaultQAResource = user;
             organization.Owner = user;
+            organization.IsForProductLine = false;
 
             /* Create the Organization in Storage */
             await _organizationRepo.AddOrganizationAsync(organization);
@@ -185,6 +186,8 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             ValidationCheck(newOrg, Core.Validation.Actions.Create);
+
+            newOrg.IsForProductLine = false;
 
             await _authLogMgr.AddAsync(AuthLogTypes.ManualOrgCreate, user.Id, user.Text, newOrg.Id, newOrg.Name, newOrg.Namespace);
 
@@ -276,6 +279,11 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<InvokeResult> UpdateOrganizationAsync(Organization org, EntityHeader userOrg, EntityHeader user)
         {
             ValidationCheck(org, Core.Validation.Actions.Update);
+
+            var existingOrg = await _organizationRepo.GetOrganizationAsync(org.Id);
+            if (existingOrg.IsForProductLine != org.IsForProductLine)
+                throw new UnauthorizedAccessException("Attempt to set IsForProductLine in update method, should do in SetIsForProductLine method.");
+
 
             await AuthorizeAsync(org, AuthorizeResult.AuthorizeActions.Update, user, userOrg);
             await _organizationRepo.UpdateOrganizationAsync(org);
@@ -677,7 +685,7 @@ namespace LagoVista.UserAdmin.Managers
             };
 
             user.CreatedBy = addedBy.Text;
-            user.CreatedById = addedBy.Text;
+            user.CreatedById = addedBy.Id;
             user.CreationDate = DateTime.UtcNow.ToJSONString();
             user.LastUpdatedBy = addedBy.Text;
             user.LastUpdatedById = addedBy.Id;
@@ -1177,7 +1185,20 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
+        public async Task<InvokeResult> SetIsProductLineOrgAsync(bool isProductLineOrg, EntityHeader updatedByOrg, EntityHeader user)
+        {
+            var updateByUser = await _appUserRepo.FindByIdAsync(user.Id);
+            if (!updateByUser.IsSystemAdmin)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.SetSystemAdminNotAuthorized, user, extras: $"Attempt to set product line org by non sys-admin user id: {user.Id} {user.Text}");
+                return InvokeResult.FromErrors(UserAdminErrorCodes.AuthNotSysAdmin.ToErrorMessage());
+            }
 
+            var org = await _organizationRepo.GetOrganizationAsync(updatedByOrg.Id);
+            org.IsForProductLine = true;
+            await _organizationRepo.UpdateOrganizationAsync(org);
+            return InvokeResult.Success;
+        }
         #endregion
     }
 

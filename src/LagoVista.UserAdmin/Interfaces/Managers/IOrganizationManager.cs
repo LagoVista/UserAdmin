@@ -91,5 +91,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
         Task<InvokeResult<Organization>> SysAdminGetOrgAsync(string orgId, EntityHeader user);
         Task<InvokeResult> SysAdminUpdateOrgAsync(Organization org, EntityHeader user);
+
+        Task<InvokeResult> SetIsProductLineOrgAsync(bool isProductLineOrg, EntityHeader org, EntityHeader user);
     }
 }
