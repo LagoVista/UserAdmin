@@ -1,4 +1,4 @@
-﻿/*7/22/2024 10:34:59 AM*/
+﻿/*7/23/2024 8:25:29 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -168,6 +168,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Area_Help
 
 		public static string Area_Help { get { return GetResourceString("Area_Help"); } }
+//Resources:UserAdminResources:Area_IsForProductLine
+
+		public static string Area_IsForProductLine { get { return GetResourceString("Area_IsForProductLine"); } }
 //Resources:UserAdminResources:Area_PageCategories
 
 		public static string Area_PageCategories { get { return GetResourceString("Area_PageCategories"); } }
@@ -929,6 +932,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Module_IsExternalLink
 
 		public static string Module_IsExternalLink { get { return GetResourceString("Module_IsExternalLink"); } }
+//Resources:UserAdminResources:Module_IsForProductLine
+
+		public static string Module_IsForProductLine { get { return GetResourceString("Module_IsForProductLine"); } }
 //Resources:UserAdminResources:Module_IsLegacyNGX
 
 		public static string Module_IsLegacyNGX { get { return GetResourceString("Module_IsLegacyNGX"); } }
@@ -1238,6 +1244,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Page_Help
 
 		public static string Page_Help { get { return GetResourceString("Page_Help"); } }
+//Resources:UserAdminResources:Page_IsForProductLine
+
+		public static string Page_IsForProductLine { get { return GetResourceString("Page_IsForProductLine"); } }
 //Resources:UserAdminResources:Page_Title
 
 		public static string Page_Title { get { return GetResourceString("Page_Title"); } }
@@ -1624,6 +1633,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AppUser_Title = "AppUser_Title";
 			public const string AppUser_UserTitle = "AppUser_UserTitle";
 			public const string Area_Help = "Area_Help";
+			public const string Area_IsForProductLine = "Area_IsForProductLine";
 			public const string Area_PageCategories = "Area_PageCategories";
 			public const string Area_Title = "Area_Title";
 			public const string AssetSet_Description = "AssetSet_Description";
@@ -1875,6 +1885,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Module_Help = "Module_Help";
 			public const string Module_HelpResources = "Module_HelpResources";
 			public const string Module_IsExternalLink = "Module_IsExternalLink";
+			public const string Module_IsForProductLine = "Module_IsForProductLine";
 			public const string Module_IsLegacyNGX = "Module_IsLegacyNGX";
 			public const string Module_Link = "Module_Link";
 			public const string Module_OpenInNewTab = "Module_OpenInNewTab";
@@ -1978,6 +1989,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string OrgLocation_PhoneNumber = "OrgLocation_PhoneNumber";
 			public const string OrgLocation_TechnicalContact_Select = "OrgLocation_TechnicalContact_Select";
 			public const string Page_Help = "Page_Help";
+			public const string Page_IsForProductLine = "Page_IsForProductLine";
 			public const string Page_Title = "Page_Title";
 			public const string RegErr_ErrorSendingEmail = "RegErr_ErrorSendingEmail";
 			public const string RegErr_ErrorSendingPhoneNumber = "RegErr_ErrorSendingPhoneNumber";

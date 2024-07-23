@@ -85,6 +85,9 @@ namespace LagoVista.UserAdmin.Models.Security
         public string Link { get; set; }
 
 
+        [FormField(LabelResource: UserAdminResources.Names.Area_IsForProductLine, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool IsForProductLine { get; set; }
+
         public List<Page> Pages { get; set; } = new List<Page>();
 
         public List<Feature> Features = new List<Feature>();
@@ -107,6 +110,7 @@ namespace LagoVista.UserAdmin.Models.Security
                 nameof(DesktopSupport),
                 nameof(TabletSupport),
                 nameof(PhoneSupport),
+                nameof(IsForProductLine),
                 nameof(Description)
             };
          }

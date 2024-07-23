@@ -110,6 +110,10 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Module_HelpResources, FieldType: FieldTypes.ChildList, ResourceType: typeof(UserAdminResources))]
         public List<HelpResource> HelplResources { get; set; }
 
+
+        [FormField(LabelResource: UserAdminResources.Names.Module_IsForProductLine, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool IsForProductLine { get; set; }
+
         public EntityHeader OwnerOrganization { get; set; }
 
         public EntityHeader OwnerUser { get; set; }
@@ -183,6 +187,7 @@ namespace LagoVista.UserAdmin.Models.Security
                 nameof(DesktopSupport),
                 nameof(TabletSupport),
                 nameof(PhoneSupport),
+                nameof(IsForProductLine),
                 nameof(Description)
             };
         }

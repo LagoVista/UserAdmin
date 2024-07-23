@@ -79,6 +79,10 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Menu_DoNotDisplay, HelpResource: UserAdminResources.Names.Menu_DoNotDisplay_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool DoNotDisplay { get; set; }
 
+
+        [FormField(LabelResource: UserAdminResources.Names.Page_IsForProductLine, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
+        public bool IsForProductLine { get; set; }
+
         public List<Feature> Features { get; set; } = new List<Feature>();
 
         public UserAccess UserAccess { get; set; }
@@ -108,6 +112,7 @@ namespace LagoVista.UserAdmin.Models.Security
                 nameof(DesktopSupport),
                 nameof(TabletSupport),
                 nameof(PhoneSupport),
+                nameof(IsForProductLine),
                 nameof(Description),
             };
         }

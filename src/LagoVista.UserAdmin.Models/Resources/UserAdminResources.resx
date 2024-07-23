@@ -1655,4 +1655,13 @@
   <data name="Organization_IsForProductLine" xml:space="preserve">
     <value>Is for Product Line</value>
   </data>
+  <data name="Area_IsForProductLine" xml:space="preserve">
+    <value>Is for Product Line</value>
+  </data>
+  <data name="Module_IsForProductLine" xml:space="preserve">
+    <value>Is for Product Line</value>
+  </data>
+  <data name="Page_IsForProductLine" xml:space="preserve">
+    <value>Is for Product Line</value>
+  </data>
 </root>
