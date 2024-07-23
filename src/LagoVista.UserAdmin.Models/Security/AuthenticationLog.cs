@@ -39,7 +39,7 @@ namespace LagoVista.UserAdmin.Models.Security
         OAuthCreateOrg,
         OAuthAppendUserLogin,
         OAuthRemoveUserLogin,
-        OAuthFinalizinLogin,
+        OAuthFinalizingLogin,
         OAuthFinalizedLogin,
         OAuthLogin,
         OAuthAccessDefined,

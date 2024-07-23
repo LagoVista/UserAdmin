@@ -132,7 +132,7 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] User: {appUser.Email}");
-            await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizinLogin, appUser, redirectUri: String.IsNullOrEmpty( returnUrl) ? String.Empty : returnUrl,  oauthProvider: provider);
+            await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizingLogin, appUser, inviteId: inviteId, redirectUri: String.IsNullOrEmpty( returnUrl) ? String.Empty : returnUrl,  oauthProvider: provider);
 
             await _signInManager.SignInAsync(appUser, false);
 
@@ -154,11 +154,18 @@ namespace LagoVista.UserAdmin.Managers
                     {
                         if (!String.IsNullOrEmpty(inviteId))
                         {
-                            await _userVerficationManager.SendConfirmationEmailAsync(appUser.ToEntityHeader());
-
-                            var redirectUrl = $"{rootScheme}acceptinvite?userid={singleUseToken.Result.UserId}&token={singleUseToken.Result.Token}&inviteid={inviteId}&page=acceptinvite";                            
-                            await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, inviteId:inviteId, oauthProvider: provider, extras: $"Mobile - Accept Invite", redirectUri: redirectUrl);
-                            return InvokeResult<string>.Create(redirectUrl);
+                            var response = await _orgManager.AcceptInvitationAsync(inviteId, appUser);
+                            if (response.Successful)
+                            {
+                                var redirectUrl = $"{rootScheme}acceptinvite?userid={singleUseToken.Result.UserId}&token={singleUseToken.Result.Token}&inviteid={inviteId}&page=acceptinvite";
+                                await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, inviteId: inviteId, oauthProvider: provider, extras: $"Mobile - Accept Invite", redirectUri: redirectUrl);
+                                return InvokeResult<string>.Create(redirectUrl);
+                            }
+                            else
+                            {
+                                await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, inviteId: inviteId, oauthProvider: provider, extras: $"Could not accept invitation - {response.ErrorMessage}", redirectUri: response.RedirectURL);
+                                return InvokeResult<string>.Create(response.RedirectURL);
+                            }
                         }
                         else if (!appUser.EmailConfirmed)
                         {
@@ -207,11 +214,20 @@ namespace LagoVista.UserAdmin.Managers
             {
                 var redirectUri = $"{CommonLinks.InviteAccepted}?inviteid={inviteId}&emailconfirmed={appUser.EmailConfirmed.ToString().ToLower()}&email={appUser.Email.ToLower()}";
 
-                _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] - Web - Email was confirmed, has invite");
-                await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, inviteId: inviteId, oauthProvider: provider, extras: appUser.EmailConfirmed ? 
-                    $"Web - Email was confirmed, has invite" : $"Web - Email was not confirmed, has invite"
-                    , redirectUri: redirectUri);
-                return InvokeResult<string>.Create(redirectUri);
+                var response = await _orgManager.AcceptInvitationAsync(inviteId, appUser);
+                if (response.Successful)
+                {
+                    _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] - Web - Email was confirmed, has invite");
+                    await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, inviteId: inviteId, oauthProvider: provider, extras: appUser.EmailConfirmed ?
+                        $"Web - Email was confirmed, has invite" : $"Web - Email was not confirmed, has invite"
+                        , redirectUri: redirectUri);
+                    return InvokeResult<string>.Create(redirectUri);
+                }
+                else
+                {
+                    await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, inviteId: inviteId, oauthProvider: provider, extras: $"Could not accept invitation - {response.ErrorMessage}", redirectUri: response.RedirectURL);
+                    return InvokeResult<string>.Create(response.RedirectURL);
+                }
             }
             else if (!appUser.EmailConfirmed)
             {
@@ -219,7 +235,7 @@ namespace LagoVista.UserAdmin.Managers
                 await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, oauthProvider: provider, extras: $"Web - Email Not Confirmed", redirectUri: $"{CommonLinks.ConfirmEmail}?email={appUser.Email}");
                 return InvokeResult<string>.Create($"{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}");
             }
-            else if(appUser.CurrentOrganization == null)
+            else if (appUser.CurrentOrganization == null)
             {
                 _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] - Web - No Current Organization");
                 await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, oauthProvider: provider, extras: $"Web - No Current Organization", redirectUri: CommonLinks.CreateDefaultOrg);
@@ -228,7 +244,7 @@ namespace LagoVista.UserAdmin.Managers
             else if (appUser.ShowWelcome)
             {
                 _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] - Web - Welcome View");
-                await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser.ToEntityHeader(), appUser.CurrentOrganization.ToEntityHeader(), oauthProvider: provider, extras: $"Web - Welcome View", redirectUri: CommonLinks.HomeWelcome);                
+                await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser.ToEntityHeader(), appUser.CurrentOrganization.ToEntityHeader(), oauthProvider: provider, extras: $"Web - Welcome View", redirectUri: CommonLinks.HomeWelcome);
                 return InvokeResult<string>.Create(CommonLinks.HomeWelcome);
             }
             else
@@ -246,7 +262,7 @@ namespace LagoVista.UserAdmin.Managers
 
             appUser = await _signInManager.UserManager.FindByIdAsync(appUser.Id);
 
-            await _authLogManager.AddAsync(AuthLogTypes.OAuthLogin, appUser.Id, appUser.Name, oauthProvier: externalLoginInfo.Provider.Text, extras: $"user already logged in, associate login if necessary");
+            await _authLogManager.AddAsync(AuthLogTypes.OAuthLogin, appUser.Id, appUser.Name, inviteId: inviteId, oauthProvier: externalLoginInfo.Provider.Text, extras: $"user already logged in, associate login if necessary");
 
             return await FinalizeExternalLogin(appUser, cookies, externalLoginInfo.Provider.Text, inviteId, returnUrl);
         }
@@ -264,7 +280,7 @@ namespace LagoVista.UserAdmin.Managers
 
             _adminLogger.Trace($"[OAUTH_HandleEXternalLogin] - {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value}");
 
-            await _authLogManager.AddAsync(AuthLogTypes.OAuthCallback, oauthProvier: externalLoginInfo.Provider.Text, extras: $"Email: {externalLoginInfo.Email}, First Name: {externalLoginInfo.FirstName}, Last Name: {externalLoginInfo.LastName}");
+            await _authLogManager.AddAsync(AuthLogTypes.OAuthCallback, oauthProvier: externalLoginInfo.Provider.Text, inviteId: inviteId, extras: $"Email: {externalLoginInfo.Email}, First Name: {externalLoginInfo.FirstName}, Last Name: {externalLoginInfo.LastName}");
 
             _adminLogger.Trace($"[OAUTH_HandleExternalLogin] - User not logged in, attempt to find - {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value}");
             var appUser = await _appUserManager.GetUserByExternalLoginAsync(externalLoginInfo.Provider.Value, externalLoginInfo.Id);
@@ -272,7 +288,7 @@ namespace LagoVista.UserAdmin.Managers
             {
                 _adminLogger.Trace($"[OAUTH_HandleExternalLogin] - Found a user by external credentials, finalize login and return - {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value}");
 
-                await _authLogManager.AddAsync(AuthLogTypes.OAuthLogin, appUser.Id, appUser.Name, oauthProvier: externalLoginInfo.Provider.Text, extras: $"found existing user, logging in, primary account name: {appUser.UserName} - found with id: {externalLoginInfo.Id}");
+                await _authLogManager.AddAsync(AuthLogTypes.OAuthLogin, appUser.Id, appUser.Name, inviteId: inviteId, oauthProvier: externalLoginInfo.Provider.Text, extras: $"found existing user, logging in, primary account name: {appUser.UserName} - found with id: {externalLoginInfo.Id}");
 
                 return await FinalizeExternalLogin(appUser, cookies, externalLoginInfo.Provider.Text, inviteId, returnUrl);
             }
@@ -293,7 +309,7 @@ namespace LagoVista.UserAdmin.Managers
                 await _appUserManager.AssociateExternalLoginAsync(appUser.Id, externalLoginInfo, appUser.ToEntityHeader());
                 // reload after associating the third party login.
                 appUser = await _signInManager.UserManager.FindByEmailAsync(externalLoginInfo.Email);
-                await _authLogManager.AddAsync(AuthLogTypes.OAuthAppendUserLogin, appUser.Id, appUser.Name, oauthProvier: externalLoginInfo.Provider.Text, extras: $"found by email, associating oauth account with email {externalLoginInfo.Email} and logging in.");
+                await _authLogManager.AddAsync(AuthLogTypes.OAuthAppendUserLogin, appUser.Id, appUser.Name, inviteId: inviteId, oauthProvier: externalLoginInfo.Provider.Text, extras: $"found by email, associating oauth account with email {externalLoginInfo.Email} and logging in.");
 
                 if (!appUser.EmailConfirmed)
                     returnUrl = $"{CommonLinks.ConfirmEmail}?email={externalLoginInfo.Email.ToLower()}";
@@ -325,7 +341,7 @@ namespace LagoVista.UserAdmin.Managers
                 var result = await _appUserManager.CreateUserAsync(newUser, externalLogin: externalLoginInfo);
                 if (!result.Successful)
                 {
-                    await _authLogManager.AddAsync(AuthLogTypes.CreateUserError, oauthProvier: externalLoginInfo.Provider.Text, extras: $"New User Created: {newUser.FirstName} {newUser.LastName} - {newUser.Email}");
+                    await _authLogManager.AddAsync(AuthLogTypes.CreateUserError, inviteId: inviteId, oauthProvier: externalLoginInfo.Provider.Text, extras: $"New User Created: {newUser.FirstName} {newUser.LastName} - {newUser.Email}");
                     _adminLogger.Trace($"[OAUTH_HandleEXternalLogin] - Could not create new user: {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value} - {externalLoginInfo.Email} - {result.Errors.First().Message}");
                     return InvokeResult<string>.Create($"/auth/error?{result.ErrorMessage}");
                 }
