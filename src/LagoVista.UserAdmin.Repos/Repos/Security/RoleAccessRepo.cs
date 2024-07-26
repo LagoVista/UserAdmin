@@ -16,13 +16,15 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
     public class RoleAccessRepo : TableStorageBase<RoleAccessDTO>, IRoleAccessRepo
     {
         private readonly ICacheProvider _cacheProvider;
+        private readonly IAppConfig _appConfig;
 
 
         public const string IS_PUBLIC = "public_role_access";
 
-        public RoleAccessRepo(IUserAdminSettings settings, IAdminLogger logger, ICacheProvider cacheProvider) :
+        public RoleAccessRepo(IUserAdminSettings settings, IAdminLogger logger, ICacheProvider cacheProvider, IAppConfig appConfig) :
                base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
+            _appConfig = appConfig;
             _cacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
@@ -144,6 +146,29 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             else
             {
                 roleAccess.AddRange(JsonConvert.DeserializeObject<List<RoleAccess>>(json));
+            }
+
+            if(_appConfig.SystemOwnerOrg == null)
+            {
+                throw new ArgumentNullException(nameof(IAppConfig.SystemOwnerOrg));
+            }
+
+            if(organizationId != _appConfig.SystemOwnerOrg.Id)
+            {
+                json = await _cacheProvider.GetAsync(CacheKey(roleId, _appConfig.SystemOwnerOrg.Id));
+                if (String.IsNullOrEmpty(json))
+                {
+                    var results = await this.GetByFilterAsync(FilterOptions.Create(nameof(RoleAccessDTO.RoleId), FilterOptions.Operators.Equals, roleId),
+                                                              FilterOptions.Create(nameof(UserRoleDTO.PartitionKey), FilterOptions.Operators.Equals, _appConfig.SystemOwnerOrg.Id));
+                    var orgRoleAcess = results.Select(usr => usr.ToRoleAccess()).OrderBy(usr => usr.Role.Text).ToList();
+                    json = JsonConvert.SerializeObject(orgRoleAcess);
+                    await _cacheProvider.AddAsync(CacheKey(roleId, _appConfig.SystemOwnerOrg.Id), json);
+                    roleAccess.AddRange(orgRoleAcess);
+                }
+                else
+                {
+                    roleAccess.AddRange(JsonConvert.DeserializeObject<List<RoleAccess>>(json));
+                }
             }
 
             json = await _cacheProvider.GetAsync(CacheKey(roleId, IS_PUBLIC));

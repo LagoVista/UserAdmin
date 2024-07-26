@@ -52,14 +52,7 @@ namespace LagoVista.UserAdmin.Models.Security
             AreaCategories = new List<UiCategory>();
             UiCategory = new EntityHeader() { Id = "48C14BE40FDA4E9587EFA66502F05F82", Key = "other", Text = "Other" }; 
         }
-
-        [FormField(LabelResource: UserAdminResources.Names.Common_Name, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
-        public string Name { get; set; }
-
-        [FormField(LabelResource: UserAdminResources.Names.Common_Key, HelpResource: UserAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key,
-            RegExValidationMessageResource: UserAdminResources.Names.Common_Key_Validation, ResourceType: typeof(UserAdminResources), IsRequired: true)]
-        public string Key { get; set; }
-
+       
         [FormField(LabelResource: UserAdminResources.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public string Description { get; set; }
 
@@ -85,8 +78,6 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Module_AreaCategories, FieldType: FieldTypes.ChildListInline, FactoryUrl: "/api/module/uicategory/factory", ResourceType: typeof(UserAdminResources))]
         public List<UiCategory> AreaCategories { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_IsPublic, IsRequired: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
-        public bool IsPublic { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_DesktopSupport, IsRequired: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool DesktopSupport { get; set; }
@@ -114,10 +105,6 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Module_IsForProductLine, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool IsForProductLine { get; set; }
 
-        public EntityHeader OwnerOrganization { get; set; }
-
-        public EntityHeader OwnerUser { get; set; }
-
         [FormField(LabelResource: UserAdminResources.Names.Module_SortOrder, IsRequired:true, FieldType: FieldTypes.Integer, ResourceType: typeof(UserAdminResources))]
         public int SortOrder { get; set; }
 
@@ -126,16 +113,6 @@ namespace LagoVista.UserAdmin.Models.Security
         public List<Feature> Features { get; set; }
 
         public UserAccess UserAccess { get; set; }
-
-        public EntityHeader ToEntityHeader()
-        {
-            return new EntityHeader()
-            {
-                Id = Id,
-                Key = Key,
-                Text = Name
-            };
-        }
 
 
         public ModuleSummary CreateSummary()

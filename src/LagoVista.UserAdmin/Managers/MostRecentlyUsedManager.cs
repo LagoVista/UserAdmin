@@ -28,6 +28,8 @@ namespace LagoVista.UserAdmin.Managers
             mostRecentlyUsedItem.LastAccessed = DateTime.UtcNow.ToJSONString();
 
             var mru = await GetMostRecentlyUsedAsync(org, user);
+            if (String.IsNullOrEmpty(mru.Key))
+                mru.Key = Guid.NewGuid().ToId().ToLower();
 
             var existing = mru.All.SingleOrDefault(itm => itm.Link == mostRecentlyUsedItem.Link);
             if (existing != null)

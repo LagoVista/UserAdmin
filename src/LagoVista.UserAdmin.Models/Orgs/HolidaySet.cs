@@ -21,12 +21,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
             Icon = "icon-ae-calendar";
         }
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_Name, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
-        public string Name { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_Key, HelpResource: UserAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key,
-            RegExValidationMessageResource: UserAdminResources.Names.Common_Key_Validation, ResourceType: typeof(UserAdminResources), IsRequired: true)]
-        public string Key { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Category, FieldType: FieldTypes.Category, WaterMark: UserAdminResources.Names.Common_Category_Select, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public EntityHeader Category { get; set; }
@@ -43,10 +38,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         [FormField(LabelResource: UserAdminResources.Names.HolidaySet_Holidays, FieldType: FieldTypes.ChildListInline, IsReferenceField:false, FactoryUrl: "/api/scheduleddowntime/factory", ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
         public List<ScheduledDowntime> Holidays { get; set; }
-
-        public bool IsPublic { get; set; }
-        public EntityHeader OwnerOrganization { get; set; }
-        public EntityHeader OwnerUser { get; set; }
 
         public HolidaySetSummary CreateSummary()
         {

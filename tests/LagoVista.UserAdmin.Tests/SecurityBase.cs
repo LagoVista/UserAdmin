@@ -169,7 +169,7 @@ namespace LagoVista.UserAdmin.Tests
                 return Task.FromResult(_modules.SingleOrDefault(mod => mod.Key == key && mod.OwnerOrganization.Id == orgId));
             }
 
-            public Task<List<ModuleSummary>> GetModulesForOrgAndPublicAsyncAsync(string orgId)
+            public Task<List<ModuleSummary>> GetModulesForOrgAndPublicAsync(string orgId)
             {
                 return Task.FromResult(_modules.Select(mod => mod.CreateSummary()).Where(mod=> mod.IsPublic || mod.OwnerOrgId == orgId).OrderBy(mod => mod.SortOrder).ToList());
             }

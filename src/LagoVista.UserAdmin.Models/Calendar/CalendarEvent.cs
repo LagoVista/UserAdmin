@@ -49,12 +49,6 @@ namespace LagoVista.UserAdmin.Models.Calendar
         public bool AllDay { get; set; }
 
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_Name, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
-        public string Name { get; set; }
-
-        public string Key { get; set; }
-
-
         public CalendarEventSummary CreateSummary()
         {
             return new CalendarEventSummary()
@@ -85,10 +79,7 @@ namespace LagoVista.UserAdmin.Models.Calendar
 
         [FormField(LabelResource: UserAdminResources.Names.Calendar_Description, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
         public string Description { get; set; }
-        public bool IsPublic { get; set; }
-        public EntityHeader OwnerOrganization { get; set; }
-        public EntityHeader OwnerUser { get; set; }
-
+        
         [CustomValidator]
         public void Validate(ValidationResult result)
         {

@@ -83,7 +83,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
                 .Skip(listRequest.PageSize * (listRequest.PageIndex - 1)).Take(listRequest.PageSize));
         }
 
-        public async Task<List<ModuleSummary>> GetModulesForOrgAndPublicAsyncAsync(string orgId)
+        public async Task<List<ModuleSummary>> GetModulesForOrgAndPublicAsync(string orgId)
         {
             var modules = await GetAll();
             return modules.Where(mod => mod.IsPublic || mod.OwnerOrgId == orgId).OrderBy(mod=>mod.UiCategory?.Text).ThenBy(mod=>mod.SortOrder).ToList();

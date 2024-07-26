@@ -48,7 +48,7 @@ namespace LagoVista.UserAdmin.Tests.User
             });
             
             var adminLogger = new AdminLogger(new ConsoleLogWriter());
-            _roleAccessRepo = new RoleAccessRepo(new AdminConnectivitySettings(), adminLogger, cacheProvider);
+            _roleAccessRepo = new RoleAccessRepo(new AdminConnectivitySettings(), adminLogger, cacheProvider, new Mock<IAppConfig>().Object);
             _orgRepo = new Mock<IOrganizationRepo>().Object;
             // To run this live, you will need to forward reference SecurityUserService nuget in the AppSupport package, the
             // reference for this is in the test .csproj file but you will likely need to adjust the nuget version.

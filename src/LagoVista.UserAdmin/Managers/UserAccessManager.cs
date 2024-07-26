@@ -31,7 +31,7 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<List<ModuleSummary>> GetUserModulesAsync(string userId, string orgId)
         {
             var userAccessList = await _userSecurityService.GetRoleAccessForUserAsync(userId, orgId);
-            var modules = await _moduleRepo.GetModulesForOrgAndPublicAsyncAsync(orgId);
+            var modules = await _moduleRepo.GetModulesForOrgAndPublicAsync(orgId);
             var org = await _orgRepo.GetOrganizationAsync(orgId);
             modules.AddRange(org.AdditionalModules);
             modules = modules.OrderBy(mod => mod.SortOrder).ToList();
@@ -53,8 +53,9 @@ namespace LagoVista.UserAdmin.Managers
             {
                 if (access.Read != -1 && !userModules.Any(mod => mod.Id == access.Module.Id))
                 {
-                    var module = modules.Single(mod => mod.Id == access.Module.Id);
-                    userModules.Add(module);
+                    var module = modules.FirstOrDefault(mod => mod.Id == access.Module.Id);                    
+                    if(module != null)
+                        userModules.Add(module);
                 }
 
                 if (access.Read == -1)

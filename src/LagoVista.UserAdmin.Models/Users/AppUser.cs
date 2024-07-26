@@ -67,11 +67,22 @@ namespace LagoVista.UserAdmin.Models.Users
             ExternalLogins = new List<ExternalLogin>();
         }
 
+        private string _key = Guid.NewGuid().ToId().ToLower();
+        public override string Key {
+            get
+            {
+                if( _key == null )
+                    _key = Guid.NewGuid().ToId().ToLower();
+
+                return _key;
+
+            }
+            set { _key = value; }
+        }
+
         public string LastLogin { get; set; }
 
         public bool ShowWelcome { get; set; } = true;
-
-        public string Key { get; set; }
 
         public bool HasGeneratedPassword { get; set; }
 
@@ -190,8 +201,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public string PaymentAccount2Secureid { get; set; }
         public string RoutingAccount2SecureId { get; set; }
 
-        [JsonIgnore()]
-        public String Name
+        public override String Name
         {
             get { return $"{FirstName} {LastName}"; }
             set { }
@@ -215,9 +225,9 @@ namespace LagoVista.UserAdmin.Models.Users
             }
         }
 
-        public EntityHeader ToEntityHeader()
+        public new EntityHeader ToEntityHeader()
         {
-            return EntityHeader.Create(Id, $"{FirstName} {LastName}");
+            return EntityHeader.Create(Id, Key=UserName, $"{FirstName} {LastName}");
         }
 
         public int ViewedSystemNotificationIndex { get; set; }
@@ -236,9 +246,6 @@ namespace LagoVista.UserAdmin.Models.Users
         public EntityHeader DeviceConfiguration { get; set; }
 
         public IList<ThirdPartyLoginInfo> Logins { get; set; }
-        public bool IsPublic { get; set; }
-        public EntityHeader OwnerOrganization { get; set; }
-        public EntityHeader OwnerUser { get; set; }
 
         public UserInfo ToUserInfo()
         {

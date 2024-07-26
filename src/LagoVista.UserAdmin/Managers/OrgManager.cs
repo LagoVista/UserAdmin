@@ -841,17 +841,12 @@ namespace LagoVista.UserAdmin.Managers
         {
             var appUser = await _appUserRepo.FindByIdAsync(user.Id);
 
-            if (orgId == org.Id)
+            var orgUsers = await _orgUserRepo.GetUsersForOrgAsync(orgId);
+            if(!orgUsers.Any(usr=>usr.UserId == user.Id))
             {
-                await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Read, new SecurityHelper() { OrgId = orgId });
-            }
-            else if (!appUser.IsSystemAdmin) // Eventually if we need to delete all the data && ((org.Id != orgId) || (org.Id == orgId && !appUser.IsOrgAdmin)))
-            {
-                //throw new NotAuthorizedException("Must be system admin or belong to the org and be an org admin for the org that is to be deleted, neither of these are the case.");
-                throw new NotAuthorizedException("Must be a system admin to check to get users for a different organization.");
+                throw new NotAuthorizedException("You do not have access to this org..");
             }
 
-            var orgUsers = await _orgUserRepo.GetUsersForOrgAsync(orgId);
             if (orgUsers.Any())
             {
                 return await _appUserRepo.GetUserSummaryForListAsync(orgUsers);

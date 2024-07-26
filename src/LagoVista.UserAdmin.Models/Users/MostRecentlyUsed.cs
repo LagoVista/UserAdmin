@@ -12,15 +12,10 @@ namespace LagoVista.UserAdmin.Models.Users
         public MostRecentlyUsed()
         {
             Id = Guid.NewGuid().ToId();
+            Key = Guid.NewGuid().ToId().ToLower();
             All = new List<MostRecentlyUsedItem>();
             Modules = new List<MostRecentlyUsedModule>();
         }
-
-        public string Key { get; set; }
-        public EntityHeader OwnerOrganization { get; set; }
-        public EntityHeader OwnerUser { get; set; }
-        public bool IsPublic { get; set; }
-        public string Name { get; set; }
 
         public List<MostRecentlyUsedItem> All { get; set; }
         public List<MostRecentlyUsedModule> Modules { get; set; }

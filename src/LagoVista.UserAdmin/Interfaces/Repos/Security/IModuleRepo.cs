@@ -14,7 +14,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
         Task DeleteModuleAsync(string id);
         Task UpdateModuleAsync(Module module);
         Task<ListResponse<ModuleSummary>> GetAllModulesForOrgAsync(string orgId, ListRequest listRequest);
-        Task<List<ModuleSummary>> GetModulesForOrgAndPublicAsyncAsync(string orgId);
+        Task<List<ModuleSummary>> GetModulesForOrgAndPublicAsync(string orgId);
         Task<ListResponse<ModuleSummary>> GetAllModulesAsync(ListRequest listRequest);
     }
 }

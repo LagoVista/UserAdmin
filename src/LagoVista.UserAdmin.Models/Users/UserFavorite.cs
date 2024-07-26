@@ -15,12 +15,6 @@ namespace LagoVista.UserAdmin.Models.Users
             Favorites = new List<UserFavorite>();
             Modules = new List<FavoritesByModule>();
         }
-          
-        public string Key { get; set; }
-        public EntityHeader OwnerOrganization { get; set; }
-        public EntityHeader OwnerUser { get; set; }
-        public bool IsPublic { get; set; }
-        public string Name { get; set; }
         public List<UserFavorite> Favorites { get; set; }
         
         public List<FavoritesByModule> Modules { get; set; }

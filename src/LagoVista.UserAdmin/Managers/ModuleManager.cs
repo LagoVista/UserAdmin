@@ -64,7 +64,7 @@ namespace LagoVista.UserAdmin.Managers
             {
                 return ListResponse<ModuleSummary>.FromErrors(new ErrorMessage() { Message = "Must be a System Admin to load all module by org" });
             }
-            return ListResponse<ModuleSummary>.Create( await _moduleRepo.GetModulesForOrgAndPublicAsyncAsync(orgId));
+            return ListResponse<ModuleSummary>.Create( await _moduleRepo.GetModulesForOrgAndPublicAsync(orgId));
         }
 
         public async Task<Module> GetModuleByKeyAsync(string key, EntityHeader org, EntityHeader user)

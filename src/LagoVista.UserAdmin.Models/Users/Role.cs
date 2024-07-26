@@ -11,19 +11,9 @@ namespace LagoVista.UserAdmin.Models.Users
     [EntityDescription(Domains.UserDomain, UserAdminResources.Names.Role_Title, UserAdminResources.Names.Role_Help, UserAdminResources.Names.Role_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
     public class Role : UserAdminModelBase, IKeyedEntity, IOwnedEntity, IValidateable, INamedEntity
     {
-        
-        [FormField(LabelResource: UserAdminResources.Names.Common_Name, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
-        public String Name { get; set; }
-
-        [FormField(LabelResource: UserAdminResources.Names.Common_Key, HelpResource: UserAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key,
-         RegExValidationMessageResource: UserAdminResources.Names.Common_Key_Validation, ResourceType: typeof(UserAdminResources), IsRequired: true)]
-        public String Key { get; set; }
-
         [FormField(LabelResource: UserAdminResources.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public string Description { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_IsPublic, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
-        public bool IsPublic { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Role_IsSystemRole, IsUserEditable:false,  FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool IsSystemRole { get; set; }
@@ -32,8 +22,6 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public List<EntityHeader> InheritedRoles { get; set; } = new List<EntityHeader>(); 
 
-        public EntityHeader OwnerOrganization { get; set; }
-        public EntityHeader OwnerUser { get; set; }
 
         public RoleSummary CreateSummary()
         {
@@ -48,15 +36,7 @@ namespace LagoVista.UserAdmin.Models.Users
             };
         }
 
-        public EntityHeader ToEntityHeader()
-        {
-            return new EntityHeader()
-            {
-                Id = Id,
-                Key = Key,
-                Text = Name
-            };
-        }
+
     }
 
     public class RoleSummary

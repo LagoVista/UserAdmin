@@ -44,12 +44,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Common_Namespace, NamespaceType: NamespaceTypes.Location, NamespaceUniqueMessageResource: UserAdminResources.Names.OrganizationLocation_NamespaceInUse, FieldType: FieldTypes.NameSpace, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public String Namespace { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Location_LocationName, IsRequired: true, ResourceType: typeof(UserAdminResources))]
-        public String Name { get; set; }
-
-        [FormField(LabelResource: UserAdminResources.Names.Common_Key, HelpResource: UserAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key, RegExValidationMessageResource: UserAdminResources.Names.Common_Key_Validation, ResourceType: typeof(UserAdminResources), IsRequired: true)]
-        public string Key { get; set; }
-
         /// <summary>
         /// Latitude and longitude for this location
         /// </summary>
@@ -129,9 +123,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public List<OrgLocationDiagramReference> DiagramReferences { get; set; } = new List<OrgLocationDiagramReference>();
        
-        public bool IsPublic { get; set; }
-        public EntityHeader OwnerOrganization { get; set; }
-        public EntityHeader OwnerUser { get; set; }
 
         public OrgLocationSummary CreateSummary()
         {
@@ -194,13 +185,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(Description),
             };
         }
-
-        public EntityHeader ToEntityHeader()
-        {
-            return EntityHeader.Create(Id, Name);
-         
-        }
-
         public override string ToString()
         {
             return Namespace;

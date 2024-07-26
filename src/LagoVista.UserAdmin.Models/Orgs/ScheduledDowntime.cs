@@ -139,23 +139,12 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public string OriginalId { get; set; }
 
-        public bool IsPublic { get; set; }
-        public EntityHeader OwnerOrganization { get; set; }
-        public EntityHeader OwnerUser { get; set; }
-
         public ScheduledDowntime()
         {
             Periods = new List<ScheduledDowntimePeriod>();
             AllDay = true;
             Icon = "icon-ae-call-time";
         }
-
-        [FormField(LabelResource: UserAdminResources.Names.Common_Name, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
-        public string Name { get; set; }
-
-        [FormField(LabelResource: UserAdminResources.Names.Common_Key, HelpResource: UserAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key,
-            RegExValidationMessageResource: UserAdminResources.Names.Common_Key_Validation, ResourceType: typeof(UserAdminResources), IsRequired: true)]
-        public string Key { get; set; }
 
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]

@@ -40,10 +40,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
             Icon = "icon-ae-building";
         }
 
-        public string Key { get; set; }
-
-        [FormField(LabelResource:UserAdminResources.Names.Organization_Name, FieldType:FieldTypes.Text, IsRequired:true,ResourceType:typeof(UserAdminResources))]
-        public string Name { get; set; }
         [FormField(LabelResource: UserAdminResources.Names.Common_Namespace, NamespaceType: NamespaceTypes.Organization, NamespaceUniqueMessageResource: UserAdminResources.Names.Organization_NamespaceInUse, 
             FieldType:FieldTypes.NameSpace, IsRequired: true, IsUserEditable:false, ResourceType: typeof(UserAdminResources))]
         public string Namespace { get; set; }
@@ -128,10 +124,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_LandingPage, HelpResource:UserAdminResources.Names.Organization_LandingPage_Help, FieldType:FieldTypes.Text, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public string LandingPage { get; set; }
-
-        public bool IsPublic { get; set; }
-        public EntityHeader OwnerOrganization { get; set; }
-        public EntityHeader OwnerUser { get; set; }
         public bool IsArchived { get; set; }
 
         public List<string> GetFormFields()
@@ -163,15 +155,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(DefaultInstance),
                 nameof(Logo),
                 nameof(TagLine),
-            };
-        }
-
-        public EntityHeader ToEntityHeader()
-        {
-            return new EntityHeader()
-            {
-                Id = Id,
-                Text = Name,
             };
         }
 
