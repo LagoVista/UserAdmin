@@ -9,6 +9,7 @@ using LagoVista.UserAdmin.Models.Resources;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace LagoVista.UserAdmin.Models.Users
 {
@@ -18,7 +19,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public AppUser(String email, String createdBy)
         {
             Id = Guid.NewGuid().ToId();
-            Key = Guid.NewGuid().ToId(); 
+            Key = Guid.NewGuid().ToId().ToLower(); 
             Email = email;
             UserName = email;
             CreatedBy = new EntityHeader()
@@ -227,7 +228,7 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public new EntityHeader ToEntityHeader()
         {
-            return EntityHeader.Create(Id, Key=UserName, $"{FirstName} {LastName}");
+            return EntityHeader.Create(Id, UserName, $"{FirstName} {LastName}");
         }
 
         public int ViewedSystemNotificationIndex { get; set; }
