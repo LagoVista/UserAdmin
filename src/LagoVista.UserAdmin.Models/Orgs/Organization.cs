@@ -35,7 +35,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         {
             Locations = new List<EntityHeader>();
             OrgStatus = EntityHeader<OrgStatuses>.Create(OrgStatuses.Active);
-            Key = Guid.NewGuid().ToId();
+            Key = Guid.NewGuid().ToId().ToLower();
             DefaultTheme = "default";
             Icon = "icon-ae-building";
         }

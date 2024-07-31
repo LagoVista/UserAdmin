@@ -75,9 +75,14 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             return landingPage;
         }
 
-        public Task<Organization> GetOrganizationAsync(string id)
+        public async Task<Organization> GetOrganizationAsync(string id)
         {
-            return GetDocumentAsync(id);
+            var org = await GetDocumentAsync(id);
+            if(!String.IsNullOrEmpty(org.Key))
+            {
+                org.Key = org.Key.ToLower();
+            }
+            return org;
         }
 
         public Task<bool> HasBillingRecords(string orgId)

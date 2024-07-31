@@ -14,6 +14,7 @@ namespace LagoVista.UserAdmin.Models.Users
             Id = Guid.NewGuid().ToId();
             Favorites = new List<UserFavorite>();
             Modules = new List<FavoritesByModule>();
+            Key = Id.ToLower();
         }
         public List<UserFavorite> Favorites { get; set; }
         
