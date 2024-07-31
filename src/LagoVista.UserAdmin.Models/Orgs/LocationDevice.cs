@@ -11,7 +11,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader DeviceRepo { get; set; }
 
         [FormField(IsRequired: true)]
-        [FKeyProperty("Device", "Device.Id = {0}")]
+        [FKeyProperty("Device", WhereClause: "Device.Id = {0}")]
         public EntityHeader Device { get; set; }
     }
 }
