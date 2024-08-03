@@ -10,6 +10,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
     {
         Task AddOrganizationAsync(Organization org);
         Task<Organization> GetOrganizationAsync(string orgId);
+        Task<string> GetOrganizationIdForNamespaceAsync(string orgId);
         Task UpdateOrganizationAsync(Organization org);
         Task<bool> QueryOrganizationExistAsync(string orgId);
         Task<bool> QueryNamespaceInUseAsync(string namespaceText);

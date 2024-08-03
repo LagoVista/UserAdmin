@@ -13,6 +13,8 @@ using LagoVista.Core.Models;
 using Microsoft.Azure.Cosmos;
 using LagoVista.CloudStorage;
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Exceptions;
+using ZstdSharp.Unsafe;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
@@ -120,6 +122,29 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         public Task<ListResponse<OrganizationSummary>> GetAllOrgsAsync(string orgSearch, ListRequest listRequest)
         {
             return QuerySummaryAsync<OrganizationSummary, Organization>(org=>org.Name.ToLower().Contains(orgSearch.ToLower()), org => org.Name, listRequest);
+        }
+
+        public async Task<string> GetOrganizationIdForNamespaceAsync(string orgNameSpace)
+        {
+            var cacheKey = $"org_id_for_namespace_{orgNameSpace}";
+
+            var orgId = await _cacheProvider.GetAsync(cacheKey);
+            if(!String.IsNullOrEmpty(orgId))
+            {
+                return orgId;
+            }
+
+            var organization = (await QueryAsync(org => org.Namespace == orgNameSpace)).ToList();
+            if (organization.Any())
+            {
+                orgId = organization.First().Id;
+                await _cacheProvider.AddAsync(cacheKey, orgId);
+                return orgId;
+            }
+            else
+            {
+                throw new RecordNotFoundException("Org Namespace Does Not Exist", orgNameSpace);
+            }
         }
     }
 }

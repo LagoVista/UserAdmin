@@ -25,6 +25,7 @@ using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Models.Auth;
 using RingCentral;
+using System.Security.Cryptography;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -1195,6 +1196,17 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
         #endregion
+
+        public async Task<string> GetOrgNameAsync(string orgId)
+        {
+            var org = await _organizationRepo.GetOrganizationAsync(orgId);
+            return org.Name;
+        }
+
+        public Task<string> GetOrgIdForNameSpaceAsync(string orgNameSpace)
+        {
+            return _organizationRepo.GetOrganizationIdForNamespaceAsync(orgNameSpace);
+        }
     }
 
     public class SecurityHelper
