@@ -87,5 +87,6 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
             Assert.IsTrue(result.Successful);
             Console.WriteLine(result.Result); 
         }
+
     }
 }

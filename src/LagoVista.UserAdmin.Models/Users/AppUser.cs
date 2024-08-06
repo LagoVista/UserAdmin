@@ -81,6 +81,11 @@ namespace LagoVista.UserAdmin.Models.Users
             set { _key = value; }
         }
 
+        public string SendGridSenderId { get; set; }
+        public bool SendGridVerified { get; set; }
+        public string SendGridVerifiedFailedReason { get; set; }
+
+
         public string LastLogin { get; set; }
 
         public bool ShowWelcome { get; set; } = true;
