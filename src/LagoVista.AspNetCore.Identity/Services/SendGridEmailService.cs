@@ -1,10 +1,13 @@
-﻿using LagoVista.Core;
+﻿using LagoVista.AspNetCore.Identity.Models;
+using LagoVista.Core;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Models.Contacts;
 using LagoVista.UserAdmin.Models.Users;
 using Newtonsoft.Json;
 using SendGrid;
@@ -27,6 +30,15 @@ namespace LagoVista.AspNetCore.Identity.Services
         ILagoVistaAspNetCoreIdentityProviderSettings _settings;
         IAppConfig _appConfig;
         IAdminLogger _adminLogger;
+
+        public class SendGridSender
+        {
+            [JsonProperty("id")]
+            public string Id { get; set; }
+
+            [JsonProperty("nickname")]
+            public string Name { get; set; }
+        }        
 
         private class SendGridListResponse
         {
@@ -158,13 +170,42 @@ namespace LagoVista.AspNetCore.Identity.Services
             [JsonProperty("verified")]
             public SendGridSenderVerifiedResponse Verified { get; set; }
         }
-
         public class SendGridImportJobResponseHeader
         {
             [JsonProperty("header")]
             public string Header { get; set; }
             [JsonProperty("value")]
             public string Value { get; set; }
+        }
+
+        public class SendGridGetSegmentListsResponse
+        {
+            [JsonProperty("results")]
+            public List<SendGridGetSegmentsResponse> Results { get; set; }
+        }
+
+        public class SendGridGetSegmentsResponseStatus
+        {
+            [JsonProperty("query_validation")]
+            public string QueryValidation { get; set; }
+            [JsonProperty("error_message")]
+            public string ErrorMessage { get; set; }
+        }
+
+        public class SendGridGetSegmentsResponse
+        {
+            [JsonProperty("id")]
+            public string Id { get; set; }
+            [JsonProperty("name")]
+            public string Name { get; set; }
+            [JsonProperty("contacts_count")]
+            public int ContactCount { get; set; }
+            [JsonProperty("sample_updated_at")]
+            public string SampleUpdated { get; set; }
+            [JsonProperty("next_sample_at")]
+            public string NextSampleUpdated { get; set; }
+            [JsonProperty("status")]
+            public SendGridGetSegmentsResponseStatus Status { get; set; }
         }
 
 
@@ -751,14 +792,14 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
         }
 
-        public async Task<InvokeResult<string>> CreateEmailListAsync(string listName, string customField, string id)
+        public async Task<InvokeResult<string>> CreateEmailListAsync(string listName, string orgId, string customField, string id)
         {
             var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
 
             var segmentRequest = new SendGridSegmentRequest()
             {
                 name = listName,
-                query_dsl = $"SELECT c.contact_id, c.updated_at FROM contact_data as c where c.{customField} = '{id}' "
+                query_dsl = $"SELECT c.contact_id, c.updated_at FROM contact_data as c where c.{customField} = '{id}' and c.organization_id = '{orgId}' "
             };
 
             var json = JsonConvert.SerializeObject(segmentRequest);
@@ -887,8 +928,6 @@ namespace LagoVista.AspNetCore.Identity.Services
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
-
-
                 var fieldResponse = await client.GetAsync("https://api.sendgrid.com/v3/marketing/field_definitions");
 
                 var strResponse = await fieldResponse.Content.ReadAsStringAsync();
@@ -937,7 +976,7 @@ namespace LagoVista.AspNetCore.Identity.Services
                         Console.WriteLine($"Add Header {hdr.Header} - {hdr.Value} ");
                     }
 
-                        var uploadStreamResponse = await streamCLient.PutAsync(sgResponse.UploadUri, new StreamContent(stream));
+                    var uploadStreamResponse = await streamCLient.PutAsync(sgResponse.UploadUri, new StreamContent(stream));
                     strResponse = await uploadStreamResponse.Content.ReadAsStringAsync();
 
                     if (!uploadStreamResponse.IsSuccessStatusCode)
@@ -950,5 +989,89 @@ namespace LagoVista.AspNetCore.Identity.Services
                 }
             }
         }
+
+        public async Task<InvokeResult> RefreshSegementAsync(string id)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
+                var response = await client.PostAsJsonAsync("https://api.sendgrid.com/v3/marketing/segments/2.0/refresh", new { user_time_zone = "America/New_York" });
+                var strResponse = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return InvokeResult.FromError(strResponse);
+                }
+
+                return InvokeResult.Success;
+            }
+        }
+
+        public async Task<ListResponse<ContactList>> GetListsAsync(string orgId)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
+                var response = await client.GetAsync("https://api.sendgrid.com/v3/marketing/segments/2.0");
+                var strResponse = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return ListResponse<ContactList>.FromError(strResponse);
+                }
+
+                var sgResponse = JsonConvert.DeserializeObject<SendGridGetSegmentListsResponse>(strResponse);
+
+                var items = sgResponse.Results.Select(seg => new ContactList()
+                {
+                    Id = seg.Id,
+                    Count = seg.ContactCount,
+                    LastUpdated = String.IsNullOrEmpty(seg.SampleUpdated) ? null : DateTime.Parse( seg.SampleUpdated).ToJSONString(),
+                    Name = seg.Name,
+                });
+
+                return ListResponse<ContactList>.Create(items);
+            }
+        }
+
+        public async Task<ListResponse<EntityHeader>> GetEmailSendersAsync(string orgId)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
+                var response = await client.GetAsync("https://api.sendgrid.com/v3/marketing/senders");
+                var strResponse = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return ListResponse<EntityHeader>.FromError(strResponse);
+                }
+
+                var sgSenders = JsonConvert.DeserializeObject<List<SendGridSender>>(strResponse);
+
+                var senders = sgSenders.Select(snd => new EntityHeader() { Id = snd.Id, Text = snd.Name });
+
+                return ListResponse<EntityHeader>.Create(senders);
+            }
+        }
+
+        public async Task<InvokeResult> DeleteEmailListAsync(string orgId, string listId)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
+                var url = $"https://api.sendgrid.com/v3/marketing/segments/{listId}";
+                var response = await client.DeleteAsync(url);
+                var strResponse = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return ListResponse<EntityHeader>.FromError(strResponse);
+                }
+            }
+
+            return InvokeResult.Success;
+        }
+
     }
 }

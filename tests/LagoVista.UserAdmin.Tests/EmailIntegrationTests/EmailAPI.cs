@@ -14,6 +14,8 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
     {
         IEmailSender _emailSenderService;
 
+        public const string OrgId = "DONTCARE";
+
         [TestInitialize]
         public void Init()
         {
@@ -28,6 +30,18 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
             Assert.IsTrue(result.Successful);
             var deleteResult = await _emailSenderService.DeleteEmailDesignAsync(result.Result);
             Assert.IsTrue(deleteResult.Successful);
+        }
+
+        [TestMethod]
+        public async Task GetAllSendersAsync()
+        {
+            var senders = await _emailSenderService.GetEmailSendersAsync(OrgId);
+            Assert.IsTrue(senders.Successful);
+
+            foreach(var sender in senders.Model)
+            {
+                Console.WriteLine($"{sender.Id} - {sender.Text}");
+            }
         }
 
         [TestMethod]

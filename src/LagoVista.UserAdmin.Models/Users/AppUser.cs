@@ -75,7 +75,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 if( _key == null )
                     _key = Guid.NewGuid().ToId().ToLower();
 
-                return _key;
+                return _key.ToLower();
 
             }
             set { _key = value; }

@@ -57,7 +57,7 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
             var customField = "industry_id";
             var id = "abc123";
 
-            var result = await _emailSenderService.CreateEmailListAsync("Test Industry", customField, id);
+            var result = await _emailSenderService.CreateEmailListAsync("Test Industry", "TESTORG", customField, id);
 
             Console.WriteLine(result.Result);
 

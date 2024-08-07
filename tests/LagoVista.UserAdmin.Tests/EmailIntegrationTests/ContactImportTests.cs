@@ -23,6 +23,38 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
             _emailSenderService = new SendGridEmailService(new IdentitySettings(), new Moq.Mock<IAppConfig>().Object, new Moq.Mock<IAdminLogger>().Object);
         }
 
+
+        [TestMethod]
+        public async Task GetSegments()
+        {
+            var lists = await _emailSenderService.GetListsAsync("x");
+            Assert.IsTrue(lists.Successful);
+            foreach(var list in lists.Model)
+            {
+                Console.WriteLine($"{list.Name},{list.Id},{list.Count},{list.LastUpdated}");
+            }
+        }
+
+        [TestMethod]
+        public async Task DeleteAllSegments()
+        {
+            var lists = await _emailSenderService.GetListsAsync("x");
+            Assert.IsTrue(lists.Successful);
+            foreach (var list in lists.Model)
+            {
+                Console.WriteLine($"{list.Name},{list.Id},{list.Count},{list.LastUpdated}");
+                var result = await _emailSenderService.DeleteEmailListAsync("X", list.Id);
+                Assert.IsTrue(result.Successful, result.ErrorMessage);
+            }
+        }
+
+        [TestMethod]
+        public async Task RefreshSegement()
+        {
+            var result = await _emailSenderService.RefreshSegementAsync("acc7890f-cfc1-45fa-87d5-8e91650d680c");
+            Assert.IsTrue(true);
+        }
+
         [TestMethod]
         public async Task CreateJobTestAsyncc()
         {

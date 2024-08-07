@@ -1203,6 +1203,12 @@ namespace LagoVista.UserAdmin.Managers
             return org.Name;
         }
 
+        public async Task<string> GetOrgNameSpaceAsync(string orgId)
+        {
+            var org = await _organizationRepo.GetOrganizationAsync(orgId);
+            return org.Namespace;
+        }
+
         public Task<string> GetOrgIdForNameSpaceAsync(string orgNameSpace)
         {
             return _organizationRepo.GetOrganizationIdForNamespaceAsync(orgNameSpace);
