@@ -17,13 +17,13 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
         IEmailSender _emailSenderService;
         Mock<IOrganizationManager> _orgManager = new Mock<IOrganizationManager>();
 
-        EntityHeader _org;
-        EntityHeader _user;
+        EntityHeader _org = EntityHeader.Create("AA2C78499D0140A5A9CE4B7581EF9691", "softwarelogistics", "Software Logistics");
+        EntityHeader _user = EntityHeader.Create("CC648B3B51164A8296EB7092F312D5CB", "Kevin Wolf");
 
         [TestInitialize]
         public void Init()
         {
-            _emailSenderService = new SendGridEmailService(new IdentitySettings(), _orgManager.Object, new Moq.Mock<IAppConfig>().Object, new Moq.Mock<IAdminLogger>().Object);
+            _emailSenderService = new SendGridEmailService(new IdentitySettings(),  new Moq.Mock<IAppConfig>().Object, new Moq.Mock<IAdminLogger>().Object);
         }
 
         

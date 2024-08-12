@@ -8,10 +8,12 @@ using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Models.Contacts;
 using LagoVista.UserAdmin.Models.Users;
 using Newtonsoft.Json;
+using OpenTelemetry.Trace;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -29,12 +31,11 @@ namespace LagoVista.AspNetCore.Identity.Services
         IOrganizationManager _orgManager;
 
 
-        public SendGridEmailService(ILagoVistaAspNetCoreIdentityProviderSettings settings, IOrganizationManager orgManager, IAppConfig appConfig, IAdminLogger adminLogger)
+        public SendGridEmailService(ILagoVistaAspNetCoreIdentityProviderSettings settings, IAppConfig appConfig, IAdminLogger adminLogger)
         {
             _settings = settings;
             _appConfig = appConfig;
             _adminLogger = adminLogger;
-            _orgManager = orgManager;
         }
 
         public class SendGridSender
@@ -44,7 +45,7 @@ namespace LagoVista.AspNetCore.Identity.Services
 
             [JsonProperty("nickname")]
             public string Name { get; set; }
-        }        
+        }
 
         private class SendGridListResponse
         {
@@ -93,6 +94,210 @@ namespace LagoVista.AspNetCore.Identity.Services
             [JsonProperty("id")]
             public string Id { get; set; }
         }
+
+        public class SendGridDesignListResponse
+        {
+            [JsonProperty("result")]
+            public List<SendGridDesignListItem> Results { get; set; }
+        }
+
+        public class SendGridDesignListItem
+        {
+            [JsonProperty("id")]
+            public string Id { get; set; }
+
+
+            private string _thumbnailUrl;
+            [JsonProperty("thumbnail_url")]
+            public string ThumbnailUrl 
+            { 
+                get { return _thumbnailUrl; }
+                set
+                {
+                    if (value != null)
+                    {
+                        if (!value.StartsWith("https"))
+                            _thumbnailUrl = $"https:{value}";
+                        else
+                        {
+                            _thumbnailUrl = value;
+                        }
+                    }
+                    else
+                    {
+                        _thumbnailUrl = null;
+                    }
+                        
+                }
+            }
+
+            [JsonProperty("name")]
+            public string Name { get; set; }
+
+            [JsonProperty("editor")]
+            public string Editor { get; set; }
+        }
+
+        public class SendGrdiSignelSendScheduleResponse
+        {
+            [JsonProperty("send_at")]
+            public string SendAt { get; set; }
+
+            [JsonProperty("status")]
+            public string Status { get; set; }
+        }
+
+        public class SendGrdiSignelSendScheduleRequest
+        {
+            [JsonProperty("send_at")]
+            public string SendAt { get; set; }
+        }
+
+
+        public class SendGridSingleSendResultAbTest
+        {
+            [JsonProperty("abtest")]
+            public string Type { get; set; }
+
+            [JsonProperty("winner_criteria")]
+            public string WinnerCriteria { get; set; }
+
+            [JsonProperty("test_percentage")]
+            public int TestPercentage { get; set; }
+
+            [JsonProperty("duration")]
+            public string Duration { get; set; }
+
+
+            [JsonProperty("winning_template_id")]
+            public string WinningTemplateId{ get; set; }
+
+
+            [JsonProperty("winner_selected_at")]
+            public string WinnerSelectedAt{ get; set; }
+
+            [JsonProperty("expiration_date")]
+            public string ExpirationDate { get; set; }
+        }
+
+        public class SendGridSingleSendResultRequest
+        {
+            [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
+            public string Names { get; set; }
+
+            [JsonProperty("status", NullValueHandling = NullValueHandling.Ignore)]
+            public List<string> Status { get; set; }
+
+            [JsonProperty("categories", NullValueHandling = NullValueHandling.Ignore)]
+            public List<string> Categories { get; set; }
+        }
+
+
+        public class SendGridSingleSendResultResponse
+        {
+            [JsonProperty("result")]
+            public List<SendGridSingleSendResultItem> Results { get; set; }
+
+        }
+
+        public class SendGridSingleSendResultItem
+        {
+            [JsonProperty("id")]
+            public string Id { get; set; }
+
+            [JsonProperty("name")]
+            public string Name { get; set; }
+
+            [JsonProperty("categories")]
+            public List<string> Categories { get; set; } = new List<string>();
+
+
+            [JsonProperty("status")]
+            public string Status { get; set; }
+
+            [JsonProperty("send_at")]
+            public string SendAt { get; set; }
+
+            [JsonProperty("is_abtest")]
+            public bool IsABTest { get; set; }
+
+            [JsonProperty("updated_at")]
+            public string UpdatedAt { get; set; }
+
+            [JsonProperty("created_at")]
+            public string CreatedAt { get; set; }
+        }
+
+        public class SendGridSingleSendList
+        {
+            [JsonProperty("list_ids", NullValueHandling = NullValueHandling.Ignore)]
+            public List<string> ListIds { get; set; } = new List<string>();
+            [JsonProperty("segment_ids", NullValueHandling = NullValueHandling.Ignore)]
+            public List<string> SegmentIds { get; set; } = new List<string>();
+            [JsonProperty("all", NullValueHandling = NullValueHandling.Ignore)]
+            public bool All { get; set; }
+        }
+
+        public class SendGridSingleSendEmailConfig
+        {
+            [JsonProperty("subject", NullValueHandling = NullValueHandling.Ignore)]
+            public string Subject { get; set; }
+            [JsonProperty("html_content", NullValueHandling = NullValueHandling.Ignore)]
+            public string HtmlContent { get; set; }
+            [JsonProperty("plain_content", NullValueHandling = NullValueHandling.Ignore)]
+            public string PlainContent { get; set; }
+            [JsonProperty("generate_plain_content", NullValueHandling = NullValueHandling.Ignore)]
+            public string GeneratePlainCOntent { get; set; }
+            [JsonProperty("design_id", NullValueHandling = NullValueHandling.Ignore)]
+            public string DesignId { get; set; }
+            [JsonProperty("editor", NullValueHandling = NullValueHandling.Ignore)]
+            public string Editor { get; set; }
+            
+            [JsonProperty("suppression_group_id", NullValueHandling = NullValueHandling.Ignore)]
+            public int SuppressionGroupId{ get; set; }
+
+
+            [JsonProperty("custom_unsubscribe_url", NullValueHandling = NullValueHandling.Ignore)]
+            public string CustomUnsubscribeUrl { get; set; }
+            [JsonProperty("sender_id", NullValueHandling = NullValueHandling.Ignore)]
+            public int SenderId { get; set; }
+            [JsonProperty("ip_pool", NullValueHandling = NullValueHandling.Ignore)]
+            public string IpPool { get; set; }
+        }
+
+        public class SendGridSingleSendRequest
+        {
+            [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
+            public string Name { get; set; }
+
+            [JsonProperty("categories", NullValueHandling = NullValueHandling.Ignore)]
+            public List<string> Categories { get; set; } = new List<string>();
+
+            [JsonProperty("send_to", NullValueHandling = NullValueHandling.Ignore)]
+            public SendGridSingleSendList SendTo { get; set; } = new SendGridSingleSendList();
+
+            [JsonProperty("email_config", NullValueHandling = NullValueHandling.Ignore)]
+            public SendGridSingleSendEmailConfig EmailConfig { get; set; } 
+        }
+
+        public class SendGridSingleSendResponse
+        {
+            [JsonProperty("name")]
+            public string Name { get; set; }
+
+            [JsonProperty("id")]
+            public string Id { get; set; }
+
+            [JsonProperty("status")]
+            public string Status { get; set; }
+
+            [JsonProperty("send_to")]
+            public SendGridSingleSendList SendTo { get; set; }
+
+            [JsonProperty("email_config")]
+            public SendGridSingleSendEmailConfig EmailConfig { get; set; }
+        }
+
 
         public class SendGridSenderRequestAddress
         {
@@ -766,6 +971,27 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
         }
 
+        public async Task<ListResponse<EmailDesign>> GetEmailDesignsAsync(EntityHeader org, EntityHeader user)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
+                var response = await client.GetAsync($"https://api.sendgrid.com/v3/designs");
+                var strResponse = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return ListResponse<EmailDesign>.FromError(strResponse);
+                }
+
+                Console.WriteLine(strResponse);
+
+                var sgResponse = JsonConvert.DeserializeObject<SendGridDesignListResponse>(strResponse);
+
+                return ListResponse<EmailDesign>.Create(sgResponse.Results.Select(dl => new EmailDesign() { Id = dl.Id, Name = dl.Name, ThumbmailImage = dl.ThumbnailUrl }));
+            }
+        }
+
         public async Task<InvokeResult> UpdateEmailDesignAsync(string id, string name, string subject, string htmlContents, string plainTextContent, EntityHeader org, EntityHeader user)
         {
             using (var client = new HttpClient())
@@ -821,6 +1047,153 @@ namespace LagoVista.AspNetCore.Identity.Services
             return InvokeResult<string>.Create(listResponse.id);
         }
 
+        public async Task<InvokeResult<string>> SendToListAsync(string name, string listId, string senderId, string designId, EntityHeader org, EntityHeader user)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
+
+                var ssRequest = new SendGridSingleSendRequest()
+                {
+                    Name = name,
+                    EmailConfig = new SendGridSingleSendEmailConfig()
+                    {
+                        DesignId = designId,
+                        SenderId = Convert.ToInt32(senderId),
+                        SuppressionGroupId = 26579
+                    },
+                    SendTo = new SendGridSingleSendList()
+                    {                       
+                    }
+                };
+
+                ssRequest.Categories.Add(org.Id);
+
+                ssRequest.SendTo.SegmentIds.Add(listId);
+
+                var json = JsonConvert.SerializeObject(ssRequest);
+                Console.WriteLine(json);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var path = $"https://api.sendgrid.com/v3/marketing/singlesends";
+                var response = await client.PostAsync(path, content);
+                var strContent = await response.Content.ReadAsStringAsync();
+                if(!response.IsSuccessStatusCode)
+                {
+                    return InvokeResult<string>.FromError(strContent);
+                }
+
+                var ssResponse = JsonConvert.DeserializeObject < SendGridSingleSendResponse>(strContent);
+
+                return InvokeResult<string>.Create(ssResponse.Id);
+            }
+        }
+
+        public async Task<InvokeResult> DeleteEmailListSendAsync(string id, EntityHeader org, EntityHeader user)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
+                var path = $"https://api.sendgrid.com/v3/marketing/singlesends/{id}";
+                Console.WriteLine($"delete list with: {path}");
+                var response = await client.DeleteAsync(path);
+                var strContent = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
+                {
+                    return InvokeResult.FromError(strContent);
+                }
+
+                return InvokeResult.Success;
+            }
+        }
+
+        public async Task<ListResponse<EmailListSend>> GetEmailListSendsAsync(ListRequest listRequest, EntityHeader org, EntityHeader user)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
+                var request = new SendGridSingleSendResultRequest();
+                request.Categories = new List<string>();
+                request.Categories.Add(org.Id);
+                var path = $"https://api.sendgrid.com/v3/marketing/singlesends/search";
+                var response = await client.PostAsJsonAsync(path, request);
+                var strContent = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
+                {
+                    return ListResponse<EmailListSend>.FromError(strContent);
+                }
+
+                Console.WriteLine(strContent);
+
+                var sgResponse = JsonConvert.DeserializeObject<SendGridSingleSendResultResponse>(strContent);
+                return ListResponse<EmailListSend>.Create(sgResponse.Results.Select(res => new EmailListSend()
+                {
+                    Name = res.Name,
+                    Id = res.Id,
+                    CreateDate = DateTime.Parse(res.CreatedAt).ToJSONString(),
+                    Status = res.Status,
+                    StatusDate = DateTime.Parse(res.UpdatedAt).ToJSONString(),
+                }));
+            }
+        }
+
+        public async Task<InvokeResult<string>> ScheduleEmailSendListAsync(string singleSendId, string scheduleDate, EntityHeader org, EntityHeader user)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
+
+                var ssRequest = new SendGrdiSignelSendScheduleRequest()
+                {
+                    SendAt = scheduleDate
+                };
+
+
+                var json = JsonConvert.SerializeObject(ssRequest);
+                Console.WriteLine(json);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var path = $"https://api.sendgrid.com/v3/marketing/singlesends/{singleSendId}/schedule";
+                var response = await client.PostAsync(path, content);
+                var strContent = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
+                {
+                    return InvokeResult<string>.FromError(strContent);
+                }
+
+                var ssResponse = JsonConvert.DeserializeObject<SendGridSingleSendResponse>(strContent);
+
+                return InvokeResult<string>.Create(ssResponse.Id);
+            }
+        }
+
+        public async Task<InvokeResult<string>> SendEmailSendListNowAsync(string singleSendId,  EntityHeader org, EntityHeader user)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
+
+                var ssRequest = new SendGrdiSignelSendScheduleRequest()
+                {
+                    SendAt = "now"
+                };
+
+                var json = JsonConvert.SerializeObject(ssRequest);
+                Console.WriteLine(json);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var path = $"https://api.sendgrid.com/v3/marketing/singlesends/{singleSendId}/schedule";
+                var response = await client.PutAsync(path, content);
+                var strContent = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
+                {
+                    return InvokeResult<string>.FromError(strContent);
+                }
+
+                var ssResponse = JsonConvert.DeserializeObject<SendGridSingleSendResponse>(strContent);
+
+                return InvokeResult<string>.Create(ssResponse.Id);
+            }
+        }
 
         public async Task<InvokeResult<string>> SendAsync(Email email, EntityHeader org, EntityHeader user)
         {
@@ -1015,17 +1388,17 @@ namespace LagoVista.AspNetCore.Identity.Services
             {
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
                 var strContent = new StringContent(JsonConvert.SerializeObject(new { name = name }), Encoding.UTF8, "application/json");
-                var response = await client.PatchAsync($"https://api.sendgrid.com/v3/marketing/lists/{sendGridListId}", strContent );
+                var response = await client.PatchAsync($"https://api.sendgrid.com/v3/marketing/lists/{sendGridListId}", strContent);
                 var strResponse = await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    return ListResponse<ContactList>.FromError(strResponse);
+                    return InvokeResult.FromError(strResponse);
                 }
 
                 return InvokeResult.Success;
             }
-         }
+        }
 
         public async Task<ListResponse<ContactList>> GetListsAsync(EntityHeader org, EntityHeader user)
         {
@@ -1042,11 +1415,12 @@ namespace LagoVista.AspNetCore.Identity.Services
 
                 var sgResponse = JsonConvert.DeserializeObject<SendGridGetSegmentListsResponse>(strResponse);
 
-                var items = sgResponse.Results.Select(seg => new ContactList()
+                var lists = sgResponse.Results; //Eventually we wan
+                var items = lists.Select(seg => new ContactList()
                 {
                     Id = seg.Id,
                     Count = seg.ContactCount,
-                    LastUpdated = String.IsNullOrEmpty(seg.SampleUpdated) ? null : DateTime.Parse( seg.SampleUpdated).ToJSONString(),
+                    LastUpdated = String.IsNullOrEmpty(seg.SampleUpdated) ? null : DateTime.Parse(seg.SampleUpdated).ToJSONString(),
                     Name = seg.Name,
                 });
 

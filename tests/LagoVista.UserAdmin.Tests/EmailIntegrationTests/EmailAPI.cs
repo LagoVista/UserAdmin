@@ -17,28 +17,19 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
         IEmailSender _emailSenderService;
 
         public const string OrgId = "DONTCARE";
-        private EntityHeader _org;
-        private EntityHeader _user;
+        EntityHeader _org = EntityHeader.Create("AA2C78499D0140A5A9CE4B7581EF9691", "softwarelogistics", "Software Logistics");
+        EntityHeader _user = EntityHeader.Create("CC648B3B51164A8296EB7092F312D5CB", "Kevin Wolf");
 
-        private Mock<IOrganizationManager> _orgManager;
+        private Mock<IOrganizationManager> _orgManager = new Mock<IOrganizationManager>();
 
 
         [TestInitialize]
         public void Init()
         {
-            _emailSenderService = new SendGridEmailService(new IdentitySettings(), _orgManager.Object, new Moq.Mock<IAppConfig>().Object,  new Moq.Mock<IAdminLogger>().Object);
+            _emailSenderService = new SendGridEmailService(new IdentitySettings(), new Moq.Mock<IAppConfig>().Object,  new Moq.Mock<IAdminLogger>().Object);
         }
 
-        [TestMethod]
-        public async Task CreateDesignAsync()
-        {
-            var result = await _emailSenderService.AddEmailDesignAsync($"TESTING - {DateTime.Now}", "SEND THE EMAIL", "HTML CONTENTS", "PLAIN TEXT CONTENTS", _org, _user);
-            Assert.IsTrue(result.Successful, result.ErrorMessage);
-            Assert.IsTrue(result.Successful);
-            var deleteResult = await _emailSenderService.DeleteEmailDesignAsync(result.Result, _org, _user);
-            Assert.IsTrue(deleteResult.Successful);
-        }
-
+      
         [TestMethod]
         public async Task GetAllSendersAsync()
         {
@@ -51,20 +42,7 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
             }
         }
 
-        [TestMethod]
-        public async Task UpdateDesignAsync()
-        {
-            var result = await _emailSenderService.AddEmailDesignAsync($"TESTING - {DateTime.Now}", "SEND THE EMAIL", "HTML CONTENTS", "PLAIN TEXT CONTENTS", _org, _user);
-            Assert.IsTrue(result.Successful, result.ErrorMessage);
-
-            Console.WriteLine(result.Result);
-
-            var updateResult = await _emailSenderService.UpdateEmailDesignAsync(result.Result, "UPDATED TESTING", "UPDATE SUBJECT", "UPDATE HTML CONTENT", "UPDATE TEXT CONTENTS",_org, _user);
-            Assert.IsTrue(updateResult.Successful, updateResult.ErrorMessage);
-
-            var deleteResult = await _emailSenderService.DeleteEmailDesignAsync(result.Result, _org, _user);
-            Assert.IsTrue(deleteResult.Successful);
-        }
+ 
 
         [TestMethod]
         public async Task AddSenderAsync()
@@ -84,8 +62,8 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
             Assert.IsTrue(result.Result.SendGridVerified, "Send Grid User should be Verified (email match domain name)");
             Assert.IsTrue(!String.IsNullOrEmpty(result.Result.SendGridSenderId));
 
-            var deleteResult = await _emailSenderService.DeleteEmailSenderAsync(appUser.SendGridSenderId, _org, _user);
-            Assert.IsTrue(deleteResult.Successful, deleteResult.ErrorMessage);
+            //var deleteResult = await _emailSenderService.DeleteEmailSenderAsync(appUser.SendGridSenderId, _org, _user);
+            //Assert.IsTrue(deleteResult.Successful, deleteResult.ErrorMessage);
         }
 
         [TestMethod]

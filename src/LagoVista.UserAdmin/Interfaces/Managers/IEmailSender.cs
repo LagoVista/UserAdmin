@@ -23,6 +23,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult<string>> AddEmailDesignAsync(string name, string subject, string htmlContents, string plainTextContent, EntityHeader org, EntityHeader user);
         Task<InvokeResult> DeleteEmailDesignAsync(string id, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateEmailDesignAsync(string id, string name, string subject, string htmlContents, string plainTextContent, EntityHeader org, EntityHeader user);
+        Task<ListResponse<EmailDesign>> GetEmailDesignsAsync(EntityHeader org, EntityHeader user);
 
         Task<InvokeResult<AppUser>> AddEmailSenderAsync(AppUser sender, EntityHeader org, EntityHeader user);
         Task<InvokeResult<AppUser>> UpdateEmailSenderAsync(AppUser sender, EntityHeader org, EntityHeader user);
@@ -36,5 +37,11 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
         Task<ListResponse<EntityHeader>> GetEmailSendersAsync(EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateListAsync(string sendGridListId, string name, EntityHeader org, EntityHeader user);
+        Task<InvokeResult<string>> SendToListAsync(string name, string listId, string senderId, string designId, EntityHeader org, EntityHeader user);
+
+        Task<InvokeResult<string>> SendEmailSendListNowAsync(string singleSendId, EntityHeader org, EntityHeader user);
+        Task<InvokeResult<string>> ScheduleEmailSendListAsync(string singleSendId, string scheduleDate, EntityHeader org, EntityHeader user);
+        Task<ListResponse<EmailListSend>> GetEmailListSendsAsync(ListRequest listRequest, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> DeleteEmailListSendAsync(string listId, EntityHeader org, EntityHeader user);
     }
 }
