@@ -1,25 +1,21 @@
-﻿using LagoVista.AspNetCore.Identity.Models;
-using LagoVista.Core;
+﻿using LagoVista.Core;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
-using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Models.Contacts;
 using LagoVista.UserAdmin.Models.Users;
 using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using SendGrid.Helpers.Mail.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Mime;
-using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,6 +26,16 @@ namespace LagoVista.AspNetCore.Identity.Services
         ILagoVistaAspNetCoreIdentityProviderSettings _settings;
         IAppConfig _appConfig;
         IAdminLogger _adminLogger;
+        IOrganizationManager _orgManager;
+
+
+        public SendGridEmailService(ILagoVistaAspNetCoreIdentityProviderSettings settings, IOrganizationManager orgManager, IAppConfig appConfig, IAdminLogger adminLogger)
+        {
+            _settings = settings;
+            _appConfig = appConfig;
+            _adminLogger = adminLogger;
+            _orgManager = orgManager;
+        }
 
         public class SendGridSender
         {
@@ -308,14 +314,8 @@ namespace LagoVista.AspNetCore.Identity.Services
             public string organization_id { get; set; } = "";
         }
 
-        public SendGridEmailService(ILagoVistaAspNetCoreIdentityProviderSettings settings, IAppConfig appConfig, IAdminLogger adminLogger)
-        {
-            _settings = settings;
-            _appConfig = appConfig;
-            _adminLogger = adminLogger;
-        }
 
-        private async Task<InvokeResult<string>> RegisterContactAsync(SendGridContact contact)
+        private async Task<InvokeResult<string>> RegisterContactAsync(SendGridContact contact, EntityHeader org, EntityHeader user)
         {
             var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
 
@@ -340,7 +340,7 @@ namespace LagoVista.AspNetCore.Identity.Services
         }
 
 
-        public async Task<InvokeResult<string>> CreateEmailListAsync(string listName)
+        public async Task<InvokeResult<string>> CreateEmailListAsync(string listName, EntityHeader org, EntityHeader user)
         {
             var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
 
@@ -363,7 +363,7 @@ namespace LagoVista.AspNetCore.Identity.Services
 
             return InvokeResult<string>.Create(listResponse.id);
         }
-        public async Task<InvokeResult> AddContactToListAsync(string listId, string contactId)
+        public async Task<InvokeResult> AddContactToListAsync(string listId, string contactId, EntityHeader org, EntityHeader user)
         {
             var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
             var response = await client.RequestAsync(
@@ -382,8 +382,10 @@ namespace LagoVista.AspNetCore.Identity.Services
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> SendAsync(string email, string subject, string body)
+        public async Task<InvokeResult> SendAsync(string email, string subject, string body, EntityHeader org, EntityHeader user)
         {
+            //IT IS POSSIBLE THAT ORG IS NULL HERE, IF THAT"S THE CASE WE NEED TO FALLBACK TO A MASTER ORG, this will be the case when the user does 
+            //not have a default org set for them and we need to send them email.
 
             try
             {
@@ -706,22 +708,22 @@ namespace LagoVista.AspNetCore.Identity.Services
 
         }
 
-        public async Task<InvokeResult<string>> RegisterContactAsync(Contact contact, Company company)
+        public async Task<InvokeResult<string>> RegisterContactAsync(Contact contact, Company company, EntityHeader org, EntityHeader user)
         {
             var sendGridContact = new SendGridContact(contact, company);
 
-            var result = await RegisterContactAsync(sendGridContact);
+            var result = await RegisterContactAsync(sendGridContact, org, user);
             return result;
         }
 
-        public async Task<InvokeResult<string>> RegisterContactAsync(Contact contact, EntityHeader org)
+        public async Task<InvokeResult<string>> RegisterContactAsync(Contact contact, EntityHeader org, EntityHeader user)
         {
             var sendGridContact = new SendGridContact(contact, org);
-            var result = await RegisterContactAsync(sendGridContact);
+            var result = await RegisterContactAsync(sendGridContact, org, user);
             return result;
         }
 
-        public async Task<InvokeResult<string>> AddEmailDesignAsync(string name, string subject, string htmlContents, string plainTextContent)
+        public async Task<InvokeResult<string>> AddEmailDesignAsync(string name, string subject, string htmlContents, string plainTextContent, EntityHeader org, EntityHeader user)
         {
             using (var client = new HttpClient())
             {
@@ -749,7 +751,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
         }
 
-        public async Task<InvokeResult> DeleteEmailDesignAsync(string id)
+        public async Task<InvokeResult> DeleteEmailDesignAsync(string id, EntityHeader org, EntityHeader user)
         {
             using (var client = new HttpClient())
             {
@@ -764,7 +766,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
         }
 
-        public async Task<InvokeResult> UpdateEmailDesignAsync(string id, string name, string subject, string htmlContents, string plainTextContent)
+        public async Task<InvokeResult> UpdateEmailDesignAsync(string id, string name, string subject, string htmlContents, string plainTextContent, EntityHeader org, EntityHeader user)
         {
             using (var client = new HttpClient())
             {
@@ -792,14 +794,14 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
         }
 
-        public async Task<InvokeResult<string>> CreateEmailListAsync(string listName, string orgId, string customField, string id)
+        public async Task<InvokeResult<string>> CreateEmailListAsync(string listName, string customField, string id, EntityHeader org, EntityHeader user)
         {
             var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
 
             var segmentRequest = new SendGridSegmentRequest()
             {
                 name = listName,
-                query_dsl = $"SELECT c.contact_id, c.updated_at FROM contact_data as c where c.{customField} = '{id}' and c.organization_id = '{orgId}' "
+                query_dsl = $"SELECT c.contact_id, c.updated_at FROM contact_data as c where c.{customField} = '{id}' and c.organization_id = '{org.Id}' "
             };
 
             var json = JsonConvert.SerializeObject(segmentRequest);
@@ -820,7 +822,7 @@ namespace LagoVista.AspNetCore.Identity.Services
         }
 
 
-        public async Task<InvokeResult<string>> SendAsync(Email email)
+        public async Task<InvokeResult<string>> SendAsync(Email email, EntityHeader org, EntityHeader user)
         {
             var msg = new SendGridMessage();
             foreach (var addr in email.To)
@@ -851,7 +853,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
         }
 
-        public async Task<InvokeResult<AppUser>> UpdateEmailSenderAsync(AppUser sender)
+        public async Task<InvokeResult<AppUser>> UpdateEmailSenderAsync(AppUser sender, EntityHeader org, EntityHeader user)
         {
             var sendGridSender = SendGridSenderRequest.Create(sender);
 
@@ -881,7 +883,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
         }
 
-        public async Task<InvokeResult<AppUser>> AddEmailSenderAsync(AppUser sender)
+        public async Task<InvokeResult<AppUser>> AddEmailSenderAsync(AppUser sender, EntityHeader org, EntityHeader user)
         {
             var sendGridSender = SendGridSenderRequest.Create(sender);
 
@@ -908,7 +910,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
         }
 
-        public async Task<InvokeResult> DeleteEmailSenderAsync(string id)
+        public async Task<InvokeResult> DeleteEmailSenderAsync(string id, EntityHeader org, EntityHeader user)
         {
             using (var client = new HttpClient())
             {
@@ -923,7 +925,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
         }
 
-        public async Task<InvokeResult<string>> StartImportJobAsync(string fieldMappings, Stream stream)
+        public async Task<InvokeResult<string>> StartImportJobAsync(string fieldMappings, Stream stream, EntityHeader org, EntityHeader user)
         {
             using (var client = new HttpClient())
             {
@@ -990,7 +992,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
         }
 
-        public async Task<InvokeResult> RefreshSegementAsync(string id)
+        public async Task<InvokeResult> RefreshSegementAsync(string id, EntityHeader org, EntityHeader user)
         {
             using (var client = new HttpClient())
             {
@@ -1007,7 +1009,25 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
         }
 
-        public async Task<ListResponse<ContactList>> GetListsAsync(string orgId)
+        public async Task<InvokeResult> UpdateListAsync(string sendGridListId, string name, EntityHeader org, EntityHeader user)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
+                var strContent = new StringContent(JsonConvert.SerializeObject(new { name = name }), Encoding.UTF8, "application/json");
+                var response = await client.PatchAsync($"https://api.sendgrid.com/v3/marketing/lists/{sendGridListId}", strContent );
+                var strResponse = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return ListResponse<ContactList>.FromError(strResponse);
+                }
+
+                return InvokeResult.Success;
+            }
+         }
+
+        public async Task<ListResponse<ContactList>> GetListsAsync(EntityHeader org, EntityHeader user)
         {
             using (var client = new HttpClient())
             {
@@ -1034,7 +1054,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
         }
 
-        public async Task<ListResponse<EntityHeader>> GetEmailSendersAsync(string orgId)
+        public async Task<ListResponse<EntityHeader>> GetEmailSendersAsync(EntityHeader org, EntityHeader user)
         {
             using (var client = new HttpClient())
             {
@@ -1055,7 +1075,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
         }
 
-        public async Task<InvokeResult> DeleteEmailListAsync(string orgId, string listId)
+        public async Task<InvokeResult> DeleteEmailListAsync(string listId, EntityHeader org, EntityHeader user)
         {
             using (var client = new HttpClient())
             {

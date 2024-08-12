@@ -5,6 +5,7 @@ using LagoVista.Core.Models;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Threading.Tasks;
 
@@ -14,11 +15,15 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
     public class ContactIntegration
     {
         IEmailSender _emailSenderService;
+        Mock<IOrganizationManager> _orgManager = new Mock<IOrganizationManager>();
+
+        EntityHeader _org;
+        EntityHeader _user;
 
         [TestInitialize]
         public void Init()
         {
-            _emailSenderService = new SendGridEmailService(new IdentitySettings(), new Moq.Mock<IAppConfig>().Object, new Moq.Mock<IAdminLogger>().Object);
+            _emailSenderService = new SendGridEmailService(new IdentitySettings(), _orgManager.Object, new Moq.Mock<IAppConfig>().Object, new Moq.Mock<IAdminLogger>().Object);
         }
 
         
@@ -43,7 +48,7 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
                 State = "FL"
             };
 
-            var result = await _emailSenderService.RegisterContactAsync(contact, company);
+            var result = await _emailSenderService.RegisterContactAsync(contact, company, _org, _user);
 
             Console.WriteLine(result.Result);
 
@@ -57,7 +62,7 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
             var customField = "industry_id";
             var id = "abc123";
 
-            var result = await _emailSenderService.CreateEmailListAsync("Test Industry", "TESTORG", customField, id);
+            var result = await _emailSenderService.CreateEmailListAsync("Test Industry", customField, id, _org, _user);
 
             Console.WriteLine(result.Result);
 
@@ -66,10 +71,11 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
 
         }
 
+
         [TestMethod]
         public async Task AddContactToList()
         {
-            var result = await _emailSenderService.AddContactToListAsync("da786a80-5f53-4077-9ee6-fdd415146e24", "eee130d5-dbb7-4f3a-9943-88ec38641bc8");
+            var result = await _emailSenderService.AddContactToListAsync("da786a80-5f53-4077-9ee6-fdd415146e24", "eee130d5-dbb7-4f3a-9943-88ec38641bc8", _org, _user);
         }
 
         [TestMethod]
@@ -77,11 +83,11 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
         {
             var result = await _emailSenderService.SendAsync(new Email()
             {
-                To = new System.Collections.Generic.List<EmailAddress>() { new EmailAddress() { Address = "kevinw@slsys.net", Name = "Keivn" } },
+                To = new System.Collections.Generic.List<EmailAddress>() { new EmailAddress() { Address = "kevinw@slsys.net", Name = "Kevin" } },
                 Subject = "Test Message",
                 From = new EmailAddress() {  Address = "alerts@nuviot.com", Name= "ALerts"},
                 Content = "Hi Kevin",
-            });
+            }, _org, _user);
 
 
             Assert.IsTrue(result.Successful);

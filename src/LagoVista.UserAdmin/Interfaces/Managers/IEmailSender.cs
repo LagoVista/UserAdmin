@@ -10,30 +10,31 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 {
     public interface IEmailSender
     {
-        Task<InvokeResult<string>> SendAsync(Email email);
+        Task<InvokeResult<string>> SendAsync(Email email, EntityHeader org, EntityHeader user);
 
-        Task<InvokeResult> SendAsync(string email, string subject, string message);
-        Task<InvokeResult<string>> RegisterContactAsync(Contact contact, Company company);
-        Task<InvokeResult<string>> RegisterContactAsync(Contact contact, EntityHeader org);
-        Task<InvokeResult<string>> CreateEmailListAsync(string listName, string orgId, string customField, string id);
+        Task<InvokeResult> SendAsync(string email, string subject, string message, EntityHeader org, EntityHeader user);
+        Task<InvokeResult<string>> RegisterContactAsync(Contact contact, Company company, EntityHeader org, EntityHeader user);
+        Task<InvokeResult<string>> RegisterContactAsync(Contact contact, EntityHeader org, EntityHeader user);
+        Task<InvokeResult<string>> CreateEmailListAsync(string listName, string customField, string id, EntityHeader org, EntityHeader user);
 
-        Task<InvokeResult> DeleteEmailListAsync(string orgId, string listId);
-        Task<InvokeResult> AddContactToListAsync(string listId, string contactId);
+        Task<InvokeResult> DeleteEmailListAsync(string listId, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> AddContactToListAsync(string listId, string contactId, EntityHeader org, EntityHeader user);
 
-        Task<InvokeResult<string>> AddEmailDesignAsync(string name, string subject, string htmlContents, string plainTextContent);
-        Task<InvokeResult> DeleteEmailDesignAsync(string id);
-        Task<InvokeResult> UpdateEmailDesignAsync(string id, string name, string subject, string htmlContents, string plainTextContent);
+        Task<InvokeResult<string>> AddEmailDesignAsync(string name, string subject, string htmlContents, string plainTextContent, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> DeleteEmailDesignAsync(string id, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> UpdateEmailDesignAsync(string id, string name, string subject, string htmlContents, string plainTextContent, EntityHeader org, EntityHeader user);
 
-        Task<InvokeResult<AppUser>> AddEmailSenderAsync(AppUser sender);
-        Task<InvokeResult<AppUser>> UpdateEmailSenderAsync(AppUser sender);
-        Task<InvokeResult> DeleteEmailSenderAsync(string id);
+        Task<InvokeResult<AppUser>> AddEmailSenderAsync(AppUser sender, EntityHeader org, EntityHeader user);
+        Task<InvokeResult<AppUser>> UpdateEmailSenderAsync(AppUser sender, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> DeleteEmailSenderAsync(string id, EntityHeader org, EntityHeader user);
 
-        Task<InvokeResult> RefreshSegementAsync(string id);
+        Task<InvokeResult> RefreshSegementAsync(string id, EntityHeader org, EntityHeader user);
 
-        Task<ListResponse<ContactList>> GetListsAsync(string orgId);
+        Task<ListResponse<ContactList>> GetListsAsync(EntityHeader org, EntityHeader user);
 
-        Task<InvokeResult<string>> StartImportJobAsync(string fieldMappings, Stream stream);
+        Task<InvokeResult<string>> StartImportJobAsync(string fieldMappings, Stream stream, EntityHeader org, EntityHeader user);
 
-        Task<ListResponse<EntityHeader>> GetEmailSendersAsync(string orgId);
+        Task<ListResponse<EntityHeader>> GetEmailSendersAsync(EntityHeader org, EntityHeader user);
+        Task<InvokeResult> UpdateListAsync(string sendGridListId, string name, EntityHeader org, EntityHeader user);
     }
 }

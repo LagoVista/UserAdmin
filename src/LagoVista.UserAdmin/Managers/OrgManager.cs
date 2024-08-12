@@ -418,7 +418,7 @@ namespace LagoVista.UserAdmin.Managers
 
             await AuthorizeAsync(user, org, "ResendInvite", invite);
 
-            var result = await SendInvitationAsync(invite, invite.OrganizationName, user);
+            var result = await SendInvitationAsync(invite, org, user);
             if (result.Successful)
             {
                 await _authLogMgr.AddAsync(AuthLogTypes.ResendOrgInvitationSuccess, userId: user.Id, userName: user.Text, extras: $"Re-Send invite to org {invite.OrganizationName} to {invite.Email} by {user.Text}");
@@ -498,23 +498,23 @@ namespace LagoVista.UserAdmin.Managers
             return environment;
         }
 
-        private async Task<InvokeResult> SendInvitationAsync(Invitation inviteModel, string orgName, EntityHeader user)
+        private async Task<InvokeResult> SendInvitationAsync(Invitation inviteModel, EntityHeader org, EntityHeader user)
         {
-            await _authLogMgr.AddAsync(AuthLogTypes.SendingOrgInvitation, userId: user.Id, userName: user.Text, orgId: inviteModel.OrganizationId, orgName: orgName, extras: $"Sending invite to org {orgName} to {inviteModel.Email} by {user.Text}");
+            await _authLogMgr.AddAsync(AuthLogTypes.SendingOrgInvitation, userId: user.Id, userName: user.Text, orgId: inviteModel.OrganizationId, orgName: org.Text, extras: $"Sending invite to org {org.Text} to {inviteModel.Email} by {user.Text}");
 
-            var subject = UserAdminResources.Invite_Greeting_Subject.Replace(Tokens.APP_NAME, AppConfig.AppName).Replace(Tokens.ORG_NAME, orgName);
-            var message = UserAdminResources.InviteUser_Greeting_Message.Replace(Tokens.USERS_FULL_NAME, user.Text).Replace(Tokens.ORG_NAME, orgName).Replace(Tokens.APP_NAME, AppConfig.AppName);
+            var subject = UserAdminResources.Invite_Greeting_Subject.Replace(Tokens.APP_NAME, AppConfig.AppName).Replace(Tokens.ORG_NAME, org.Text);
+            var message = UserAdminResources.InviteUser_Greeting_Message.Replace(Tokens.USERS_FULL_NAME, user.Text).Replace(Tokens.ORG_NAME, org.Text).Replace(Tokens.APP_NAME, AppConfig.AppName);
             message += $"<br /><br />{inviteModel.Message}<br /><br />";
             var acceptLink = $"{GetWebURI()}/api/auth/invite/accept/{inviteModel.RowKey}";
             var mobileAcceptLink = $"nuviot://acceptinvite?inviteId={inviteModel.RowKey}";
 
             message += UserAdminResources.InviteUser_ClickHere.Replace("[ACCEPT_LINK]", acceptLink).Replace("[MOBILE_ACCEPT_LINK]", mobileAcceptLink);
 
-            var result = await _emailSender.SendAsync(inviteModel.Email, subject, message);
+            var result = await _emailSender.SendAsync(inviteModel.Email, subject, message, org, user);
             if (result.Successful)
-                await _authLogMgr.AddAsync(AuthLogTypes.SendOrgInvitationSuccess, userId: user.Id, userName: user.Text, orgId: inviteModel.OrganizationId, orgName: orgName, extras: $"Sent invite to org {orgName} to {inviteModel.Email} by {user.Text}");
+                await _authLogMgr.AddAsync(AuthLogTypes.SendOrgInvitationSuccess, userId: user.Id, userName: user.Text, orgId: inviteModel.OrganizationId, orgName: org.Text, extras: $"Sent invite to org {org.Text} to {inviteModel.Email} by {user.Text}");
             else
-                await _authLogMgr.AddAsync(AuthLogTypes.SendEmailConfirmFailed, userId: user.Id, userName: user.Text, orgId: inviteModel.OrganizationId, orgName: orgName, errors: result.ErrorMessage, extras: $"Sent invite to org {orgName} to {inviteModel.Email} by {user.Text}");
+                await _authLogMgr.AddAsync(AuthLogTypes.SendEmailConfirmFailed, userId: user.Id, userName: user.Text, orgId: inviteModel.OrganizationId, orgName: org.Text, errors: result.ErrorMessage, extras: $"Sent invite to org {org.Text} to {inviteModel.Email} by {user.Text}");
 
             return result;
         }
@@ -601,7 +601,7 @@ namespace LagoVista.UserAdmin.Managers
             await _inviteUserRepo.InsertInvitationAsync(inviteModel);
 
             inviteModel = await _inviteUserRepo.GetInvitationAsync(inviteModel.RowKey);
-            await SendInvitationAsync(inviteModel, organization.Name, user);
+            await SendInvitationAsync(inviteModel, org, user);
             inviteModel.DateSent = DateTime.Now.ToJSONString();
             inviteModel.Status = Invitation.StatusTypes.Sent;
             await _inviteUserRepo.UpdateInvitationAsync(inviteModel);

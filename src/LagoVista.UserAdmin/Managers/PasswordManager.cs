@@ -86,7 +86,7 @@ namespace LagoVista.UserAdmin.Managers
             var subject = UserAdminResources.Email_ResetPassword_Subject.Replace("[APP_NAME]", _appConfig.AppName);
             var body = UserAdminResources.Email_ResetPassword_Body.Replace("[CALLBACK_URL]", callbackUrl).Replace("[MOBILE_CALLBACK_URL]", mobileCallbackUrl);
 
-            var result = await _emailSender.SendAsync(sendResetPasswordLink.Email, subject, body);
+            var result = await _emailSender.SendAsync(sendResetPasswordLink.Email, subject, body, appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
             if (result.Successful)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_SendResetPasswordLinkAsync", "SentLink",

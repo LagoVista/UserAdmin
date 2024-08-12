@@ -96,7 +96,7 @@ namespace LagoVista.UserAdmin.Managers
 
                 var appUserDetail = await _appuserRepo.FindByIdAsync(usr.Id);
                 var emailLink = await _linkShortner.ShortenLinkAsync($"{_appConfig.WebAddress}/api/distro/{id}/confirm/appuser/{usr.Id}/email");
-                await _emailSender.SendAsync(appUserDetail.Email, subject, message.Replace(confirmLink, emailLink.Result));
+                await _emailSender.SendAsync(appUserDetail.Email, subject, message.Replace(confirmLink, emailLink.Result), org, user);
                 _logger.Trace($"[DistributionManager__SendTestAsync] - Send App User Email {appUserDetail.Email}");
 
                 if (!String.IsNullOrEmpty(appUserDetail.PhoneNumber))
@@ -114,7 +114,7 @@ namespace LagoVista.UserAdmin.Managers
                 if (contact.SendEmail)
                 {
                     var emailLink = await _linkShortner.ShortenLinkAsync($"{_appConfig.WebAddress}/api/distro/{id}/confirm/external/{contact.Id}/email");
-                    await _emailSender.SendAsync(contact.Email, subject, message.Replace(confirmLink, emailLink.Result));
+                    await _emailSender.SendAsync(contact.Email, subject, message.Replace(confirmLink, emailLink.Result), org, user);
                     _logger.Trace($"[DistributionManager__SendTestAsync] - Send External Contact Email {contact.Email}");
                 }
 
@@ -197,7 +197,7 @@ namespace LagoVista.UserAdmin.Managers
             foreach (var appUser in distroList.AppUsers)
             {
                 var appUserDetail = await _appuserRepo.FindByIdAsync(appUser.Id);
-                await _emailSender.SendAsync(appUserDetail.Email, subject, message);
+                await _emailSender.SendAsync(appUserDetail.Email, subject, message, org, user);
             }
         }
 

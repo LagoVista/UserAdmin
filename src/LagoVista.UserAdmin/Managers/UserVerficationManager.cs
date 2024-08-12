@@ -115,7 +115,7 @@ namespace LagoVista.UserAdmin.Managers
 
                 var subject = UserAdminResources.Email_Verification_Subject.Replace("[APP_NAME]", _appConfig.AppName);
                 var body = UserAdminResources.Email_Verification_Body.Replace("[CALLBACK_URL]", callbackUrl).Replace("[MOBILE_CALLBACK_URL]", mobileCallbackUrl);
-                var result = await _emailSender.SendAsync(appUser.Email, subject, body);
+                var result = await _emailSender.SendAsync(appUser.Email, subject, body, _appConfig.SystemOwnerOrg, appUser.ToEntityHeader());
 
                 _adminLogger.LogInvokeResult("[UserVerficationManager_SendConfirmationEmailAsync]", result,
                     new KeyValuePair<string, string>("callbackLink", callbackUrl),
