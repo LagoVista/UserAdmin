@@ -140,6 +140,7 @@ namespace LagoVista.UserAdmin.Models.Security
                 DesktopSupport = DesktopSupport,
                 TabletSupport = TabletSupport,
                 PhoneSupport = PhoneSupport,
+                IsForProductLine = IsForProductLine,
             };
         }
 
@@ -203,6 +204,7 @@ namespace LagoVista.UserAdmin.Models.Security
         public string Link { get; set; }
         public bool IsLegacyNGX { get; set; }
         public bool IsExternalLink { get; set; }
+        public bool IsForProductLine { get; set; }
         public bool DesktopSupport { get; set; }
         public bool PhoneSupport { get; set; }
         public bool TabletSupport { get; set; }

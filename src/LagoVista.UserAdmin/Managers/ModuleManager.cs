@@ -5,6 +5,7 @@ using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Models.Security;
@@ -19,11 +20,13 @@ namespace LagoVista.UserAdmin.Managers
     {
         private IModuleRepo _moduleRepo;
         private IUserManager _userManager;
+        private IOrganizationRepo _orgRepo;
 
-        public ModuleManager(IModuleRepo moduleRepo, IUserManager userManager, ILogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security) : base(logger, appConfig, dependencyManager, security)
+        public ModuleManager(IModuleRepo moduleRepo, IUserManager userManager, IOrganizationRepo orgRepo, ILogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security) : base(logger, appConfig, dependencyManager, security)
         {
             _moduleRepo = moduleRepo ?? throw new ArgumentNullException(nameof(moduleRepo));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _orgRepo = orgRepo ?? throw new ArgumentNullException(nameof(orgRepo));
         }
 
         public async Task<InvokeResult> AddModuleAsync(Module module, EntityHeader org, EntityHeader user)
@@ -60,11 +63,12 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<ListResponse<ModuleSummary>> SysAdminGetModuleAsync(string orgId, EntityHeader user)
         {
             var editingUser = await _userManager.FindByIdAsync(user.Id);
+            var org = await _orgRepo.GetOrganizationAsync(orgId);
             if (!editingUser.IsSystemAdmin)
             {
                 return ListResponse<ModuleSummary>.FromErrors(new ErrorMessage() { Message = "Must be a System Admin to load all module by org" });
             }
-            return ListResponse<ModuleSummary>.Create( await _moduleRepo.GetModulesForOrgAndPublicAsync(orgId));
+            return ListResponse<ModuleSummary>.Create( await _moduleRepo.GetModulesForOrgAndPublicAsync(orgId, org.IsForProductLine));
         }
 
         public async Task<Module> GetModuleByKeyAsync(string key, EntityHeader org, EntityHeader user)

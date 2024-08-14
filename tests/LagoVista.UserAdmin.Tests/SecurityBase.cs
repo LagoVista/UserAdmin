@@ -169,9 +169,9 @@ namespace LagoVista.UserAdmin.Tests
                 return Task.FromResult(_modules.SingleOrDefault(mod => mod.Key == key && mod.OwnerOrganization.Id == orgId));
             }
 
-            public Task<List<ModuleSummary>> GetModulesForOrgAndPublicAsync(string orgId)
+            public Task<List<ModuleSummary>> GetModulesForOrgAndPublicAsync(string orgId, bool isForProductLine)
             {
-                return Task.FromResult(_modules.Select(mod => mod.CreateSummary()).Where(mod=> mod.IsPublic || mod.OwnerOrgId == orgId).OrderBy(mod => mod.SortOrder).ToList());
+                return Task.FromResult(_modules.Select(mod => mod.CreateSummary()).Where(mod=> mod.IsPublic || mod.OwnerOrgId == orgId || (isForProductLine && mod.IsForProductLine)).OrderBy(mod => mod.SortOrder).ToList());
             }
 
             public Task UpdateModuleAsync(Module module)

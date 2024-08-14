@@ -30,9 +30,10 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<List<ModuleSummary>> GetUserModulesAsync(string userId, string orgId)
         {
-            var userAccessList = await _userSecurityService.GetRoleAccessForUserAsync(userId, orgId);
-            var modules = await _moduleRepo.GetModulesForOrgAndPublicAsync(orgId);
             var org = await _orgRepo.GetOrganizationAsync(orgId);
+            var userAccessList = await _userSecurityService.GetRoleAccessForUserAsync(userId, orgId);
+            var modules = await _moduleRepo.GetModulesForOrgAndPublicAsync(orgId, org.IsForProductLine);
+            
             modules.AddRange(org.AdditionalModules);
             modules = modules.OrderBy(mod => mod.SortOrder).ToList();
 

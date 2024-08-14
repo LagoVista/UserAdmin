@@ -175,6 +175,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 Icon = Icon,
                 TagLine = TagLine,
                 Logo = Logo,
+                IsForProductLine = IsForProductLine,
                 DefaultTheme = DefaultTheme,
                 DefaultInstance = DefaultInstance,
                 DefaultDeviceRepository = DefaultDeviceRepository
@@ -201,6 +202,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public string LandingPage { get; set; }
         public EntityHeader DefaultDeviceRepository { get; set; }
         public EntityHeader DefaultInstance { get; set; }
+
+        public bool IsForProductLine { get; set; }
 
         public EntityHeader ToEntityHeader()
         {
