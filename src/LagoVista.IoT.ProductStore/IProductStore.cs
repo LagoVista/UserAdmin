@@ -7,6 +7,6 @@ namespace LagoVista.IoT.ProductStore
 {
     public interface IProductStore
     {
-        Task<IEnumerable<ProductOffering>> GetProductsAsync(string categoryKey);
+        Task<IEnumerable<ProductOffering>> GetProductsAsync(string orgns, string categoryKey);
     }
 }

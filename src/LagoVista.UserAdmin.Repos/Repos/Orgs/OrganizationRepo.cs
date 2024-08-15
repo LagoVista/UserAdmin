@@ -146,5 +146,28 @@ namespace LagoVista.UserAdmin.Repos.Orgs
                 throw new RecordNotFoundException("Org Namespace Does Not Exist", orgNameSpace);
             }
         }
+
+        public async Task<Organization> GetOrganizationFromNamespaceAsync(string orgNameSpace)
+        {
+            var cacheKey = $"org_id_for_namespace_{orgNameSpace}";
+
+            var orgId = await _cacheProvider.GetAsync(cacheKey);
+            if (!String.IsNullOrEmpty(orgId))
+            {
+                return await GetOrganizationAsync(orgId);
+            }
+
+            var organization = (await QueryAsync(org => org.Namespace == orgNameSpace)).ToList();
+            if (organization.Any())
+            {
+                orgId = organization.First().Id;
+                await _cacheProvider.AddAsync(cacheKey, orgId);
+                return await GetOrganizationAsync(orgId);
+            }
+            else
+            {
+                throw new RecordNotFoundException("Org Namespace Does Not Exist", orgNameSpace);
+            }
+        }
     }
 }
