@@ -55,7 +55,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public EntityHeader<OrgStatuses> OrgStatus { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Organization_Logo, FieldType: FieldTypes.MediaResourceUpload, UploadUrl: "/api/media/resource/public/upload", ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Organization_Logo, FieldType: FieldTypes.FileUpload, UploadUrl: "/api/media/resource/public/upload", ResourceType: typeof(UserAdminResources))]
         public EntityHeader Logo { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_TagLine, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
@@ -67,7 +67,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Icon { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Organization_HeroBackground, GeneratedImageSize: "1792x1024", DisplayImageSize:"1350x900", FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Organization_HeroBackground, GeneratedImageSize: "1792x1024", DisplayImageSize:"1350x900", FieldType: FieldTypes.FileUpload, UploadUrl: "/api/media/resource/public/upload", ResourceType: typeof(UserAdminResources))]
         public string HeroBackgroundImage { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_HeroTitle, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
@@ -180,7 +180,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(TagLine),
                 nameof(PrimaryTextColor),
                 nameof(PrimaryBgColor),
-                nameof(PrimaryTextColor),
+                nameof(AccentColor),
             };
         }
 
