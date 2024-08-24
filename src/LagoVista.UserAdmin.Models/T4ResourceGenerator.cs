@@ -1,4 +1,4 @@
-﻿/*7/23/2024 8:25:29 AM*/
+﻿/*8/24/2024 6:03:30 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1055,6 +1055,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization
 
 		public static string Organization { get { return GetResourceString("Organization"); } }
+//Resources:UserAdminResources:Organization_AccentColor
+
+		public static string Organization_AccentColor { get { return GetResourceString("Organization_AccentColor"); } }
 //Resources:UserAdminResources:Organization_CantCreate
 
 		public static string Organization_CantCreate { get { return GetResourceString("Organization_CantCreate"); } }
@@ -1109,9 +1112,18 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_Description
 
 		public static string Organization_Description { get { return GetResourceString("Organization_Description"); } }
+//Resources:UserAdminResources:Organization_Details
+
+		public static string Organization_Details { get { return GetResourceString("Organization_Details"); } }
 //Resources:UserAdminResources:Organization_Help
 
 		public static string Organization_Help { get { return GetResourceString("Organization_Help"); } }
+//Resources:UserAdminResources:Organization_HeroBackground
+
+		public static string Organization_HeroBackground { get { return GetResourceString("Organization_HeroBackground"); } }
+//Resources:UserAdminResources:Organization_HeroTitle
+
+		public static string Organization_HeroTitle { get { return GetResourceString("Organization_HeroTitle"); } }
 //Resources:UserAdminResources:Organization_IsForProductLine
 
 		public static string Organization_IsForProductLine { get { return GetResourceString("Organization_IsForProductLine"); } }
@@ -1163,6 +1175,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_Primary_Location
 
 		public static string Organization_Primary_Location { get { return GetResourceString("Organization_Primary_Location"); } }
+//Resources:UserAdminResources:Organization_PrimaryBgColor
+
+		public static string Organization_PrimaryBgColor { get { return GetResourceString("Organization_PrimaryBgColor"); } }
+//Resources:UserAdminResources:Organization_PrimaryTextColor
+
+		public static string Organization_PrimaryTextColor { get { return GetResourceString("Organization_PrimaryTextColor"); } }
+//Resources:UserAdminResources:Organization_SalesContact
+
+		public static string Organization_SalesContact { get { return GetResourceString("Organization_SalesContact"); } }
 //Resources:UserAdminResources:Organization_Status_Active
 
 		public static string Organization_Status_Active { get { return GetResourceString("Organization_Status_Active"); } }
@@ -1172,6 +1193,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_Status_Archived
 
 		public static string Organization_Status_Archived { get { return GetResourceString("Organization_Status_Archived"); } }
+//Resources:UserAdminResources:Organization_SubLocation
+
+		public static string Organization_SubLocation { get { return GetResourceString("Organization_SubLocation"); } }
+//Resources:UserAdminResources:Organization_SubLocation_Details
+
+		public static string Organization_SubLocation_Details { get { return GetResourceString("Organization_SubLocation_Details"); } }
+//Resources:UserAdminResources:Organization_SubLocations
+
+		public static string Organization_SubLocations { get { return GetResourceString("Organization_SubLocations"); } }
 //Resources:UserAdminResources:Organization_TagLine
 
 		public static string Organization_TagLine { get { return GetResourceString("Organization_TagLine"); } }
@@ -1926,6 +1956,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Month_Select = "Month_Select";
 			public const string Month_September = "Month_September";
 			public const string Organization = "Organization";
+			public const string Organization_AccentColor = "Organization_AccentColor";
 			public const string Organization_CantCreate = "Organization_CantCreate";
 			public const string Organization_CreateGettingStartedData = "Organization_CreateGettingStartedData";
 			public const string Organization_CreateGettingStartedData_Help = "Organization_CreateGettingStartedData_Help";
@@ -1944,7 +1975,10 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_DefaultResource_Watermark = "Organization_DefaultResource_Watermark";
 			public const string Organization_DefaultTheme = "Organization_DefaultTheme";
 			public const string Organization_Description = "Organization_Description";
+			public const string Organization_Details = "Organization_Details";
 			public const string Organization_Help = "Organization_Help";
+			public const string Organization_HeroBackground = "Organization_HeroBackground";
+			public const string Organization_HeroTitle = "Organization_HeroTitle";
 			public const string Organization_IsForProductLine = "Organization_IsForProductLine";
 			public const string Organization_LandingPage = "Organization_LandingPage";
 			public const string Organization_LandingPage_Help = "Organization_LandingPage_Help";
@@ -1962,9 +1996,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_OrgStatuses_Spam = "Organization_OrgStatuses_Spam";
 			public const string Organization_Owner = "Organization_Owner";
 			public const string Organization_Primary_Location = "Organization_Primary_Location";
+			public const string Organization_PrimaryBgColor = "Organization_PrimaryBgColor";
+			public const string Organization_PrimaryTextColor = "Organization_PrimaryTextColor";
+			public const string Organization_SalesContact = "Organization_SalesContact";
 			public const string Organization_Status_Active = "Organization_Status_Active";
 			public const string Organization_Status_Active_BehindPayments = "Organization_Status_Active_BehindPayments";
 			public const string Organization_Status_Archived = "Organization_Status_Archived";
+			public const string Organization_SubLocation = "Organization_SubLocation";
+			public const string Organization_SubLocation_Details = "Organization_SubLocation_Details";
+			public const string Organization_SubLocations = "Organization_SubLocations";
 			public const string Organization_TagLine = "Organization_TagLine";
 			public const string Organization_Title = "Organization_Title";
 			public const string Organization_User_Description = "Organization_User_Description";

@@ -1664,4 +1664,34 @@
   <data name="Page_IsForProductLine" xml:space="preserve">
     <value>Is for Product Line</value>
   </data>
+  <data name="Organization_AccentColor" xml:space="preserve">
+    <value>Accent Color</value>
+  </data>
+  <data name="Organization_Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Organization_HeroBackground" xml:space="preserve">
+    <value>Hero Background Image</value>
+  </data>
+  <data name="Organization_HeroTitle" xml:space="preserve">
+    <value>Hero Title</value>
+  </data>
+  <data name="Organization_PrimaryBgColor" xml:space="preserve">
+    <value>Primary Background Color</value>
+  </data>
+  <data name="Organization_PrimaryTextColor" xml:space="preserve">
+    <value>Primary Text Color</value>
+  </data>
+  <data name="Organization_SalesContact" xml:space="preserve">
+    <value>Sales Contact</value>
+  </data>
+  <data name="Organization_SubLocation" xml:space="preserve">
+    <value>Sub-Location</value>
+  </data>
+  <data name="Organization_SubLocations" xml:space="preserve">
+    <value>Sub-Locations</value>
+  </data>
+  <data name="Organization_SubLocation_Details" xml:space="preserve">
+    <value>A Sub-Location is part of a location that has specific details.</value>
+  </data>
 </root>

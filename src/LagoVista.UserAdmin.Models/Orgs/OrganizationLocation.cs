@@ -17,13 +17,13 @@ namespace LagoVista.UserAdmin.Models.Orgs
 {
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Location_Title, UserAdminResources.Names.Organization_Location_Help, 
         UserAdminResources.Names.Organization_Location_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
-        GetListUrl:"/api/org/locations", GetUrl:"/api/org/location/:id", SaveUrl:"/api/org/location", FactoryUrl:"/api/org/location/factory", DeleteUrl:"/api/org/location" , Icon: "icon-fo-internet-2")]
+        GetListUrl:"/api/org/locations", GetUrl:"/api/org/location/:id", SaveUrl:"/api/org/location", FactoryUrl:"/api/org/location/factory", DeleteUrl:"/api/org/location" , Icon: "icon-fo-office")]
     public class OrgLocation : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IIconEntity, IFormDescriptor, IFormDescriptorAdvanced, IFormDescriptorAdvancedCol2, ISummaryFactory
     {
         public OrgLocation()
         {
             Id = Guid.NewGuid().ToId();
-            Icon = "icon-fo-internet-2";
+            Icon = "icon-fo-office";
         }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization, IsRequired:true, ResourceType: typeof(UserAdminResources))]
@@ -121,8 +121,15 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Common_Description, FieldType:FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public String Description { get; set; }
 
+        public string HeroTitle { get; set; }
+
+        public string HeroImage { get; set; }
+
         public List<OrgLocationDiagramReference> DiagramReferences { get; set; } = new List<OrgLocationDiagramReference>();
-       
+
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_SubLocations, FieldType: FieldTypes.ChildListInline, FactoryUrl: "/api/org/location/factory", ResourceType: typeof(UserAdminResources))]
+        public List<SubLocation> SubLocations { get; set; } = new List<SubLocation>();
 
         public OrgLocationSummary CreateSummary()
         {
@@ -169,6 +176,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(PhoneNumber),
                 nameof(Description),
                 nameof(Notes),
+                nameof(SubLocations),
             };
         }
 

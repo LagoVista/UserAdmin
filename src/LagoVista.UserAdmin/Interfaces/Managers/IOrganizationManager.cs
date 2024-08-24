@@ -42,6 +42,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
         Task<ListResponse<OwnedObject>> GetOwnedObjectsForOrgAsync(string orgId, ListRequest request, EntityHeader org, EntityHeader user);
 
+        Task<PublicOrgInformation> GetPublicOrginfoAsync(string orgns);
 
         Task<bool> IsUserOrgAdminAsync(string orgId, string userId);
 

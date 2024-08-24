@@ -23,8 +23,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Title, UserAdminResources.Names.Organization_Help,
         UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
-        EditUIUrl: "/organization/orgaccount", Icon: "icon-ae-building",
-        SaveUrl: "/api/org", GetUrl: "/api/org/{id}")]
+        EditUIUrl: "/organization/orgaccount", Icon: "icon-ae-building", SaveUrl: "/api/org", GetUrl: "/api/org/{id}")]
     public class Organization : UserAdminModelBase, INamedEntity, IKeyedEntity, IValidateable, IOwnedEntity, IFormDescriptor, IFormDescriptorCol2, IIconEntity, ISummaryFactory
     {
         public const string Organization_OrgStatuses_Active = "active";
@@ -40,14 +39,14 @@ namespace LagoVista.UserAdmin.Models.Orgs
             Icon = "icon-ae-building";
         }
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_Namespace, NamespaceType: NamespaceTypes.Organization, NamespaceUniqueMessageResource: UserAdminResources.Names.Organization_NamespaceInUse, 
-            FieldType:FieldTypes.NameSpace, IsRequired: true, IsUserEditable:false, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Namespace, NamespaceType: NamespaceTypes.Organization, NamespaceUniqueMessageResource: UserAdminResources.Names.Organization_NamespaceInUse,
+            FieldType: FieldTypes.NameSpace, IsRequired: true, IsUserEditable: false, ResourceType: typeof(UserAdminResources))]
         public string Namespace { get; set; }
-        
-        [FormField(LabelResource: UserAdminResources.Names.Organization_WebSite, FieldType:FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_WebSite, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public String WebSite { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_Status, IsUserEditable:false, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Status, IsUserEditable: false, ResourceType: typeof(UserAdminResources))]
         public String Status { get; set; }
 
         public bool InitializationCompleted { get; set; }
@@ -57,7 +56,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader<OrgStatuses> OrgStatus { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_Logo, FieldType: FieldTypes.MediaResourceUpload, UploadUrl: "/api/media/resource/public/upload", ResourceType: typeof(UserAdminResources))]
-        public string Logo { get; set; }
+        public EntityHeader Logo { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_TagLine, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public string TagLine { get; set; }
@@ -68,6 +67,13 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Icon { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Organization_HeroBackground, GeneratedImageSize: "1792x1024", DisplayImageSize:"1350x900", FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string HeroBackgroundImage { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_HeroTitle, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string HeroTitle { get; set; }
+
+
         [FormField(LabelResource: UserAdminResources.Names.Organization_Owner, FieldType: FieldTypes.UserPicker, IsRequired: true, IsUserEditable: true,
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
         public EntityHeader Owner { get; set; }
@@ -76,16 +82,20 @@ namespace LagoVista.UserAdmin.Models.Orgs
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
         public EntityHeader PrimaryLocation { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Admin_Contact, FieldType: FieldTypes.UserPicker, IsRequired:false,
+        [FormField(LabelResource: UserAdminResources.Names.Admin_Contact, FieldType: FieldTypes.UserPicker, IsRequired: false,
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
         public EntityHeader AdminContact { get; set; }
-        
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_SalesContact, FieldType: FieldTypes.UserPicker, IsRequired: false,
+            WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader SalesContact { get; set; }
+
         [FormField(LabelResource: UserAdminResources.Names.Billing_Contact, FieldType: FieldTypes.UserPicker, IsRequired: false,
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
         public EntityHeader BillingContact { get; set; }
-        
+
         [FormField(LabelResource: UserAdminResources.Names.Technical_Contact, FieldType: FieldTypes.UserPicker, IsRequired: false,
-            WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark,  ResourceType: typeof(UserAdminResources))]
+            WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
         public EntityHeader TechnicalContact { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultRepo, FieldType: FieldTypes.EntityHeaderPicker, IsRequired: false, EntityHeaderPickerUrl: "/api/devicerepos",
@@ -108,7 +118,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public EntityHeader DefaultContributor { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultQAResource, HelpResource:UserAdminResources.Names.Organization_DefaultQAResource_Help, FieldType: FieldTypes.UserPicker, 
+        [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultQAResource, HelpResource: UserAdminResources.Names.Organization_DefaultQAResource_Help, FieldType: FieldTypes.UserPicker,
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public EntityHeader DefaultQAResource { get; set; }
 
@@ -116,13 +126,23 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Organization_IsForProductLine, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool IsForProductLine { get; set; }
 
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_PrimaryBgColor, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources))]
+        public string PrimaryBgColor { get; set; } = "#1976D2";
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_AccentColor, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources))]
+        public string AccentColor { get; set; } = "#D48D17";
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_PrimaryTextColor, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources))]
+        public string PrimaryTextColor { get; set; } = "#F4F4F4";
+
         public List<ModuleSummary> AdditionalModules { get; set; } = new List<ModuleSummary>();
 
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_Locations, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public List<EntityHeader> Locations { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Organization_LandingPage, HelpResource:UserAdminResources.Names.Organization_LandingPage_Help, FieldType:FieldTypes.Text, IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Organization_LandingPage, HelpResource: UserAdminResources.Names.Organization_LandingPage_Help, FieldType: FieldTypes.Text, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public string LandingPage { get; set; }
         public bool IsArchived { get; set; }
 
@@ -135,6 +155,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(Icon),
                 nameof(Owner),
                 nameof(AdminContact),
+                nameof(SalesContact),
                 nameof(BillingContact),
                 nameof(TechnicalContact),
                 nameof(DefaultProjectLead),
@@ -150,11 +171,36 @@ namespace LagoVista.UserAdmin.Models.Orgs
             {
                 nameof(DefaultTheme),
                 nameof(WebSite),
-                nameof(LandingPage), 
+                nameof(LandingPage),
                 nameof(DefaultDeviceRepository),
                 nameof(DefaultInstance),
+                nameof(HeroTitle),
+                nameof(HeroBackgroundImage),
                 nameof(Logo),
                 nameof(TagLine),
+                nameof(PrimaryTextColor),
+                nameof(PrimaryBgColor),
+                nameof(PrimaryTextColor),
+            };
+        }
+
+        public PublicOrgInformation ToPublicOrgInfo()
+        {
+            if (!IsForProductLine)
+                throw new InvalidOperationException("Should only get public information for product line.");
+
+            return new PublicOrgInformation()
+            {
+                AccentColor = AccentColor,
+                HeroBackgroundImage = HeroBackgroundImage,
+                HeroTitle = HeroTitle,
+                Icon = Icon,
+                Logo = Logo,
+                Name = Name,
+                Namespace = Namespace,
+                PrimaryBgColor = PrimaryBgColor,
+                PrimaryTextColor = PrimaryTextColor,
+                TagLine = TagLine
             };
         }
 
@@ -192,13 +238,13 @@ namespace LagoVista.UserAdmin.Models.Orgs
      UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
      EditUIUrl: "/organization/orgaccount", Icon: "icon-ae-building",
      SaveUrl: "/api/org", GetUrl: "/api/org/{id}")]
-    public class OrganizationSummary : SummaryData, IOrganizationSummary 
+    public class OrganizationSummary : SummaryData, IOrganizationSummary
     {
         public string Text { get; set; }
         public string Namespace { get; set; }
-        public string Logo { get; set; }
+        public EntityHeader Logo { get; set; }
         public string TagLine { get; set; }
-        public string DefaultTheme { get; set; }   
+        public string DefaultTheme { get; set; }
         public string LandingPage { get; set; }
         public EntityHeader DefaultDeviceRepository { get; set; }
         public EntityHeader DefaultInstance { get; set; }
@@ -209,5 +255,22 @@ namespace LagoVista.UserAdmin.Models.Orgs
         {
             return EntityHeader.Create(Id, Namespace, Text);
         }
+    }
+
+
+
+    public class PublicOrgInformation
+    {
+        public string Name { get; set; }
+        public string Namespace { get; set; }
+        public EntityHeader Logo { get; set; }
+
+        public string TagLine { get; set; }
+        public string Icon { get; set; }
+        public string PrimaryBgColor { get; set; }
+        public string AccentColor { get; set; }
+        public string PrimaryTextColor { get; set; }
+        public string HeroBackgroundImage { get; set; }
+        public string HeroTitle { get; set; }
     }
 }
