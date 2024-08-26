@@ -98,5 +98,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<string> GetOrgNameAsync(string orgId);
         Task<string> GetOrgNameSpaceAsync(string orgId);
         Task<string> GetOrgIdForNameSpaceAsync(string orgNameSpace);
+
+        Task<EntityHeader> GetOrgEntityHeaderForNameSpaceAsync(string orgNameSpace);
     }
 }

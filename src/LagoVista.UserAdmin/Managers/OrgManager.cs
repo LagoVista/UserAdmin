@@ -1221,6 +1221,13 @@ namespace LagoVista.UserAdmin.Managers
             var org = await _organizationRepo.GetOrganizationAsync(id);
             return org.ToPublicOrgInfo();
         }
+
+        public async Task<EntityHeader> GetOrgEntityHeaderForNameSpaceAsync(string orgNameSpace)
+        {
+            var orgId = await _organizationRepo.GetOrganizationIdForNamespaceAsync(orgNameSpace);
+            var org = await _organizationRepo.GetOrganizationAsync(orgId);
+            return org.ToEntityHeader();
+        }
     }
 
     public class SecurityHelper
