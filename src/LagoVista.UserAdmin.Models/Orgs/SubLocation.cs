@@ -12,7 +12,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 {
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Title, UserAdminResources.Names.Organization_Help,
     UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
-        FactoryUrl:"/api/org/location/factory", Icon: "icon-fo-internet-2")]
+        FactoryUrl: "/api/org/location/sublocation/factory", Icon: "icon-fo-internet-2")]
     public class SubLocation : IIDEntity, IKeyedEntity, INamedEntity, IValidateable, IIconEntity, IFormDescriptor
     {
         public string Id { get; set; }

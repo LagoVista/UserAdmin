@@ -128,7 +128,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public List<OrgLocationDiagramReference> DiagramReferences { get; set; } = new List<OrgLocationDiagramReference>();
 
 
-        [FormField(LabelResource: UserAdminResources.Names.Organization_SubLocations, FieldType: FieldTypes.ChildListInline, FactoryUrl: "/api/org/location/factory", ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Organization_SubLocations, FieldType: FieldTypes.ChildListInline, FactoryUrl: "/api/org/location/sublocation/factory", ResourceType: typeof(UserAdminResources))]
         public List<SubLocation> SubLocations { get; set; } = new List<SubLocation>();
 
         public OrgLocationSummary CreateSummary()

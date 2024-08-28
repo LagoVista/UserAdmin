@@ -191,6 +191,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
             return new PublicOrgInformation()
             {
+                Id = Id,
                 AccentColor = AccentColor,
                 HeroBackgroundImage = HeroBackgroundImage,
                 HeroTitle = HeroTitle,
@@ -261,6 +262,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
     public class PublicOrgInformation
     {
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Namespace { get; set; }
         public EntityHeader Logo { get; set; }
