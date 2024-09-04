@@ -119,11 +119,13 @@ namespace LagoVista.UserAdmin.Managers
 
             var cantDeleteReason = new StringBuilder();
 
-            var billingContactOrgs = await _orgRepo.GetBillingContactOrgsForUserAsync(id);
+            
             var orgsToDelete = new List<EntityHeader>();
             foreach (var userOrg in appUser.Organizations)
             {
                 var users = await _orgUserRepo.GetUsersForOrgAsync(userOrg.Id);
+                var billingContactOrgs = await _orgRepo.GetBillingContactOrgsForUserAsync(userOrg.Id, id);
+
                 if (users.Count() == 1 && users.First().UserId == id)
                 {
                     if (await _orgRepo.HasBillingRecords(userOrg.Id))

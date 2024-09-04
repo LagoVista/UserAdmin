@@ -19,7 +19,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
         Task<bool> HasBillingRecords(string orgId);
         Task<ListResponse<OrganizationSummary>> GetAllOrgsAsync(ListRequest listRequest);
         Task<ListResponse<OrganizationSummary>> GetAllOrgsAsync(string orgSearch, ListRequest listRequest);
-        Task<List<EntityHeader>> GetBillingContactOrgsForUserAsync(string userId);
+        Task<List<EntityHeader>> GetBillingContactOrgsForUserAsync(string orgId, string userId);
         Task<string> GetLandingPageFororgAsync(string orgId);
 
 

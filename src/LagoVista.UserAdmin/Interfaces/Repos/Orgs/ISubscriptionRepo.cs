@@ -10,11 +10,11 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
     {
         Task AddSubscriptionAsync(Subscription subscription);
         Task UpdateSubscriptionAsync(Subscription subscription);
-        Task DeleteSubscriptionAsync(Guid id);
+        Task DeleteSubscriptionAsync(string orgId, Guid id);
         Task DeleteSubscriptionsForOrgAsync(string orgId);
         Task<Subscription> GetTrialSubscriptionAsync(string orgId);
 
-        Task<Subscription> GetSubscriptionAsync(Guid id, bool disableTracking = false);
+        Task<Subscription> GetSubscriptionAsync(string orgId, Guid id, bool disableTracking = false);
 
         Task<IEnumerable<SubscriptionSummary>> GetSubscriptionsForOrgAsync(string orgId);
 

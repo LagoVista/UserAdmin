@@ -20,7 +20,7 @@ namespace LagoVista.UserAdmin.Tests.TeamsIntegration
         public string SecretValue = Environment.GetEnvironmentVariable("GRAPH_SECRET_VALUE");
 
         ClientSecretCredential _creds;
-        private static GraphServiceClient? _appClient;
+        private static GraphServiceClient _appClient;
 
         [TestInitialize]
         public void Init()

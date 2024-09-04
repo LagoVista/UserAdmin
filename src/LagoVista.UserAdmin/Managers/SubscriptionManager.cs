@@ -88,7 +88,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<Subscription> GetSubscriptionAsync(Guid id, EntityHeader org, EntityHeader user)
         {
-            var subscription = await _subscriptionRepo.GetSubscriptionAsync(id);
+            var subscription = await _subscriptionRepo.GetSubscriptionAsync(org.Id, id);
             await AuthorizeAsync(user, org, "getSubscription", subscription);
             return subscription;
         }
@@ -117,7 +117,7 @@ namespace LagoVista.UserAdmin.Managers
         {
             await AuthorizeAsync(user, org, "updateSubscription", subscription);
 
-            var oldSubscription = await _subscriptionRepo.GetSubscriptionAsync(subscription.Id, true);
+            var oldSubscription = await _subscriptionRepo.GetSubscriptionAsync(org.Id, subscription.Id, true);
 
             ValidationCheck(subscription, Actions.Update);
 

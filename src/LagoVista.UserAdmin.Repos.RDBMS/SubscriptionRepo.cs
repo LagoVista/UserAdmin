@@ -6,40 +6,72 @@ using LagoVista.UserAdmin.Models.Orgs;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using LagoVista.Core.Exceptions;
+using LagoVista.Core.Models;
+using Microsoft.Extensions.Logging;
+using System.Security.Cryptography;
 
 namespace LagoVista.UserAdmin.Repos.RDBMS
 {
     public class SubscriptionRepo : ISubscriptionRepo
     {
-        UserAdminDataContext _dataContext;
-        public SubscriptionRepo(UserAdminDataContext dataContext)
+        private readonly IRDBMSConnectionProvider _connectionProvider;
+        UserAdminDataContext _dataCtx;
+        public SubscriptionRepo(UserAdminDataContext dataContext, IRDBMSConnectionProvider connectionProvider)
         {
-            _dataContext = dataContext;
+            _dataCtx = dataContext;
+            _connectionProvider = connectionProvider;
         }
+
+
+        public async Task<UserAdminDataContext> GetBillingDataContextAsync(string orgId)
+        {
+            var connection = await _connectionProvider.GetConnectionAsync(orgId);
+            switch (connection.ConnectionType)
+            {
+                case RDBMSConnectionType.PosgreSQLDedicated:
+
+                    var options = new DbContextOptionsBuilder<UserAdminDataContext>().UseNpgsql(connection.ConnectionString);
+                    if (connection.VerboseLogging)
+                    {
+                        var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+                        var logger = loggerFactory.CreateLogger<RDBMSManager>();
+
+                        options = options.UseLoggerFactory(loggerFactory);
+                    }
+
+                    return new UserAdminDataContext(options.Options);
+                default:
+                    return _dataCtx;
+            }
+        }
+
 
         public async Task AddSubscriptionAsync(Subscription subscription)
         {
-            _dataContext.Subscription.Add(subscription);
-            await _dataContext.SaveChangesAsync();
+            var ctx = await GetBillingDataContextAsync(subscription.OrgId);
+            ctx.Subscription.Add(subscription);
+            await ctx.SaveChangesAsync();
         }
 
-        public async Task DeleteSubscriptionAsync(Guid id)
+        public async Task DeleteSubscriptionAsync(string orgId, Guid id)
         {
-            var subscription = await GetSubscriptionAsync(id);
-            _dataContext.Subscription.Remove(subscription);
-            await _dataContext.SaveChangesAsync();
+            var ctx = await GetBillingDataContextAsync(orgId);
+            var subscription = await GetSubscriptionAsync(orgId, id);
+            ctx.Subscription.Remove(subscription);
+            await ctx.SaveChangesAsync();
         }
 
-        public async Task<Subscription> GetSubscriptionAsync(Guid id, bool disableTracking = false)
+        public async Task<Subscription> GetSubscriptionAsync(string orgId, Guid id, bool disableTracking = false)
         {
+            var ctx = await GetBillingDataContextAsync(orgId);
             Subscription subscription;
             if (disableTracking)
             {
-                subscription = await _dataContext.Subscription.AsNoTracking().Where(prd => prd.Id == id).FirstOrDefaultAsync();
+                subscription = await ctx.Subscription.AsNoTracking().Where(prd => prd.Id == id).FirstOrDefaultAsync();
             }
             else
             {
-                subscription = await _dataContext.Subscription.Where(prd => prd.Id == id).FirstOrDefaultAsync();
+                subscription = await ctx.Subscription.Where(prd => prd.Id == id).FirstOrDefaultAsync();
             }
 
             if (subscription == null)
@@ -50,38 +82,47 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
             return subscription;
         }
 
-        public Task<Subscription> GetTrialSubscriptionAsync(string orgId)
+        public async Task<Subscription> GetTrialSubscriptionAsync(string orgId)
         {
-            return _dataContext.Subscription.Where(prd => prd.OrgId == orgId && prd.Key == Subscription.SubscriptionKey_Trial).FirstOrDefaultAsync();
+            var ctx = await GetBillingDataContextAsync(orgId);
+            return await ctx.Subscription.Where(prd => prd.OrgId == orgId && prd.Key == Subscription.SubscriptionKey_Trial).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<SubscriptionSummary>> GetSubscriptionsForOrgAsync(string orgId)
         {
-            var subscriptions = await _dataContext.Subscription.Where(pc => pc.OrgId == orgId).ToListAsync();
+            var ctx = await GetBillingDataContextAsync(orgId);
+            var subscriptions = await ctx.Subscription.Where(pc => pc.OrgId == orgId).ToListAsync();
             return from sub in subscriptions select sub.CreateSummary();
         }
 
-        public Task<bool> QueryKeyInUse(string key, string orgId)
+        public async Task<bool> QueryKeyInUse(string key, string orgId)
         {
-            return _dataContext.Subscription.Where(pc => pc.OrgId == orgId && pc.Key == key).AnyAsync();
+            var ctx = await GetBillingDataContextAsync(orgId);
+            return await ctx.Subscription.Where(pc => pc.OrgId == orgId && pc.Key == key).AnyAsync();
         }
 
 
-        public Task UpdateSubscriptionAsync(Subscription subscription)
+        public async Task UpdateSubscriptionAsync(Subscription subscription)
         {
-            _dataContext.Subscription.Update(subscription);
-            return _dataContext.SaveChangesAsync();
+            // Need to ensure this gets inserted at DatTime type UTC
+            subscription.CreationDate = new DateTime(subscription.CreationDate.Ticks, DateTimeKind.Utc);
+            subscription.LastUpdatedDate = DateTime.UtcNow;
+
+            var ctx = await GetBillingDataContextAsync(subscription.OrgId);
+            ctx.Subscription.Update(subscription);
+            await  ctx.SaveChangesAsync();
         }
 
         public async Task DeleteSubscriptionsForOrgAsync(string orgId)
         {
-            var subscriptions = await _dataContext.Subscription.Where(pc => pc.OrgId == orgId).ToListAsync();
+            var ctx = await GetBillingDataContextAsync(orgId);
+            var subscriptions = await ctx.Subscription.Where(pc => pc.OrgId == orgId).ToListAsync();
             foreach (var subscription in subscriptions)
             {
-                _dataContext.Subscription.Remove(subscription);
+                ctx.Subscription.Remove(subscription);
             }
 
-            await _dataContext.SaveChangesAsync();
+            await ctx.SaveChangesAsync();
         }
     }
 }

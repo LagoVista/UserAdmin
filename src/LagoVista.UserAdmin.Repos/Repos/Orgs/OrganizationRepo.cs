@@ -59,9 +59,9 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             return await base.QuerySummaryAsync<OrganizationSummary, Organization>(qry => true, org => org.Name, listRequest);
         }
 
-        public Task<List<EntityHeader>> GetBillingContactOrgsForUserAsync(string userId)
+        public Task<List<EntityHeader>> GetBillingContactOrgsForUserAsync(string orgId, string userId)
         {
-            return _rdbmsUserManager.GetBillingContactOrgsForUserAsync(userId);
+            return _rdbmsUserManager.GetBillingContactOrgsForUserAsync(orgId, userId);
         }
 
         public async Task<string> GetLandingPageFororgAsync(string orgId)

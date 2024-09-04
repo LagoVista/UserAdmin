@@ -66,9 +66,8 @@ namespace LagoVista.UserAdmin.Managers
             ISecurity security,
             IBackgroundServiceTaskQueue taskQueue,
             IOrgInitializer orgInitializer,
-            IDefaultRoleList defaultRoleList,
-            
-        IOwnedObjectRepo ownedObjectRepo,
+            IDefaultRoleList defaultRoleList,            
+            IOwnedObjectRepo ownedObjectRepo,
             IUserRoleManager useRoleManager,
             IAuthenticationLogManager authLogMgr,
             ISubscriptionManager subscriptionManager,

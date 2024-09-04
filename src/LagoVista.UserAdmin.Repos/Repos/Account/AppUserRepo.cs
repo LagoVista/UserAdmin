@@ -51,7 +51,7 @@ namespace LagoVista.UserAdmin.Repos.Users
         public async Task CreateAsync(AppUser user)
         {
             await CreateDocumentAsync(user);
-            await _rdbmsUserManager.AddAppUserAsync(user);
+            
         }
 
         public async Task DeleteAsync(AppUser user)
@@ -59,7 +59,8 @@ namespace LagoVista.UserAdmin.Repos.Users
             try
             {
                 await DeleteDocumentAsync(user.Id);
-                await _rdbmsUserManager.DeleteAppUserAsync(user.Id);
+                foreach(var org in user.Organizations)
+                    await _rdbmsUserManager.RemoveAppUserFromOrgAsync(org.Id, user.Id);
             }
             catch(Exception ex)
             {
@@ -126,8 +127,14 @@ namespace LagoVista.UserAdmin.Repos.Users
 
         public async Task UpdateAsync(AppUser user)
         {
+            var existingUser = await GetDocumentAsync(user.Id);
             await UpsertDocumentAsync(user);
-            await _rdbmsUserManager.UpdateAppUserAsync(user);
+
+            if (existingUser.Name != user.Name || existingUser.Email != user.Email)
+            {
+                foreach(var org in user.Organizations)
+                    await _rdbmsUserManager.UpdateAppUserAsync(org.Id, user);
+            }
         }
 
         public Task<AppUser> FindByThirdPartyLogin(string providerId, string providerKey)
@@ -234,7 +241,9 @@ namespace LagoVista.UserAdmin.Repos.Users
         public async Task DeleteAsync(string userId)
         {
             await this.DeleteDocumentAsync(userId);
-            await this._rdbmsUserManager.DeleteAppUserAsync(userId);
+            var user = await GetDocumentAsync(userId);
+            foreach(var org in user.Organizations)
+                await this._rdbmsUserManager.RemoveAppUserFromOrgAsync(org.Id, userId);
         }
 
         public async Task<ListResponse<UserInfoSummary>> GetUsersWithoutOrgsAsync(ListRequest listRequest)
