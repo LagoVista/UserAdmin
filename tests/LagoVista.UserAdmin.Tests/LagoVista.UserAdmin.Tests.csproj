@@ -9,8 +9,7 @@
     <RootNamespace>LagoVista.UserAdmin.Tests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.10.4" />
-    <!--<PackageReference Include="LagoVista.IoT.SecurityManager" Version="3.0.2666.0842" />-->
+    <!--<PackageReference Include="LagoVista.IoT.SecurityManager" Version="3.0.2672.1832" />-->
     <PackageReference Include="Microsoft.Graph" Version="5.44.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="Moq" Version="4.18.2" />
