@@ -50,6 +50,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Location_GeoLocation, FieldType: FieldTypes.GeoLocation, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public GeoLocation GeoLocation { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Location_GeoLocation, FieldType: FieldTypes.Custom, CustomFieldType:"boudninggeorect", IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        public string BoundingGeoLocation { get; set; }
+
 
         [FormField(LabelResource: UserAdminResources.Names.OrgLocation_PhoneNumber, FieldType: FieldTypes.Phone, IsRequired: false, ResourceType: typeof(UserAdminResources))]
 
@@ -173,6 +176,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(AdminContact),
                 nameof(TechnicalContact),
                 nameof(GeoLocation),
+                nameof(BoundingGeoLocation),
                 nameof(PhoneNumber),
                 nameof(Description),
                 nameof(Notes),

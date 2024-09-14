@@ -28,8 +28,7 @@ namespace LagoVista.AspNetCore.Identity.Services
         ILagoVistaAspNetCoreIdentityProviderSettings _settings;
         IAppConfig _appConfig;
         IAdminLogger _adminLogger;
-        IOrganizationManager _orgManager;
-
+ 
 
         public SendGridEmailService(ILagoVistaAspNetCoreIdentityProviderSettings settings, IAppConfig appConfig, IAdminLogger adminLogger)
         {
