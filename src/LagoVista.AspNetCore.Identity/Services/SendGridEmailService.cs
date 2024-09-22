@@ -28,7 +28,22 @@ namespace LagoVista.AspNetCore.Identity.Services
         ILagoVistaAspNetCoreIdentityProviderSettings _settings;
         IAppConfig _appConfig;
         IAdminLogger _adminLogger;
- 
+
+        
+        public List<string> GetRequiredImportFields()
+        {
+            return new List<string>()
+            {
+                "email",
+                "first_name",
+                "last_namne",
+                "organization",
+                "organiation_id",
+                "custom_list_id",
+                "custom_list"
+            };
+        }
+
 
         public SendGridEmailService(ILagoVistaAspNetCoreIdentityProviderSettings settings, IAppConfig appConfig, IAdminLogger adminLogger)
         {
@@ -1311,9 +1326,7 @@ namespace LagoVista.AspNetCore.Identity.Services
                     return InvokeResult<string>.FromError(strResponse);
                 }
 
-
                 var fields = JsonConvert.DeserializeObject<SendGridFieldDefinitions>(strResponse);
-
 
                 var mappings = fieldMappings.Split(','); // the name of the field isn't what we want to pass in, we need to look it up and then get the id for the column...go figure...
                 var mappedMappings = new List<string>();

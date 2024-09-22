@@ -3,6 +3,7 @@ using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Contacts;
 using LagoVista.UserAdmin.Models.Users;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -43,5 +44,6 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult<string>> ScheduleEmailSendListAsync(string singleSendId, string scheduleDate, EntityHeader org, EntityHeader user);
         Task<ListResponse<EmailListSend>> GetEmailListSendsAsync(ListRequest listRequest, EntityHeader org, EntityHeader user);
         Task<InvokeResult> DeleteEmailListSendAsync(string listId, EntityHeader org, EntityHeader user);
+        List<string> GetRequiredImportFields();
     }
 }

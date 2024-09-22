@@ -62,8 +62,6 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
             Assert.IsTrue(true);
         }
 
-
-
         [TestMethod]
         public async Task CreateJobTestAsyncc()
         {
@@ -83,6 +81,19 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
 
                 var result = await _emailSenderService.StartImportJobAsync("email,first_name,last_name,industry_id,niche_id", memoryStream, _org, _user);
                 Assert.IsTrue(result.Successful, result.ErrorMessage);
+            }
+        }
+
+        [TestMethod]
+        public async Task ImportListIntoSendGrid()
+        {
+            var lines = System.IO.File.ReadAllLines("EmailIntegrationTests/list.csv");
+            var fields = lines.FirstOrDefault().Split(',');
+            
+
+            foreach(var line in fields)
+            {
+                Console.WriteLine(line);
             }
         }
     }

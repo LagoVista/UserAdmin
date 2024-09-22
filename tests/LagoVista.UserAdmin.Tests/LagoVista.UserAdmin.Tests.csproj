@@ -9,7 +9,7 @@
     <RootNamespace>LagoVista.UserAdmin.Tests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <!--<PackageReference Include="LagoVista.IoT.SecurityManager" Version="3.0.2677.1142" />-->
+    <!--<PackageReference Include="LagoVista.IoT.SecurityManager" Version="3.0.2684.1832" />-->
     <PackageReference Include="Azure.Identity" Version="1.12.0" />
     <PackageReference Include="Microsoft.Graph" Version="5.44.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
@@ -27,5 +27,10 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="EmailIntegrationTests\list.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
