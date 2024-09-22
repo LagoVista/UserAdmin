@@ -83,18 +83,5 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
                 Assert.IsTrue(result.Successful, result.ErrorMessage);
             }
         }
-
-        [TestMethod]
-        public async Task ImportListIntoSendGrid()
-        {
-            var lines = System.IO.File.ReadAllLines("EmailIntegrationTests/list.csv");
-            var fields = lines.FirstOrDefault().Split(',');
-            
-
-            foreach(var line in fields)
-            {
-                Console.WriteLine(line);
-            }
-        }
     }
 }

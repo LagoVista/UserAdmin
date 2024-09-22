@@ -28,7 +28,6 @@ namespace LagoVista.AspNetCore.Identity.Services
         ILagoVistaAspNetCoreIdentityProviderSettings _settings;
         IAppConfig _appConfig;
         IAdminLogger _adminLogger;
-
         
         public List<string> GetRequiredImportFields()
         {
@@ -1332,12 +1331,13 @@ namespace LagoVista.AspNetCore.Identity.Services
                 var mappedMappings = new List<string>();
                 foreach (var mapping in mappings)
                 {
-                    var field = fields.CustomFields.FirstOrDefault(fld => fld.Name == mapping);
+                    var mappedFieldName = mapping.Trim();
+                    var field = fields.CustomFields.FirstOrDefault(fld => fld.Name == mappedFieldName);
                     if (field == null)
-                        field = fields.ReservedFields.FirstOrDefault(field => field.Name == mapping);
+                        field = fields.ReservedFields.FirstOrDefault(field => field.Name == mappedFieldName);
 
                     if (field == null)
-                        return InvokeResult<string>.FromError($"[{mapping}] is not a valid mapping");
+                        return InvokeResult<string>.FromError($"[{mappedFieldName}] is not a valid mapping");
 
                     mappedMappings.Add(field.Id);
                 }
@@ -1362,7 +1362,7 @@ namespace LagoVista.AspNetCore.Identity.Services
                         streamCLient.DefaultRequestHeaders.Add(hdr.Header, hdr.Value);
                         Console.WriteLine($"Add Header {hdr.Header} - {hdr.Value} ");
                     }
-
+                    stream.Seek(0, SeekOrigin.Begin);
                     var uploadStreamResponse = await streamCLient.PutAsync(sgResponse.UploadUri, new StreamContent(stream));
                     strResponse = await uploadStreamResponse.Content.ReadAsStringAsync();
 
@@ -1374,6 +1374,23 @@ namespace LagoVista.AspNetCore.Identity.Services
 
                     return InvokeResult<string>.Create(sgResponse.JobId);
                 }
+            }
+        }
+
+        public async Task<InvokeResult<EmailImportStatus>> GetImportJobStatusAsync(string jobId, EntityHeader org, EntityHeader user)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
+                var response = await client.GetAsync($"https://api.sendgrid.com/v3/marketing/contacts/imports/{jobId}");
+                var strResponse = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return InvokeResult<EmailImportStatus>.FromError(String.IsNullOrEmpty(strResponse) ? response.StatusCode.ToString() : strResponse);
+                }
+
+                return InvokeResult<EmailImportStatus>.Create(JsonConvert.DeserializeObject<EmailImportStatus>(strResponse));
             }
         }
 

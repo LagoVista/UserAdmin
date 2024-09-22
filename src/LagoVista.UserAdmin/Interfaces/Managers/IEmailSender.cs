@@ -44,6 +44,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult<string>> ScheduleEmailSendListAsync(string singleSendId, string scheduleDate, EntityHeader org, EntityHeader user);
         Task<ListResponse<EmailListSend>> GetEmailListSendsAsync(ListRequest listRequest, EntityHeader org, EntityHeader user);
         Task<InvokeResult> DeleteEmailListSendAsync(string listId, EntityHeader org, EntityHeader user);
+        Task<InvokeResult<EmailImportStatus>> GetImportJobStatusAsync(string jobId, EntityHeader org, EntityHeader user);
         List<string> GetRequiredImportFields();
     }
 }
