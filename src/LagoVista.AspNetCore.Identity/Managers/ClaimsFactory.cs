@@ -35,10 +35,14 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string IsUserDevice = "com.lagovista.iot.isuserdevice";
         public const string IsFinancceAdmin = "com.lagovista.iot.isfinanceadmin";
         public const string CurrentUserProfilePictureurl = "com.lagovista.iot.currentprofilepictureurl";
+        public const string DeviceId = "com.lagovista.iot.deviceid";
+        public const string DeviceName = "com.lagovista.iot.devicename";
+        public const string DeviceRepoId = "com.lagovista.iot.devicerepoid";
+        public const string DeviceRepoName = "com.lagovista.iot.devicereponame";
 
         // support for unattended Kiosk authentication
         public const string KioskId = "com.lagovista.iot.kioskid";
-      
+
         public List<Claim> GetClaims(AppUser user)
         {
             var claims = new List<Claim> {
@@ -108,5 +112,22 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return claims;
         }
 
+        public List<Claim> GetClaimsForDevice(EntityHeader org, EntityHeader user, EntityHeader deviceRepo, EntityHeader device)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(CurrentUserId, user.Id),
+                new Claim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(user.Text) ? user.Text: None),
+                new Claim(ClaimTypes.Surname, None),
+                new Claim(CurrentOrgName, org.Text),
+                new Claim(CurrentOrgId, org.Id),
+                new Claim(DeviceRepoName, deviceRepo.Text),
+                new Claim(DeviceRepoId, deviceRepo.Id),
+                new Claim(DeviceRepoName, device.Text),
+                new Claim(DeviceId, device.Id),
+            };
+
+            return claims;
+        }
     }
 }

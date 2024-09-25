@@ -33,20 +33,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public List<AppUserContact> AppUsers { get; set; } = new List<AppUserContact>();
 
-
-
         [FormField(LabelResource: UserAdminResources.Names.DistributionList_ExternalContacts, IsRequired: false, ChildListDisplayMember: "firstName", FieldType: FieldTypes.ChildListInline, EntityHeaderPickerUrl: "/api/distro/externalcontact/factory", ResourceType: typeof(UserAdminResources))]
         public List<ExternalContact> ExternalContacts { get; set; } = new List<ExternalContact>();
-
-
-        [CustomValidator]
-        public void Validate(ValidationResult result, Actions action)
-        {
-            if (AppUsers.Count == 0 && ExternalContacts.Count == 0)
-            {
-                result.AddUserError("Must have at least one person on the distribution list.");
-            }
-        }
 
         public DistroListSummary CreateSummary()
         {
