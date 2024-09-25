@@ -560,6 +560,21 @@ namespace LagoVista.AspNetCore.Identity.Services
 
         public async Task<InvokeResult<string>> CreateEmailListAsync(string listName, EntityHeader org, EntityHeader user)
         {
+            switch (_appConfig.Environment)
+            {
+                case Environments.Local:
+                case Environments.LocalDevelopment:
+                case Environments.Development:
+                    listName = $"env:Dev, {listName}";
+                    break;
+                case Environments.Testing:
+                    listName = $"env:Test, {listName}";
+                    break;
+                case Environments.Beta:
+                    listName = $"env:Beta, {listName}";
+                    break;
+            }
+
             var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
 
             var listRequest = new SendGridListRequest()
@@ -1399,12 +1414,17 @@ namespace LagoVista.AspNetCore.Identity.Services
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
-                var response = await client.PostAsJsonAsync("https://api.sendgrid.com/v3/marketing/segments/2.0/refresh", new { user_time_zone = "America/New_York" });
+                var url = $"https://api.sendgrid.com/v3/marketing/segments/2.0/refresh/{id}";
+
+
+                var response = await client.PostAsJsonAsync(url, new { user_time_zone = "America/New_York" });
                 var strResponse = await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    return InvokeResult.FromError(strResponse);
+                    Console.WriteLine($"[SendGridEmailSender__RefreshSegementAsync] Could not post to: {url}, Response Code: {response.StatusCode}, {strResponse}");
+
+                    return InvokeResult.FromError(String.IsNullOrEmpty(strResponse) ? response.StatusCode.ToString() : $"HTTP {response.StatusCode}");
                 }
 
                 return InvokeResult.Success;
