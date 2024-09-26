@@ -1,4 +1,4 @@
-﻿/*8/24/2024 6:03:30 PM*/
+﻿/*9/26/2024 7:17:08 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -489,6 +489,54 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:DayOfWeek_Wednesday
 
 		public static string DayOfWeek_Wednesday { get { return GetResourceString("DayOfWeek_Wednesday"); } }
+//Resources:UserAdminResources:DeviceOwner_Description
+
+		public static string DeviceOwner_Description { get { return GetResourceString("DeviceOwner_Description"); } }
+//Resources:UserAdminResources:DeviceOwner_Devices
+
+		public static string DeviceOwner_Devices { get { return GetResourceString("DeviceOwner_Devices"); } }
+//Resources:UserAdminResources:DeviceOwner_EmailAddress
+
+		public static string DeviceOwner_EmailAddress { get { return GetResourceString("DeviceOwner_EmailAddress"); } }
+//Resources:UserAdminResources:DeviceOwner_FirstName
+
+		public static string DeviceOwner_FirstName { get { return GetResourceString("DeviceOwner_FirstName"); } }
+//Resources:UserAdminResources:DeviceOwner_LastName
+
+		public static string DeviceOwner_LastName { get { return GetResourceString("DeviceOwner_LastName"); } }
+//Resources:UserAdminResources:DeviceOwner_Password
+
+		public static string DeviceOwner_Password { get { return GetResourceString("DeviceOwner_Password"); } }
+//Resources:UserAdminResources:DeviceOwner_Password_Confirm
+
+		public static string DeviceOwner_Password_Confirm { get { return GetResourceString("DeviceOwner_Password_Confirm"); } }
+//Resources:UserAdminResources:DeviceOwner_PhoneNumber
+
+		public static string DeviceOwner_PhoneNumber { get { return GetResourceString("DeviceOwner_PhoneNumber"); } }
+//Resources:UserAdminResources:DeviceOwner_Title
+
+		public static string DeviceOwner_Title { get { return GetResourceString("DeviceOwner_Title"); } }
+//Resources:UserAdminResources:DeviceOwners_Title
+
+		public static string DeviceOwners_Title { get { return GetResourceString("DeviceOwners_Title"); } }
+//Resources:UserAdminResources:DeviceOwnersDevices_Description
+
+		public static string DeviceOwnersDevices_Description { get { return GetResourceString("DeviceOwnersDevices_Description"); } }
+//Resources:UserAdminResources:DeviceOwnersDevices_Device
+
+		public static string DeviceOwnersDevices_Device { get { return GetResourceString("DeviceOwnersDevices_Device"); } }
+//Resources:UserAdminResources:DeviceOwnersDevices_DeviceId
+
+		public static string DeviceOwnersDevices_DeviceId { get { return GetResourceString("DeviceOwnersDevices_DeviceId"); } }
+//Resources:UserAdminResources:DeviceOwnersDevices_DeviceRepository
+
+		public static string DeviceOwnersDevices_DeviceRepository { get { return GetResourceString("DeviceOwnersDevices_DeviceRepository"); } }
+//Resources:UserAdminResources:DeviceOwnersDevices_Organization
+
+		public static string DeviceOwnersDevices_Organization { get { return GetResourceString("DeviceOwnersDevices_Organization"); } }
+//Resources:UserAdminResources:DeviceOwnersDevices_Title
+
+		public static string DeviceOwnersDevices_Title { get { return GetResourceString("DeviceOwnersDevices_Title"); } }
 //Resources:UserAdminResources:DistributionList_ExternalContacts
 
 		public static string DistributionList_ExternalContacts { get { return GetResourceString("DistributionList_ExternalContacts"); } }
@@ -1770,6 +1818,22 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string DayOfWeek_Thursday = "DayOfWeek_Thursday";
 			public const string DayOfWeek_Tuesday = "DayOfWeek_Tuesday";
 			public const string DayOfWeek_Wednesday = "DayOfWeek_Wednesday";
+			public const string DeviceOwner_Description = "DeviceOwner_Description";
+			public const string DeviceOwner_Devices = "DeviceOwner_Devices";
+			public const string DeviceOwner_EmailAddress = "DeviceOwner_EmailAddress";
+			public const string DeviceOwner_FirstName = "DeviceOwner_FirstName";
+			public const string DeviceOwner_LastName = "DeviceOwner_LastName";
+			public const string DeviceOwner_Password = "DeviceOwner_Password";
+			public const string DeviceOwner_Password_Confirm = "DeviceOwner_Password_Confirm";
+			public const string DeviceOwner_PhoneNumber = "DeviceOwner_PhoneNumber";
+			public const string DeviceOwner_Title = "DeviceOwner_Title";
+			public const string DeviceOwners_Title = "DeviceOwners_Title";
+			public const string DeviceOwnersDevices_Description = "DeviceOwnersDevices_Description";
+			public const string DeviceOwnersDevices_Device = "DeviceOwnersDevices_Device";
+			public const string DeviceOwnersDevices_DeviceId = "DeviceOwnersDevices_DeviceId";
+			public const string DeviceOwnersDevices_DeviceRepository = "DeviceOwnersDevices_DeviceRepository";
+			public const string DeviceOwnersDevices_Organization = "DeviceOwnersDevices_Organization";
+			public const string DeviceOwnersDevices_Title = "DeviceOwnersDevices_Title";
 			public const string DistributionList_ExternalContacts = "DistributionList_ExternalContacts";
 			public const string DistroList_Description = "DistroList_Description";
 			public const string DistroList_Help = "DistroList_Help";

@@ -25,6 +25,7 @@ namespace LagoVista.UserAdmin.Repos
     {
         public static void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IDeviceOwnerRepo, DeviceOwnerRepo>();
             services.AddTransient<IAppUserRepo, AppUserRepo>();
             services.AddTransient<ILocationUserRepo, LocationUserRepo>();
             services.AddTransient<IRefreshTokenRepo, RefreshTokenRepo>();

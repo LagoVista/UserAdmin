@@ -18,5 +18,13 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<List<EntityHeader>> GetBillingContactOrgsForUserAsync(string orgId, string userId);
         Task<bool> UserExistsAsync(string orgId, string userId);
         Task<bool> OrgExistsAsync(string orgId);
+
+        Task<InvokeResult> AddDeviceOwnerAsync(DeviceOwnerUser deviceOwner);
+        Task<InvokeResult> UpdateDeviceOwnerAsync(DeviceOwnerUser updateDeviceOwner);
+        Task<InvokeResult> DeleteDeviceOwnerAsync(string orgId,string id);
+
+        Task<InvokeResult> AddOwnedDeviceAsync(string orgId, string ownerId, DeviceOwnerDevices device);
+        Task<InvokeResult> UpdateOwnedDeviceAsync(string orgId, DeviceOwnerDevices device);
+        Task<InvokeResult> RemoveOwnedDeviceAsync(string orgId,string id);
     }
 }

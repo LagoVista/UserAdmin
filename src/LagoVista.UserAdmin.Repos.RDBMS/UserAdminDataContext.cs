@@ -17,13 +17,11 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
         public DbSet<RDBMSOrg> Org { get; set; }
         public DbSet<RDBMSAppUser> AppUser { get; set; }
         public DbSet<Subscription> Subscription { get; set; }
+        public DbSet<RDBMSDeviceOwnerUser> DeviceOwnerUser { get; set; }
+        public DbSet<OwnedDevice> DeviceOwnerUserDevices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //  NuvIoTDev1234
-
-
-
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.LowerCaseNames();

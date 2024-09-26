@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using RingCentral;
 using LagoVista.UserAdmin.Repos.RDBMS.Models;
 using Npgsql;
+using System.Security.Cryptography;
 
 namespace LagoVista.UserAdmin.Repos.RDBMS
 {
@@ -182,6 +183,83 @@ select o.*
         {
             var ctx = await GetBillingDataContextAsync(orgId);
             return await ctx.Org.AnyAsync(org => org.OrgId == orgId);
+        }
+
+        public async Task<InvokeResult> AddDeviceOwnerAsync(DeviceOwnerUser deviceOwner)
+        {
+            var dbUser = new RDBMSDeviceOwnerUser()
+            {
+                FullName = $"{deviceOwner.FirstName} {deviceOwner.LastName}",
+                CreationDate = deviceOwner.CreationDate.ToDateTime(),
+                LastUpdatedDate = deviceOwner.LastUpdatedDate.ToDateTime(),
+                Email = deviceOwner.EmailAddress,
+                DeviceOwnerUserId = deviceOwner.Id                
+            };
+
+            var ctx = await GetBillingDataContextAsync(deviceOwner.OwnerOrganization.Id);
+            ctx.DeviceOwnerUser.Add(dbUser);
+            await ctx.SaveChangesAsync();
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> UpdateDeviceOwnerAsync(DeviceOwnerUser updateDeviceOwner)
+        {
+            var ctx = await GetBillingDataContextAsync(updateDeviceOwner.OwnerOrganization.Id);
+            var owner = await ctx.DeviceOwnerUser.SingleOrDefaultAsync(dev => dev.DeviceOwnerUserId == updateDeviceOwner.Id);
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> DeleteDeviceOwnerAsync(string orgId, string id)
+        {
+            var ctx = await GetBillingDataContextAsync(orgId);
+            var owner = await ctx.DeviceOwnerUser.SingleOrDefaultAsync(dev => dev.DeviceOwnerUserId == id);
+            if (owner != null)
+            {
+                ctx.DeviceOwnerUser.Remove(owner);
+                await ctx.SaveChangesAsync();
+            }
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> AddOwnedDeviceAsync(string id, string orgId, DeviceOwnerDevices device)
+        {
+            var ownedDevice = new OwnedDevice()
+            {
+                Id = device.Id,
+                DeviceUniqueId = device.Device.Id,
+                DeviceId = device.DeviceId,
+                DeviceName = device.Device.Text,
+                DeviceOwnerUserId = id,
+                ProductId = Guid.Parse(device.Product.Id),
+                Discount = 0,
+            };
+
+            var ctx = await GetBillingDataContextAsync(orgId);
+            ctx.DeviceOwnerUserDevices.Add(ownedDevice);
+            await ctx.SaveChangesAsync();
+        
+            return InvokeResult.Success;
+        }
+
+        public Task<InvokeResult> UpdateOwnedDeviceAsync(string orgId, DeviceOwnerDevices device)
+        {
+            return Task.FromResult(InvokeResult.Success);
+        }
+
+        public async Task<InvokeResult> RemoveOwnedDeviceAsync(string orgId, string id)
+        {
+            var ctx = await GetBillingDataContextAsync(orgId);
+            var ownedDevice = await ctx.DeviceOwnerUserDevices.SingleOrDefaultAsync(dev => dev.Id == id);
+            if (ownedDevice != null)
+            {
+                ctx.DeviceOwnerUserDevices.Remove(ownedDevice);
+                await ctx.SaveChangesAsync();
+            }
+
+            return InvokeResult.Success;
         }
     }
 }
