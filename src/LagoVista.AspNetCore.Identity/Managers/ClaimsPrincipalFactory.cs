@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -74,13 +75,19 @@ namespace LagoVista.AspNetCore.Identity.Managers
         {
             var principal = await base.CreateAsync(user);
 
-            ((ClaimsIdentity)principal.Identity).AddClaims(_claimsFactory.GetClaims(user).ToArray());
+            var claims = _claimsFactory.GetClaims(user).ToArray();
+            Console.Write($"Total Claims {claims.Count()}");
+
+            ((ClaimsIdentity)principal.Identity).AddClaims(claims);
 
             return principal;
         }
 
         protected override async Task<ClaimsIdentity> GenerateClaimsAsync(DeviceOwnerUser user)
         {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
             return await base.GenerateClaimsAsync(user);
         }
     }

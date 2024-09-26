@@ -5,6 +5,7 @@ using System.Security.Claims;
 using LagoVista.Core.Models;
 using System.Linq;
 using RingCentral;
+using System;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -27,6 +28,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string CurrentOrgId = "com.lagovista.iot.currentorgid";
         public const string OAuthToken = "com.lagovista.iot.oauth.token";
         public const string OAuthTokenVerifier = "com.lagovista.iot.oauth.tokenverifier";
+        public const string Anonymous = "com.lagovista.iot.anonymous";
         public const string EmailVerified = "com.lagovista.iot.emailverified";
         public const string PhoneVerfiied = "com.lagovista.iot.phoneverified";
         public const string IsSystemAdmin = "com.lagovista.iot.issystemadmin";
@@ -116,23 +118,46 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return claims;
         }
 
-        public List<Claim> GetClaims(DeviceOwnerUser pinAuthuser)
+        public List<Claim> GetClaims(DeviceOwnerUser owner)
         {
+            if (string.IsNullOrEmpty(owner.Id))
+                throw new ArgumentNullException("Owner.Id");
+
+            if (EntityHeader.IsNullOrEmpty(owner.OwnerOrganization))
+                throw new ArgumentNullException(nameof(DeviceOwnerUser.OwnerOrganization));
+
+            if (EntityHeader.IsNullOrEmpty(owner.CurrentDevice))
+                throw new ArgumentNullException(nameof(DeviceOwnerUser.CurrentDevice));
+
+            if (EntityHeader.IsNullOrEmpty(owner.CurrentRepo))
+                throw new ArgumentNullException(nameof(DeviceOwnerUser.CurrentRepo));
+
+            if (String.IsNullOrEmpty(owner.CurrentDeviceId))
+                throw new ArgumentNullException(nameof(DeviceOwnerUser.CurrentDeviceId));
+
             var claims = new List<Claim>
             {
-                new Claim(CurrentUserId, pinAuthuser.Id),
-                new Claim(ClaimTypes.GivenName, pinAuthuser.FirstName),
-                new Claim(ClaimTypes.Surname, pinAuthuser.LastName),
-                new Claim(Logintype, nameof(DeviceOwnerDevices)),
+                new Claim(CurrentUserId, owner.Id),
+                
+                new Claim(ClaimTypes.GivenName, string.IsNullOrEmpty( owner.FirstName) ? "anonymous" : owner.FirstName),
+                new Claim(ClaimTypes.Surname, string.IsNullOrEmpty( owner.LastName) ? "anonymous" : owner.LastName),
+                
+                new Claim(Logintype, nameof(DeviceOwnerUser)),
+                new Claim(Anonymous, owner.IsAnonymous.ToString()),
+                
                 new Claim(EmailVerified, true.ToString()),
-                new Claim(CurrentOrgName, pinAuthuser.OwnerOrganization.Text),
-                new Claim(CurrentOrgId, pinAuthuser.OwnerOrganization.Id),
                 new Claim(PhoneVerfiied, true.ToString()),
-                new Claim(DeviceId, pinAuthuser.CurrentDeviceId),
-                new Claim(DeviceRepoId, pinAuthuser.CurrentRepo.Id),
-                new Claim(DeviceRepoName, pinAuthuser.CurrentRepo.Text),
-                new Claim(DeviceUniqueId, pinAuthuser.CurrentDevice.Id),
-                new Claim(DeviceName, pinAuthuser.CurrentDevice.Text),
+                
+                new Claim(CurrentOrgName, owner.OwnerOrganization.Text),
+                new Claim(CurrentOrgId, owner.OwnerOrganization.Id),                
+                
+                new Claim(DeviceId, owner.CurrentDeviceId),
+
+                new Claim(DeviceRepoId, owner.CurrentRepo.Id),
+                new Claim(DeviceRepoName, owner.CurrentRepo.Text),
+
+                new Claim(DeviceUniqueId, owner.CurrentDevice.Id),
+                new Claim(DeviceName, owner.CurrentDevice.Text),
             };
 
             return claims;
