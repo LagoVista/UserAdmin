@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace LagoVista.UserAdmin.Models.Orgs
 {
 
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Title, UserAdminResources.Names.Organization_Help,
+    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.ExternalContact_Title, UserAdminResources.Names.ExternalContact_Description,
     UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
     FactoryUrl: "/api/distro/externalcontact/factory", Icon: "icon-pz-skill")]
     public class ExternalContact : IIDEntity, IValidateable, IFormDescriptor, IFormConditionalFields

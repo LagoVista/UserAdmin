@@ -49,6 +49,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public List<Claim> GetClaims(AppUser user)
         {
+            if (user.LoginType == LoginTypes.DeviceOwner)
+                return GetClaimsForDeviceOwner(user);
+
             var claims = new List<Claim> {
                 new Claim(Logintype, nameof(AppUser)),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
@@ -84,6 +87,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public List<Claim> GetClaims(AppUser user, EntityHeader org, bool isOrgAdmin, bool isAppBuilder)
         {
+            if (user.LoginType == LoginTypes.DeviceOwner)
+                return GetClaimsForDeviceOwner(user);
+
             var claims = new List<Claim> {
                 new Claim(Logintype, nameof(AppUser)),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
@@ -118,7 +124,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return claims;
         }
 
-        public List<Claim> GetClaims(DeviceOwnerUser owner)
+        public List<Claim> GetClaimsForDeviceOwner(AppUser owner)
         {
             if (string.IsNullOrEmpty(owner.Id))
                 throw new ArgumentNullException("Owner.Id");

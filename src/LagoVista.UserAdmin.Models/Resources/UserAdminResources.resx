@@ -1742,4 +1742,10 @@
   <data name="DeviceOwner_Title" xml:space="preserve">
     <value>Device Owner</value>
   </data>
+  <data name="ExternalContact_Description" xml:space="preserve">
+    <value>An external contact is a user that is not in the system as a user that can be notified.</value>
+  </data>
+  <data name="ExternalContact_Title" xml:space="preserve">
+    <value>External Contact</value>
+  </data>
 </root>

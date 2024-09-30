@@ -60,35 +60,4 @@ namespace LagoVista.AspNetCore.Identity.Managers
             }
         }
     }
-
-    public class DeviceOwnerUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<DeviceOwnerUser, Role>
-    {
-        private readonly IClaimsFactory _claimsFactory;
-
-        public DeviceOwnerUserClaimsPrincipalFactory(UserManager<DeviceOwnerUser> userManager, RoleManager<Role> roleManager, IClaimsFactory claimsFactory, IOptions<IdentityOptions> optionsAccessor) :
-            base(userManager, roleManager, optionsAccessor)
-        {
-            _claimsFactory = claimsFactory ?? throw new ArgumentNullException(nameof(claimsFactory));
-        }
-
-        public async override Task<ClaimsPrincipal> CreateAsync(DeviceOwnerUser user)
-        {
-            var principal = await base.CreateAsync(user);
-
-            var claims = _claimsFactory.GetClaims(user).ToArray();
-            Console.Write($"Total Claims {claims.Count()}");
-
-            ((ClaimsIdentity)principal.Identity).AddClaims(claims);
-
-            return principal;
-        }
-
-        protected override async Task<ClaimsIdentity> GenerateClaimsAsync(DeviceOwnerUser user)
-        {
-            if (user == null)
-                throw new ArgumentNullException(nameof(user));
-
-            return await base.GenerateClaimsAsync(user);
-        }
-    }
 }

@@ -1,4 +1,4 @@
-﻿/*9/26/2024 7:17:08 AM*/
+﻿/*9/30/2024 3:58:11 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -627,12 +627,18 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:ErrInvitation_CantFind
 
 		public static string ErrInvitation_CantFind { get { return GetResourceString("ErrInvitation_CantFind"); } }
+//Resources:UserAdminResources:ExternalContact_Description
+
+		public static string ExternalContact_Description { get { return GetResourceString("ExternalContact_Description"); } }
 //Resources:UserAdminResources:ExternalContact_SendEmail
 
 		public static string ExternalContact_SendEmail { get { return GetResourceString("ExternalContact_SendEmail"); } }
 //Resources:UserAdminResources:ExternalContact_SendSMS
 
 		public static string ExternalContact_SendSMS { get { return GetResourceString("ExternalContact_SendSMS"); } }
+//Resources:UserAdminResources:ExternalContact_Title
+
+		public static string ExternalContact_Title { get { return GetResourceString("ExternalContact_Title"); } }
 //Resources:UserAdminResources:ExternalLoginConfirmVM_Description
 
 		public static string ExternalLoginConfirmVM_Description { get { return GetResourceString("ExternalLoginConfirmVM_Description"); } }
@@ -1864,8 +1870,10 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Err_UserId_DoesNotMatch = "Err_UserId_DoesNotMatch";
 			public const string ErrInvitation_AlreayAccepted = "ErrInvitation_AlreayAccepted";
 			public const string ErrInvitation_CantFind = "ErrInvitation_CantFind";
+			public const string ExternalContact_Description = "ExternalContact_Description";
 			public const string ExternalContact_SendEmail = "ExternalContact_SendEmail";
 			public const string ExternalContact_SendSMS = "ExternalContact_SendSMS";
+			public const string ExternalContact_Title = "ExternalContact_Title";
 			public const string ExternalLoginConfirmVM_Description = "ExternalLoginConfirmVM_Description";
 			public const string ExternalLoginConfirmVM_Help = "ExternalLoginConfirmVM_Help";
 			public const string ExternalLoginConfirmVM_Title = "ExternalLoginConfirmVM_Title";

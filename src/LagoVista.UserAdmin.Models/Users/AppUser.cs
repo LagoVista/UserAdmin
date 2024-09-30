@@ -13,6 +13,14 @@ using System.Threading;
 
 namespace LagoVista.UserAdmin.Models.Users
 {
+    public enum LoginTypes
+    {
+        DeviceOwner,
+        AppUser,
+        Kiosk
+    }
+
+
     [EntityDescription(Domains.UserDomain, UserAdminResources.Names.AppUser_Title, UserAdminResources.Names.AppUser_Help, UserAdminResources.Names.AppUser_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
     public class AppUser : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, ISummaryFactory
     {
@@ -85,6 +93,9 @@ namespace LagoVista.UserAdmin.Models.Users
         public bool SendGridVerified { get; set; }
         public string SendGridVerifiedFailedReason { get; set; }
 
+        public LoginTypes LoginType { get; set; } = LoginTypes.AppUser;
+
+        public bool IsAnonymous { get; set; } = false;
 
         public string LastLogin { get; set; }
 
@@ -101,6 +112,10 @@ namespace LagoVista.UserAdmin.Models.Users
         public List<EntityHeader> Organizations { get; set; }
         public OrganizationSummary CurrentOrganization { get; set; }
         public List<EntityHeader> CurrentOrganizationRoles { get; set; }
+
+        public EntityHeader CurrentRepo { get; set; }
+        public EntityHeader CurrentDevice { get; set; }
+        public string CurrentDeviceId { get; set; }
 
         public ImageDetails ProfileImageUrl { get; set; }
 
