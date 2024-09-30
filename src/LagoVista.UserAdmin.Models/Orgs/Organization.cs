@@ -37,6 +37,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
             Key = Guid.NewGuid().ToId().ToLower();
             DefaultTheme = "default";
             Icon = "icon-ae-building";
+            TimeZone = new EntityHeader()
+            {
+                Id = "UTC",
+                Text = "(UTC) Coordinated Universal Time",
+            };
         }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Namespace, NamespaceType: NamespaceTypes.Organization, NamespaceUniqueMessageResource: UserAdminResources.Names.Organization_NamespaceInUse,
@@ -73,6 +78,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Organization_HeroTitle, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string HeroTitle { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Common_TimeZome, IsRequired: true, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
+        public EntityHeader TimeZone { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_Owner, FieldType: FieldTypes.UserPicker, IsRequired: true, IsUserEditable: true,
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
@@ -169,6 +176,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         {
             return new List<string>()
             {
+                nameof(TimeZone),
                 nameof(DefaultTheme),
                 nameof(WebSite),
                 nameof(LandingPage),

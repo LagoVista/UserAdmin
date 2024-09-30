@@ -24,6 +24,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
         {
             Id = Guid.NewGuid().ToId();
             Icon = "icon-fo-office";
+            TimeZone = new EntityHeader()
+            {
+                Id = "UTC",
+                Text = "(UTC) Coordinated Universal Time",
+            };
         }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization, IsRequired:true, ResourceType: typeof(UserAdminResources))]
@@ -61,6 +66,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         [FormField(LabelResource: UserAdminResources.Names.Location_RoomNumber, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public string RoomNumber { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Common_TimeZome, IsRequired: true, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
+        public EntityHeader TimeZone { get; set; }
 
         /// <summary>
         /// Primary Address
@@ -173,6 +181,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         {
             return new List<string>()
             {
+                nameof(TimeZone),
                 nameof(AdminContact),
                 nameof(TechnicalContact),
                 nameof(GeoLocation),
