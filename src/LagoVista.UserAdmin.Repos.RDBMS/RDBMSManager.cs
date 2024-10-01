@@ -193,6 +193,7 @@ select o.*
                 CreationDate = deviceOwner.CreationDate.ToDateTime(),
                 LastUpdatedDate = deviceOwner.LastUpdatedDate.ToDateTime(),
                 Email = deviceOwner.EmailAddress,
+                Phone = deviceOwner.PhoneNumber,
                 DeviceOwnerUserId = deviceOwner.Id                
             };
 

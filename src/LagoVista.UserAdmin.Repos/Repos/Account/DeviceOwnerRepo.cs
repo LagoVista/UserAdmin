@@ -1,6 +1,7 @@
 ﻿using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.CloudStorage.Storage;
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Account;
@@ -64,6 +65,11 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
             return FindByEmailAsync(userName);
         }
 
+        public async Task<DeviceOwnerUser> FindByPhoneNumberAsync(string phone)
+        {
+            return (await QueryAsync(own => own.PhoneNumber == phone.CleanPhoneNumber())).SingleOrDefault();
+        }
+
         public async Task<DeviceOwnerUser> RemoveOwnedDeviceAsync(string orgId, string ownerId, string id)
         {
             var owner = await FindByIdAsync(ownerId);
@@ -91,6 +97,16 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
         {
             await UpsertDocumentAsync(user);
             await _rdbmsUserManager.AddDeviceOwnerAsync(user);
+        }
+    }
+
+    public static class PhoneExtensions
+    {
+        public static string CleanPhoneNumber(this string phoneNumber) {
+            if (String.IsNullOrEmpty(phoneNumber))
+                return String.Empty;
+
+            return phoneNumber.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "");
         }
     }
 }

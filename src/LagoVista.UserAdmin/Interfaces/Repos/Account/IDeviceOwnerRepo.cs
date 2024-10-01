@@ -12,6 +12,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Account
         Task UpdateUserAsync(DeviceOwnerUser user);
         Task DeleteUserAsync(string orgId, string id);
         Task<DeviceOwnerUser> FindByIdAsync(string userId);
+        Task<DeviceOwnerUser> FindByPhoneNumberAsync(string userId);
         Task<DeviceOwnerUser> FindByNameAsync(string userName);
         Task<DeviceOwnerUser> FindByEmailAsync(string email);
 

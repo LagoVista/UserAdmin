@@ -25,11 +25,11 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public string UserName { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.DeviceOwner_FirstName, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
+        [FormField(LabelResource: UserAdminResources.Names.DeviceOwner_FirstName, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsUserEditable: false)]
         public string FirstName { get; set; }
-        [FormField(LabelResource: UserAdminResources.Names.DeviceOwner_FirstName, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
+        [FormField(LabelResource: UserAdminResources.Names.DeviceOwner_LastName, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsUserEditable: false)]
         public string LastName { get; set; }
-        [FormField(LabelResource: UserAdminResources.Names.DeviceOwner_EmailAddress, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
+        [FormField(LabelResource: UserAdminResources.Names.DeviceOwner_EmailAddress, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsUserEditable: false)]
         public string EmailAddress { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.DeviceOwner_PhoneNumber, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
@@ -47,16 +47,43 @@ namespace LagoVista.UserAdmin.Models.Users
         public List<DeviceOwnerDevices> Devices { get; set; } = new List<DeviceOwnerDevices>();
         public EntityHeader CurrentRepo { get; set; }
         public EntityHeader CurrentDevice { get; set; }
-        public string CurrentDeviceId { get; set; }
+        public string CurrentDeviceId { get; set; }        
 
-        [CustomValidator]
-        public void Validte(ValidationResult result, Actions action)
+        public AppUser ToAppUser()
         {
-            if (String.IsNullOrEmpty(FirstName))
-                result.AddUserError("Please provide your name.");
+            return new AppUser()
+            {
+                Id = Id,
+                Key = Key,        
+                LoginType = LoginTypes.DeviceOwner,
+                UserName = UserName,
+                FirstName = FirstName,
+                LastName = LastName,
+                Email = EmailAddress,
+                PhoneNumber = PhoneNumber,
+                CurrentRepo = CurrentRepo,
+                CurrentDevice = CurrentDevice,
+                CurrentDeviceId = CurrentDeviceId,
+                OwnerOrganization = OwnerOrganization,
+            };
+        }
 
-            if (String.IsNullOrEmpty(LastName))
-                result.AddUserError("Please provide your name.");
+        public static DeviceOwnerUser FromAppUser(AppUser appUser)
+        {
+            return new DeviceOwnerUser()
+            {
+                Id = appUser.Id,
+                Key = appUser.Key,                
+                UserName = appUser.UserName,
+                FirstName = appUser.FirstName,
+                LastName = appUser.LastName,
+                EmailAddress = appUser.Email,
+                PhoneNumber = appUser.PhoneNumber,
+                CurrentRepo = appUser.CurrentRepo,
+                CurrentDevice = appUser.CurrentDevice,
+                CurrentDeviceId = appUser.CurrentDeviceId,
+                OwnerOrganization = appUser.OwnerOrganization,
+            };
         }
     }
 
