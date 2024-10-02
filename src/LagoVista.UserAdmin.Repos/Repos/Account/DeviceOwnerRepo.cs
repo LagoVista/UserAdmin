@@ -1,15 +1,13 @@
 ﻿using LagoVista.CloudStorage.DocumentDB;
-using LagoVista.CloudStorage.Storage;
 using LagoVista.Core.Interfaces;
-using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
+using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Account;
 using LagoVista.UserAdmin.Models.Users;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Account
@@ -30,24 +28,23 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
         {
             var owner = await FindByIdAsync(ownerId);
             owner.Devices.Add(device);
-            await UpdateUserAsync(owner);
-
-            await _rdbmsUserManager.AddOwnedDeviceAsync(orgId, ownerId, device);
+            await UpsertDocumentAsync(owner);
+            await _rdbmsUserManager.AddOwnedDeviceAsync(ownerId, orgId, device);
 
             return owner;
         }
 
-        public async Task AddUserAsync(DeviceOwnerUser user)
+        public async Task<InvokeResult> AddUserAsync(DeviceOwnerUser user)
         {
             user.IsAnonymous = false;
             await CreateDocumentAsync(user);
-            await _rdbmsUserManager.AddDeviceOwnerAsync(user);
+            return await _rdbmsUserManager.AddDeviceOwnerAsync(user);
         }
 
-        public async Task DeleteUserAsync(string orgId,string id)
+        public async Task<InvokeResult> DeleteUserAsync(string orgId,string id)
         {
             await DeleteDocumentAsync(id);
-            await _rdbmsUserManager.DeleteDeviceOwnerAsync(orgId, id);
+            return await _rdbmsUserManager.DeleteDeviceOwnerAsync(orgId, id);
         }
 
         public async Task<DeviceOwnerUser> FindByEmailAsync(string email)
@@ -68,6 +65,11 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
         public async Task<DeviceOwnerUser> FindByPhoneNumberAsync(string phone)
         {
             return (await QueryAsync(own => own.PhoneNumber == phone.CleanPhoneNumber())).SingleOrDefault();
+        }
+
+        public Task<ListResponse<DeviceOwnerUserSummary>> GetAllAsync(ListRequest listRequest)
+        {
+            return QuerySummaryAsync<DeviceOwnerUserSummary, DeviceOwnerUser>(rec => true, rec => rec.Name, listRequest);
         }
 
         public async Task<DeviceOwnerUser> RemoveOwnedDeviceAsync(string orgId, string ownerId, string id)
@@ -93,10 +95,10 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
             return owner;
         }
 
-        public async Task UpdateUserAsync(DeviceOwnerUser user)
+        public async Task<InvokeResult> UpdateUserAsync(DeviceOwnerUser user)
         {
             await UpsertDocumentAsync(user);
-            await _rdbmsUserManager.AddDeviceOwnerAsync(user);
+            return await _rdbmsUserManager.UpdateDeviceOwnerAsync(user);
         }
     }
 

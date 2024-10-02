@@ -8,13 +8,16 @@ using System.Text;
 using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.Core.Authentication.Models;
 using LagoVista.UserAdmin.Models.Orgs;
+using LagoVista.Core.Interfaces;
 
 namespace LagoVista.UserAdmin.Models.Users
 {
 
     [EntityDescription(Domains.UserDomain, UserAdminResources.Names.DeviceOwner_Title, UserAdminResources.Names.DeviceOwner_Description,
-        UserAdminResources.Names.DeviceOwner_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(UserAdminResources), Icon: "icon-ae-error-1")]
-    public class DeviceOwnerUser : UserAdminModelBase, IValidateable
+        UserAdminResources.Names.DeviceOwner_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(UserAdminResources), Icon: "icon-ae-emoji",
+        ListUIUrl: "/sysadmin/deviceusers", EditUIUrl: "/sysadmin/deviceuser/{id}",
+        GetListUrl: "/api/sysadmin/deviceownerusers", GetUrl: "/api/sysadmin/deviceowneruser/{orgid}/{id}", DeleteUrl: "/api/sysadmin/deviceowneruser/{orgid}/{id}", SaveUrl: "/api/sysadmin/deviceowneruser", FactoryUrl: "/api/sysadmin/deviceowneruser/factory")]
+    public class DeviceOwnerUser : UserAdminModelBase, IValidateable, ISummaryFactory
     {
         public DeviceOwnerUser()
         {
@@ -43,11 +46,28 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public string PasswordHash { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.DeviceOwner_Devices, FieldType: FieldTypes.ChildList, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
+        [FormField(LabelResource: UserAdminResources.Names.DeviceOwner_Devices, FieldType: FieldTypes.ChildList, ChildListDisplayMember:nameof(DeviceOwnerDevices.DeviceId), ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
         public List<DeviceOwnerDevices> Devices { get; set; } = new List<DeviceOwnerDevices>();
         public EntityHeader CurrentRepo { get; set; }
         public EntityHeader CurrentDevice { get; set; }
+        public EntityHeader CurrentDeviceConfig { get; set; }
         public string CurrentDeviceId { get; set; }        
+
+        public string HomePage { get; set; }
+        public string MobileHomePage { get; set; }
+
+        public DeviceOwnerUserSummary CreateSummary()
+        {
+            return new DeviceOwnerUserSummary()
+            {
+                FirstName = FirstName,
+                LastName = LastName,
+                Name = $"{FirstName} {LastName}",
+                Key = Key,
+                PhoneNumber = PhoneNumber,
+                Id = Id,                 
+            };
+        }
 
         public AppUser ToAppUser()
         {
@@ -63,8 +83,11 @@ namespace LagoVista.UserAdmin.Models.Users
                 PhoneNumber = PhoneNumber,
                 CurrentRepo = CurrentRepo,
                 CurrentDevice = CurrentDevice,
+                CurrentDeviceConfig = CurrentDeviceConfig,
                 CurrentDeviceId = CurrentDeviceId,
                 OwnerOrganization = OwnerOrganization,
+                HomePage = HomePage,
+                MobileHomePage = MobileHomePage,
             };
         }
 
@@ -82,15 +105,27 @@ namespace LagoVista.UserAdmin.Models.Users
                 CurrentRepo = appUser.CurrentRepo,
                 CurrentDevice = appUser.CurrentDevice,
                 CurrentDeviceId = appUser.CurrentDeviceId,
+                CurrentDeviceConfig = appUser.CurrentDeviceConfig,
                 OwnerOrganization = appUser.OwnerOrganization,
+                HomePage = appUser.HomePage,
+                MobileHomePage = appUser.MobileHomePage,
             };
+        }
+
+        ISummaryData ISummaryFactory.CreateSummary()
+        {
+            return CreateSummary();
         }
     }
 
-    [EntityDescription(Domains.UserDomain, UserAdminResources.Names.DeviceOwnersDevices_Title, UserAdminResources.Names.DeviceOwnersDevices_Description,
-        UserAdminResources.Names.DeviceOwner_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(UserAdminResources), Icon: "icon-ae-error-1")]
+   
     public class DeviceOwnerDevices
     {
+        public DeviceOwnerDevices()
+        {
+            Id = Guid.NewGuid().ToId();
+        }
+
         public string Id { get; set; }
      
         [FormField(LabelResource: UserAdminResources.Names.DeviceOwner_Password, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsUserEditable: false, IsRequired: true)]
@@ -103,5 +138,16 @@ namespace LagoVista.UserAdmin.Models.Users
         public string DeviceId { get; set; }
 
         public EntityHeader Product { get; set; }
+    }
+
+    [EntityDescription(Domains.UserDomain, UserAdminResources.Names.DeviceOwner_Title, UserAdminResources.Names.DeviceOwner_Description,
+       UserAdminResources.Names.DeviceOwner_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(UserAdminResources), Icon: "icon-ae-emoji",
+       ListUIUrl: "/sysadmin/deviceusers", EditUIUrl: "/sysadmin/deviceuser/{id}",
+       GetListUrl: "/api/sysadmin/deviceownerusers", GetUrl: "/api/sysadmin/deviceowneruser/{orgid}/{id}", DeleteUrl: "/api/sysadmin/deviceowneruser/{orgid}/{id}", SaveUrl: "/api/sysadmin/deviceowneruser", FactoryUrl: "/api/sysadmin/deviceowneruser/factory")]
+    public class DeviceOwnerUserSummary : SummaryData
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

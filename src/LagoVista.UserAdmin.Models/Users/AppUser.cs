@@ -115,6 +115,9 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public EntityHeader CurrentRepo { get; set; }
         public EntityHeader CurrentDevice { get; set; }
+        public EntityHeader CurrentDeviceConfig { get; set; }
+        public string HomePage { get; set; }
+        public string MobileHomePage { get; set; }
         public string CurrentDeviceId { get; set; }
 
         public ImageDetails ProfileImageUrl { get; set; }

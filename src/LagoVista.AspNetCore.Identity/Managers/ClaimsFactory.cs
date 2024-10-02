@@ -38,11 +38,14 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string IsUserDevice = "com.lagovista.iot.isuserdevice";
         public const string IsFinancceAdmin = "com.lagovista.iot.isfinanceadmin";
         public const string CurrentUserProfilePictureurl = "com.lagovista.iot.currentprofilepictureurl";
+
         public const string DeviceUniqueId = "com.lagovista.iot.deviceuniqueid";
         public const string DeviceId = "com.lagovista.iot.deviceid";
         public const string DeviceName = "com.lagovista.iot.devicename";
         public const string DeviceRepoId = "com.lagovista.iot.devicerepoid";
         public const string DeviceRepoName = "com.lagovista.iot.devicereponame";
+        public const string DeviceConfigId = "com.lagovista.iot.deviceconfigid";
+        public const string DeviceConfigName = "com.lagovista.iot.deviceconfigname";
 
         // support for unattended Kiosk authentication
         public const string KioskId = "com.lagovista.iot.kioskid";
@@ -138,6 +141,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (EntityHeader.IsNullOrEmpty(owner.CurrentRepo))
                 throw new ArgumentNullException(nameof(DeviceOwnerUser.CurrentRepo));
 
+            if (EntityHeader.IsNullOrEmpty(owner.CurrentDeviceConfig))
+                throw new ArgumentNullException(nameof(DeviceOwnerUser.CurrentDeviceConfig));
+
             if (String.IsNullOrEmpty(owner.CurrentDeviceId))
                 throw new ArgumentNullException(nameof(DeviceOwnerUser.CurrentDeviceId));
 
@@ -164,6 +170,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
                 new Claim(DeviceUniqueId, owner.CurrentDevice.Id),
                 new Claim(DeviceName, owner.CurrentDevice.Text),
+
+                new Claim(DeviceConfigId, owner.CurrentDeviceConfig.Id),
+                new Claim(DeviceConfigName, owner.CurrentDeviceConfig.Text),
             };
 
             return claims;

@@ -225,7 +225,7 @@ select o.*
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> AddOwnedDeviceAsync(string id, string orgId, DeviceOwnerDevices device)
+        public async Task<InvokeResult> AddOwnedDeviceAsync(string deviceOwneruserId, string orgId, DeviceOwnerDevices device)
         {
             var ownedDevice = new OwnedDevice()
             {
@@ -233,7 +233,7 @@ select o.*
                 DeviceUniqueId = device.Device.Id,
                 DeviceId = device.DeviceId,
                 DeviceName = device.Device.Text,
-                DeviceOwnerUserId = id,
+                DeviceOwnerUserId = deviceOwneruserId,
                 ProductId = Guid.Parse(device.Product.Id),
                 Discount = 0,
             };
