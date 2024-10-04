@@ -227,6 +227,9 @@ select o.*
 
         public async Task<InvokeResult> AddOwnedDeviceAsync(string deviceOwneruserId, string orgId, DeviceOwnerDevices device)
         {
+            if (device.Product == null)
+                throw new Exception("To add a device as a device user, it must be associate with a product from the product catalog.");
+
             var ownedDevice = new OwnedDevice()
             {
                 Id = device.Id,
@@ -236,7 +239,7 @@ select o.*
                 DeviceOwnerUserId = deviceOwneruserId,
                 ProductId = Guid.Parse(device.Product.Id),
                 Discount = 0,
-            };
+            };           
 
             var ctx = await GetBillingDataContextAsync(orgId);
             ctx.DeviceOwnerUserDevices.Add(ownedDevice);
