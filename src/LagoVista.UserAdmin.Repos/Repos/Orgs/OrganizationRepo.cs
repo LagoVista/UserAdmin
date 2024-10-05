@@ -15,6 +15,7 @@ using LagoVista.CloudStorage;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Exceptions;
 using ZstdSharp.Unsafe;
+using System.Security.Cryptography;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
@@ -117,6 +118,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             await _rdbmsUserManager.UpdateOrgAsync(org);
             await UpsertDocumentAsync(org);
             await _cacheProvider.RemoveAsync(GetCacheKey(org.Id));
+            await _cacheProvider.GetAsync($"basic_theme_org_{org.Id}");
         }
 
         public Task<ListResponse<OrganizationSummary>> GetAllOrgsAsync(string orgSearch, ListRequest listRequest)

@@ -60,8 +60,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public EntityHeader<OrgStatuses> OrgStatus { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Organization_Logo, FieldType: FieldTypes.FileUpload, UploadUrl: "/api/media/resource/public/upload", ResourceType: typeof(UserAdminResources))]
-        public EntityHeader Logo { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.Organization_Logo_Light, UserAdminResources.Names.Organization_Logo_LightColor_Help, FieldType: FieldTypes.FileUpload, DisplayImageSize:"800x224", GeneratedImageSize:"1024x1024", UploadUrl: "/api/media/resource/public/upload", ResourceType: typeof(UserAdminResources))]
+        public EntityHeader LightLogo { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_Logo_DarkColor, UserAdminResources.Names.Organization_Logo_DarkColor_Help, FieldType: FieldTypes.FileUpload, DisplayImageSize: "800x224", GeneratedImageSize: "1024x1024", UploadUrl: "/api/media/resource/public/upload", ResourceType: typeof(UserAdminResources))]
+        public EntityHeader DarkLogo { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_TagLine, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public string TagLine { get; set; }
@@ -184,7 +187,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(DefaultInstance),
                 nameof(HeroTitle),
                 nameof(HeroBackgroundImage),
-                nameof(Logo),
+                nameof(LightLogo),
+                nameof(DarkLogo),
                 nameof(TagLine),
                 nameof(PrimaryTextColor),
                 nameof(PrimaryBgColor),
@@ -204,7 +208,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 HeroBackgroundImage = HeroBackgroundImage,
                 HeroTitle = HeroTitle,
                 Icon = Icon,
-                Logo = Logo,
+                DarkLogo = DarkLogo,
+                LightLogo = LightLogo,
                 Name = Name,
                 Namespace = Namespace,
                 PrimaryBgColor = PrimaryBgColor,
@@ -229,7 +234,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 Namespace = Namespace,
                 Icon = Icon,
                 TagLine = TagLine,
-                Logo = Logo,
+                DarkLogo = DarkLogo,
+                LightLogo = LightLogo,
+                PrimaryBgColor = PrimaryBgColor,
+                PrimaryTextColor = PrimaryTextColor,
+                AccentColor = AccentColor,
                 IsForProductLine = IsForProductLine,
                 DefaultTheme = DefaultTheme,
                 DefaultInstance = DefaultInstance,
@@ -251,10 +260,14 @@ namespace LagoVista.UserAdmin.Models.Orgs
     {
         public string Text { get; set; }
         public string Namespace { get; set; }
-        public EntityHeader Logo { get; set; }
+        public EntityHeader DarkLogo { get; set; }
+        public EntityHeader LightLogo { get; set; }
         public string TagLine { get; set; }
         public string DefaultTheme { get; set; }
         public string LandingPage { get; set; }
+        public string PrimaryBgColor { get; set; }
+        public string PrimaryTextColor { get; set; }
+        public string AccentColor { get; set; }
         public EntityHeader DefaultDeviceRepository { get; set; }
         public EntityHeader DefaultInstance { get; set; }
 
@@ -273,7 +286,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public string Id { get; set; }
         public string Name { get; set; }
         public string Namespace { get; set; }
-        public EntityHeader Logo { get; set; }
+        public EntityHeader DarkLogo { get; set; }
+        public EntityHeader LightLogo { get; set; }
 
         public string TagLine { get; set; }
         public string Icon { get; set; }

@@ -1,4 +1,4 @@
-﻿/*9/30/2024 4:56:24 PM*/
+﻿/*10/5/2024 2:58:35 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1208,9 +1208,18 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_Locations_Title
 
 		public static string Organization_Locations_Title { get { return GetResourceString("Organization_Locations_Title"); } }
-//Resources:UserAdminResources:Organization_Logo
+//Resources:UserAdminResources:Organization_Logo_DarkColor
 
-		public static string Organization_Logo { get { return GetResourceString("Organization_Logo"); } }
+		public static string Organization_Logo_DarkColor { get { return GetResourceString("Organization_Logo_DarkColor"); } }
+//Resources:UserAdminResources:Organization_Logo_DarkColor_Help
+
+		public static string Organization_Logo_DarkColor_Help { get { return GetResourceString("Organization_Logo_DarkColor_Help"); } }
+//Resources:UserAdminResources:Organization_Logo_Light
+
+		public static string Organization_Logo_Light { get { return GetResourceString("Organization_Logo_Light"); } }
+//Resources:UserAdminResources:Organization_Logo_LightColor_Help
+
+		public static string Organization_Logo_LightColor_Help { get { return GetResourceString("Organization_Logo_LightColor_Help"); } }
 //Resources:UserAdminResources:Organization_Name
 
 		public static string Organization_Name { get { return GetResourceString("Organization_Name"); } }
@@ -2064,7 +2073,10 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_Location_Title = "Organization_Location_Title";
 			public const string Organization_Locations = "Organization_Locations";
 			public const string Organization_Locations_Title = "Organization_Locations_Title";
-			public const string Organization_Logo = "Organization_Logo";
+			public const string Organization_Logo_DarkColor = "Organization_Logo_DarkColor";
+			public const string Organization_Logo_DarkColor_Help = "Organization_Logo_DarkColor_Help";
+			public const string Organization_Logo_Light = "Organization_Logo_Light";
+			public const string Organization_Logo_LightColor_Help = "Organization_Logo_LightColor_Help";
 			public const string Organization_Name = "Organization_Name";
 			public const string Organization_NamespaceInUse = "Organization_NamespaceInUse";
 			public const string Organization_OrgStatuses_Active = "Organization_OrgStatuses_Active";

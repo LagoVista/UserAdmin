@@ -26,6 +26,7 @@ using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Models.Auth;
 using RingCentral;
 using System.Security.Cryptography;
+using Newtonsoft.Json;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -48,6 +49,7 @@ namespace LagoVista.UserAdmin.Managers
         private readonly ISubscriptionManager _subscriptionManager;
         private readonly IDefaultRoleList _defaultRoleList;
         private readonly IAuthenticationLogManager _authLogMgr;
+        private readonly ICacheProvider _cacheProvider;
         private readonly IBackgroundServiceTaskQueue _taskQueue;
         #endregion
 
@@ -71,6 +73,7 @@ namespace LagoVista.UserAdmin.Managers
             IUserRoleManager useRoleManager,
             IAuthenticationLogManager authLogMgr,
             ISubscriptionManager subscriptionManager,
+            ICacheProvider cacheProvider,
             IAdminLogger logger) : base(logger, appConfig, depManager, security)
         {
 
@@ -90,6 +93,7 @@ namespace LagoVista.UserAdmin.Managers
             _adminLogger = logger;
             _orgInitializer = orgInitializer;
             _ownedObjectRepo = ownedObjectRepo;
+            _cacheProvider = cacheProvider;
             _taskQueue = taskQueue ?? throw new ArgumentNullException(nameof(taskQueue));
         }
         #endregion
@@ -287,6 +291,7 @@ namespace LagoVista.UserAdmin.Managers
 
             await AuthorizeAsync(org, AuthorizeResult.AuthorizeActions.Update, user, userOrg);
             await _organizationRepo.UpdateOrganizationAsync(org);
+
 
             return InvokeResult.Success;
         }
@@ -1226,6 +1231,31 @@ namespace LagoVista.UserAdmin.Managers
             var orgId = await _organizationRepo.GetOrganizationIdForNamespaceAsync(orgNameSpace);
             var org = await _organizationRepo.GetOrganizationAsync(orgId);
             return org.ToEntityHeader();
+        }
+
+
+        public async Task<InvokeResult<BasicTheme>> GetBasicThemeForOrgAsync(string orgid)
+        {
+            var json = await _cacheProvider.GetAsync($"basic_theme_{orgid}");
+            if (string.IsNullOrEmpty(json))
+            {
+                var org = await _organizationRepo.GetOrganizationAsync(orgid);
+                var basicTheme = new BasicTheme()
+                {
+                    PrimaryTextColor = org.PrimaryTextColor,
+                    PrimryBGColor = org.PrimaryBgColor,
+                    AccentColor = org.AccentColor
+                };
+
+                await _cacheProvider.AddAsync($"basic_theme_{orgid}", JsonConvert.SerializeObject(basicTheme));
+                return InvokeResult<BasicTheme>.Create(basicTheme);
+            }
+            else
+            {
+                var theme = JsonConvert.DeserializeObject<BasicTheme>(json);
+                return InvokeResult<BasicTheme>.Create(theme);
+
+            }           
         }
     }
 

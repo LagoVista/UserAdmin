@@ -1421,8 +1421,8 @@
   <data name="Common_Icon" xml:space="preserve">
     <value>Icon</value>
   </data>
-  <data name="Organization_Logo" xml:space="preserve">
-    <value>Logo</value>
+  <data name="Organization_Logo_Light" xml:space="preserve">
+    <value>Logo (LIght Color)</value>
   </data>
   <data name="Organization_TagLine" xml:space="preserve">
     <value>Tag Line</value>
@@ -1750,5 +1750,14 @@
   </data>
   <data name="Common_TimeZome" xml:space="preserve">
     <value>Time Zone</value>
+  </data>
+  <data name="Organization_Logo_DarkColor" xml:space="preserve">
+    <value>Logo (Dark Color)</value>
+  </data>
+  <data name="Organization_Logo_DarkColor_Help" xml:space="preserve">
+    <value>Logo that will be used on a light color background, which may be the primary background color with an aspect ration of 3:1, a good size is 800x225</value>
+  </data>
+  <data name="Organization_Logo_LightColor_Help" xml:space="preserve">
+    <value>Logo that will be used on a dark color background such as a white page with an aspect ration of 3:1, a good size for this image is 800x225</value>
   </data>
 </root>

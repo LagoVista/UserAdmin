@@ -100,5 +100,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<string> GetOrgIdForNameSpaceAsync(string orgNameSpace);
 
         Task<EntityHeader> GetOrgEntityHeaderForNameSpaceAsync(string orgNameSpace);
+
+        Task<InvokeResult<BasicTheme>> GetBasicThemeForOrgAsync(string orgid);
     }
 }
