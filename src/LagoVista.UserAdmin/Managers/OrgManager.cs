@@ -1236,7 +1236,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult<BasicTheme>> GetBasicThemeForOrgAsync(string orgid)
         {
-            var json = await _cacheProvider.GetAsync($"basic_theme_{orgid}");
+            var json = await _cacheProvider.GetAsync($"basic_theme_org_{orgid}");
             if (string.IsNullOrEmpty(json))
             {
                 var org = await _organizationRepo.GetOrganizationAsync(orgid);
@@ -1247,7 +1247,7 @@ namespace LagoVista.UserAdmin.Managers
                     AccentColor = org.AccentColor
                 };
 
-                await _cacheProvider.AddAsync($"basic_theme_{orgid}", JsonConvert.SerializeObject(basicTheme));
+                await _cacheProvider.AddAsync($"basic_theme_org_{orgid}", JsonConvert.SerializeObject(basicTheme));
                 return InvokeResult<BasicTheme>.Create(basicTheme);
             }
             else
