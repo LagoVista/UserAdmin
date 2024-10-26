@@ -12,5 +12,7 @@ namespace LagoVista.AspNetCore.Identity.Interfaces
         List<Claim> GetClaims(AppUser user);
         List<Claim> GetClaims(AppUser user, EntityHeader org, bool isOrgAdmin, bool isAppBuilder);
         List<Claim> GetClaimsForDeviceOwner(AppUser pinAuthUser);
+        List<Claim> GetClaimsForCustomer(AppUser pinAuthUser);
+
     }
 }

@@ -15,9 +15,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public const string Logintype = "com.lagovista.iot.logintype";
         public const string InstanceId = "com.lagovista.iot.instanceid";
+        public const string InstanceName = "com.lagovista.iot.instancename";
         public const string HostId = "com.lagovista.iot.hostid";
         public const string HostName = "com.lagovista.iot.hostname";
-        public const string InstanceName = "com.lagovista.iot.instancename";
         public const string Bio = "com.lagovista.iot.bio";
         public const string Organization = "com.lagovista.iot.organization";
         public const string Avatar = "com.lagovista.iot.avatar";
@@ -46,6 +46,11 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string DeviceRepoName = "com.lagovista.iot.devicereponame";
         public const string DeviceConfigId = "com.lagovista.iot.deviceconfigid";
         public const string DeviceConfigName = "com.lagovista.iot.deviceconfigname";
+
+        public const string CustomerId = "com.lagovista.iot.customerid";
+        public const string CustomerName = "com.lagovista.iot.customername";
+        public const string CustomerContactId = "com.lagovista.iot.customercontactid";
+        public const string CustomerContactName = "com.lagovista.iot.customercontactname";
 
         // support for unattended Kiosk authentication
         public const string KioskId = "com.lagovista.iot.kioskid";
@@ -127,6 +132,61 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return claims;
         }
 
+        public List<Claim> GetClaimsForCustomer(AppUser owner)
+        {
+            if (string.IsNullOrEmpty(owner.Id))
+                throw new ArgumentNullException("Owner.Id");
+
+            if (EntityHeader.IsNullOrEmpty(owner.OwnerOrganization))
+                throw new ArgumentNullException(nameof(AppUser.OwnerOrganization));
+
+            if (EntityHeader.IsNullOrEmpty(owner.Customer))
+                throw new ArgumentNullException(nameof(AppUser.Customer));
+
+            if (EntityHeader.IsNullOrEmpty(owner.CustomerContact))
+                throw new ArgumentNullException(nameof(AppUser.CustomerContact));
+
+            if (EntityHeader.IsNullOrEmpty(owner.CurrentRepo))
+                throw new ArgumentNullException(nameof(AppUser.CurrentRepo));
+
+            if (EntityHeader.IsNullOrEmpty(owner.CurrentInstance))
+                throw new ArgumentNullException(nameof(AppUser.CurrentInstance));
+
+            var claims = new List<Claim>
+            {
+                new Claim(CurrentUserId, owner.Id),
+
+                new Claim(ClaimTypes.GivenName, string.IsNullOrEmpty( owner.FirstName) ? "anonymous" : owner.FirstName),
+                new Claim(ClaimTypes.Surname, string.IsNullOrEmpty( owner.LastName) ? "anonymous" : owner.LastName),
+
+                new Claim(Logintype, "Customer"),
+                new Claim(Anonymous, owner.IsAnonymous.ToString()),
+
+                new Claim(EmailVerified, true.ToString()),
+                new Claim(PhoneVerfiied, true.ToString()),
+
+                new Claim(CurrentOrgName, owner.OwnerOrganization.Text),
+                new Claim(CurrentOrgId, owner.OwnerOrganization.Id),
+
+                new Claim(CurrentOrgName, owner.OwnerOrganization.Text),
+                new Claim(CurrentOrgId, owner.OwnerOrganization.Id),
+
+                new Claim(DeviceRepoId, owner.CurrentRepo.Id),
+                new Claim(DeviceRepoName, owner.CurrentRepo.Text),
+
+                new Claim(InstanceId, owner.CurrentInstance.Id),
+                new Claim(InstanceName, owner.CurrentInstance.Text),
+
+                new Claim(CustomerId, owner.Customer.Id),
+                new Claim(CustomerName, owner.Customer.Text),
+
+                new Claim(CustomerContactId, owner.CustomerContact.Id),
+                new Claim(CustomerContactName, owner.CustomerContact.Text),
+            };
+
+            return claims;
+        }
+
         public List<Claim> GetClaimsForDeviceOwner(AppUser owner)
         {
             if (string.IsNullOrEmpty(owner.Id))
@@ -150,19 +210,19 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var claims = new List<Claim>
             {
                 new Claim(CurrentUserId, owner.Id),
-                
+
                 new Claim(ClaimTypes.GivenName, string.IsNullOrEmpty( owner.FirstName) ? "anonymous" : owner.FirstName),
                 new Claim(ClaimTypes.Surname, string.IsNullOrEmpty( owner.LastName) ? "anonymous" : owner.LastName),
-                
+
                 new Claim(Logintype, nameof(DeviceOwnerUser)),
                 new Claim(Anonymous, owner.IsAnonymous.ToString()),
-                
+
                 new Claim(EmailVerified, true.ToString()),
                 new Claim(PhoneVerfiied, true.ToString()),
-                
+
                 new Claim(CurrentOrgName, owner.OwnerOrganization.Text),
-                new Claim(CurrentOrgId, owner.OwnerOrganization.Id),                
-                
+                new Claim(CurrentOrgId, owner.OwnerOrganization.Id),
+
                 new Claim(DeviceId, owner.CurrentDeviceId),
 
                 new Claim(DeviceRepoId, owner.CurrentRepo.Id),

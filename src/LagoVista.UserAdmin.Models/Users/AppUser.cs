@@ -113,7 +113,11 @@ namespace LagoVista.UserAdmin.Models.Users
         public OrganizationSummary CurrentOrganization { get; set; }
         public List<EntityHeader> CurrentOrganizationRoles { get; set; }
 
+        public EntityHeader Customer {  get; set; }
+        public EntityHeader CustomerContact { get; set; }
+
         public EntityHeader CurrentRepo { get; set; }
+        public EntityHeader CurrentInstance { get; set; }
         public EntityHeader CurrentDevice { get; set; }
         public EntityHeader CurrentDeviceConfig { get; set; }
         public string HomePage { get; set; }
