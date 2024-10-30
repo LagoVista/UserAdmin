@@ -51,19 +51,27 @@ namespace LagoVista.UserAdmin.Models.Apps
 
         public async Task<InvokeResult<int>> GetAllInboxItemCountAsync(EntityHeader org, EntityHeader user)
         {
+            var bldr = TimingBuilder.StartNew();
+
             var myItems = await _inboxRepo.GetInboxItemsAsync(org.Id, user.Id, ListRequest.Create());
+            bldr.CompleteAndRestart("[AppUserInboxManager__GetAllInboxItemCountAsync__GetInboxItemsAsync]");
             var allItems = new List<InboxItem>();
             allItems.AddRange(myItems.Model.Where(mod=>mod.Viewed == false).Select(mod => mod.ToInboxItem()));
 
             var sysItems = await _systemNotificationRepo.GetSystemAndPublicNotifications(org.Id);
+            bldr.CompleteAndRestart("[AppUserInboxManager__GetAllInboxItemCountAsync__GetSystemAndPublicNotifications]");
             allItems.AddRange(sysItems.Select(sys => sys.ToInboxItem()));
-            return InvokeResult<int>.Create(allItems.Count);
+            return InvokeResult<int>.Create(allItems.Count, bldr);
         }
 
 
         public async Task<ListResponse<InboxItem>> GetAllInboxItemsAsync(EntityHeader org, EntityHeader user, ListRequest listRequest)
         {
+            var bldr = TimingBuilder.StartNew();
+
             var myItems = await _inboxRepo.GetInboxItemsAsync(org.Id, user.Id, listRequest);
+            bldr.CompleteAndRestart("[AppUserInboxManager__GetAllInboxItemsAsync__GetAllInboxItemsAsync]");
+
             var allItems = new List<InboxItem>();
             allItems.AddRange(myItems.Model.Select(mod => mod.ToInboxItem()));
             foreach (var item in myItems.Model)
@@ -77,9 +85,9 @@ namespace LagoVista.UserAdmin.Models.Apps
             }
 
             var sysItems = await _systemNotificationRepo.GetSystemAndPublicNotifications(org.Id);
+            bldr.CompleteAndRestart("[AppUserInboxManager__GetAllInboxItemsAsync__GetSystemAndPublicNotifications]");
             allItems.AddRange(sysItems.Select(sys => sys.ToInboxItem()));
-
-            return ListResponse<InboxItem>.Create(allItems.OrderByDescending(itm=>itm.CreationDate), myItems);
+            return ListResponse<InboxItem>.Create(allItems.OrderByDescending(itm=>itm.CreationDate), myItems, bldr);
         }
 
         public async Task<ListResponse<AppUserInboxItem>> GetUnreadInboxItemsAsync(EntityHeader org, EntityHeader user, ListRequest listRequest)

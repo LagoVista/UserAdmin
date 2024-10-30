@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using Prometheus;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -81,18 +82,24 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public async Task<InvokeResult<UserLoginResponse>> PasswordSignInAsync(AuthLoginRequest loginRequest)
         {
+            var timings = new List<ResultTiming>();
+
             var response = new UserLoginResponse();
 
             if (string.IsNullOrEmpty(loginRequest.UserName)) return InvokeResult<UserLoginResponse>.FromError($"User name is a required field [{loginRequest.UserName}].");
             if (string.IsNullOrEmpty(loginRequest.Password)) return InvokeResult<UserLoginResponse>.FromError($"Password is a required field [{loginRequest.UserName}].");
-
+            var sw = Stopwatch.StartNew();
             await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthStart, userName: loginRequest.UserName, inviteId:loginRequest.InviteId);
+            timings.Add(new ResultTiming() { Key = "Add password start, auth manager", Ms = sw.Elapsed.TotalMilliseconds });
+            sw.Restart();
 
             var signIn = UserSignInMetrics.WithLabels(nameof(PasswordSignInAsync));
             UserLoginAttempts.Inc();
 
             var appUser = await _userManager.FindByEmailAsync(loginRequest.UserName);
             response.AddAuthMetric("Got User");
+            timings.Add(new ResultTiming() { Key = $"Find by email", Ms = sw.Elapsed.TotalMilliseconds });
+            sw.Restart();
 
             if (appUser == null)
             {
@@ -104,8 +111,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
             }
 
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[SignInManager__PasswordSignInAsync]", "User Login", loginRequest.UserName.ToKVP("loginRequest.UserName"));
+            timings.Add(new ResultTiming() { Key = $"Log event", Ms = sw.Elapsed.TotalMilliseconds });
+            sw.Restart();
+
 
             var signInResult = await _signinManager.PasswordSignInAsync(loginRequest.UserName, loginRequest.Password, loginRequest.RememberMe, loginRequest.LockoutOnFailure);
+            timings.Add(new ResultTiming() { Key = $"Password sign in", Ms = sw.Elapsed.TotalMilliseconds });
+            sw.Restart();
 
             response.AddAuthMetric("Password Sign In");
 
@@ -157,6 +169,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 {
                     var org = await _organizationRepo.GetOrganizationAsync(appUser.CurrentOrganization.Id);
                     response.AddAuthMetric("Loaded Organization");
+                    timings.Add(new ResultTiming() { Key = $"Loaded organiation", Ms = sw.Elapsed.TotalMilliseconds });
+                    sw.Restart();
 
                     if (org.CreatedBy.Id == appUser.Id)
                     {
@@ -193,6 +207,10 @@ namespace LagoVista.AspNetCore.Identity.Managers
                         appUser.IsOrgAdmin = isOrgAdmin;
                     }
 
+                    timings.Add(new ResultTiming() { Key = $"Org admin check", Ms = sw.Elapsed.TotalMilliseconds });
+                    sw.Restart();
+
+
                     if (String.IsNullOrEmpty(response.RedirectPage))
                     {
                         if (!String.IsNullOrEmpty(org.LandingPage))
@@ -226,6 +244,10 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 appUser.LastLogin = DateTime.UtcNow.ToJSONString();
                 // we can bypass the manager here, we are updating the current user if they are logged in, should not require any security.
                 await _appUserRepo.UpdateAsync(appUser);
+
+                timings.Add(new ResultTiming() { Key = $"User Updated", Ms = sw.Elapsed.TotalMilliseconds });
+                sw.Restart();
+
                 response.AddAuthMetric("Update user");
                 
                 signIn.Dispose();
@@ -239,17 +261,23 @@ namespace LagoVista.AspNetCore.Identity.Managers
                     response.AddAuthMetric("Add FAVs");
 
                     var mrus = await _mostRecentlyUsedManager.GetMostRecentlyUsedAsync(appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
+                    timings.AddRange(mrus.Timings);
                     response.AddAuthMetric("Add MRUs");
 
                     response.Favorites = favs;
-                    response.MostRecentlyUsed = mrus;
+                    response.MostRecentlyUsed = mrus.Result;
+
+                    timings.Add(new ResultTiming() { Key = $"Finalize user ", Ms = sw.Elapsed.TotalMilliseconds });
+                    sw.Restart();
                 }
 
                 response.User = appUser;
 
                 await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthSuccess, appUser, inviteId:loginRequest.InviteId, redirectUri: response.RedirectPage);
 
-                return InvokeResult<UserLoginResponse>.Create(response);
+                var result = InvokeResult<UserLoginResponse>.Create(response);
+                result.Timings.AddRange(timings);
+                return result;
             }
 
             if (signInResult.IsLockedOut)

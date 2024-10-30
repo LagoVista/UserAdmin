@@ -8,8 +8,8 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 {
     public interface IMostRecentlyUsedManager
     {
-        Task<MostRecentlyUsed> AddMostRecentlyUsedAsync(MostRecentlyUsedItem mostRecentlyUsedItem, EntityHeader org, EntityHeader user);
-        Task<MostRecentlyUsed> GetMostRecentlyUsedAsync(EntityHeader org,EntityHeader user);
+        Task<InvokeResult<MostRecentlyUsed>> AddMostRecentlyUsedAsync(MostRecentlyUsedItem mostRecentlyUsedItem, EntityHeader org, EntityHeader user);
+        Task<InvokeResult<MostRecentlyUsed>> GetMostRecentlyUsedAsync(EntityHeader org,EntityHeader user);
         Task<InvokeResult> ClearMostRecentlyUsedAsync(EntityHeader org, EntityHeader user); 
     }
 }

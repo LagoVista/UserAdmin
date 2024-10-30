@@ -2,12 +2,14 @@
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.ML;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Account;
 using LagoVista.UserAdmin.Models.Users;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,32 +24,35 @@ namespace LagoVista.UserAdmin.Managers
             _mruRepo = mruRepo ?? throw new ArgumentNullException(nameof(mruRepo));
         }
 
-        public async Task<MostRecentlyUsed> AddMostRecentlyUsedAsync(MostRecentlyUsedItem mostRecentlyUsedItem, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult<MostRecentlyUsed>> AddMostRecentlyUsedAsync(MostRecentlyUsedItem mostRecentlyUsedItem, EntityHeader org, EntityHeader user)
         {
+
             mostRecentlyUsedItem.DateAdded = DateTime.UtcNow.ToJSONString();
             mostRecentlyUsedItem.LastAccessed = DateTime.UtcNow.ToJSONString();
 
             var mru = await GetMostRecentlyUsedAsync(org, user);
-            if (String.IsNullOrEmpty(mru.Key))
-                mru.Key = Guid.NewGuid().ToId().ToLower();
+            var sw = Stopwatch.StartNew();
 
-            var existing = mru.All.SingleOrDefault(itm => itm.Link == mostRecentlyUsedItem.Link);
+            if (String.IsNullOrEmpty(mru.Result.Key))
+                mru.Result.Key = Guid.NewGuid().ToId().ToLower();
+
+            var existing = mru.Result.All.SingleOrDefault(itm => itm.Link == mostRecentlyUsedItem.Link);
             if (existing != null)
-                mru.All.Remove(existing);
+                mru.Result.All.Remove(existing);
 
-            mru.All.Insert(0, mostRecentlyUsedItem);
-            if (mru.All.Count > 50)
+            mru.Result.All.Insert(0, mostRecentlyUsedItem);
+            if (mru.Result.All.Count > 50)
             {
-                mru.All.RemoveAt(50);
+                mru.Result.All.RemoveAt(50);
             }
 
             if (!String.IsNullOrEmpty(mostRecentlyUsedItem.ModuleKey))
             {
-                var module = mru.Modules.SingleOrDefault(mod => mod.ModuleKey == mostRecentlyUsedItem.ModuleKey);
+                var module = mru.Result.Modules.SingleOrDefault(mod => mod.ModuleKey == mostRecentlyUsedItem.ModuleKey);
                 if (module == null)
                 {
                     module = new MostRecentlyUsedModule() { ModuleKey = mostRecentlyUsedItem.ModuleKey };
-                    mru.Modules.Add(module);
+                    mru.Result.Modules.Add(module);
                 }
                 else
                 {
@@ -63,9 +68,13 @@ namespace LagoVista.UserAdmin.Managers
                 }
             }
 
-            await _mruRepo.UpdateMostRecentlyUsedAsync(mru);
+            mru.Timings.Add(new ResultTiming() { Key = "Processing", Ms = sw.Elapsed.TotalMilliseconds });
+            sw.Restart();
 
-            return mru;
+            await _mruRepo.UpdateMostRecentlyUsedAsync(mru.Result);
+            mru.Timings.Add(new ResultTiming() { Key = "MRU does not exist, created and inserted", Ms = sw.Elapsed.TotalMilliseconds });
+
+            return  mru;
         }
 
         public async Task<InvokeResult> ClearMostRecentlyUsedAsync(EntityHeader org, EntityHeader user)
@@ -74,11 +83,17 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<MostRecentlyUsed> GetMostRecentlyUsedAsync(EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult<MostRecentlyUsed>> GetMostRecentlyUsedAsync(EntityHeader org, EntityHeader user)
         {
+            var result = new InvokeResult<MostRecentlyUsed>();
+
+            var sw = Stopwatch.StartNew();
             var mru = await _mruRepo.GetMostRecentlyUsedAsync(org.Id, user.Id);
+            result.Timings.Add(new ResultTiming() { Key = "Attempt get MRU", Ms = sw.Elapsed.TotalMilliseconds });
+
             if (mru == null)
             {
+                sw.Restart();
                 var timeStamp = DateTime.UtcNow.ToJSONString();
                 mru = new MostRecentlyUsed()
                 {
@@ -94,9 +109,12 @@ namespace LagoVista.UserAdmin.Managers
                     Name = $"{user.Text}/{org.Text} - Most Recently Used Items"
                 };
                 await _mruRepo.AddMostRecentlyUsedAsync(mru);
+                result.Timings.Add(new ResultTiming() { Key = "MRU does not exist, created and inserted", Ms = sw.Elapsed.TotalMilliseconds });
             }
 
-            return mru;
+            result.Result = mru;
+
+            return result;
         }
     }
 }
