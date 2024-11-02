@@ -128,15 +128,16 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public string Id { get; set; }
      
-        [FormField(LabelResource: UserAdminResources.Names.DeviceOwner_Password, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsUserEditable: false, IsRequired: true)]
+        [FormField(LabelResource: UserAdminResources.Names.DeviceOwnersDevices_DeviceRepository, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsUserEditable: false, IsRequired: true)]
         public EntityHeader DeviceRepository { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.DeviceOwner_Password, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsUserEditable: false, IsRequired: true)]
+        [FormField(LabelResource: UserAdminResources.Names.DeviceOwnersDevices_Device, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsUserEditable: false, IsRequired: true)]
         public EntityHeader Device { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.DeviceOwner_Password, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsUserEditable: false, IsRequired: true)]
+        [FormField(LabelResource: UserAdminResources.Names.DeviceOwnersDevices_DeviceId, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsUserEditable: false, IsRequired: true)]
         public string DeviceId { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.DeviceOwnersDevices_Product, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsUserEditable: false, IsRequired: true)]
         public EntityHeader Product { get; set; }
     }
 

@@ -72,6 +72,16 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
             return QuerySummaryAsync<DeviceOwnerUserSummary, DeviceOwnerUser>(rec => true, rec => rec.Name, listRequest);
         }
 
+        public async Task<ListResponse<DeviceOwnerUser>> GetDeviceOwnersForDeviceAsync(string ownedDeviceId, ListRequest listRequest)
+        {
+            var query = @"SELECT *
+                            FROM c
+                            WHERE ARRAY_CONTAINS(c.Devices, {Device:{Id:@id}}, true)
+                              AND c.EntityType = 'DeviceOwnerUser'";
+
+            return await QueryAsync(query, listRequest, new CloudStorage.QueryParameter("@id", ownedDeviceId));
+        }
+
         public async Task<DeviceOwnerUser> RemoveOwnedDeviceAsync(string orgId, string ownerId, string id)
         {
             var owner = await FindByIdAsync(ownerId);

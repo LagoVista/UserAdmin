@@ -1,4 +1,4 @@
-﻿/*10/5/2024 2:58:35 PM*/
+﻿/*11/2/2024 3:39:05 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -537,6 +537,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:DeviceOwnersDevices_Organization
 
 		public static string DeviceOwnersDevices_Organization { get { return GetResourceString("DeviceOwnersDevices_Organization"); } }
+//Resources:UserAdminResources:DeviceOwnersDevices_Product
+
+		public static string DeviceOwnersDevices_Product { get { return GetResourceString("DeviceOwnersDevices_Product"); } }
 //Resources:UserAdminResources:DeviceOwnersDevices_Title
 
 		public static string DeviceOwnersDevices_Title { get { return GetResourceString("DeviceOwnersDevices_Title"); } }
@@ -1852,6 +1855,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string DeviceOwnersDevices_DeviceId = "DeviceOwnersDevices_DeviceId";
 			public const string DeviceOwnersDevices_DeviceRepository = "DeviceOwnersDevices_DeviceRepository";
 			public const string DeviceOwnersDevices_Organization = "DeviceOwnersDevices_Organization";
+			public const string DeviceOwnersDevices_Product = "DeviceOwnersDevices_Product";
 			public const string DeviceOwnersDevices_Title = "DeviceOwnersDevices_Title";
 			public const string DistributionList_ExternalContacts = "DistributionList_ExternalContacts";
 			public const string DistroList_Description = "DistroList_Description";

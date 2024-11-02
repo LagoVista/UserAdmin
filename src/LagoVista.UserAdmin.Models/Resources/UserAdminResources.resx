@@ -1760,4 +1760,7 @@
   <data name="Organization_Logo_LightColor_Help" xml:space="preserve">
     <value>Logo that will be used on a dark color background such as a white page with an aspect ration of 3:1, a good size for this image is 800x225</value>
   </data>
+  <data name="DeviceOwnersDevices_Product" xml:space="preserve">
+    <value>Product</value>
+  </data>
 </root>

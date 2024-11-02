@@ -21,7 +21,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Account
         Task<DeviceOwnerUser> AddOwnedDeviceAsync(string orgId, string ownerId, DeviceOwnerDevices device);
         Task<DeviceOwnerUser> UpdateOwnedDeviceAsync(string orgId, string ownerId, DeviceOwnerDevices device);
         Task<DeviceOwnerUser> RemoveOwnedDeviceAsync(string orgId, string ownerId, string id);
-
+        Task<ListResponse<DeviceOwnerUser>> GetDeviceOwnersForDeviceAsync(string ownedDeviceId, ListRequest listRequest);
         Task<ListResponse<DeviceOwnerUserSummary>> GetAllAsync(ListRequest listRequest);
     }
 }
