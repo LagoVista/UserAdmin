@@ -16,7 +16,7 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
 
         public DbSet<RDBMSOrg> Org { get; set; }
         public DbSet<RDBMSAppUser> AppUser { get; set; }
-        public DbSet<Subscription> Subscription { get; set; }
+        public DbSet<SubscriptionDTO> Subscription { get; set; }
         public DbSet<RDBMSDeviceOwnerUser> DeviceOwnerUser { get; set; }
         public DbSet<OwnedDevice> DeviceOwnerUserDevices { get; set; }
 

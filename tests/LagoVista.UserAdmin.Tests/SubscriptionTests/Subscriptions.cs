@@ -103,9 +103,9 @@ namespace LagoVista.UserAdmin.Tests.SubscriptionTests
             await dbUserManager.AddOrgAsync(orgSS);
         }
 
-        private Subscription Create(string orgId, string userId, string key)
+        private SubscriptionDTO Create(string orgId, string userId, string key)
         {
-            var subscription = new Subscription()
+            var subscription = new SubscriptionDTO()
             {
                 OrgId = orgId,
                 CreatedById = userId,
@@ -182,12 +182,12 @@ namespace LagoVista.UserAdmin.Tests.SubscriptionTests
         [TestMethod]
         public async Task AddAndGetTrialSubscriptionPG()
         {
-            var subscription = Create(TEST_ORG_ID1, TEST_USER_ID1, Subscription.SubscriptionKey_Trial);
+            var subscription = Create(TEST_ORG_ID1, TEST_USER_ID1, SubscriptionDTO.SubscriptionKey_Trial);
             await _subscriptionManager.AddSubscriptionAsync(subscription);
 
             var loadedSubscription = await _subscriptionManager.GetTrialSubscriptionAsync(TEST_ORG_ID1);
             Assert.IsNotNull(loadedSubscription);
-            Assert.AreEqual(Subscription.SubscriptionKey_Trial, subscription.Key);
+            Assert.AreEqual(SubscriptionDTO.SubscriptionKey_Trial, subscription.Key);
 
             var reLoadedSubscriptions = await _npDevDedicated.Subscription.Where(subs => subs.Id == subscription.Id).SingleOrDefaultAsync();
             Assert.IsNotNull(loadedSubscription, "Did not find in SQL Server.");
@@ -196,12 +196,12 @@ namespace LagoVista.UserAdmin.Tests.SubscriptionTests
         [TestMethod]
         public async Task AddAndGetTrialSubscriptionSS()
         {
-            var subscription = Create(TEST_ORG_ID2, TEST_USER_ID2, Subscription.SubscriptionKey_Trial);
+            var subscription = Create(TEST_ORG_ID2, TEST_USER_ID2, SubscriptionDTO.SubscriptionKey_Trial);
             await _subscriptionManager.AddSubscriptionAsync(subscription);
 
             var loadedSubscription = await _subscriptionManager.GetTrialSubscriptionAsync(TEST_ORG_ID2);
             Assert.IsNotNull(loadedSubscription);
-            Assert.AreEqual(Subscription.SubscriptionKey_Trial, subscription.Key);
+            Assert.AreEqual(SubscriptionDTO.SubscriptionKey_Trial, subscription.Key);
 
             var reLoadedSubscriptions = await _devShared.Subscription.Where(subs => subs.Id == subscription.Id).SingleOrDefaultAsync();
             Assert.IsNotNull(loadedSubscription, "Did not find in SQL Server.");
@@ -210,7 +210,7 @@ namespace LagoVista.UserAdmin.Tests.SubscriptionTests
         [TestMethod]
         public async Task AddAndGetMultipleSubscriptionsSS()
         {
-            var subscription1 = Create(TEST_ORG_ID2, TEST_USER_ID2, Subscription.SubscriptionKey_Trial);
+            var subscription1 = Create(TEST_ORG_ID2, TEST_USER_ID2, SubscriptionDTO.SubscriptionKey_Trial);
             await _subscriptionManager.AddSubscriptionAsync(subscription1);
             var subscription2 = Create(TEST_ORG_ID2, TEST_USER_ID2, "key1");
             await _subscriptionManager.AddSubscriptionAsync(subscription2);
@@ -227,7 +227,7 @@ namespace LagoVista.UserAdmin.Tests.SubscriptionTests
         [TestMethod]
         public async Task DeletesSubscriptionsPG()
         {
-            var subscription1 = Create(TEST_ORG_ID1, TEST_USER_ID1, Subscription.SubscriptionKey_Trial);
+            var subscription1 = Create(TEST_ORG_ID1, TEST_USER_ID1, SubscriptionDTO.SubscriptionKey_Trial);
             await _subscriptionManager.AddSubscriptionAsync(subscription1);
             var subscription2 = Create(TEST_ORG_ID1, TEST_USER_ID1, "key1");
             await _subscriptionManager.AddSubscriptionAsync(subscription2);
@@ -246,7 +246,7 @@ namespace LagoVista.UserAdmin.Tests.SubscriptionTests
         [TestMethod]
         public async Task DeleteSubscriptionsForOrgSS()
         {
-            var subscription1 = Create(TEST_ORG_ID2, TEST_USER_ID2, Subscription.SubscriptionKey_Trial);
+            var subscription1 = Create(TEST_ORG_ID2, TEST_USER_ID2, SubscriptionDTO.SubscriptionKey_Trial);
             await _subscriptionManager.AddSubscriptionAsync(subscription1);
             var subscription2 = Create(TEST_ORG_ID2, TEST_USER_ID2, "key1");
             await _subscriptionManager.AddSubscriptionAsync(subscription2);
@@ -265,7 +265,7 @@ namespace LagoVista.UserAdmin.Tests.SubscriptionTests
         [TestMethod]
         public async Task AddAndGetMultipleSubscriptionsPG()
         {
-            var subscription1 = Create(TEST_ORG_ID1, TEST_USER_ID1, Subscription.SubscriptionKey_Trial);
+            var subscription1 = Create(TEST_ORG_ID1, TEST_USER_ID1, SubscriptionDTO.SubscriptionKey_Trial);
             await _subscriptionManager.AddSubscriptionAsync(subscription1);
             var subscription2 = Create(TEST_ORG_ID1, TEST_USER_ID1, "key1");
             await _subscriptionManager.AddSubscriptionAsync(subscription2);

@@ -46,7 +46,7 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
         }
 
 
-        public async Task AddSubscriptionAsync(Subscription subscription)
+        public async Task AddSubscriptionAsync(SubscriptionDTO subscription)
         {
             var ctx = await GetBillingDataContextAsync(subscription.OrgId);
             ctx.Subscription.Add(subscription);
@@ -61,10 +61,10 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
             await ctx.SaveChangesAsync();
         }
 
-        public async Task<Subscription> GetSubscriptionAsync(string orgId, Guid id, bool disableTracking = false)
+        public async Task<SubscriptionDTO> GetSubscriptionAsync(string orgId, Guid id, bool disableTracking = false)
         {
             var ctx = await GetBillingDataContextAsync(orgId);
-            Subscription subscription;
+            SubscriptionDTO subscription;
             if (disableTracking)
             {
                 subscription = await ctx.Subscription.AsNoTracking().Where(prd => prd.Id == id).FirstOrDefaultAsync();
@@ -82,10 +82,10 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
             return subscription;
         }
 
-        public async Task<Subscription> GetTrialSubscriptionAsync(string orgId)
+        public async Task<SubscriptionDTO> GetTrialSubscriptionAsync(string orgId)
         {
             var ctx = await GetBillingDataContextAsync(orgId);
-            return await ctx.Subscription.Where(prd => prd.OrgId == orgId && prd.Key == Subscription.SubscriptionKey_Trial).FirstOrDefaultAsync();
+            return await ctx.Subscription.Where(prd => prd.OrgId == orgId && prd.Key == SubscriptionDTO.SubscriptionKey_Trial).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<SubscriptionSummary>> GetSubscriptionsForOrgAsync(string orgId)
@@ -102,7 +102,7 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
         }
 
 
-        public async Task UpdateSubscriptionAsync(Subscription subscription)
+        public async Task UpdateSubscriptionAsync(SubscriptionDTO subscription)
         {
             // Need to ensure this gets inserted at DatTime type UTC
             subscription.CreationDate = new DateTime(subscription.CreationDate.Ticks, DateTimeKind.Utc);

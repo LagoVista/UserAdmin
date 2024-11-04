@@ -34,27 +34,27 @@ namespace LagoVista.UserAdmin.Managers
             _organizationRepo = organizationRepo ?? throw new ArgumentNullException(nameof(organizationRepo));
         }
 
-        public async Task<InvokeResult> AddSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> AddSubscriptionAsync(SubscriptionDTO subscription, EntityHeader org, EntityHeader user)
         {
-            if (subscription.Key == Subscription.SubscriptionKey_Trial)
+            if (subscription.Key == SubscriptionDTO.SubscriptionKey_Trial)
             {
                 var subscriptions = await GetSubscriptionsForOrgAsync(org.Id, user);
-                if (subscriptions.Where(sub => sub.Key == Subscription.SubscriptionKey_Trial).Any())
+                if (subscriptions.Where(sub => sub.Key == SubscriptionDTO.SubscriptionKey_Trial).Any())
                 {
                     throw new ValidationException("Invalid Data", new List<ErrorMessage>(){new ErrorMessage("Organization already has one trial subscription.")});
                 }
                 else
                 {
-                    subscription.Status = Subscription.Status_OK;
-                    subscription.PaymentTokenStatus = Subscription.PaymentTokenStatus_Waived;
+                    subscription.Status = SubscriptionDTO.Status_OK;
+                    subscription.PaymentTokenStatus = SubscriptionDTO.PaymentTokenStatus_Waived;
                 }
             }
             else
             {
                 if (String.IsNullOrEmpty(subscription.PaymentToken))
                 {
-                    subscription.PaymentTokenStatus = Subscription.PaymentTokenStatus_Empty;
-                    subscription.Status = Subscription.Status_NoPaymentDetails;
+                    subscription.PaymentTokenStatus = SubscriptionDTO.PaymentTokenStatus_Empty;
+                    subscription.Status = SubscriptionDTO.Status_NoPaymentDetails;
                 }
                 else
                 {
@@ -62,8 +62,8 @@ namespace LagoVista.UserAdmin.Managers
                     if (!result.Successful) return result.ToInvokeResult();
 
                     subscription.CustomerId = result.Result;
-                    subscription.PaymentTokenStatus = Subscription.PaymentTokenStatus_OK;
-                    subscription.Status = Subscription.Status_OK;
+                    subscription.PaymentTokenStatus = SubscriptionDTO.PaymentTokenStatus_OK;
+                    subscription.Status = SubscriptionDTO.Status_OK;
                     subscription.PaymentTokenDate = DateTime.UtcNow;
                 }
             }
@@ -75,7 +75,7 @@ namespace LagoVista.UserAdmin.Managers
 
        
 
-        public async Task<Subscription> GetTrialSubscriptionAsync(EntityHeader org, EntityHeader user)
+        public async Task<SubscriptionDTO> GetTrialSubscriptionAsync(EntityHeader org, EntityHeader user)
         {
             var subscription = await _subscriptionRepo.GetTrialSubscriptionAsync(org.Id);
             if (subscription != null)
@@ -86,7 +86,7 @@ namespace LagoVista.UserAdmin.Managers
             return subscription;
         }
 
-        public async Task<Subscription> GetSubscriptionAsync(Guid id, EntityHeader org, EntityHeader user)
+        public async Task<SubscriptionDTO> GetSubscriptionAsync(Guid id, EntityHeader org, EntityHeader user)
         {
             var subscription = await _subscriptionRepo.GetSubscriptionAsync(org.Id, id);
             await AuthorizeAsync(user, org, "getSubscription", subscription);
@@ -113,7 +113,7 @@ namespace LagoVista.UserAdmin.Managers
             return _subscriptionRepo.QueryKeyInUse(key, org.Id);
         }
 
-        public async Task<InvokeResult> UpdateSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> UpdateSubscriptionAsync(SubscriptionDTO subscription, EntityHeader org, EntityHeader user)
         {
             await AuthorizeAsync(user, org, "updateSubscription", subscription);
 
@@ -135,8 +135,8 @@ namespace LagoVista.UserAdmin.Managers
                     if (!result.Successful) return result.ToInvokeResult();
                 }
 
-                subscription.PaymentTokenStatus = Subscription.PaymentTokenStatus_OK;
-                subscription.Status = Subscription.Status_OK;
+                subscription.PaymentTokenStatus = SubscriptionDTO.PaymentTokenStatus_OK;
+                subscription.Status = SubscriptionDTO.Status_OK;
                 subscription.PaymentTokenDate = DateTime.UtcNow;
             }
 

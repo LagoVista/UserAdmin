@@ -8,13 +8,13 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
 {
     public interface ISubscriptionRepo
     {
-        Task AddSubscriptionAsync(Subscription subscription);
-        Task UpdateSubscriptionAsync(Subscription subscription);
+        Task AddSubscriptionAsync(SubscriptionDTO subscription);
+        Task UpdateSubscriptionAsync(SubscriptionDTO subscription);
         Task DeleteSubscriptionAsync(string orgId, Guid id);
         Task DeleteSubscriptionsForOrgAsync(string orgId);
-        Task<Subscription> GetTrialSubscriptionAsync(string orgId);
+        Task<SubscriptionDTO> GetTrialSubscriptionAsync(string orgId);
 
-        Task<Subscription> GetSubscriptionAsync(string orgId, Guid id, bool disableTracking = false);
+        Task<SubscriptionDTO> GetSubscriptionAsync(string orgId, Guid id, bool disableTracking = false);
 
         Task<IEnumerable<SubscriptionSummary>> GetSubscriptionsForOrgAsync(string orgId);
 

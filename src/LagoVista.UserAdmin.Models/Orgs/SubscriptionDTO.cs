@@ -13,7 +13,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         UserAdminResources.Names.Subscription_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
         CreateUIUrl:"/organization/subscription/add", ListUIUrl:"/organization/subscriptions", EditUIUrl:"/organization/suscription/{id}", Icon: "icon-ae-bill-1",
         GetListUrl: "/api/subscriptions", GetUrl: "/api/subscription/{id}", SaveUrl: "/api/subscription", FactoryUrl: "/api/subscription/factory")]
-    public class Subscription : IValidateable, IKeyedEntity, INamedEntity, ISummaryFactory, IFormDescriptor, IFormDescriptorCol2
+    public class SubscriptionDTO : IValidateable, IKeyedEntity, INamedEntity, ISummaryFactory, IFormDescriptor, IFormDescriptorCol2
     {
         public const string Status_OK = "ok";
         public const string Status_FreeAccount = "freeaccount";
@@ -27,7 +27,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public const string SubscriptionKey_Trial = "trial";
 
-        public Subscription()
+        public SubscriptionDTO()
         {
             Icon = "icon-ae-bill-1";
             Id = Guid.NewGuid();
@@ -126,6 +126,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(PaymentTokenDate),
                 nameof(PaymentTokenExpires),
             };
+        }
+
+        public EntityHeader ToEntityHeader()
+        {
+            return EntityHeader.Create(Id.ToString(), Name); 
         }
     }
 
