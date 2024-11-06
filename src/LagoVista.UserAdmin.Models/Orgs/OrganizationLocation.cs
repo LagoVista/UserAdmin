@@ -55,7 +55,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Location_GeoLocation, FieldType: FieldTypes.GeoLocation, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public GeoLocation GeoLocation { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Location_GeoLocation, FieldType: FieldTypes.Custom, CustomFieldType:"boudninggeorect", IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.OrgLocation_GeoBoundingBox, HelpResource:UserAdminResources.Names.OrgLocation_GeoBoundingBox_Help, FieldType: FieldTypes.Custom, CustomFieldType: "boudningpolygon", IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public string BoundingGeoLocation { get; set; }
 
 
@@ -94,7 +94,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         /// <summary>
         /// Postal code for this location
         /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Location_PostalCode,  ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_PostalCode,  ResourceType: typeof(UserAdminResources))]
         public String PostalCode { get; set; }
 
         /// <summary>

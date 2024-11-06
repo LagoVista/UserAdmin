@@ -45,7 +45,7 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
         /// <summary>
         /// Postal code for this location
         /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Location_PostalCode, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_PostalCode, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public String PostalCode { get; set; }
         /// <summary>
         /// Country for this location

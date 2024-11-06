@@ -314,9 +314,6 @@
   <data name="Location_LocationName" xml:space="preserve">
     <value>Location Name</value>
   </data>
-  <data name="Location_PostalCode" xml:space="preserve">
-    <value>Postal Code</value>
-  </data>
   <data name="Location_State" xml:space="preserve">
     <value>State</value>
   </data>
@@ -1097,7 +1094,7 @@
   <data name="AppUser_Country" xml:space="preserve">
     <value>Country</value>
   </data>
-  <data name="AppUser_PostalCode" xml:space="preserve">
+  <data name="Common_PostalCode" xml:space="preserve">
     <value>Postal Code</value>
   </data>
   <data name="AppUser_StateProvince" xml:space="preserve">
@@ -1676,10 +1673,10 @@
   <data name="Organization_HeroTitle" xml:space="preserve">
     <value>Hero Title</value>
   </data>
-  <data name="Organization_PrimaryBgColor" xml:space="preserve">
+  <data name="Common_PrimaryBgColor" xml:space="preserve">
     <value>Primary Background Color</value>
   </data>
-  <data name="Organization_PrimaryTextColor" xml:space="preserve">
+  <data name="Common_PrimaryTextColor" xml:space="preserve">
     <value>Primary Text Color</value>
   </data>
   <data name="Organization_SalesContact" xml:space="preserve">
@@ -1768,5 +1765,11 @@
   </data>
   <data name="Organization_BillingLocation_Select" xml:space="preserve">
     <value>-select billing location-</value>
+  </data>
+  <data name="OrgLocation_GeoBoundingBox" xml:space="preserve">
+    <value>Bounding Box (geo)</value>
+  </data>
+  <data name="OrgLocation_GeoBoundingBox_Help" xml:space="preserve">
+    <value>A collection of points that make up a bounding box that define the perimeter of the location, if you are not using the built in editor, this field is a string that represents a JSON array of 2D or 3D points of latitude and longitude.  There must be a minimum of three points.</value>
   </data>
 </root>

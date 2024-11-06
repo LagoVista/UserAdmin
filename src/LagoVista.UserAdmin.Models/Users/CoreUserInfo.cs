@@ -46,7 +46,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public string State { get; set; }
         [FormField(LabelResource: UserAdminResources.Names.AppUser_Country, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string Country { get; set; }
-        [FormField(LabelResource: UserAdminResources.Names.AppUser_PostalCode, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_PostalCode, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string PostalCode { get; set; }
 
 

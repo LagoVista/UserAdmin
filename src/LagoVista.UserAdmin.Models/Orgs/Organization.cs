@@ -141,13 +141,13 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public bool IsForProductLine { get; set; }
 
 
-        [FormField(LabelResource: UserAdminResources.Names.Organization_PrimaryBgColor, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_PrimaryBgColor, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources))]
         public string PrimaryBgColor { get; set; } = "#1976D2";
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_AccentColor, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources))]
         public string AccentColor { get; set; } = "#D48D17";
 
-        [FormField(LabelResource: UserAdminResources.Names.Organization_PrimaryTextColor, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_PrimaryTextColor, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources))]
         public string PrimaryTextColor { get; set; } = "#F4F4F4";
 
         public List<ModuleSummary> AdditionalModules { get; set; } = new List<ModuleSummary>();
