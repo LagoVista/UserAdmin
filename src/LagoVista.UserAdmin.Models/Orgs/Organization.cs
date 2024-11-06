@@ -92,6 +92,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
         public EntityHeader PrimaryLocation { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Organization_BillingLocation, IsRequired: false, IsUserEditable: true,
+            WaterMark: UserAdminResources.Names.Organization_BillingLocation_Select, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader BillingLocation { get; set; }
+
         [FormField(LabelResource: UserAdminResources.Names.Admin_Contact, FieldType: FieldTypes.UserPicker, IsRequired: false,
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
         public EntityHeader AdminContact { get; set; }
@@ -180,6 +184,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
             return new List<string>()
             {
                 nameof(TimeZone),
+                nameof(PrimaryLocation),
+                nameof(BillingLocation),
                 nameof(DefaultTheme),
                 nameof(WebSite),
                 nameof(LandingPage),

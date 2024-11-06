@@ -1763,4 +1763,10 @@
   <data name="DeviceOwnersDevices_Product" xml:space="preserve">
     <value>Product</value>
   </data>
+  <data name="Organization_BillingLocation" xml:space="preserve">
+    <value>Billing Location</value>
+  </data>
+  <data name="Organization_BillingLocation_Select" xml:space="preserve">
+    <value>-select billing location-</value>
+  </data>
 </root>
