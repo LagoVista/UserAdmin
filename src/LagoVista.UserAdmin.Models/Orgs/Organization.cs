@@ -88,12 +88,12 @@ namespace LagoVista.UserAdmin.Models.Orgs
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
         public EntityHeader Owner { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Organization_Primary_Location, IsRequired: false, IsUserEditable: true,
-            WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Organization_Primary_Location, IsRequired: false, IsUserEditable: true, FieldType: FieldTypes.EntityHeaderPicker,
+           EntityHeaderPickerUrl: "/api/org/locations", WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
         public EntityHeader PrimaryLocation { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Organization_BillingLocation, IsRequired: false, IsUserEditable: true,
-            WaterMark: UserAdminResources.Names.Organization_BillingLocation_Select, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Organization_BillingLocation, IsRequired: false, IsUserEditable: true, FieldType: FieldTypes.EntityHeaderPicker,
+           EntityHeaderPickerUrl: "/api/org/locations",  WaterMark: UserAdminResources.Names.Organization_BillingLocation_Select, ResourceType: typeof(UserAdminResources))]
         public EntityHeader BillingLocation { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Admin_Contact, FieldType: FieldTypes.UserPicker, IsRequired: false,
