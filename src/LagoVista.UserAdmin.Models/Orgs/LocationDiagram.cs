@@ -2,6 +2,7 @@
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.Geo;
 using LagoVista.Core.Resources;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Calendar;
@@ -20,8 +21,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public LocationDiagram()
         {
             Icon = "icon-pz-worldwide-1";
-            Width = 1024;
-            Height = 1024;
+            Width = 100*12;
+            Height = 100*12;
+            Fill = "#f8f8f8";
+            Stroke = "#000000";
+            TextColor = "#000000";
         }
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
@@ -30,18 +34,40 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Common_Notes, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(UserAdminResources))]
         public string Notes { get; set; }
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.LocationDiagram_BaseLocation, HelpResource: Resources.UserAdminResources.Names.LocationDiagram_BaseLocation_Help,
-           WaterMark: UserAdminResources.Names.Common_SelectLocation, FieldType: FieldTypes.OrgLocationPicker, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: Resources.UserAdminResources.Names.LocationDiagram_BaseLocation, HelpResource: Resources.UserAdminResources.Names.LocationDiagram_BaseLocation_Help, EntityHeaderPickerUrl: "/api/org/locations",
+           WaterMark: UserAdminResources.Names.Common_SelectLocation, FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public EntityHeader Location { get; set; }
 
+        public GeoLocation GeoLocationCenter { get; set; }
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.LocationDiagram_Width,
-            FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
+        public decimal DefaultGeoZoomLevel { get; set; } = 10;
+
+        public decimal DefaultShapeZoomLevel { get; set; } = 1;
+
+        public double ViewPortX { get; set; } = 20;
+        public double ViewPortY { get; set; } = 20;
+
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.LocationDiagram_Width, FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public double Width { get; set; }
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.LocationDiagram_Height,
-            FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: Resources.UserAdminResources.Names.LocationDiagram_Height, FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public double Height { get; set; }
+
+        public double Scale { get; set; }
+
+        public double Rotation { get; set; }
+
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_TextColor, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string TextColor { get; set; }
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_StrokeColor, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string Stroke { get; set; }
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_FillColor, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string Fill { get; set; }
+
 
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.LocationDiagram_Layers,
@@ -67,9 +93,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
             {
                 nameof(Name),
                 nameof(Key),
+                nameof(Stroke),
+                nameof(TextColor),
+                nameof(Fill),
                 nameof(Icon),
-                nameof(Width),
-                nameof(Height),
                 nameof(Location),
                 nameof(Notes),
             };
@@ -119,13 +146,14 @@ namespace LagoVista.UserAdmin.Models.Orgs
         {
             Id = Guid.NewGuid().ToId();
             Icon = "icon-ae-ecommerce-1";
-            X = 200;
-            Y = 200;
-            Width = 200;
-            Height = 200;
-            Fill = "#f8f8f8";
+            X = 50 * 12;
+            Y = 50 * 12;
+            Width = 10 * 12;
+            Height = 10 * 12;
             Scale = 1;
+            Fill = "#f8f8f8";            
             Stroke = "#000000";
+            TextColor = "#000000";
             ShapeType = EntityHeader<ShapeTypes>.Create(ShapeTypes.Room);
         }
 
@@ -142,8 +170,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Icon { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.LocationDiagram_Shape_Location, WaterMark: UserAdminResources.Names.Common_SelectLocation,
-            HelpResource: UserAdminResources.Names.LocationDiagram_Shape_Location_Help, FieldType: FieldTypes.OrgLocationPicker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
+        [FormField(LabelResource: UserAdminResources.Names.LocationDiagram_Shape_Location, WaterMark: UserAdminResources.Names.Common_SelectLocation, EntityHeaderPickerUrl: "/api/org/locations",
+            HelpResource: UserAdminResources.Names.LocationDiagram_Shape_Location_Help, FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
         public EntityHeader Location { get; set; }
 
 
@@ -183,15 +211,25 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: Resources.UserAdminResources.Names.Shape_Scale, FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: true, IsUserEditable: true)]
         public double Scale { get; set; }
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.Shape_Stroke, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_TextColor, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string TextColor { get; set; }
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_StrokeColor, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Stroke { get; set; }
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_FillColor, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string Fill { get; set; }
+
+
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.Shape_Locked, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public bool Locked { get; set; } = false;
 
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.Shape_Fill, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
-        public string Fill { get; set; }
+        public GeoLocation GeoLocationCenter { get; set; }
+
+
         public List<ShapePoint> Points { get; set; } = new List<ShapePoint>();
 
         public LocationDiagram Details { get; set; }
@@ -205,14 +243,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(Key),
                 nameof(Icon),
                 nameof(ShapeType),
-                nameof(X),
-                nameof(Y),
-                nameof(Width),
-                nameof(Height),
                 nameof(Location),
                 nameof(Rotation),
                 nameof(Scale),
                 nameof(Stroke),   
+                nameof(TextColor),
                 nameof(Fill),
                 nameof(Notes),
             };

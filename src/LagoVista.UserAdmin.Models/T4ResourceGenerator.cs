@@ -1,4 +1,4 @@
-﻿/*11/6/2024 10:02:10 AM*/
+﻿/*11/7/2024 4:02:29 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -390,6 +390,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Common_EmailAddress
 
 		public static string Common_EmailAddress { get { return GetResourceString("Common_EmailAddress"); } }
+//Resources:UserAdminResources:Common_FillColor
+
+		public static string Common_FillColor { get { return GetResourceString("Common_FillColor"); } }
 //Resources:UserAdminResources:Common_Icon
 
 		public static string Common_Icon { get { return GetResourceString("Common_Icon"); } }
@@ -450,9 +453,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Common_Status
 
 		public static string Common_Status { get { return GetResourceString("Common_Status"); } }
+//Resources:UserAdminResources:Common_StrokeColor
+
+		public static string Common_StrokeColor { get { return GetResourceString("Common_StrokeColor"); } }
 //Resources:UserAdminResources:Common_TabletSupport
 
 		public static string Common_TabletSupport { get { return GetResourceString("Common_TabletSupport"); } }
+//Resources:UserAdminResources:Common_TextColor
+
+		public static string Common_TextColor { get { return GetResourceString("Common_TextColor"); } }
 //Resources:UserAdminResources:Common_TimeZome
 
 		public static string Common_TimeZome { get { return GetResourceString("Common_TimeZome"); } }
@@ -1815,6 +1824,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Common_Description = "Common_Description";
 			public const string Common_DesktopSupport = "Common_DesktopSupport";
 			public const string Common_EmailAddress = "Common_EmailAddress";
+			public const string Common_FillColor = "Common_FillColor";
 			public const string Common_Icon = "Common_Icon";
 			public const string Common_Id = "Common_Id";
 			public const string Common_IsPublic = "Common_IsPublic";
@@ -1835,7 +1845,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Common_SelectDevice = "Common_SelectDevice";
 			public const string Common_SelectLocation = "Common_SelectLocation";
 			public const string Common_Status = "Common_Status";
+			public const string Common_StrokeColor = "Common_StrokeColor";
 			public const string Common_TabletSupport = "Common_TabletSupport";
+			public const string Common_TextColor = "Common_TextColor";
 			public const string Common_TimeZome = "Common_TimeZome";
 			public const string CreateLocationVM_Description = "CreateLocationVM_Description";
 			public const string CreateLocationVM_Help = "CreateLocationVM_Help";

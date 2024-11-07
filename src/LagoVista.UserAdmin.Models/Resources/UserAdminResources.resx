@@ -1772,4 +1772,13 @@
   <data name="OrgLocation_GeoBoundingBox_Help" xml:space="preserve">
     <value>A collection of points that make up a bounding box that define the perimeter of the location, if you are not using the built in editor, this field is a string that represents a JSON array of 2D or 3D points of latitude and longitude.  There must be a minimum of three points.</value>
   </data>
+  <data name="Common_TextColor" xml:space="preserve">
+    <value>Text Color</value>
+  </data>
+  <data name="Common_FillColor" xml:space="preserve">
+    <value>Fill Color</value>
+  </data>
+  <data name="Common_StrokeColor" xml:space="preserve">
+    <value>Stroke Color</value>
+  </data>
 </root>
