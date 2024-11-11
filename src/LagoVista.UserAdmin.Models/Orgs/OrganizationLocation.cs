@@ -12,12 +12,13 @@ using System.Threading;
 using System.Text;
 using System.Linq;
 using LagoVista.Core.Models.Geo;
+using System.Net.Http.Headers;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Location_Title, UserAdminResources.Names.Organization_Location_Help, 
+    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Location_Title, UserAdminResources.Names.Organization_Location_Help,
         UserAdminResources.Names.Organization_Location_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
-        GetListUrl:"/api/org/locations", GetUrl:"/api/org/location/:id", SaveUrl:"/api/org/location", FactoryUrl:"/api/org/location/factory", DeleteUrl:"/api/org/location" , Icon: "icon-fo-office")]
+        GetListUrl: "/api/org/locations", GetUrl: "/api/org/location/:id", SaveUrl: "/api/org/location", FactoryUrl: "/api/org/location/factory", DeleteUrl: "/api/org/location", Icon: "icon-fo-office")]
     public class OrgLocation : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IIconEntity, IFormDescriptor, IFormDescriptorAdvanced, IFormDescriptorAdvancedCol2, ISummaryFactory
     {
         public OrgLocation()
@@ -31,7 +32,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
             };
         }
 
-        [FormField(LabelResource: UserAdminResources.Names.Organization, IsRequired:true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Organization, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public EntityHeader Organization { get; set; }
 
 
@@ -55,8 +56,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Location_GeoLocation, FieldType: FieldTypes.GeoLocation, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public GeoLocation GeoLocation { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.OrgLocation_GeoBoundingBox, HelpResource:UserAdminResources.Names.OrgLocation_GeoBoundingBox_Help, FieldType: FieldTypes.Custom, CustomFieldType: "boudningpolygon", IsRequired: false, ResourceType: typeof(UserAdminResources))]
-        public string BoundingGeoLocation { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.OrgLocation_GeoBoundingBox, HelpResource: UserAdminResources.Names.OrgLocation_GeoBoundingBox_Help, FieldType: FieldTypes.Custom, CustomFieldType: "boudningpolygon", IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        public List<GeoLocation> GeoPointsBoundingBox { get; set; } = new List<GeoLocation>();
 
 
         [FormField(LabelResource: UserAdminResources.Names.OrgLocation_PhoneNumber, FieldType: FieldTypes.Phone, IsRequired: false, ResourceType: typeof(UserAdminResources))]
@@ -94,7 +95,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         /// <summary>
         /// Postal code for this location
         /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Common_PostalCode,  ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_PostalCode, ResourceType: typeof(UserAdminResources))]
         public String PostalCode { get; set; }
 
         /// <summary>
@@ -111,25 +112,25 @@ namespace LagoVista.UserAdmin.Models.Orgs
         /// <summary>
         /// Main Contact for this Location
         /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Admin_Contact, IsRequired: false, FieldType:FieldTypes.UserPicker,  WaterMark:UserAdminResources.Names.OrgLocation_AdminContact_Select, 
+        [FormField(LabelResource: UserAdminResources.Names.Admin_Contact, IsRequired: false, FieldType: FieldTypes.UserPicker, WaterMark: UserAdminResources.Names.OrgLocation_AdminContact_Select,
             ResourceType: typeof(UserAdminResources))]
         public EntityHeader AdminContact { get; set; }
 
         /// <summary>
         /// The technical contact for this location.
         /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Technical_Contact, IsRequired: false, FieldType: FieldTypes.UserPicker, WaterMark: UserAdminResources.Names.OrgLocation_TechnicalContact_Select, 
+        [FormField(LabelResource: UserAdminResources.Names.Technical_Contact, IsRequired: false, FieldType: FieldTypes.UserPicker, WaterMark: UserAdminResources.Names.OrgLocation_TechnicalContact_Select,
             ResourceType: typeof(UserAdminResources))]
         public EntityHeader TechnicalContact { get; set; }
 
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Notes, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(UserAdminResources))]
         public string Notes { get; set; }
-      
+
         /// <summary>
         /// A description that can be added to this location
         /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Common_Description, FieldType:FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Description, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public String Description { get; set; }
 
         public string HeroTitle { get; set; }
@@ -158,7 +159,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 AdminContact = AdminContact,
                 NumberDevices = Devices.Count
             };
-        }        
+        }
 
         public List<string> GetAdvancedFields()
         {
@@ -185,7 +186,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(AdminContact),
                 nameof(TechnicalContact),
                 nameof(GeoLocation),
-                nameof(BoundingGeoLocation),
+                nameof(GeoPointsBoundingBox),
                 nameof(PhoneNumber),
                 nameof(Description),
                 nameof(Notes),
@@ -277,7 +278,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public int NumberDevices { get; set; }
     }
 
-    public class OrgLocationDiagramReference
+    public class OrgLocationDiagramReference : IValidateable
     {
         public OrgLocationDiagramReference()
         {
@@ -289,5 +290,26 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader LocationDiagramLayer { get; set; }
         public EntityHeader LocationDiagramShape { get; set; }
 
+
+        [CustomValidator]
+        public void Validate(ValidationResult result, Actions action)
+        {
+            if (EntityHeader.IsNullOrEmpty(LocationDiagram)) result.AddUserError("Diagram is required");
+            if (EntityHeader.IsNullOrEmpty(LocationDiagramLayer)) result.AddUserError("Layer is required");
+            if (EntityHeader.IsNullOrEmpty(LocationDiagramShape)) result.AddUserError("Shape is required");
+        }
+    }
+
+    public class DeviceReference : IValidateable
+    {
+        public EntityHeader DeviceRepository { get; set; }
+        public EntityHeader Device { get; set; }
+
+        [CustomValidator]
+        public void Validate(ValidationResult result, Actions action)
+        {
+            if (EntityHeader.IsNullOrEmpty(DeviceRepository)) result.AddUserError("Device Repository is required");
+            if (EntityHeader.IsNullOrEmpty(Device)) result.AddUserError("Device is required");
+        }
     }
 }

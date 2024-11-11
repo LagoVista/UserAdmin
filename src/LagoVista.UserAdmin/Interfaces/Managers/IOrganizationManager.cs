@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.UserAdmin.Models.Auth;
+using LagoVista.Core.Models.Geo;
 
 namespace LagoVista.UserAdmin.Interfaces.Managers
 {
@@ -29,6 +30,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> AddLocationAsync(OrgLocation newLocation, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateLocationAsync(OrgLocation location, EntityHeader org, EntityHeader user);
         Task<InvokeResult<Organization>> CreateNewOrganizationAsync(CreateOrganizationViewModel organizationViewModel, EntityHeader user);
+        Task<InvokeResult<List<GeoLocation>>> GetBoundingBoxForLocationAsync(string orgLocation, EntityHeader org, EntityHeader user);
 
         Task<InvokeResult> SetOrgAdminAsync(string userId, EntityHeader org, EntityHeader user);
 
@@ -58,6 +60,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<IEnumerable<UserInfoSummary>> GetActiveUsersForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user);
         Task<IEnumerable<LocationUserRole>> GetUserWithRoleInLocationAsync(string locationId, string roleId, EntityHeader org, EntityHeader user);
         Task<AcceptInviteViewModel> GetInviteViewModelAsync(string inviteId);
+
         Task<ListResponse<Invitation>> GetInvitationsAsync(ListRequest request, EntityHeader org, EntityHeader user, Invitation.StatusTypes? byStatus = null);
         Task<ListResponse<Invitation>> GetActiveInvitationsForOrgAsync(ListRequest request, EntityHeader org, EntityHeader user);
         Task<bool> GetIsInvigationActiveAsync(string inviteId);

@@ -9,6 +9,7 @@ using LagoVista.UserAdmin.Models.Calendar;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Orgs
@@ -39,6 +40,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader Location { get; set; }
 
         public GeoLocation GeoLocationCenter { get; set; }
+
+        public List<GeoLocation> GeoPoints { get; set; } = new List<GeoLocation>();
 
         public decimal DefaultGeoZoomLevel { get; set; } = 10;
 
@@ -208,6 +211,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: Resources.UserAdminResources.Names.Shape_Rotation, FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: true, IsUserEditable: true)]
         public double Rotation { get; set; }
 
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Shape_TextRotation, FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: true, IsUserEditable: true)]
+        public double TextRotation { get; set; }
+
         [FormField(LabelResource: Resources.UserAdminResources.Names.Shape_Scale, FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: true, IsUserEditable: true)]
         public double Scale { get; set; }
 
@@ -222,6 +229,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public string Fill { get; set; }
 
 
+        public List<DeviceReference> Devices { get; set; } = new List<DeviceReference>();
+
+
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.Shape_Locked, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public bool Locked { get; set; } = false;
@@ -230,10 +240,20 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public GeoLocation GeoLocationCenter { get; set; }
 
 
+        public List<GeoLocation> GeoPoints { get; set; } = new List<GeoLocation>();
+
         public List<ShapePoint> Points { get; set; } = new List<ShapePoint>();
 
-        public LocationDiagram Details { get; set; }
-        
+        public EntityHeader ToEntityHeader()
+        {
+            return new EntityHeader()
+            {
+                Id = Id,
+                Key = Key,
+                Text = Name,
+            };
+        }
+
 
         public List<string> GetFormFields()
         {
@@ -292,6 +312,16 @@ namespace LagoVista.UserAdmin.Models.Orgs
      
         [FormField(LabelResource: Resources.UserAdminResources.Names.LocationDiagramLayer_Groups, FieldType: FieldTypes.ChildList, ResourceType: typeof(UserAdminResources))]
         public List<LocationDiagramShapeGroup> Groups { get; set; } = new List<LocationDiagramShapeGroup>();
+
+        public EntityHeader ToEntityHeader()
+        {
+            return new EntityHeader()
+            {
+                Id = Id,
+                Key = Key,
+                Text = Name,
+            };
+        }
 
         public List<string> GetFormFields()
         {

@@ -1,4 +1,4 @@
-﻿/*11/7/2024 4:02:29 PM*/
+﻿/*11/11/2024 7:23:22 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1565,6 +1565,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Shape_Stroke
 
 		public static string Shape_Stroke { get { return GetResourceString("Shape_Stroke"); } }
+//Resources:UserAdminResources:Shape_TextRotation
+
+		public static string Shape_TextRotation { get { return GetResourceString("Shape_TextRotation"); } }
 //Resources:UserAdminResources:ShapeType
 
 		public static string ShapeType { get { return GetResourceString("ShapeType"); } }
@@ -2213,6 +2216,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Shape_Rotation = "Shape_Rotation";
 			public const string Shape_Scale = "Shape_Scale";
 			public const string Shape_Stroke = "Shape_Stroke";
+			public const string Shape_TextRotation = "Shape_TextRotation";
 			public const string ShapeType = "ShapeType";
 			public const string ShapeType_Building = "ShapeType_Building";
 			public const string ShapeType_Circle = "ShapeType_Circle";

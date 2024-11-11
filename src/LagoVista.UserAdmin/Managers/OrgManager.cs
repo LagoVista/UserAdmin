@@ -27,6 +27,7 @@ using LagoVista.UserAdmin.Models.Auth;
 using RingCentral;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
+using LagoVista.Core.Models.Geo;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -51,6 +52,7 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IAuthenticationLogManager _authLogMgr;
         private readonly ICacheProvider _cacheProvider;
         private readonly IBackgroundServiceTaskQueue _taskQueue;
+        private readonly ILocationDiagramRepo _diagramRepo;
         #endregion
 
         #region Ctor
@@ -73,6 +75,7 @@ namespace LagoVista.UserAdmin.Managers
             IUserRoleManager useRoleManager,
             IAuthenticationLogManager authLogMgr,
             ISubscriptionManager subscriptionManager,
+            ILocationDiagramRepo diagramRepo,
             ICacheProvider cacheProvider,
             IAdminLogger logger) : base(logger, appConfig, depManager, security)
         {
@@ -94,6 +97,7 @@ namespace LagoVista.UserAdmin.Managers
             _orgInitializer = orgInitializer;
             _ownedObjectRepo = ownedObjectRepo;
             _cacheProvider = cacheProvider;
+            _diagramRepo = diagramRepo;
             _taskQueue = taskQueue ?? throw new ArgumentNullException(nameof(taskQueue));
         }
         #endregion
@@ -294,6 +298,28 @@ namespace LagoVista.UserAdmin.Managers
 
 
             return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult<List<GeoLocation>>> GetBoundingBoxForLocationAsync(string orgLocation, EntityHeader org, EntityHeader user)
+        {
+            var location = await _locationRepo.GetLocationAsync(orgLocation);
+            await AuthorizeAsync(location, AuthorizeResult.AuthorizeActions.Update, user, org);
+
+            if(location.DiagramReferences.Any())
+            {
+                var diagramRef = location.DiagramReferences.First();
+                var diagarm = await _diagramRepo.GetLocationDiagramAsync(diagramRef.LocationDiagram.Id);
+                var layer = diagarm.Layers.Single(lyr => lyr.Id == diagramRef.LocationDiagramLayer.Id);
+                var shape = layer.Shapes.FirstOrDefault(shp => shp.Id == diagramRef.LocationDiagramShape.Id);
+                if (shape.GeoPoints.Any())
+                    return InvokeResult<List<GeoLocation>>.Create(shape.GeoPoints);
+
+                return InvokeResult<List<GeoLocation>>.FromError("Shape exists but does not have any geo points.");
+            }
+            else
+            {
+                return InvokeResult<List<GeoLocation>>.FromError("Location does not have any location diagrams.");
+            }
         }
 
         public async Task<InvokeResult> UpdateLocationAsync(OrgLocation location, EntityHeader org, EntityHeader user)

@@ -1,4 +1,5 @@
 ﻿using LagoVista.CloudStorage.DocumentDB;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
@@ -11,8 +12,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
     {
         private readonly bool _shouldConsolidateCollections;
 
-        public LocationDiagramRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
+        public LocationDiagramRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider, IDependencyManager dependencyManager) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider, dependencyManager)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }

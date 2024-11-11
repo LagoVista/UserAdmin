@@ -1781,4 +1781,7 @@
   <data name="Common_StrokeColor" xml:space="preserve">
     <value>Stroke Color</value>
   </data>
+  <data name="Shape_TextRotation" xml:space="preserve">
+    <value>Text Rotation</value>
+  </data>
 </root>

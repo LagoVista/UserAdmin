@@ -1,16 +1,13 @@
 ﻿using LagoVista.CloudStorage.DocumentDB;
-
 using System;
 using System.Threading.Tasks;
-using LagoVista.Core.PlatformSupport;
-using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Azure.Documents;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.IoT.Logging.Loggers;
 using Microsoft.Azure.Cosmos;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.Core.Interfaces;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
@@ -18,8 +15,8 @@ namespace LagoVista.UserAdmin.Repos.Orgs
     {
         bool _shouldConsolidateCollections;
 
-        public OrgLocationRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
+        public OrgLocationRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider, IDependencyManager dependencyManager) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider: cacheProvider, dependencyManager)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }
@@ -43,7 +40,6 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         {
             return GetDocumentAsync(id);
         }
-
 
         public async Task<bool> QueryNamespaceInUseAsync(string orgId, string namespaceText)
         {
