@@ -1784,4 +1784,16 @@
   <data name="Shape_TextRotation" xml:space="preserve">
     <value>Text Rotation</value>
   </data>
+  <data name="OrgLocation_Diagram" xml:space="preserve">
+    <value>Diagram</value>
+  </data>
+  <data name="OrgLocation_Diagram_Select" xml:space="preserve">
+    <value>-select diagram-</value>
+  </data>
+  <data name="OrgLocatoin_DeviceRepository" xml:space="preserve">
+    <value>Device Repository</value>
+  </data>
+  <data name="OrgLocatoin_DeviceRepository_Select" xml:space="preserve">
+    <value>-select device repository-</value>
+  </data>
 </root>

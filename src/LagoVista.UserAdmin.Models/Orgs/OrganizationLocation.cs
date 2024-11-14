@@ -124,6 +124,16 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader TechnicalContact { get; set; }
 
 
+        [FormField(LabelResource: UserAdminResources.Names.OrgLocation_Diagram, IsRequired: false, EntityHeaderPickerUrl: "/api/org/location/diagrams", FieldType: FieldTypes.EntityHeaderPicker, WaterMark: UserAdminResources.Names.OrgLocation_Diagram_Select,
+            ResourceType: typeof(UserAdminResources))]
+        public EntityHeader LocationDiagram { get; set; }
+
+
+        [FormField(LabelResource: UserAdminResources.Names.OrgLocatoin_DeviceRepository, IsRequired: false, EntityHeaderPickerUrl: "/api/devicerepos", FieldType: FieldTypes.EntityHeaderPicker, WaterMark: UserAdminResources.Names.OrgLocatoin_DeviceRepository_Select,
+            ResourceType: typeof(UserAdminResources))]
+        public EntityHeader DeviceRepository { get; set; }
+
+
         [FormField(LabelResource: UserAdminResources.Names.Common_Notes, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(UserAdminResources))]
         public string Notes { get; set; }
 
@@ -187,6 +197,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(TechnicalContact),
                 nameof(GeoLocation),
                 nameof(GeoPointsBoundingBox),
+                nameof(DeviceRepository),
+                nameof(LocationDiagram),
                 nameof(PhoneNumber),
                 nameof(Description),
                 nameof(Notes),
@@ -217,7 +229,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
             return CreateSummary();
         }
 
-
         public string ToHTML(string site)
         {
             var bldr = new StringBuilder();
@@ -238,7 +249,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 bldr.Append(City);
 
             if (!String.IsNullOrEmpty(StateProvince))
+            {
+                if (!String.IsNullOrEmpty(City))
+                    bldr.Append(", ");
                 bldr.Append(StateProvince);
+            }
 
             if (!String.IsNullOrEmpty(City) || !String.IsNullOrEmpty(StateProvince))
                 bldr.Append("<br />");
@@ -257,7 +272,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 bldr.Append($"<h3>Diagrams</h3>");
                 foreach (var diagram in DiagramReferences)
                 {
-                    bldr.Append($"<div><a href='{site}/public/diagram/{diagram.LocationDiagram.Id}/{diagram.LocationDiagramLayer.Id}/{diagram.LocationDiagramShape.Id}'>{diagram.LocationDiagram.Text}/{diagram.LocationDiagramShape.Text}/{diagram.LocationDiagramShape.Text}</a></div>");
+                    if(!EntityHeader.IsNullOrEmpty(DeviceRepository))
+                        bldr.Append($"<div><a href='{site}/public/diagram/{diagram.LocationDiagram.Id}/{diagram.LocationDiagramLayer.Id}/{diagram.LocationDiagramShape.Id}/{OwnerOrganization.Id}/{DeviceRepository.Id}'>{diagram.LocationDiagram.Text}/{diagram.LocationDiagramShape.Text}/{diagram.LocationDiagramShape.Text}</a></div>");
+                    else
+                        bldr.Append($"<div><a href='{site}/public/diagram/{diagram.LocationDiagram.Id}/{diagram.LocationDiagramLayer.Id}/{diagram.LocationDiagramShape.Id}'>{diagram.LocationDiagram.Text}/{diagram.LocationDiagramShape.Text}/{diagram.LocationDiagramShape.Text}</a></div>");
                 }
             }
 
