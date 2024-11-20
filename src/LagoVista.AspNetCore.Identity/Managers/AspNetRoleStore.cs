@@ -46,7 +46,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public void Dispose()
         {
-            _roleRepo.Dispose();
+         //   _roleRepo.Dispose();
         }
 
         public Task<string> GetRoleIdAsync(Role role, CancellationToken cancellationToken)

@@ -75,6 +75,16 @@ namespace LagoVista.UserAdmin.Repos.Users
             }
         }
 
+        /// <summary>
+        /// This will not populate the current organization roles.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<AppUser> GetCachedAppUserAsync(string id)
+        {
+            return await GetDocumentAsync(id, false);
+        }
+
         public async Task<AppUser> FindByIdAsync(string id)
         {
             var appUser = await GetDocumentAsync(id, false);
@@ -87,8 +97,7 @@ namespace LagoVista.UserAdmin.Repos.Users
                 appUser.CurrentOrganizationRoles = userRoles.Select(role => role.ToEntityHeader()).ToList();
             }
 
-            return appUser;
-        
+            return appUser; 
         }
 
         public async Task<AppUser> FindByNameAsync(string userName)

@@ -6,7 +6,7 @@ using LagoVista.Core.Models.UIMetaData;
 
 namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
 {
-    public interface IOrgLocationRepo : IDisposable
+    public interface IOrgLocationRepo 
     {
         Task AddLocationAsync(OrgLocation orgLocation);
         Task<OrgLocation> GetLocationAsync(string id);

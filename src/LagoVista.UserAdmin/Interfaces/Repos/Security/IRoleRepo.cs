@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Interfaces.Repos.Security
 {
-    public interface IRoleRepo : IDisposable
+    public interface IRoleRepo 
     {
         Task AddRoleAsync(Role role);
         Task InsertAsync(Role role);

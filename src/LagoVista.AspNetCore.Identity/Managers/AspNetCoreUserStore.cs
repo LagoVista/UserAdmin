@@ -269,7 +269,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public void Dispose()
         {
-            _userRepo.Dispose();
+            //_userRepo.Dispose();
         }
     }
 }

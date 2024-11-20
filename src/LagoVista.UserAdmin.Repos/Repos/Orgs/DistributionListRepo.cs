@@ -13,8 +13,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
     {
         private readonly bool _shouldConsolidateCollections;
 
-        public DistributionListRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger, IDependencyManager dependencyMgr) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, dependencyManager: dependencyMgr)
+        public DistributionListRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger, IDependencyManager dependencyMgr, ICacheProvider cacheProvider) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider, dependencyManager: dependencyMgr)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }

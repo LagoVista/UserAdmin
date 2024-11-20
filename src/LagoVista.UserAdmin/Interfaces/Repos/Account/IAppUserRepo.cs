@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Interfaces.Repos.Users
 {
-    public interface IAppUserRepo : IDisposable
+    public interface IAppUserRepo 
     {
         Task<IEnumerable<UserInfoSummary>> GetUserSummaryForListAsync(IEnumerable<OrgUser> orgUsers);
         Task<ListResponse<UserInfoSummary>> GetDeviceUsersAsync(string deviceRepoId, ListRequest listRequest);
         Task<ListResponse<UserInfoSummary>> GetActiveUsersAsync(ListRequest listRequest);
         Task CreateAsync(AppUser user);
+        Task<AppUser> GetCachedAppUserAsync(string id);
         Task<AppUser> FindByIdAsync(string userId);
         Task<AppUser> FindByNameAsync(string userName);
         Task<AppUser> FindByEmailAsync(string email);
