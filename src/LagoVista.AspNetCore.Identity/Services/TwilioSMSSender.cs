@@ -3,6 +3,7 @@ using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using Prometheus;
 using System;
 using System.Threading.Tasks;
 using Twilio;
@@ -14,11 +15,12 @@ namespace LagoVista.AspNetCore.Identity.Services
 {
     public class TwilioSMSSender : ISmsSender
     {
+
+        protected static readonly Counter SendSMSMessage = Metrics.CreateCounter("nuviot_send_sms", "Send SMS Message to a user account", "entity");
+
         ILagoVistaAspNetCoreIdentityProviderSettings _settings;
         IAdminLogger _adminLogger;
         private readonly IBackgroundServiceTaskQueue _taskQueue;
-
-
         public TwilioSMSSender(ILagoVistaAspNetCoreIdentityProviderSettings settings, IBackgroundServiceTaskQueue taskQueue, IAdminLogger adminLogger)
         {
             _settings = settings;
@@ -48,6 +50,8 @@ namespace LagoVista.AspNetCore.Identity.Services
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "TwilioSMSSender_SendAsync", "EmailSent",
                     new System.Collections.Generic.KeyValuePair<string, string>("Subject", number),
                     new System.Collections.Generic.KeyValuePair<string, string>("to", contents));
+
+                SendSMSMessage.Inc();
 
                 return InvokeResult.Success;
             }

@@ -9,6 +9,7 @@ using LagoVista.UserAdmin.Models.Contacts;
 using LagoVista.UserAdmin.Models.Users;
 using Newtonsoft.Json;
 using OpenTelemetry.Trace;
+using Prometheus;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
@@ -25,6 +26,8 @@ namespace LagoVista.AspNetCore.Identity.Services
 {
     public class SendGridEmailService : IEmailSender
     {
+        protected static readonly Counter SendEmailMessage = Metrics.CreateCounter("nuviot_send_email", "Send Email Message to a user account", "entity");
+
         private readonly ILagoVistaAspNetCoreIdentityProviderSettings _settings;
         private readonly IBackgroundServiceTaskQueue _taskQueue;
         private readonly IAppConfig _appConfig;
@@ -936,6 +939,8 @@ namespace LagoVista.AspNetCore.Identity.Services
                 var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
                 var response = await client.SendEmailAsync(msg);
 
+                SendEmailMessage.Inc();
+
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "SendGridEmailServices_SendAsync", "EmailSent",
                     new System.Collections.Generic.KeyValuePair<string, string>("Subject", subject),
                     new System.Collections.Generic.KeyValuePair<string, string>("to", email));
@@ -1263,8 +1268,11 @@ namespace LagoVista.AspNetCore.Identity.Services
             var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
             var response = await client.SendEmailAsync(msg);
 
+
             if (response.IsSuccessStatusCode)
             {
+                SendEmailMessage.Inc();
+                
                 var messageIds = response.Headers.GetValues("X-Message-Id");
                 return InvokeResult<string>.Create(messageIds.FirstOrDefault());
             }
