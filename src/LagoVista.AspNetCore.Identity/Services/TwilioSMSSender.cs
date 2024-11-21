@@ -1,4 +1,6 @@
-﻿using LagoVista.Core.Validation;
+﻿using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models;
+using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using System;
@@ -14,12 +16,26 @@ namespace LagoVista.AspNetCore.Identity.Services
     {
         ILagoVistaAspNetCoreIdentityProviderSettings _settings;
         IAdminLogger _adminLogger;
+        private readonly IBackgroundServiceTaskQueue _taskQueue;
 
-        public TwilioSMSSender(ILagoVistaAspNetCoreIdentityProviderSettings settings, IAdminLogger adminLogger)
+
+        public TwilioSMSSender(ILagoVistaAspNetCoreIdentityProviderSettings settings, IBackgroundServiceTaskQueue taskQueue, IAdminLogger adminLogger)
         {
             _settings = settings;
             _adminLogger = adminLogger;
+            _taskQueue = taskQueue;
         }
+
+        public async Task<InvokeResult> SendInBackgroundAsync(string number, string contents)
+        {
+            await _taskQueue.QueueBackgroundWorkItemAsync(async (token) =>
+            {
+                await SendAsync(number, contents);
+            });
+
+            return InvokeResult.Success;
+        }
+
 
         public async Task<InvokeResult> SendAsync(string number, string contents)
         {

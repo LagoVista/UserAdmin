@@ -26,7 +26,7 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
         [TestInitialize]
         public void Init()
         {
-            _emailSenderService = new SendGridEmailService(new IdentitySettings(), new Moq.Mock<IAppConfig>().Object, new Moq.Mock<IAdminLogger>().Object);
+            _emailSenderService = new SendGridEmailService(new IdentitySettings(),  new Moq.Mock<IBackgroundServiceTaskQueue>().Object, new Moq.Mock<IAppConfig>().Object, new Moq.Mock<IAdminLogger>().Object);
             _orgManager.Setup(ogn => ogn.GetOrgNameSpaceAsync(It.Is<string>(o => o == _org.Id))).ReturnsAsync(_org.Key);
         }
 

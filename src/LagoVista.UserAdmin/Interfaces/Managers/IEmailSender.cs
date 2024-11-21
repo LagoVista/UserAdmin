@@ -13,7 +13,10 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
     {
         Task<InvokeResult<string>> SendAsync(Email email, EntityHeader org, EntityHeader user);
 
+        Task<InvokeResult> SendInBackgroundAsync(Email email, EntityHeader org, EntityHeader user);
+
         Task<InvokeResult> SendAsync(string email, string subject, string message, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> SendInBackgroundAsync(string email, string subject, string body, EntityHeader org, EntityHeader user);
         Task<InvokeResult<string>> RegisterContactAsync(Contact contact, Company company, EntityHeader org, EntityHeader user);
         Task<InvokeResult<string>> RegisterContactAsync(Contact contact, EntityHeader org, EntityHeader user);
         Task<InvokeResult<string>> CreateEmailListAsync(string listName, string customField, string id, EntityHeader org, EntityHeader user);

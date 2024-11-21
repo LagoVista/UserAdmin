@@ -27,9 +27,8 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
         [TestInitialize]
         public void Init()
         {
-            _emailSenderService = new SendGridEmailService(new IdentitySettings(), new Moq.Mock<IAppConfig>().Object, new Moq.Mock<IAdminLogger>().Object);
+            _emailSenderService = new SendGridEmailService(new IdentitySettings(), new Moq.Mock<IBackgroundServiceTaskQueue>().Object, new Moq.Mock<IAppConfig>().Object, new Moq.Mock<IAdminLogger>().Object);
         }
-
 
         [TestMethod]
         public async Task CreateAndSendToListAsync()

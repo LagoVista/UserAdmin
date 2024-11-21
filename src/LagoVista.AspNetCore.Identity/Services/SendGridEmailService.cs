@@ -25,9 +25,10 @@ namespace LagoVista.AspNetCore.Identity.Services
 {
     public class SendGridEmailService : IEmailSender
     {
-        ILagoVistaAspNetCoreIdentityProviderSettings _settings;
-        IAppConfig _appConfig;
-        IAdminLogger _adminLogger;
+        private readonly ILagoVistaAspNetCoreIdentityProviderSettings _settings;
+        private readonly IBackgroundServiceTaskQueue _taskQueue;
+        private readonly IAppConfig _appConfig;
+        private readonly IAdminLogger _adminLogger;
         
         public List<string> GetRequiredImportFields()
         {
@@ -44,11 +45,12 @@ namespace LagoVista.AspNetCore.Identity.Services
         }
 
 
-        public SendGridEmailService(ILagoVistaAspNetCoreIdentityProviderSettings settings, IAppConfig appConfig, IAdminLogger adminLogger)
+        public SendGridEmailService(ILagoVistaAspNetCoreIdentityProviderSettings settings, IBackgroundServiceTaskQueue taskQueue, IAppConfig appConfig, IAdminLogger adminLogger)
         {
             _settings = settings;
             _appConfig = appConfig;
             _adminLogger = adminLogger;
+            _taskQueue = taskQueue;
         }
 
         public class SendGridSender
@@ -611,6 +613,16 @@ namespace LagoVista.AspNetCore.Identity.Services
                 bldr.Append($"{header.Key} - {String.Join(',', header.Value)}");
 
             _adminLogger.Trace($"[SendGridEmailService__AddContactToListAsync] Status Code {response.StatusCode} - {result} - Headers: {bldr}");
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> SendInBackgroundAsync(string email, string subject, string body, EntityHeader org, EntityHeader user)
+        {
+            await _taskQueue.QueueBackgroundWorkItemAsync(async (cncl) =>
+            {
+                await SendAsync(email, subject, body, org, user);
+            });
 
             return InvokeResult.Success;
         }
@@ -1221,6 +1233,16 @@ namespace LagoVista.AspNetCore.Identity.Services
 
                 return InvokeResult<string>.Create(ssResponse.Id);
             }
+        }
+
+        public async Task<InvokeResult> SendInBackgroundAsync(Email email, EntityHeader org, EntityHeader user)
+        {
+            await _taskQueue.QueueBackgroundWorkItemAsync(async (token) =>
+            {
+                await SendAsync(email, org, user);
+            });
+
+            return InvokeResult.Success;
         }
 
         public async Task<InvokeResult<string>> SendAsync(Email email, EntityHeader org, EntityHeader user)
