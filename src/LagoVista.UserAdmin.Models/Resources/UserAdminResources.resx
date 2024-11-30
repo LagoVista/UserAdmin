@@ -1413,7 +1413,7 @@
     <value>Social Security Number</value>
   </data>
   <data name="AppUser_SSN_Help" xml:space="preserve">
-    <value>Your Social Security Number is encrypted on the server.</value>
+    <value>Your Social Security Number is encrypted on the server.  If you get an error message when attempting to view it, please make sure you are in your primary organization.</value>
   </data>
   <data name="Common_Icon" xml:space="preserve">
     <value>Icon</value>
@@ -1795,5 +1795,11 @@
   </data>
   <data name="OrgLocatoin_DeviceRepository_Select" xml:space="preserve">
     <value>-select device repository-</value>
+  </data>
+  <data name="AppUser_PrimaryOrganization" xml:space="preserve">
+    <value>Primary Organization</value>
+  </data>
+  <data name="AppUser_PrimaryOrganization_Help" xml:space="preserve">
+    <value>The primary organization is the primary organization for the user.  This is where their Social Security number is stored and is typically where they will get paid.</value>
   </data>
 </root>

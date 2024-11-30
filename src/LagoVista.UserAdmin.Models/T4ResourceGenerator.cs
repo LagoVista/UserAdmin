@@ -1,4 +1,4 @@
-﻿/*11/12/2024 5:50:52 AM*/
+﻿/*11/29/2024 2:31:42 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -138,6 +138,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AppUser_PhoneVerificationCode
 
 		public static string AppUser_PhoneVerificationCode { get { return GetResourceString("AppUser_PhoneVerificationCode"); } }
+//Resources:UserAdminResources:AppUser_PrimaryOrganization
+
+		public static string AppUser_PrimaryOrganization { get { return GetResourceString("AppUser_PrimaryOrganization"); } }
+//Resources:UserAdminResources:AppUser_PrimaryOrganization_Help
+
+		public static string AppUser_PrimaryOrganization_Help { get { return GetResourceString("AppUser_PrimaryOrganization_Help"); } }
 //Resources:UserAdminResources:AppUser_RememberMe
 
 		public static string AppUser_RememberMe { get { return GetResourceString("AppUser_RememberMe"); } }
@@ -1755,6 +1761,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AppUser_PasswordConfirmPasswordMatch = "AppUser_PasswordConfirmPasswordMatch";
 			public const string AppUser_PhoneNumber = "AppUser_PhoneNumber";
 			public const string AppUser_PhoneVerificationCode = "AppUser_PhoneVerificationCode";
+			public const string AppUser_PrimaryOrganization = "AppUser_PrimaryOrganization";
+			public const string AppUser_PrimaryOrganization_Help = "AppUser_PrimaryOrganization_Help";
 			public const string AppUser_RememberMe = "AppUser_RememberMe";
 			public const string AppUser_RememberMe_InThisBrowser = "AppUser_RememberMe_InThisBrowser";
 			public const string AppUser_SSN = "AppUser_SSN";

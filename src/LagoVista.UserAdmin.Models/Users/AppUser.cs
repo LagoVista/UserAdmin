@@ -179,9 +179,11 @@ namespace LagoVista.UserAdmin.Models.Users
         [FormField(LabelResource: UserAdminResources.Names.AppUser_TeamsAccountName, FieldType: FieldTypes.Text, IsUserEditable: true, ResourceType: typeof(UserAdminResources))]
         public string TeamsAccountName { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.AppUser_SSN, HelpResource:UserAdminResources.Names.AppUser_SSN_Help, 
-           SecureIdFieldName:nameof(SsnSecretId), FieldType: FieldTypes.Secret, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_SSN, HelpResource:UserAdminResources.Names.AppUser_SSN_Help, SecureIdFieldName:nameof(SsnSecretId), FieldType: FieldTypes.Secret, ResourceType: typeof(UserAdminResources))]
         public string Ssn { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_PrimaryOrganization, HelpResource: UserAdminResources.Names.AppUser_PrimaryOrganization_Help, FieldType: FieldTypes.Text, IsUserEditable: true, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader PrimaryOrganization { get; set; }
 
         public string SsnSecretId { get; set; }
 
@@ -324,7 +326,8 @@ namespace LagoVista.UserAdmin.Models.Users
                 Country = Country,
                 LastLogin = LastLogin,
                 Roles = CurrentOrganizationRoles,
-                MediaResources = MediaResources
+                MediaResources = MediaResources,
+                PrimaryOrganization = PrimaryOrganization
             };
         }
 
@@ -347,7 +350,9 @@ namespace LagoVista.UserAdmin.Models.Users
                 PhoneNumberConfirmed = PhoneNumberConfirmed,
                 ProfileImageUrl = ProfileImageUrl,
                 TeamsAccountName = TeamsAccountName,
+                CurrentOrganization = CurrentOrganization?.ToEntityHeader(),
                 Key = Id,
+                LastLogin = LastLogin
             };
         }
 

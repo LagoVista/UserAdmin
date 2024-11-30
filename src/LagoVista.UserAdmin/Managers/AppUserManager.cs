@@ -75,6 +75,7 @@ namespace LagoVista.UserAdmin.Managers
 
                 user.SsnSecretId = result.Result;
                 user.Ssn = null;
+                user.PrimaryOrganization = org;
             }
 
             await _appUserRepo.CreateAsync(user);
@@ -201,6 +202,7 @@ namespace LagoVista.UserAdmin.Managers
 
                 existingUser.SsnSecretId = result.Result;
                 existingUser.Ssn = null;
+                existingUser.PrimaryOrganization = org;
             }
 
             await AuthorizeAsync(existingUser, AuthorizeResult.AuthorizeActions.Update, updatedByUser, org);
