@@ -72,7 +72,7 @@ namespace LagoVista.UserAdmin.Managers
             sw.Restart();
 
             await _mruRepo.UpdateMostRecentlyUsedAsync(mru.Result);
-            mru.Timings.Add(new ResultTiming() { Key = "MRU does not exist, created and inserted", Ms = sw.Elapsed.TotalMilliseconds });
+            mru.Timings.Add(new ResultTiming() { Key = "Updated MRU in storage.", Ms = sw.Elapsed.TotalMilliseconds });
 
             return  mru;
         }
@@ -89,10 +89,10 @@ namespace LagoVista.UserAdmin.Managers
 
             var sw = Stopwatch.StartNew();
             var mru = await _mruRepo.GetMostRecentlyUsedAsync(org.Id, user.Id);
-            result.Timings.Add(new ResultTiming() { Key = "Attempt get MRU", Ms = sw.Elapsed.TotalMilliseconds });
 
             if (mru == null)
             {
+                result.Timings.Add(new ResultTiming() { Key = "Dit not get MRU from storage", Ms = sw.Elapsed.TotalMilliseconds });
                 sw.Restart();
                 var timeStamp = DateTime.UtcNow.ToJSONString();
                 mru = new MostRecentlyUsed()
@@ -111,6 +111,8 @@ namespace LagoVista.UserAdmin.Managers
                 await _mruRepo.AddMostRecentlyUsedAsync(mru);
                 result.Timings.Add(new ResultTiming() { Key = "MRU does not exist, created and inserted", Ms = sw.Elapsed.TotalMilliseconds });
             }
+            else
+                result.Timings.Add(new ResultTiming() { Key = "Got MRU from storage", Ms = sw.Elapsed.TotalMilliseconds });
 
             result.Result = mru;
 
