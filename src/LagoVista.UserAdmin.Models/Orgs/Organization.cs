@@ -281,6 +281,16 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public EntityHeader ToEntityHeader()
         {
+            if (String.IsNullOrEmpty(Namespace))
+            {
+                char[] arr = Text.ToCharArray();
+
+                arr = Array.FindAll<char>(arr, (c => (char.IsLetter(c)
+                                                  || char.IsWhiteSpace(c)
+                                                  || c == '-')));
+                Namespace = new string(arr).ToLower();
+            }
+
             return EntityHeader.Create(Id, Namespace, Text);
         }
     }
