@@ -12,6 +12,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<LocationDiagram> GetLocationDiagramAsync(string id, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateLocationDiagramAsync(LocationDiagram diagramLocation, EntityHeader org, EntityHeader user);
         Task<InvokeResult> DeleteLocationDiagramAsync(string id, EntityHeader org, EntityHeader user);
+        Task<ListResponse<LocationDiagramSummary>> GetLocationDiagramsForCustomerAsync(string customerId, ListRequest listRequest, EntityHeader org, EntityHeader user);
         Task<ListResponse<LocationDiagramSummary>> GetLocationDiagramsAsync(ListRequest listRequest, EntityHeader org, EntityHeader user);        
     }
 }

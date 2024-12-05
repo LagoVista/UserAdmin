@@ -1523,10 +1523,10 @@
   <data name="LocationDiagram_Shape_Help" xml:space="preserve">
     <value>The Location Diagram Shape is a shape on a location diagram that could represent a room or an object.  </value>
   </data>
-  <data name="LocationDiagram_Shape_Location" xml:space="preserve">
+  <data name="LocationDiagram_Shape_OrgLocation" xml:space="preserve">
     <value>Org Location</value>
   </data>
-  <data name="LocationDiagram_Shape_Location_Help" xml:space="preserve">
+  <data name="LocationDiagram_Shape_OrgLocation_Help" xml:space="preserve">
     <value>The location within the organization that this shape or room represents</value>
   </data>
   <data name="LocationDiagram_Title" xml:space="preserve">
@@ -1801,5 +1801,14 @@
   </data>
   <data name="AppUser_PrimaryOrganization_Help" xml:space="preserve">
     <value>The primary organization is the primary organization for the user.  This is where their Social Security number is stored and is typically where they will get paid.</value>
+  </data>
+  <data name="Common_Customer" xml:space="preserve">
+    <value>Customer</value>
+  </data>
+  <data name="LocationDiagram_Shape_CustomerLocation" xml:space="preserve">
+    <value>Customer Location</value>
+  </data>
+  <data name="LocationDiagram_Shape_CustomerLocation_Help" xml:space="preserve">
+    <value>Location within a customer that this shape presents</value>
   </data>
 </root>

@@ -15,6 +15,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> DeleteListAsync(string id, EntityHeader org, EntityHeader user);
         Task<DistroList> GetListAsync(string id, EntityHeader org, EntityHeader user);
         Task<ListResponse<DistroListSummary>> GetListsForOrgAsync(EntityHeader org, EntityHeader user, ListRequest listRequest);
+        Task<ListResponse<DistroListSummary>> GetListsForCustomerAsync(string customerId, EntityHeader org, EntityHeader user, ListRequest listRequest);
         Task<bool> QueryKeyInUseAsync(string key, string orgId);
         Task<DependentObjectCheckResult> CheckInUse(string id, EntityHeader org, EntityHeader user);
         Task SendEmailNotification(string subject, string message, string distroListId, EntityHeader org, EntityHeader user);

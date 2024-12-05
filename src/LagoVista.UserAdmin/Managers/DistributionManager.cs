@@ -184,6 +184,12 @@ namespace LagoVista.UserAdmin.Managers
             return await _distroListRepo.GetDistroListsForOrgAsync(org.Id, listRequest);
         }
 
+        public async Task<ListResponse<DistroListSummary>> GetListsForCustomerAsync(string customerId, EntityHeader org, EntityHeader user, ListRequest listRequest)
+        {
+            await AuthorizeOrgAccessAsync(user, org, typeof(DistroList), Actions.Read);
+            return await _distroListRepo.GetDistroListsForCustomerAsync(customerId, org.Id, listRequest);
+        }
+
         public Task<bool> QueryKeyInUseAsync(string key, string orgId)
         {
             return _distroListRepo.QueryKeyInUseAsync(key, orgId);

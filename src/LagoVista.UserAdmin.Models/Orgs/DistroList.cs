@@ -12,7 +12,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         UserAdminResources.Names.DistroList_Help, UserAdminResources.Names.DistroList_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
         ListUIUrl: "/organization/distrolists", CreateUIUrl: "/organization/distrolist/add", EditUIUrl: "/organization/distrolist/{id}",
         Icon: "icon-pz-rating-star", GetListUrl: "/api/distros", SaveUrl: "/api/distro", GetUrl: "/api/distro/{id}", FactoryUrl: "/api/distro/factory", DeleteUrl: "/api/distro/{id}")]
-    public class DistroList : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity, IFormDescriptor, IIconEntity, ICategorized, IFormAdditionalActions
+    public class DistroList : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity, IFormDescriptor, IIconEntity, ICategorized, IFormAdditionalActions, ISummaryFactory
     {
         public DistroList()
         {
@@ -30,6 +30,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public string Description { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Common_Customer, IsRequired: false, FieldType: FieldTypes.CustomerPicker, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader Customer { get; set; }
 
         public List<AppUserContact> AppUsers { get; set; } = new List<AppUserContact>();
 
@@ -58,6 +60,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                nameof(Key),
                nameof(Icon),
                nameof(Category),
+               nameof(Customer),
                nameof(Description),
                nameof(ExternalContacts),
             };
@@ -71,12 +74,17 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 {
                      ForEdit = true,
                      ForCreate = false,
-                      Key = "confirm",
-                      Title = "Confirm",
-                       Icon = "fa-check"
+                     Key = "confirm",
+                     Title = "Confirm",
+                     Icon = "fa-check"
 
                 }
             };
+        }
+
+        ISummaryData ISummaryFactory.CreateSummary()
+        {
+            return CreateSummary();
         }
     }
 

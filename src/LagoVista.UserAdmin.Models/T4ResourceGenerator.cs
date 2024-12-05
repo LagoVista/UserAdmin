@@ -1,4 +1,4 @@
-﻿/*11/29/2024 2:31:42 PM*/
+﻿/*12/4/2024 4:48:34 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -387,6 +387,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Common_CreationDate
 
 		public static string Common_CreationDate { get { return GetResourceString("Common_CreationDate"); } }
+//Resources:UserAdminResources:Common_Customer
+
+		public static string Common_Customer { get { return GetResourceString("Common_Customer"); } }
 //Resources:UserAdminResources:Common_Description
 
 		public static string Common_Description { get { return GetResourceString("Common_Description"); } }
@@ -887,15 +890,21 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:LocationDiagram_Shape
 
 		public static string LocationDiagram_Shape { get { return GetResourceString("LocationDiagram_Shape"); } }
+//Resources:UserAdminResources:LocationDiagram_Shape_CustomerLocation
+
+		public static string LocationDiagram_Shape_CustomerLocation { get { return GetResourceString("LocationDiagram_Shape_CustomerLocation"); } }
+//Resources:UserAdminResources:LocationDiagram_Shape_CustomerLocation_Help
+
+		public static string LocationDiagram_Shape_CustomerLocation_Help { get { return GetResourceString("LocationDiagram_Shape_CustomerLocation_Help"); } }
 //Resources:UserAdminResources:LocationDiagram_Shape_Help
 
 		public static string LocationDiagram_Shape_Help { get { return GetResourceString("LocationDiagram_Shape_Help"); } }
-//Resources:UserAdminResources:LocationDiagram_Shape_Location
+//Resources:UserAdminResources:LocationDiagram_Shape_OrgLocation
 
-		public static string LocationDiagram_Shape_Location { get { return GetResourceString("LocationDiagram_Shape_Location"); } }
-//Resources:UserAdminResources:LocationDiagram_Shape_Location_Help
+		public static string LocationDiagram_Shape_OrgLocation { get { return GetResourceString("LocationDiagram_Shape_OrgLocation"); } }
+//Resources:UserAdminResources:LocationDiagram_Shape_OrgLocation_Help
 
-		public static string LocationDiagram_Shape_Location_Help { get { return GetResourceString("LocationDiagram_Shape_Location_Help"); } }
+		public static string LocationDiagram_Shape_OrgLocation_Help { get { return GetResourceString("LocationDiagram_Shape_OrgLocation_Help"); } }
 //Resources:UserAdminResources:LocationDiagram_Shapes
 
 		public static string LocationDiagram_Shapes { get { return GetResourceString("LocationDiagram_Shapes"); } }
@@ -1844,6 +1853,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Common_Category_Select = "Common_Category_Select";
 			public const string Common_CreatedBy = "Common_CreatedBy";
 			public const string Common_CreationDate = "Common_CreationDate";
+			public const string Common_Customer = "Common_Customer";
 			public const string Common_Description = "Common_Description";
 			public const string Common_DesktopSupport = "Common_DesktopSupport";
 			public const string Common_EmailAddress = "Common_EmailAddress";
@@ -2008,9 +2018,11 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string LocationDiagram_Layers = "LocationDiagram_Layers";
 			public const string LocationDiagram_Left = "LocationDiagram_Left";
 			public const string LocationDiagram_Shape = "LocationDiagram_Shape";
+			public const string LocationDiagram_Shape_CustomerLocation = "LocationDiagram_Shape_CustomerLocation";
+			public const string LocationDiagram_Shape_CustomerLocation_Help = "LocationDiagram_Shape_CustomerLocation_Help";
 			public const string LocationDiagram_Shape_Help = "LocationDiagram_Shape_Help";
-			public const string LocationDiagram_Shape_Location = "LocationDiagram_Shape_Location";
-			public const string LocationDiagram_Shape_Location_Help = "LocationDiagram_Shape_Location_Help";
+			public const string LocationDiagram_Shape_OrgLocation = "LocationDiagram_Shape_OrgLocation";
+			public const string LocationDiagram_Shape_OrgLocation_Help = "LocationDiagram_Shape_OrgLocation_Help";
 			public const string LocationDiagram_Shapes = "LocationDiagram_Shapes";
 			public const string LocationDiagram_Title = "LocationDiagram_Title";
 			public const string LocationDiagram_Top = "LocationDiagram_Top";

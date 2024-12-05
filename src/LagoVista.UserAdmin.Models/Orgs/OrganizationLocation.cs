@@ -1,18 +1,14 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
-using LagoVista.Core.Geo;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using System;
-using LagoVista.UserAdmin.Resources;
 using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.Core;
 using System.Collections.Generic;
-using System.Threading;
 using System.Text;
 using System.Linq;
 using LagoVista.Core.Models.Geo;
-using System.Net.Http.Headers;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
@@ -236,7 +232,26 @@ namespace LagoVista.UserAdmin.Models.Orgs
             bldr.Append($"{Name}<br/>");
 
             if (!String.IsNullOrEmpty(PhoneNumber))
-                bldr.Append($"<a href='tel:{PhoneNumber}'>{PhoneNumber}<br/>");
+            {
+                bldr.Append("<div style='font-weight:bold'>Primary Phone</h5>");
+                bldr.Append($"<a href='tel:{PhoneNumber}'>{PhoneNumber}<br/></a><br /><br />");
+            }
+
+            if(!String.IsNullOrEmpty(Addr1) && !String.IsNullOrEmpty(City))
+            {
+                bldr.Append("<div style='font-weight:bold'>Street Address</h5>");
+                var strAddr = String.Empty;                
+                if(!String.IsNullOrEmpty(Addr1))
+                    strAddr += $"{Addr1},";
+
+                if (!String.IsNullOrEmpty(City))
+                    strAddr += $" {City}";
+
+                if (!String.IsNullOrEmpty(StateProvince))
+                    strAddr += $" {StateProvince}";
+
+                bldr.Append($"<a href='https://www.google.com/maps/place/{Uri.EscapeDataString(strAddr)}' >");
+            }
 
             if (!String.IsNullOrEmpty(Addr1))
                 bldr.Append($"{Addr1}<br/>");
@@ -258,6 +273,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
             if (!String.IsNullOrEmpty(City) || !String.IsNullOrEmpty(StateProvince))
                 bldr.Append("<br />");
 
+
+            if (!String.IsNullOrEmpty(Addr1) && !String.IsNullOrEmpty(City))
+                bldr.Append("</a><br  /><br />");
+
             if (GeoLocation != null && GeoLocation.Latitude.HasValue && GeoLocation.Longitude.HasValue)
                 bldr.Append($"<a href='https://www.google.com/maps/search/?api=1&query={GeoLocation.Latitude},{GeoLocation.Longitude}'>View on Map</a>");
 
@@ -273,9 +292,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 foreach (var diagram in DiagramReferences)
                 {
                     if(!EntityHeader.IsNullOrEmpty(DeviceRepository))
-                        bldr.Append($"<div><a href='{site}/public/diagram/{diagram.LocationDiagram.Id}/{diagram.LocationDiagramLayer.Id}/{diagram.LocationDiagramShape.Id}/{OwnerOrganization.Id}/{DeviceRepository.Id}'>{diagram.LocationDiagram.Text}/{diagram.LocationDiagramShape.Text}/{diagram.LocationDiagramShape.Text}</a></div>");
+                        bldr.Append($"<div><a href='{site}/public/diagram/{diagram.LocationDiagram.Id}/{diagram.LocationDiagramLayer.Id}/{diagram.LocationDiagramShape.Id}/{OwnerOrganization.Id}/{DeviceRepository.Id}'>{diagram.LocationDiagram.Text}/{diagram.LocationDiagramShape.Text}</a></div>");
                     else
-                        bldr.Append($"<div><a href='{site}/public/diagram/{diagram.LocationDiagram.Id}/{diagram.LocationDiagramLayer.Id}/{diagram.LocationDiagramShape.Id}'>{diagram.LocationDiagram.Text}/{diagram.LocationDiagramShape.Text}/{diagram.LocationDiagramShape.Text}</a></div>");
+                        bldr.Append($"<div><a href='{site}/public/diagram/{diagram.LocationDiagram.Id}/{diagram.LocationDiagramLayer.Id}/{diagram.LocationDiagramShape.Id}'>{diagram.LocationDiagram.Text}/{diagram.LocationDiagramShape.Text}</a></div>");
                 }
             }
 
@@ -330,4 +349,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
             if (EntityHeader.IsNullOrEmpty(Device)) result.AddUserError("Device is required");
         }
     }
+
+
 }

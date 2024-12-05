@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Interfaces;
+using LagoVista.Core;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Orgs
 {
@@ -39,10 +40,14 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
             return GetDocumentAsync(id);
         }
 
+        public async Task<ListResponse<DistroListSummary>> GetDistroListsForCustomerAsync(string customerId, string orgId, ListRequest listRequest)
+        {
+            return await QuerySummaryAsync<DistroListSummary, DistroList>(rec => rec.OwnerOrganization.Id == orgId && rec.Customer.Id == customerId, rec => rec.Name, listRequest);
+        }
+
         public async Task<ListResponse<DistroListSummary>> GetDistroListsForOrgAsync(string orgId, ListRequest listRequest)
         {
-            var lists = await QueryAsync(rec => rec.OwnerOrganization.Id == orgId, rec => rec.Name, listRequest);
-            return ListResponse<DistroListSummary>.Create(lists.Model.Select(dls => dls.CreateSummary()), lists);
+            return await QuerySummaryAsync<DistroListSummary, DistroList>(rec => rec.OwnerOrganization.Id == orgId, rec => rec.Name, listRequest);
         }
 
         public async Task<bool> QueryKeyInUseAsync(string key, string orgId)

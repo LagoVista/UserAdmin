@@ -43,6 +43,11 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
             return QuerySummaryAsync<LocationDiagramSummary, LocationDiagram>(dig => dig.OwnerOrganization.Id == orgId, dig => dig.Name, listRequest);
         }
 
+        public Task<ListResponse<LocationDiagramSummary>> GetLocationDiagramsForCustomerAsync(string orgId, string customerId, ListRequest listRequest)
+        {
+            return QuerySummaryAsync<LocationDiagramSummary, LocationDiagram>(dig => dig.OwnerOrganization.Id == orgId && dig.Customer.Id == customerId, dig => dig.Name, listRequest);
+        }
+
         public Task UpdateLocationDiagramAsync(LocationDiagram diagramLocation)
         {
             return UpsertDocumentAsync(diagramLocation);

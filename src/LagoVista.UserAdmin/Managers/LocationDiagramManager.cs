@@ -58,6 +58,12 @@ namespace LagoVista.UserAdmin.Managers
             return await _locationDiagramRepo.GetLocationDiagramsAsync(org.Id, listRequest);
         }
 
+        public async Task<ListResponse<LocationDiagramSummary>> GetLocationDiagramsForCustomerAsync(string customerId, ListRequest listRequest, EntityHeader org, EntityHeader user)
+        {
+            await AuthorizeOrgAccessAsync(user, org, typeof(LocationDiagram));
+            return await _locationDiagramRepo.GetLocationDiagramsForCustomerAsync(org.Id, customerId, listRequest);
+        }
+
         public async Task<InvokeResult> UpdateLocationDiagramAsync(LocationDiagram diagramLocation, EntityHeader org, EntityHeader user)
         {
             ValidationCheck(diagramLocation, Actions.Create);
@@ -65,7 +71,7 @@ namespace LagoVista.UserAdmin.Managers
 
             foreach(var layer in diagramLocation.Layers)
             {
-                foreach(var shape in layer.Shapes)
+                /*foreach(var shape in layer.Shapes)
                 {
                     if(!EntityHeader.IsNullOrEmpty(shape.Location))
                     {
@@ -73,12 +79,12 @@ namespace LagoVista.UserAdmin.Managers
                         if (location.OwnerOrganization.Id != org.Id)
                             throw new NotAuthorizedException("Attempt to associate location from a different organization.");
 
-                        var existing = location.DiagramReferences.Where(dg=>dg.LocationDiagramShape.Id == shape.Location.Id).FirstOrDefault();
+                        var existing = location.DiagramReferences.Where(dg=>dg.LocationDiagramShape.Id == shape.Id).FirstOrDefault();
                         if(existing == null)
                         {
                             location.DiagramReferences.Add(new OrgLocationDiagramReference()
                             {
-                                LocationDiagram = diagramLocation.ToEntityHeader(),
+                                LocationDiagram = diagramLocation.ToEntityHeader(),                               
                                 LocationDiagramLayer = layer.ToEntityHeader(),
                                 LocationDiagramShape = shape.ToEntityHeader()
                             });
@@ -86,7 +92,7 @@ namespace LagoVista.UserAdmin.Managers
                             await _orgLocationRepo.UpdateLocationAsync(location);
                         }    
                     }
-                }
+                }*/
             }
 
             await _locationDiagramRepo.UpdateLocationDiagramAsync(diagramLocation);

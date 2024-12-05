@@ -62,6 +62,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public double Rotation { get; set; }
 
 
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Customer, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
+        public EntityHeader Customer { get; set; }
+
+
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_TextColor, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public string TextColor { get; set; }
 
@@ -173,9 +177,13 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Icon { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.LocationDiagram_Shape_Location, WaterMark: UserAdminResources.Names.Common_SelectLocation, EntityHeaderPickerUrl: "/api/org/locations",
-            HelpResource: UserAdminResources.Names.LocationDiagram_Shape_Location_Help, FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
+        /*[FormField(LabelResource: UserAdminResources.Names.LocationDiagram_Shape_OrgLocation, WaterMark: UserAdminResources.Names.Common_SelectLocation, EntityHeaderPickerUrl: "/api/org/locations",
+            HelpResource: UserAdminResources.Names.LocationDiagram_Shape_OrgLocation_Help, FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
         public EntityHeader Location { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.LocationDiagram_Shape_CustomerLocation, WaterMark: UserAdminResources.Names.Common_SelectLocation, EntityHeaderPickerUrl: "/api/customer/{customerid}/locations",
+            HelpResource: UserAdminResources.Names.LocationDiagram_Shape_CustomerLocation_Help, FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
+        public EntityHeader CustomerLocation { get; set; }*/
 
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Notes, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(UserAdminResources))]
@@ -263,7 +271,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(Key),
                 nameof(Icon),
                 nameof(ShapeType),
-                nameof(Location),
+///                nameof(Location),
+///                nameof(CustomerLocation),
                 nameof(Rotation),
                 nameof(Scale),
                 nameof(Stroke),   
