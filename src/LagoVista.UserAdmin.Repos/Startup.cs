@@ -58,6 +58,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<IAuthenticationLogRepo, AuthenticationLogRepo>();
             services.AddTransient<ISystemNotificationsRepo, SystemNotificationsRepo>();
             services.AddTransient<ILocationDiagramRepo, LocationDiagramRepo>();
+            services.AddTransient<ISecureLinkRepo, SecureLinkRepo>();
 
             ErrorCodes.Register(typeof(UserAdminErrorCodes));
         }
