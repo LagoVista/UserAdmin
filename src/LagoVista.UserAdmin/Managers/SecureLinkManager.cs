@@ -12,16 +12,16 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Managers
 {
-    public class SecureLinkManager : ManagerBase, ISecureLinkManager
+    public class SecureLinkManager : ISecureLinkManager
     {
-        private readonly ISecureLinkRepo _secureLinkRepo;
-        private readonly ILinkShortener _linkShortner;
+        private readonly ISecureLinkRepo _secureLinkRepo;        
         private readonly IAppConfig _appConfig;
+        private readonly IAdminLogger _admingLogger;
         private readonly ISignInManager _signInManager;
         private readonly IAppUserManager _appUserManager;
+        private readonly ILinkShortener _linkShortner;
 
-        public SecureLinkManager(ISecureLinkRepo secureLinkRepo, IAppUserManager appUserManager, ISignInManager signInManager, ILinkShortener linkShortener, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig) :
-            base(logger, appConfig, depManager, security)
+        public SecureLinkManager(ISecureLinkRepo secureLinkRepo, IAppUserManager appUserManager, ISignInManager signInManager, ILinkShortener linkShortener,  IAdminLogger logger, IAppConfig appConfig)             
         {
             _secureLinkRepo = secureLinkRepo ?? throw new ArgumentNullException(nameof(secureLinkRepo));
             _linkShortner = linkShortener ?? throw new ArgumentNullException(nameof(linkShortener));
@@ -51,6 +51,8 @@ namespace LagoVista.UserAdmin.Managers
             await _secureLinkRepo.AddSecureLinkAsync(record);
             var secureLink = $"{_appConfig.WebAddress}/api/links/{org.Id}/{record.RowKey}";
             return await _linkShortner.ShortenLinkAsync(secureLink);
+
+            //return InvokeResult<string>.Create(secureLink);
         }
 
         public async Task<InvokeResult<string>> GetSecureLinkAsync(string orgId, string linkId)

@@ -285,19 +285,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
             if (!String.IsNullOrEmpty(Notes))
                 bldr.Append($"<div>{Notes}</div>");
-
-            if (DiagramReferences.Any())
-            {
-                bldr.Append($"<h3>Diagrams</h3>");
-                foreach (var diagram in DiagramReferences)
-                {
-                    if(!EntityHeader.IsNullOrEmpty(DeviceRepository))
-                        bldr.Append($"<div><a href='{site}/public/diagram/{diagram.LocationDiagram.Id}/{diagram.LocationDiagramLayer.Id}/{diagram.LocationDiagramShape.Id}/{OwnerOrganization.Id}/{DeviceRepository.Id}'>{diagram.LocationDiagram.Text}/{diagram.LocationDiagramShape.Text}</a></div>");
-                    else
-                        bldr.Append($"<div><a href='{site}/public/diagram/{diagram.LocationDiagram.Id}/{diagram.LocationDiagramLayer.Id}/{diagram.LocationDiagramShape.Id}'>{diagram.LocationDiagram.Text}/{diagram.LocationDiagramShape.Text}</a></div>");
-                }
-            }
-
+            
             return bldr.ToString();
         }
     }
