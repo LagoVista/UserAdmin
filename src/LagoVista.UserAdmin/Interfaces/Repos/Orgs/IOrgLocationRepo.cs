@@ -12,6 +12,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
         Task<OrgLocation> GetLocationAsync(string id);
         Task UpdateLocationAsync(OrgLocation orgLocation);
         Task<ListResponse<OrgLocationSummary>> GetOrganizationLocationAsync(String orgId, ListRequest listRequest);
+        Task<ListResponse<OrgLocationSummary>> GetOrganizationLocationsForCustomerAsync(string orgId, string customerId, ListRequest listRequest);
         Task<bool> QueryNamespaceInUseAsync(string orgId, string namespaceText);
     }
 }

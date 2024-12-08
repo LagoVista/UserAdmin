@@ -25,28 +25,28 @@ namespace LagoVista.UserAdmin.Repos
     {
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IDeviceOwnerRepo, DeviceOwnerRepo>();
-            services.AddTransient<IAppUserRepo, AppUserRepo>();
-            services.AddTransient<ILocationUserRepo, LocationUserRepo>();
-            services.AddTransient<IRefreshTokenRepo, RefreshTokenRepo>();
-            services.AddTransient<IInviteUserRepo, InviteUserRepo>();
-            services.AddTransient<IOrgUserRepo, OrgUserRepo>();
-            services.AddTransient<IOwnedObjectRepo, OwnedObjectRepo>();
-            services.AddTransient<IOrgLocationRepo, OrgLocationRepo>();
-            services.AddTransient<IOrganizationRepo, OrganizationRepo>();
-            services.AddTransient<ISubscriptionResourceRepo, SubscriptionResourceRepo>();
-            services.AddTransient<ILocationRoleRepo, LocationRoleRepo>();
+            services.AddSingleton<IDeviceOwnerRepo, DeviceOwnerRepo>();
+            services.AddSingleton<IAppUserRepo, AppUserRepo>();
+            services.AddSingleton<ILocationUserRepo, LocationUserRepo>();
+            services.AddSingleton<IRefreshTokenRepo, RefreshTokenRepo>();
+            services.AddSingleton<IInviteUserRepo, InviteUserRepo>();
+            services.AddSingleton<IOrgUserRepo, OrgUserRepo>();
+            services.AddSingleton<IOwnedObjectRepo, OwnedObjectRepo>();
+            services.AddSingleton<IOrgLocationRepo, OrgLocationRepo>();
+            services.AddSingleton<IOrganizationRepo, OrganizationRepo>();
+            services.AddSingleton<ISubscriptionResourceRepo, SubscriptionResourceRepo>();
+            services.AddSingleton<ILocationRoleRepo, LocationRoleRepo>();
             services.AddTransient<IRoleRepo, RoleRepo>();
-            services.AddTransient<IUserRoleManager, UserRoleManager>();
-            services.AddTransient<IModuleRepo, ModuleRepo>();
-            services.AddTransient<IAccessLogRepo, AccessLogRepo>();
-            services.AddTransient<IHolidaySetRepo, HolidaySetRepo>();
-            services.AddTransient<IScheduledDowntimeRepo, ScheduledDowntimeRepo>();
-            services.AddTransient<ITeamRepo, TeamRepo>();
+            services.AddSingleton<IUserRoleManager, UserRoleManager>();
+            services.AddSingleton<IModuleRepo, ModuleRepo>();
+            services.AddSingleton<IAccessLogRepo, AccessLogRepo>();
+            services.AddSingleton<IHolidaySetRepo, HolidaySetRepo>();
+            services.AddSingleton<IScheduledDowntimeRepo, ScheduledDowntimeRepo>();
+            services.AddSingleton<ITeamRepo, TeamRepo>();
             services.AddTransient<ITeamUserRepo, TeamUserRepo>();
-            services.AddTransient<IAssetSetRepo, AssetSetRepo>();
-            services.AddTransient<IManagedAssetRepo, ManagedAssetRepo>();
-            services.AddTransient<IAppInstanceRepo, AppInstanceRepo>();
+            services.AddSingleton<IAssetSetRepo, AssetSetRepo>();
+            services.AddSingleton<IManagedAssetRepo, ManagedAssetRepo>();
+            services.AddSingleton<IAppInstanceRepo, AppInstanceRepo>();
             services.AddTransient<IUserRoleRepo, UserRoleRepo>();
             services.AddTransient<IRoleAccessRepo, RoleAccessRepo>();
             services.AddTransient<ISingleUseTokenRepo, SingleUseTokenRepo>();
@@ -58,7 +58,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<IAuthenticationLogRepo, AuthenticationLogRepo>();
             services.AddTransient<ISystemNotificationsRepo, SystemNotificationsRepo>();
             services.AddTransient<ILocationDiagramRepo, LocationDiagramRepo>();
-            services.AddTransient<ISecureLinkRepo, SecureLinkRepo>();
+            services.AddScoped<ISecureLinkRepo, SecureLinkRepo>();
 
             ErrorCodes.Register(typeof(UserAdminErrorCodes));
         }

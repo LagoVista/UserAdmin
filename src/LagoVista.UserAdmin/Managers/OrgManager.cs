@@ -943,6 +943,12 @@ namespace LagoVista.UserAdmin.Managers
             return await _locationRepo.GetOrganizationLocationAsync(org.Id, listRequest);
         }
 
+        public async Task<ListResponse<OrgLocationSummary>> GetLocationsForCustomerAsync(ListRequest listRequest, string customerId, EntityHeader org, EntityHeader user)
+        {
+            await AuthorizeOrgAccessAsync(user, org, typeof(OrgLocation), Actions.Read, new SecurityHelper { OrgId = org.Id });
+            return await _locationRepo.GetOrganizationLocationsForCustomerAsync(org.Id, customerId, listRequest);
+        }
+
         public async Task<OrgLocation> GetOrgLocationAsync(string id, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(OrgLocation), Actions.Read, new SecurityHelper { OrgId = org.Id });

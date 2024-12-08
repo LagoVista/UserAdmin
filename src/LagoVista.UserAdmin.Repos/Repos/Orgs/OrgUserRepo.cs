@@ -10,16 +10,19 @@ using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Core.Interfaces;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
     public class OrgUserRepo : TableStorageBase<OrgUser>, IOrgUserRepo
     {
         private readonly ICacheProvider _cacheProvider;
+        private readonly IAdminLogger _adminLogger;
 
         public OrgUserRepo(IUserAdminSettings settings, IAdminLogger logger, ICacheProvider cacheProvider) : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
             _cacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
+            _adminLogger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         private string GetCacheKey(string orgid)
@@ -60,12 +63,13 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             }
         }
 
-        public async Task RemoveUserFromOrgAsync(string orgid, string userid, EntityHeader removedBy)
+        public async Task RemoveUserFromOrgAsync(string orgId, string userId, EntityHeader removedBy)
         {
-            var rowKey = OrgUser.CreateRowKey(orgid, userid);
-            await RemoveAsync(orgid, rowKey);
-            await _cacheProvider.RemoveAsync(GetCacheKey(orgid));
-    }
+            var rowKey = OrgUser.CreateRowKey(orgId, userId);
+            await RemoveAsync(orgId, rowKey);
+            await _cacheProvider.RemoveAsync(GetCacheKey(orgId));
+            await _cacheProvider.RemoveAsync(GetOrgUserKey(orgId, userId));
+        }
 
         public async Task<bool> QueryOrgHasUserByEmailAsync(string orgId, string email)
         {
@@ -81,17 +85,40 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             return orgUser.IsOrgAdmin;
         }
 
+        private string GetOrgUserKey(string orgId, string userId)
+        {
+            return $"org_user_{orgId}_{userId}";
+        }
+
         public async Task<OrgUser> GetOrgUserAsync(string orgId, string userId)
         {
-            return (await GetByFilterAsync(
+            var sw = Stopwatch.StartNew();
+            var json = await _cacheProvider.GetAsync(GetOrgUserKey(orgId, userId));
+            if(!String.IsNullOrEmpty(json))
+            {
+                _adminLogger.AddCustomEvent(LogLevel.Message, "[OrgUserRepo__GetOrguserAsync]", $"[OrgUserRepo__GetOrguserAsync] - Cache Hit OrgId: {orgId}, UserId: {userId} - {sw.Elapsed.TotalMilliseconds}.");
+                return JsonConvert.DeserializeObject<OrgUser>(json);
+            }
+            _adminLogger.AddCustomEvent(LogLevel.Message, "[OrgUserRepo__GetOrguserAsync]", $"[OrgUserRepo__GetOrguserAsync] - Cache Miss OrgId: {orgId}, UserId: {userId} - {sw.Elapsed.TotalMilliseconds}.");
+            sw.Restart();
+
+            var orgUser = (await GetByFilterAsync(
                 FilterOptions.Create(nameof(OrgUser.UserId), FilterOptions.Operators.Equals, userId.ToUpper()),
                 FilterOptions.Create(nameof(OrgUser.PartitionKey), FilterOptions.Operators.Equals, orgId)
                 )).FirstOrDefault();
+
+            await _cacheProvider.AddAsync(GetOrgUserKey(orgId, userId), JsonConvert.SerializeObject(orgUser));
+
+            _adminLogger.AddCustomEvent(LogLevel.Message, "[OrgUserRepo__GetOrguserAsync]", $"[OrgUserRepo__GetOrguserAsync] - Added To Cache OrgId: {orgId}, UserId: {userId} - {sw.Elapsed.TotalMilliseconds}.");
+
+            return orgUser;
         }
 
         public async Task UpdateOrgUserAsync(OrgUser orgUser)
         {
             await this.UpdateAsync(orgUser);
+
+            await _cacheProvider.RemoveAsync(GetOrgUserKey(orgUser.OrgId, orgUser.UserId));
             await _cacheProvider.RemoveAsync(GetCacheKey(orgUser.OrgId));
         }
 

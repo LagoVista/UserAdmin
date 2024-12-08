@@ -36,9 +36,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
             return GetDocumentAsync(MostRecentlyUsed.GenerateId(orgId, userId), false);
         }
 
-        public Task UpdateMostRecentlyUsedAsync(MostRecentlyUsed mostRecentlyUsed)
+        public async Task UpdateMostRecentlyUsedAsync(MostRecentlyUsed mostRecentlyUsed)
         {
-            return UpsertDocumentAsync(mostRecentlyUsed);
+            await UpsertDocumentAsync(mostRecentlyUsed);
         }
     }
 }

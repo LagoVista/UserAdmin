@@ -15,12 +15,12 @@ namespace LagoVista.AspNetCore.Identity
     {
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IUserManager, UserManager>();
-            services.AddTransient<ISignInManager, SignInManager>();
+            services.AddSingleton<IUserManager, UserManager>();
+            services.AddSingleton<ISignInManager, SignInManager>();
 
             //TODO: These don't belong here.
-            services.AddTransient<IEmailSender, SendGridEmailService>();
-            services.AddTransient<ISmsSender, TwilioSMSSender>();
+            services.AddSingleton<IEmailSender, SendGridEmailService>();
+            services.AddSingleton<ISmsSender, TwilioSMSSender>();
 
             services.AddSingleton<IClaimsFactory, ClaimsFactory>();
 
@@ -28,11 +28,11 @@ namespace LagoVista.AspNetCore.Identity
             services.AddSingleton<IOrgHelper, OrgHelper>();
             services.AddSingleton<IAuthRequestValidators, AuthRequestValidators>();
 
-            services.AddTransient<ITwitterAuthService, TwitterAuthServices>();
+            services.AddScoped<ITwitterAuthService, TwitterAuthServices>();
 
             services.AddSingleton<IAuthTokenManager, AuthTokenManager>();
             services.AddSingleton<IRefreshTokenManager, RefreshTokenManager>();
-            services.AddTransient<IExternalLoginManager, ExternalLoginManager>();
+            services.AddScoped<IExternalLoginManager, ExternalLoginManager>();
         }
     }
 }

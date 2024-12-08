@@ -36,7 +36,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         private readonly IUserFavoritesManager _userFavoritesManager;
         private readonly IMostRecentlyUsedManager _mostRecentlyUsedManager;
         private readonly IAuthenticationLogManager _authLogManager;
-
+        private readonly IBackgroundServiceTaskQueue _bgServiceQueue;
 
         private static readonly Histogram UserSignInMetrics = Metrics.CreateHistogram("nuviot_user_sign_in", "Use Sign In Metrics.",
            new HistogramConfiguration
@@ -51,7 +51,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public static readonly Counter UserLoginFailures = Metrics.CreateCounter("nuviot_login_failures", "Number of user login failures");
 
         public SignInManager(IAdminLogger adminLogger, IDefaultRoleList defaultRoleList, IUserRoleManager roleManager, IDependencyManager depManager,
-                            IUserFavoritesManager userFavoritesManager, IMostRecentlyUsedManager mostRecentlyUsedManager, IAppUserRepo appUserRepo,
+                            IUserFavoritesManager userFavoritesManager, IMostRecentlyUsedManager mostRecentlyUsedManager, IAppUserRepo appUserRepo, IBackgroundServiceTaskQueue bgServiceQueue,
                             IAuthenticationLogManager authenticationLogManager, ISecurity security, IAppConfig appConfig, IUserManager userManager, IOrganizationManager orgManager, IOrganizationRepo orgRepo,
                              SignInManager<AppUser> signInManager)
             : base(adminLogger, appConfig, depManager, security)
@@ -67,6 +67,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
             _userFavoritesManager = userFavoritesManager;
             _mostRecentlyUsedManager = mostRecentlyUsedManager;
             _authLogManager = authenticationLogManager;
+            _bgServiceQueue = bgServiceQueue;
+
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[SignInManager__Constructor]", "Created Sign-in manager");
         }
 
         public Task SignInAsync(AppUser user, bool isPersistent = false)
@@ -200,6 +203,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
                         _adminLogger.Trace("SignInManager__PasswordSignInAsync; User did not create organization, thus is not an owner.");
                     }
 
+                    sw.Restart();
+
                     var isOrgAdmin = await _orgManager.IsUserOrgAdminAsync(appUser.CurrentOrganization.Id, appUser.Id);
                     response.AddAuthMetric("Check if User is Admin");
                     if (isOrgAdmin != appUser.IsOrgAdmin)
@@ -243,7 +248,11 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
                 appUser.LastLogin = DateTime.UtcNow.ToJSONString();
                 // we can bypass the manager here, we are updating the current user if they are logged in, should not require any security.
-                await _appUserRepo.UpdateAsync(appUser);
+
+                await _bgServiceQueue.QueueBackgroundWorkItemAsync(ct =>
+                {
+                    return _appUserRepo.UpdateAsync(appUser);
+                });
 
                 timings.Add(new ResultTiming() { Key = $"User Updated", Ms = sw.Elapsed.TotalMilliseconds });
                 sw.Restart();

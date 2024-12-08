@@ -15,6 +15,7 @@ using Microsoft.Azure.Documents;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
@@ -31,6 +32,7 @@ namespace LagoVista.UserAdmin.Repos.Users
         private readonly IUserRoleRepo _userRoleRepo;
         private readonly ICacheProvider _cacheProvider;
         private readonly IAuthenticationLogManager _authLogMgr;
+        private readonly IAdminLogger _adminLogger;
 
         public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserRoleRepo userRoleRepo, IUserAdminSettings userAdminSettings, IAdminLogger logger, IAuthenticationLogManager authLogMgr, ICacheProvider cacheProvider, IDependencyManager dependencyMgr) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider, dependencyManager: dependencyMgr)
@@ -39,6 +41,7 @@ namespace LagoVista.UserAdmin.Repos.Users
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
             _rdbmsUserManager = rdbmsUserManager;
             _userRoleRepo = userRoleRepo;
+            _adminLogger = logger;
             _cacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
             _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
@@ -51,7 +54,6 @@ namespace LagoVista.UserAdmin.Repos.Users
         public async Task CreateAsync(AppUser user)
         {
             await CreateDocumentAsync(user);
-            
         }
 
         public async Task DeleteAsync(AppUser user)
@@ -100,38 +102,88 @@ namespace LagoVista.UserAdmin.Repos.Users
             return appUser; 
         }
 
+        private string UserNameCacheKey(string userName)
+        {
+            return $"useraccountid_by_username_{userName.ToLower().Replace("@", String.Empty)}";
+        }
+
         public async Task<AppUser> FindByNameAsync(string userName)
         {
+            var sw = Stopwatch.StartNew();
+            
             if (String.IsNullOrEmpty(userName))
             {
                 throw new InvalidOperationException("Attempt to find user with null or empty user name.");
             }
 
-            var user = (await QueryAsync(usr => usr.UserName == userName.ToUpper())).FirstOrDefault();
-            if (user == null)
+            var accountId = await _cacheProvider.GetAsync(UserNameCacheKey(userName));
+            if (!String.IsNullOrEmpty(accountId))
             {
-                return null;
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - resolved {userName} for {accountId} in cache - {sw.Elapsed.TotalMilliseconds} ms");
             }
+            else
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - did not {userName} to an account id in storage - {sw.Elapsed.TotalMilliseconds} ms");
+                sw.Restart();
+                var user = (await QueryAsync(usr => usr.UserName == userName.ToUpper())).FirstOrDefault();
+                if (user == null)
+                {
+                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Warning, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - Could not find user by username {userName} - {sw.Elapsed.TotalMilliseconds} ms");
+                    return null;
+                }
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - Found user {userName} in storage by user name - {sw.Elapsed.TotalMilliseconds} ms");
+                accountId = user.Id;
+                sw.Restart();
+                await _cacheProvider.AddAsync(UserNameCacheKey(userName), accountId);
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - Added user {userName} to cache for account id {accountId} - {sw.Elapsed.TotalMilliseconds} ms");
+            }
+            sw.Restart();
 
-            //TODO: THIS SUX, when deserializing the query it auto converts to date time, we want the json string
-            return await FindByIdAsync(user.Id);
+            var appUser = await FindByIdAsync(accountId);
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - Get user by id {accountId}, {userName} from storage by id - {sw.Elapsed.TotalMilliseconds} ms");
+            return appUser;
+        }
+
+        private string EmailCacheKey(String email)
+        {
+            return $"useraccountid_by_email_{email.ToLower().Replace("@",String.Empty)}";
         }
 
         public async Task<AppUser> FindByEmailAsync(string email)
         {
+            var sw = Stopwatch.StartNew();
+
             if (String.IsNullOrEmpty(email))
             {
                 throw new InvalidOperationException("Attempt to find user with null or empty user name.");
             }
 
-            var user = (await QueryAsync(usr => usr.Email == email.ToUpper())).FirstOrDefault();
-            if (user == null)
+            var accountId = await _cacheProvider.GetAsync(EmailCacheKey(email));
+            if(!String.IsNullOrEmpty(accountId))
             {
-                return null;
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByEmailAsync]", $"[AppUserRepo__FindByEmailAsync] - resolved user {email} to {accountId} cache in cache - {sw.Elapsed.TotalMilliseconds} ms");
             }
-
-            //TODO: THIS SUX, when deserializing the query it auto converts to date time, we want the json string
-            return await FindByIdAsync(user.Id);
+            else
+            {
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - did not {email} to an account id in storage - {sw.Elapsed.TotalMilliseconds} ms");
+                sw.Restart();
+                var user = (await QueryAsync(usr => usr.Email == email.ToUpper())).FirstOrDefault();
+                if (user == null)
+                {
+                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Warning, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - Could not find user by username {email} - {sw.Elapsed.TotalMilliseconds} ms");
+                    return null;
+                }
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - Found user {email} in storage by email - {sw.Elapsed.TotalMilliseconds} ms");
+                accountId = user.Id;
+                sw.Restart();
+                await _cacheProvider.AddAsync(EmailCacheKey(email), accountId);
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByEmailAsync]", $"[AppUserRepo__FindByEmailAsync] - Added user {email} to cache for account id {accountId} - {sw.Elapsed.TotalMilliseconds} ms");
+            }
+            sw.Restart();
+           
+            var appUser = await FindByIdAsync(accountId);
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByEmailAsync]", $"[AppUserRepo__FindByEmailAsync] - Get user by id {accountId}, {email} from storage by id - {sw.Elapsed.TotalMilliseconds} ms");
+            return appUser;
         }
 
         public async Task UpdateAsync(AppUser user)

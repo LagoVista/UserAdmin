@@ -10,34 +10,34 @@ namespace LagoVista.UserAdmin
     {
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IAppUserManager, AppUserManager>();
-            services.AddTransient<IAppUserManagerReadOnly, AppUserManagerReadOnly>();
-            services.AddTransient<IAppUserManager, AppUserManager>();
-            services.AddTransient<IOrganizationManager, OrgManager>();
+            services.AddScoped<IAppUserManager, AppUserManager>();
+            services.AddSingleton<IAppUserManagerReadOnly, AppUserManagerReadOnly>();
+            services.AddSingleton<IAppUserManager, AppUserManager>();
+            services.AddSingleton<IOrganizationManager, OrgManager>();
             services.AddTransient<ITeamManager, TeamManager>();
             services.AddTransient<IAssetSetManager, AssetSetManager>();
             services.AddTransient<IScheduledDowntimeManager, ScheduledDowntimeManager>();
             services.AddTransient<IHolidaySetManager, HolidaySetManager>();
             services.AddTransient<ISubscriptionManager, SubscriptionManager>();
-            services.AddTransient<IModuleManager, ModuleManager>();
+            services.AddSingleton<IModuleManager, ModuleManager>();
             services.AddTransient<IAppInstanceManager, AppInstanceManager>();
             services.AddTransient<IUserVerficationManager, UserVerficationManager>();
             services.AddTransient<IDefaultRoleList, DefaultRoleList>();
             services.AddTransient<IPasswordManager, PasswordManager>();
-            services.AddTransient<IIUserAccessManager, UserAccessManager>();
+            services.AddSingleton<IIUserAccessManager, UserAccessManager>();
             services.AddTransient<IOrgUtils, OrgUtils>();
             services.AddTransient<IRoleManager, RoleManager>(); ;
             services.AddTransient<IDistributionManager, DistributionManager>();
             services.AddTransient<ISingleUseTokenManager, SingleUseTokenManager>();
             services.AddTransient<ICalendarManager, CalendarManager>();
-            services.AddTransient<IMostRecentlyUsedManager, MostRecentlyUsedManager>();
-            services.AddTransient<IUserFavoritesManager, UserFavoritesManager>();            
+            services.AddSingleton<IMostRecentlyUsedManager, MostRecentlyUsedManager>();
+            services.AddSingleton<IUserFavoritesManager, UserFavoritesManager>();            
             services.AddTransient<ISystemNotificationManager, SystemNotificationManager>();
-            services.AddTransient<IAppUserInboxManager, AppUserInboxManager>();
+            services.AddSingleton<IAppUserInboxManager, AppUserInboxManager>();
             services.AddTransient<ICallLogManager, RingCentralManager>();
-            services.AddTransient<IAuthenticationLogManager, AuthenticationLogManager>();
+            services.AddSingleton<IAuthenticationLogManager, AuthenticationLogManager>();
             services.AddTransient<ILocationDiagramManager, LocationDiagramManager>();
-            services.AddTransient<ISecureLinkManager, SecureLinkManager>();
+            services.AddScoped<ISecureLinkManager, SecureLinkManager>();
         }
     }
 }

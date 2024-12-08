@@ -67,6 +67,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Common_TimeZome, IsRequired: true, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
         public EntityHeader TimeZone { get; set; }
 
+
+
+        [FormField(LabelResource: UserAdminResources.Names.Common_Customer, IsRequired: false, FieldType: FieldTypes.CustomerPicker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
+        public EntityHeader Customer { get; set; }
+
         /// <summary>
         /// Primary Address
         /// </summary>
@@ -195,6 +200,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(GeoPointsBoundingBox),
                 nameof(DeviceRepository),
                 nameof(LocationDiagram),
+                nameof(Customer),
                 nameof(PhoneNumber),
                 nameof(Description),
                 nameof(Notes),

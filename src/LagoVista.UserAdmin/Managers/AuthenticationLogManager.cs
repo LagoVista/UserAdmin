@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
@@ -7,6 +8,7 @@ using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Security;
 using LagoVista.UserAdmin.Models.Users;
 using Microsoft.AspNetCore.Http;
+using RingCentral;
 using System;
 using System.Threading.Tasks;
 
@@ -18,17 +20,21 @@ namespace LagoVista.UserAdmin.Managers
         private IAdminLogger _adminLogger;
 
         private IHttpContextAccessor _httpContextAccessor;
+        private IBackgroundServiceTaskQueue _bgServiceQueue;
 
-        public AuthenticationLogManager(IHttpContextAccessor httpContextAccessor, IAuthenticationLogRepo authLogRepo, IAdminLogger adminLogger)
+        public AuthenticationLogManager(IHttpContextAccessor httpContextAccessor, IBackgroundServiceTaskQueue bgServiceQueue, IAuthenticationLogRepo authLogRepo, IAdminLogger adminLogger)
         {
             _authLogRepo = authLogRepo ?? throw new ArgumentNullException(nameof(authLogRepo));
             _adminLogger = adminLogger ?? throw new ArgumentNullException(nameof(adminLogger));
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+            _bgServiceQueue = bgServiceQueue ?? throw new ArgumentNullException(nameof(bgServiceQueue));
         }
 
         public Task AddAsync(AuthenticationLog authLog)
         {
-            return _authLogRepo.AddAsync(authLog);
+            return _bgServiceQueue.QueueBackgroundWorkItemAsync((ct) => {
+                return _authLogRepo.AddAsync(authLog);
+            });
         }
 
         public Task AddAsync(AuthLogTypes type, string userId = "?", string userName = "?", string orgId = "?", string orgName = "?", string oauthProvier = "", string errors = "", string extras = "", string redirectUri = "none", string inviteId = "none")
@@ -52,7 +58,7 @@ namespace LagoVista.UserAdmin.Managers
                 RedirectUri = redirectUri
             };
 
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AuthLog]", "Authentication Log",
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AuthLog_AddAsync]", $"[AuthLog_AddAsync] - {type}",
                 userId.ToKVP("userId"), userName.ToKVP("username"), orgId.ToKVP("orgId"), orgName.ToKVP("orgName"), errors.ToKVP("errors"),
                 extras.ToKVP("extras"), oauthProvier.ToKVP("oauthProvider")); 
 
