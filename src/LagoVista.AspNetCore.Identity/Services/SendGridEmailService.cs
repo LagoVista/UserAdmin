@@ -941,7 +941,7 @@ namespace LagoVista.AspNetCore.Identity.Services
 
                 SendEmailMessage.Inc();
 
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "SendGridEmailServices_SendAsync", "EmailSent",
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "[SendGridEmailServices_SendAsync]", $"[SendGridEmailServices_SendAsync] EmailSent - {email}: {subject}",
                     new System.Collections.Generic.KeyValuePair<string, string>("Subject", subject),
                     new System.Collections.Generic.KeyValuePair<string, string>("to", email));
 

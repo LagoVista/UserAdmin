@@ -239,13 +239,13 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
             if (!String.IsNullOrEmpty(PhoneNumber))
             {
-                bldr.Append("<div style='font-weight:bold'>Primary Phone</h5>");
+                bldr.Append("<h5>Primary Phone</h5>");
                 bldr.Append($"<a href='tel:{PhoneNumber}'>{PhoneNumber}<br/></a><br /><br />");
             }
 
             if(!String.IsNullOrEmpty(Addr1) && !String.IsNullOrEmpty(City))
             {
-                bldr.Append("<div style='font-weight:bold'>Street Address</h5>");
+                bldr.Append("<h5>Street Address</h5>");
                 var strAddr = String.Empty;                
                 if(!String.IsNullOrEmpty(Addr1))
                     strAddr += $"{Addr1},";

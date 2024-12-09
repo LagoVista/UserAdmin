@@ -47,9 +47,9 @@ namespace LagoVista.AspNetCore.Identity.Services
                 var restClient = new TwilioRestClient(_settings.SmsServer.AccountId, _settings.SmsServer.AccessKey);
                 await MessageResource.CreateAsync(to: new PhoneNumber(number), from: new PhoneNumber(_settings.FromPhoneNumber), body: contents);
 
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "TwilioSMSSender_SendAsync", "EmailSent",
-                    new System.Collections.Generic.KeyValuePair<string, string>("Subject", number),
-                    new System.Collections.Generic.KeyValuePair<string, string>("to", contents));
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "[TwilioSMSSender_SendAsync]", $"[TwilioSMSSender_SendAsync] - {number}",
+                    new System.Collections.Generic.KeyValuePair<string, string>("number", number),
+                    new System.Collections.Generic.KeyValuePair<string, string>("content", contents));
 
                 SendSMSMessage.Inc();
 

@@ -35,7 +35,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public List<AppUserContact> AppUsers { get; set; } = new List<AppUserContact>();
 
-        [FormField(LabelResource: UserAdminResources.Names.DistributionList_ExternalContacts, IsRequired: false, ChildListDisplayMember: "firstName", FieldType: FieldTypes.ChildListInline, EntityHeaderPickerUrl: "/api/distro/externalcontact/factory", ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.DistributionList_ExternalContacts, IsRequired: false, ChildListDisplayMembers: "FirstName,LastName", FieldType: FieldTypes.ChildListInline, EntityHeaderPickerUrl: "/api/distro/externalcontact/factory", ResourceType: typeof(UserAdminResources))]
         public List<ExternalContact> ExternalContacts { get; set; } = new List<ExternalContact>();
 
         public DistroListSummary CreateSummary()
