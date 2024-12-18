@@ -14,7 +14,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 {
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Location_Title, UserAdminResources.Names.Organization_Location_Help,
         UserAdminResources.Names.Organization_Location_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
-        GetListUrl: "/api/org/locations", GetUrl: "/api/org/location/:id", SaveUrl: "/api/org/location", FactoryUrl: "/api/org/location/factory", DeleteUrl: "/api/org/location", Icon: "icon-fo-office")]
+        GetListUrl: "/api/org/locations", GetUrl: "/api/org/location/:id", SaveUrl: "/api/org/location", FactoryUrl: "/api/org/location/factory", DeleteUrl: "/api/org/location/{id}", Icon: "icon-fo-office")]
     public class OrgLocation : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IIconEntity, IFormDescriptor, IFormDescriptorAdvanced, IFormDescriptorAdvancedCol2, ISummaryFactory
     {
         public OrgLocation()
@@ -235,12 +235,12 @@ namespace LagoVista.UserAdmin.Models.Orgs
         {
             var bldr = new StringBuilder();
 
-            bldr.Append($"{Name}<br/>");
+            bldr.Append($"<h1>{Name}</h1>");
 
             if (!String.IsNullOrEmpty(PhoneNumber))
             {
                 bldr.Append("<h5>Primary Phone</h5>");
-                bldr.Append($"<a href='tel:{PhoneNumber}'>{PhoneNumber}<br/></a><br /><br />");
+                bldr.Append($"<a href='tel:{PhoneNumber}'>{PhoneNumber}</a><br /><br />");
             }
 
             if(!String.IsNullOrEmpty(Addr1) && !String.IsNullOrEmpty(City))

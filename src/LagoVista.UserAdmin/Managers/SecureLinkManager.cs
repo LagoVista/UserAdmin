@@ -5,6 +5,7 @@ using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Security;
 using OpenTelemetry.Trace;
@@ -21,8 +22,11 @@ namespace LagoVista.UserAdmin.Managers
         private readonly ISignInManager _signInManager;
         private readonly IAppUserManager _appUserManager;
         private readonly ILinkShortener _linkShortner;
+        private readonly IOrgUserRepo _orgUserRepo;
+        private readonly IOrganizationRepo _organizationRepo;
 
-        public SecureLinkManager(ISecureLinkRepo secureLinkRepo, IAppUserManager appUserManager, ISignInManager signInManager, ILinkShortener linkShortener,  IAdminLogger logger, IAppConfig appConfig)             
+
+        public SecureLinkManager(ISecureLinkRepo secureLinkRepo, IAppUserManager appUserManager, IOrgUserRepo orgUserRepo, IOrganizationRepo orgRepo, ISignInManager signInManager, ILinkShortener linkShortener,  IAdminLogger logger, IAppConfig appConfig)             
         {
             _secureLinkRepo = secureLinkRepo ?? throw new ArgumentNullException(nameof(secureLinkRepo));
             _linkShortner = linkShortener ?? throw new ArgumentNullException(nameof(linkShortener));
@@ -31,6 +35,8 @@ namespace LagoVista.UserAdmin.Managers
              _appUserManager = appUserManager ?? throw new ArgumentNullException(nameof(appUserManager));
             _admingLogger = logger ?? throw new ArgumentNullException(nameof(logger));
             _admingLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[SecureLinkManager__Constructor]", $"Created Secure Link Generator.");
+            _organizationRepo = orgRepo ?? throw new ArgumentNullException(nameof(orgRepo));
+            _orgUserRepo = orgUserRepo ?? throw new ArgumentNullException(nameof(orgUserRepo));
         }
 
         public async Task<InvokeResult<String>> GenerateSecureLinkAsync(string link, EntityHeader forUser, TimeSpan duration, EntityHeader org, EntityHeader user)
@@ -70,6 +76,11 @@ namespace LagoVista.UserAdmin.Managers
             var user = EntityHeader.Create(secureLink.CreatedByUserId, secureLink.CreatedByUser);
 
             var appUser = await  _appUserManager.GetUserByIdAsync(secureLink.ForUserId, org, user);
+            var newOrg = await _organizationRepo.GetOrganizationAsync(orgId);
+            appUser.CurrentOrganization = newOrg.CreateSummary();
+            appUser.IsOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(orgId, appUser.Id);
+            appUser.IsAppBuilder = true;
+
             await _signInManager.SignInAsync(appUser);
 
             return InvokeResult<string>.Create(secureLink.DestinationLink);

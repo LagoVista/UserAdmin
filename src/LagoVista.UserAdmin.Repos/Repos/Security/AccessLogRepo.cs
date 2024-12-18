@@ -96,6 +96,10 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
         {
             return new AccessLogEntity()
             {
+                RowKey = accessLog.RowKey,
+                Timestamp = DateTime.UtcNow,
+                ETag = ETag.All,
+                PartitionKey = accessLog.PartitionKey,
                 DateStamp = accessLog.DateStamp,
                 Resource = accessLog.Resource,
                 ResourceId = accessLog.ResourceId,
