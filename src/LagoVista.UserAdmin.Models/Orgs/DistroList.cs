@@ -33,6 +33,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Common_Customer, IsRequired: false, FieldType: FieldTypes.CustomerPicker, ResourceType: typeof(UserAdminResources))]
         public EntityHeader Customer { get; set; }
 
+
+        [FormField(LabelResource: UserAdminResources.Names.DistroList_ParentList,  EntityHeaderPickerUrl: "/api/distros", IsRequired: false, FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader ParentDistributionList { get; set; }
+
+
         public List<AppUserContact> AppUsers { get; set; } = new List<AppUserContact>();
 
         [FormField(LabelResource: UserAdminResources.Names.DistributionList_ExternalContacts, IsRequired: false, ChildListDisplayMembers: "FirstName,LastName", FieldType: FieldTypes.ChildListInline, EntityHeaderPickerUrl: "/api/distro/externalcontact/factory", ResourceType: typeof(UserAdminResources))]
@@ -60,6 +65,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                nameof(Key),
                nameof(Icon),
                nameof(Category),
+               nameof(ParentDistributionList),
                nameof(Customer),
                nameof(Description),
                nameof(ExternalContacts),

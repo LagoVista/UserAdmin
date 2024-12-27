@@ -1,4 +1,4 @@
-﻿/*12/4/2024 4:48:34 PM*/
+﻿/*12/27/2024 4:20:29 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -579,6 +579,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:DistroList_Name
 
 		public static string DistroList_Name { get { return GetResourceString("DistroList_Name"); } }
+//Resources:UserAdminResources:DistroList_ParentList
+
+		public static string DistroList_ParentList { get { return GetResourceString("DistroList_ParentList"); } }
 //Resources:UserAdminResources:DistroLists_Name
 
 		public static string DistroLists_Name { get { return GetResourceString("DistroLists_Name"); } }
@@ -1917,6 +1920,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string DistroList_Description = "DistroList_Description";
 			public const string DistroList_Help = "DistroList_Help";
 			public const string DistroList_Name = "DistroList_Name";
+			public const string DistroList_ParentList = "DistroList_ParentList";
 			public const string DistroLists_Name = "DistroLists_Name";
 			public const string DownTimeType_Admin = "DownTimeType_Admin";
 			public const string DownTimeType_Holiday = "DownTimeType_Holiday";

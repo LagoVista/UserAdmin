@@ -1811,4 +1811,10 @@
   <data name="LocationDiagram_Shape_CustomerLocation_Help" xml:space="preserve">
     <value>Location within a customer that this shape presents</value>
   </data>
+  <data name="DistroList_ParentList" xml:space="preserve">
+    <value>Parent Distribution List</value>
+  </data>
+  <data name="DistroList_ParentList_Help" xml:space="preserve">
+    <value>A distribution list can have a parent list associated with it, this is commonly used for escalatoin.</value>
+  </data>
 </root>
