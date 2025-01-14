@@ -57,7 +57,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
             catch (Exception ex)
             {
-                _adminLogger.AddException("SendGridEmailServices_SendAsync", ex,
+                _adminLogger.AddException("[TwilioSMSSender_SendAsync]", ex,
     new System.Collections.Generic.KeyValuePair<string, string>("number", number),
     new System.Collections.Generic.KeyValuePair<string, string>("contents", contents));
 

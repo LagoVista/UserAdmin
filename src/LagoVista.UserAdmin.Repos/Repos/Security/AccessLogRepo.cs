@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Azure.Data.Tables;
 using LagoVista.CloudStorage.Storage;
+using LagoVista.Core;
 using LagoVista.Core.Interfaces;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
@@ -29,20 +30,33 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             _bgServiceQueue = bgServiceQueue;
         }
 
+        public override StoragePeriod GetStoragePeriod()
+        {
+            return StoragePeriod.Month;
+        }
+
         public void AddActivity(AccessLog accessLog)
         {
             _bgServiceQueue.QueueBackgroundWorkItemAsync(async (ct) =>
             {
-                var sw = Stopwatch.StartNew();
-
-                if (!_created)
+                try
                 {
-                    await _tableClient.CreateIfNotExistsAsync();
-                    _created = true;
-                }
+                    var sw = Stopwatch.StartNew();
 
-                await _tableClient.AddEntityAsync<AccessLogEntity>(AccessLogEntity.FromAccessLog(accessLog));
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, $"[AccessLogRepo__AddActivity]", $"[AccessLogRepo__AddActivity] Org: {accessLog.OrgName} {accessLog.Resource} - {accessLog.ResourceId} {sw.Elapsed.TotalMilliseconds}ms");
+                    if (!_created)
+                    {
+                        await _tableClient.CreateIfNotExistsAsync();
+                        _created = true;
+                    }
+
+                    await _tableClient.AddEntityAsync<AccessLogEntity>(AccessLogEntity.FromAccessLog(accessLog));
+                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, $"[AccessLogRepo__AddActivity]", $"[AccessLogRepo__AddActivity] Org: {accessLog.OrgName} {accessLog.Resource} - {accessLog.ResourceId} {sw.Elapsed.TotalMilliseconds}ms");
+                }
+                catch(Exception ex)
+                {
+                    _adminLogger.AddException("[AccessLogRepo_AddActivity]",  ex, GetTableName().ToKVP("tableName"));
+                }
+            
             });
         }
 
