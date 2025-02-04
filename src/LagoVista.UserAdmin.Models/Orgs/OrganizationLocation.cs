@@ -185,6 +185,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(Addr2),
                 nameof(City),
                 nameof(StateProvince),
+                nameof(PostalCode),
                 nameof(Country),
             };
         }
