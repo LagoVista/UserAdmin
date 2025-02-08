@@ -82,6 +82,31 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(CurrentUserProfilePictureurl, user.ProfileImageUrl.ImageUrl),
             };
 
+
+            if (user.Customer != null)
+            {
+                claims.Add(new Claim(CustomerId, user.Customer.Id));
+                claims.Add(new Claim(CustomerName, user.Customer.Text));
+            }
+
+            if (user.CustomerContact != null)
+            {
+                claims.Add(new Claim(CustomerContactId, user.CustomerContact.Id));
+                claims.Add(new Claim(CustomerContactName, user.CustomerContact.Text));
+            }
+
+            if (user.DeviceRepo != null)
+            {
+                claims.Add(new Claim(DeviceRepoId, user.DeviceRepo.Id));
+                claims.Add(new Claim(DeviceRepoName, user.DeviceRepo.Text));
+            }
+
+            if (user.CurrentInstance != null)
+            {
+                claims.Add(new Claim(InstanceId, user.CurrentInstance.Id));
+                claims.Add(new Claim(InstanceName, user.CurrentInstance.Text));
+            }
+
             if (user.CurrentOrganizationRoles != null)
             {
                 foreach (var role in user.CurrentOrganizationRoles)
@@ -117,9 +142,32 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(IsFinancceAdmin, user.IsFinanceAdmin.ToString()),
                 new Claim(CurrentOrgName, org == null ? None : org.Text),
                 new Claim(CurrentOrgId, org == null ? None : org.Id),
-
                 new Claim(CurrentUserProfilePictureurl, user.ProfileImageUrl.ImageUrl),
             };
+
+            if(user.Customer != null)
+            {
+                claims.Add(new Claim(CustomerId, user.Customer.Id));
+                claims.Add(new Claim(CustomerName, user.Customer.Text));
+            }
+
+            if(user.CustomerContact != null)
+            {
+                claims.Add(new Claim(CustomerContactId, user.CustomerContact.Id));
+                claims.Add(new Claim(CustomerContactName, user.CustomerContact.Text));
+            }
+
+            if(user.DeviceRepo != null)
+            {
+                claims.Add(new Claim(DeviceRepoId, user.DeviceRepo.Id));
+                claims.Add(new Claim(DeviceRepoName, user.DeviceRepo.Text));
+            }
+
+            if(user.CurrentInstance != null)
+            {
+                claims.Add(new Claim(InstanceId, user.CurrentInstance.Id));
+                claims.Add(new Claim(InstanceName, user.CurrentInstance.Text));
+            }
 
             if (user.CurrentOrganizationRoles != null)
             {
@@ -171,11 +219,11 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(CurrentOrgName, owner.OwnerOrganization.Text),
                 new Claim(CurrentOrgId, owner.OwnerOrganization.Id),
 
-                new Claim(DeviceRepoId, owner.CurrentRepo.Id),
-                new Claim(DeviceRepoName, owner.CurrentRepo.Text),
-
                 new Claim(InstanceId, owner.CurrentInstance.Id),
                 new Claim(InstanceName, owner.CurrentInstance.Text),
+
+                new Claim(DeviceRepoId, owner.CurrentRepo.Id),
+                new Claim(DeviceRepoName, owner.CurrentRepo.Text),
 
                 new Claim(CustomerId, owner.Customer.Id),
                 new Claim(CustomerName, owner.Customer.Text),
