@@ -95,10 +95,17 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 claims.Add(new Claim(CustomerContactName, user.CustomerContact.Text));
             }
 
+            // OK - this little dance will bite us in the but for sure at some point....
+            //      need to align customer type devices and user type devices.
             if (user.DeviceRepo != null)
             {
                 claims.Add(new Claim(DeviceRepoId, user.DeviceRepo.Id));
                 claims.Add(new Claim(DeviceRepoName, user.DeviceRepo.Text));
+            }
+            else if(user.CurrentRepo != null)
+            {
+                claims.Add(new Claim(DeviceRepoId, user.CurrentRepo.Id));
+                claims.Add(new Claim(DeviceRepoName, user.CurrentRepo.Text));
             }
 
             if (user.CurrentInstance != null)
