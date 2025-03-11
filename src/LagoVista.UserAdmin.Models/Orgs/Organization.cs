@@ -120,6 +120,20 @@ namespace LagoVista.UserAdmin.Models.Orgs
             WaterMark: UserAdminResources.Names.Organization_DefaultInstance_Select, ResourceType: typeof(UserAdminResources))]
         public EntityHeader DefaultInstance { get; set; }
 
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultDemoInstance, FieldType: FieldTypes.EntityHeaderPicker, IsRequired: false, EntityHeaderPickerUrl: "/api/deployment/instances",
+            WaterMark: UserAdminResources.Names.Organization_DefaultInstance_Select, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader DefaultDemoInstance { get; set; }
+
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultTestInstance, FieldType: FieldTypes.EntityHeaderPicker, IsRequired: false, EntityHeaderPickerUrl: "/api/deployment/instances",
+            WaterMark: UserAdminResources.Names.Organization_DefaultInstance_Select, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader DefaultTestInstance { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultDevelopmentInstance, FieldType: FieldTypes.EntityHeaderPicker, IsRequired: false, EntityHeaderPickerUrl: "/api/deployment/instances",
+            WaterMark: UserAdminResources.Names.Organization_DefaultInstance_Select, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader DefaultDevelopmentInstance { get; set; }
+
         [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultProjectLead, HelpResource: UserAdminResources.Names.Organization_DefaultProjectLead_Help, FieldType: FieldTypes.UserPicker,
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public EntityHeader DefaultProjectLead { get; set; }
@@ -189,8 +203,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(DefaultTheme),
                 nameof(WebSite),
                 nameof(LandingPage),
-                nameof(DefaultDeviceRepository),
                 nameof(DefaultInstance),
+                nameof(DefaultDemoInstance),
+                nameof(DefaultTestInstance),
+                nameof(DefaultDevelopmentInstance),
+                nameof(DefaultDeviceRepository),
                 nameof(HeroTitle),
                 nameof(HeroBackgroundImage),
                 nameof(LightLogo),
@@ -248,6 +265,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 IsForProductLine = IsForProductLine,
                 DefaultTheme = DefaultTheme,
                 DefaultInstance = DefaultInstance,
+                DefaultTestInstance = DefaultTestInstance,
+                DefaultDevelopmentInstance = DefaultDevelopmentInstance,
+                DefaultDemoInstance = DefaultDemoInstance,
                 DefaultDeviceRepository = DefaultDeviceRepository
             };
         }
@@ -276,6 +296,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public string AccentColor { get; set; }
         public EntityHeader DefaultDeviceRepository { get; set; }
         public EntityHeader DefaultInstance { get; set; }
+        public EntityHeader DefaultDemoInstance { get; set; }
+        public EntityHeader DefaultTestInstance { get; set; }
+        public EntityHeader DefaultDevelopmentInstance { get; set; }
 
         public bool IsForProductLine { get; set; }
 

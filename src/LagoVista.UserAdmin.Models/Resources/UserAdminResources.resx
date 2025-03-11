@@ -1479,7 +1479,7 @@
     <value>Default Instance</value>
   </data>
   <data name="Organization_DefaultInstance_Select" xml:space="preserve">
-    <value>-select default device instance-</value>
+    <value>-select default instance-</value>
   </data>
   <data name="Organization_DefaultRepo" xml:space="preserve">
     <value>Default Device Repository</value>
@@ -1816,5 +1816,14 @@
   </data>
   <data name="DistroList_ParentList_Help" xml:space="preserve">
     <value>A distribution list can have a parent list associated with it, this is commonly used for escalatoin.</value>
+  </data>
+  <data name="Organization_DefaultDemoInstance" xml:space="preserve">
+    <value>Default Demo Instance</value>
+  </data>
+  <data name="Organization_DefaultDevelopmentInstance" xml:space="preserve">
+    <value>Default Development Instance</value>
+  </data>
+  <data name="Organization_DefaultTestInstance" xml:space="preserve">
+    <value>Default Test Instance</value>
   </data>
 </root>

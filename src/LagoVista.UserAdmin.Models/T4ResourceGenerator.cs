@@ -1,4 +1,4 @@
-﻿/*12/27/2024 4:20:29 AM*/
+﻿/*3/10/2025 2:23:22 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -582,6 +582,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:DistroList_ParentList
 
 		public static string DistroList_ParentList { get { return GetResourceString("DistroList_ParentList"); } }
+//Resources:UserAdminResources:DistroList_ParentList_Help
+
+		public static string DistroList_ParentList_Help { get { return GetResourceString("DistroList_ParentList_Help"); } }
 //Resources:UserAdminResources:DistroLists_Name
 
 		public static string DistroLists_Name { get { return GetResourceString("DistroLists_Name"); } }
@@ -1169,6 +1172,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_DefaultContributor_Help
 
 		public static string Organization_DefaultContributor_Help { get { return GetResourceString("Organization_DefaultContributor_Help"); } }
+//Resources:UserAdminResources:Organization_DefaultDemoInstance
+
+		public static string Organization_DefaultDemoInstance { get { return GetResourceString("Organization_DefaultDemoInstance"); } }
+//Resources:UserAdminResources:Organization_DefaultDevelopmentInstance
+
+		public static string Organization_DefaultDevelopmentInstance { get { return GetResourceString("Organization_DefaultDevelopmentInstance"); } }
 //Resources:UserAdminResources:Organization_DefaultInstance
 
 		public static string Organization_DefaultInstance { get { return GetResourceString("Organization_DefaultInstance"); } }
@@ -1202,6 +1211,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_DefaultResource_Watermark
 
 		public static string Organization_DefaultResource_Watermark { get { return GetResourceString("Organization_DefaultResource_Watermark"); } }
+//Resources:UserAdminResources:Organization_DefaultTestInstance
+
+		public static string Organization_DefaultTestInstance { get { return GetResourceString("Organization_DefaultTestInstance"); } }
 //Resources:UserAdminResources:Organization_DefaultTheme
 
 		public static string Organization_DefaultTheme { get { return GetResourceString("Organization_DefaultTheme"); } }
@@ -1921,6 +1933,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string DistroList_Help = "DistroList_Help";
 			public const string DistroList_Name = "DistroList_Name";
 			public const string DistroList_ParentList = "DistroList_ParentList";
+			public const string DistroList_ParentList_Help = "DistroList_ParentList_Help";
 			public const string DistroLists_Name = "DistroLists_Name";
 			public const string DownTimeType_Admin = "DownTimeType_Admin";
 			public const string DownTimeType_Holiday = "DownTimeType_Holiday";
@@ -2114,6 +2127,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_CreateGettingStartedData_Help = "Organization_CreateGettingStartedData_Help";
 			public const string Organization_DefaultContributor = "Organization_DefaultContributor";
 			public const string Organization_DefaultContributor_Help = "Organization_DefaultContributor_Help";
+			public const string Organization_DefaultDemoInstance = "Organization_DefaultDemoInstance";
+			public const string Organization_DefaultDevelopmentInstance = "Organization_DefaultDevelopmentInstance";
 			public const string Organization_DefaultInstance = "Organization_DefaultInstance";
 			public const string Organization_DefaultInstance_Select = "Organization_DefaultInstance_Select";
 			public const string Organization_DefaultProjectAdminLead = "Organization_DefaultProjectAdminLead";
@@ -2125,6 +2140,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_DefaultRepo = "Organization_DefaultRepo";
 			public const string Organization_DefaultRepo_Select = "Organization_DefaultRepo_Select";
 			public const string Organization_DefaultResource_Watermark = "Organization_DefaultResource_Watermark";
+			public const string Organization_DefaultTestInstance = "Organization_DefaultTestInstance";
 			public const string Organization_DefaultTheme = "Organization_DefaultTheme";
 			public const string Organization_Description = "Organization_Description";
 			public const string Organization_Details = "Organization_Details";
