@@ -28,6 +28,7 @@ using RingCentral;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 using LagoVista.Core.Models.Geo;
+using LagoVista.Core.Authentication.Models;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -40,6 +41,7 @@ namespace LagoVista.UserAdmin.Managers
         private readonly ILocationUserRepo _locationUserRepo;
         private readonly ISmsSender _smsSender;
         private readonly IUserRoleManager _userRoleManager;
+        private readonly IUserRoleRepo _userRoleRepo;
         private readonly IEmailSender _emailSender;
         private readonly IInviteUserRepo _inviteUserRepo;
         private readonly ILocationRoleRepo _locationRoleRepo;
@@ -72,6 +74,7 @@ namespace LagoVista.UserAdmin.Managers
             IOrgInitializer orgInitializer,
             IDefaultRoleList defaultRoleList,            
             IOwnedObjectRepo ownedObjectRepo,
+            IUserRoleRepo userRoleRepo,
             IUserRoleManager useRoleManager,
             IAuthenticationLogManager authLogMgr,
             ISubscriptionManager subscriptionManager,
@@ -93,6 +96,7 @@ namespace LagoVista.UserAdmin.Managers
             _emailSender = emailSender;
             _inviteUserRepo = inviteUserRepo;
             _defaultRoleList = defaultRoleList;
+            _userRoleRepo = userRoleRepo;
             _adminLogger = logger;
             _orgInitializer = orgInitializer;
             _ownedObjectRepo = ownedObjectRepo;
@@ -233,6 +237,13 @@ namespace LagoVista.UserAdmin.Managers
             appUser.IsOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(newOrgId, user.Id);
             appUser.IsAppBuilder = await _orgUserRepo.IsAppBuilderAsync(newOrgId, user.Id);
 
+            var orgRoles = await _userRoleRepo.GetRolesForUserAsync(appUser.Id, newOrgId);
+            appUser.CurrentOrganizationRoles = new List<EntityHeader>();
+            foreach (var orgRole in orgRoles)
+            {
+                appUser.CurrentOrganizationRoles.Add(orgRole.ToEntityHeader());
+            }
+
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, user, org, "switchOrgs");
             await _appUserRepo.UpdateAsync(appUser);
             await _authLogMgr.AddAsync(AuthLogTypes.ChangeOrg, user.Id, user.Text, newOrg.Id, newOrg.Name, extras: $"old orgid: {org.Id}, new orgid: {org.Text}");
@@ -264,6 +275,14 @@ namespace LagoVista.UserAdmin.Managers
             appUser.CurrentOrganization = newOrg.CreateSummary();
             appUser.IsOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(newOrgId, appUser.Id);
             appUser.IsAppBuilder = await _orgUserRepo.IsAppBuilderAsync(newOrgId, appUser.Id);
+            appUser.CurrentOrganizationRoles = new List<EntityHeader>();
+
+            var orgRoles = await _userRoleRepo.GetRolesForUserAsync(appUser.Id, newOrgId);
+            appUser.CurrentOrganizationRoles = new List<EntityHeader>();
+            foreach (var orgRole in orgRoles)
+            {
+                appUser.CurrentOrganizationRoles.Add(orgRole.ToEntityHeader());
+            }
 
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, appUser.ToEntityHeader(), org, "switchOrgs");
             await _appUserRepo.UpdateAsync(appUser);
