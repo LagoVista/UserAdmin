@@ -53,7 +53,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 Key = Key,
                 Icon = Icon,
                 Name = Name,
-                Category = Category,
+                Category = Category?.Text,
+                CategoryId = Category?.Id,
+                CategoryKey = Category?.Key
+
             };
         }
 
@@ -97,7 +100,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.DistroLists_Name,
          UserAdminResources.Names.DistroList_Help, UserAdminResources.Names.DistroList_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(UserAdminResources),
          Icon: "icon-pz-rating-star", GetListUrl: "/api/distros", SaveUrl: "/api/distro", GetUrl: "/api/distro/{id}", FactoryUrl: "/api/distro/factory", DeleteUrl: "/api/distro/{id}")]
-    public class DistroListSummary : CategorizedSummaryData
+    public class DistroListSummary : SummaryData
     {
 
     }

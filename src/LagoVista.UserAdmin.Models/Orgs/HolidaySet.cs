@@ -49,7 +49,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 Name = Name,
                 IsPublic = IsPublic,
                 Key = Key,
-                Category = Category,
+                CategoryId = Category?.Id,
+                Category = Category?.Text,
+                CategoryKey = Category?.Key,
                 CultureOrCountry = CultureOrCountry
             };
         }
@@ -81,7 +83,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.HolidaySets_Title, UserAdminResources.Names.HolidaySet_Help,
                           UserAdminResources.Names.HolidaySet_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(UserAdminResources), Icon: "icon-ae-calendar",
                           GetListUrl: "/api/holidaysets", GetUrl: "/api/holidayset/{id}", SaveUrl: "/api/holidayset", FactoryUrl: "/api/holidayset/factory", DeleteUrl: "/api/holidayset/{id}")]
-    public class HolidaySetSummary : CategorizedSummaryData
+    public class HolidaySetSummary : SummaryData
     {
         public string CultureOrCountry {get; set;}
     }

@@ -203,7 +203,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 Icon = Icon,
                 IsPublic = IsPublic,
                 Key = Key,
-                Category = Category,
+                CategoryId = Category?.Id,
+                Category = Category?.Text,
+                CategoryKey = Category?.Key,
                 DowntimeType = DowntimeType.Text,
                 DowntimeTypeId = DowntimeType.Id,
                 ScheduleType = ScheduleType.Text,
@@ -287,7 +289,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                           ListUIUrl: "/organization/downtimes", EditUIUrl: "/organization/downtime/{id}", CreateUIUrl: "/organization/downtime/add",
                           SaveUrl: "/api/scheduleddowntime", GetListUrl: "/api/scheduleddowntimes", GetUrl: "/api/scheduleddowntime/{id}", Icon: "icon-ae-call-time",
                           DeleteUrl: "/api/scheduleddowntime/{id}", FactoryUrl: "/api/scheduleddowntime/factory")]
-    public class ScheduledDowntimeSummary : CategorizedSummaryData
+    public class ScheduledDowntimeSummary : SummaryData
     {
         public string ScheduleType { get; set; }
         public string ScheduleTypeId { get; set; }
