@@ -19,9 +19,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
             Icon = "icon-pz-rating-star";
         }
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_Category, FieldType: FieldTypes.Category, WaterMark: UserAdminResources.Names.Common_Category_Select, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
-        public EntityHeader Category { get; set; }
-
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Icon { get; set; }

@@ -32,10 +32,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader Organization { get; set; }
 
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_Category, FieldType: FieldTypes.Category, WaterMark: UserAdminResources.Names.Common_Category_Select, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
-        public EntityHeader Category { get; set; }
-
-
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Icon { get; set; }
 
@@ -116,6 +112,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Admin_Contact, IsRequired: false, FieldType: FieldTypes.UserPicker, WaterMark: UserAdminResources.Names.OrgLocation_AdminContact_Select,
             ResourceType: typeof(UserAdminResources))]
         public EntityHeader AdminContact { get; set; }
+
+
+        [FormField(LabelResource: UserAdminResources.Names.OrgLocation_DistributionList, IsRequired: false, EntityHeaderPickerUrl: "/organization/distrolists", FieldType: FieldTypes.EntityHeaderPicker, WaterMark: UserAdminResources.Names.OrgLocation_DistributionList_Select,
+            ResourceType: typeof(UserAdminResources))]
+        public EntityHeader DistributionList { get; set; }
 
         /// <summary>
         /// The technical contact for this location.
@@ -204,6 +205,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(GeoPointsBoundingBox),
                 nameof(DeviceRepository),
                 nameof(LocationDiagram),
+                nameof(DistributionList),
                 nameof(Customer),
                 nameof(PhoneNumber),
                 nameof(Description),

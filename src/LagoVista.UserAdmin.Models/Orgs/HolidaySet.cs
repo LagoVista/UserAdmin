@@ -21,12 +21,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
             Icon = "icon-ae-calendar";
         }
 
-
-
-        [FormField(LabelResource: UserAdminResources.Names.Common_Category, FieldType: FieldTypes.Category, WaterMark: UserAdminResources.Names.Common_Category_Select, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
-        public EntityHeader Category { get; set; }
-
-
         [FormField(LabelResource: UserAdminResources.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public string Description { get; set; }
 

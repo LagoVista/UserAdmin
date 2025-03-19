@@ -1826,4 +1826,10 @@
   <data name="Organization_DefaultTestInstance" xml:space="preserve">
     <value>Default Test Instance</value>
   </data>
+  <data name="OrgLocation_DistributionList" xml:space="preserve">
+    <value>Distribution List</value>
+  </data>
+  <data name="OrgLocation_DistributionList_Select" xml:space="preserve">
+    <value>-select distribution list-</value>
+  </data>
 </root>

@@ -1,4 +1,4 @@
-﻿/*3/10/2025 2:23:22 PM*/
+﻿/*3/19/2025 5:37:47 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1382,6 +1382,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:OrgLocation_Diagram_Select
 
 		public static string OrgLocation_Diagram_Select { get { return GetResourceString("OrgLocation_Diagram_Select"); } }
+//Resources:UserAdminResources:OrgLocation_DistributionList
+
+		public static string OrgLocation_DistributionList { get { return GetResourceString("OrgLocation_DistributionList"); } }
+//Resources:UserAdminResources:OrgLocation_DistributionList_Select
+
+		public static string OrgLocation_DistributionList_Select { get { return GetResourceString("OrgLocation_DistributionList_Select"); } }
 //Resources:UserAdminResources:OrgLocation_GeoBoundingBox
 
 		public static string OrgLocation_GeoBoundingBox { get { return GetResourceString("OrgLocation_GeoBoundingBox"); } }
@@ -2197,6 +2203,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string OrgLocation_AdminContact_Select = "OrgLocation_AdminContact_Select";
 			public const string OrgLocation_Diagram = "OrgLocation_Diagram";
 			public const string OrgLocation_Diagram_Select = "OrgLocation_Diagram_Select";
+			public const string OrgLocation_DistributionList = "OrgLocation_DistributionList";
+			public const string OrgLocation_DistributionList_Select = "OrgLocation_DistributionList_Select";
 			public const string OrgLocation_GeoBoundingBox = "OrgLocation_GeoBoundingBox";
 			public const string OrgLocation_GeoBoundingBox_Help = "OrgLocation_GeoBoundingBox_Help";
 			public const string OrgLocation_PhoneNumber = "OrgLocation_PhoneNumber";
