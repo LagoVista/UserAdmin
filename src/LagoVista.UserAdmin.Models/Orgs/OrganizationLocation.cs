@@ -14,7 +14,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 {
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Location_Title, UserAdminResources.Names.Organization_Location_Help,
         UserAdminResources.Names.Organization_Location_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
-        GetListUrl: "/api/org/locations", GetUrl: "/api/org/location/:id", SaveUrl: "/api/org/location", FactoryUrl: "/api/org/location/factory", DeleteUrl: "/api/org/location/{id}", Icon: "icon-fo-office")]
+        GetListUrl: "/api/org/locations", GetUrl: "/api/org/location/{id}", SaveUrl: "/api/org/location", FactoryUrl: "/api/org/location/factory", DeleteUrl: "/api/org/location/{id}", Icon: "icon-fo-office")]
     public class OrgLocation : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IIconEntity, IFormDescriptor, IFormDescriptorAdvanced, IFormDescriptorAdvancedCol2, ISummaryFactory
     {
         public OrgLocation()
@@ -304,7 +304,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Locations_Title, UserAdminResources.Names.Organization_Location_Help,
         UserAdminResources.Names.Organization_Location_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(UserAdminResources),
-        GetListUrl: "/api/org/locations", GetUrl: "/api/org/location/:id", SaveUrl: "/api/org/location", FactoryUrl: "/api/org/location/factory", DeleteUrl: "/api/org/location", Icon: "icon-fo-internet-2")]
+        GetListUrl: "/api/org/locations", GetUrl: "/api/org/location/{id}", SaveUrl: "/api/org/location", FactoryUrl: "/api/org/location/factory", DeleteUrl: "/api/org/location/{id}", Icon: "icon-fo-internet-2")]
     public class OrgLocationSummary : SummaryData
     {
         public EntityHeader AdminContact { get; set; }
