@@ -10,6 +10,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
     {
         Task AddLocationAsync(OrgLocation orgLocation);
         Task<OrgLocation> GetLocationAsync(string id);
+        Task DeleteOrgLocationAsync(string id);
         Task UpdateLocationAsync(OrgLocation orgLocation);
         Task<ListResponse<OrgLocationSummary>> GetOrganizationLocationAsync(String orgId, ListRequest listRequest);
         Task<ListResponse<OrgLocationSummary>> GetOrganizationLocationsForCustomerAsync(string orgId, string customerId, ListRequest listRequest);

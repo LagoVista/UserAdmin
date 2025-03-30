@@ -64,5 +64,10 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         {
             return QuerySummaryAsync<OrgLocationSummary, OrgLocation>(ol => ol.Organization.Id == orgId && ol.Customer.Id == customerId, ol => ol.Name, listRequest);
         }
+
+        public Task DeleteOrgLocationAsync(string id)
+        {
+            return DeleteDocumentAsync(id);
+        }
     }
 }

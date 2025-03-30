@@ -975,6 +975,13 @@ namespace LagoVista.UserAdmin.Managers
             return await _locationRepo.GetLocationAsync(id);
         }
 
+        public async Task<InvokeResult> DeleteOrgLocationAsync(string id, EntityHeader org, EntityHeader user)
+        {
+            await AuthorizeOrgAccessAsync(user, org, typeof(OrgLocation), Actions.Delete, new SecurityHelper { OrgId = org.Id });
+            await _locationRepo.DeleteOrgLocationAsync(id);
+            return InvokeResult.Success;
+        }
+
         public async Task<InvokeResult> AddLocationAsync(OrgLocation location, EntityHeader org, EntityHeader user)
         {
             location.OwnerOrganization = org;
