@@ -114,7 +114,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader AdminContact { get; set; }
 
 
-        [FormField(LabelResource: UserAdminResources.Names.OrgLocation_DistributionList, IsRequired: false, EntityHeaderPickerUrl: "/organization/distrolists", FieldType: FieldTypes.EntityHeaderPicker, WaterMark: UserAdminResources.Names.OrgLocation_DistributionList_Select,
+        [FormField(LabelResource: UserAdminResources.Names.OrgLocation_DistributionList, IsRequired: false, EntityHeaderPickerUrl: "/api/distros", FieldType: FieldTypes.EntityHeaderPicker, WaterMark: UserAdminResources.Names.OrgLocation_DistributionList_Select,
             ResourceType: typeof(UserAdminResources))]
         public EntityHeader DistributionList { get; set; }
 
