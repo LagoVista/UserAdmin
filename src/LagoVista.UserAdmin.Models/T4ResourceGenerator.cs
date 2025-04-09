@@ -1,4 +1,4 @@
-﻿/*3/19/2025 5:37:47 AM*/
+﻿/*4/4/2025 9:55:32 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1376,6 +1376,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:OrgLocation_AdminContact_Select
 
 		public static string OrgLocation_AdminContact_Select { get { return GetResourceString("OrgLocation_AdminContact_Select"); } }
+//Resources:UserAdminResources:OrgLocation_DeviceRepository
+
+		public static string OrgLocation_DeviceRepository { get { return GetResourceString("OrgLocation_DeviceRepository"); } }
+//Resources:UserAdminResources:OrgLocation_DeviceRepository_Select
+
+		public static string OrgLocation_DeviceRepository_Select { get { return GetResourceString("OrgLocation_DeviceRepository_Select"); } }
 //Resources:UserAdminResources:OrgLocation_Diagram
 
 		public static string OrgLocation_Diagram { get { return GetResourceString("OrgLocation_Diagram"); } }
@@ -1397,15 +1403,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:OrgLocation_PhoneNumber
 
 		public static string OrgLocation_PhoneNumber { get { return GetResourceString("OrgLocation_PhoneNumber"); } }
+//Resources:UserAdminResources:OrgLocation_PrimaryDevice
+
+		public static string OrgLocation_PrimaryDevice { get { return GetResourceString("OrgLocation_PrimaryDevice"); } }
+//Resources:UserAdminResources:OrgLocation_PrimaryDevice_Select
+
+		public static string OrgLocation_PrimaryDevice_Select { get { return GetResourceString("OrgLocation_PrimaryDevice_Select"); } }
 //Resources:UserAdminResources:OrgLocation_TechnicalContact_Select
 
 		public static string OrgLocation_TechnicalContact_Select { get { return GetResourceString("OrgLocation_TechnicalContact_Select"); } }
-//Resources:UserAdminResources:OrgLocatoin_DeviceRepository
-
-		public static string OrgLocatoin_DeviceRepository { get { return GetResourceString("OrgLocatoin_DeviceRepository"); } }
-//Resources:UserAdminResources:OrgLocatoin_DeviceRepository_Select
-
-		public static string OrgLocatoin_DeviceRepository_Select { get { return GetResourceString("OrgLocatoin_DeviceRepository_Select"); } }
 //Resources:UserAdminResources:Page_Help
 
 		public static string Page_Help { get { return GetResourceString("Page_Help"); } }
@@ -2201,6 +2207,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string OrganizationVM_Help = "OrganizationVM_Help";
 			public const string OrganizationVM_Title = "OrganizationVM_Title";
 			public const string OrgLocation_AdminContact_Select = "OrgLocation_AdminContact_Select";
+			public const string OrgLocation_DeviceRepository = "OrgLocation_DeviceRepository";
+			public const string OrgLocation_DeviceRepository_Select = "OrgLocation_DeviceRepository_Select";
 			public const string OrgLocation_Diagram = "OrgLocation_Diagram";
 			public const string OrgLocation_Diagram_Select = "OrgLocation_Diagram_Select";
 			public const string OrgLocation_DistributionList = "OrgLocation_DistributionList";
@@ -2208,9 +2216,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string OrgLocation_GeoBoundingBox = "OrgLocation_GeoBoundingBox";
 			public const string OrgLocation_GeoBoundingBox_Help = "OrgLocation_GeoBoundingBox_Help";
 			public const string OrgLocation_PhoneNumber = "OrgLocation_PhoneNumber";
+			public const string OrgLocation_PrimaryDevice = "OrgLocation_PrimaryDevice";
+			public const string OrgLocation_PrimaryDevice_Select = "OrgLocation_PrimaryDevice_Select";
 			public const string OrgLocation_TechnicalContact_Select = "OrgLocation_TechnicalContact_Select";
-			public const string OrgLocatoin_DeviceRepository = "OrgLocatoin_DeviceRepository";
-			public const string OrgLocatoin_DeviceRepository_Select = "OrgLocatoin_DeviceRepository_Select";
 			public const string Page_Help = "Page_Help";
 			public const string Page_IsForProductLine = "Page_IsForProductLine";
 			public const string Page_Title = "Page_Title";

@@ -131,9 +131,12 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader LocationDiagram { get; set; }
 
 
-        [FormField(LabelResource: UserAdminResources.Names.OrgLocatoin_DeviceRepository, IsRequired: false, EntityHeaderPickerUrl: "/api/devicerepos", FieldType: FieldTypes.EntityHeaderPicker, WaterMark: UserAdminResources.Names.OrgLocatoin_DeviceRepository_Select,
+        [FormField(LabelResource: UserAdminResources.Names.OrgLocation_DeviceRepository, IsRequired: false, EntityHeaderPickerUrl: "/api/devicerepos", FieldType: FieldTypes.EntityHeaderPicker, WaterMark: UserAdminResources.Names.OrgLocation_DeviceRepository_Select,
             ResourceType: typeof(UserAdminResources))]
         public EntityHeader DeviceRepository { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.OrgLocation_PrimaryDevice, IsRequired: false, FieldType: FieldTypes.DevicePicker, WaterMark:UserAdminResources.Names.OrgLocation_PrimaryDevice_Select,  ResourceType: typeof(UserAdminResources))]
+        public EntityHeader PrimaryDevice { get; set; }
 
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Notes, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(UserAdminResources))]
@@ -204,6 +207,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(GeoLocation),
                 nameof(GeoPointsBoundingBox),
                 nameof(DeviceRepository),
+                nameof(PrimaryDevice),
                 nameof(LocationDiagram),
                 nameof(DistributionList),
                 nameof(Customer),

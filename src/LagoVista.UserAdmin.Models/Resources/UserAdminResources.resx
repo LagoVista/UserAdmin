@@ -1790,10 +1790,10 @@
   <data name="OrgLocation_Diagram_Select" xml:space="preserve">
     <value>-select diagram-</value>
   </data>
-  <data name="OrgLocatoin_DeviceRepository" xml:space="preserve">
+  <data name="OrgLocation_DeviceRepository" xml:space="preserve">
     <value>Device Repository</value>
   </data>
-  <data name="OrgLocatoin_DeviceRepository_Select" xml:space="preserve">
+  <data name="OrgLocation_DeviceRepository_Select" xml:space="preserve">
     <value>-select device repository-</value>
   </data>
   <data name="AppUser_PrimaryOrganization" xml:space="preserve">
@@ -1831,5 +1831,11 @@
   </data>
   <data name="OrgLocation_DistributionList_Select" xml:space="preserve">
     <value>-select distribution list-</value>
+  </data>
+  <data name="OrgLocation_PrimaryDevice" xml:space="preserve">
+    <value>Primary Device</value>
+  </data>
+  <data name="OrgLocation_PrimaryDevice_Select" xml:space="preserve">
+    <value>-select primary device-</value>
   </data>
 </root>
