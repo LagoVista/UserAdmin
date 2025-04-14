@@ -67,7 +67,7 @@ namespace LagoVista.UserAdmin.Tests.Distribution
                 AppUsers = users
             };
 
-            _listRepo.Setup(dl => dl.GetDistroListAsync(It.Is<string>(lst => lst == id))).ReturnsAsync(dl);
+            _listRepo.Setup(dl => dl.GetDistroListAsync(It.Is<string>(lst => lst == id), false)).ReturnsAsync(dl);
         }
 
         private AppUserContact GenerateAppuser()

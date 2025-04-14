@@ -10,7 +10,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
         Task AddDistroListAsync(DistroList distroList);
         Task UpdateDistroListAsync(DistroList distroList);
         Task DeleteDistroListAsync(string id);
-        Task<DistroList> GetDistroListAsync(String id);
+        Task<DistroList> GetDistroListAsync(String id, bool loadParents = false);
         Task<ListResponse<DistroListSummary>> GetDistroListsForOrgAsync(string orgId, ListRequest listRequest);
         Task<ListResponse<DistroListSummary>> GetDistroListsForCustomerAsync(string customerId, string orgId, ListRequest listRequest);
         Task<bool> QueryKeyInUseAsync(string key, string orgId);

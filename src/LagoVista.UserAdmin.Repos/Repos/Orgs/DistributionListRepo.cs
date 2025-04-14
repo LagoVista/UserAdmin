@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core;
+using LagoVista.Core.Models;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Orgs
 {
@@ -35,9 +36,15 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
             return base.DeleteDocumentAsync(id);
         }
 
-        public Task<DistroList> GetDistroListAsync(string id)
+        public async Task<DistroList> GetDistroListAsync(string id, bool getParents = false)
         {
-            return GetDocumentAsync(id);
+            var list = await GetDocumentAsync(id);
+            if(!EntityHeader.IsNullOrEmpty(list.ParentDistributionList))
+            {
+                var parentList = GetDistroListAsync(list.ParentDistributionList.Id);
+            }
+
+            return list;
         }
 
         public async Task<ListResponse<DistroListSummary>> GetDistroListsForCustomerAsync(string customerId, string orgId, ListRequest listRequest)
