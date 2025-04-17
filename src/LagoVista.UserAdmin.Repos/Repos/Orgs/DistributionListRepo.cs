@@ -41,7 +41,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
             var list = await GetDocumentAsync(id);
             if(!EntityHeader.IsNullOrEmpty(list.ParentDistributionList))
             {
-                var parentList = GetDistroListAsync(list.ParentDistributionList.Id);
+                var parentList = await GetDistroListAsync(list.ParentDistributionList.Id);
+                list.ExternalContacts.AddRange(parentList.ExternalContacts);
+                list.AppUsers.AddRange(parentList.AppUsers);
             }
 
             return list;
