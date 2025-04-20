@@ -39,7 +39,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
         public async Task<DistroList> GetDistroListAsync(string id, bool getParents = false)
         {
             var list = await GetDocumentAsync(id);
-            if(!EntityHeader.IsNullOrEmpty(list.ParentDistributionList))
+            if(getParents && !EntityHeader.IsNullOrEmpty(list.ParentDistributionList))
             {
                 var parentList = await GetDistroListAsync(list.ParentDistributionList.Id);
                 list.ExternalContacts.AddRange(parentList.ExternalContacts);
