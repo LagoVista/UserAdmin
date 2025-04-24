@@ -1,4 +1,4 @@
-﻿/*4/4/2025 9:55:32 AM*/
+﻿/*4/22/2025 3:01:34 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1043,6 +1043,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Module_RestrictByDefault_Help
 
 		public static string Module_RestrictByDefault_Help { get { return GetResourceString("Module_RestrictByDefault_Help"); } }
+//Resources:UserAdminResources:Module_RootPath
+
+		public static string Module_RootPath { get { return GetResourceString("Module_RootPath"); } }
+//Resources:UserAdminResources:Module_RootPath_Help
+
+		public static string Module_RootPath_Help { get { return GetResourceString("Module_RootPath_Help"); } }
 //Resources:UserAdminResources:Module_SortOrder
 
 		public static string Module_SortOrder { get { return GetResourceString("Module_SortOrder"); } }
@@ -2096,6 +2102,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Module_OpenInNewTab = "Module_OpenInNewTab";
 			public const string Module_RestrictByDefault = "Module_RestrictByDefault";
 			public const string Module_RestrictByDefault_Help = "Module_RestrictByDefault_Help";
+			public const string Module_RootPath = "Module_RootPath";
+			public const string Module_RootPath_Help = "Module_RootPath_Help";
 			public const string Module_SortOrder = "Module_SortOrder";
 			public const string Module_Title = "Module_Title";
 			public const string ModuleCategory_Admin = "ModuleCategory_Admin";

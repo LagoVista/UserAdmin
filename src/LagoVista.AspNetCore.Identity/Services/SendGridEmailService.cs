@@ -5,6 +5,7 @@ using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Contacts;
 using LagoVista.UserAdmin.Models.Users;
 using Newtonsoft.Json;
@@ -28,6 +29,7 @@ namespace LagoVista.AspNetCore.Identity.Services
     {
         protected static readonly Counter SendEmailMessage = Metrics.CreateCounter("nuviot_send_email", "Send Email Message to a user account", "entity");
 
+        private readonly IAppUserRepo _appUserRepo;
         private readonly ILagoVistaAspNetCoreIdentityProviderSettings _settings;
         private readonly IBackgroundServiceTaskQueue _taskQueue;
         private readonly IAppConfig _appConfig;
@@ -48,12 +50,13 @@ namespace LagoVista.AspNetCore.Identity.Services
         }
 
 
-        public SendGridEmailService(ILagoVistaAspNetCoreIdentityProviderSettings settings, IBackgroundServiceTaskQueue taskQueue, IAppConfig appConfig, IAdminLogger adminLogger)
+        public SendGridEmailService(ILagoVistaAspNetCoreIdentityProviderSettings settings, IAppUserRepo appuserRepo, IBackgroundServiceTaskQueue taskQueue, IAppConfig appConfig, IAdminLogger adminLogger)
         {
             _settings = settings;
             _appConfig = appConfig;
             _adminLogger = adminLogger;
             _taskQueue = taskQueue;
+            _appUserRepo = appuserRepo;
         }
 
         public class SendGridSender
@@ -629,8 +632,23 @@ namespace LagoVista.AspNetCore.Identity.Services
 
             return InvokeResult.Success;
         }
+ 
+        public async Task<InvokeResult> SendToAppUserAsync(string appuUserId, string subject, string body)
+        {
+            var user = await _appUserRepo.FindByIdAsync(appuUserId);
+            if (user == null)
+                return InvokeResult.FromError($"User not found for id: {appuUserId}");
 
-        public async Task<InvokeResult> SendAsync(string email, string subject, string body, EntityHeader org, EntityHeader user)
+            return await SendAsync(user.Email, subject, body);
+        }
+
+        public Task<InvokeResult> SendAsync(string email, string subject, string body, EntityHeader org, EntityHeader user)
+        {
+            return SendAsync(email, subject, body);
+        }
+
+
+        public async Task<InvokeResult> SendAsync(string email, string subject, string body)
         {
             //IT IS POSSIBLE THAT ORG IS NULL HERE, IF THAT"S THE CASE WE NEED TO FALLBACK TO A MASTER ORG, this will be the case when the user does 
             //not have a default org set for them and we need to send them email.

@@ -103,19 +103,30 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
                 if (module == null)
                     return null;
 
+                if (String.IsNullOrEmpty(module.RootPath))
+                    module.RootPath = module.Key;
+
                 await _cacheProvider.AddAsync($"{MODULE_CACHE_KEY}_{key}", JsonConvert.SerializeObject(module));
 
                 return module;
             }
             else
             {
-                return JsonConvert.DeserializeObject<Module>(json);
+                var module =  JsonConvert.DeserializeObject<Module>(json);
+                if (String.IsNullOrEmpty(module.RootPath))
+                    module.RootPath = module.Key;
+
+                return module;
             }
         }
 
         public async Task<Module> GetModuleByKeyAsync(string key, string orgId)
         {
-            return (await QueryAsync(mod => mod.Key == key && mod.OwnerOrganization.Id == orgId)).FirstOrDefault();
+            var module = (await QueryAsync(mod => mod.Key == key && mod.OwnerOrganization.Id == orgId)).FirstOrDefault();
+            if (String.IsNullOrEmpty(module?.RootPath))
+                module.RootPath = module.Key;
+
+            return module;
         }
 
 

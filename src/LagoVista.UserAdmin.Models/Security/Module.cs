@@ -79,6 +79,9 @@ namespace LagoVista.UserAdmin.Models.Security
         public List<UiCategory> AreaCategories { get; set; }
 
 
+        [FormField(LabelResource: UserAdminResources.Names.Module_RootPath, IsRequired: true, HelpResource: UserAdminResources.Names.Module_RootPath_Help, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string RootPath { get; set; }
+
         [FormField(LabelResource: UserAdminResources.Names.Common_DesktopSupport, IsRequired: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool DesktopSupport { get; set; }
         [FormField(LabelResource: UserAdminResources.Names.Common_PhoneSupport, IsRequired: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
@@ -127,6 +130,7 @@ namespace LagoVista.UserAdmin.Models.Security
                 StatusLabel = Status.Text,
                 Status = Status.Id,
                 Key = Key,
+                RootPath = RootPath ?? Key,
                 SortOrder = SortOrder,
                 Description = Description,
                 IsPublic = IsPublic,
@@ -175,6 +179,7 @@ namespace LagoVista.UserAdmin.Models.Security
             return new List<string>() {
                 nameof(Name),
                 nameof(UiCategory),
+                nameof(RootPath),
                 nameof(Key),
                 nameof(IsPublic),
                 nameof(RestrictByDefault),
@@ -209,6 +214,7 @@ namespace LagoVista.UserAdmin.Models.Security
         public bool PhoneSupport { get; set; }
         public bool TabletSupport { get; set; }
 
+        public string RootPath { get; set; }
         public EntityHeader UiCategory { get; set; }
 
         public string OwnerOrgId { get; set; }

@@ -1838,4 +1838,10 @@
   <data name="OrgLocation_PrimaryDevice_Select" xml:space="preserve">
     <value>-select primary device-</value>
   </data>
+  <data name="Module_RootPath" xml:space="preserve">
+    <value>Root Path</value>
+  </data>
+  <data name="Module_RootPath_Help" xml:space="preserve">
+    <value>This is the root path where the module exists.  It typically maps to a path as defined in Traefix (our K8s ingress mapper) that will map that path to a docker image that contains the user interface.</value>
+  </data>
 </root>
