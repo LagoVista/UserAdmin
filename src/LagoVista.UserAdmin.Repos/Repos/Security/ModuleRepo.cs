@@ -70,6 +70,12 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             {
                 var allModules = JsonConvert.DeserializeObject<List<ModuleSummary>>(allModulesJson);
                 _adminLogger.Trace($"[ModuleRepo__GetAllModules] - CACHE-HIT - {ALL_MODULES_CACHE_KEY} - has {allModules.Count} modules");
+                foreach(var module in allModules)
+                {
+                    if(String.IsNullOrWhiteSpace(module.RootPath))
+                        module.RootPath = module.Key;
+                }
+                
                 return allModules;
             }
         }
