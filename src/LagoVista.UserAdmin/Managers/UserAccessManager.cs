@@ -37,6 +37,12 @@ namespace LagoVista.UserAdmin.Managers
             modules.AddRange(org.AdditionalModules);
             modules = modules.OrderBy(mod => mod.SortOrder).ToList();
 
+            foreach (var module in modules)
+            {
+                if (String.IsNullOrEmpty(module.RootPath))
+                    module.RootPath = module.Key;
+            }
+
             var userRoles = await _userSecurityService.GetRolesForUserAsync(userId, orgId);
             if (userRoles.Any(rol => rol.Key == DefaultRoleList.OWNER))
             {
@@ -68,7 +74,6 @@ namespace LagoVista.UserAdmin.Managers
 #if VERBOSE
             _adminLogger.Trace($"[UserAccessmanager__GetUserModules] - Found ({modules.Count}) modules for user.");
 #endif
-
             return userModules.OrderBy(mod => mod.SortOrder).ToList();
         }
         public async Task<Module> GetUserModuleAsync(string moduleKey, string userId, string orgId)
@@ -76,7 +81,6 @@ namespace LagoVista.UserAdmin.Managers
             var module = await _moduleRepo.GetModuleByKeyAsync(moduleKey);
             if (module == null)
                 throw new ArgumentException($"Invalid Module: {moduleKey}");
-
 
             var roles = await _userSecurityService.GetRolesForUserAsync(userId, orgId);
             if (roles.Any(role => role.Key == DefaultRoleList.OWNER))
@@ -319,6 +323,11 @@ namespace LagoVista.UserAdmin.Managers
                     }
                 }
             }        
+
+            if(String.IsNullOrEmpty(module.RootPath))
+            {
+                module.RootPath = module.Key;
+            }
             
             return module;
         }
