@@ -1519,7 +1519,7 @@ namespace LagoVista.AspNetCore.Identity.Services
                     Count = seg.ContactCount,
                     LastUpdated = String.IsNullOrEmpty(seg.SampleUpdated) ? null : DateTime.Parse(seg.SampleUpdated).ToJSONString(),
                     Name = seg.Name,
-                });
+                }).OrderBy(lst=>lst.Name);
 
                 return ListResponse<ContactList>.Create(items);
             }

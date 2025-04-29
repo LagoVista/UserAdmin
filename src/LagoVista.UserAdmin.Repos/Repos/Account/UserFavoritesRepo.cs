@@ -30,6 +30,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
         public Task AddUserFavoritesAsync(UserFavorites userFavorites)
         {
             userFavorites.Id = UserFavorites.GenerateId(userFavorites.OwnerOrganization, userFavorites.OwnerUser);
+          
+            Console.WriteLine($"Adding user favorites {userFavorites.Name} {userFavorites.Id} {userFavorites.Key}");
+
             return CreateDocumentAsync(userFavorites);
         }
 

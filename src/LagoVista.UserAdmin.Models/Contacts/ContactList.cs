@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LagoVista.Core.Attributes;
+using LagoVista.UserAdmin.Models.Resources;
+using Newtonsoft.Json;
 
 namespace LagoVista.UserAdmin.Models.Contacts
 {
+    [EntityDescription(Domains.EmailServicesDomain, TitleResource:UserAdminResources.Names.ContactList_Title, UserHelpResource:UserAdminResources.Names.ContactList_Description, DescriptionResource:UserAdminResources.Names.ContactList_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources), Icon: "icon-pz-programming")]
     public class ContactList
     {
         public string Name { get; set; }

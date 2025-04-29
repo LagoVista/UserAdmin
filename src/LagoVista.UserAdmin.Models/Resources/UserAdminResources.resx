@@ -1844,4 +1844,10 @@
   <data name="Module_RootPath_Help" xml:space="preserve">
     <value>This is the root path where the module exists.  It typically maps to a path as defined in Traefix (our K8s ingress mapper) that will map that path to a docker image that contains the user interface.</value>
   </data>
+  <data name="ContactList_Title" xml:space="preserve">
+    <value>Contact List</value>
+  </data>
+  <data name="ContactList_Description" xml:space="preserve">
+    <value>A contact list is a list managed by a third party service that we can send emails to.  Originally this will be SendGrid however in the future it could be other servies.</value>
+  </data>
 </root>

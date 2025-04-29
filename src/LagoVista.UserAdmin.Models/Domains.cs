@@ -13,6 +13,7 @@ namespace LagoVista.UserAdmin.Models
         public const string OrganizationViewModels = "OrganizationViewModels";
         public const string SecurityDomain = "SecurityDomain";
         public const string SecurityViewModels = "SecurityViewModels";
+        public const string EmailServicesDomain = "EmailServices";
         public const string MiscDomain = "MiscDomain";
 
         [DomainDescription(UserDomain)]
@@ -169,6 +170,30 @@ namespace LagoVista.UserAdmin.Models
                         Minor = 8,
                         Build = 001,
                         DateStamp = new DateTime(2016, 12, 20),
+                        Revision = 1,
+                        ReleaseNotes = "Initial unstable preview"
+                    }
+                };
+            }
+        }
+
+
+        [DomainDescription(EmailServicesDomain)]
+        public static DomainDescription EmaailServicesDescription
+        {
+            get
+            {
+                return new DomainDescription()
+                {
+                    Description = "A collection of classes that support sending emails, at this time with SendGrid, this might change at a later date",
+                    DomainType = DomainDescription.DomainTypes.BusinessObject,
+                    Name = "emailservices",
+                    CurrentVersion = new Core.Models.VersionInfo()
+                    {
+                        Major = 0,
+                        Minor = 8,
+                        Build = 001,
+                        DateStamp = new DateTime(2025, 04, 29),
                         Revision = 1,
                         ReleaseNotes = "Initial unstable preview"
                     }
