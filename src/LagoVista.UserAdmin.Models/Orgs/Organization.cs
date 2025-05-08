@@ -121,6 +121,22 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader DefaultInstance { get; set; }
 
 
+        [FormField(LabelResource: UserAdminResources.Names.Organization_LinkedInUrl, FieldType: FieldTypes.WebLink, ResourceType: typeof(UserAdminResources))]
+        public string LinkeInUrl { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_FacebookUrl, FieldType: FieldTypes.WebLink, ResourceType: typeof(UserAdminResources))]
+        public string FacebookUrl { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_XUrl, FieldType: FieldTypes.WebLink, ResourceType: typeof(UserAdminResources))]
+        public string XUrl { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_YouTubeUrl, FieldType: FieldTypes.WebLink, ResourceType: typeof(UserAdminResources))]
+        public string YouTubeUrl { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_VimeoUrl, FieldType: FieldTypes.WebLink, ResourceType: typeof(UserAdminResources))]
+        public string VimeoUrl { get; set; }
+
+
         [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultDemoInstance, FieldType: FieldTypes.EntityHeaderPicker, IsRequired: false, EntityHeaderPickerUrl: "/api/deployment/instances",
             WaterMark: UserAdminResources.Names.Organization_DefaultInstance_Select, ResourceType: typeof(UserAdminResources))]
         public EntityHeader DefaultDemoInstance { get; set; }
@@ -190,6 +206,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(DefaultProjectAdminLead),
                 nameof(DefaultContributor),
                 nameof(DefaultQAResource),
+                nameof(FacebookUrl),
+                nameof(XUrl),
+                nameof(LinkeInUrl),
+                nameof(VimeoUrl),
+                nameof(YouTubeUrl),
             };
         }
 

@@ -1,4 +1,4 @@
-﻿/*4/29/2025 6:21:10 AM*/
+﻿/*5/8/2025 3:49:56 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1235,6 +1235,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_Details
 
 		public static string Organization_Details { get { return GetResourceString("Organization_Details"); } }
+//Resources:UserAdminResources:Organization_FacebookUrl
+
+		public static string Organization_FacebookUrl { get { return GetResourceString("Organization_FacebookUrl"); } }
 //Resources:UserAdminResources:Organization_Help
 
 		public static string Organization_Help { get { return GetResourceString("Organization_Help"); } }
@@ -1253,6 +1256,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_LandingPage_Help
 
 		public static string Organization_LandingPage_Help { get { return GetResourceString("Organization_LandingPage_Help"); } }
+//Resources:UserAdminResources:Organization_LinkedInUrl
+
+		public static string Organization_LinkedInUrl { get { return GetResourceString("Organization_LinkedInUrl"); } }
 //Resources:UserAdminResources:Organization_Location
 
 		public static string Organization_Location { get { return GetResourceString("Organization_Location"); } }
@@ -1340,9 +1346,18 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_User_Title
 
 		public static string Organization_User_Title { get { return GetResourceString("Organization_User_Title"); } }
+//Resources:UserAdminResources:Organization_VimeoUrl
+
+		public static string Organization_VimeoUrl { get { return GetResourceString("Organization_VimeoUrl"); } }
 //Resources:UserAdminResources:Organization_WebSite
 
 		public static string Organization_WebSite { get { return GetResourceString("Organization_WebSite"); } }
+//Resources:UserAdminResources:Organization_XUrl
+
+		public static string Organization_XUrl { get { return GetResourceString("Organization_XUrl"); } }
+//Resources:UserAdminResources:Organization_YouTubeUrl
+
+		public static string Organization_YouTubeUrl { get { return GetResourceString("Organization_YouTubeUrl"); } }
 //Resources:UserAdminResources:OrganizationDetailsVM_Description
 
 		public static string OrganizationDetailsVM_Description { get { return GetResourceString("OrganizationDetailsVM_Description"); } }
@@ -2172,12 +2187,14 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_DefaultTheme = "Organization_DefaultTheme";
 			public const string Organization_Description = "Organization_Description";
 			public const string Organization_Details = "Organization_Details";
+			public const string Organization_FacebookUrl = "Organization_FacebookUrl";
 			public const string Organization_Help = "Organization_Help";
 			public const string Organization_HeroBackground = "Organization_HeroBackground";
 			public const string Organization_HeroTitle = "Organization_HeroTitle";
 			public const string Organization_IsForProductLine = "Organization_IsForProductLine";
 			public const string Organization_LandingPage = "Organization_LandingPage";
 			public const string Organization_LandingPage_Help = "Organization_LandingPage_Help";
+			public const string Organization_LinkedInUrl = "Organization_LinkedInUrl";
 			public const string Organization_Location = "Organization_Location";
 			public const string Organization_Location_Description = "Organization_Location_Description";
 			public const string Organization_Location_Help = "Organization_Location_Help";
@@ -2207,7 +2224,10 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_User_Description = "Organization_User_Description";
 			public const string Organization_User_Help = "Organization_User_Help";
 			public const string Organization_User_Title = "Organization_User_Title";
+			public const string Organization_VimeoUrl = "Organization_VimeoUrl";
 			public const string Organization_WebSite = "Organization_WebSite";
+			public const string Organization_XUrl = "Organization_XUrl";
+			public const string Organization_YouTubeUrl = "Organization_YouTubeUrl";
 			public const string OrganizationDetailsVM_Description = "OrganizationDetailsVM_Description";
 			public const string OrganizationDetailVM_Help = "OrganizationDetailVM_Help";
 			public const string OrganizationDetailVM_Title = "OrganizationDetailVM_Title";

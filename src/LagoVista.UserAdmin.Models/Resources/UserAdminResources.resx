@@ -1850,4 +1850,19 @@
   <data name="ContactList_Description" xml:space="preserve">
     <value>A contact list is a list managed by a third party service that we can send emails to.  Originally this will be SendGrid however in the future it could be other servies.</value>
   </data>
+  <data name="Organization_LinkedInUrl" xml:space="preserve">
+    <value>LinkedIn URL</value>
+  </data>
+  <data name="Organization_FacebookUrl" xml:space="preserve">
+    <value>Facebook Url</value>
+  </data>
+  <data name="Organization_XUrl" xml:space="preserve">
+    <value>X Url</value>
+  </data>
+  <data name="Organization_YouTubeUrl" xml:space="preserve">
+    <value>You Tube Url</value>
+  </data>
+  <data name="Organization_VimeoUrl" xml:space="preserve">
+    <value>Vimeo Url</value>
+  </data>
 </root>
