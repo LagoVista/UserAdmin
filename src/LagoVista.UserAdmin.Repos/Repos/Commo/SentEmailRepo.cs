@@ -4,21 +4,20 @@ using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Commo;
 using LagoVista.UserAdmin.Models.Commo;
-using Microsoft.Extensions.Logging.Abstractions;
-using RingCentral;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Commo
 {
     public class SentEmailRepo : TableStorageBase<SentEmailDTO>, ISentEmailRepo
     {
+        private readonly IAdminLogger _adminLogger;
+
         public SentEmailRepo(IUserAdminSettings settings, IAdminLogger logger) :
         base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
+            _adminLogger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public Task AddSentEmailAsync(SentEmail sentEmail)
