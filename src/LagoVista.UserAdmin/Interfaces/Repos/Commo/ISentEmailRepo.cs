@@ -1,0 +1,14 @@
+﻿using LagoVista.Core.Models.UIMetaData;
+using LagoVista.UserAdmin.Models.Commo;
+using System.Threading.Tasks;
+
+namespace LagoVista.UserAdmin.Interfaces.Repos.Commo
+{
+    public interface ISentEmailRepo
+    {
+        Task AddSentEmailAsync(SentEmail sentEmail);
+        Task UpdateSentEmailAsync(SentEmail sentEmail);
+        Task<SentEmail> GetSentEmailAsync(string enternalMessageId);
+        Task<ListResponse<SentEmail>> GetSentEmailForOrgAsync(string orgId, ListRequest listRequest);
+    }
+}

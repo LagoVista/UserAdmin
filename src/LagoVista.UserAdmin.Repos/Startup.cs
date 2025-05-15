@@ -18,6 +18,8 @@ using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Repos.Repos.Calendar;
 using LagoVista.UserAdmin.Interfaces.Repos.Account;
 using LagoVista.UserAdmin.Repos.Repos.Account;
+using LagoVista.UserAdmin.Interfaces.Repos.Commo;
+using LagoVista.UserAdmin.Repos.Repos.Commo;
 
 namespace LagoVista.UserAdmin.Repos
 {
@@ -36,27 +38,29 @@ namespace LagoVista.UserAdmin.Repos
             services.AddSingleton<IOrganizationRepo, OrganizationRepo>();
             services.AddSingleton<ISubscriptionResourceRepo, SubscriptionResourceRepo>();
             services.AddSingleton<ILocationRoleRepo, LocationRoleRepo>();
-            services.AddTransient<IRoleRepo, RoleRepo>();
+            services.AddSingleton<IRoleRepo, RoleRepo>();
             services.AddSingleton<IUserRoleManager, UserRoleManager>();
             services.AddSingleton<IModuleRepo, ModuleRepo>();
             services.AddSingleton<IAccessLogRepo, AccessLogRepo>();
             services.AddSingleton<IHolidaySetRepo, HolidaySetRepo>();
             services.AddSingleton<IScheduledDowntimeRepo, ScheduledDowntimeRepo>();
+            services.AddSingleton<IScheduledDowntimeRepo, ScheduledDowntimeRepo>();
             services.AddSingleton<ITeamRepo, TeamRepo>();
-            services.AddTransient<ITeamUserRepo, TeamUserRepo>();
+            services.AddSingleton<ITeamUserRepo, TeamUserRepo>();
             services.AddSingleton<IAssetSetRepo, AssetSetRepo>();
             services.AddSingleton<IManagedAssetRepo, ManagedAssetRepo>();
             services.AddSingleton<IAppInstanceRepo, AppInstanceRepo>();
-            services.AddTransient<IUserRoleRepo, UserRoleRepo>();
-            services.AddTransient<IRoleAccessRepo, RoleAccessRepo>();
+            services.AddSingleton<IUserRoleRepo, UserRoleRepo>();
+            services.AddSingleton<IRoleAccessRepo, RoleAccessRepo>();
             services.AddTransient<ISingleUseTokenRepo, SingleUseTokenRepo>();
-            services.AddTransient<IDistributionListRepo, DistributionListRepo>();
-            services.AddTransient<ICalendarRepo, CalendarRepo>();
-            services.AddTransient<IMostRecentlyUsedRepo, MostRecentUsedRepo>();
-            services.AddTransient<IUserFavoritesRepo, UserFavoritesRepo>();
-            services.AddTransient<IAppUserInboxRepo, AppUserIndboxRepo>();
-            services.AddTransient<IAuthenticationLogRepo, AuthenticationLogRepo>();
-            services.AddTransient<ISystemNotificationsRepo, SystemNotificationsRepo>();
+            services.AddSingleton<IDistributionListRepo, DistributionListRepo>();
+            services.AddSingleton<ICalendarRepo, CalendarRepo>();
+            services.AddSingleton<IMostRecentlyUsedRepo, MostRecentUsedRepo>();
+            services.AddSingleton<IUserFavoritesRepo, UserFavoritesRepo>();
+            services.AddSingleton<IAppUserInboxRepo, AppUserIndboxRepo>();
+            services.AddSingleton<IAuthenticationLogRepo, AuthenticationLogRepo>();
+            services.AddSingleton<ISystemNotificationsRepo, SystemNotificationsRepo>();
+            services.AddSingleton<ISentEmailRepo, SentEmailRepo>();
             services.AddTransient<ILocationDiagramRepo, LocationDiagramRepo>();
             services.AddScoped<ISecureLinkRepo, SecureLinkRepo>();
 
