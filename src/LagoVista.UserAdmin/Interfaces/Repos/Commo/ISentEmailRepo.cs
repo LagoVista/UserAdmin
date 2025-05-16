@@ -10,5 +10,6 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Commo
         Task UpdateSentEmailAsync(SentEmail sentEmail);
         Task<SentEmail> GetSentEmailAsync(string enternalMessageId);
         Task<ListResponse<SentEmail>> GetSentEmailForOrgAsync(string orgId, ListRequest listRequest);
+        Task<ListResponse<SentEmail>> GetSentEmailForMailerAsync(string orgId, string mailerId, ListRequest listRequest);
     }
 }

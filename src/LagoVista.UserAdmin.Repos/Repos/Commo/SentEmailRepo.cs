@@ -39,6 +39,12 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
             var records = await this.GetPagedResultsAsync(orgId, listRequest);
             return ListResponse<SentEmail>.Create(records.Model.Select(rec => rec.ToSentEmail()), listRequest);
         }
+        public async Task<ListResponse<SentEmail>> GetSentEmailForMailerAsync(string orgId, string mailerId, ListRequest listRequest)
+        {
+            var records = await this.GetPagedResultsAsync(orgId,  listRequest, FilterOptions.Create(nameof(SentEmailDTO.MailerId), FilterOptions.Operators.Equals, mailerId));
+            return ListResponse<SentEmail>.Create(records.Model.Select(rec => rec.ToSentEmail()), listRequest);
+        }
+
 
         public Task UpdateSentEmailAsync(SentEmail sentEmail)
         {
@@ -81,7 +87,13 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
         public int Clicks { get; set; }
         public bool Bounced { get; set; }
         public bool Delivered { get; set; }
+        public bool Opened { get; set; }
+        public bool Clicked { get; set; }
         public bool Undeliverable { get; set; }
+        public string TemplateId { get; set; }
+        public string Template { get; set; }
+        public string MailerId { get; set; }
+        public string Mailer { get; set; }
 
         public static SentEmailDTO FromSentEmail(SentEmail sentEmail)
         {
@@ -115,8 +127,13 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
                 Opens = sentEmail.Opens,
                 Clicks = sentEmail.Clicks,
                 Bounced = sentEmail.Bounced,
+                Opened = sentEmail.Opened,
                 Delivered = sentEmail.Delivered,
                 Undeliverable = sentEmail.Undeliverable,
+                TemplateId = sentEmail.Template?.Id,
+                Template = sentEmail.Template?.Text,
+                MailerId = sentEmail.Mailer?.Id,
+                Mailer = sentEmail.Mailer?.Text,
             };
         }
 
@@ -134,6 +151,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
                 IndustryNiche = String.IsNullOrEmpty(IndustryNicheId) ? null : EntityHeader.Create(IndustryNicheId, IndustryNiche),
                 Campaign = String.IsNullOrEmpty(CampaignId) ? null : EntityHeader.Create(CampaignId, Campaign),
                 Promotion = String.IsNullOrEmpty(PromotionId) ? null : EntityHeader.Create(PromotionId, Promotion),
+                Template = String.IsNullOrEmpty(TemplateId) ? null : EntityHeader.Create(TemplateId, Template),
+                Mailer = String.IsNullOrEmpty(MailerId) ? null : EntityHeader.Create(MailerId, Mailer),
                 SentDate = SentDate,
                 StatusDate = StatusDate,
                 Email = Email,
@@ -142,9 +161,12 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
                 ReplyToEmail = ReplyToEmail,
                 Bounced = Bounced,
                 Delivered = Delivered,
+
                 Undeliverable = Undeliverable,
                 Clicks = Clicks,
                 Opens = Opens,
+                Opened = Opened,
+                Clicked = Clicked,
                 Processed = Processed,
             };
         }

@@ -23,6 +23,9 @@ namespace LagoVista.UserAdmin.Models.Commo
         public EntityHeader Campaign { get; set; }
         public EntityHeader Promotion { get; set; }
 
+        public EntityHeader Template { get; set; }
+        public EntityHeader Mailer { get; set; }
+
         public string SenderEmail { get; set; }
         public string ReplyToEmail { get; set; }
 
@@ -31,11 +34,15 @@ namespace LagoVista.UserAdmin.Models.Commo
         public string StatusDate { get; set; }
 
         public bool Processed { get; set; }
+        public bool Delivered { get; set; }
+        public bool Undeliverable { get; set; }
+    
+        public bool Opened { get; set; }
+        public bool Clicked { get; set; }
+        
         public int Opens { get; set; }
         public int Clicks { get; set; }
         public bool Bounced { get; set; }
-        public bool Delivered { get; set; }
-        public bool Undeliverable { get; set; }
-
+      
     }
 }
