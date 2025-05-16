@@ -121,6 +121,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
                 SentByUser = sentEmail.SentByUser.Text,
                 SentDate = sentEmail.SentDate,
                 Status = sentEmail.Status,  
+                StatusDate = sentEmail.StatusDate,
                 SenderEmail = sentEmail.SenderEmail,
                 ReplyToEmail = sentEmail.ReplyToEmail,
                 Processed = sentEmail.Processed,
