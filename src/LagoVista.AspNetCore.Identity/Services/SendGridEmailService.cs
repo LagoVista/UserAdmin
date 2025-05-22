@@ -5,6 +5,7 @@ using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Contacts;
 using LagoVista.UserAdmin.Models.Users;
@@ -34,6 +35,7 @@ namespace LagoVista.AspNetCore.Identity.Services
         private readonly IBackgroundServiceTaskQueue _taskQueue;
         private readonly IAppConfig _appConfig;
         private readonly IAdminLogger _adminLogger;
+        private readonly IOrganizationRepo _organizationRepo;
         
         public List<string> GetRequiredImportFields()
         {
@@ -50,13 +52,14 @@ namespace LagoVista.AspNetCore.Identity.Services
         }
 
 
-        public SendGridEmailService(ILagoVistaAspNetCoreIdentityProviderSettings settings, IAppUserRepo appuserRepo, IBackgroundServiceTaskQueue taskQueue, IAppConfig appConfig, IAdminLogger adminLogger)
+        public SendGridEmailService(ILagoVistaAspNetCoreIdentityProviderSettings settings, IOrganizationRepo organizationRepo, IAppUserRepo appuserRepo, IBackgroundServiceTaskQueue taskQueue, IAppConfig appConfig, IAdminLogger adminLogger)
         {
             _settings = settings;
             _appConfig = appConfig;
             _adminLogger = adminLogger;
             _taskQueue = taskQueue;
             _appUserRepo = appuserRepo;
+            _organizationRepo = organizationRepo;
         }
 
         public class SendGridSender
@@ -1499,6 +1502,10 @@ namespace LagoVista.AspNetCore.Identity.Services
 
         public async Task<ListResponse<ContactList>> GetListsAsync(EntityHeader org, EntityHeader user)
         {
+            var orgRecord = await _organizationRepo.GetOrganizationAsync(org.Id);
+
+            var ns = orgRecord.Namespace;
+            
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
@@ -1512,13 +1519,15 @@ namespace LagoVista.AspNetCore.Identity.Services
 
                 var sgResponse = JsonConvert.DeserializeObject<SendGridGetSegmentListsResponse>(strResponse);
 
+                var nsFilter = $"orgns:{ns}, ";
+
                 var lists = sgResponse.Results; //Eventually we wan
-                var items = lists.Select(seg => new ContactList()
+                var items = lists.Where(cl => cl.Name.StartsWith(nsFilter)).Select(seg => new ContactList()
                 {
                     Id = seg.Id,
                     Count = seg.ContactCount,
                     LastUpdated = String.IsNullOrEmpty(seg.SampleUpdated) ? null : DateTime.Parse(seg.SampleUpdated).ToJSONString(),
-                    Name = seg.Name,
+                    Name = seg.Name.Replace(nsFilter, String.Empty),
                 }).OrderBy(lst=>lst.Name);
 
                 return ListResponse<ContactList>.Create(items);
