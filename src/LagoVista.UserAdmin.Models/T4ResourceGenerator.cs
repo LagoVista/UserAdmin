@@ -1,4 +1,4 @@
-﻿/*5/8/2025 3:49:56 PM*/
+﻿/*5/23/2025 10:07:50 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1163,6 +1163,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_AccentColor
 
 		public static string Organization_AccentColor { get { return GetResourceString("Organization_AccentColor"); } }
+//Resources:UserAdminResources:Organization_AppUrl
+
+		public static string Organization_AppUrl { get { return GetResourceString("Organization_AppUrl"); } }
+//Resources:UserAdminResources:Organization_AppUrl_Help
+
+		public static string Organization_AppUrl_Help { get { return GetResourceString("Organization_AppUrl_Help"); } }
 //Resources:UserAdminResources:Organization_BillingLocation
 
 		public static string Organization_BillingLocation { get { return GetResourceString("Organization_BillingLocation"); } }
@@ -2163,6 +2169,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Month_September = "Month_September";
 			public const string Organization = "Organization";
 			public const string Organization_AccentColor = "Organization_AccentColor";
+			public const string Organization_AppUrl = "Organization_AppUrl";
+			public const string Organization_AppUrl_Help = "Organization_AppUrl_Help";
 			public const string Organization_BillingLocation = "Organization_BillingLocation";
 			public const string Organization_BillingLocation_Select = "Organization_BillingLocation_Select";
 			public const string Organization_CantCreate = "Organization_CantCreate";

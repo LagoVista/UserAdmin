@@ -1865,4 +1865,10 @@
   <data name="Organization_VimeoUrl" xml:space="preserve">
     <value>Vimeo Url</value>
   </data>
+  <data name="Organization_AppUrl" xml:space="preserve">
+    <value>App Url</value>
+  </data>
+  <data name="Organization_AppUrl_Help" xml:space="preserve">
+    <value>This is the URL that identifies how users will access resources and links.  By default this will be https://www.nuviot.com </value>
+  </data>
 </root>

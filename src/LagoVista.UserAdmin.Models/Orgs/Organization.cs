@@ -121,6 +121,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader DefaultInstance { get; set; }
 
 
+        [FormField(LabelResource: UserAdminResources.Names.Organization_AppUrl, HelpResource:UserAdminResources.Names.Organization_AppUrl_Help, FieldType: FieldTypes.WebLink, ResourceType: typeof(UserAdminResources))]
+        public string AppUrl { get; set; } = "https://www.nuyviot.com";
+
+
         [FormField(LabelResource: UserAdminResources.Names.Organization_LinkedInUrl, FieldType: FieldTypes.WebLink, ResourceType: typeof(UserAdminResources))]
         public string LinkeInUrl { get; set; }
 
@@ -234,6 +238,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(LightLogo),
                 nameof(DarkLogo),
                 nameof(TagLine),
+                nameof(AppUrl),
                 nameof(PrimaryTextColor),
                 nameof(PrimaryBgColor),
                 nameof(AccentColor),
