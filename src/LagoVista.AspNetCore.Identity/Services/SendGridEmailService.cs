@@ -515,6 +515,8 @@ namespace LagoVista.AspNetCore.Identity.Services
 
             public string email { get; set; }
 
+            public string id { get; set; }
+
             public string first_name { get; set; }
             public string last_name { get; set; }
 
@@ -530,6 +532,13 @@ namespace LagoVista.AspNetCore.Identity.Services
                 get; set;
             } = new SendGridContactCustomFields();
         }
+
+        private class SendGridContactSearchResuts
+        {
+            public List<SendGridContact> result { get; set; }
+            public int contact_count { get; set; }
+        }
+
 
         public class SendGridContactCustomFields
         {
@@ -567,6 +576,8 @@ namespace LagoVista.AspNetCore.Identity.Services
 
             return InvokeResult<string>.Create(result);
         }
+
+
 
 
         public async Task<InvokeResult<string>> CreateEmailListAsync(string listName, EntityHeader org, EntityHeader user)
@@ -985,6 +996,22 @@ namespace LagoVista.AspNetCore.Identity.Services
 
             var result = await RegisterContactAsync(sendGridContact, org, user);
             return result;
+        }
+
+        public async Task<InvokeResult> DeleteContactByEmailAsync(string email)
+        {
+            var query = "email = '" + email + "'";
+            var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
+            var results = await client.RequestAsync(BaseClient.Method.POST, query,
+                urlPath: "/v3/marketing/contacts/search");
+
+            var result = await results.Body.ReadAsStringAsync();
+            var searchResults = JsonConvert.DeserializeObject<SendGridContactSearchResuts>(result);
+
+
+            var deleteResults = await client.RequestAsync(BaseClient.Method.DELETE, queryParams: $"id={searchResults.result.Single().id}", urlPath: "/v3/marketing/contacts");
+
+            return InvokeResult.Success;
         }
 
         public async Task<InvokeResult<string>> RegisterContactAsync(Contact contact, EntityHeader org, EntityHeader user)
