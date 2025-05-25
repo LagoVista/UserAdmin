@@ -20,12 +20,12 @@ namespace RingCentralIntegrationTests
         [SetUp]
         public async Task Setup()
         {
-            //var clientId = Environment.GetEnvironmentVariable("RC_CLIENT_ID");
-            //var secret = Environment.GetEnvironmentVariable("RC_CLIENT_SECRET");
+            var clientId = Environment.GetEnvironmentVariable("RC_CLIENT_ID");
+            var secret = Environment.GetEnvironmentVariable("RC_CLIENT_SECRET");
             var url = Environment.GetEnvironmentVariable("RC_CLIENT_URL");
 
-            var clientId = Environment.GetEnvironmentVariable("RC_CLIENT_ID_WH");
-            var secret = Environment.GetEnvironmentVariable("RC_CLIENT_SECRET_WH");
+          //  var clientId = Environment.GetEnvironmentVariable("RC_CLIENT_ID_WH");
+          //  var secret = Environment.GetEnvironmentVariable("RC_CLIENT_SECRET_WH");
 
             var jwt = Environment.GetEnvironmentVariable("RC_CLIENT_JWT");
 
@@ -46,7 +46,7 @@ namespace RingCentralIntegrationTests
             // Change the "timeFrom" value accordingly so that it does not exceed 184 days from the current date and time
             // The specified time is UTC time. If you want the timeFrom and timeTo your local time, you have to convert
             // your local time to UTC time!
-            bodyParams.timeSettings.timeRange.timeFrom = "2024-01-01T00:00:00.000Z";
+            bodyParams.timeSettings.timeRange.timeFrom = "2025-05-01T00:00:00.000Z";
             bodyParams.timeSettings.timeRange.timeTo = DateTime.UtcNow.ToJSONString();
             bodyParams.responseOptions = new AggregationResponseOptions();
             bodyParams.responseOptions.counters = new AggregationResponseOptionsCounters();
