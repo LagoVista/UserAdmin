@@ -122,7 +122,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_AppUrl, HelpResource:UserAdminResources.Names.Organization_AppUrl_Help, FieldType: FieldTypes.WebLink, ResourceType: typeof(UserAdminResources))]
-        public string AppUrl { get; set; } = "https://www.nuyviot.com";
+        public string AppUrl { get; set; } = "https://www.nuviot.com";
 
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_LinkedInUrl, FieldType: FieldTypes.WebLink, ResourceType: typeof(UserAdminResources))]
