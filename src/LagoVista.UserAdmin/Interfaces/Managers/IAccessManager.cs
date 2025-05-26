@@ -10,5 +10,6 @@ namespace LagoVista.UserAdmin.Interfaces
     {
         Task<List<ModuleSummary>> GetUserModulesAsync(string userId, string orgId);
         Task<Module> GetUserModuleAsync(string moduleId, string userId, string orgId);
+        Task<List<Module>> GetFullAppTreeForUserAsync(string userId, string orgId);
     }
 }

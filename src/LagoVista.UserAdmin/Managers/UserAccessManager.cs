@@ -9,6 +9,7 @@ using LagoVista.UserAdmin.Models.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Managers
@@ -330,6 +331,21 @@ namespace LagoVista.UserAdmin.Managers
             }
             
             return module;
+        }
+
+        public async Task<List<Module>> GetFullAppTreeForUserAsync(string userId, string orgId)
+        {
+            var summaries = await GetUserModulesAsync(userId, orgId);
+
+            var modules = new List<Module>();
+
+            foreach(var summary in summaries)
+            {
+                var module = await GetUserModuleAsync(summary.Key, userId, orgId);
+                modules.Add(module);
+            }   
+
+            return modules;
         }
 
     }
