@@ -63,6 +63,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddSingleton<ISentEmailRepo, SentEmailRepo>();
             services.AddTransient<ILocationDiagramRepo, LocationDiagramRepo>();
             services.AddScoped<ISecureLinkRepo, SecureLinkRepo>();
+            services.AddSingleton<IFunctionMapRepo, FunctionMapRepo>();
 
             ErrorCodes.Register(typeof(UserAdminErrorCodes));
         }

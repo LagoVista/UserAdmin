@@ -25,6 +25,9 @@ namespace LagoVista.UserAdmin.Models.Security
         public EntityHeader Page { get; set; }
         public EntityHeader Feature { get; set; }
 
+        public EntityHeader FunctionMap { get; set; }
+        public EntityHeader FunctionMapFunction { get; set; }
+
         public int Create { get; set; }
         public int Read { get; set; }
         public int Update { get; set; }
@@ -61,6 +64,14 @@ namespace LagoVista.UserAdmin.Models.Security
                 FeatureId = Feature?.Id,
                 FeatureKey = Feature?.Key,
                 FeatureName = Feature?.Text,
+
+                FunctionMapId = FunctionMap?.Id,
+                FunctionMapKey = FunctionMap?.Key,
+                FunctionMapName = FunctionMap?.Text,
+
+                FunctionMapFunctionId = FunctionMapFunction?.Id,
+                FunctionMapFunctionKey = FunctionMapFunction?.Key,
+                FunctionMapFunctionName = FunctionMapFunction?.Text,
 
                 IsPublic = IsPublic,
 

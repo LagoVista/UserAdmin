@@ -1871,4 +1871,28 @@
   <data name="Organization_AppUrl_Help" xml:space="preserve">
     <value>This is the URL that identifies how users will access resources and links.  By default this will be https://www.nuviot.com </value>
   </data>
+  <data name="FunctionMap_Title" xml:space="preserve">
+    <value>Function Map</value>
+  </data>
+  <data name="FunctionMap_Description" xml:space="preserve">
+    <value>A Function Map is a User Interface that shows functions within the system and how they are related.</value>
+  </data>
+  <data name="FunctionMapFunction_Title" xml:space="preserve">
+    <value>Function</value>
+  </data>
+  <data name=" FunctionMapFunction_Description" xml:space="preserve">
+    <value>A Function is a screen where tasks can be completed or navigation to another function map.</value>
+  </data>
+  <data name="FunctionMapFunction_Type_ChildFunctionMap" xml:space="preserve">
+    <value>Child Function Map</value>
+  </data>
+  <data name="FunctionMapFunction_Type_FunctionView" xml:space="preserve">
+    <value>Function View</value>
+  </data>
+  <data name="FunctionMapFunction_ChildFunctionMap" xml:space="preserve">
+    <value>Child Function Map</value>
+  </data>
+  <data name="FunctionMapFunction_FuctionView" xml:space="preserve">
+    <value>Function View</value>
+  </data>
 </root>

@@ -15,18 +15,19 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
 {
     public class AccessLogRepo : TableStorageBase<AccessLog>, IAccessLogRepo
     {
-        private readonly TableClient _tableClient;
+        private TableClient _tableClient;
         private readonly IAdminLogger _adminLogger;
         private readonly IBackgroundServiceTaskQueue _bgServiceQueue;
-        private static bool _created;
+        private string _tableName;
+        private string _connectionString;
 
         public AccessLogRepo(IUserAdminSettings settings, IBackgroundServiceTaskQueue bgServiceQueue, IAdminLogger logger) :
             base(settings.AccessLogTableStorage.AccountId, settings.AccessLogTableStorage.AccessKey, logger)
         {
             _adminLogger = logger ?? throw new ArgumentNullException(nameof(logger));
-            var tableName = GetTableName();
-            var connectionString = $"DefaultEndpointsProtocol=https;AccountName={settings.AccessLogTableStorage.AccountId};AccountKey={settings.AccessLogTableStorage.AccessKey}";
-            _tableClient = new TableClient(connectionString, tableName);
+            _tableName = GetTableName();
+            _connectionString = $"DefaultEndpointsProtocol=https;AccountName={settings.AccessLogTableStorage.AccountId};AccountKey={settings.AccessLogTableStorage.AccessKey}";
+            _tableClient = new TableClient(_connectionString, _tableName);
             _bgServiceQueue = bgServiceQueue;
         }
 
@@ -35,22 +36,28 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             return StoragePeriod.Month;
         }
 
+        private async Task<TableClient> GetTableClient()
+        {
+            if (_tableName != GetTableName() || _tableClient == null)
+            {
+                _tableName = GetTableName();
+                _tableClient = new TableClient(_connectionString, _tableName);
+                await _tableClient.CreateIfNotExistsAsync();
+            }
+
+            return _tableClient;
+        }
+
+
         public void AddActivity(AccessLog accessLog)
         {
             _bgServiceQueue.QueueBackgroundWorkItemAsync(async (ct) =>
             {
                 try
                 {
-                    var sw = Stopwatch.StartNew();
-
-                    if (!_created)
-                    {
-                        await _tableClient.CreateIfNotExistsAsync();
-                        _created = true;
-                    }
-
-                    await _tableClient.AddEntityAsync<AccessLogEntity>(AccessLogEntity.FromAccessLog(accessLog));
-                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, $"[AccessLogRepo__AddActivity]", $"[AccessLogRepo__AddActivity] Org: {accessLog.OrgName} {accessLog.Resource} - {accessLog.ResourceId} {sw.Elapsed.TotalMilliseconds}ms");
+                    var tableClient = await GetTableClient();
+                    await tableClient.AddEntityAsync<AccessLogEntity>(AccessLogEntity.FromAccessLog(accessLog));
+                   // _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, $"[AccessLogRepo__AddActivity]", $"[AccessLogRepo__AddActivity] Org: {accessLog.OrgName} {accessLog.Resource} - {accessLog.ResourceId} {sw.Elapsed.TotalMilliseconds}ms");
                 }
                 catch(Exception ex)
                 {
@@ -65,15 +72,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             return _bgServiceQueue.QueueBackgroundWorkItemAsync(async (ct) =>
             {
                 var sw = Stopwatch.StartNew();
-
-                if (!_created)
-                {
-                    await _tableClient.CreateIfNotExistsAsync();
-                    _created = true;
-                }
-
-                await _tableClient.AddEntityAsync<AccessLogEntity>(AccessLogEntity.FromAccessLog(accessLog));
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, $"[AccessLogRepo__AddActivityAsync]", $"[AccessLogRepo__AddActivityAsync] Org: {accessLog.OrgName} {accessLog.Resource} - {accessLog.ResourceId} {sw.Elapsed.TotalMilliseconds}ms");
+                var tableClient = await GetTableClient();
+                await tableClient.AddEntityAsync<AccessLogEntity>(AccessLogEntity.FromAccessLog(accessLog));
+                //_adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, $"[AccessLogRepo__AddActivityAsync]", $"[AccessLogRepo__AddActivityAsync] Org: {accessLog.OrgName} {accessLog.Resource} - {accessLog.ResourceId} {sw.Elapsed.TotalMilliseconds}ms");
             });
         }
 

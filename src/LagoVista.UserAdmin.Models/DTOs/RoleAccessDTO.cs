@@ -37,6 +37,15 @@ namespace LagoVista.UserAdmin.Models.DTOs
         public string FeatureKey { get; set; }
         public string FeatureName { get; set; }
 
+        public string FunctionMapId { get; set; }
+        public string FunctionMapKey { get; set; }
+        public string FunctionMapName { get; set; }
+
+        public string FunctionMapFunctionId { get; set; }
+        public string FunctionMapFunctionKey { get; set; }
+        public string FunctionMapFunctionName { get; set; }
+
+
         public int Create { get; set; }
         public int Read { get; set; }
         public int Update { get; set; }

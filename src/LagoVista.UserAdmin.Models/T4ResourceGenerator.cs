@@ -1,4 +1,4 @@
-﻿/*5/23/2025 10:07:50 AM*/
+﻿/*5/26/2025 10:48:37 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -714,6 +714,30 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:ForgotPasswordVM_Title
 
 		public static string ForgotPasswordVM_Title { get { return GetResourceString("ForgotPasswordVM_Title"); } }
+//Resources:UserAdminResources:FunctionMap_Description
+
+		public static string FunctionMap_Description { get { return GetResourceString("FunctionMap_Description"); } }
+//Resources:UserAdminResources:FunctionMap_Title
+
+		public static string FunctionMap_Title { get { return GetResourceString("FunctionMap_Title"); } }
+//Resources:UserAdminResources:FunctionMapFunction_ChildFunctionMap
+
+		public static string FunctionMapFunction_ChildFunctionMap { get { return GetResourceString("FunctionMapFunction_ChildFunctionMap"); } }
+//Resources:UserAdminResources:FunctionMapFunction_Description
+
+		public static string FunctionMapFunction_Description { get { return GetResourceString("FunctionMapFunction_Description"); } }
+//Resources:UserAdminResources:FunctionMapFunction_FuctionView
+
+		public static string FunctionMapFunction_FuctionView { get { return GetResourceString("FunctionMapFunction_FuctionView"); } }
+//Resources:UserAdminResources:FunctionMapFunction_Title
+
+		public static string FunctionMapFunction_Title { get { return GetResourceString("FunctionMapFunction_Title"); } }
+//Resources:UserAdminResources:FunctionMapFunction_Type_ChildFunctionMap
+
+		public static string FunctionMapFunction_Type_ChildFunctionMap { get { return GetResourceString("FunctionMapFunction_Type_ChildFunctionMap"); } }
+//Resources:UserAdminResources:FunctionMapFunction_Type_FunctionView
+
+		public static string FunctionMapFunction_Type_FunctionView { get { return GetResourceString("FunctionMapFunction_Type_FunctionView"); } }
 //Resources:UserAdminResources:GeoLocation_Description
 
 		public static string GeoLocation_Description { get { return GetResourceString("GeoLocation_Description"); } }
@@ -2022,6 +2046,14 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string ForgotPasswordVM_Description = "ForgotPasswordVM_Description";
 			public const string ForgotPasswordVM_Help = "ForgotPasswordVM_Help";
 			public const string ForgotPasswordVM_Title = "ForgotPasswordVM_Title";
+			public const string FunctionMap_Description = "FunctionMap_Description";
+			public const string FunctionMap_Title = "FunctionMap_Title";
+			public const string FunctionMapFunction_ChildFunctionMap = "FunctionMapFunction_ChildFunctionMap";
+			public const string FunctionMapFunction_Description = "FunctionMapFunction_Description";
+			public const string FunctionMapFunction_FuctionView = "FunctionMapFunction_FuctionView";
+			public const string FunctionMapFunction_Title = "FunctionMapFunction_Title";
+			public const string FunctionMapFunction_Type_ChildFunctionMap = "FunctionMapFunction_Type_ChildFunctionMap";
+			public const string FunctionMapFunction_Type_FunctionView = "FunctionMapFunction_Type_FunctionView";
 			public const string GeoLocation_Description = "GeoLocation_Description";
 			public const string GeoLocation_Help = "GeoLocation_Help";
 			public const string GeoLocation_Title = "GeoLocation_Title";
