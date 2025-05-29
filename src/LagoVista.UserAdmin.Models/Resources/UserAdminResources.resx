@@ -1895,4 +1895,37 @@
   <data name="FunctionMapFunction_FuctionView" xml:space="preserve">
     <value>Function View</value>
   </data>
+  <data name="Common_Icon_Size_Small" xml:space="preserve">
+    <value>Small</value>
+  </data>
+  <data name="Common_Icon_Size_Medium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="Common_Icon_Size_Large" xml:space="preserve">
+    <value>Large</value>
+  </data>
+  <data name="Common_Icon_Size_ExtraLarge" xml:space="preserve">
+    <value>Extra Large</value>
+  </data>
+  <data name="Common_IconSize" xml:space="preserve">
+    <value>Icon Size</value>
+  </data>
+  <data name="Common_IconSize_Select" xml:space="preserve">
+    <value>-select icon size-</value>
+  </data>
+  <data name="FunctionMapFunction_Type" xml:space="preserve">
+    <value>Function Type</value>
+  </data>
+  <data name="FunctionMapFunction_Type_Select" xml:space="preserve">
+    <value>-select function type-</value>
+  </data>
+  <data name="FunctionMapFunction_ChildFunctionMap_Select" xml:space="preserve">
+    <value>-select child map-</value>
+  </data>
+  <data name="FunctionMapFunction_FuctionView_SelectView" xml:space="preserve">
+    <value>-select view-</value>
+  </data>
+  <data name="FunctionMap_Functions" xml:space="preserve">
+    <value>Functions</value>
+  </data>
 </root>

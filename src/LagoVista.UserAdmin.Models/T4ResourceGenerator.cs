@@ -1,4 +1,4 @@
-﻿/*5/26/2025 10:48:37 AM*/
+﻿/*5/28/2025 7:58:54 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -405,6 +405,24 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Common_Icon
 
 		public static string Common_Icon { get { return GetResourceString("Common_Icon"); } }
+//Resources:UserAdminResources:Common_Icon_Size_ExtraLarge
+
+		public static string Common_Icon_Size_ExtraLarge { get { return GetResourceString("Common_Icon_Size_ExtraLarge"); } }
+//Resources:UserAdminResources:Common_Icon_Size_Large
+
+		public static string Common_Icon_Size_Large { get { return GetResourceString("Common_Icon_Size_Large"); } }
+//Resources:UserAdminResources:Common_Icon_Size_Medium
+
+		public static string Common_Icon_Size_Medium { get { return GetResourceString("Common_Icon_Size_Medium"); } }
+//Resources:UserAdminResources:Common_Icon_Size_Small
+
+		public static string Common_Icon_Size_Small { get { return GetResourceString("Common_Icon_Size_Small"); } }
+//Resources:UserAdminResources:Common_IconSize
+
+		public static string Common_IconSize { get { return GetResourceString("Common_IconSize"); } }
+//Resources:UserAdminResources:Common_IconSize_Select
+
+		public static string Common_IconSize_Select { get { return GetResourceString("Common_IconSize_Select"); } }
 //Resources:UserAdminResources:Common_Id
 
 		public static string Common_Id { get { return GetResourceString("Common_Id"); } }
@@ -717,27 +735,42 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:FunctionMap_Description
 
 		public static string FunctionMap_Description { get { return GetResourceString("FunctionMap_Description"); } }
+//Resources:UserAdminResources:FunctionMap_Functions
+
+		public static string FunctionMap_Functions { get { return GetResourceString("FunctionMap_Functions"); } }
 //Resources:UserAdminResources:FunctionMap_Title
 
 		public static string FunctionMap_Title { get { return GetResourceString("FunctionMap_Title"); } }
 //Resources:UserAdminResources:FunctionMapFunction_ChildFunctionMap
 
 		public static string FunctionMapFunction_ChildFunctionMap { get { return GetResourceString("FunctionMapFunction_ChildFunctionMap"); } }
+//Resources:UserAdminResources:FunctionMapFunction_ChildFunctionMap_Select
+
+		public static string FunctionMapFunction_ChildFunctionMap_Select { get { return GetResourceString("FunctionMapFunction_ChildFunctionMap_Select"); } }
 //Resources:UserAdminResources:FunctionMapFunction_Description
 
 		public static string FunctionMapFunction_Description { get { return GetResourceString("FunctionMapFunction_Description"); } }
 //Resources:UserAdminResources:FunctionMapFunction_FuctionView
 
 		public static string FunctionMapFunction_FuctionView { get { return GetResourceString("FunctionMapFunction_FuctionView"); } }
+//Resources:UserAdminResources:FunctionMapFunction_FuctionView_SelectView
+
+		public static string FunctionMapFunction_FuctionView_SelectView { get { return GetResourceString("FunctionMapFunction_FuctionView_SelectView"); } }
 //Resources:UserAdminResources:FunctionMapFunction_Title
 
 		public static string FunctionMapFunction_Title { get { return GetResourceString("FunctionMapFunction_Title"); } }
+//Resources:UserAdminResources:FunctionMapFunction_Type
+
+		public static string FunctionMapFunction_Type { get { return GetResourceString("FunctionMapFunction_Type"); } }
 //Resources:UserAdminResources:FunctionMapFunction_Type_ChildFunctionMap
 
 		public static string FunctionMapFunction_Type_ChildFunctionMap { get { return GetResourceString("FunctionMapFunction_Type_ChildFunctionMap"); } }
 //Resources:UserAdminResources:FunctionMapFunction_Type_FunctionView
 
 		public static string FunctionMapFunction_Type_FunctionView { get { return GetResourceString("FunctionMapFunction_Type_FunctionView"); } }
+//Resources:UserAdminResources:FunctionMapFunction_Type_Select
+
+		public static string FunctionMapFunction_Type_Select { get { return GetResourceString("FunctionMapFunction_Type_Select"); } }
 //Resources:UserAdminResources:GeoLocation_Description
 
 		public static string GeoLocation_Description { get { return GetResourceString("GeoLocation_Description"); } }
@@ -1943,6 +1976,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Common_EmailAddress = "Common_EmailAddress";
 			public const string Common_FillColor = "Common_FillColor";
 			public const string Common_Icon = "Common_Icon";
+			public const string Common_Icon_Size_ExtraLarge = "Common_Icon_Size_ExtraLarge";
+			public const string Common_Icon_Size_Large = "Common_Icon_Size_Large";
+			public const string Common_Icon_Size_Medium = "Common_Icon_Size_Medium";
+			public const string Common_Icon_Size_Small = "Common_Icon_Size_Small";
+			public const string Common_IconSize = "Common_IconSize";
+			public const string Common_IconSize_Select = "Common_IconSize_Select";
 			public const string Common_Id = "Common_Id";
 			public const string Common_IsPublic = "Common_IsPublic";
 			public const string Common_Key = "Common_Key";
@@ -2047,13 +2086,18 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string ForgotPasswordVM_Help = "ForgotPasswordVM_Help";
 			public const string ForgotPasswordVM_Title = "ForgotPasswordVM_Title";
 			public const string FunctionMap_Description = "FunctionMap_Description";
+			public const string FunctionMap_Functions = "FunctionMap_Functions";
 			public const string FunctionMap_Title = "FunctionMap_Title";
 			public const string FunctionMapFunction_ChildFunctionMap = "FunctionMapFunction_ChildFunctionMap";
+			public const string FunctionMapFunction_ChildFunctionMap_Select = "FunctionMapFunction_ChildFunctionMap_Select";
 			public const string FunctionMapFunction_Description = "FunctionMapFunction_Description";
 			public const string FunctionMapFunction_FuctionView = "FunctionMapFunction_FuctionView";
+			public const string FunctionMapFunction_FuctionView_SelectView = "FunctionMapFunction_FuctionView_SelectView";
 			public const string FunctionMapFunction_Title = "FunctionMapFunction_Title";
+			public const string FunctionMapFunction_Type = "FunctionMapFunction_Type";
 			public const string FunctionMapFunction_Type_ChildFunctionMap = "FunctionMapFunction_Type_ChildFunctionMap";
 			public const string FunctionMapFunction_Type_FunctionView = "FunctionMapFunction_Type_FunctionView";
+			public const string FunctionMapFunction_Type_Select = "FunctionMapFunction_Type_Select";
 			public const string GeoLocation_Description = "GeoLocation_Description";
 			public const string GeoLocation_Help = "GeoLocation_Help";
 			public const string GeoLocation_Title = "GeoLocation_Title";

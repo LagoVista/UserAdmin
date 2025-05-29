@@ -11,6 +11,6 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
         Task DeleteFunctionMapAsync(string id);
         Task<FunctionMap> GetTopLevelFunctionMapAsync(string orgId);
         Task<FunctionMap> GetFunctionMapAsync(string id);
-        Task<FunctionMap> GetFunctionMapByKeyAsync(String key);
+        Task<FunctionMap> GetFunctionMapByKeyAsync(string orgId, String key);
     }
 }

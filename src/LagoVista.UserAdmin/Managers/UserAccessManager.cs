@@ -16,17 +16,17 @@ namespace LagoVista.UserAdmin.Managers
 {
     public class UserAccessManager : IIUserAccessManager
     {
-
-
         private readonly IUserSecurityServices _userSecurityService;
         private readonly IModuleRepo _moduleRepo;
         private readonly IOrganizationRepo _orgRepo;
+        private readonly IAdminLogger _adminLogger;
 
         public UserAccessManager(IUserSecurityServices userSecurityService, IOrganizationRepo orgRepo, IModuleRepo moduleRepo, IAdminLogger adminLogger)
         {
             _userSecurityService = userSecurityService ?? throw new ArgumentNullException(nameof(userSecurityService));
             _moduleRepo = moduleRepo ?? throw new ArgumentNullException(nameof(moduleRepo));
             _orgRepo = orgRepo ??  throw new ArgumentException(nameof(orgRepo));
+            _adminLogger = adminLogger ?? throw new ArgumentNullException(nameof(adminLogger));
         }
 
         public async Task<List<ModuleSummary>> GetUserModulesAsync(string userId, string orgId)
@@ -335,17 +335,25 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<List<Module>> GetFullAppTreeForUserAsync(string userId, string orgId)
         {
-            var summaries = await GetUserModulesAsync(userId, orgId);
-
-            var modules = new List<Module>();
-
-            foreach(var summary in summaries)
+            try
             {
-                var module = await GetUserModuleAsync(summary.Key, userId, orgId);
-                modules.Add(module);
-            }   
+                var summaries = await GetUserModulesAsync(userId, orgId);
 
-            return modules;
+                var modules = new List<Module>();
+
+                foreach (var summary in summaries)
+                {
+                    var module = await GetUserModuleAsync(summary.Key, userId, orgId);
+                    modules.Add(module);
+                }
+
+                return modules;
+            }
+            catch(Exception ex)
+            {
+                _adminLogger.AddException("[UserAccessManager__GetFullAppTreeForUserAsync]", ex);   
+                return new List<Module>();
+            }
         }
 
     }

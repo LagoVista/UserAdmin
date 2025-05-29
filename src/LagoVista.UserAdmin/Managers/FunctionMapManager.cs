@@ -32,22 +32,19 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult<FunctionMap>> GetFunctionMapAsync(string id, EntityHeader org, EntityHeader user)
+        public Task<FunctionMap> GetFunctionMapAsync(string id, EntityHeader org, EntityHeader user)
         {
-            var map = await _functionMapRepo.GetFunctionMapAsync(id);
-            return InvokeResult<FunctionMap>.Create(map);
+            return _functionMapRepo.GetFunctionMapAsync(id);
         }
 
-        public async Task<InvokeResult<FunctionMap>> GetFunctionMapByKeyAsync(string key, EntityHeader org, EntityHeader user)
+        public Task<FunctionMap> GetFunctionMapByKeyAsync(string key, EntityHeader org, EntityHeader user)
         {
-            var map = await _functionMapRepo.GetFunctionMapByKeyAsync(key);
-            return InvokeResult<FunctionMap>.Create(map);
+            return _functionMapRepo.GetFunctionMapByKeyAsync(org.Id, key);
         }
 
-        public async Task<InvokeResult<FunctionMap>> GetTopLevelFunctionMapAsync(EntityHeader org, EntityHeader user)
+        public Task<FunctionMap> GetTopLevelFunctionMapAsync(EntityHeader org, EntityHeader user)
         {
-            var map = await _functionMapRepo.GetTopLevelFunctionMapAsync(org.Id);
-            return InvokeResult<FunctionMap>.Create(map);
+            return _functionMapRepo.GetTopLevelFunctionMapAsync(org.Id);
         }
 
         public async Task<InvokeResult> UpdateFunctionMapAsync(FunctionMap map, EntityHeader org, EntityHeader user)

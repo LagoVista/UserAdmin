@@ -9,9 +9,9 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
     {
         Task<InvokeResult> AddFunctionMapAsync(FunctionMap map, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateFunctionMapAsync(FunctionMap map, EntityHeader org, EntityHeader user);
-        Task<InvokeResult<FunctionMap>> GetFunctionMapAsync(string id, EntityHeader org, EntityHeader user);
-        Task<InvokeResult<FunctionMap>> GetFunctionMapByKeyAsync(string key, EntityHeader org, EntityHeader user);
-        Task<InvokeResult<FunctionMap>> GetTopLevelFunctionMapAsync(EntityHeader org, EntityHeader user);
+        Task<FunctionMap> GetFunctionMapAsync(string id, EntityHeader org, EntityHeader user);
+        Task<FunctionMap> GetFunctionMapByKeyAsync(string key, EntityHeader org, EntityHeader user);
+        Task<FunctionMap> GetTopLevelFunctionMapAsync(EntityHeader org, EntityHeader user);
         Task<InvokeResult> DeleteFunctionMapAsync(string id, EntityHeader org, EntityHeader user);
     }
 }
