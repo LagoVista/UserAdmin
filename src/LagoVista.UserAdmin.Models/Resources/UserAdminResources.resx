@@ -1895,6 +1895,24 @@
   <data name="FunctionMapFunction_FuctionView" xml:space="preserve">
     <value>Function View</value>
   </data>
+  <data name="FunctionMapFunction_ImageIcon" xml:space="preserve">
+    <value>Image Icon</value>
+  </data>
+  <data name="FunctionMapFunction_IconShape" xml:space="preserve">
+    <value>Icon Shape</value>
+  </data>
+  <data name="FunctionMapFunction_IconShape_Select" xml:space="preserve">
+    <value>-select icon shape-</value>
+  </data>
+  <data name="FunctionMapFunction_IconShape_Square" xml:space="preserve">
+    <value>Square</value>
+  </data>
+  <data name="FunctionMapFunction_IconShape_Landscape" xml:space="preserve">
+    <value>Landscape</value>
+  </data>
+  <data name="FunctionMapFunction_IconShape_Portrait" xml:space="preserve">
+    <value>Portrait</value>
+  </data>
   <data name="Common_Icon_Size_Small" xml:space="preserve">
     <value>Small</value>
   </data>

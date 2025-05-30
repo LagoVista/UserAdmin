@@ -4,6 +4,7 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Resources;
+using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
 using System.Collections.Generic;
@@ -72,6 +73,16 @@ namespace LagoVista.UserAdmin.Models.Security
         ExtraLarge
     }
 
+    public enum IconShape
+    {
+        [EnumLabel(FunctionMapFunction.IconShape_Square, UserAdminResources.Names.FunctionMapFunction_IconShape_Square, typeof(UserAdminResources))]
+        Square,
+        [EnumLabel(FunctionMapFunction.IconShape_Landscape, UserAdminResources.Names.FunctionMapFunction_IconShape_Landscape, typeof(UserAdminResources))]
+        Landscape,
+        [EnumLabel(FunctionMapFunction.IconShape_Portrait, UserAdminResources.Names.FunctionMapFunction_IconShape_Portrait, typeof(UserAdminResources))]
+        Portrait
+    }
+
 
     [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.FunctionMapFunction_Title, UserAdminResources.Names.FunctionMapFunction_Description, UserAdminResources.Names.FunctionMapFunction_Description,
         EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources), Icon: "icon-ae-coding-metal", FactoryUrl: "/api/function/map/function/factory")]
@@ -81,6 +92,10 @@ namespace LagoVista.UserAdmin.Models.Security
         public const string IconSize_Medium = "medium";
         public const string IconSize_Large = "large";
         public const string IconSize_ExtraLarge = "xlarge";
+
+        public const string IconShape_Square = "square";
+        public const string IconShape_Landscape = "landscape";
+        public const string IconShape_Portrait = "portrait";
 
         public const string Type_ChildFunctionMap = "childfunctionmap";
         public const string Type_FunctionView = "functionview";
@@ -92,7 +107,7 @@ namespace LagoVista.UserAdmin.Models.Security
             RegExValidationMessageResource: LagoVistaCommonStrings.Names.Common_Key_Validation, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true)]
         public string Key { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_Icon, IsRequired: true, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Icon, IsRequired: false, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources))]
         public string Icon { get; set; }
 
 
@@ -114,6 +129,12 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Common_IconSize, WaterMark:UserAdminResources.Names.Common_IconSize_Select, EnumType:typeof(IconSize), IsRequired:true, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
         public EntityHeader<IconSize> IconSize { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.FunctionMapFunction_IconShape, WaterMark: UserAdminResources.Names.FunctionMapFunction_IconShape_Select, EnumType: typeof(IconShape), IsRequired: true, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader<IconShape> IconShape { get; set; }
+
+
+        [FormField(LabelResource: UserAdminResources.Names.FunctionMapFunction_ImageIcon, FieldType: FieldTypes.FileUpload, UploadUrl: "/api/media/resource/public/upload", ResourceType: typeof(UserAdminResources))]
+        public EntityHeader ImageIcon { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.FunctionMapFunction_ChildFunctionMap, WaterMark: UserAdminResources.Names.FunctionMapFunction_ChildFunctionMap_Select,
                     FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(UserAdminResources))]
@@ -159,6 +180,16 @@ namespace LagoVista.UserAdmin.Models.Security
             };
        }
 
+        [CustomValidator]
+        public void Validate(ValidationResult result, Actions action)
+        {
+            if (EntityHeader.IsNullOrEmpty(ImageIcon) && String.IsNullOrEmpty(Icon))
+            {
+                result.AddUserError("Either Uplaoded Image Icon or Icon is required.");
+            }
+        }
+
+
         public List<string> GetFormFields()
         {
             return new List<string>()
@@ -166,10 +197,10 @@ namespace LagoVista.UserAdmin.Models.Security
                 nameof(Name),
                 nameof(Key),
                 nameof(Icon),
+                nameof(ImageIcon),
                 nameof(IconSize),
-                nameof(Type),
-                nameof(FunctionView),
-                nameof(ChildFunctionMap),
+                nameof(IconShape),
+                nameof(Type)
             };
         }
     }

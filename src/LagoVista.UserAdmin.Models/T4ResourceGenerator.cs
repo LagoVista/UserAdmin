@@ -1,4 +1,4 @@
-﻿/*5/28/2025 7:58:54 PM*/
+﻿/*5/29/2025 4:15:25 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -756,6 +756,24 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:FunctionMapFunction_FuctionView_SelectView
 
 		public static string FunctionMapFunction_FuctionView_SelectView { get { return GetResourceString("FunctionMapFunction_FuctionView_SelectView"); } }
+//Resources:UserAdminResources:FunctionMapFunction_IconShape
+
+		public static string FunctionMapFunction_IconShape { get { return GetResourceString("FunctionMapFunction_IconShape"); } }
+//Resources:UserAdminResources:FunctionMapFunction_IconShape_Landscape
+
+		public static string FunctionMapFunction_IconShape_Landscape { get { return GetResourceString("FunctionMapFunction_IconShape_Landscape"); } }
+//Resources:UserAdminResources:FunctionMapFunction_IconShape_Portrait
+
+		public static string FunctionMapFunction_IconShape_Portrait { get { return GetResourceString("FunctionMapFunction_IconShape_Portrait"); } }
+//Resources:UserAdminResources:FunctionMapFunction_IconShape_Select
+
+		public static string FunctionMapFunction_IconShape_Select { get { return GetResourceString("FunctionMapFunction_IconShape_Select"); } }
+//Resources:UserAdminResources:FunctionMapFunction_IconShape_Square
+
+		public static string FunctionMapFunction_IconShape_Square { get { return GetResourceString("FunctionMapFunction_IconShape_Square"); } }
+//Resources:UserAdminResources:FunctionMapFunction_ImageIcon
+
+		public static string FunctionMapFunction_ImageIcon { get { return GetResourceString("FunctionMapFunction_ImageIcon"); } }
 //Resources:UserAdminResources:FunctionMapFunction_Title
 
 		public static string FunctionMapFunction_Title { get { return GetResourceString("FunctionMapFunction_Title"); } }
@@ -2093,6 +2111,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string FunctionMapFunction_Description = "FunctionMapFunction_Description";
 			public const string FunctionMapFunction_FuctionView = "FunctionMapFunction_FuctionView";
 			public const string FunctionMapFunction_FuctionView_SelectView = "FunctionMapFunction_FuctionView_SelectView";
+			public const string FunctionMapFunction_IconShape = "FunctionMapFunction_IconShape";
+			public const string FunctionMapFunction_IconShape_Landscape = "FunctionMapFunction_IconShape_Landscape";
+			public const string FunctionMapFunction_IconShape_Portrait = "FunctionMapFunction_IconShape_Portrait";
+			public const string FunctionMapFunction_IconShape_Select = "FunctionMapFunction_IconShape_Select";
+			public const string FunctionMapFunction_IconShape_Square = "FunctionMapFunction_IconShape_Square";
+			public const string FunctionMapFunction_ImageIcon = "FunctionMapFunction_ImageIcon";
 			public const string FunctionMapFunction_Title = "FunctionMapFunction_Title";
 			public const string FunctionMapFunction_Type = "FunctionMapFunction_Type";
 			public const string FunctionMapFunction_Type_ChildFunctionMap = "FunctionMapFunction_Type_ChildFunctionMap";
