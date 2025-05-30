@@ -33,7 +33,7 @@ namespace LagoVista.UserAdmin.Models.Security
 
         public UserAccess UserAccess { get; set; }
 
-        public List<EntityHeader> Parents { get; set; }
+        public List<EntityHeader> Parents { get; set; } = new List<EntityHeader>();
 
         [FormField(LabelResource: UserAdminResources.Names.FunctionMap_Functions, FieldType: FieldTypes.ChildListInline, FactoryUrl: "/api/function/map/function/factory", ResourceType: typeof(UserAdminResources))]
         public List<FunctionMapFunction> Functions { get; set; } = new List<FunctionMapFunction>();
@@ -126,11 +126,11 @@ namespace LagoVista.UserAdmin.Models.Security
             EnumType: typeof(FunctionMapFunctionTypes), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
         public EntityHeader<FunctionMapFunctionTypes> Type { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_IconSize, WaterMark:UserAdminResources.Names.Common_IconSize_Select, EnumType:typeof(IconSize), IsRequired:true, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
-        public EntityHeader<IconSize> IconSize { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.Common_IconSize, WaterMark: UserAdminResources.Names.Common_IconSize_Select, EnumType: typeof(IconSize), IsRequired: true, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader<IconSize> IconSize { get; set; } = EntityHeader<Security.IconSize>.Create(Security.IconSize.Medium);
 
         [FormField(LabelResource: UserAdminResources.Names.FunctionMapFunction_IconShape, WaterMark: UserAdminResources.Names.FunctionMapFunction_IconShape_Select, EnumType: typeof(IconShape), IsRequired: true, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
-        public EntityHeader<IconShape> IconShape { get; set; }
+        public EntityHeader<IconShape> IconShape { get; set; } = EntityHeader<Security.IconShape>.Create(Security.IconShape.Square);
 
 
         [FormField(LabelResource: UserAdminResources.Names.FunctionMapFunction_ImageIcon, FieldType: FieldTypes.FileUpload, UploadUrl: "/api/media/resource/public/upload", ResourceType: typeof(UserAdminResources))]
