@@ -4,19 +4,15 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Security;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Security
 {
     public class FunctionMapRepo : DocumentDBRepoBase<FunctionMap>, IFunctionMapRepo
     {
-
-
         private ICacheProvider _cacheProvider;
         private IAdminLogger _adminLogger;
         public FunctionMapRepo(IUserAdminSettings settings, IDefaultRoleList defaultRoleList, IAdminLogger logger, ICacheProvider cacheProvider) :
@@ -26,21 +22,88 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             _cacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
-
-
         protected override bool ShouldConsolidateCollections
         {
             get => true;
         }
 
-        public Task AddFunctionMapAsync(FunctionMap map)
+        private string GetCacheKey(FunctionMap map)
         {
-            return CreateDocumentAsync(map);   
+            if(map.IsPublic)
+            {
+                if(map.TopLevel)
+                {
+                    return $"funcitonmap-public-root";
+                }
+                else
+                    return $"functionmap-public-{map.Key}";
+            }
+            else
+            {
+                if(map.TopLevel)
+                {
+                    return $"functionmap-{map.OwnerOrganization.Id}-root";
+                }
+                else
+                    return $"functionmap-{map.OwnerOrganization.Id}-{map.Key}";
+            }
         }
 
-        public Task DeleteFunctionMapAsync(string id)
+        private string GetCacheKey(string key)
         {
-            return DeleteDocumentAsync(id);
+            return $"functionmap-{key}";
+        }
+
+        private string GetCacheKey(string orgid, string key)
+        {
+            return $"functionmap-{orgid}-{key}";
+
+        }
+
+        public async Task AddFunctionMapAsync(FunctionMap map)
+        {
+            if (map.TopLevel && map.IsPublic)
+            {
+                var existing = await QueryAsync(qry => qry.IsPublic && qry.TopLevel);
+                if (existing.Any())
+                {
+                    throw new InvalidOperationException($"An existing top level public function map exists.  Existing: {existing.First().Name}/{existing.First().Id}.  Keys must be unique within oganization.");
+                }
+            }
+            else if (map.TopLevel)
+            {
+                var existing = await QueryAsync(qry => qry.IsPublic && qry.OwnerOrganization.Id == map.OwnerOrganization.Id);
+                if (existing.Any())
+                {
+                    throw new InvalidOperationException($"An existing top level for the {map.OwnerOrganization.Text} org, function map exists.  Existing: {existing.First().Name}/{existing.First().Id}.  Keys must be unique within oganization.");
+                }
+            }
+            else if (map.IsPublic)
+            {
+                var existing = await QueryAsync(qry => qry.Key == map.Key && qry.IsPublic);
+                if (existing.Any())
+                {
+                    throw new InvalidOperationException($"An existing public function map with the key [{map.Key}] aleady exists. Existing: {existing.First().Name}/{existing.First().Id}.  Keys must be unique within oganization.");
+                }
+            }
+            else
+            {
+                var existing = await QueryAsync(qry => qry.Key == map.Key && qry.OwnerOrganization.Id == map.OwnerOrganization.Id);
+                if (existing.Any())
+                {
+                    throw new InvalidOperationException($"An existing module with that key [{map.Key}] already exists for the {map.OwnerOrganization.Text} org, Existing: {existing.First().Name}/{existing.First().Id}.  Keys must be unique within oganization.");
+                }
+            }
+           
+            await CreateDocumentAsync(map);
+            var json = JsonConvert.SerializeObject(map);
+            var key = GetCacheKey(map);
+            await _cacheProvider.AddAsync(key, json);          
+        }
+
+        public async Task DeleteFunctionMapAsync(string id)
+        {
+            await DeleteDocumentAsync(id);
         }
 
         public Task<FunctionMap> GetFunctionMapAsync(string id)
@@ -50,37 +113,94 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
 
         public async Task<FunctionMap> GetFunctionMapByKeyAsync(string orgId, string key)
         {
-            var topLevel = await QueryAsync(mp => mp.Key == key && mp.OwnerOrganization.Id == orgId);
-            if (topLevel.Count() == 1)
-                return topLevel.Single();
+            var cacheKey = GetCacheKey(orgId, key);
+            var json = await _cacheProvider.GetAsync(cacheKey);
+            if(!String.IsNullOrEmpty(json))
+                return JsonConvert.DeserializeObject<FunctionMap>(json);
 
-            topLevel = await QueryAsync(mp => mp.Key == key && mp.IsPublic);
-            if (topLevel.Count() > 1)
+            cacheKey = GetCacheKey(key);
+            json = await _cacheProvider.GetAsync(cacheKey);
+            if (!String.IsNullOrEmpty(json))
+                return JsonConvert.DeserializeObject<FunctionMap>(json);
+
+            var maps = await QueryAsync(mp => mp.Key == key && mp.OwnerOrganization.Id == orgId);
+            if (maps.Count() == 1)
+            {
+                var map = maps.Single();
+                cacheKey = GetCacheKey(orgId, key);
+                await _cacheProvider.AddAsync(cacheKey, JsonConvert.SerializeObject(map));
+                return map;
+            }
+
+            maps = await QueryAsync(mp => mp.Key == key && mp.IsPublic);
+            if (maps.Count() > 1)
             {
                 throw new Exception($"Found more than one function map by key {key}.");
             }
             else
-                return topLevel.SingleOrDefault();
+            {
+                if(maps.Count() == 0)
+                {
+                    return null;
+                }
+
+                var map = maps.Single();
+                
+                cacheKey = GetCacheKey(key);
+                json = JsonConvert.SerializeObject(map);
+                await _cacheProvider.AddAsync(cacheKey, json);
+
+                return map;
+            }
         }
 
         public async Task<FunctionMap> GetTopLevelFunctionMapAsync(string orgId)
         {
-            var topLevel = await QueryAsync(mp => mp.TopLevel && mp.OwnerOrganization.Id == orgId);
-            if (topLevel.Count() == 1)
-                return topLevel.Single();
+            var cacheKey = $"functionmap-{orgId}-root";
+            var json = await _cacheProvider.GetAsync(cacheKey);
+            if (!String.IsNullOrEmpty(json))
+                return JsonConvert.DeserializeObject<FunctionMap>(json);
 
-            topLevel = await QueryAsync(mp => mp.TopLevel && mp.IsPublic);
-            if (topLevel.Count() > 1)
+            cacheKey = $"funcitonmap-public-root";
+
+            json = await _cacheProvider.GetAsync(cacheKey);
+            if (!String.IsNullOrEmpty(json))
+                return JsonConvert.DeserializeObject<FunctionMap>(json);
+
+            var maps = await QueryAsync(mp => mp.TopLevel && mp.OwnerOrganization.Id == orgId);
+            if (maps.Count() == 1)
+            {
+                var map = maps.Single();
+                cacheKey = $"functionmap-{orgId}-root";
+                await _cacheProvider.AddAsync(cacheKey, JsonConvert.SerializeObject(map));
+                return map;
+            }
+
+            maps = await QueryAsync(mp => mp.TopLevel && mp.IsPublic);
+            if (maps.Count() > 1)
             {
                 throw new Exception("Should be only one public top level function map.");
             }
-            else 
-                return topLevel.SingleOrDefault();
+            else
+            {
+                if (maps.Count() == 0)
+                {
+                    return null;
+                }
+
+                var map = maps.Single();
+                cacheKey = $"funcitonmap-public-root";
+                json = JsonConvert.SerializeObject(map);
+                await _cacheProvider.AddAsync(cacheKey, json);
+                return map;
+            }
         }
 
-        public Task UpdateFunctionMapAsync(FunctionMap map)
+        public async Task UpdateFunctionMapAsync(FunctionMap map)
         {
-            return UpsertDocumentAsync(map);
+            var cacheKey = GetCacheKey(map);
+            await UpsertDocumentAsync(map);
+            await _cacheProvider.AddAsync(cacheKey, JsonConvert.SerializeObject(map));
         }
     }
 }

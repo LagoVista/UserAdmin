@@ -33,7 +33,7 @@ namespace LagoVista.UserAdmin.Models.Security
 
         public UserAccess UserAccess { get; set; }
 
-        public List<EntityHeader> Parents { get; set; } = new List<EntityHeader>();
+        public EntityHeader Parent { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.FunctionMap_Functions, FieldType: FieldTypes.ChildListInline, FactoryUrl: "/api/function/map/function/factory", ResourceType: typeof(UserAdminResources))]
         public List<FunctionMapFunction> Functions { get; set; } = new List<FunctionMapFunction>();
@@ -45,6 +45,7 @@ namespace LagoVista.UserAdmin.Models.Security
                 nameof(Name),
                 nameof(Key),
                 nameof(Icon),
+                nameof(IsPublic),
                 nameof(RestrictByDefault),
                 nameof(Functions)
             };
