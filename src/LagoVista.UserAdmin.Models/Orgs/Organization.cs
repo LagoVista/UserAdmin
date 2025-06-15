@@ -171,6 +171,13 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader DefaultQAResource { get; set; }
 
 
+        [FormField(LabelResource: UserAdminResources.Names.Organization_TestingIndustry, WaterMark:UserAdminResources.Names.Organization_TestingIndustry_Select, HelpResource: UserAdminResources.Names.Organization_TestingIndustry_Help,
+            FieldType: FieldTypes.EntityHeaderPicker, EntityHeaderPickerUrl: "/api/industries", ResourceType: typeof(UserAdminResources))]
+        public EntityHeader TestingIndustry { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_TestingIndustryNiche, FieldType: FieldTypes.EntityHeaderPicker, WaterMark: UserAdminResources.Names.Organization_TestingIndustryNiche_Select, EntityHeaderPickerUrl: "/api/industry/{industry.id}/niches", ResourceType: typeof(UserAdminResources))]
+        public EntityHeader TestingIndustryNiche { get; set; }
+
         [FormField(LabelResource: UserAdminResources.Names.Organization_IsForProductLine, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool IsForProductLine { get; set; }
 
@@ -233,6 +240,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(DefaultTestInstance),
                 nameof(DefaultDevelopmentInstance),
                 nameof(DefaultDeviceRepository),
+                nameof(TestingIndustry),
+                nameof(TestingIndustryNiche),
                 nameof(HeroTitle),
                 nameof(HeroBackgroundImage),
                 nameof(LightLogo),

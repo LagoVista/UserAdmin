@@ -1,4 +1,4 @@
-﻿/*6/15/2025 6:40:57 AM*/
+﻿/*6/15/2025 11:57:15 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1445,6 +1445,21 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_TagLine
 
 		public static string Organization_TagLine { get { return GetResourceString("Organization_TagLine"); } }
+//Resources:UserAdminResources:Organization_TestingIndustry
+
+		public static string Organization_TestingIndustry { get { return GetResourceString("Organization_TestingIndustry"); } }
+//Resources:UserAdminResources:Organization_TestingIndustry_Help
+
+		public static string Organization_TestingIndustry_Help { get { return GetResourceString("Organization_TestingIndustry_Help"); } }
+//Resources:UserAdminResources:Organization_TestingIndustry_Select
+
+		public static string Organization_TestingIndustry_Select { get { return GetResourceString("Organization_TestingIndustry_Select"); } }
+//Resources:UserAdminResources:Organization_TestingIndustryNiche
+
+		public static string Organization_TestingIndustryNiche { get { return GetResourceString("Organization_TestingIndustryNiche"); } }
+//Resources:UserAdminResources:Organization_TestingIndustryNiche_Select
+
+		public static string Organization_TestingIndustryNiche_Select { get { return GetResourceString("Organization_TestingIndustryNiche_Select"); } }
 //Resources:UserAdminResources:Organization_Title
 
 		public static string Organization_Title { get { return GetResourceString("Organization_Title"); } }
@@ -2368,6 +2383,11 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_SubLocation_Details = "Organization_SubLocation_Details";
 			public const string Organization_SubLocations = "Organization_SubLocations";
 			public const string Organization_TagLine = "Organization_TagLine";
+			public const string Organization_TestingIndustry = "Organization_TestingIndustry";
+			public const string Organization_TestingIndustry_Help = "Organization_TestingIndustry_Help";
+			public const string Organization_TestingIndustry_Select = "Organization_TestingIndustry_Select";
+			public const string Organization_TestingIndustryNiche = "Organization_TestingIndustryNiche";
+			public const string Organization_TestingIndustryNiche_Select = "Organization_TestingIndustryNiche_Select";
 			public const string Organization_Title = "Organization_Title";
 			public const string Organization_User_Description = "Organization_User_Description";
 			public const string Organization_User_Help = "Organization_User_Help";

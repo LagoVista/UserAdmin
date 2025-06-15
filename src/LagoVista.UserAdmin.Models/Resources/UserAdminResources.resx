@@ -1976,4 +1976,19 @@
   <data name="EmailSenders_Title" xml:space="preserve">
     <value>Email Senders</value>
   </data>
+  <data name="Organization_TestingIndustry" xml:space="preserve">
+    <value>Testing Industry</value>
+  </data>
+  <data name="Organization_TestingIndustryNiche" xml:space="preserve">
+    <value>Testing Industry Niche</value>
+  </data>
+  <data name="Organization_TestingIndustry_Select" xml:space="preserve">
+    <value>-select testing industry-</value>
+  </data>
+  <data name="Organization_TestingIndustryNiche_Select" xml:space="preserve">
+    <value>-select testing industry niche-</value>
+  </data>
+  <data name="Organization_TestingIndustry_Help" xml:space="preserve">
+    <value>The testing industry is used to test out email templates, mailers and bulk email mailings.  As part of the setup, you should upload a bulk email list that has a few sample contacts you can receive and review emails sent.</value>
+  </data>
 </root>

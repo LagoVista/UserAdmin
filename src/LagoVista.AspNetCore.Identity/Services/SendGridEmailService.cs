@@ -1547,6 +1547,41 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
         }
 
+        public async Task<InvokeResult<ContactList>> GetListAsync(string listId, EntityHeader org, EntityHeader user)
+        {
+            var orgRecord = await _organizationRepo.GetOrganizationAsync(org.Id);
+
+            var ns = orgRecord.Namespace;
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
+                var response = await client.GetAsync($"https://api.sendgrid.com/v3/marketing/segments/2.0/{listId}");
+                var strResponse = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return InvokeResult<ContactList>.FromError(strResponse);
+                }
+
+                var contactList = JsonConvert.DeserializeObject<SendGridGetSegmentsResponse>(strResponse);
+
+                var nsFilter = $"orgns:{ns}, ";
+                if (!contactList.Name.StartsWith(nsFilter))
+                {
+                    throw new UnauthorizedAccessException($"You do not have access to the list with id: {listId}. The list does not start with the organization namespace filter: {nsFilter}.");
+                }
+
+                return InvokeResult<ContactList>.Create(new ContactList()
+                {
+                    Id = contactList.Id,
+                    Count = contactList.ContactCount,
+                    LastUpdated = String.IsNullOrEmpty(contactList.SampleUpdated) ? null : DateTime.Parse(contactList.SampleUpdated).ToJSONString(),
+                    Name = contactList.Name.Replace(nsFilter, String.Empty),
+                });
+            }
+        }
+
         public async Task<ListResponse<EmailSenderSummary>> GetEmailSendersAsync(EntityHeader org, EntityHeader user)
         {
             using (var client = new HttpClient())

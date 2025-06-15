@@ -45,6 +45,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> RefreshSegementAsync(string id, EntityHeader org, EntityHeader user);
 
         Task<ListResponse<ContactList>> GetListsAsync(EntityHeader org, EntityHeader user);
+        Task<InvokeResult<ContactList>> GetListAsync(string listId, EntityHeader org, EntityHeader user);
 
         Task<InvokeResult<string>> StartImportJobAsync(string fieldMappings, Stream stream, EntityHeader org, EntityHeader user);
 
