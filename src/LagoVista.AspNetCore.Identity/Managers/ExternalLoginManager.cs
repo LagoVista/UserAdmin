@@ -367,12 +367,12 @@ namespace LagoVista.UserAdmin.Managers
                 //    var newOrg = new UserAdmin.ViewModels.Organization.CreateOrganizationViewModel()
                 //    {
                 //        Namespace = orgNamespace,
-                //        Name = $"{newUser.LastName} Organization"
+                //        NickName = $"{newUser.LastName} Organization"
                 //    };
 
                 //    var orgResult = await _orgManager.CreateNewOrganizationAsync(newOrg, result.Result.User);
-                //    _adminLogger.Trace($"[OAUTH_HandleEXternalLogin] - Created New Organization {newOrg.Name} - {orgNamespace}");
-                //    await _authLogManager.AddAsync(AuthLogTypes.OAuthCreateOrg, result.Result.User.Id, result.Result.User.Text, orgResult.Result.Id, orgResult.Result.Name, oauthProvier: externalLoginInfo.Provider.Text, extras: $"Organization Created for New User: {newOrg.Name} ({orgNamespace})");
+                //    _adminLogger.Trace($"[OAUTH_HandleEXternalLogin] - Created New Organization {newOrg.NickName} - {orgNamespace}");
+                //    await _authLogManager.AddAsync(AuthLogTypes.OAuthCreateOrg, result.Result.User.Id, result.Result.User.Text, orgResult.Result.Id, orgResult.Result.NickName, oauthProvier: externalLoginInfo.Provider.Text, extras: $"Organization Created for New User: {newOrg.NickName} ({orgNamespace})");
                 //    appUser = await _appUserManager.GetUserByExternalLoginAsync(externalLoginInfo.Provider.Value, externalLoginInfo.Id);
                 //}
 

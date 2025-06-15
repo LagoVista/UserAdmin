@@ -187,18 +187,18 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public string SsnSecretId { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.AppUser_Address1, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Address1, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string Address1 { get; set; }
       
-        [FormField(LabelResource: UserAdminResources.Names.AppUser_Address2, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Address2, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string Address2 { get; set; }
         
         
-        [FormField(LabelResource: UserAdminResources.Names.AppUser_City, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_City, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string City { get; set; }
-        [FormField(LabelResource: UserAdminResources.Names.AppUser_StateProvince, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_State, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string State { get; set; }
-        [FormField(LabelResource: UserAdminResources.Names.AppUser_Country, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Country, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string Country { get; set; }
         [FormField(LabelResource: UserAdminResources.Names.Common_PostalCode, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string PostalCode { get; set; }

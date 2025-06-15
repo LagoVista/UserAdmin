@@ -67,7 +67,7 @@ namespace LagoVista.UserAdmin.Tests.User
             Console.WriteLine($"module: {module.Id}");
             //foreach(var area in module.Areas)
             //{
-            //    Console.WriteLine(area.Name);
+            //    Console.WriteLine(area.NickName);
             //    foreach(var page in area.Pages)
             //    {
             //        Console.WriteLine($"\t{page.CardTitle}");

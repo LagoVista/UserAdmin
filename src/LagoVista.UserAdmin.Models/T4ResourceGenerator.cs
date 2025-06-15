@@ -1,4 +1,4 @@
-﻿/*5/29/2025 4:15:25 PM*/
+﻿/*6/15/2025 6:40:57 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -66,12 +66,6 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Admin_Contact
 
 		public static string Admin_Contact { get { return GetResourceString("Admin_Contact"); } }
-//Resources:UserAdminResources:AppUser_Address1
-
-		public static string AppUser_Address1 { get { return GetResourceString("AppUser_Address1"); } }
-//Resources:UserAdminResources:AppUser_Address2
-
-		public static string AppUser_Address2 { get { return GetResourceString("AppUser_Address2"); } }
 //Resources:UserAdminResources:AppUser_Bio
 
 		public static string AppUser_Bio { get { return GetResourceString("AppUser_Bio"); } }
@@ -375,12 +369,24 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:ClientApp_Title
 
 		public static string ClientApp_Title { get { return GetResourceString("ClientApp_Title"); } }
+//Resources:UserAdminResources:Common_Address1
+
+		public static string Common_Address1 { get { return GetResourceString("Common_Address1"); } }
+//Resources:UserAdminResources:Common_Address2
+
+		public static string Common_Address2 { get { return GetResourceString("Common_Address2"); } }
 //Resources:UserAdminResources:Common_Category
 
 		public static string Common_Category { get { return GetResourceString("Common_Category"); } }
 //Resources:UserAdminResources:Common_Category_Select
 
 		public static string Common_Category_Select { get { return GetResourceString("Common_Category_Select"); } }
+//Resources:UserAdminResources:Common_City
+
+		public static string Common_City { get { return GetResourceString("Common_City"); } }
+//Resources:UserAdminResources:Common_Country
+
+		public static string Common_Country { get { return GetResourceString("Common_Country"); } }
 //Resources:UserAdminResources:Common_CreatedBy
 
 		public static string Common_CreatedBy { get { return GetResourceString("Common_CreatedBy"); } }
@@ -477,6 +483,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Common_SelectLocation
 
 		public static string Common_SelectLocation { get { return GetResourceString("Common_SelectLocation"); } }
+//Resources:UserAdminResources:Common_State
+
+		public static string Common_State { get { return GetResourceString("Common_State"); } }
 //Resources:UserAdminResources:Common_Status
 
 		public static string Common_Status { get { return GetResourceString("Common_Status"); } }
@@ -645,6 +654,33 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Email_Verification_Subject
 
 		public static string Email_Verification_Subject { get { return GetResourceString("Email_Verification_Subject"); } }
+//Resources:UserAdminResources:EmailSender_Description
+
+		public static string EmailSender_Description { get { return GetResourceString("EmailSender_Description"); } }
+//Resources:UserAdminResources:EmailSender_From
+
+		public static string EmailSender_From { get { return GetResourceString("EmailSender_From"); } }
+//Resources:UserAdminResources:EmailSender_FromAddress
+
+		public static string EmailSender_FromAddress { get { return GetResourceString("EmailSender_FromAddress"); } }
+//Resources:UserAdminResources:EmailSender_FromName
+
+		public static string EmailSender_FromName { get { return GetResourceString("EmailSender_FromName"); } }
+//Resources:UserAdminResources:EmailSender_ReplyTo
+
+		public static string EmailSender_ReplyTo { get { return GetResourceString("EmailSender_ReplyTo"); } }
+//Resources:UserAdminResources:EmailSender_ReplyToAddress
+
+		public static string EmailSender_ReplyToAddress { get { return GetResourceString("EmailSender_ReplyToAddress"); } }
+//Resources:UserAdminResources:EmailSender_ReplyToName
+
+		public static string EmailSender_ReplyToName { get { return GetResourceString("EmailSender_ReplyToName"); } }
+//Resources:UserAdminResources:EmailSender_Title
+
+		public static string EmailSender_Title { get { return GetResourceString("EmailSender_Title"); } }
+//Resources:UserAdminResources:EmailSenders_Title
+
+		public static string EmailSenders_Title { get { return GetResourceString("EmailSenders_Title"); } }
 //Resources:UserAdminResources:Err_PwdChange_CouldNotFindUser
 
 		public static string Err_PwdChange_CouldNotFindUser { get { return GetResourceString("Err_PwdChange_CouldNotFindUser"); } }
@@ -929,12 +965,6 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:InviteUserVM_Title
 
 		public static string InviteUserVM_Title { get { return GetResourceString("InviteUserVM_Title"); } }
-//Resources:UserAdminResources:Location_Address1
-
-		public static string Location_Address1 { get { return GetResourceString("Location_Address1"); } }
-//Resources:UserAdminResources:Location_Address2
-
-		public static string Location_Address2 { get { return GetResourceString("Location_Address2"); } }
 //Resources:UserAdminResources:Location_Admin_Contact
 
 		public static string Location_Admin_Contact { get { return GetResourceString("Location_Admin_Contact"); } }
@@ -1881,8 +1911,6 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AcceptInviteVM_Help = "AcceptInviteVM_Help";
 			public const string AcceptInviteVM_Title = "AcceptInviteVM_Title";
 			public const string Admin_Contact = "Admin_Contact";
-			public const string AppUser_Address1 = "AppUser_Address1";
-			public const string AppUser_Address2 = "AppUser_Address2";
 			public const string AppUser_Bio = "AppUser_Bio";
 			public const string AppUser_City = "AppUser_City";
 			public const string AppUser_ConfirmPassword = "AppUser_ConfirmPassword";
@@ -1984,8 +2012,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string ClientApp_Instance = "ClientApp_Instance";
 			public const string ClientApp_SelectInstance = "ClientApp_SelectInstance";
 			public const string ClientApp_Title = "ClientApp_Title";
+			public const string Common_Address1 = "Common_Address1";
+			public const string Common_Address2 = "Common_Address2";
 			public const string Common_Category = "Common_Category";
 			public const string Common_Category_Select = "Common_Category_Select";
+			public const string Common_City = "Common_City";
+			public const string Common_Country = "Common_Country";
 			public const string Common_CreatedBy = "Common_CreatedBy";
 			public const string Common_CreationDate = "Common_CreationDate";
 			public const string Common_Customer = "Common_Customer";
@@ -2018,6 +2050,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Common_Role = "Common_Role";
 			public const string Common_SelectDevice = "Common_SelectDevice";
 			public const string Common_SelectLocation = "Common_SelectLocation";
+			public const string Common_State = "Common_State";
 			public const string Common_Status = "Common_Status";
 			public const string Common_StrokeColor = "Common_StrokeColor";
 			public const string Common_TabletSupport = "Common_TabletSupport";
@@ -2074,6 +2107,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Email_RestPassword_ErrorSending = "Email_RestPassword_ErrorSending";
 			public const string Email_Verification_Body = "Email_Verification_Body";
 			public const string Email_Verification_Subject = "Email_Verification_Subject";
+			public const string EmailSender_Description = "EmailSender_Description";
+			public const string EmailSender_From = "EmailSender_From";
+			public const string EmailSender_FromAddress = "EmailSender_FromAddress";
+			public const string EmailSender_FromName = "EmailSender_FromName";
+			public const string EmailSender_ReplyTo = "EmailSender_ReplyTo";
+			public const string EmailSender_ReplyToAddress = "EmailSender_ReplyToAddress";
+			public const string EmailSender_ReplyToName = "EmailSender_ReplyToName";
+			public const string EmailSender_Title = "EmailSender_Title";
+			public const string EmailSenders_Title = "EmailSenders_Title";
 			public const string Err_PwdChange_CouldNotFindUser = "Err_PwdChange_CouldNotFindUser";
 			public const string Err_PwdChange_MissingUserId = "Err_PwdChange_MissingUserId";
 			public const string Err_PwdChange_NewPassword_Missing = "Err_PwdChange_NewPassword_Missing";
@@ -2166,8 +2208,6 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string InviteUserVM_Description = "InviteUserVM_Description";
 			public const string InviteUserVM_Help = "InviteUserVM_Help";
 			public const string InviteUserVM_Title = "InviteUserVM_Title";
-			public const string Location_Address1 = "Location_Address1";
-			public const string Location_Address2 = "Location_Address2";
 			public const string Location_Admin_Contact = "Location_Admin_Contact";
 			public const string Location_City = "Location_City";
 			public const string Location_Country = "Location_Country";

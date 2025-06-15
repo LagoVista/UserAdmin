@@ -40,7 +40,7 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
 
             foreach(var sender in senders.Model)
             {
-                Console.WriteLine($"{sender.Id} - {sender.Text}");
+                Console.WriteLine($"{sender.Id} - {sender.Name}");
             }
         }
 
@@ -59,7 +59,7 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
             appUser.PostalCode = "34685";
             appUser.Country = "United States";
 
-            var result = await _emailSenderService.AddEmailSenderAsync(appUser, _org, _user);
+            var result = await _emailSenderService.AddEmailSenderAsync(appUser,"", _org, _user);
             Assert.IsTrue(result.Successful, result.ErrorMessage);
             Assert.IsTrue(result.Result.SendGridVerified, "Send Grid User should be Verified (email match domain name)");
             Assert.IsTrue(!String.IsNullOrEmpty(result.Result.SendGridSenderId));
@@ -68,6 +68,7 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
             //Assert.IsTrue(deleteResult.Successful, deleteResult.ErrorMessage);
         }
 
+        /* Updates to senders no longer can be done by mapping AppUser fields.
         [TestMethod]
         public async Task UpdateSenderAsync()
         {
@@ -81,7 +82,7 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
             appUser.PostalCode = "34685";
             appUser.Country = "United States";
 
-            var result = await _emailSenderService.AddEmailSenderAsync(appUser, _org, _user);
+            var result = await _emailSenderService.AddEmailSenderAsync(appUser, "", _org, _user);
             Assert.IsTrue(result.Successful, result.ErrorMessage);
             Assert.IsTrue(result.Result.SendGridVerified, "Send Grid User should be Verified (email match domain name)");
             Assert.IsTrue(!String.IsNullOrEmpty(result.Result.SendGridSenderId));
@@ -100,6 +101,7 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
             var deleteResult = await _emailSenderService.DeleteEmailSenderAsync(appUser.SendGridSenderId, _org, _user);
             Assert.IsTrue(deleteResult.Successful, deleteResult.ErrorMessage);
         }
+        */
 
     }
 }

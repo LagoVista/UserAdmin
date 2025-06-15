@@ -293,12 +293,6 @@
   <data name="LocationNamespace_Help" xml:space="preserve">
     <value>The location namespace is used when adding a device to a specific location in conjunction with the organizatoin namespace to generate a unique human readable device id. The namespaces must be unique across your organization.  Namespace can only contain lower case letters and number with no spaces or special characters other than dash or [-]</value>
   </data>
-  <data name="Location_Address1" xml:space="preserve">
-    <value>Address 1</value>
-  </data>
-  <data name="Location_Address2" xml:space="preserve">
-    <value>Address 2</value>
-  </data>
   <data name="Location_Admin_Contact" xml:space="preserve">
     <value>Admin Contact</value>
   </data>
@@ -1079,10 +1073,10 @@
   <data name="AppUser_TeamsAccountName" xml:space="preserve">
     <value>Teams Account Name</value>
   </data>
-  <data name="AppUser_Address1" xml:space="preserve">
+  <data name="Common_Address1" xml:space="preserve">
     <value>Address 1</value>
   </data>
-  <data name="AppUser_Address2" xml:space="preserve">
+  <data name="Common_Address2" xml:space="preserve">
     <value>Address 2</value>
   </data>
   <data name="AppUser_Bio" xml:space="preserve">
@@ -1945,5 +1939,41 @@
   </data>
   <data name="FunctionMap_Functions" xml:space="preserve">
     <value>Functions</value>
+  </data>
+  <data name="EmailSender_Title" xml:space="preserve">
+    <value>Email Sender</value>
+  </data>
+  <data name="EmailSender_Description" xml:space="preserve">
+    <value>An email sender is used to send emails to an external list of contacts.</value>
+  </data>
+  <data name="EmailSender_ReplyTo" xml:space="preserve">
+    <value>Reply To</value>
+  </data>
+  <data name="EmailSender_From" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="EmailSender_ReplyToName" xml:space="preserve">
+    <value>Reply to Name</value>
+  </data>
+  <data name="EmailSender_ReplyToAddress" xml:space="preserve">
+    <value>Reply to Address</value>
+  </data>
+  <data name="EmailSender_FromName" xml:space="preserve">
+    <value>From Name</value>
+  </data>
+  <data name="EmailSender_FromAddress" xml:space="preserve">
+    <value>From Address</value>
+  </data>
+  <data name="Common_City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="Common_State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="Common_Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="EmailSenders_Title" xml:space="preserve">
+    <value>Email Senders</value>
   </data>
 </root>

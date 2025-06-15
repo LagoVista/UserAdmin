@@ -33,9 +33,14 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> UpdateEmailDesignAsync(string id, string name, string subject, string htmlContents, string plainTextContent, EntityHeader org, EntityHeader user);
         Task<ListResponse<EmailDesign>> GetEmailDesignsAsync(EntityHeader org, EntityHeader user);
 
-        Task<InvokeResult<AppUser>> AddEmailSenderAsync(AppUser sender, EntityHeader org, EntityHeader user);
-        Task<InvokeResult<AppUser>> UpdateEmailSenderAsync(AppUser sender, EntityHeader org, EntityHeader user);
+        Task<InvokeResult<AppUser>> AddEmailSenderAsync(AppUser sender, string nickNameOverride, EntityHeader org, EntityHeader user);
         Task<InvokeResult> DeleteEmailSenderAsync(string id, EntityHeader org, EntityHeader user);
+        Task<ListResponse<EmailSenderSummary>> GetEmailSendersAsync(EntityHeader org, EntityHeader user);
+        Task<EmailSender> GetEmailSenderAsync(string id, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> AddEmailSenderAsync(EmailSender sender, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> UpdateEmailSenderAsync(EmailSender sender, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> SendEmailSenderVerificationAsync(string senderId);
+
 
         Task<InvokeResult> RefreshSegementAsync(string id, EntityHeader org, EntityHeader user);
 
@@ -43,7 +48,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
         Task<InvokeResult<string>> StartImportJobAsync(string fieldMappings, Stream stream, EntityHeader org, EntityHeader user);
 
-        Task<ListResponse<EntityHeader>> GetEmailSendersAsync(EntityHeader org, EntityHeader user);
+
         Task<InvokeResult> UpdateListAsync(string sendGridListId, string name, EntityHeader org, EntityHeader user);
         Task<InvokeResult<string>> SendToListAsync(string name, string listId, string senderId, string designId, EntityHeader org, EntityHeader user);
 
@@ -53,5 +58,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> DeleteEmailListSendAsync(string listId, EntityHeader org, EntityHeader user);
         Task<InvokeResult<EmailImportStatus>> GetImportJobStatusAsync(string jobId, EntityHeader org, EntityHeader user);
         List<string> GetRequiredImportFields();
+
+        bool IsValidEmail(string email);
     }
 }

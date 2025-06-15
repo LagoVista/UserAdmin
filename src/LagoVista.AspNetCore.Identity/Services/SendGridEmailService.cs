@@ -20,7 +20,9 @@ using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Net.Mime;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -62,15 +64,26 @@ namespace LagoVista.AspNetCore.Identity.Services
             _organizationRepo = organizationRepo;
         }
 
-        public class SendGridSender
+        public bool IsValidEmail(string email)
         {
-            [JsonProperty("id")]
-            public string Id { get; set; }
+            var trimmedEmail = email.Trim();
 
-            [JsonProperty("nickname")]
-            public string Name { get; set; }
+            if (trimmedEmail.EndsWith("."))
+            {
+                return false; // suggested by @TK-421
+            }
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == trimmedEmail;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
+     
         private class SendGridListResponse
         {
             public string name { get; set; }
@@ -346,7 +359,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             public string Address { get; set; }
 
             [JsonProperty("address_2")]
-            public string Address2 { get; set; }
+            public string OrganizationId { get; set; }
 
             [JsonProperty("city")]
             public string City { get; set; }
@@ -379,7 +392,6 @@ namespace LagoVista.AspNetCore.Identity.Services
                         Name = user.Name,
                     },
                     Address = user.Address1,
-                    Address2 = user.Address2,
                     City = user.City,
                     State = user.State,
                     Zip = user.PostalCode,
@@ -1332,39 +1344,13 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
         }
 
-        public async Task<InvokeResult<AppUser>> UpdateEmailSenderAsync(AppUser sender, EntityHeader org, EntityHeader user)
+
+        public async Task<InvokeResult<AppUser>> AddEmailSenderAsync(AppUser sender, string nickNameOverRide, EntityHeader org, EntityHeader user)
         {
             var sendGridSender = SendGridSenderRequest.Create(sender);
-
-            using (var client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
-
-                var json = JsonConvert.SerializeObject(sendGridSender);
-
-                var path = $"https://api.sendgrid.com/v3/marketing/senders/{sender.SendGridSenderId}";
-                var response = await client.PatchAsync(path, new StringContent(json, Encoding.UTF8, "application/json"));
-
-                var strResponse = await response.Content.ReadAsStringAsync();
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    return InvokeResult<AppUser>.FromError(strResponse);
-                }
-
-                var sgResponse = JsonConvert.DeserializeObject<SendGridSenderResponse>(strResponse);
-
-                sender.SendGridSenderId = sgResponse.Id;
-                sender.SendGridVerified = sgResponse.Verified.Status;
-                sender.SendGridVerifiedFailedReason = sgResponse.Verified.Reason;
-
-                return InvokeResult<AppUser>.Create(sender);
-            }
-        }
-
-        public async Task<InvokeResult<AppUser>> AddEmailSenderAsync(AppUser sender, EntityHeader org, EntityHeader user)
-        {
-            var sendGridSender = SendGridSenderRequest.Create(sender);
+            sendGridSender.OrganizationId = org.Id;
+            if(!String.IsNullOrEmpty(nickNameOverRide))
+                sendGridSender.Name = nickNameOverRide;
 
             using (var client = new HttpClient())
             {
@@ -1561,7 +1547,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
         }
 
-        public async Task<ListResponse<EntityHeader>> GetEmailSendersAsync(EntityHeader org, EntityHeader user)
+        public async Task<ListResponse<EmailSenderSummary>> GetEmailSendersAsync(EntityHeader org, EntityHeader user)
         {
             using (var client = new HttpClient())
             {
@@ -1571,14 +1557,187 @@ namespace LagoVista.AspNetCore.Identity.Services
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    return ListResponse<EntityHeader>.FromError(strResponse);
+                    _adminLogger.AddError("[SendGridEmailService__GetEmailSender]", strResponse);
+                    throw new Exception($"[SendGridEmailService__GetEmailSender] Could not get email senders, Response Code: {response.StatusCode}, {strResponse}");
                 }
 
-                var sgSenders = JsonConvert.DeserializeObject<List<SendGridSender>>(strResponse);
+                var sgSenders = JsonConvert.DeserializeObject<List<EmailSender>>(strResponse);
+                var senders = sgSenders.Where(snd=>snd.OrganizationId == org.Id);
+                foreach(var sender in senders)
+                {
+                    sender.ReplyToAddress = sender.ReplyTo.Email;
+                    sender.ReplyToName = sender.ReplyTo.Name;
+                    sender.FromAddress = sender.From.Email;
+                    sender.FromName = sender.From.Name;
+                }
+                return ListResponse<EmailSenderSummary>.Create(senders.Select(sndr=>sndr.CreateSummary()));
+            }
+        }
 
-                var senders = sgSenders.Select(snd => new EntityHeader() { Id = snd.Id, Text = snd.Name });
+        public async Task<EmailSender> GetEmailSenderAsync(string id, EntityHeader org, EntityHeader user)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
+                var response = await client.GetAsync("https://api.sendgrid.com/v3/marketing/senders");
+                var strResponse = await response.Content.ReadAsStringAsync();
 
-                return ListResponse<EntityHeader>.Create(senders);
+                if (!response.IsSuccessStatusCode)
+                {
+                    _adminLogger.AddError("[SendGridEmailService__GetEmailSender]", strResponse);
+                    throw new Exception($"[SendGridEmailService__GetEmailSender] Could not get email sender with id: {id}, Response Code: {response.StatusCode}, {strResponse}");
+                }
+
+                var sgSenders = JsonConvert.DeserializeObject<List<EmailSender>>(strResponse);
+                var senders = sgSenders.Where(snd => snd.OrganizationId == org.Id);
+               
+                foreach (var sender in senders)
+                {
+                    sender.Name = sender.NickName;
+                    sender.ReplyToAddress = sender.ReplyTo.Email;
+                    sender.ReplyToName = sender.ReplyTo.Name;
+                    sender.FromAddress = sender.From.Email;
+                    sender.FromName = sender.From.Name;
+                }
+                return senders.SingleOrDefault(sndr=>sndr.Id.ToString() == id);
+            }
+        }
+
+        private InvokeResult ValidateSendGridSender(EmailSender sender)
+        {
+            var result = InvokeResult.Success;
+            if (String.IsNullOrEmpty(sender.NickName)) result.AddUserError("Name is required.");
+            if (String.IsNullOrEmpty(sender.Address)) result.AddUserError("Address is required.");
+            if (String.IsNullOrEmpty(sender.City)) result.AddUserError("City is required.");
+            if (String.IsNullOrEmpty(sender.State)) result.AddUserError("State is required.");
+            if (String.IsNullOrEmpty(sender.Country)) result.AddUserError("Country is required.");
+            if (sender.From == null)
+                result.AddUserError("From object is null.");
+            else
+            {
+                if (String.IsNullOrEmpty(sender.From?.Email)) result.AddUserError("From Email is required.");
+                if (String.IsNullOrEmpty(sender.From?.Name)) result.AddUserError("From Name is required.");
+                if (!IsValidEmail(sender.From?.Email)) result.AddUserError("From email address does not appear to be a valid email address.");
+            }
+
+            if (sender.ReplyTo == null)
+                result.AddUserError("Reply To object is null.");
+            else
+            {
+                if (String.IsNullOrEmpty(sender.ReplyTo?.Email)) result.AddUserError("Reply To Email is required.");
+                if (String.IsNullOrEmpty(sender.ReplyTo?.Name)) result.AddUserError("Reply To Name is required.");
+                if (!IsValidEmail(sender.ReplyTo?.Email)) result.AddUserError("Reply to email address does not appear to be a valid email address.");
+            }
+
+            return result;
+        }
+
+        public async Task<InvokeResult> AddEmailSenderAsync(EmailSender sender, EntityHeader org, EntityHeader user)
+        {
+            sender.ReplyTo = new EmailSenderAddress()
+            {
+                Email = sender.ReplyToAddress,
+                Name = sender.ReplyToName
+            };
+
+            sender.From = new EmailSenderAddress()
+            {
+                Email = sender.FromAddress,
+                Name = sender.FromName
+            };
+
+            sender.NickName = sender.Name;
+            sender.Name = null;
+            sender.FromAddress = null;
+            sender.FromName = null;
+            sender.ReplyToAddress = null;
+            sender.ReplyToName = null;
+
+            var result = ValidateSendGridSender(sender);
+
+            if (!result.Successful)
+                return result;
+
+            sender.OrganizationId = org.Id;
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
+
+                var createResult = await client.PostAsJsonAsync("https://api.sendgrid.com/v3/marketing/senders", sender);
+                var strResponse = await createResult.Content.ReadAsStringAsync();
+                if (!createResult.IsSuccessStatusCode)
+                {
+                    _adminLogger.AddError("[SendGridEmailService__AddEmailSender]", strResponse, createResult.StatusCode.ToString().ToKVP("statusCode"));
+                    return InvokeResult.FromError(strResponse);
+                }
+                
+                return InvokeResult.Success;
+            }
+        }
+
+        public async Task<InvokeResult> UpdateEmailSenderAsync(EmailSender sender, EntityHeader org, EntityHeader user)
+        {
+            sender.ReplyTo = new EmailSenderAddress()
+            {
+                Email = sender.ReplyToAddress,
+                Name = sender.ReplyToName
+            };
+
+            sender.From = new EmailSenderAddress()
+            {
+                Email = sender.FromAddress,
+                Name = sender.FromName
+            };
+
+            sender.NickName = sender.Name;
+            sender.Name = null;
+            sender.FromAddress = null;
+            sender.FromName = null;
+            sender.ReplyToAddress = null;
+            sender.ReplyToName = null;
+
+            var result = ValidateSendGridSender(sender);
+
+            if (!result.Successful)
+                return result;
+
+            sender.OrganizationId = org.Id;
+
+            //NOTE: It would appear as of 6/15/2025, send grid does not allow you to change the Reply To Name, nor Nick Name via API. 
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
+
+                var jsonContent = JsonContent.Create(sender, sender.GetType());
+
+                var json = JsonConvert.SerializeObject(sender);
+                Console.WriteLine(json);
+
+                var createResult = await client.PatchAsync($"https://api.sendgrid.com/v3/marketing/senders/{sender.Id}", jsonContent);
+                var strResponse = await createResult.Content.ReadAsStringAsync();
+                if (!createResult.IsSuccessStatusCode)
+                {
+                    _adminLogger.AddError("[SendGridEmailService__AddEmailSender]", strResponse, createResult.StatusCode.ToString().ToKVP("statusCode"));
+                    return InvokeResult.FromError(strResponse);
+                }
+
+                return InvokeResult.Success;
+            }
+        }
+
+        public async Task<InvokeResult> SendEmailSenderVerificationAsync(string senderId)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _settings.SmtpServer.Password);
+                var response = await client.PostAsync($"https://api.sendgrid.com/v3/marketing/senders/{senderId}/resend_verification", null);
+                var strResponse = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
+                {
+                    return InvokeResult.FromError(strResponse);
+                }
+                return InvokeResult.Success;
             }
         }
 

@@ -126,6 +126,12 @@
   <data name="AuthErr_RefreshTokenExpired" xml:space="preserve">
     <value>Refresh Token Expired</value>
   </data>
+  <data name="EmailSender_Description" xml:space="preserve">
+    <value>An Email Sender is used to send emails to a list.</value>
+  </data>
+  <data name="EmailSender_TItle" xml:space="preserve">
+    <value>Email Sender</value>
+  </data>
   <data name="Login_Email" xml:space="preserve">
     <value>Email</value>
   </data>

@@ -70,7 +70,7 @@ namespace LagoVista.UserAdmin.Models.Security
         Medium,
         [EnumLabel(FunctionMapFunction.IconSize_Large, UserAdminResources.Names.Common_Icon_Size_Large, typeof(UserAdminResources))]
         Large,
-        [EnumLabel(FunctionMapFunction.IconSize_Large, UserAdminResources.Names.Common_Icon_Size_ExtraLarge, typeof(UserAdminResources))]
+        [EnumLabel(FunctionMapFunction.IconSize_ExtraLarge, UserAdminResources.Names.Common_Icon_Size_ExtraLarge, typeof(UserAdminResources))]
         ExtraLarge
     }
 

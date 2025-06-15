@@ -37,7 +37,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
 
         /// <summary>
-        /// Name space to be used for any devices at this location.  It will build upon the accounts name space.
+        /// NickName space to be used for any devices at this location.  It will build upon the accounts name space.
         /// </summary>
         [FormField(LabelResource: UserAdminResources.Names.Common_Namespace, NamespaceType: NamespaceTypes.Location, NamespaceUniqueMessageResource: UserAdminResources.Names.OrganizationLocation_NamespaceInUse, FieldType: FieldTypes.NameSpace, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public String Namespace { get; set; }
@@ -71,23 +71,23 @@ namespace LagoVista.UserAdmin.Models.Orgs
         /// <summary>
         /// Primary Address
         /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Location_Address1, IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Address1, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public String Addr1 { get; set; }
 
         /// <summary>
         /// Secondary Address
         /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Location_Address2, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Address2, ResourceType: typeof(UserAdminResources))]
         public String Addr2 { get; set; }
         /// <summary>
         /// City for this location
         /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Location_City, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_City, ResourceType: typeof(UserAdminResources))]
         public String City { get; set; }
         /// <summary>
         /// State or province for this location
         /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Location_State, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_State, ResourceType: typeof(UserAdminResources))]
         public String StateProvince { get; set; }
         /// <summary>
         /// Postal code for this location
@@ -103,7 +103,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         /// <summary>
         /// Country for this location
         /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Location_Country, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Country, ResourceType: typeof(UserAdminResources))]
         public String Country { get; set; }
 
         /// <summary>

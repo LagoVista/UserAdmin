@@ -24,23 +24,23 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
         /// <summary>
         /// Primary Address
         /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Location_Address1, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Address1, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public String Addr1 { get; set; }
 
         /// <summary>
         /// Secondary Address
         /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Location_Address2, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Address2, ResourceType: typeof(UserAdminResources))]
         public String Addr2 { get; set; }
         /// <summary>
         /// City for this location
         /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Location_City, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_City, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public String City { get; set; }
         /// <summary>
         /// State or province for this location
         /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Location_State, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_State, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public String StateProvince { get; set; }
         /// <summary>
         /// Postal code for this location
@@ -50,7 +50,7 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
         /// <summary>
         /// Country for this location
         /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Location_Country, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Country, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public String Country { get; set; }
 
         /// <summary>
