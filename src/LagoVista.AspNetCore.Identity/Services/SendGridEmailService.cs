@@ -1168,13 +1168,15 @@ namespace LagoVista.AspNetCore.Identity.Services
                         SuppressionGroupId = 26579
                     },
                     SendTo = new SendGridSingleSendList()
-                    {                       
+                    {
+                        SegmentIds = new List<string>()
+                        {
+                            listId
+                        }
                     }
                 };
 
                 ssRequest.Categories.Add(org.Id);
-
-                ssRequest.SendTo.SegmentIds.Add(listId);
 
                 var json = JsonConvert.SerializeObject(ssRequest);
                 Console.WriteLine(json);
