@@ -1,4 +1,5 @@
 ﻿using LagoVista.CloudStorage.Storage;
+using LagoVista.Core.Exceptions;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
@@ -48,13 +49,26 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
 
         public Task UpdateSentEmailAsync(SentEmail sentEmail)
         {
+
             return UpdateAsync(SentEmailDTO.FromSentEmail(sentEmail));
+        }
+
+        public async Task<SentEmail> GetSentEmailAsync(string orgId, string internalMessageId)
+        {
+            var sentEmail = await this.FindAsync(orgId, FilterOptions.Create(nameof(SentEmailDTO.InternalMessageId), FilterOptions.Operators.Equals, internalMessageId));
+            if(sentEmail == null)
+            {
+                throw new RecordNotFoundException(nameof(SentEmail), $"OrgId={orgId}, internalMessgaeId={internalMessageId}");
+            }
+
+            return sentEmail.ToSentEmail();
         }
     } 
 
     public class SentEmailDTO : TableStorageEntity
     {
         public string Org { get; set; }
+        public string InternalMessageId { get; set; }
         public string Email { get; set; }
         public string ContactId { get; set; }
         public string CompanyId { get; set; }
@@ -82,6 +96,10 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
 
         public string PromotionId { get; set; }
         public string Promotion { get; set; }
+
+        public string PersonaId { get; set; }
+        public string Persona { get; set; }
+
         public bool Processed { get; set; }
         public int Opens { get; set; }
         public int Clicks { get; set; }
@@ -101,6 +119,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
             {
                 Org = sentEmail.Org.Text,
                 RowKey = sentEmail.ExternalMessageId,
+                InternalMessageId = sentEmail.InternalMessageId,
                 Email = sentEmail.Email,
                 AppUserId = sentEmail.AppUser?.Id,
                 AppUser = sentEmail.AppUser?.Text,
@@ -135,6 +154,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
                 Template = sentEmail.Template?.Text,
                 MailerId = sentEmail.Mailer?.Id,
                 Mailer = sentEmail.Mailer?.Text,
+                Persona = sentEmail.Persona?.Text,
+                PersonaId = sentEmail.Persona?.Id
             };
         }
 
@@ -143,6 +164,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
             return new SentEmail()
             {
                 ExternalMessageId = RowKey,
+                InternalMessageId = InternalMessageId,
                 Org = EntityHeader.Create(PartitionKey, Org),
                 SentByUser = EntityHeader.Create(SentByUserId, SentByUser),
                 AppUser = String.IsNullOrEmpty(AppUserId) ? null :  EntityHeader.Create(AppUserId, AppUser),
@@ -153,6 +175,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
                 Campaign = String.IsNullOrEmpty(CampaignId) ? null : EntityHeader.Create(CampaignId, Campaign),
                 Promotion = String.IsNullOrEmpty(PromotionId) ? null : EntityHeader.Create(PromotionId, Promotion),
                 Template = String.IsNullOrEmpty(TemplateId) ? null : EntityHeader.Create(TemplateId, Template),
+                Persona = String.IsNullOrEmpty(PersonaId) ? null : EntityHeader.Create(PersonaId, Persona),
                 Mailer = String.IsNullOrEmpty(MailerId) ? null : EntityHeader.Create(MailerId, Mailer),
                 SentDate = SentDate,
                 StatusDate = StatusDate,

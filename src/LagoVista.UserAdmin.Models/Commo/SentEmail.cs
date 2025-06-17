@@ -9,6 +9,8 @@ namespace LagoVista.UserAdmin.Models.Commo
     public class SentEmail
     {
         public string ExternalMessageId { get; set; }
+        public string InternalMessageId { get; set; }
+
         public string Email { get; set; }
 
         public EntityHeader Org { get; set; }
@@ -22,7 +24,7 @@ namespace LagoVista.UserAdmin.Models.Commo
 
         public EntityHeader Campaign { get; set; }
         public EntityHeader Promotion { get; set; }
-
+        public EntityHeader Persona { get; set; }
         public EntityHeader Template { get; set; }
         public EntityHeader Mailer { get; set; }
 
