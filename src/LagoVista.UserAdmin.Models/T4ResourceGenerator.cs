@@ -1,4 +1,4 @@
-﻿/*6/15/2025 11:57:15 AM*/
+﻿/*6/21/2025 2:27:16 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1307,6 +1307,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_DefaultInstance_Select
 
 		public static string Organization_DefaultInstance_Select { get { return GetResourceString("Organization_DefaultInstance_Select"); } }
+//Resources:UserAdminResources:Organization_DefaultLandingPage
+
+		public static string Organization_DefaultLandingPage { get { return GetResourceString("Organization_DefaultLandingPage"); } }
+//Resources:UserAdminResources:Organization_DefaultLandingPage_Select
+
+		public static string Organization_DefaultLandingPage_Select { get { return GetResourceString("Organization_DefaultLandingPage_Select"); } }
 //Resources:UserAdminResources:Organization_DefaultProjectAdminLead
 
 		public static string Organization_DefaultProjectAdminLead { get { return GetResourceString("Organization_DefaultProjectAdminLead"); } }
@@ -1358,15 +1364,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_HeroTitle
 
 		public static string Organization_HeroTitle { get { return GetResourceString("Organization_HeroTitle"); } }
+//Resources:UserAdminResources:Organization_HomePage
+
+		public static string Organization_HomePage { get { return GetResourceString("Organization_HomePage"); } }
+//Resources:UserAdminResources:Organization_HomePage_Help
+
+		public static string Organization_HomePage_Help { get { return GetResourceString("Organization_HomePage_Help"); } }
 //Resources:UserAdminResources:Organization_IsForProductLine
 
 		public static string Organization_IsForProductLine { get { return GetResourceString("Organization_IsForProductLine"); } }
-//Resources:UserAdminResources:Organization_LandingPage
-
-		public static string Organization_LandingPage { get { return GetResourceString("Organization_LandingPage"); } }
-//Resources:UserAdminResources:Organization_LandingPage_Help
-
-		public static string Organization_LandingPage_Help { get { return GetResourceString("Organization_LandingPage_Help"); } }
 //Resources:UserAdminResources:Organization_LinkedInUrl
 
 		public static string Organization_LinkedInUrl { get { return GetResourceString("Organization_LinkedInUrl"); } }
@@ -2337,6 +2343,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_DefaultDevelopmentInstance = "Organization_DefaultDevelopmentInstance";
 			public const string Organization_DefaultInstance = "Organization_DefaultInstance";
 			public const string Organization_DefaultInstance_Select = "Organization_DefaultInstance_Select";
+			public const string Organization_DefaultLandingPage = "Organization_DefaultLandingPage";
+			public const string Organization_DefaultLandingPage_Select = "Organization_DefaultLandingPage_Select";
 			public const string Organization_DefaultProjectAdminLead = "Organization_DefaultProjectAdminLead";
 			public const string Organization_DefaultProjectAdminLead_Help = "Organization_DefaultProjectAdminLead_Help";
 			public const string Organization_DefaultProjectLead = "Organization_DefaultProjectLead";
@@ -2354,9 +2362,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_Help = "Organization_Help";
 			public const string Organization_HeroBackground = "Organization_HeroBackground";
 			public const string Organization_HeroTitle = "Organization_HeroTitle";
+			public const string Organization_HomePage = "Organization_HomePage";
+			public const string Organization_HomePage_Help = "Organization_HomePage_Help";
 			public const string Organization_IsForProductLine = "Organization_IsForProductLine";
-			public const string Organization_LandingPage = "Organization_LandingPage";
-			public const string Organization_LandingPage_Help = "Organization_LandingPage_Help";
 			public const string Organization_LinkedInUrl = "Organization_LinkedInUrl";
 			public const string Organization_Location = "Organization_Location";
 			public const string Organization_Location_Description = "Organization_Location_Description";

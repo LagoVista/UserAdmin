@@ -61,7 +61,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             if (String.IsNullOrEmpty(allModulesJson))
             {
                 _adminLogger.Trace($"[ModuleRepo__GetAllModules] - CACHE-MISS - {ALL_MODULES_CACHE_KEY}");
-                var lists = await QueryAsync(rec => true);
+                var lists = await QueryAsync(rec => !rec.IsDeleted.HasValue || rec.IsDeleted == false);
                 var summaries = lists.OrderBy(mod => mod.SortOrder).Select(mod => mod.CreateSummary()).ToList();
                 await _cacheProvider.AddAsync(ALL_MODULES_CACHE_KEY, JsonConvert.SerializeObject(summaries));
                 return summaries;
@@ -84,7 +84,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
         {
             var all = await GetAll();
             return ListResponse<ModuleSummary>.Create(listRequest, 
-                all.Where(org => org.OwnerOrgId == orgId)
+                all.Where(org => org.OwnerOrgId == orgId && org.IsDeleted == false)
                 .OrderBy( mod=>mod.UiCategory?.Text).ThenBy(mod=>mod.SortOrder)
                 .Skip(listRequest.PageSize * (listRequest.PageIndex - 1)).Take(listRequest.PageSize));
         }
@@ -92,7 +92,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
         public async Task<List<ModuleSummary>> GetModulesForOrgAndPublicAsync(string orgId, bool isForProductLine)
         {
             var modules = await GetAll();
-            return modules.Where(mod => mod.IsPublic || mod.OwnerOrgId == orgId || (mod.IsForProductLine && isForProductLine)).OrderBy(mod=>mod.UiCategory?.Text).ThenBy(mod=>mod.SortOrder).ToList();
+            return modules.Where(mod => (!mod.IsDeleted.HasValue || mod.IsDeleted == false) && (mod.IsPublic || mod.OwnerOrgId == orgId || (mod.IsForProductLine && isForProductLine))).OrderBy(mod=>mod.UiCategory?.Text).ThenBy(mod=>mod.SortOrder).ToList();
         }
 
         public Task<Module> GetModuleAsync(string id)

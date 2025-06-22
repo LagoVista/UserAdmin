@@ -81,6 +81,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Organization_HeroTitle, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string HeroTitle { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultLandingPage, WaterMark:UserAdminResources.Names.Organization_DefaultLandingPage_Select, EntityHeaderPickerUrl:"/api/landingpages", EditorPath: "/contentmanagement/landingpage/{id}", FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader DefaultLandingPage { get; set; }
+
         [FormField(LabelResource: UserAdminResources.Names.Common_TimeZome, IsRequired: true, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
         public EntityHeader TimeZone { get; set; }
 
@@ -197,8 +200,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Organization_Locations, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public List<EntityHeader> Locations { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Organization_LandingPage, HelpResource: UserAdminResources.Names.Organization_LandingPage_Help, FieldType: FieldTypes.Text, IsRequired: false, ResourceType: typeof(UserAdminResources))]
-        public string LandingPage { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.Organization_HomePage, HelpResource: UserAdminResources.Names.Organization_HomePage_Help, FieldType: FieldTypes.Text, IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        public string HomePage { get; set; }
+
         public bool IsArchived { get; set; }
 
         public List<string> GetFormFields()
