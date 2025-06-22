@@ -272,6 +272,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 Icon = Icon,
                 DarkLogo = DarkLogo,
                 LightLogo = LightLogo,
+                DefaultLandingPage = DefaultLandingPage,
                 Name = Name,
                 Namespace = Namespace,
                 PrimaryBgColor = PrimaryBgColor,
@@ -366,6 +367,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public string Namespace { get; set; }
         public EntityHeader DarkLogo { get; set; }
         public EntityHeader LightLogo { get; set; }
+
+        public EntityHeader DefaultLandingPage { get; set; }
 
         public string TagLine { get; set; }
         public string Icon { get; set; }
