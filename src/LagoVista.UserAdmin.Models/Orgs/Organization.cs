@@ -165,6 +165,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public EntityHeader DefaultProjectAdminLead { get; set; }
 
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultBusinessDevelopmentRep, HelpResource: UserAdminResources.Names.Organization_DefaultBusinessDevelopmentRep_Help, FieldType: FieldTypes.UserPicker,
+            WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader DefaultBusinessDevelopmentRep { get; set; }
+
         [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultContributor, HelpResource: UserAdminResources.Names.Organization_DefaultContributor_Help, FieldType: FieldTypes.UserPicker,
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public EntityHeader DefaultContributor { get; set; }

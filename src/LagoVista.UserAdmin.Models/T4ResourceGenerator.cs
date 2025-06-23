@@ -1,4 +1,4 @@
-﻿/*6/21/2025 2:27:16 PM*/
+﻿/*6/23/2025 12:52:34 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1289,6 +1289,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_CreateGettingStartedData_Help
 
 		public static string Organization_CreateGettingStartedData_Help { get { return GetResourceString("Organization_CreateGettingStartedData_Help"); } }
+//Resources:UserAdminResources:Organization_DefaultBusinessDevelopmentRep
+
+		public static string Organization_DefaultBusinessDevelopmentRep { get { return GetResourceString("Organization_DefaultBusinessDevelopmentRep"); } }
+//Resources:UserAdminResources:Organization_DefaultBusinessDevelopmentRep_Help
+
+		public static string Organization_DefaultBusinessDevelopmentRep_Help { get { return GetResourceString("Organization_DefaultBusinessDevelopmentRep_Help"); } }
 //Resources:UserAdminResources:Organization_DefaultContributor
 
 		public static string Organization_DefaultContributor { get { return GetResourceString("Organization_DefaultContributor"); } }
@@ -2337,6 +2343,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_CantCreate = "Organization_CantCreate";
 			public const string Organization_CreateGettingStartedData = "Organization_CreateGettingStartedData";
 			public const string Organization_CreateGettingStartedData_Help = "Organization_CreateGettingStartedData_Help";
+			public const string Organization_DefaultBusinessDevelopmentRep = "Organization_DefaultBusinessDevelopmentRep";
+			public const string Organization_DefaultBusinessDevelopmentRep_Help = "Organization_DefaultBusinessDevelopmentRep_Help";
 			public const string Organization_DefaultContributor = "Organization_DefaultContributor";
 			public const string Organization_DefaultContributor_Help = "Organization_DefaultContributor_Help";
 			public const string Organization_DefaultDemoInstance = "Organization_DefaultDemoInstance";

@@ -1997,4 +1997,10 @@
   <data name="Organization_DefaultLandingPage_Select" xml:space="preserve">
     <value>-select default landing page-</value>
   </data>
+  <data name="Organization_DefaultBusinessDevelopmentRep" xml:space="preserve">
+    <value>Default Business Development Representative</value>
+  </data>
+  <data name="Organization_DefaultBusinessDevelopmentRep_Help" xml:space="preserve">
+    <value>The employee that should be the default business development representative of the organization.</value>
+  </data>
 </root>
