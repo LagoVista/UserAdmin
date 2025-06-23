@@ -65,13 +65,13 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             return _rdbmsUserManager.GetBillingContactOrgsForUserAsync(orgId, userId);
         }
 
-        public async Task<string> GetLandingPageFororgAsync(string orgId)
+        public async Task<string> GetHomePageForOrgAsync(string orgId)
         {
             var landingPage = await _cacheProvider.GetAsync(GetCacheKey(orgId));
             if(String.IsNullOrEmpty(landingPage))
             {
                 var org = await GetOrganizationAsync(orgId);
-                landingPage = (String.IsNullOrEmpty(org.LandingPage)) ? "/home" : org.LandingPage;
+                landingPage = (String.IsNullOrEmpty(org.HomePage)) ? "/home" : org.HomePage;
                 await _cacheProvider.AddAsync(GetCacheKey(orgId), landingPage);
             }
 

@@ -238,7 +238,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(BillingLocation),
                 nameof(DefaultTheme),
                 nameof(WebSite),
-                nameof(LandingPage),
+                nameof(HomePage),
                 nameof(DefaultInstance),
                 nameof(DefaultDemoInstance),
                 nameof(DefaultTestInstance),
@@ -246,6 +246,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(DefaultDeviceRepository),
                 nameof(TestingIndustry),
                 nameof(TestingIndustryNiche),
+                nameof(DefaultLandingPage),
                 nameof(HeroTitle),
                 nameof(HeroBackgroundImage),
                 nameof(LightLogo),
@@ -293,7 +294,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 Id = Id,
                 Text = Name,
                 Name = Name,
-                LandingPage = LandingPage,
+                HomePage = HomePage,
                 Namespace = Namespace,
                 Icon = Icon,
                 TagLine = TagLine,
@@ -330,7 +331,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader LightLogo { get; set; }
         public string TagLine { get; set; }
         public string DefaultTheme { get; set; }
-        public string LandingPage { get; set; }
+        public string HomePage { get; set; }
         public string PrimaryBgColor { get; set; }
         public string PrimaryTextColor { get; set; }
         public string AccentColor { get; set; }

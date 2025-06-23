@@ -218,9 +218,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
                     if (String.IsNullOrEmpty(response.RedirectPage))
                     {
-                        if (!String.IsNullOrEmpty(org.LandingPage))
+                        if (!String.IsNullOrEmpty(org.HomePage))
                         {
-                            response.RedirectPage = org.LandingPage;
+                            response.RedirectPage = org.HomePage;
                         }
                         else if (appUser.ShowWelcome)
                         {

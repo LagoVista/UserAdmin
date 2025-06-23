@@ -814,7 +814,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult<string>> GetLandingPageForOrgAsync(string orgId)
         {
-            var landingPage = await _organizationRepo.GetLandingPageFororgAsync(orgId);
+            var landingPage = await _organizationRepo.GetHomePageForOrgAsync(orgId);
             return InvokeResult<string>.Create(landingPage);
         }
 

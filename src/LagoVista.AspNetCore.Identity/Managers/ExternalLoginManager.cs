@@ -315,8 +315,8 @@ namespace LagoVista.UserAdmin.Managers
                     returnUrl = $"{CommonLinks.ConfirmEmail}?email={externalLoginInfo.Email.ToLower()}";
                 else if (appUser.CurrentOrganization == null)
                     returnUrl = CommonLinks.CreateDefaultOrg;
-                else if (!String.IsNullOrEmpty(appUser.CurrentOrganization.LandingPage) && appUser.EmailConfirmed)
-                    returnUrl = appUser.CurrentOrganization.LandingPage;
+                else if (!String.IsNullOrEmpty(appUser.CurrentOrganization.HomePage) && appUser.EmailConfirmed)
+                    returnUrl = appUser.CurrentOrganization.HomePage;
 
                 return await FinalizeExternalLogin(appUser, cookies, externalLoginInfo.Provider.Text, inviteId, returnUrl);
             }
