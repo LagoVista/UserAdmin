@@ -84,7 +84,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
         {
             var all = await GetAll();
             return ListResponse<ModuleSummary>.Create(listRequest, 
-                all.Where(org => org.OwnerOrgId == orgId && org.IsDeleted == false)
+                all.Where(org => org.OwnerOrgId == orgId && (org.IsDeleted == false || !org.IsDeleted.HasValue))
                 .OrderBy( mod=>mod.UiCategory?.Text).ThenBy(mod=>mod.SortOrder)
                 .Skip(listRequest.PageSize * (listRequest.PageIndex - 1)).Take(listRequest.PageSize));
         }

@@ -226,6 +226,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(DefaultProjectAdminLead),
                 nameof(DefaultContributor),
                 nameof(DefaultQAResource),
+                nameof(DefaultBusinessDevelopmentRep),
                 nameof(FacebookUrl),
                 nameof(XUrl),
                 nameof(LinkeInUrl),
