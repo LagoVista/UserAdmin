@@ -2003,4 +2003,10 @@
   <data name="Organization_DefaultBusinessDevelopmentRep_Help" xml:space="preserve">
     <value>The employee that should be the default business development representative of the organization.</value>
   </data>
+  <data name="Organization_LandingPageHostName" xml:space="preserve">
+    <value>Landing Page Host Name</value>
+  </data>
+  <data name="Organization_LandingPageHostName_Help" xml:space="preserve">
+    <value>The landing page host name will be used by the web server to detect requests made with this host name.  If the host name matches and there is no path a redirect will be done to the default landing page.  The protocol such as HTTP:// or HTTPS:// should not be included.</value>
+  </data>
 </root>

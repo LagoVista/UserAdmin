@@ -84,6 +84,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultLandingPage, WaterMark:UserAdminResources.Names.Organization_DefaultLandingPage_Select, EntityHeaderPickerUrl:"/api/landingpages", EditorPath: "/contentmanagement/landingpage/{id}", FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(UserAdminResources))]
         public EntityHeader DefaultLandingPage { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Organization_LandingPageHostName, HelpResource: UserAdminResources.Names.Organization_LandingPageHostName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string LandingPageHostName { get; set; }
+
         [FormField(LabelResource: UserAdminResources.Names.Common_TimeZome, IsRequired: true, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
         public EntityHeader TimeZone { get; set; }
 
@@ -253,6 +256,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(TestingIndustry),
                 nameof(TestingIndustryNiche),
                 nameof(DefaultLandingPage),
+                nameof(LandingPageHostName),
                 nameof(HeroTitle),
                 nameof(HeroBackgroundImage),
                 nameof(LightLogo),

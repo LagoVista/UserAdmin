@@ -1,4 +1,4 @@
-﻿/*6/23/2025 12:52:34 PM*/
+﻿/*6/26/2025 7:28:30 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1379,6 +1379,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_IsForProductLine
 
 		public static string Organization_IsForProductLine { get { return GetResourceString("Organization_IsForProductLine"); } }
+//Resources:UserAdminResources:Organization_LandingPageHostName
+
+		public static string Organization_LandingPageHostName { get { return GetResourceString("Organization_LandingPageHostName"); } }
+//Resources:UserAdminResources:Organization_LandingPageHostName_Help
+
+		public static string Organization_LandingPageHostName_Help { get { return GetResourceString("Organization_LandingPageHostName_Help"); } }
 //Resources:UserAdminResources:Organization_LinkedInUrl
 
 		public static string Organization_LinkedInUrl { get { return GetResourceString("Organization_LinkedInUrl"); } }
@@ -2373,6 +2379,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_HomePage = "Organization_HomePage";
 			public const string Organization_HomePage_Help = "Organization_HomePage_Help";
 			public const string Organization_IsForProductLine = "Organization_IsForProductLine";
+			public const string Organization_LandingPageHostName = "Organization_LandingPageHostName";
+			public const string Organization_LandingPageHostName_Help = "Organization_LandingPageHostName_Help";
 			public const string Organization_LinkedInUrl = "Organization_LinkedInUrl";
 			public const string Organization_Location = "Organization_Location";
 			public const string Organization_Location_Description = "Organization_Location_Description";
