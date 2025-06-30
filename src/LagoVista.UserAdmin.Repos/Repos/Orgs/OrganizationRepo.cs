@@ -14,8 +14,9 @@ using Microsoft.Azure.Cosmos;
 using LagoVista.CloudStorage;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Exceptions;
-using ZstdSharp.Unsafe;
-using System.Security.Cryptography;
+using Newtonsoft.Json;
+using MongoDB.Bson.Serialization.IdGenerators;
+
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
@@ -78,6 +79,24 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             return landingPage;
         }
 
+        public const string ORGS_WITH_NAMESPACE = "orgs_with_hostnames";
+
+        public async Task<OrgHostNameRedirect> GetDefaultLandingPageForHostAsync(string hostName)
+        {
+            var json = await _cacheProvider.GetAsync(ORGS_WITH_NAMESPACE);
+            if(!String.IsNullOrEmpty(json))
+            {
+                var orgHostNames = JsonConvert.DeserializeObject<List<OrgHostNameRedirect>>(json);
+                return orgHostNames.FirstOrDefault(o => o.HostName == hostName);   
+            }
+
+            var orgs = await QueryAsync(o => null != o.LandingPageHostName);
+            var os = orgs.Select(o => new OrgHostNameRedirect() { HostName = o.LandingPageHostName, OrgNs = o.Namespace, LandingPage = o.DefaultLandingPage });
+            json = JsonConvert.SerializeObject(os);
+            await _cacheProvider.AddAsync(ORGS_WITH_NAMESPACE, json);
+            return os.FirstOrDefault(o => o.HostName == hostName);
+        }
+
         public async Task<Organization> GetOrganizationAsync(string id)
         {
             var org = await GetDocumentAsync(id);
@@ -118,7 +137,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             await _rdbmsUserManager.UpdateOrgAsync(org);
             await UpsertDocumentAsync(org);
             await _cacheProvider.RemoveAsync(GetCacheKey(org.Id));
-            await _cacheProvider.GetAsync($"basic_theme_org_{org.Id}");
+            await _cacheProvider.RemoveAsync(ORGS_WITH_NAMESPACE);
         }
 
         public Task<ListResponse<OrganizationSummary>> GetAllOrgsAsync(string orgSearch, ListRequest listRequest)

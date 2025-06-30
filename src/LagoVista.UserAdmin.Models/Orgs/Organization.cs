@@ -371,6 +371,15 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
 
 
+
+    public class OrgHostNameRedirect
+    {
+        public string HostName { get; set; }
+        public string OrgNs { get; set; }
+        public EntityHeader LandingPage { get; set; }
+    }
+
+
     public class PublicOrgInformation
     {
         public string Id { get; set; }
