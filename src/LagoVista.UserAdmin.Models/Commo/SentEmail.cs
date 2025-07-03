@@ -13,6 +13,7 @@ namespace LagoVista.UserAdmin.Models.Commo
                     ListUIUrl: "/business/email")]
     public class SentEmail
     {
+        public string Id { get; set; }
         public string ExternalMessageId { get; set; }
         public string InternalMessageId { get; set; }
 
