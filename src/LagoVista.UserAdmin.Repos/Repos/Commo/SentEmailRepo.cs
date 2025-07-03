@@ -1,12 +1,16 @@
-﻿using LagoVista.CloudStorage.Storage;
+﻿using Azure.Storage.Blobs;
+using LagoVista.CloudStorage.Storage;
+using LagoVista.Core;
 using LagoVista.Core.Exceptions;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Commo;
 using LagoVista.UserAdmin.Models.Commo;
 using System;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Commo
@@ -14,11 +18,13 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
     public class SentEmailRepo : TableStorageBase<SentEmailDTO>, ISentEmailRepo
     {
         private readonly IAdminLogger _adminLogger;
+        private readonly IUserAdminSettings _userAdminSettings;
 
         public SentEmailRepo(IUserAdminSettings settings, IAdminLogger logger) :
         base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
             _adminLogger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _userAdminSettings = settings ?? throw new ArgumentNullException(nameof(settings));    
         }
 
         public Task AddSentEmailAsync(SentEmail sentEmail)
@@ -40,16 +46,22 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
             var records = await this.GetPagedResultsAsync(orgId, listRequest);
             return ListResponse<SentEmail>.Create(records.Model.Select(rec => rec.ToSentEmail()), listRequest);
         }
+
         public async Task<ListResponse<SentEmail>> GetSentEmailForMailerAsync(string orgId, string mailerId, ListRequest listRequest)
         {
             var records = await this.GetPagedResultsAsync(orgId,  listRequest, FilterOptions.Create(nameof(SentEmailDTO.MailerId), FilterOptions.Operators.Equals, mailerId));
             return ListResponse<SentEmail>.Create(records.Model.Select(rec => rec.ToSentEmail()), listRequest);
         }
 
+        public async Task<ListResponse<SentEmail>> GetIndividualSentEmailForOrgAsync(string orgId, ListRequest listRequest)
+        { 
+            var records = await this.GetPagedResultsAsync(orgId, listRequest, FilterOptions.Create(nameof(SentEmailDTO.IndividualMessage), FilterOptions.Operators.Equals, true));
+            return ListResponse<SentEmail>.Create(records.Model.Select(rec => rec.ToSentEmail()), listRequest);
+        }
+
 
         public Task UpdateSentEmailAsync(SentEmail sentEmail)
         {
-
             return UpdateAsync(SentEmailDTO.FromSentEmail(sentEmail));
         }
 
@@ -62,6 +74,101 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
             }
 
             return sentEmail.ToSentEmail();
+        }
+
+        private string GetContainerName(SentEmail sentEmail)
+        {
+            var dateStamp = sentEmail.SentDate.ToDateTime();
+            var containerName =  $"emailarchive{sentEmail.OrgNameSpace}{dateStamp.Year:0000}{dateStamp.Month:00}".ToLower();
+            return containerName;
+        }
+
+        private async Task<BlobContainerClient> GetBlobContainerClient(string containerName)
+        {
+            var baseuri = $"https://{_userAdminSettings.UserTableStorage.AccountId}.blob.core.windows.net";
+            var uri = new Uri(baseuri);
+
+            var connectionString = $"DefaultEndpointsProtocol=https;AccountName={_userAdminSettings.UserTableStorage.AccountId};AccountKey={_userAdminSettings.UserTableStorage.AccessKey}";
+            var blobClient = new BlobServiceClient(connectionString);
+            try
+            {
+                var blobContainerClient = blobClient.GetBlobContainerClient(containerName);
+                return blobContainerClient;
+            }
+            catch (Exception)
+            {
+                var container = await blobClient.CreateBlobContainerAsync(containerName);
+
+                return container.Value;
+            }
+        }
+
+        private string GetBlobName(SentEmail sentEmail)
+        {
+            return $"{sentEmail.InternalMessageId}.eml";
+        }
+
+
+        public async Task AddEmailBodyAsync(SentEmail email, string body)
+        {
+            var retryCount = 0;
+            Exception ex = null;
+            while (retryCount++ < 5)
+            {
+                try
+                {
+                    var containerName = GetContainerName(email);
+                    var containerClient = await GetBlobContainerClient(containerName);
+                    await containerClient.CreateIfNotExistsAsync();
+                    var blobName = GetBlobName(email);
+                    var buffer = System.Text.ASCIIEncoding.ASCII.GetBytes(body);
+                    var blobClient = containerClient.GetBlobClient(blobName);
+                    await blobClient.UploadAsync(new BinaryData(buffer));
+                    return;
+                }
+                catch (Exception exc)
+                {
+                    ex = exc;
+                    _adminLogger.AddException("AttachmentRepo_AddAttachmentAsync", ex);
+                    Console.WriteLine("Exception deserializeing: " + ex.Message);
+                    await Task.Delay(retryCount * 250);
+                    if (retryCount == 4)
+                        throw;
+                }
+            }
+        }
+
+
+        public async Task<string> GetEmailBodyAsync(SentEmail email)
+        {
+            var retryCount = 0;
+            Exception ex = null;
+            while (retryCount++ < 5)
+            {
+                try
+                {
+                    var containerName = GetContainerName(email);
+                    var containerClient = await GetBlobContainerClient(containerName);
+                    await containerClient.CreateIfNotExistsAsync();
+                    var blobName = GetBlobName(email);
+                    var blobClient = containerClient.GetBlobClient(blobName);
+                    var content = await blobClient.DownloadContentAsync();
+                    var text = System.Text.ASCIIEncoding.ASCII.GetString(content.Value.Content.ToArray());
+                    return text;                    
+                }
+                catch (Exception exc)
+                {
+                    ex = exc;
+                    _adminLogger.AddException("AttachmentRepo_GetAttachmentAsync", ex);
+                    Console.WriteLine("Exception deserializeing: " + ex.Message);
+                    await Task.Delay(retryCount * 250);
+                    if (retryCount == 4)
+                        throw;
+                }
+            }
+
+            /* nop */
+            return null;
         }
     } 
 
@@ -100,6 +207,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
         public string PersonaId { get; set; }
         public string Persona { get; set; }
 
+        public string Subject { get; set; }
+
         public bool Processed { get; set; }
         public int Opens { get; set; }
         public int Clicks { get; set; }
@@ -113,12 +222,17 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
         public string MailerId { get; set; }
         public string Mailer { get; set; }
 
+        public bool IndividualMessage { get; set; }
+
+        public string PrimaryExternalMessageId { get; set; }
+
         public static SentEmailDTO FromSentEmail(SentEmail sentEmail)
         {
             return new SentEmailDTO()
             {
                 Org = sentEmail.Org.Text,
                 RowKey = sentEmail.ExternalMessageId,
+                PrimaryExternalMessageId = sentEmail.PrimaryExternalMessageId,
                 InternalMessageId = sentEmail.InternalMessageId,
                 Email = sentEmail.Email,
                 AppUserId = sentEmail.AppUser?.Id,
@@ -155,7 +269,10 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
                 MailerId = sentEmail.Mailer?.Id,
                 Mailer = sentEmail.Mailer?.Text,
                 Persona = sentEmail.Persona?.Text,
-                PersonaId = sentEmail.Persona?.Id
+                Subject = sentEmail.Subject,
+                PersonaId = sentEmail.Persona?.Id,
+                IndividualMessage = sentEmail.IndividualMessage,
+                
             };
         }
 
@@ -165,6 +282,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
             {
                 ExternalMessageId = RowKey,
                 InternalMessageId = InternalMessageId,
+                PrimaryExternalMessageId = PrimaryExternalMessageId,
                 Org = EntityHeader.Create(PartitionKey, Org),
                 SentByUser = EntityHeader.Create(SentByUserId, SentByUser),
                 AppUser = String.IsNullOrEmpty(AppUserId) ? null :  EntityHeader.Create(AppUserId, AppUser),
@@ -185,7 +303,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
                 ReplyToEmail = ReplyToEmail,
                 Bounced = Bounced,
                 Delivered = Delivered,
-
+                Subject = Subject,
+                IndividualMessage = IndividualMessage,
                 Undeliverable = Undeliverable,
                 Clicks = Clicks,
                 Opens = Opens,

@@ -2009,4 +2009,13 @@
   <data name="Organization_LandingPageHostName_Help" xml:space="preserve">
     <value>The landing page host name will be used by the web server to detect requests made with this host name.  If the host name matches and there is no path a redirect will be done to the default landing page.  The protocol such as HTTP:// or HTTPS:// should not be included.</value>
   </data>
+  <data name="SentEmail_Title" xml:space="preserve">
+    <value>Sent Email</value>
+  </data>
+  <data name="SentEmail_Description" xml:space="preserve">
+    <value>Detail records of emails that have been sent.</value>
+  </data>
+  <data name="SentEmails_Title" xml:space="preserve">
+    <value>Sent Emails</value>
+  </data>
 </root>

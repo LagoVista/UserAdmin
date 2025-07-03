@@ -1318,6 +1318,9 @@ namespace LagoVista.AspNetCore.Identity.Services
             foreach (var addr in email.To)
                 msg.AddTo(addr.Address, addr.Name);
 
+            foreach (var addr in email.Cc)
+                msg.AddCc(addr.Address, addr.Name);
+
             msg.From = new SendGrid.Helpers.Mail.EmailAddress(email.From.Address, email.From.Name);
 
             if (email.ReplyTo != null && email.ReplyTo.Address != email.From.Address)

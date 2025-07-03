@@ -1,4 +1,4 @@
-﻿/*6/26/2025 7:28:30 AM*/
+﻿/*7/3/2025 6:03:25 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1760,6 +1760,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:SendCodeVM_Title
 
 		public static string SendCodeVM_Title { get { return GetResourceString("SendCodeVM_Title"); } }
+//Resources:UserAdminResources:SentEmail_Description
+
+		public static string SentEmail_Description { get { return GetResourceString("SentEmail_Description"); } }
+//Resources:UserAdminResources:SentEmail_Title
+
+		public static string SentEmail_Title { get { return GetResourceString("SentEmail_Title"); } }
+//Resources:UserAdminResources:SentEmails_Title
+
+		public static string SentEmails_Title { get { return GetResourceString("SentEmails_Title"); } }
 //Resources:UserAdminResources:SetPasswordVM_Description
 
 		public static string SetPasswordVM_Description { get { return GetResourceString("SetPasswordVM_Description"); } }
@@ -2506,6 +2515,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string SendCodeVM_Description = "SendCodeVM_Description";
 			public const string SendCodeVM_Help = "SendCodeVM_Help";
 			public const string SendCodeVM_Title = "SendCodeVM_Title";
+			public const string SentEmail_Description = "SentEmail_Description";
+			public const string SentEmail_Title = "SentEmail_Title";
+			public const string SentEmails_Title = "SentEmails_Title";
 			public const string SetPasswordVM_Description = "SetPasswordVM_Description";
 			public const string SetPasswordVM_Help = "SetPasswordVM_Help";
 			public const string SetPasswordVM_Title = "SetPasswordVM_Title";

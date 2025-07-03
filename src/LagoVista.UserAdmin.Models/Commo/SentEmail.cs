@@ -1,4 +1,6 @@
-﻿using LagoVista.Core.Models;
+﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Models;
+using LagoVista.UserAdmin.Models.Resources;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,12 +8,21 @@ using System.Xml;
 
 namespace LagoVista.UserAdmin.Models.Commo
 {
+    [EntityDescription(Domains.EmailServicesDomain, UserAdminResources.Names.SentEmails_Title, UserAdminResources.Names.SentEmail_Description,
+                    UserAdminResources.Names.SentEmail_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "icon-ae-email-3",
+                    ListUIUrl: "/business/email")]
     public class SentEmail
     {
         public string ExternalMessageId { get; set; }
         public string InternalMessageId { get; set; }
 
+        public string PrimaryExternalMessageId { get; set; }
+
+        public string Subject { get; set; }
+
         public string Email { get; set; }
+
+        public string OrgNameSpace { get; set; }
 
         public EntityHeader Org { get; set; }
         public EntityHeader Contact { get; set; }
@@ -27,6 +38,7 @@ namespace LagoVista.UserAdmin.Models.Commo
         public EntityHeader Persona { get; set; }
         public EntityHeader Template { get; set; }
         public EntityHeader Mailer { get; set; }
+        public bool IndividualMessage { get; set; }
 
         public string SenderEmail { get; set; }
         public string ReplyToEmail { get; set; }
