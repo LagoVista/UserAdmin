@@ -122,7 +122,6 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Module_RestrictByDefault, HelpResource: UserAdminResources.Names.Module_RestrictByDefault_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool RestrictByDefault { get; set; }
 
-
         [FormField(LabelResource: UserAdminResources.Names.FunctionMapFunction_Type, WaterMark: UserAdminResources.Names.FunctionMapFunction_Type_Select, IsRequired:true,
             EnumType: typeof(FunctionMapFunctionTypes), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
         public EntityHeader<FunctionMapFunctionTypes> Type { get; set; }

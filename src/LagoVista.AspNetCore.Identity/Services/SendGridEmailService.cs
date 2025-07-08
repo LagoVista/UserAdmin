@@ -1330,6 +1330,11 @@ namespace LagoVista.AspNetCore.Identity.Services
 
             msg.AddContent(MediaTypeNames.Text.Html, email.Content);
 
+            foreach(var attach in email.Attachments)
+            {
+                msg.AddAttachment(attach.FileName, attach.Base64Content, attach.ContentType);
+            }
+
             var client = new SendGrid.SendGridClient(_settings.SmtpServer.Password);
             var response = await client.SendEmailAsync(msg);
 
