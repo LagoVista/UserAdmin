@@ -349,6 +349,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 PhoneNumber = PhoneNumber,
                 PhoneNumberConfirmed = PhoneNumberConfirmed,
                 ProfileImageUrl = ProfileImageUrl,
+                Title = Title,
                 TeamsAccountName = TeamsAccountName,
                 CurrentOrganization = CurrentOrganization?.ToEntityHeader(),
                 Key = Id,
