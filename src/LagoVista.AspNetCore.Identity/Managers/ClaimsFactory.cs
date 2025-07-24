@@ -66,7 +66,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(user.FirstName) ? user.FirstName : None),
                 new Claim(ClaimTypes.Surname, !string.IsNullOrWhiteSpace(user.LastName) ? user.LastName : None),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(Avatar, user.ProfileImageUrl.ImageUrl),
+                new Claim(Avatar, user.ProfileImage.ImageUrl),
                 new Claim(CurrentUserId, user.Id),
                 new Claim(IsPreviewUser, user.IsPreviewUser.ToString().ToLower()),
                 new Claim(ExternalAccountVerified, user.ExternalLogins.Any().ToString()),
@@ -79,7 +79,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(IsFinancceAdmin, user.IsFinanceAdmin.ToString()),
                 new Claim(CurrentOrgName, user.CurrentOrganization == null ? None : user.CurrentOrganization.Text),
                 new Claim(CurrentOrgId, user.CurrentOrganization == null ? None : user.CurrentOrganization.Id),
-                new Claim(CurrentUserProfilePictureurl, user.ProfileImageUrl.ImageUrl),
+                new Claim(CurrentUserProfilePictureurl, user.ProfileImage.ImageUrl),
             };
 
 
@@ -136,7 +136,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(user.FirstName) ? user.FirstName : None),
                 new Claim(ClaimTypes.Surname, !string.IsNullOrWhiteSpace(user.LastName) ? user.LastName : None),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(Avatar, user.ProfileImageUrl.ImageUrl),
+                new Claim(Avatar, user.ProfileImage.ImageUrl),
                 new Claim(CurrentUserId, user.Id),
                 new Claim(ExternalAccountVerified, user.ExternalLogins.Any().ToString()),
                 new Claim(IsPreviewUser, user.IsPreviewUser.ToString().ToLower()),
@@ -149,7 +149,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(IsFinancceAdmin, user.IsFinanceAdmin.ToString()),
                 new Claim(CurrentOrgName, org == null ? None : org.Text),
                 new Claim(CurrentOrgId, org == null ? None : org.Id),
-                new Claim(CurrentUserProfilePictureurl, user.ProfileImageUrl.ImageUrl),
+                new Claim(CurrentUserProfilePictureurl, user.ProfileImage.ImageUrl),
             };
 
             if(user.Customer != null)

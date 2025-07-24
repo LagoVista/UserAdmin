@@ -253,7 +253,7 @@ namespace LagoVista.UserAdmin.Managers
                 appUser.PhoneNumberConfirmed = true;
             }
 
-            if ((user.ProfileImageUrl != null)) appUser.ProfileImageUrl = user.ProfileImageUrl;
+            if ((user.ProfileImageUrl != null)) appUser.ProfileImage = user.ProfileImageUrl;
 
             if (!String.IsNullOrEmpty(user.Ssn))
             {

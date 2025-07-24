@@ -47,7 +47,7 @@ namespace LagoVista.UserAdmin.Models.Users
 
             LastUpdatedDate = DateTime.UtcNow.ToJSONString();
 
-            ProfileImageUrl = new ImageDetails()
+            ProfileImage = new ImageDetails()
             {
                 Width = 128,
                 Height = 128,
@@ -64,7 +64,7 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public AppUser()
         {
-            ProfileImageUrl = new ImageDetails()
+            ProfileImage = new ImageDetails()
             {
                 Width = 128,
                 Height = 128,
@@ -124,7 +124,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public string MobileHomePage { get; set; }
         public string CurrentDeviceId { get; set; }
 
-        public ImageDetails ProfileImageUrl { get; set; }
+        public ImageDetails ProfileImage { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.AppUser_Bio, FieldType: FieldTypes.MultiLineText, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public string Bio { get; set; }
@@ -311,7 +311,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 TermsAndConditionsAcceptedIPAddress = TermsAndConditionsAcceptedIPAddress,
                 UserName = UserName,
                 PhoneNumberConfirmed = PhoneNumberConfirmed,
-                ProfileImageUrl = ProfileImageUrl,
+                ProfileImageUrl = ProfileImage,
                 TeamsAccountName = TeamsAccountName,
                 ExternalLogins = ExternalLogins,
                 ShowWelcome = ShowWelcome,
@@ -348,7 +348,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 Name = Name,
                 PhoneNumber = PhoneNumber,
                 PhoneNumberConfirmed = PhoneNumberConfirmed,
-                ProfileImageUrl = ProfileImageUrl,
+                ProfileImageUrl = ProfileImage,
                 Title = Title,
                 TeamsAccountName = TeamsAccountName,
                 CurrentOrganization = CurrentOrganization?.ToEntityHeader(),

@@ -680,7 +680,7 @@ namespace LagoVista.UserAdmin.Managers
                 UserName = appUser.Name,
                 IsOrgAdmin = isOrgAdmin,
                 IsAppBuilder = isAppBuilder,
-                ProfileImageUrl = appUser.ProfileImageUrl.ImageUrl,
+                ProfileImageUrl = appUser.ProfileImage.ImageUrl,
             };
 
             user.CreatedBy = appUser.Name;
@@ -731,7 +731,7 @@ namespace LagoVista.UserAdmin.Managers
                 IsOrgAdmin = false,
                 IsAppBuilder = false,
                 UserName = appUser.Name,
-                ProfileImageUrl = appUser.ProfileImageUrl.ImageUrl,
+                ProfileImageUrl = appUser.ProfileImage.ImageUrl,
             };
 
             user.CreatedBy = addedBy.Text;
