@@ -56,8 +56,8 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task DeclineInvitationAsync(String inviteId);
         Task<IEnumerable<LocationUserRole>> GetRolesForUserInLocationAsync(string locationId, string userId, EntityHeader org, EntityHeader user);
         Task<IEnumerable<LocationUser>> GetUsersForLocationAsync(string locationId, EntityHeader org, EntityHeader user);
-        Task<IEnumerable<UserInfoSummary>> GetUsersForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user);
-        Task<IEnumerable<UserInfoSummary>> GetActiveUsersForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user);
+        Task<IEnumerable<UserInfoSummary>> GetUsersForOrganizationsAsync(string orgId, bool useCache, EntityHeader org, EntityHeader user);
+        Task<IEnumerable<UserInfoSummary>> GetActiveUsersForOrganizationsAsync(string orgId, bool useCache, EntityHeader org, EntityHeader user);
         Task<IEnumerable<LocationUserRole>> GetUserWithRoleInLocationAsync(string locationId, string roleId, EntityHeader org, EntityHeader user);
         Task<AcceptInviteViewModel> GetInviteViewModelAsync(string inviteId);
 

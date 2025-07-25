@@ -60,5 +60,6 @@ namespace LagoVista.UserAdmin.Managers
         Task<InvokeResult> UpdatePaymentAccountsAsync(string userId, PaymentAccounts accounts, EntityHeader org, EntityHeader user);
         Task<InvokeResult> AddPushNotificationChannel(string userId, PushNotificationChannel channel, EntityHeader org, EntityHeader user);
         Task<InvokeResult> RemovePushNotificationChannel(string userId, PushNotificationChannel channel, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> SetProfileImageAsync(string userId, ImageDetails profileImage, EntityHeader org, EntityHeader updatedByUser);
     }
 }

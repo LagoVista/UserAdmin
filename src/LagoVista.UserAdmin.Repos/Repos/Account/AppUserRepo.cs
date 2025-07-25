@@ -216,7 +216,7 @@ namespace LagoVista.UserAdmin.Repos.Users
             return hex.ToString();
         }
 
-        public async Task<IEnumerable<UserInfoSummary>> GetUserSummaryForListAsync(IEnumerable<OrgUser> orgUsers)
+        public async Task<IEnumerable<UserInfoSummary>> GetUserSummaryForListAsync(IEnumerable<OrgUser> orgUsers, bool useCache = true)
         {
             var sqlParams = string.Empty;
             var idx = 0;
@@ -234,6 +234,8 @@ namespace LagoVista.UserAdmin.Repos.Users
                 parameters.Add(new QueryParameter(paramName, orgUser.UserId));
                 userIds += orgUser.UserId;
             }
+
+            var sw = Stopwatch.StartNew();
             
 
             using (var md5 = MD5.Create())
@@ -243,7 +245,7 @@ namespace LagoVista.UserAdmin.Repos.Users
                 var hash = md5.ComputeHash(buffer);
                 var key = ByteArrayToString(hash);
                 var json = await _cacheProvider.GetAsync(key);
-                if (!String.IsNullOrEmpty(json))
+                if (!String.IsNullOrEmpty(json) && useCache)
                 {
                     return JsonConvert.DeserializeObject<IEnumerable<UserInfoSummary>>(json);
                 }
@@ -262,6 +264,7 @@ namespace LagoVista.UserAdmin.Repos.Users
 
                     json = JsonConvert.SerializeObject(userSummaries);
                     await _cacheProvider.AddAsync(key, json);
+                    _adminLogger.Trace($"[AppUserRepo__GetUserSummaryForListAsync] - Cache Miss, get and process all users in {sw.Elapsed.TotalMilliseconds}ms");
                     return userSummaries;
                 }
             }

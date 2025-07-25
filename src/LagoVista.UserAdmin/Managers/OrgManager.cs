@@ -887,7 +887,7 @@ namespace LagoVista.UserAdmin.Managers
         }
 
 
-        public async Task<IEnumerable<UserInfoSummary>> GetUsersForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user)
+        public async Task<IEnumerable<UserInfoSummary>> GetUsersForOrganizationsAsync(string orgId, bool useCache, EntityHeader org, EntityHeader user)
         {
             var appUser = await _appUserRepo.FindByIdAsync(user.Id);
 
@@ -899,7 +899,7 @@ namespace LagoVista.UserAdmin.Managers
 
             if (orgUsers.Any())
             {
-                return await _appUserRepo.GetUserSummaryForListAsync(orgUsers);
+                return (await _appUserRepo.GetUserSummaryForListAsync(orgUsers, useCache)).OrderBy(usr => usr.Name);
             }
             else
             {
@@ -907,11 +907,11 @@ namespace LagoVista.UserAdmin.Managers
             }
         }
 
-        public async Task<IEnumerable<UserInfoSummary>> GetActiveUsersForOrganizationsAsync(string orgId, EntityHeader org, EntityHeader user)
+        public async Task<IEnumerable<UserInfoSummary>> GetActiveUsersForOrganizationsAsync(string orgId, bool useCache, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Read, new SecurityHelper() { OrgId = orgId });
             var orgUsers = await _orgUserRepo.GetUsersForOrgAsync(orgId);
-            return (await _appUserRepo.GetUserSummaryForListAsync(orgUsers)).Where(usr => !usr.IsAccountDisabled && !usr.IsRuntimeUser && !usr.IsUserDevice).OrderBy(usr => usr.Name);
+            return (await _appUserRepo.GetUserSummaryForListAsync(orgUsers, useCache)).Where(usr => !usr.IsAccountDisabled && !usr.IsRuntimeUser && !usr.IsUserDevice).OrderBy(usr => usr.Name);
         }
 
         public async Task<IEnumerable<OrgUser>> GetOrganizationsForUserAsync(string userId, EntityHeader org, EntityHeader user)

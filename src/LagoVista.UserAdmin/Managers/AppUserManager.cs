@@ -42,9 +42,10 @@ namespace LagoVista.UserAdmin.Managers
         private readonly ISubscriptionManager _subscriptionManager;
         private readonly ISecureStorage _secureStorage;
         private readonly IAuthenticationLogManager _authLogMgr;
+        private readonly IBackgroundServiceTaskQueue _backgroundTaskService;
 
         public AppUserManager(IAppUserRepo appUserRepo, IUserRoleRepo userRoleRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IOrganizationManager orgManager, IOrgUserRepo orgUserRepo, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
-           IOrganizationRepo orgRepo, IAuthTokenManager authTokenManager, ISubscriptionManager subscriptionManager, IUserManager userManager, ISecureStorage secureStorage,
+           IOrganizationRepo orgRepo, IAuthTokenManager authTokenManager, ISubscriptionManager subscriptionManager, IUserManager userManager, ISecureStorage secureStorage, IBackgroundServiceTaskQueue backgroundTaskService,
            IAuthenticationLogManager authLogMgr, ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, userRoleRepo, depManager, security, logger, appConfig)
         {
             _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(authLogMgr));
@@ -60,6 +61,7 @@ namespace LagoVista.UserAdmin.Managers
             _userVerificationmanager = userVerificationmanager ?? throw new ArgumentNullException(nameof(userVerificationmanager));
             _subscriptionManager = subscriptionManager ?? throw new ArgumentNullException(nameof(subscriptionManager));
             _secureStorage = secureStorage ?? throw new ArgumentNullException(nameof(secureStorage));
+            _backgroundTaskService = backgroundTaskService ?? throw new ArgumentNullException(nameof(backgroundTaskService));
         }
 
         public async Task<InvokeResult> AddUserAsync(AppUser user, EntityHeader org, EntityHeader updatedByUser)
@@ -167,6 +169,37 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
+        public async Task<InvokeResult> SetProfileImageAsync(string userId, ImageDetails profileImage, EntityHeader org, EntityHeader updatedByUser)
+        {
+            var existingUser = await _appUserRepo.FindByIdAsync(userId);
+            if (profileImage == null)
+            {
+                return InvokeResult.FromError("Null profile image provided.");
+            }
+
+            if(profileImage.ImageUrl == null)
+            {
+                return InvokeResult.FromError("no image url provided with image details.");
+            }
+
+            existingUser.ProfileImage = profileImage;
+            await AuthorizeAsync(existingUser, AuthorizeResult.AuthorizeActions.Update, updatedByUser, org);
+            await _appUserRepo.UpdateAsync(existingUser);
+
+            ClearUserSummaryFororgAsync(existingUser.CurrentOrganization.Id, org, updatedByUser);
+
+            return InvokeResult.Success;
+        }
+
+        private void ClearUserSummaryFororgAsync(string orgId, EntityHeader org, EntityHeader user)
+        {
+            _backgroundTaskService.TryQueueBackgroundWorkItem(async (token) =>
+            {
+               await _orgManager.GetActiveUsersForOrganizationsAsync(orgId, false, org, user);
+            });
+
+        }
+
         public async Task<InvokeResult> UpdateUserAsync(CoreUserInfo user, EntityHeader org, EntityHeader updatedByUser)
         {
             ValidationCheck(user, Actions.Update);
@@ -209,6 +242,8 @@ namespace LagoVista.UserAdmin.Managers
 
             await _appUserRepo.UpdateAsync(existingUser);
 
+            ClearUserSummaryFororgAsync(existingUser.CurrentOrganization.Id, org, updatedByUser);
+
             return InvokeResult.Success;
         }
 
@@ -236,6 +271,8 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             await _appUserRepo.UpdateAsync(user);
+
+            ClearUserSummaryFororgAsync(user.CurrentOrganization.Id, org, updatedByUser);
 
             return InvokeResult.Success;
         }
@@ -266,6 +303,7 @@ namespace LagoVista.UserAdmin.Managers
                 var result = await _secureStorage.AddUserSecretAsync(user.ToEntityHeader(), user.Ssn);
                 if (!result.Successful)
                     return result.ToInvokeResult();
+
 
                 appUser.SsnSecretId = result.Result;
             }
@@ -306,6 +344,8 @@ namespace LagoVista.UserAdmin.Managers
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, updatedByUser, org);
 
             await _appUserRepo.UpdateAsync(appUser);
+
+            ClearUserSummaryFororgAsync(user.CurrentOrganization.Id, org, updatedByUser);
 
             return InvokeResult.Success;
         }
@@ -660,7 +700,7 @@ namespace LagoVista.UserAdmin.Managers
                 await _signInManager.SignInAsync(appUser);
             }
 
-            // this is if we create a user by registering them, they will not get an invite but they should be added to the org.
+            // this is if we create a profileImage by registering them, they will not get an invite but they should be added to the org.
             if (!String.IsNullOrEmpty(newUser.OrgId))
             {
                 var org = await _orgRepo.GetOrganizationAsync(newUser.OrgId);
@@ -671,7 +711,7 @@ namespace LagoVista.UserAdmin.Managers
 
             await _appUserRepo.UpdateAsync(appUser);
 
-            // In all cases when a user gets setup we need them to validate the email, even if it is manually setup.
+            // In all cases when a profileImage gets setup we need them to validate the email, even if it is manually setup.
             var sendEmailResult = await _userVerificationmanager.SendConfirmationEmailAsync(appUser.ToEntityHeader());
             if(!sendEmailResult.Successful)
             {
