@@ -12,8 +12,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
     public interface IEmailSender
     {
         Task<InvokeResult> SendToAppUserAsync(string appuUserId, string subject, string body);
-        Task<InvokeResult> SendAsync(string email, string subject, string body);
-
+        Task<InvokeResult> SendAsync(string email, string subject, string body, bool hasFullEmail = false);
 
         Task<InvokeResult<string>> SendAsync(Email email, EntityHeader org, EntityHeader user);
 

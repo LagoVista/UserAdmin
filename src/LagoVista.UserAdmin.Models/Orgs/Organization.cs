@@ -213,6 +213,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public bool IsArchived { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultTeamsWebHook, HelpResource: UserAdminResources.Names.Organization_DefaultTeamsWebHook_Help, FieldType: FieldTypes.WebLink, IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        public string DefaultTeamsWebHook { get; set; }
+
         public List<string> GetFormFields()
         {
             return new List<string>()
@@ -253,6 +256,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(DefaultTestInstance),
                 nameof(DefaultDevelopmentInstance),
                 nameof(DefaultDeviceRepository),
+                nameof(DefaultTeamsWebHook),
                 nameof(TestingIndustry),
                 nameof(TestingIndustryNiche),
                 nameof(DefaultLandingPage),

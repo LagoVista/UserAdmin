@@ -2018,4 +2018,10 @@
   <data name="SentEmails_Title" xml:space="preserve">
     <value>Sent Emails</value>
   </data>
+  <data name="Organization_DefaultTeamsWebHook" xml:space="preserve">
+    <value>Default Teams Notification Web Hook</value>
+  </data>
+  <data name="Organization_DefaultTeamsWebHook_Help" xml:space="preserve">
+    <value>Create a web hook to a channel within Microsoft Teams, as mentions are added to discussions, those discussions will be added to the channel and anyone tagged in the discussion will be notified.</value>
+  </data>
 </root>
