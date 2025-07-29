@@ -187,6 +187,10 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public string SsnSecretId { get; set; }
 
+
+        [FormField(LabelResource: UserAdminResources.Names.Common_TimeZome, IsRequired: false, WaterMark:UserAdminResources.Names.Common_TimeZome_Picker, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
+        public EntityHeader TimeZone { get; set; }
+
         [FormField(LabelResource: UserAdminResources.Names.Common_Address1, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string Address1 { get; set; }
       
@@ -327,7 +331,8 @@ namespace LagoVista.UserAdmin.Models.Users
                 LastLogin = LastLogin,
                 Roles = CurrentOrganizationRoles,
                 MediaResources = MediaResources,
-                PrimaryOrganization = PrimaryOrganization
+                PrimaryOrganization = PrimaryOrganization,
+                TimeZone = TimeZone,
             };
         }
 
@@ -353,7 +358,8 @@ namespace LagoVista.UserAdmin.Models.Users
                 TeamsAccountName = TeamsAccountName,
                 CurrentOrganization = CurrentOrganization?.ToEntityHeader(),
                 Key = Id,
-                LastLogin = LastLogin
+                LastLogin = LastLogin,
+                TimeZone = TimeZone,
             };
         }
 

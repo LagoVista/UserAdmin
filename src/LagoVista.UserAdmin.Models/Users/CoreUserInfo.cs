@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
@@ -48,6 +49,9 @@ namespace LagoVista.UserAdmin.Models.Users
         public string Country { get; set; }
         [FormField(LabelResource: UserAdminResources.Names.Common_PostalCode, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string PostalCode { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Common_TimeZome, IsRequired: false, WaterMark: UserAdminResources.Names.Common_TimeZome_Picker, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
+        public EntityHeader TimeZone { get; set; }
 
 
         [FormField(LabelResource: UserAdminResources.Names.AppUser_EmailSignature, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(UserAdminResources))]

@@ -219,6 +219,7 @@ namespace LagoVista.UserAdmin.Managers
             existingUser.State = user.State;
             existingUser.PostalCode = user.PostalCode;
             existingUser.Country = user.Country;
+            existingUser.TimeZone = user.TimeZone;
 
             if (!String.IsNullOrEmpty(user.Ssn))
             {

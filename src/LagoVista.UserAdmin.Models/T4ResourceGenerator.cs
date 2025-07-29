@@ -1,4 +1,4 @@
-﻿/*7/28/2025 9:59:40 AM*/
+﻿/*7/29/2025 1:28:36 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -501,6 +501,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Common_TimeZome
 
 		public static string Common_TimeZome { get { return GetResourceString("Common_TimeZome"); } }
+//Resources:UserAdminResources:Common_TimeZome_Picker
+
+		public static string Common_TimeZome_Picker { get { return GetResourceString("Common_TimeZome_Picker"); } }
 //Resources:UserAdminResources:ContactList_Description
 
 		public static string ContactList_Description { get { return GetResourceString("ContactList_Description"); } }
@@ -2104,6 +2107,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Common_TabletSupport = "Common_TabletSupport";
 			public const string Common_TextColor = "Common_TextColor";
 			public const string Common_TimeZome = "Common_TimeZome";
+			public const string Common_TimeZome_Picker = "Common_TimeZome_Picker";
 			public const string ContactList_Description = "ContactList_Description";
 			public const string ContactList_Title = "ContactList_Title";
 			public const string CreateLocationVM_Description = "CreateLocationVM_Description";

@@ -87,7 +87,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Organization_LandingPageHostName, HelpResource: UserAdminResources.Names.Organization_LandingPageHostName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string LandingPageHostName { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_TimeZome, IsRequired: true, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
+        [FormField(LabelResource: UserAdminResources.Names.Common_TimeZome, IsRequired: true, WaterMark: UserAdminResources.Names.Common_TimeZome_Picker, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
         public EntityHeader TimeZone { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_Owner, FieldType: FieldTypes.UserPicker, IsRequired: true, IsUserEditable: true,
