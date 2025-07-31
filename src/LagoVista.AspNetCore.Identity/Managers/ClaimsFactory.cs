@@ -60,6 +60,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (user.LoginType == LoginTypes.DeviceOwner)
                 return GetClaimsForDeviceOwner(user);
 
+            var isOwner = user.CurrentOrganizationRoles != null && user.CurrentOrganizationRoles.Select(role => role.Id == "ACDC1BADF00D1CAFEF12CE0FF55F2B01").Any();
+
             var claims = new List<Claim> {
                 new Claim(Logintype, nameof(AppUser)),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
@@ -76,12 +78,11 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(IsOrgAdmin, user.IsOrgAdmin.ToString()),
                 new Claim(IsAppBuilder, user.IsAppBuilder.ToString()),
                 new Claim(IsUserDevice, user.IsUserDevice.ToString()),
-                new Claim(IsFinancceAdmin, user.IsFinanceAdmin.ToString()),
+                new Claim(IsFinancceAdmin, (user.IsFinanceAdmin || isOwner).ToString()),
                 new Claim(CurrentOrgName, user.CurrentOrganization == null ? None : user.CurrentOrganization.Text),
                 new Claim(CurrentOrgId, user.CurrentOrganization == null ? None : user.CurrentOrganization.Id),
                 new Claim(CurrentUserProfilePictureurl, user.ProfileImage.ImageUrl),
             };
-
 
             if (user.Customer != null)
             {
@@ -130,6 +131,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (user.LoginType == LoginTypes.DeviceOwner)
                 return GetClaimsForDeviceOwner(user);
 
+            var isOwner = user.CurrentOrganizationRoles != null && user.CurrentOrganizationRoles.Select(role => role.Id == "ACDC1BADF00D1CAFEF12CE0FF55F2B01").Any();
+
             var claims = new List<Claim> {
                 new Claim(Logintype, nameof(AppUser)),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
@@ -144,9 +147,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(PhoneVerfiied, user.PhoneNumberConfirmed.ToString()),
                 new Claim(IsSystemAdmin, user.IsSystemAdmin.ToString()),
                 new Claim(IsOrgAdmin, isOrgAdmin.ToString()),
-                new Claim(IsAppBuilder, isAppBuilder.ToString()),
+                new Claim(IsAppBuilder, (isAppBuilder || isOwner).ToString()),
                 new Claim(IsUserDevice, user.IsUserDevice.ToString()),
-                new Claim(IsFinancceAdmin, user.IsFinanceAdmin.ToString()),
+                new Claim(IsFinancceAdmin, (user.IsFinanceAdmin || isOwner).ToString()),
                 new Claim(CurrentOrgName, org == null ? None : org.Text),
                 new Claim(CurrentOrgId, org == null ? None : org.Id),
                 new Claim(CurrentUserProfilePictureurl, user.ProfileImage.ImageUrl),
