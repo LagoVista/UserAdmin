@@ -8,7 +8,7 @@
     <None Remove="Account\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.CloudStorage" Version="3.0.2048.0520" />
+    <PackageReference Include="LagoVista.CloudStorage" Version="3.0.2999.0900" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.UserAdmin\LagoVista.UserAdmin.csproj" />

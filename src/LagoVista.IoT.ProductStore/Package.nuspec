@@ -3,7 +3,7 @@
   <metadata>
     <id>LagoVista.IoT.ProductStore</id>
     <title>LagoVista ASP.NET Core Identity Provider</title>
-    <version>3.0.2048.0648</version>
+    <version>3.0.2999.0900</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -11,10 +11,10 @@
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
     <description>Contains data structure and an interface for a manager to retrieve Product Offerings for the LagoVista Devices, IoT and Home Automation Framework </description>
     <summary>Contains data structure and an interface for a manager to retrieve Product Offerings, IoT and Home Automation Framework</summary>
-    <copyright>Copyright Software Logistics - 2022</copyright>
+    <copyright>Copyright Software Logistics - 2025</copyright>
     <tags>HomeAutomation IoT</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 12/25/2022 11:48:01 AM UTC</releaseNotes>
+    <releaseNotes>Build Date: 8/2/2025 1:00:33 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1" />
