@@ -60,20 +60,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (user.LoginType == LoginTypes.DeviceOwner)
                 return GetClaimsForDeviceOwner(user);
 
-<<<<<<< HEAD
             var isOwner = user.CurrentOrganizationRoles != null && user.CurrentOrganizationRoles.Select(role => role.Id == "ACDC1BADF00D1CAFEF12CE0FF55F2B01").Any();
 
             var claims = new List<Claim> {
-=======
-
-            var isOwner = false;
-            if (user.CurrentOrganizationRoles != null)
-            {
-                isOwner = user.CurrentOrganizationRoles.Any(role => role.Id == "ACDC1BADF00D1CAFEF12CE0FF55F2B01");
-            }
-
-           var claims = new List<Claim> {
->>>>>>> 6969e10 (if owner grant orgadmin/finance admin)
                 new Claim(Logintype, nameof(AppUser)),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(user.FirstName) ? user.FirstName : None),
@@ -95,8 +84,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(CurrentUserProfilePictureurl, user.ProfileImage.ImageUrl),
             };
 
-<<<<<<< HEAD
-=======
             if (user.CurrentOrganizationRoles != null)
             {
                 foreach (var role in user.CurrentOrganizationRoles)
@@ -105,7 +92,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 }
             }
 
->>>>>>> 6969e10 (if owner grant orgadmin/finance admin)
             if (user.Customer != null)
             {
                 claims.Add(new Claim(CustomerId, user.Customer.Id));
@@ -146,15 +132,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (user.LoginType == LoginTypes.DeviceOwner)
                 return GetClaimsForDeviceOwner(user);
 
-<<<<<<< HEAD
             var isOwner = user.CurrentOrganizationRoles != null && user.CurrentOrganizationRoles.Select(role => role.Id == "ACDC1BADF00D1CAFEF12CE0FF55F2B01").Any();
-=======
-            var isOwner = false;
-            if (user.CurrentOrganizationRoles != null)
-            {
-                isOwner = user.CurrentOrganizationRoles.Any(role => role.Id == "ACDC1BADF00D1CAFEF12CE0FF55F2B01");
-            }
->>>>>>> 6969e10 (if owner grant orgadmin/finance admin)
 
             var claims = new List<Claim> {
                 new Claim(Logintype, nameof(AppUser)),
@@ -169,13 +147,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(EmailVerified, user.EmailConfirmed.ToString()),
                 new Claim(PhoneVerfiied, user.PhoneNumberConfirmed.ToString()),
                 new Claim(IsSystemAdmin, user.IsSystemAdmin.ToString()),
-<<<<<<< HEAD
-                new Claim(IsOrgAdmin, isOrgAdmin.ToString()),
-                new Claim(IsAppBuilder, (isAppBuilder || isOwner).ToString()),
-=======
                 new Claim(IsOrgAdmin, (isOrgAdmin || isOwner).ToString()),
                 new Claim(IsAppBuilder, isAppBuilder.ToString()),
->>>>>>> 6969e10 (if owner grant orgadmin/finance admin)
                 new Claim(IsUserDevice, user.IsUserDevice.ToString()),
                 new Claim(IsFinancceAdmin, (user.IsFinanceAdmin || isOwner).ToString()),
                 new Claim(CurrentOrgName, org == null ? None : org.Text),
