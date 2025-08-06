@@ -61,5 +61,15 @@ namespace LagoVista.UserAdmin.Managers
         Task<InvokeResult> AddPushNotificationChannel(string userId, PushNotificationChannel channel, EntityHeader org, EntityHeader user);
         Task<InvokeResult> RemovePushNotificationChannel(string userId, PushNotificationChannel channel, EntityHeader org, EntityHeader user);
         Task<InvokeResult> SetProfileImageAsync(string userId, ImageDetails profileImage, EntityHeader org, EntityHeader updatedByUser);
+
+        Task<InvokeResult> AddUserSvgSignatureAsync(string svgSignature, EntityHeader user);
+        Task<InvokeResult<string>> GetUserSvgSignatureAsync(EntityHeader user);
+        Task<InvokeResult<string>> GetUserSvgSignatureAsB64PngAsync(EntityHeader user);
+        Task<InvokeResult> ClearUserSvgSignatureAsync(EntityHeader user);
+
+        Task<InvokeResult> AddUserSvgInitialsAsync(string svgInitials, EntityHeader user);
+        Task<InvokeResult<string>> GetUserSvgInitialsAsync(EntityHeader user);
+        Task<InvokeResult<string>> GetUserSvgInitialsAsB64PngAsync(EntityHeader user);
+        Task<InvokeResult> ClearUserSvgInitialsAsync(EntityHeader user);
     }
 }

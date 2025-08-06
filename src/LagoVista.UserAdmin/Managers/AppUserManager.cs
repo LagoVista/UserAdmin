@@ -24,6 +24,9 @@ using System.Diagnostics;
 using System.Text;
 using System.Security.Cryptography;
 using RingCentral;
+using System.IO;
+using Svg;
+using System.Drawing.Imaging;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -274,6 +277,168 @@ namespace LagoVista.UserAdmin.Managers
             await _appUserRepo.UpdateAsync(user);
 
             ClearUserSummaryFororgAsync(user.CurrentOrganization.Id, org, updatedByUser);
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> AddUserSvgSignatureAsync(string svgSignature, EntityHeader user)
+        {
+            if (String.IsNullOrEmpty(svgSignature))
+                return InvokeResult.FromError("No signature provided.");
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+            if (appUser == null)
+                return InvokeResult.FromError($"Could not find user with id: {user.Id}.");
+
+            var result = await _secureStorage.AddUserSecretAsync(user, svgSignature);
+            if (!result.Successful)
+                return result.ToInvokeResult();
+
+            appUser.LastUpdatedBy = user;
+            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+
+            AddAuditHistory(appUser, nameof(appUser.SignatureSvgSecretId), appUser.SignatureSvgSecretId, result.Result);
+
+
+            appUser.SignatureSvgSecretId = result.Result;
+            await _appUserRepo.UpdateAsync(appUser);
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> AddUserSvgInitialsAsync(string svgInitials, EntityHeader user)
+        {
+            if (String.IsNullOrEmpty(svgInitials))
+                return InvokeResult.FromError("No signature provided.");
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+            if (appUser == null)
+                return InvokeResult.FromError($"Could not find user with id: {user.Id}.");
+
+            var result = await _secureStorage.AddUserSecretAsync(user, svgInitials);
+            if (!result.Successful)
+                return result.ToInvokeResult();
+
+            appUser.LastUpdatedBy = user;
+            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+
+            AddAuditHistory(appUser, nameof(appUser.InitialsImageSvgSecretId),  appUser.InitialsImageSvgSecretId, result.Result);
+
+            appUser.InitialsImageSvgSecretId = result.Result;
+            await _appUserRepo.UpdateAsync(appUser);
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult<string>> GetUserSvgSignatureAsync(EntityHeader user)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+            if (appUser == null)
+                return InvokeResult<string>.FromError($"Could not find user with id: {user.Id}.");
+
+            if(String.IsNullOrEmpty(appUser.SignatureSvgSecretId))
+                return InvokeResult<string>.FromError($"User with id: {user.Id} does not have a signature image.");
+
+            var result = await _secureStorage.GetUserSecretAsync(user, appUser.SignatureSvgSecretId);
+            return result;
+        }
+
+        public async Task<InvokeResult<string>> GetUserSvgInitialsAsync(EntityHeader user)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+            if (appUser == null)
+                return InvokeResult<string>.FromError($"Could not find user with id: {user.Id}.");
+
+            if (String.IsNullOrEmpty(appUser.InitialsImageSvgSecretId))
+                return InvokeResult<string>.FromError($"User with id: {user.Id} does not have stored initials.");
+
+            var result = await _secureStorage.GetUserSecretAsync(user, appUser.InitialsImageSvgSecretId);
+            return result;
+        }
+
+        public async Task<InvokeResult<string>> GetUserSvgSignatureAsB64PngAsync(EntityHeader user)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+            if (appUser == null)
+                return InvokeResult<string>.FromError($"Could not find user with id: {user.Id}.");
+
+            if (String.IsNullOrEmpty(appUser.SignatureSvgSecretId))
+                return InvokeResult<string>.FromError($"User with id: {user.Id} does not have a signature image.");
+
+            var result = await _secureStorage.GetUserSecretAsync(user, appUser.SignatureSvgSecretId);
+            if (!result.Successful)
+                return result;
+
+            var doc = SvgDocument.Open(result.Result);
+            var image = doc.Draw();
+            using (var imageStream = new MemoryStream())
+            {
+                image.Save(imageStream, ImageFormat.Png);
+                imageStream.Seek(0, SeekOrigin.Begin);
+                var buffer = imageStream.GetBuffer();
+                var b64 = Convert.ToBase64String(buffer);
+                return InvokeResult<string>.Create(b64);
+            }
+        }
+
+        public async Task<InvokeResult<string>> GetUserSvgInitialsAsB64PngAsync(EntityHeader user)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+            if (appUser == null)
+                return InvokeResult<string>.FromError($"Could not find user with id: {user.Id}.");
+
+            if (String.IsNullOrEmpty(appUser.InitialsImageSvgSecretId))
+                return InvokeResult<string>.FromError($"User with id: {user.Id} does not have stored initials.");
+
+            var result = await _secureStorage.GetUserSecretAsync(user, appUser.InitialsImageSvgSecretId);
+            if (!result.Successful)
+                return result;
+
+            var doc = SvgDocument.Open(result.Result);
+            var image = doc.Draw();
+            using (var imageStream = new MemoryStream())
+            {
+                image.Save(imageStream, ImageFormat.Png);
+                imageStream.Seek(0, SeekOrigin.Begin);
+                var buffer = imageStream.GetBuffer();
+                var b64 = Convert.ToBase64String(buffer);
+                return InvokeResult<string>.Create(b64);
+            }
+        }
+
+
+        public async Task<InvokeResult> ClearUserSvgSignatureAsync(EntityHeader user)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+            if (appUser == null)
+                return InvokeResult.FromError($"Could not find user with id: {user.Id}.");
+
+            appUser.LastUpdatedBy = user;
+            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+
+            if (!String.IsNullOrEmpty(appUser.SignatureSvgSecretId))
+            {
+                AddAuditHistory(appUser, nameof(appUser.SignatureSvgSecretId), null, appUser.SignatureSvgSecretId);
+                appUser.SignatureSvgSecretId = null;
+                await _appUserRepo.UpdateAsync(appUser);
+            }
+
+            await _appUserRepo.UpdateAsync(appUser);
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> ClearUserSvgInitialsAsync(EntityHeader user)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+            if (appUser == null)
+                return InvokeResult.FromError($"Could not find user with id: {user.Id}.");
+
+            appUser.LastUpdatedBy = user;
+            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+
+            if (!String.IsNullOrEmpty(appUser.InitialsImageSvgSecretId))
+            {
+                AddAuditHistory(appUser, nameof(appUser.InitialsImageSvgSecretId), null, appUser.InitialsImageSvgSecretId);
+                appUser.InitialsImageSvgSecretId = null;
+                await _appUserRepo.UpdateAsync(appUser);
+            }
 
             return InvokeResult.Success;
         }
