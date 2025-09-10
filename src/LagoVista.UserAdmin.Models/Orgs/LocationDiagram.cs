@@ -226,6 +226,15 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: Resources.UserAdminResources.Names.Shape_Scale, FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: true, IsUserEditable: true)]
         public double Scale { get; set; }
 
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Shape_FontSize, FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: true, IsUserEditable: true)]
+        public double FontSize { get; set; }
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Shape_TextOffsetX, FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: true, IsUserEditable: true)]
+        public double TextOffsetX { get; set; }
+       
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Shape_TextOffsetY, FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: true, IsUserEditable: true)]
+        public double TextOffsetY { get; set; }
+
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_TextColor, FieldType: FieldTypes.Color, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public string TextColor { get; set; }
@@ -276,8 +285,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(Rotation),
                 nameof(Scale),
                 nameof(Stroke),   
-                nameof(TextColor),
                 nameof(Fill),
+                nameof(TextColor),
+                nameof(FontSize),
+                nameof(TextOffsetX),
+                nameof(TextOffsetY),
                 nameof(Notes),
             };
         }

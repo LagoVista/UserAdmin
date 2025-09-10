@@ -1,4 +1,4 @@
-﻿/*7/29/2025 1:28:36 PM*/
+﻿/*9/10/2025 7:51:19 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1796,6 +1796,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Shape_FlipY
 
 		public static string Shape_FlipY { get { return GetResourceString("Shape_FlipY"); } }
+//Resources:UserAdminResources:Shape_FontSize
+
+		public static string Shape_FontSize { get { return GetResourceString("Shape_FontSize"); } }
 //Resources:UserAdminResources:Shape_Locked
 
 		public static string Shape_Locked { get { return GetResourceString("Shape_Locked"); } }
@@ -1808,6 +1811,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Shape_Stroke
 
 		public static string Shape_Stroke { get { return GetResourceString("Shape_Stroke"); } }
+//Resources:UserAdminResources:Shape_TextOffsetX
+
+		public static string Shape_TextOffsetX { get { return GetResourceString("Shape_TextOffsetX"); } }
+//Resources:UserAdminResources:Shape_TextOffsetY
+
+		public static string Shape_TextOffsetY { get { return GetResourceString("Shape_TextOffsetY"); } }
 //Resources:UserAdminResources:Shape_TextRotation
 
 		public static string Shape_TextRotation { get { return GetResourceString("Shape_TextRotation"); } }
@@ -2536,10 +2545,13 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Shape_Fill = "Shape_Fill";
 			public const string Shape_FlipX = "Shape_FlipX";
 			public const string Shape_FlipY = "Shape_FlipY";
+			public const string Shape_FontSize = "Shape_FontSize";
 			public const string Shape_Locked = "Shape_Locked";
 			public const string Shape_Rotation = "Shape_Rotation";
 			public const string Shape_Scale = "Shape_Scale";
 			public const string Shape_Stroke = "Shape_Stroke";
+			public const string Shape_TextOffsetX = "Shape_TextOffsetX";
+			public const string Shape_TextOffsetY = "Shape_TextOffsetY";
 			public const string Shape_TextRotation = "Shape_TextRotation";
 			public const string ShapeType = "ShapeType";
 			public const string ShapeType_Building = "ShapeType_Building";

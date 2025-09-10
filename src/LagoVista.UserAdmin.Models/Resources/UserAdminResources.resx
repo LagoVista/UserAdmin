@@ -2027,4 +2027,13 @@
   <data name="Common_TimeZome_Picker" xml:space="preserve">
     <value>-select time zone-</value>
   </data>
+  <data name="Shape_FontSize" xml:space="preserve">
+    <value>Font Size</value>
+  </data>
+  <data name="Shape_TextOffsetX" xml:space="preserve">
+    <value>Text Offset X</value>
+  </data>
+  <data name="Shape_TextOffsetY" xml:space="preserve">
+    <value>Text Offset Y</value>
+  </data>
 </root>
