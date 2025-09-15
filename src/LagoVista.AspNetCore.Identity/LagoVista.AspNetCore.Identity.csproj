@@ -4,12 +4,12 @@
     <OutputType>Library</OutputType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.IoT.Logging" Version="3.0.3043.1807" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="3.0.3043.1839" />
     <PackageReference Include="SendGrid" Version="9.29.3" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="Twilio" Version="7.13.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="9.0.9" />
-    <PackageReference Include="LagoVista.Core.Authentication" Version="3.0.3043.1807" />
+    <PackageReference Include="LagoVista.Core.Authentication" Version="3.0.3043.1839" />
     <PackageReference Include="prometheus-net" Version="8.2.1" />
 
   </ItemGroup>
