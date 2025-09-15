@@ -3,7 +3,7 @@
   <metadata>
     <id>LagoVista.AspNetCore.Identity</id>
     <title>LagoVista ASP.NET Core Identity Provider</title>
-    <version>3.0.3000.0708</version>
+    <version>3.0.3043.1654</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -14,20 +14,20 @@
     <copyright>Copyright Software Logistics - 2025</copyright>
     <tags>HomeAutomation IoT</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 8/3/2025 11:08:28 AM UTC</releaseNotes>
+    <releaseNotes>Build Date: 9/15/2025 8:54:48 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net6.0">
-        <dependency id="LagoVista.IoT.Logging" version="3.0.3000.0708" />
+        <dependency id="LagoVista.IoT.Logging" version="3.0.3043.1654" />
         <dependency id="SendGrid" version="9.29.2" />
         <dependency id="System.ComponentModel.Annotations" version="5.0.0" />
         <dependency id="Twilio" version="5.80.0" />
         <dependency id="Newtonsoft.Json" version="13.0.1" />
-        <dependency id="LagoVista.Core" version="3.0.3000.0708" />
+        <dependency id="LagoVista.Core" version="3.0.3043.1654" />
         <dependency id="Microsoft.AspNetCore.Authentication.Twitter" version="6.0.9" />
-        <dependency id="LagoVista.Core.Authentication" version="3.0.3000.0708" />
+        <dependency id="LagoVista.Core.Authentication" version="3.0.3043.1654" />
         <dependency id="prometheus-net" version="6.0.0" />
-        <dependency id="LagoVista.UserAdmin" version="3.0.3000.0708" />
+        <dependency id="LagoVista.UserAdmin" version="3.0.3043.1654" />
       </group>
     </dependencies>
   </metadata>
