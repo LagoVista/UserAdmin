@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.UserAdmin.Repos.RDBMS</id>
-    <version>3.0.3043.1711</version>
+    <version>3.0.3043.1807</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <title>LagoVista Relational DB Repo for Orgs and Users</title>
@@ -14,7 +14,7 @@
     <copyright>Copyright Software Logistics - 2025</copyright>
     <tags>HomeAutomation IoT Devices NuvIoT LagoVista</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 9/15/2025 9:11:31 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 9/15/2025 10:07:42 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="NET9.0">
@@ -22,7 +22,7 @@
         <dependency id="Microsoft.EntityFrameworkCore.SqlServer" version="9.0.9" />
         <dependency id="Microsoft.Extensions.Logging.Console" version="9.0.9" />
         <dependency id="Npgsql.EntityFrameworkCore.PostgreSQL" version="9.0.4" />
-        <dependency id="LagoVista.UserAdmin" version="3.0.3043.1711" />
+        <dependency id="LagoVista.UserAdmin" version="3.0.3043.1807" />
       </group>
     </dependencies>
   </metadata>
