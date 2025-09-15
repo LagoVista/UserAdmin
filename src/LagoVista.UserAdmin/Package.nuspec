@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.UserAdmin</id>
-    <version>3.0.3043.1654</version>
+    <version>3.0.3043.1711</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <title>LagoVista User Administration</title>
@@ -14,15 +14,15 @@
     <copyright>Copyright Software Logistics - 2025</copyright>
     <tags>HomeAutomation IoT Devices NuvIoT LagoVista</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 9/15/2025 8:54:48 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 9/15/2025 9:11:31 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1">
-        <dependency id="LagoVista.Core.Authentication" version="3.0.3043.1654" />
-        <dependency id="LagoVista.PDFServices" version="3.0.3043.1654" />
-        <dependency id="Microsoft.AspNetCore.Http.Abstractions" version="2.2.0" />
-        <dependency id="RingCentral.Net" version="6.1.3" />
-        <dependency id="LagoVista.UserAdmin.Models" version="3.0.3043.1654" />
+        <dependency id="LagoVista.Core.Authentication" version="3.0.3043.1711" />
+        <dependency id="LagoVista.PDFServices" version="3.0.3043.1711" />
+        <dependency id="Microsoft.AspNetCore.Http.Abstractions" version="2.3.0" />
+        <dependency id="RingCentral.Net" version="6.4.1" />
+        <dependency id="LagoVista.UserAdmin.Models" version="3.0.3043.1711" />
       </group>
     </dependencies>
   </metadata>

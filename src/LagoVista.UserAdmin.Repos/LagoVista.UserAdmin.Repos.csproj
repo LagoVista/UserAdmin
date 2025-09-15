@@ -3,12 +3,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Account\**" />
-    <EmbeddedResource Remove="Account\**" />
-    <None Remove="Account\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="LagoVista.CloudStorage" Version="3.0.3043.1654" />
+    <PackageReference Include="LagoVista.CloudStorage" Version="3.0.3043.1711" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.UserAdmin\LagoVista.UserAdmin.csproj" />
