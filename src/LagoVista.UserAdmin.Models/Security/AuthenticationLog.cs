@@ -136,6 +136,8 @@ namespace LagoVista.UserAdmin.Models.Security
         SysAdminGetOwnedObjects,
         SysAdminGetOrg,
         SysAdminUpdateOrg,
+
+        UnauthorizedCall
     }
 
     [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.AuthenticationLogs_Title, LoggingResources.Names.LogRecord_Description,
