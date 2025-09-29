@@ -36,6 +36,7 @@ namespace LagoVista.UserAdmin.Models.Users
             };
         }
 
+
         public List<EntityHeader> Pages { get; set; }
     }
 

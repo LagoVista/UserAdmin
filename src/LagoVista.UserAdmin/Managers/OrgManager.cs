@@ -730,6 +730,27 @@ namespace LagoVista.UserAdmin.Managers
             await _authLogMgr.AddAsync(AuthLogTypes.AddUserToOrg, orgUser.UserId, orgUser.UserName, userOrg.Id, userOrg.Text, extras: $"set default role {role.Name} by id: {setByUser.Id}, name: {setByUser.Text}");
         }
 
+        public async Task ClearDefaultOrgUserRoleAsync(string orgId, string userId, EntityHeader userOrg, EntityHeader setByUser)
+        {
+            await AuthorizeOrgAccessAsync(setByUser, userOrg, typeof(OrgUser), Actions.Update, new SecurityHelper() { OrgId = orgId, UserId = userId });
+
+
+            var orgUser = await _orgUserRepo.GetOrgUserAsync(orgId, userId);
+
+            if (String.IsNullOrEmpty(orgUser.DefaultRoleId))
+                return;
+
+            orgUser.DefaultRole = null;
+            orgUser.DefaultRoleId = null;
+
+            orgUser.LastUpdatedBy = setByUser.Text;
+            orgUser.LastUpdatedById = setByUser.Id;
+            orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+
+            await _orgUserRepo.UpdateOrgUserAsync(orgUser);
+            await _authLogMgr.AddAsync(AuthLogTypes.AddUserToOrg, orgUser.UserId, orgUser.UserName, userOrg.Id, userOrg.Text, extras: $"set default role {role.Name} by id: {setByUser.Id}, name: {setByUser.Text}");
+        }
+
         public async Task<InvokeResult> AddUserToOrgAsync(string orgId, string userId, EntityHeader userOrg, EntityHeader addedBy)
         {
             await AuthorizeOrgAccessAsync(addedBy, userOrg, typeof(OrgUser), Actions.Create, new SecurityHelper() { OrgId = orgId, UserId = userId });
