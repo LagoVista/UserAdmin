@@ -29,6 +29,7 @@ using System.Security.Cryptography;
 using Newtonsoft.Json;
 using LagoVista.Core.Models.Geo;
 using LagoVista.Core.Authentication.Models;
+using NLog.Targets.Wrappers;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -55,6 +56,7 @@ namespace LagoVista.UserAdmin.Managers
         private readonly ICacheProvider _cacheProvider;
         private readonly IBackgroundServiceTaskQueue _taskQueue;
         private readonly ILocationDiagramRepo _diagramRepo;
+        private readonly IRoleRepo _roleRepo;
         #endregion
 
         #region Ctor
@@ -80,6 +82,7 @@ namespace LagoVista.UserAdmin.Managers
             ISubscriptionManager subscriptionManager,
             ILocationDiagramRepo diagramRepo,
             ICacheProvider cacheProvider,
+            IRoleRepo roleRepo,
             IAdminLogger logger) : base(logger, appConfig, depManager, security)
         {
 
@@ -103,6 +106,8 @@ namespace LagoVista.UserAdmin.Managers
             _cacheProvider = cacheProvider;
             _diagramRepo = diagramRepo;
             _taskQueue = taskQueue ?? throw new ArgumentNullException(nameof(taskQueue));
+            _roleRepo = roleRepo ?? throw new ArgumentNullException(nameof(roleRepo));
+            
         }
         #endregion
 
@@ -697,6 +702,32 @@ namespace LagoVista.UserAdmin.Managers
             await _authLogMgr.AddAsync(AuthLogTypes.AddUserToOrg, userToAdd.Id, userToAdd.Text, org.Id, org.Text, extras: $"added by id: {addedBy.Id}, name: {addedBy.Text}");
 
             return result;
+        }
+
+        public async Task SetDefaultOrguserRoleAsync(string orgId, string userId, string roleId, EntityHeader userOrg, EntityHeader setByUser)
+        {
+            await AuthorizeOrgAccessAsync(setByUser, userOrg, typeof(OrgUser), Actions.Update, new SecurityHelper() { OrgId = orgId, UserId = userId });
+
+            
+            var role = _defaultRoleList.GetStandardRoles().SingleOrDefault(rl=>rl.Id == roleId);
+            if(role == null)
+            {
+               role = await _roleRepo.GetRoleAsync(roleId);
+                if (!role.IsPublic && role.OwnerOrganization.Id != orgId)
+                    throw new NotAuthorizedException($"Attempt to assign a default role {roleId} to user {userId}, however role is not available to org: {userOrg.Text}/{userOrg.Id}");
+            }
+
+            var orgUser = await _orgUserRepo.GetOrgUserAsync(orgId, userId);
+
+            orgUser.DefaultRole = role.Name;
+            orgUser.DefaultRoleId = role.Id;
+
+            orgUser.LastUpdatedBy = setByUser.Text;
+            orgUser.LastUpdatedById = setByUser.Id;
+            orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+
+            await _orgUserRepo.UpdateOrgUserAsync(orgUser);
+            await _authLogMgr.AddAsync(AuthLogTypes.AddUserToOrg, orgUser.UserId, orgUser.UserName, userOrg.Id, userOrg.Text, extras: $"set default role {role.Name} by id: {setByUser.Id}, name: {setByUser.Text}");
         }
 
         public async Task<InvokeResult> AddUserToOrgAsync(string orgId, string userId, EntityHeader userOrg, EntityHeader addedBy)

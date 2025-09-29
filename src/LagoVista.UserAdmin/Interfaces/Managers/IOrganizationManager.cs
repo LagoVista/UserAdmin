@@ -80,6 +80,9 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<Organization> GetOrganizationAsync(string ogId, EntityHeader org, EntityHeader user);
         Task<IEnumerable<OrgUser>> GetOrganizationsForUserAsync(string userId, EntityHeader org, EntityHeader user);
 
+        Task SetDefaultOrguserRoleAsync(string orgId, string userId, string roleId, EntityHeader userOrg, EntityHeader setByUser);
+        Task ClearDefaultOrgUserRoleAsync(string orgId, string userId, EntityHeader userOrg, EntityHeader setByUser);
+
         Task<InvokeResult> ClearOrgUserCache(EntityHeader org, EntityHeader user);
         Task<UpdateOrganizationViewModel> GetUpdateOrganizationViewModel(string orgId, EntityHeader org, EntityHeader user);
         Task<InvokeResult<Invitation>> InviteUserAsync(InviteUser inviteViewModel, EntityHeader orgEntityHeader, EntityHeader userEntityHeader);

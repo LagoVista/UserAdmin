@@ -46,6 +46,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public bool IsOrgAdmin { get; set; }
         public bool IsAppBuilder { get; set; }
 
+        public string DefaultRoleId { get; set; }
+        public string DefaultRole { get; set; }
+
         public static String CreateRowKey(String orgId, String userId)
         {
             return $"{orgId}.{userId}";
