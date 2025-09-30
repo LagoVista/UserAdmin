@@ -748,7 +748,7 @@ namespace LagoVista.UserAdmin.Managers
             orgUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
 
             await _orgUserRepo.UpdateOrgUserAsync(orgUser);
-            await _authLogMgr.AddAsync(AuthLogTypes.AddUserToOrg, orgUser.UserId, orgUser.UserName, userOrg.Id, userOrg.Text, extras: $"set default role {role.Name} by id: {setByUser.Id}, name: {setByUser.Text}");
+            await _authLogMgr.AddAsync(AuthLogTypes.AddUserToOrg, orgUser.UserId, orgUser.UserName, userOrg.Id, userOrg.Text, extras: $"removed default rol by id: {setByUser.Id}, name: {setByUser.Text}");
         }
 
         public async Task<InvokeResult> AddUserToOrgAsync(string orgId, string userId, EntityHeader userOrg, EntityHeader addedBy)
