@@ -128,6 +128,9 @@ namespace LagoVista.UserAdmin.Models.Users
         public string MobileHomePage { get; set; }
         public string CurrentDeviceId { get; set; }
 
+
+        string EndUserOrgAppId { get; set; }
+
         public ImageDetails ProfileImage { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.AppUser_Bio, FieldType: FieldTypes.MultiLineText, IsRequired: false, ResourceType: typeof(UserAdminResources))]
