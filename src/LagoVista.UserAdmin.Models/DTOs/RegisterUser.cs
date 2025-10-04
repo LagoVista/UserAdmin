@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LagoVista.Core.Models;
+using Newtonsoft.Json;
 using System;
 
 namespace LagoVista.UserAdmin.Models.DTOs
@@ -27,5 +28,14 @@ namespace LagoVista.UserAdmin.Models.DTOs
         public string Password { get; set; }
         [JsonProperty("inviteId")]
         public string InviteId { get; set; }
+
+        public EntityHeader EndUserAppOrg { get; set; }
+        public EntityHeader Customer { get; set; }
+        public EntityHeader CustomerContact { get; set; }
+
+        [JsonProperty("customerCity")]
+        public string CustomerCity { get; set; }
+        [JsonProperty("customerState")]
+        public string CustomerState { get; set; }
     }
 }

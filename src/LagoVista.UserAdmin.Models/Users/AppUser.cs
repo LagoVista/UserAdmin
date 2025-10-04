@@ -129,7 +129,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public string CurrentDeviceId { get; set; }
 
 
-        string EndUserOrgAppId { get; set; }
+        public EntityHeader EndUserAppOrg { get; set; }
 
         public ImageDetails ProfileImage { get; set; }
 

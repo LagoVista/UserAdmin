@@ -2036,6 +2036,24 @@
   <data name="Shape_TextOffsetY" xml:space="preserve">
     <value>Text Offset Y</value>
   </data>
+  <data name="Invite_Customer" xml:space="preserve">
+    <value>Customer</value>
+  </data>
+  <data name="Invite_CustomerId" xml:space="preserve">
+    <value>Customer Id</value>
+  </data>
+  <data name="Invite_CustomerContact" xml:space="preserve">
+    <value>Customer Contact</value>
+  </data>
+  <data name="Invite_CustomerContactId" xml:space="preserve">
+    <value>Customer Contact Id</value>
+  </data>
+  <data name="Invite_EndUserAppOrgId" xml:space="preserve">
+    <value>End User App Org Id</value>
+  </data>
+  <data name="Invite_EndUserAppOrg" xml:space="preserve">
+    <value>End User App Org</value>
+  </data>
   <data name="DiagramUnits_Feet" xml:space="preserve">
     <value>Feet</value>
   </data>

@@ -801,10 +801,15 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegInvalidEmailAddress.ToErrorMessage());
             }
 
-            var appUser = new AppUser(newUser.Email, $"{newUser.FirstName} {newUser.LastName}")
+            var userName = EntityHeader.IsNullOrEmpty(newUser.EndUserAppOrg) ? newUser.Email : $"{newUser.EndUserAppOrg.Id}-{newUser.Email}";
+
+            var appUser = new AppUser(userName, $"{newUser.FirstName} {newUser.LastName}")
             {
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
+                EndUserAppOrg = newUser.EndUserAppOrg,
+                Customer = newUser.Customer,
+                CustomerContact = newUser.CustomerContact
             };
 
             if (externalLogin != null)
@@ -857,6 +862,16 @@ namespace LagoVista.UserAdmin.Managers
 
                 createUserResponse.RedirectPage = response.Result.RedirectPage;
                 createUserResponse.ResponseMessage = response.Result.ResponseMessage;
+
+                if (!EntityHeader.IsNullOrEmpty(appUser.Customer) && !EntityHeader.IsNullOrEmpty(appUser.CustomerContact))
+                {
+                    appUser.LoginType = LoginTypes.CustomerContact;
+                    appUser.Customer = response.Result.Customer;
+                    appUser.CustomerContact = response.Result.CustomerContact;
+                }
+
+                if (!EntityHeader.IsNullOrEmpty(appUser.EndUserAppOrg))
+                    appUser.EndUserAppOrg = response.Result.EndUserAppOrg; 
             }
 
             await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "New User Registered", null, appUser.ToEntityHeader());

@@ -45,6 +45,22 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Common_Id, IsRequired: true, FieldType: FieldTypes.RowId, ResourceType: typeof(UserAdminResources))]
         public String OrganizationId { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Invite_EndUserAppOrg, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string EndUserAppOrg { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.Invite_EndUserAppOrgId, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string EndUserAppOrgId { get; set; }
+
+
+        [FormField(LabelResource: UserAdminResources.Names.Invite_Customer, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string Customer { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.Invite_CustomerId, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string CustomerId { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Invite_CustomerContact, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string CustomerContact { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.Invite_CustomerContactId, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        public string CustomerContactId { get; set; }
+
         [JsonConverter(typeof(StringEnumConverter))]
         [FormField(LabelResource: UserAdminResources.Names.InviteUser_Status, IsRequired: true, FieldType: FieldTypes.JsonDateTime, ResourceType: typeof(UserAdminResources))]
         public StatusTypes Status { get; set; }
