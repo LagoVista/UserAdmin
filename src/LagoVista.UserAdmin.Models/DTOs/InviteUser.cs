@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LagoVista.Core.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,5 +22,14 @@ namespace LagoVista.UserAdmin.Models.DTOs
 
         [JsonProperty("message")]
         public String Message { get; set; }
+
+        [JsonProperty("endUserOrgApp")]
+        public EntityHeader EndUserAppOrg { get; set; }
+        
+        [JsonProperty("customer")]
+        public EntityHeader Customer { get; set; }
+
+        [JsonProperty("customerContact")]
+        public EntityHeader CustomerContact { get; set; }
     }
 }

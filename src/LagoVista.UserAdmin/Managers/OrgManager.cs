@@ -393,6 +393,7 @@ namespace LagoVista.UserAdmin.Managers
                 return acceptResult;
             }
 
+            
             invite.Accepted = true;
             invite.Status = Invitation.StatusTypes.Accepted;
             invite.DateAccepted = DateTime.UtcNow.ToJSONString();
@@ -427,11 +428,22 @@ namespace LagoVista.UserAdmin.Managers
 
             await _authLogMgr.AddAsync(AuthLogTypes.AcceptedInvite, acceptedUser.ToEntityHeader(), acceptedUser.CurrentOrganization.ToEntityHeader(), inviteId: inviteId);
 
-            return InvokeResult<AcceptInviteResponse>.Create(new AcceptInviteResponse()
+            var response = new AcceptInviteResponse()
             {
                 RedirectPage = $"{CommonLinks.InviteAccepted}?inviteid={inviteId}&emailconfirmed={acceptedUser.EmailConfirmed.ToString().ToLower()}",
                 ResponseMessage = msg
-            }); 
+            };
+
+            if (!String.IsNullOrEmpty(invite.EndUserAppOrg) && !String.IsNullOrEmpty(invite.EndUserAppOrgId))
+                response.EndUserAppOrg = EntityHeader.Create(invite.EndUserAppOrgId, invite.EndUserAppOrg);
+
+            if (!String.IsNullOrEmpty(invite.Customer) && !String.IsNullOrEmpty(invite.CustomerId))
+                response.Customer = EntityHeader.Create(invite.CustomerId, invite.Customer);
+
+            if (!String.IsNullOrEmpty(invite.CustomerContact) && !String.IsNullOrEmpty(invite.CustomerContactId))
+                response.CustomerContact = EntityHeader.Create(invite.CustomerContactId, invite.CustomerContact);
+
+            return InvokeResult<AcceptInviteResponse>.Create(response); 
         }
 
         public async Task<InvokeResult<AcceptInviteResponse>> AcceptInvitationAsync(string inviteId, string userId)
@@ -647,6 +659,12 @@ namespace LagoVista.UserAdmin.Managers
                 Email = inviteViewModel.Email,
                 DateSent = DateTime.Now.ToJSONString(),
                 Status = Invitation.StatusTypes.New,
+                EndUserAppOrg = inviteViewModel.EndUserAppOrg?.Text,
+                EndUserAppOrgId = inviteViewModel.EndUserAppOrg?.Id,
+                Customer = inviteViewModel.Customer?.Text,
+                CustomerId = inviteViewModel.Customer?.Id,
+                CustomerContact = inviteViewModel.CustomerContact?.Text,
+                CustomerContactId = inviteViewModel.CustomerContact?.Id,
             };
 
             await AuthorizeAsync(user, org, "InviteUser", inviteModel.RowKey);

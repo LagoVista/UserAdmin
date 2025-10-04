@@ -1,4 +1,4 @@
-﻿/*9/10/2025 7:51:19 AM*/
+﻿/*10/3/2025 2:34:56 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -906,6 +906,24 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Invitation_Title
 
 		public static string Invitation_Title { get { return GetResourceString("Invitation_Title"); } }
+//Resources:UserAdminResources:Invite_Customer
+
+		public static string Invite_Customer { get { return GetResourceString("Invite_Customer"); } }
+//Resources:UserAdminResources:Invite_CustomerContact
+
+		public static string Invite_CustomerContact { get { return GetResourceString("Invite_CustomerContact"); } }
+//Resources:UserAdminResources:Invite_CustomerContactId
+
+		public static string Invite_CustomerContactId { get { return GetResourceString("Invite_CustomerContactId"); } }
+//Resources:UserAdminResources:Invite_CustomerId
+
+		public static string Invite_CustomerId { get { return GetResourceString("Invite_CustomerId"); } }
+//Resources:UserAdminResources:Invite_EndUserAppOrg
+
+		public static string Invite_EndUserAppOrg { get { return GetResourceString("Invite_EndUserAppOrg"); } }
+//Resources:UserAdminResources:Invite_EndUserAppOrgId
+
+		public static string Invite_EndUserAppOrgId { get { return GetResourceString("Invite_EndUserAppOrgId"); } }
 //Resources:UserAdminResources:Invite_Greeting_Subject
 
 		public static string Invite_Greeting_Subject { get { return GetResourceString("Invite_Greeting_Subject"); } }
@@ -2251,6 +2269,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Invitation_Description = "Invitation_Description";
 			public const string Invitation_Help = "Invitation_Help";
 			public const string Invitation_Title = "Invitation_Title";
+			public const string Invite_Customer = "Invite_Customer";
+			public const string Invite_CustomerContact = "Invite_CustomerContact";
+			public const string Invite_CustomerContactId = "Invite_CustomerContactId";
+			public const string Invite_CustomerId = "Invite_CustomerId";
+			public const string Invite_EndUserAppOrg = "Invite_EndUserAppOrg";
+			public const string Invite_EndUserAppOrgId = "Invite_EndUserAppOrgId";
 			public const string Invite_Greeting_Subject = "Invite_Greeting_Subject";
 			public const string InviteErr_EmailInvalid = "InviteErr_EmailInvalid";
 			public const string InviteErr_EmailIsEmpty = "InviteErr_EmailIsEmpty";
