@@ -14,11 +14,52 @@ using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
+    public enum DiagramUnits
+    {
+        [EnumLabel(LocationDiagram.DiagramUnits_Feet,  Resources.UserAdminResources.Names.DiagramUnits_Feet, typeof(Resources.UserAdminResources))]
+        Feet,
+
+        [EnumLabel(LocationDiagram.DiagramUnits_Meters, Resources.UserAdminResources.Names.DiagramUnits_Meters, typeof(Resources.UserAdminResources))]
+        Meters
+    }
+
+    public enum VerticalAlign
+    {
+        [EnumLabel(LocationDiagram.VerticalAlign_Top, Resources.UserAdminResources.Names.VerticalAlign_Top, typeof(Resources.UserAdminResources))]
+        Top,
+        [EnumLabel(LocationDiagram.VerticalAlign_Middle, Resources.UserAdminResources.Names.VerticalAlign_Middle, typeof(Resources.UserAdminResources))]
+        Middle,
+        [EnumLabel(LocationDiagram.VerticalAlign_Bottom, Resources.UserAdminResources.Names.VerticalAlign_Bottom, typeof(Resources.UserAdminResources))]
+        Bottom
+    }
+
+    public enum HorizontalAlign
+    {
+        [EnumLabel(LocationDiagram.HorizontalAlign_Left, Resources.UserAdminResources.Names.HorizontalAlign_Left, typeof(Resources.UserAdminResources))]
+        Top,
+        [EnumLabel(LocationDiagram.HorizontalAlign_Center, Resources.UserAdminResources.Names.HorizontalAlign_Center, typeof(Resources.UserAdminResources))]
+        Center,
+        [EnumLabel(LocationDiagram.HorizontalAlign_Right, Resources.UserAdminResources.Names.HorizontalAlign_Right, typeof(Resources.UserAdminResources))]
+        Bottom
+    }
+
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.LocationDiagram_Title, UserAdminResources.Names.LocationDiagrams_Description, UserAdminResources.Names.LocationDiagrams_Description,
         EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "icon-pz-worldwide-1", GetListUrl: "/api/org/location/diagrams", DeleteUrl: "/api/org/location/diagram/{id}", 
         GetUrl: "/api/org/location/diagram/{id}", SaveUrl: "/api/org/location/diagram", FactoryUrl: "/api/org/location/diagram")]
     public class LocationDiagram : EntityBase, IValidateable, ISummaryFactory, IFormDescriptor
     {
+        public const string DiagramUnits_Feet = "feet";
+        public const string DiagramUnits_Meters = "meters";
+
+        public const string VerticalAlign_Top = "top";
+        public const string VerticalAlign_Middle = "middle";
+        public const string VerticalAlign_Bottom = "bottom";
+
+        public const string HorizontalAlign_Left = "left";
+        public const string HorizontalAlign_Center = "center";
+        public const string HorizontalAlign_Right = "right";
+
+
         public LocationDiagram()
         {
             Icon = "icon-pz-worldwide-1";
@@ -27,6 +68,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
             Fill = "#f8f8f8";
             Stroke = "#000000";
             TextColor = "#000000";
+            Units = EntityHeader<DiagramUnits>.Create(DiagramUnits.Feet);
         }
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
@@ -49,6 +91,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public double ViewPortX { get; set; } = 20;
         public double ViewPortY { get; set; } = 20;
+
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Diagram_Units, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources), EnumType: typeof(DiagramUnits), WaterMark: UserAdminResources.Names.Diagram_Units_Select, IsRequired: true, IsUserEditable: true)]
+        public EntityHeader<DiagramUnits> Units { get; set; }
+
 
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.LocationDiagram_Width, FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
@@ -100,6 +147,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
             {
                 nameof(Name),
                 nameof(Key),
+                nameof(Units),
                 nameof(Stroke),
                 nameof(TextColor),
                 nameof(Fill),
@@ -138,7 +186,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.LocationDiagram_Shape, UserAdminResources.Names.LocationDiagram_Shape_Help, UserAdminResources.Names.LocationDiagram_Shape_Help,
         EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "icon-ae-ecommerce-1", FactoryUrl: "/api/org/location/diagram/shape/factory")]
-    public class LocationDiagramShape : IValidateable, IFormDescriptor
+    public class LocationDiagramShape : IValidateable, IFormDescriptor, IFormDescriptorCol2
     {
         public const string ShapeType_Room = "room";
         public const string ShapeType_ParkingLot = "parkinglot";
@@ -162,7 +210,17 @@ namespace LagoVista.UserAdmin.Models.Orgs
             Stroke = "#000000";
             TextColor = "#000000";
             ShapeType = EntityHeader<ShapeTypes>.Create(ShapeTypes.Room);
+            HorizontalAlign = EntityHeader<HorizontalAlign>.Create(Orgs.HorizontalAlign.Center);
+            VerticalAlign = EntityHeader<VerticalAlign>.Create(Orgs.VerticalAlign.Middle);
         }
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_VerticalAlign, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources), EnumType: typeof(VerticalAlign), WaterMark: UserAdminResources.Names.Common_VerticalAlign_Select, IsRequired: true, IsUserEditable: true)]
+        public EntityHeader<VerticalAlign> VerticalAlign { get; set; }
+
+
+        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_HorizontalAlign, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources), EnumType: typeof(HorizontalAlign), WaterMark: UserAdminResources.Names.Common_HorizontalAlign_Select, IsRequired: true, IsUserEditable: true)]
+        public EntityHeader<HorizontalAlign> HorizontalAlign { get; set; }
+
 
         public string Id { get; set; }
 
@@ -227,7 +285,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public double Scale { get; set; }
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.Shape_FontSize, FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: true, IsUserEditable: true)]
-        public double FontSize { get; set; }
+        public double FontSize { get; set; } = 12;
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.Shape_TextOffsetX, FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: true, IsUserEditable: true)]
         public double TextOffsetX { get; set; }
@@ -283,14 +341,23 @@ namespace LagoVista.UserAdmin.Models.Orgs
 ///                nameof(Location),
 ///                nameof(CustomerLocation),
                 nameof(Rotation),
-                nameof(Scale),
-                nameof(Stroke),   
+                nameof(Notes),
+            };
+        }
+
+        public List<string> GetFormFieldsCol2()
+        {
+            return new List<string>()
+            {
+                nameof(Stroke),
                 nameof(Fill),
                 nameof(TextColor),
                 nameof(FontSize),
+                nameof(HorizontalAlign),
+                nameof(VerticalAlign),
+                nameof(TextRotation),
                 nameof(TextOffsetX),
                 nameof(TextOffsetY),
-                nameof(Notes),
             };
         }
     }

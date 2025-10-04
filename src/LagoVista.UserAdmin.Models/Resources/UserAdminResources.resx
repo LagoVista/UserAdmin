@@ -2036,4 +2036,46 @@
   <data name="Shape_TextOffsetY" xml:space="preserve">
     <value>Text Offset Y</value>
   </data>
+  <data name="DiagramUnits_Feet" xml:space="preserve">
+    <value>Feet</value>
+  </data>
+  <data name="DiagramUnits_Meters" xml:space="preserve">
+    <value>Meters</value>
+  </data>
+  <data name="Diagram_Units" xml:space="preserve">
+    <value>Units</value>
+  </data>
+  <data name="Diagram_Units_Select" xml:space="preserve">
+    <value>-select units-</value>
+  </data>
+  <data name="VerticalAlign_Middle" xml:space="preserve">
+    <value>Middle</value>
+  </data>
+  <data name="VerticalAlign_Top" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="VerticalAlign_Bottom" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="HorizontalAlign_Left" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="HorizontalAlign_Center" xml:space="preserve">
+    <value>Center</value>
+  </data>
+  <data name="HorizontalAlign_Right" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="Common_HorizontalAlign" xml:space="preserve">
+    <value>Horizontal Align</value>
+  </data>
+  <data name="Common_HorizontalAlign_Select" xml:space="preserve">
+    <value>-select horizontal align-</value>
+  </data>
+  <data name="Common_VerticalAlign" xml:space="preserve">
+    <value>Vertical Align</value>
+  </data>
+  <data name="Common_VerticalAlign_Select" xml:space="preserve">
+    <value>-select vertical align-</value>
+  </data>
 </root>

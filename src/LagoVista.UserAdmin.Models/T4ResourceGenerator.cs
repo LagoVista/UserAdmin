@@ -1,4 +1,4 @@
-﻿/*9/10/2025 7:51:19 AM*/
+﻿/*10/3/2025 6:08:34 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -408,6 +408,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Common_FillColor
 
 		public static string Common_FillColor { get { return GetResourceString("Common_FillColor"); } }
+//Resources:UserAdminResources:Common_HorizontalAlign
+
+		public static string Common_HorizontalAlign { get { return GetResourceString("Common_HorizontalAlign"); } }
+//Resources:UserAdminResources:Common_HorizontalAlign_Select
+
+		public static string Common_HorizontalAlign_Select { get { return GetResourceString("Common_HorizontalAlign_Select"); } }
 //Resources:UserAdminResources:Common_Icon
 
 		public static string Common_Icon { get { return GetResourceString("Common_Icon"); } }
@@ -504,6 +510,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Common_TimeZome_Picker
 
 		public static string Common_TimeZome_Picker { get { return GetResourceString("Common_TimeZome_Picker"); } }
+//Resources:UserAdminResources:Common_VerticalAlign
+
+		public static string Common_VerticalAlign { get { return GetResourceString("Common_VerticalAlign"); } }
+//Resources:UserAdminResources:Common_VerticalAlign_Select
+
+		public static string Common_VerticalAlign_Select { get { return GetResourceString("Common_VerticalAlign_Select"); } }
 //Resources:UserAdminResources:ContactList_Description
 
 		public static string ContactList_Description { get { return GetResourceString("ContactList_Description"); } }
@@ -603,6 +615,18 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:DeviceOwnersDevices_Title
 
 		public static string DeviceOwnersDevices_Title { get { return GetResourceString("DeviceOwnersDevices_Title"); } }
+//Resources:UserAdminResources:Diagram_Units
+
+		public static string Diagram_Units { get { return GetResourceString("Diagram_Units"); } }
+//Resources:UserAdminResources:Diagram_Units_Select
+
+		public static string Diagram_Units_Select { get { return GetResourceString("Diagram_Units_Select"); } }
+//Resources:UserAdminResources:DiagramUnits_Feet
+
+		public static string DiagramUnits_Feet { get { return GetResourceString("DiagramUnits_Feet"); } }
+//Resources:UserAdminResources:DiagramUnits_Meters
+
+		public static string DiagramUnits_Meters { get { return GetResourceString("DiagramUnits_Meters"); } }
 //Resources:UserAdminResources:DistributionList_ExternalContacts
 
 		public static string DistributionList_ExternalContacts { get { return GetResourceString("DistributionList_ExternalContacts"); } }
@@ -876,6 +900,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:HolidaySets_Title
 
 		public static string HolidaySets_Title { get { return GetResourceString("HolidaySets_Title"); } }
+//Resources:UserAdminResources:HorizontalAlign_Center
+
+		public static string HorizontalAlign_Center { get { return GetResourceString("HorizontalAlign_Center"); } }
+//Resources:UserAdminResources:HorizontalAlign_Left
+
+		public static string HorizontalAlign_Left { get { return GetResourceString("HorizontalAlign_Left"); } }
+//Resources:UserAdminResources:HorizontalAlign_Right
+
+		public static string HorizontalAlign_Right { get { return GetResourceString("HorizontalAlign_Right"); } }
 //Resources:UserAdminResources:ImageDetails_Description
 
 		public static string ImageDetails_Description { get { return GetResourceString("ImageDetails_Description"); } }
@@ -1964,6 +1997,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:VerifyUser_PhoneConfirmed
 
 		public static string VerifyUser_PhoneConfirmed { get { return GetResourceString("VerifyUser_PhoneConfirmed"); } }
+//Resources:UserAdminResources:VerticalAlign_Bottom
+
+		public static string VerticalAlign_Bottom { get { return GetResourceString("VerticalAlign_Bottom"); } }
+//Resources:UserAdminResources:VerticalAlign_Middle
+
+		public static string VerticalAlign_Middle { get { return GetResourceString("VerticalAlign_Middle"); } }
+//Resources:UserAdminResources:VerticalAlign_Top
+
+		public static string VerticalAlign_Top { get { return GetResourceString("VerticalAlign_Top"); } }
 
 		public static class Names
 		{
@@ -2085,6 +2127,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Common_DesktopSupport = "Common_DesktopSupport";
 			public const string Common_EmailAddress = "Common_EmailAddress";
 			public const string Common_FillColor = "Common_FillColor";
+			public const string Common_HorizontalAlign = "Common_HorizontalAlign";
+			public const string Common_HorizontalAlign_Select = "Common_HorizontalAlign_Select";
 			public const string Common_Icon = "Common_Icon";
 			public const string Common_Icon_Size_ExtraLarge = "Common_Icon_Size_ExtraLarge";
 			public const string Common_Icon_Size_Large = "Common_Icon_Size_Large";
@@ -2117,6 +2161,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Common_TextColor = "Common_TextColor";
 			public const string Common_TimeZome = "Common_TimeZome";
 			public const string Common_TimeZome_Picker = "Common_TimeZome_Picker";
+			public const string Common_VerticalAlign = "Common_VerticalAlign";
+			public const string Common_VerticalAlign_Select = "Common_VerticalAlign_Select";
 			public const string ContactList_Description = "ContactList_Description";
 			public const string ContactList_Title = "ContactList_Title";
 			public const string CreateLocationVM_Description = "CreateLocationVM_Description";
@@ -2150,6 +2196,10 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string DeviceOwnersDevices_Organization = "DeviceOwnersDevices_Organization";
 			public const string DeviceOwnersDevices_Product = "DeviceOwnersDevices_Product";
 			public const string DeviceOwnersDevices_Title = "DeviceOwnersDevices_Title";
+			public const string Diagram_Units = "Diagram_Units";
+			public const string Diagram_Units_Select = "Diagram_Units_Select";
+			public const string DiagramUnits_Feet = "DiagramUnits_Feet";
+			public const string DiagramUnits_Meters = "DiagramUnits_Meters";
 			public const string DistributionList_ExternalContacts = "DistributionList_ExternalContacts";
 			public const string DistroList_Description = "DistroList_Description";
 			public const string DistroList_Help = "DistroList_Help";
@@ -2241,6 +2291,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string HolidaySet_Holidays = "HolidaySet_Holidays";
 			public const string HolidaySet_Title = "HolidaySet_Title";
 			public const string HolidaySets_Title = "HolidaySets_Title";
+			public const string HorizontalAlign_Center = "HorizontalAlign_Center";
+			public const string HorizontalAlign_Left = "HorizontalAlign_Left";
+			public const string HorizontalAlign_Right = "HorizontalAlign_Right";
 			public const string ImageDetails_Description = "ImageDetails_Description";
 			public const string ImageDetails_Help = "ImageDetails_Help";
 			public const string ImageDetails_Title = "ImageDetails_Title";
@@ -2601,6 +2654,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string VerifyUser_EmailConfirmed = "VerifyUser_EmailConfirmed";
 			public const string VerifyUser_ExistingPhoneNumber = "VerifyUser_ExistingPhoneNumber";
 			public const string VerifyUser_PhoneConfirmed = "VerifyUser_PhoneConfirmed";
+			public const string VerticalAlign_Bottom = "VerticalAlign_Bottom";
+			public const string VerticalAlign_Middle = "VerticalAlign_Middle";
+			public const string VerticalAlign_Top = "VerticalAlign_Top";
 		}
 	}
 }
