@@ -1,11 +1,19 @@
-﻿using LagoVista.Core.Models;
+﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Models;
+using LagoVista.Core.Validation;
+using LagoVista.UserAdmin.Models.Users;
 using Newtonsoft.Json;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace LagoVista.UserAdmin.Models.DTOs
 {
-    public class RegisterUser
+    public class RegisterUser : IValidateable
     {
+
+        [JsonProperty("loginType")]
+        public LoginTypes LoginType { get; set; } 
+
         [JsonProperty("appId")]
         public String AppId { get; set; }
 
@@ -33,9 +41,33 @@ namespace LagoVista.UserAdmin.Models.DTOs
         public EntityHeader Customer { get; set; }
         public EntityHeader CustomerContact { get; set; }
 
+        [JsonProperty("customerName")]
+        public string CustomerName { get; set; }
         [JsonProperty("customerCity")]
         public string CustomerCity { get; set; }
         [JsonProperty("customerState")]
         public string CustomerState { get; set; }
+
+
+        [CustomValidator]
+        public void Validate(Core.Validation.ValidationResult result, Actions action)
+        {
+            if (!String.IsNullOrEmpty(Password)) result.AddUserError("Password is a Required Field.");
+            if (!String.IsNullOrEmpty(FirstName)) result.AddUserError("Contact First Name is a Required Field.");
+            if (!String.IsNullOrEmpty(LastName)) result.AddUserError("Contact Last Name is a Required Field.");
+            if (!String.IsNullOrEmpty(Email)) result.AddUserError("Contact Email is a Required Field.");
+            var email = new EmailAddressAttribute();
+            if (!email.IsValid(Email)) result.AddUserError("Invalid Email Address.");
+
+            switch(LoginType)
+            {
+                case LoginTypes.AppEndUser:
+                    if (String.IsNullOrEmpty(OrgId) && EntityHeader.IsNullOrEmpty(EndUserAppOrg)) result.AddUserError("When LoginType is AppEnduser, either OrgId or EndUserAppOg is required.");
+                    if(String.IsNullOrEmpty(CustomerName)) result.AddUserError("When LoginType is AppEnduser, CustomerName is required.");
+                    if (String.IsNullOrEmpty(CustomerCity)) result.AddUserError("When LoginType is AppEnduser, CustomerCity is required.");
+                    if (String.IsNullOrEmpty(CustomerState)) result.AddUserError("When LoginType is AppEnduser, CustomerState is required.");
+                    break;
+            }
+        }
     }
 }

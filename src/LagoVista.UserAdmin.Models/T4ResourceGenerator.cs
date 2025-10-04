@@ -1,4 +1,4 @@
-﻿/*10/3/2025 6:08:34 PM*/
+﻿/*10/4/2025 10:30:46 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1361,6 +1361,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_DefaultDevelopmentInstance
 
 		public static string Organization_DefaultDevelopmentInstance { get { return GetResourceString("Organization_DefaultDevelopmentInstance"); } }
+//Resources:UserAdminResources:Organization_DefaultIndustry
+
+		public static string Organization_DefaultIndustry { get { return GetResourceString("Organization_DefaultIndustry"); } }
+//Resources:UserAdminResources:Organization_DefaultIndustry_Help
+
+		public static string Organization_DefaultIndustry_Help { get { return GetResourceString("Organization_DefaultIndustry_Help"); } }
+//Resources:UserAdminResources:Organization_DefaultIndustry_Select
+
+		public static string Organization_DefaultIndustry_Select { get { return GetResourceString("Organization_DefaultIndustry_Select"); } }
 //Resources:UserAdminResources:Organization_DefaultInstance
 
 		public static string Organization_DefaultInstance { get { return GetResourceString("Organization_DefaultInstance"); } }
@@ -2460,6 +2469,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_DefaultContributor_Help = "Organization_DefaultContributor_Help";
 			public const string Organization_DefaultDemoInstance = "Organization_DefaultDemoInstance";
 			public const string Organization_DefaultDevelopmentInstance = "Organization_DefaultDevelopmentInstance";
+			public const string Organization_DefaultIndustry = "Organization_DefaultIndustry";
+			public const string Organization_DefaultIndustry_Help = "Organization_DefaultIndustry_Help";
+			public const string Organization_DefaultIndustry_Select = "Organization_DefaultIndustry_Select";
 			public const string Organization_DefaultInstance = "Organization_DefaultInstance";
 			public const string Organization_DefaultInstance_Select = "Organization_DefaultInstance_Select";
 			public const string Organization_DefaultLandingPage = "Organization_DefaultLandingPage";

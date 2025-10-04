@@ -20,6 +20,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
         Task<ListResponse<OrganizationSummary>> GetAllOrgsAsync(ListRequest listRequest);
         Task<ListResponse<OrganizationSummary>> GetAllOrgsAsync(string orgSearch, ListRequest listRequest);
         Task<List<EntityHeader>> GetBillingContactOrgsForUserAsync(string orgId, string userId);
+        Task<EntityHeader> GetDefaultIndustryForOrgAsync(string orgId);
         Task<string> GetHomePageForOrgAsync(string orgId);
         Task<OrgHostNameRedirect> GetDefaultLandingPageForHostAsync(string hostName);
     }

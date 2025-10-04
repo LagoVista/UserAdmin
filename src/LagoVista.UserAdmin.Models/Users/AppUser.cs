@@ -18,7 +18,7 @@ namespace LagoVista.UserAdmin.Models.Users
         DeviceOwner,
         AppUser,
         Kiosk,
-        CustomerContact,
+        AppEndUser,
     }
 
     [EntityDescription(Domains.UserDomain, UserAdminResources.Names.AppUser_Title, UserAdminResources.Names.AppUser_Help, UserAdminResources.Names.AppUser_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]

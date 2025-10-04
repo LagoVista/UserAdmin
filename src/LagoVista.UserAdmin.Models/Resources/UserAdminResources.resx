@@ -2096,4 +2096,13 @@
   <data name="Common_VerticalAlign_Select" xml:space="preserve">
     <value>-select vertical align-</value>
   </data>
+  <data name="Organization_DefaultIndustry" xml:space="preserve">
+    <value>Default Industry</value>
+  </data>
+  <data name="Organization_DefaultIndustry_Select" xml:space="preserve">
+    <value>-select default industry-</value>
+  </data>
+  <data name="Organization_DefaultIndustry_Help" xml:space="preserve">
+    <value>The Default Industry is used when creating new customers when an industry is not selected.  The industry can be changed at a later time for the customer.</value>
+  </data>
 </root>

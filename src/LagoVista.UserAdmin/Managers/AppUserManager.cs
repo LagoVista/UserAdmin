@@ -718,7 +718,7 @@ namespace LagoVista.UserAdmin.Managers
         {
             if (String.IsNullOrEmpty(newUser.Email))
             {
-                await _authLogMgr.AddAsync(externalLogin == null ? Models.Security.AuthLogTypes.CreateEmailUser : Models.Security.AuthLogTypes.CreateExernalLoginUser, userName: "NOT PROVIDED", extras: $"Client Type: {newUser.ClientType}.");
+                await _authLogMgr.AddAsync(externalLogin == null ? Models.Security.AuthLogTypes.CreateEmailUser : Models.Security.AuthLogTypes.CreateExernalLoginUser, userName: "NOT PROVIDED", extras: $"Client Type: {newUser.ClientType}, Login Type {newUser.LoginType}");
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: "?", errors: "Email address not provided.");
 
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserServicesController_CreateUserAsync", UserAdminErrorCodes.RegMissingEmail.Message);
@@ -728,7 +728,7 @@ namespace LagoVista.UserAdmin.Managers
             newUser.Email = newUser.Email.Trim();
 
             await _authLogMgr.AddAsync(externalLogin == null ? Models.Security.AuthLogTypes.CreateEmailUser : Models.Security.AuthLogTypes.CreateExernalLoginUser, 
-                userName: newUser.Email, oauthProvier: externalLogin?.Provider.ToString(), extras: $"Client Type: {newUser.ClientType}.");
+                userName: newUser.Email, oauthProvier: externalLogin?.Provider.ToString(), extras: $"Client Type: {newUser.ClientType}, Login Type: {newUser.LoginType}.");
             if (!IsValidEmail(newUser.Email))
             {
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Invalid email address");
@@ -834,7 +834,13 @@ namespace LagoVista.UserAdmin.Managers
             }
             else
                 appUser.HasGeneratedPassword = false;
-         
+            
+            if (_appConfig.Environment == Environments.LocalDevelopment)
+            {
+                appUser.EmailConfirmed = true;
+                appUser.PhoneNumberConfirmed = true;
+            }
+
             var identityResult = await _userManager.CreateAsync(appUser, newUser.Password);
             if (!identityResult.Successful)
             {
@@ -856,6 +862,13 @@ namespace LagoVista.UserAdmin.Managers
                 RedirectPage = $"{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}"
             };
 
+            if(_appConfig.Environment == Environments.LocalDevelopment)
+            {
+                createUserResponse.RedirectPage = CommonLinks.Home;
+            }
+
+            appUser.LoginType = newUser.LoginType;
+
             if (!String.IsNullOrEmpty(newUser.InviteId))
             {
                 var response = await _orgManager.AcceptInvitationAsync(newUser.InviteId, appUser);
@@ -865,9 +878,9 @@ namespace LagoVista.UserAdmin.Managers
 
                 if (!EntityHeader.IsNullOrEmpty(appUser.Customer) && !EntityHeader.IsNullOrEmpty(appUser.CustomerContact))
                 {
-                    appUser.LoginType = LoginTypes.CustomerContact;
                     appUser.Customer = response.Result.Customer;
                     appUser.CustomerContact = response.Result.CustomerContact;
+                    appUser.LoginType = LoginTypes.AppUser;
                 }
 
                 if (!EntityHeader.IsNullOrEmpty(appUser.EndUserAppOrg))
@@ -887,7 +900,12 @@ namespace LagoVista.UserAdmin.Managers
                 var org = await _orgRepo.GetOrganizationAsync(newUser.OrgId);
                 var orgEH = new EntityHeader() { Id = newUser.OrgId, Text = newUser.FirstName + " " + newUser.LastName };
                 await _orgManager.AddUserToOrgAsync(newUser.OrgId, appUser.Id, org.ToEntityHeader(), orgEH);
-                appUser.CurrentOrganization = org.CreateSummary();                
+                appUser.CurrentOrganization = org.CreateSummary();   
+                
+                if(!String.IsNullOrEmpty(org.HomePage))
+                {
+                    createUserResponse.RedirectPage = org.HomePage;
+                }
             }
 
             await _appUserRepo.UpdateAsync(appUser);
@@ -934,6 +952,39 @@ namespace LagoVista.UserAdmin.Managers
                 /* If we are logging in as web app, none of this applies */
                 return InvokeResult<CreateUserResponse>.Create(createUserResponse, createUserResponse.RedirectPage);
             }
+        }
+
+        public async Task<InvokeResult> UpdateAppUserCompanyContactAsync(string userId, EntityHeader customer, EntityHeader contact, EntityHeader org, EntityHeader user)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(userId);
+
+            appUser.Customer = customer;
+            appUser.CustomerContact = contact;
+            appUser.LastUpdatedBy = user;
+            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            appUser.AuditHistory.Add(new EntityChangeSet()
+            {
+                ChangeDate = appUser.LastUpdatedDate,
+                 ChangedBy = user,
+                Changes = new List<EntityChange>()
+                  {
+                      new EntityChange()
+                      {
+                         Field = nameof(AppUser.Customer),
+                         NewValue = customer?.Id,
+                         OldValue = appUser.Customer?.Id
+                      },
+                      new EntityChange()
+                      {
+                          Field = nameof(AppUser.CustomerContact),
+                          NewValue = contact?.Id,
+                          OldValue = appUser.CustomerContact?.Id
+                      }
+                  }
+            });
+
+            await _appUserRepo.UpdateAsync(appUser);
+            return InvokeResult.Success;
         }
 
         public async Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(bool? emailConfirmed, bool? smsConfirmed, EntityHeader org, EntityHeader user, ListRequest listRequest)

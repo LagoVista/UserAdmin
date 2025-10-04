@@ -182,6 +182,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader DefaultQAResource { get; set; }
 
 
+        [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultIndustry, WaterMark: UserAdminResources.Names.Organization_DefaultIndustry_Select, HelpResource: UserAdminResources.Names.Organization_DefaultIndustry_Help,
+            FieldType: FieldTypes.EntityHeaderPicker, EntityHeaderPickerUrl: "/api/industries", ResourceType: typeof(UserAdminResources))]
+        public EntityHeader DefaultIndustry { get; set; }
+
+
         [FormField(LabelResource: UserAdminResources.Names.Organization_TestingIndustry, WaterMark:UserAdminResources.Names.Organization_TestingIndustry_Select, HelpResource: UserAdminResources.Names.Organization_TestingIndustry_Help,
             FieldType: FieldTypes.EntityHeaderPicker, EntityHeaderPickerUrl: "/api/industries", ResourceType: typeof(UserAdminResources))]
         public EntityHeader TestingIndustry { get; set; }
@@ -252,6 +257,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(WebSite),
                 nameof(HomePage),
                 nameof(DefaultInstance),
+                nameof(DefaultIndustry),
                 nameof(DefaultDemoInstance),
                 nameof(DefaultTestInstance),
                 nameof(DefaultDevelopmentInstance),
@@ -289,6 +295,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 LightLogo = LightLogo,
                 DefaultLandingPage = DefaultLandingPage,
                 Name = Name,
+                DefaultIndustry = DefaultIndustry,
                 Namespace = Namespace,
                 PrimaryBgColor = PrimaryBgColor,
                 PrimaryTextColor = PrimaryTextColor,
@@ -393,6 +400,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader LightLogo { get; set; }
 
         public EntityHeader DefaultLandingPage { get; set; }
+        public EntityHeader DefaultIndustry { get; set; }
 
         public string TagLine { get; set; }
         public string Icon { get; set; }

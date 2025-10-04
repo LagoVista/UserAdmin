@@ -81,6 +81,17 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 
         public const string ORGS_WITH_NAMESPACE = "orgs_with_hostnames";
 
+        public async Task<EntityHeader> GetDefaultIndustryForOrgAsync(string orgId)
+        {
+            var org = await GetOrganizationAsync(orgId);
+            if(EntityHeader.IsNullOrEmpty(org.DefaultIndustry))
+            {
+                throw new RecordNotFoundException("Organization.DefaultIndustry", orgId);
+            }
+
+            return org.DefaultIndustry;
+        }
+
         public async Task<OrgHostNameRedirect> GetDefaultLandingPageForHostAsync(string hostName)
         {
             var json = await _cacheProvider.GetAsync(ORGS_WITH_NAMESPACE);
