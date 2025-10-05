@@ -85,6 +85,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public async Task<InvokeResult<UserLoginResponse>> PasswordSignInAsync(AuthLoginRequest loginRequest)
         {
+            var userName = String.IsNullOrEmpty(loginRequest.EndUserAppOrgId) ? loginRequest.UserName : $"{loginRequest.UserName}@{loginRequest.EndUserAppOrgId}";
+
             var timings = new List<ResultTiming>();
 
             var response = new UserLoginResponse();
@@ -99,14 +101,15 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var signIn = UserSignInMetrics.WithLabels(nameof(PasswordSignInAsync));
             UserLoginAttempts.Inc();
 
-            var appUser = await _userManager.FindByEmailAsync(loginRequest.UserName);
+
+            var appUser = await _userManager.FindByEmailAsync(userName);
             response.AddAuthMetric("Got User");
             timings.Add(new ResultTiming() { Key = $"Find by email", Ms = sw.Elapsed.TotalMilliseconds });
             sw.Restart();
 
             if (appUser == null)
             {
-                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthUserNotFound, loginRequest.UserName);
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthUserNotFound, userName);
                 await LogEntityActionAsync(loginRequest.UserName, typeof(AppUser).Name, $"Could not find user with account [{loginRequest.UserName}].", EntityHeader.Create("unkonwn", "unknown"), EntityHeader.Create(loginRequest.UserName, loginRequest.UserName));
                 UserLoginFailures.Inc();
                 signIn.Dispose();
@@ -116,7 +119,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[SignInManager__PasswordSignInAsync]", "User Login", loginRequest.UserName.ToKVP("loginRequest.UserName"));
             timings.Add(new ResultTiming() { Key = $"Log event", Ms = sw.Elapsed.TotalMilliseconds });
             sw.Restart();
-
 
             var signInResult = await _signinManager.PasswordSignInAsync(loginRequest.UserName, loginRequest.Password, loginRequest.RememberMe, loginRequest.LockoutOnFailure);
             timings.Add(new ResultTiming() { Key = $"Password sign in", Ms = sw.Elapsed.TotalMilliseconds });

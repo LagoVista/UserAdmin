@@ -60,7 +60,7 @@ namespace LagoVista.UserAdmin.Managers
 
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AuthLog_AddAsync]", $"[AuthLog_AddAsync] - {type}",
                 userId.ToKVP("userId"), userName.ToKVP("username"), orgId.ToKVP("orgId"), orgName.ToKVP("orgName"), errors.ToKVP("errors"),
-                extras.ToKVP("extras"), oauthProvier.ToKVP("oauthProvider")); 
+                extras.ToKVP("extras"), oauthProvier.ToKVP("oauthProvider"), type.ToString().ToKVP("authType"), "true".ToKVP("authlog")); 
 
             return AddAsync(auth);
         }
@@ -72,7 +72,6 @@ namespace LagoVista.UserAdmin.Managers
 
             var userId = user == null ? "?" : user.Id;
             var userName = user == null ? "?" : user.Text;
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "[AuthenticationLogManager__AddAsync]", $"[AuthenticationLogManager__AddAsync] - {type.ToString()} - Org: {orgName}; User: {userName}", extras.ToKVP("extras"), type.ToString().ToKVP("authEvent"));
 
             return AddAsync(type, userId, userName, orgId, orgName, oauthProvider, errors, extras, redirectUri, inviteId);
         }
@@ -85,7 +84,6 @@ namespace LagoVista.UserAdmin.Managers
             var userId = user == null ? "?" : user.Id;
             var userName = user == null ? "?" : user.UserName;
 
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "[AuthenticationLogManager__AddAsync]", $"[AuthenticationLogManager__AddAsync] - {type.ToString()} - Org: {orgName}; User: {userName}", extras.ToKVP("extras"), type.ToString().ToKVP("authEvent"));
 
             return AddAsync(type, userId, userName, orgId, orgName, oauthProvider, errors, extras, redirectUri, inviteId);
         }

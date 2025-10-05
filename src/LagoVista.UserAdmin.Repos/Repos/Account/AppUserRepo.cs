@@ -123,7 +123,7 @@ namespace LagoVista.UserAdmin.Repos.Users
             }
             else
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - did not {userName} to an account id in storage - {sw.Elapsed.TotalMilliseconds} ms");
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - did not {userName} in cache - {sw.Elapsed.TotalMilliseconds} ms");
                 sw.Restart();
                 var user = (await QueryAsync(usr => usr.UserName == userName.ToUpper())).FirstOrDefault();
                 if (user == null)

@@ -19,11 +19,7 @@ using LagoVista.Core.Exceptions;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using System.Linq;
 using LagoVista.UserAdmin.Models.Auth;
-using LagoVista.Core.Models.ML;
-using System.Diagnostics;
 using System.Text;
-using System.Security.Cryptography;
-using RingCentral;
 using System.IO;
 using Svg;
 using System.Drawing.Imaging;
@@ -727,15 +723,17 @@ namespace LagoVista.UserAdmin.Managers
 
             newUser.Email = newUser.Email.Trim();
 
+            var userName = EntityHeader.IsNullOrEmpty(newUser.EndUserAppOrg) ? newUser.Email : $"{newUser.Email}@{newUser.EndUserAppOrg.Id}";
+
             await _authLogMgr.AddAsync(externalLogin == null ? Models.Security.AuthLogTypes.CreateEmailUser : Models.Security.AuthLogTypes.CreateExernalLoginUser, 
-                userName: newUser.Email, oauthProvier: externalLogin?.Provider.ToString(), extras: $"Client Type: {newUser.ClientType}, Login Type: {newUser.LoginType}.");
+                userName: userName, oauthProvier: externalLogin?.Provider.ToString(), extras: $"Client Type: {newUser.ClientType}, Login Type: {newUser.LoginType}.");
             if (!IsValidEmail(newUser.Email))
             {
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Invalid email address");
                 return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.AuthEmailInvalidFormat.ToErrorMessage());
             }
 
-            var user = await _appUserRepo.FindByEmailAsync(newUser.Email);
+            var user = await _appUserRepo.FindByEmailAsync(userName);
             if (user != null)
             {
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Email already exists");
@@ -801,9 +799,7 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegInvalidEmailAddress.ToErrorMessage());
             }
 
-            var userName = EntityHeader.IsNullOrEmpty(newUser.EndUserAppOrg) ? newUser.Email : $"{newUser.EndUserAppOrg.Id}-{newUser.Email}";
-
-            var appUser = new AppUser(userName, $"{newUser.FirstName} {newUser.LastName}")
+            var appUser = new AppUser(newUser.Email, userName, $"{newUser.FirstName} {newUser.LastName}")
             {
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
@@ -835,7 +831,8 @@ namespace LagoVista.UserAdmin.Managers
             else
                 appUser.HasGeneratedPassword = false;
             
-            if (_appConfig.Environment == Environments.LocalDevelopment)
+            if (_appConfig.Environment == Environments.Local ||
+                _appConfig.Environment == Environments.LocalDevelopment)
             {
                 appUser.EmailConfirmed = true;
                 appUser.PhoneNumberConfirmed = true;
@@ -862,7 +859,8 @@ namespace LagoVista.UserAdmin.Managers
                 RedirectPage = $"{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}"
             };
 
-            if(_appConfig.Environment == Environments.LocalDevelopment)
+            if(_appConfig.Environment == Environments.Local ||
+               _appConfig.Environment == Environments.LocalDevelopment)
             {
                 createUserResponse.RedirectPage = CommonLinks.Home;
             }
@@ -965,7 +963,7 @@ namespace LagoVista.UserAdmin.Managers
             appUser.AuditHistory.Add(new EntityChangeSet()
             {
                 ChangeDate = appUser.LastUpdatedDate,
-                 ChangedBy = user,
+                ChangedBy = user,
                 Changes = new List<EntityChange>()
                   {
                       new EntityChange()
@@ -984,6 +982,13 @@ namespace LagoVista.UserAdmin.Managers
             });
 
             await _appUserRepo.UpdateAsync(appUser);
+
+            var orgUser = await _orgUserRepo.GetOrgUserAsync(org.Id, userId);
+            orgUser.Customer = customer.Text;
+            orgUser.CustomerId = customer.Id;
+            orgUser.CustomerContact = contact.Text;
+            orgUser.CustomerContactId = contact.Id;
+            await _orgUserRepo.UpdateOrgUserAsync(orgUser);
             return InvokeResult.Success;
         }
 

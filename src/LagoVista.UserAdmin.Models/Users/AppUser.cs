@@ -24,12 +24,17 @@ namespace LagoVista.UserAdmin.Models.Users
     [EntityDescription(Domains.UserDomain, UserAdminResources.Names.AppUser_Title, UserAdminResources.Names.AppUser_Help, UserAdminResources.Names.AppUser_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
     public class AppUser : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, ISummaryFactory
     {
-        public AppUser(String email, String createdBy)
+        public AppUser(String email, String createdBy) : this(email, email, createdBy)
+        {
+
+        }
+            
+        public AppUser(String email, string userName, String createdBy)
         {
             Id = Guid.NewGuid().ToId();
             Key = Guid.NewGuid().ToId().ToLower(); 
             Email = email;
-            UserName = email;
+            UserName = userName;
             CreatedBy = new EntityHeader()
             {
                 Id = Id,
@@ -362,6 +367,8 @@ namespace LagoVista.UserAdmin.Models.Users
                 PhoneNumberConfirmed = PhoneNumberConfirmed,
                 ProfileImageUrl = ProfileImage,
                 Title = Title,
+                Customer = Customer,
+                CustomerContact = CustomerContact,
                 TeamsAccountName = TeamsAccountName,
                 CurrentOrganization = CurrentOrganization?.ToEntityHeader(),
                 Key = Id,

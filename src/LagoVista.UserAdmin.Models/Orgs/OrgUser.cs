@@ -49,6 +49,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public string DefaultRoleId { get; set; }
         public string DefaultRole { get; set; }
 
+        public string Customer { get; set; }
+        public string CustomerId { get; set; }
+        public string CustomerContact { get; set; }
+        public string CustomerContactId { get; set; }
+
         public static String CreateRowKey(String orgId, String userId)
         {
             return $"{orgId}.{userId}";
