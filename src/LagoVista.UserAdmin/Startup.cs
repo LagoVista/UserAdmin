@@ -38,6 +38,7 @@ namespace LagoVista.UserAdmin
             services.AddSingleton<IAuthenticationLogManager, AuthenticationLogManager>();
             services.AddSingleton<ILocationDiagramManager, LocationDiagramManager>();
             services.AddScoped<ISecureLinkManager, SecureLinkManager>();
+            services.AddScoped<IUserRegistrationManager, UserRegistrationManager>();
             services.AddScoped<IFunctionMapManager, FunctionMapManager>();
         }
     }

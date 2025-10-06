@@ -260,7 +260,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.RefreshTokenGrantFailed, userName: userName, errors: refreshTokenRequestValidationResult.ErrorMessage);
                 return InvokeResult<AuthResponse>.FromInvokeResult(refreshTokenRequestValidationResult);
             }
-            AppUser appUser =  await _userManager.FindByEmailAsync(authRequest.UserName);
+            AppUser appUser =  await _userManager.FindByNameAsync(authRequest.UserName);
             
             if (appUser == null)
             {

@@ -74,6 +74,7 @@ namespace LagoVista.UserAdmin.Models.Security
         AcceptTermsAndConditions,
         GrantRole,
         RevokeRole,
+        AutoConfirmEmail,
         ConfirmEmailSuccess,
         ConfirmEmailFailed,
         ConfirmPhoneSuccess,

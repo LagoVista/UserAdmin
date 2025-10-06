@@ -113,7 +113,7 @@ namespace LagoVista.UserAdmin.Repos.Users
             
             if (String.IsNullOrEmpty(userName))
             {
-                throw new InvalidOperationException("Attempt to find user with null or empty user name.");
+                throw new InvalidOperationException("Attempt to find user by user name, but null or empty user name provided.");
             }
 
             var accountId = await _cacheProvider.GetAsync(UserNameCacheKey(userName));
@@ -155,7 +155,7 @@ namespace LagoVista.UserAdmin.Repos.Users
 
             if (String.IsNullOrEmpty(email))
             {
-                throw new InvalidOperationException("Attempt to find user with null or empty user name.");
+                throw new InvalidOperationException("Attempt to find user by email, but null or empty email provided.");
             }
 
             var accountId = await _cacheProvider.GetAsync(EmailCacheKey(email));
@@ -165,15 +165,15 @@ namespace LagoVista.UserAdmin.Repos.Users
             }
             else
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - did not {email} to an account id in storage - {sw.Elapsed.TotalMilliseconds} ms");
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByEmailAsync]", $"[AppUserRepo__FindByEmailAsync] - did not {email} to an account id in storage - {sw.Elapsed.TotalMilliseconds} ms");
                 sw.Restart();
                 var user = (await QueryAsync(usr => usr.Email == email.ToUpper())).FirstOrDefault();
                 if (user == null)
                 {
-                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Warning, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - Could not find user by username {email} - {sw.Elapsed.TotalMilliseconds} ms");
+                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Warning, "[AppUserRepo__FindByEmailAsync]", $"[AppUserRepo__FindByEmailAsync] - Could not find user by email {email} - {sw.Elapsed.TotalMilliseconds} ms");
                     return null;
                 }
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - Found user {email} in storage by email - {sw.Elapsed.TotalMilliseconds} ms");
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByEmailAsync]", $"[AppUserRepo__FindByEmailAsync] - Found user {email} in storage by email - {sw.Elapsed.TotalMilliseconds} ms");
                 accountId = user.Id;
                 sw.Restart();
                 await _cacheProvider.AddAsync(EmailCacheKey(email), accountId);

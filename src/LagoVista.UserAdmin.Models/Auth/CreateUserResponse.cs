@@ -22,6 +22,8 @@ namespace LagoVista.UserAdmin.Models.Auth
             };
         }
 
+        public bool IsSetupComplete { get; set; } = false;
+
         public string ResponseMessage { get; set; }
 
         public string RedirectPage { get; set; }

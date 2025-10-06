@@ -10,6 +10,7 @@ using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Security;
 using LagoVista.UserAdmin.Models.Users;
 using Microsoft.AspNetCore.Identity;
+using RingCentral;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,9 +30,10 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IOrganizationManager _orgManager;
         private readonly IAppConfig _appConfig;
         private readonly IUserVerficationManager _userVerficationManager;
+        private readonly IUserRegistrationManager _userRegistrationManager;
 
         public ExternalLoginManager(ITwitterAuthService twitterAuthorization, SignInManager<AppUser> signInManager, IAppConfig appConfig, IUserVerficationManager userVerficationManager, IAuthTokenManager authTokenManager, IOrganizationManager orgManager, IAdminLogger adminLogger, IAuthenticationLogManager authLogManager,
-                                   IAppUserManager appUserManager)
+                                   IUserRegistrationManager userRegistrationManager, IAppUserManager appUserManager)
         {
             _twitterAuthorization = twitterAuthorization ?? throw new ArgumentNullException(nameof(twitterAuthorization));
             _adminLogger = adminLogger ?? throw new ArgumentNullException(nameof(adminLogger));
@@ -42,6 +44,7 @@ namespace LagoVista.UserAdmin.Managers
             _appUserManager = appUserManager ?? throw new ArgumentNullException(nameof(appUserManager));
             _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
             _userVerficationManager = userVerficationManager ?? throw new ArgumentNullException(nameof(userVerficationManager));
+            _userRegistrationManager = userRegistrationManager ?? throw new ArgumentNullException(nameof(userRegistrationManager));
         }
 
         public async Task<ExternalLogin> GetExternalLoginAsync(ExternalLoginInfo loginInfo)
@@ -338,7 +341,7 @@ namespace LagoVista.UserAdmin.Managers
                     ClientType = "WEBAPP",
                 };
 
-                var result = await _appUserManager.CreateUserAsync(newUser, externalLogin: externalLoginInfo);
+                var result = await _userRegistrationManager.CreateUserAsync(newUser, externalLogin: externalLoginInfo);
                 if (!result.Successful)
                 {
                     await _authLogManager.AddAsync(AuthLogTypes.CreateUserError, inviteId: inviteId, oauthProvier: externalLoginInfo.Provider.Text, extras: $"New User Created: {newUser.FirstName} {newUser.LastName} - {newUser.Email}");

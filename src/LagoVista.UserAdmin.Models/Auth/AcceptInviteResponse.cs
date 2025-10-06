@@ -8,6 +8,7 @@ namespace LagoVista.UserAdmin.Models.Auth
 {
     public class AcceptInviteResponse
     {
+        public string OriginalEmail { get; set; }
         public string RedirectPage { get; set; }
         public string ResponseMessage { get; set; }
         public EntityHeader Customer { get; set; }
