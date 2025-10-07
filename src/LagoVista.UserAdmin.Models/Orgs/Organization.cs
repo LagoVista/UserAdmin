@@ -216,6 +216,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Organization_HomePage, HelpResource: UserAdminResources.Names.Organization_HomePage_Help, FieldType: FieldTypes.Text, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public string HomePage { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Organization_EndUserHomePage, HelpResource: UserAdminResources.Names.Organization_EndUserHomePage_Help, FieldType: FieldTypes.Text, IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        public string EndUserHomePage { get; set; }
+
+
         public bool IsArchived { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultTeamsWebHook, HelpResource: UserAdminResources.Names.Organization_DefaultTeamsWebHook_Help, FieldType: FieldTypes.WebLink, IsRequired: false, ResourceType: typeof(UserAdminResources))]
@@ -256,6 +260,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(DefaultTheme),
                 nameof(WebSite),
                 nameof(HomePage),
+                nameof(EndUserHomePage),
                 nameof(DefaultInstance),
                 nameof(DefaultIndustry),
                 nameof(DefaultDemoInstance),

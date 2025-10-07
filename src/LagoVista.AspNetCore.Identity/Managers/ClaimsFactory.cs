@@ -24,6 +24,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string ExternalAccountVerified = "com.lagovista.iot.externalaccount.verified";
         public const string ExternalAccountName = "com.lagovista.iot.externalaccount.name";
         public const string CurrentUserId = "com.lagovista.iot.userid";
+        public const string CurrentUserName = "com.lagovista.iot.username";
         public const string CurrentOrgName = "com.lagovista.iot.currentorgname";
         public const string CurrentOrgId = "com.lagovista.iot.currentorgid";
         public const string OAuthToken = "com.lagovista.iot.oauth.token";
@@ -63,11 +64,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var isOwner = user.CurrentOrganizationRoles != null && user.CurrentOrganizationRoles.Select(role => role.Id == "ACDC1BADF00D1CAFEF12CE0FF55F2B01").Any();
 
             var claims = new List<Claim> {
-                new Claim(Logintype, nameof(AppUser)),
+                new Claim(Logintype, user.LoginType.ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(user.FirstName) ? user.FirstName : None),
                 new Claim(ClaimTypes.Surname, !string.IsNullOrWhiteSpace(user.LastName) ? user.LastName : None),
                 new Claim(ClaimTypes.Email, user.Email),
+                new Claim(CurrentUserName, user.UserName),
                 new Claim(Avatar, user.ProfileImage.ImageUrl),
                 new Claim(CurrentUserId, user.Id),
                 new Claim(IsPreviewUser, user.IsPreviewUser.ToString().ToLower()),
@@ -142,6 +144,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(Avatar, user.ProfileImage.ImageUrl),
                 new Claim(CurrentUserId, user.Id),
+                new Claim(CurrentUserName, user.UserName),
                 new Claim(ExternalAccountVerified, user.ExternalLogins.Any().ToString()),
                 new Claim(IsPreviewUser, user.IsPreviewUser.ToString().ToLower()),
                 new Claim(EmailVerified, user.EmailConfirmed.ToString()),
@@ -218,6 +221,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(ClaimTypes.GivenName, string.IsNullOrEmpty( owner.FirstName) ? "anonymous" : owner.FirstName),
                 new Claim(ClaimTypes.Surname, string.IsNullOrEmpty( owner.LastName) ? "anonymous" : owner.LastName),
 
+                new Claim(CurrentUserName, owner.UserName),
+
                 new Claim(Logintype, "Customer"),
                 new Claim(Anonymous, owner.IsAnonymous.ToString()),
 
@@ -269,6 +274,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var claims = new List<Claim>
             {
                 new Claim(CurrentUserId, owner.Id),
+
+                new Claim(CurrentUserName, owner.UserName), 
 
                 new Claim(ClaimTypes.GivenName, string.IsNullOrEmpty( owner.FirstName) ? "anonymous" : owner.FirstName),
                 new Claim(ClaimTypes.Surname, string.IsNullOrEmpty( owner.LastName) ? "anonymous" : owner.LastName),

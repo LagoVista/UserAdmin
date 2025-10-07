@@ -2105,4 +2105,10 @@
   <data name="Organization_DefaultIndustry_Help" xml:space="preserve">
     <value>The Default Industry is used when creating new customers when an industry is not selected.  The industry can be changed at a later time for the customer.</value>
   </data>
+  <data name="Organization_EndUserHomePage" xml:space="preserve">
+    <value>End User Home Page</value>
+  </data>
+  <data name="Organization_EndUserHomePage_Help" xml:space="preserve">
+    <value>This is the home page where end users, or people that are using your application should see when they login.   This is different then the Home Page where standard users, typcially the ones that are budiling and manage the application will see when they login.</value>
+  </data>
 </root>

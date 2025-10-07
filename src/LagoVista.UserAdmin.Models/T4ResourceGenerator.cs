@@ -1,4 +1,4 @@
-﻿/*10/4/2025 10:30:46 AM*/
+﻿/*10/7/2025 1:19:48 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1427,6 +1427,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_Details
 
 		public static string Organization_Details { get { return GetResourceString("Organization_Details"); } }
+//Resources:UserAdminResources:Organization_EndUserHomePage
+
+		public static string Organization_EndUserHomePage { get { return GetResourceString("Organization_EndUserHomePage"); } }
+//Resources:UserAdminResources:Organization_EndUserHomePage_Help
+
+		public static string Organization_EndUserHomePage_Help { get { return GetResourceString("Organization_EndUserHomePage_Help"); } }
 //Resources:UserAdminResources:Organization_FacebookUrl
 
 		public static string Organization_FacebookUrl { get { return GetResourceString("Organization_FacebookUrl"); } }
@@ -2491,6 +2497,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_DefaultTheme = "Organization_DefaultTheme";
 			public const string Organization_Description = "Organization_Description";
 			public const string Organization_Details = "Organization_Details";
+			public const string Organization_EndUserHomePage = "Organization_EndUserHomePage";
+			public const string Organization_EndUserHomePage_Help = "Organization_EndUserHomePage_Help";
 			public const string Organization_FacebookUrl = "Organization_FacebookUrl";
 			public const string Organization_Help = "Organization_Help";
 			public const string Organization_HeroBackground = "Organization_HeroBackground";

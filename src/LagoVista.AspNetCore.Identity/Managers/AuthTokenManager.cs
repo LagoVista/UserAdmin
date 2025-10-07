@@ -87,7 +87,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             var signInRequest = new AuthLoginRequest()
             {
-                UserName = userName,
+                Email = userName,
                 Password = password,
                 RememberMe = true,
                 LockoutOnFailure = false,

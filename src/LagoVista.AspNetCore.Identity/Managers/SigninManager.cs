@@ -85,24 +85,25 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public async Task<InvokeResult<UserLoginResponse>> PasswordSignInAsync(AuthLoginRequest loginRequest)
         {
-            var userName = String.IsNullOrEmpty(loginRequest.EndUserAppOrgId) ? loginRequest.UserName : $"{loginRequest.UserName}@{loginRequest.EndUserAppOrgId}";
+            var email = loginRequest.Email; 
+
+            var userName = String.IsNullOrEmpty(loginRequest.EndUserAppOrgId) ? loginRequest.Email : $"{email}@{loginRequest.EndUserAppOrgId}";
 
             var timings = new List<ResultTiming>();
 
             var response = new UserLoginResponse();
 
-            if (string.IsNullOrEmpty(loginRequest.UserName)) return InvokeResult<UserLoginResponse>.FromError($"User name is a required field [{loginRequest.UserName}].");
-            if (string.IsNullOrEmpty(loginRequest.Password)) return InvokeResult<UserLoginResponse>.FromError($"Password is a required field [{loginRequest.UserName}].");
+            if (string.IsNullOrEmpty(email)) return InvokeResult<UserLoginResponse>.FromError($"User name is a required field [{email}].");
+            if (string.IsNullOrEmpty(loginRequest.Password)) return InvokeResult<UserLoginResponse>.FromError($"Password is a required field [{email}].");
             var sw = Stopwatch.StartNew();
-            await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthStart, userName: loginRequest.UserName, inviteId:loginRequest.InviteId);
+            await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthStart, userName: email, inviteId:loginRequest.InviteId);
             timings.Add(new ResultTiming() { Key = "Add password start, auth manager", Ms = sw.Elapsed.TotalMilliseconds });
             sw.Restart();
 
             var signIn = UserSignInMetrics.WithLabels(nameof(PasswordSignInAsync));
             UserLoginAttempts.Inc();
 
-
-            var appUser = await _userManager.FindByEmailAsync(userName);
+            var appUser = await _userManager.FindByNameAsync(userName);
             response.AddAuthMetric("Got User");
             timings.Add(new ResultTiming() { Key = $"Find by email", Ms = sw.Elapsed.TotalMilliseconds });
             sw.Restart();
@@ -110,17 +111,17 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (appUser == null)
             {
                 await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthUserNotFound, userName);
-                await LogEntityActionAsync(loginRequest.UserName, typeof(AppUser).Name, $"Could not find user with account [{loginRequest.UserName}].", EntityHeader.Create("unkonwn", "unknown"), EntityHeader.Create(loginRequest.UserName, loginRequest.UserName));
+                await LogEntityActionAsync(email, typeof(AppUser).Name, $"Could not find user with account [{email}].", EntityHeader.Create("unkonwn", "unknown"), EntityHeader.Create(email, email));
                 UserLoginFailures.Inc();
                 signIn.Dispose();
-                return InvokeResult<UserLoginResponse>.FromError($"SignInManager__PasswordSignInAsync;  Could not find user [{loginRequest.UserName}].");
+                return InvokeResult<UserLoginResponse>.FromError($"SignInManager__PasswordSignInAsync;  Could not find user [{email}].");
             }
 
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[SignInManager__PasswordSignInAsync]", "User Login", loginRequest.UserName.ToKVP("loginRequest.UserName"));
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[SignInManager__PasswordSignInAsync]", "User Login", email.ToKVP("email"));
             timings.Add(new ResultTiming() { Key = $"Log event", Ms = sw.Elapsed.TotalMilliseconds });
             sw.Restart();
 
-            var signInResult = await _signinManager.PasswordSignInAsync(loginRequest.UserName, loginRequest.Password, loginRequest.RememberMe, loginRequest.LockoutOnFailure);
+            var signInResult = await _signinManager.PasswordSignInAsync(userName, loginRequest.Password, loginRequest.RememberMe, loginRequest.LockoutOnFailure);
             timings.Add(new ResultTiming() { Key = $"Password sign in", Ms = sw.Elapsed.TotalMilliseconds });
             sw.Restart();
 
@@ -130,11 +131,11 @@ namespace LagoVista.AspNetCore.Identity.Managers
             {
                 if (appUser.IsAccountDisabled)
                 {
-                    await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PaswwordAuthFailed, loginRequest.UserName, appUser.Id, extras:"Account Disabled");
+                    await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PaswwordAuthFailed, email, appUser.Id, extras:"Account Disabled");
                     await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed - Account Disabled", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
                     UserLoginFailures.Inc();
                     signIn.Dispose();
-                    return InvokeResult<UserLoginResponse>.FromError($"Account [{loginRequest.UserName}] is disabled.");
+                    return InvokeResult<UserLoginResponse>.FromError($"Account [{email}] is disabled.");
                 }
 
                 if (!String.IsNullOrEmpty(loginRequest.InviteId))
@@ -170,12 +171,16 @@ namespace LagoVista.AspNetCore.Identity.Managers
                     }
                 }
 
+
                 if (appUser.CurrentOrganization != null)
                 {
                     var org = await _organizationRepo.GetOrganizationAsync(appUser.CurrentOrganization.Id);
                     response.AddAuthMetric("Loaded Organization");
                     timings.Add(new ResultTiming() { Key = $"Loaded organiation", Ms = sw.Elapsed.TotalMilliseconds });
                     sw.Restart();
+
+                    if (!String.IsNullOrEmpty(loginRequest.EndUserAppOrgId) && !String.IsNullOrEmpty(org.EndUserHomePage))
+                        response.RedirectPage = org.EndUserHomePage;
 
                     if (org.CreatedBy.Id == appUser.Id)
                     {
@@ -296,7 +301,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed - Locked Out", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
                 await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PaswwordAuthFailed, appUser, errors: "User is locked out.");
 
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AccessTokenGrantAsync", UserAdminErrorCodes.AuthUserLockedOut.Message, new KeyValuePair<string, string>("email", loginRequest.UserName));
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AccessTokenGrantAsync", UserAdminErrorCodes.AuthUserLockedOut.Message, new KeyValuePair<string, string>("email", email));
                 signIn.Dispose();
                 UserLoginFailures.Inc();
                 return InvokeResult<UserLoginResponse>.FromErrors(UserAdminErrorCodes.AuthUserLockedOut.ToErrorMessage());
@@ -305,7 +310,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
 
 
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "[AuthTokenManager_AccessTokenGrantAsync]", UserAdminErrorCodes.AuthInvalidCredentials.Message, new KeyValuePair<string, string>("email", loginRequest.UserName));
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "[AuthTokenManager_AccessTokenGrantAsync]", UserAdminErrorCodes.AuthInvalidCredentials.Message, new KeyValuePair<string, string>("email", email));
             signIn.Dispose();
             UserLoginSuccess.Inc();
 
