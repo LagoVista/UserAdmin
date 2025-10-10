@@ -90,9 +90,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return Task.FromResult(0);
         }
 
-        public Task SetNormalizedUserNameAsync(AppUser user, string email, CancellationToken token)
+        public Task SetNormalizedUserNameAsync(AppUser user, string userName, CancellationToken token)
         {
-            user.Email = email;
+            user.UserName = userName;
             return Task.FromResult(0);
         }
 

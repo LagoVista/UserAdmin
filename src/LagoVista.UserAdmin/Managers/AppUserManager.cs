@@ -23,6 +23,7 @@ using System.Text;
 using System.IO;
 using Svg;
 using System.Drawing.Imaging;
+using RingCentral;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -690,10 +691,90 @@ namespace LagoVista.UserAdmin.Managers
             return await _appUserRepo.GetActiveUsersAsync(listRequest);
         }
 
-        public async Task<InvokeResult<AppUser>> UpdateAppUserCompanyContactAsync(string userId, EntityHeader customer, EntityHeader contact, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> SetEndUserContactAsCustomerAdminAsync(string contactAppUserId, EntityHeader customer, EntityHeader org, EntityHeader user)
+        {
+            var customerAdminUser = await _appUserRepo.FindByIdAsync(user.Id);
+            if (customerAdminUser.Customer?.Id != customer.Id)
+                throw new NotAuthenticatedException("Customer Mismatch");
+
+            if (!customerAdminUser.IsCustomerAdmin)
+                throw new NotAuthenticatedException("User must be customer admin user to enable another user customer admin role");
+
+            var appUser = await _appUserRepo.FindByIdAsync(contactAppUserId);
+
+            if (!appUser.IsCustomerAdmin)
+                return InvokeResult.FromError($"User {appUser.Name} is already a customer admin, no need to set the role.");
+
+            appUser.IsCustomerAdmin = true;
+            appUser.LastUpdatedBy = user;
+            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            appUser.AuditHistory.Add(new EntityChangeSet()
+            {
+                ChangeDate = appUser.LastUpdatedDate,
+                ChangedBy = user,
+                Changes = new List<EntityChange>()
+                  {
+                      new EntityChange()
+                      {
+                         Field = nameof(AppUser.Customer),
+                         NewValue = true.ToString(),
+                         OldValue = false.ToString(),
+                         Notes = "Enabled contact as a end user/customer admin."
+                      },
+                  }
+            });
+
+            await _appUserRepo.UpdateAsync(appUser);
+
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> ClearEndUserContactAsCustomerAdminAsync(string contactAppUserId, EntityHeader customer, EntityHeader org, EntityHeader user)
+        {
+            var customerAdminUser = await _appUserRepo.FindByIdAsync(user.Id);
+            if (customerAdminUser.Customer?.Id != customer.Id)
+                throw new NotAuthenticatedException("Customer Mismatch");
+
+            if(!customerAdminUser.IsCustomerAdmin)
+                throw new NotAuthenticatedException("User must be customer admin user to disabled another user customer admin role");
+
+            var appUser = await _appUserRepo.FindByIdAsync(contactAppUserId);
+            if(appUser.Customer?.Id != customer.Id)
+                throw new NotAuthenticatedException("Customer Mismatch");
+
+            if(!appUser.IsCustomerAdmin)
+                return InvokeResult.FromError($"User {appUser.Name} is not a customer admin, can not remove customer admin role.");
+
+            appUser.IsCustomerAdmin = false;
+            appUser.LastUpdatedBy = user;
+            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            appUser.AuditHistory.Add(new EntityChangeSet()
+            {
+                ChangeDate = appUser.LastUpdatedDate,
+                ChangedBy = user,
+                Changes = new List<EntityChange>()
+                  {
+                      new EntityChange()
+                      {
+                         Field = nameof(AppUser.Customer),
+                         NewValue = false.ToString(),
+                         OldValue = true.ToString(),
+                         Notes = "disable contact as a end user/customer admin."
+                      },
+                  }
+            });
+
+            await _appUserRepo.UpdateAsync(appUser);
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult<AppUser>> UpdateAppUserCompanyContactAsync(string userId, EntityHeader customer, EntityHeader contact, bool isCustomerAdmin, EntityHeader org, EntityHeader user)
         {
             var appUser = await _appUserRepo.FindByIdAsync(userId);
 
+            appUser.IsCustomerAdmin = true;
             appUser.Customer = customer;
             appUser.CustomerContact = contact;
             appUser.LastUpdatedBy = user;
@@ -715,7 +796,13 @@ namespace LagoVista.UserAdmin.Managers
                           Field = nameof(AppUser.CustomerContact),
                           NewValue = contact?.Id,
                           OldValue = appUser.CustomerContact?.Id
-                      }
+                      },
+                      new EntityChange()
+                      {
+                          Field = nameof(AppUser.IsCustomerAdmin),
+                          NewValue = contact?.Id,
+                          OldValue = "?"
+                      },
                   }
             });
 
@@ -869,7 +956,7 @@ namespace LagoVista.UserAdmin.Managers
         {
             var appUser = await _userManager.FindByIdAsync(userId);
             await AuthorizeAsync(user, org, "Add Push Notification Channel", userId);
-
+            
             if (!appUser.PushNotificationChannels.Any(pn => pn.Token == channel.Token))
             {
                 appUser.PushNotificationChannels.Add(channel);

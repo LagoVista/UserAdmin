@@ -32,7 +32,7 @@ namespace LagoVista.UserAdmin.Managers
         Task<InvokeResult> AddMediaResourceAsync(string userId, EntityHeader mediaResource, EntityHeader org, EntityHeader updatedByUser);
         Task<InvokeResult> UpdateUserAsync(UserInfo user, EntityHeader org, EntityHeader updatedByUser);
         Task<InvokeResult> UpdateUserAsync(CoreUserInfo user, EntityHeader org, EntityHeader updatedByUser);
-        Task<InvokeResult<AppUser>> UpdateAppUserCompanyContactAsync(string userId, EntityHeader customer, EntityHeader contact, EntityHeader org, EntityHeader user);
+        Task<InvokeResult<AppUser>> UpdateAppUserCompanyContactAsync(string userId, EntityHeader customer, EntityHeader contact, bool isCustomerAdmin, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateUserAsync(AppUser user, EntityHeader org, EntityHeader updatedByUser);
         Task<InvokeResult> DeleteUserAsync(String id, EntityHeader org, EntityHeader deletedByUser);
         Task<InvokeResult> DisableAccountAsync(string userId, EntityHeader org, EntityHeader adminUser);
@@ -66,5 +66,8 @@ namespace LagoVista.UserAdmin.Managers
         Task<InvokeResult<string>> GetUserSvgInitialsAsync(EntityHeader user);
         Task<InvokeResult<string>> GetUserSvgInitialsAsB64PngAsync(EntityHeader user);
         Task<InvokeResult> ClearUserSvgInitialsAsync(EntityHeader user);
+
+        Task<InvokeResult> ClearEndUserContactAsCustomerAdminAsync(string contactAppUserId, EntityHeader customer, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> SetEndUserContactAsCustomerAdminAsync(string contactAppUserId, EntityHeader customer, EntityHeader org, EntityHeader user);
     }
 }

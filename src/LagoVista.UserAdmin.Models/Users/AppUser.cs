@@ -100,6 +100,11 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public LoginTypes LoginType { get; set; } = LoginTypes.AppUser;
 
+        public string LoginTypeName
+        {
+            get{return LoginType.ToString();}
+        }
+
         public bool IsAnonymous { get; set; } = false;
 
         public string LastLogin { get; set; }
@@ -118,6 +123,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public OrganizationSummary CurrentOrganization { get; set; }
         public List<EntityHeader> CurrentOrganizationRoles { get; set; }
 
+        public bool IsCustomerAdmin { get; set; }
         public EntityHeader Customer {  get; set; }
         public EntityHeader CustomerContact { get; set; }
 

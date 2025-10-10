@@ -38,6 +38,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string IsAppBuilder = "com.lagovista.iot.isappbuilder";
         public const string IsUserDevice = "com.lagovista.iot.isuserdevice";
         public const string IsFinancceAdmin = "com.lagovista.iot.isfinanceadmin";
+        public const string IsCustomerAdmin = "com.lagovista.iot.iscustomerdmin";
         public const string CurrentUserProfilePictureurl = "com.lagovista.iot.currentprofilepictureurl";
 
         public const string DeviceUniqueId = "com.lagovista.iot.deviceuniqueid";
@@ -80,6 +81,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(IsOrgAdmin, (user.IsOrgAdmin || isOwner).ToString()),
                 new Claim(IsAppBuilder, user.IsAppBuilder.ToString()),
                 new Claim(IsUserDevice, user.IsUserDevice.ToString()),
+                new Claim(IsCustomerAdmin, user.IsCustomerAdmin.ToString()),
                 new Claim(IsFinancceAdmin, (user.IsFinanceAdmin || isOwner).ToString()),
                 new Claim(CurrentOrgName, user.CurrentOrganization == null ? None : user.CurrentOrganization.Text),
                 new Claim(CurrentOrgId, user.CurrentOrganization == null ? None : user.CurrentOrganization.Id),
@@ -154,6 +156,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(IsAppBuilder, isAppBuilder.ToString()),
                 new Claim(IsUserDevice, user.IsUserDevice.ToString()),
                 new Claim(IsFinancceAdmin, (user.IsFinanceAdmin || isOwner).ToString()),
+                new Claim(IsCustomerAdmin, user.IsCustomerAdmin.ToString()),
                 new Claim(CurrentOrgName, org == null ? None : org.Text),
                 new Claim(CurrentOrgId, org == null ? None : org.Id),
                 new Claim(CurrentUserProfilePictureurl, user.ProfileImage.ImageUrl),
@@ -285,6 +288,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
                 new Claim(EmailVerified, true.ToString()),
                 new Claim(PhoneVerfiied, true.ToString()),
+
+                new Claim(IsCustomerAdmin, owner.IsCustomerAdmin.ToString()),
 
                 new Claim(CurrentOrgName, owner.OwnerOrganization.Text),
                 new Claim(CurrentOrgId, owner.OwnerOrganization.Id),

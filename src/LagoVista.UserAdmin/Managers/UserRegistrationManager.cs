@@ -88,7 +88,7 @@ namespace LagoVista.UserAdmin.Managers
             var userName = EntityHeader.IsNullOrEmpty(newUser.EndUserAppOrg) ? newUser.Email : $"{newUser.Email}@{newUser.EndUserAppOrg.Id}";
 
             await _authLogMgr.AddAsync(externalLogin == null ? Models.Security.AuthLogTypes.CreateEmailUser : Models.Security.AuthLogTypes.CreateExernalLoginUser,
-                userName: userName, oauthProvier: externalLogin?.Provider.ToString(), extras: $"Client Type: {newUser.ClientType}, Login Type: {newUser.LoginType}.");
+                userName: userName, oauthProvier: externalLogin?.Provider.ToString(), extras: $"Client Type: {newUser.ClientType}, Login Type: {newUser.LoginType}, Full User Name {userName}.");
             if (!IsValidEmail(newUser.Email))
             {
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Invalid email address");
@@ -108,6 +108,10 @@ namespace LagoVista.UserAdmin.Managers
                 {
                     return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegisterUserExists_3rdParty.ToErrorMessage());
                 }
+            }
+            else
+            {
+                Console.WriteLine($"[UserRegistrationManager_CreateUserAsync] - User with user name {userName} and email {newUser.Email} does not exist.");
             }
 
             /* Need to check all these, if any fail, we want to aboart, we need to refactor this into the UserAdmin module :( */
@@ -169,10 +173,10 @@ namespace LagoVista.UserAdmin.Managers
                 LastName = newUser.LastName,
                 EndUserAppOrg = newUser.EndUserAppOrg,
                 Customer = newUser.Customer,
-                CustomerContact = newUser.CustomerContact
+                CustomerContact = newUser.CustomerContact,
             };
 
-            Console.WriteLine("[UserRegistrationManager_CreateUserAsync] - Created app user.");
+            Console.WriteLine($"[UserRegistrationManager_CreateUserAsync] - Populated app user with Email: {appUser.Email} and User Name: {appUser.UserName}");
 
             if (externalLogin != null)
             {
@@ -211,6 +215,8 @@ namespace LagoVista.UserAdmin.Managers
                 appUser.PhoneNumberConfirmed = true;
             }
 
+            Console.WriteLine($"[UserRegistrationManager_CreateUserAsync] - Before User Manager - Creating User Email: {appUser.Email} and User Name: {appUser.UserName}");
+
             var identityResult = await _userManager.CreateAsync(appUser, newUser.Password);
             if (!identityResult.Successful)
             {
@@ -220,7 +226,7 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult<CreateUserResponse>.FromInvokeResult(identityResult);
             }
 
-            Console.WriteLine($"[UserRegistrationManager_CreateUserAsync] - Could not created user.");
+            Console.WriteLine($"[UserRegistrationManager_CreateUserAsync] - After User Manager - Created User Email: {appUser.Email} and User Name: {appUser.UserName}");
 
             var createUserResponse = new CreateUserResponse()
             {
@@ -287,7 +293,11 @@ namespace LagoVista.UserAdmin.Managers
                 await _orgManager.AddUserToOrgAsync(newUser.OrgId, appUser.Id, org.ToEntityHeader(), orgEH);
                 appUser.CurrentOrganization = org.CreateSummary();
 
-                if (!String.IsNullOrEmpty(org.HomePage))
+                if(!String.IsNullOrEmpty(org.EndUserHomePage))
+                {
+                    createUserResponse.RedirectPage = org.EndUserHomePage;
+                }
+                else if (!String.IsNullOrEmpty(org.HomePage))
                 {
                     createUserResponse.RedirectPage = org.HomePage;
                 }
@@ -323,7 +333,7 @@ namespace LagoVista.UserAdmin.Managers
                     ClientType = newUser.ClientType,
                     GrantType = "password",
                     Email = newUser.Email,
-                    UserName = newUser.Email,
+                    UserName = userName,
                     Password = newUser.Password,
                 };
 

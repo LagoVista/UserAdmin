@@ -171,7 +171,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
                     }
                 }
 
-
                 if (appUser.CurrentOrganization != null)
                 {
                     var org = await _organizationRepo.GetOrganizationAsync(appUser.CurrentOrganization.Id);
