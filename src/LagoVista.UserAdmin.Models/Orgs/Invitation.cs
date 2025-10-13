@@ -45,20 +45,20 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Common_Id, IsRequired: true, FieldType: FieldTypes.RowId, ResourceType: typeof(UserAdminResources))]
         public String OrganizationId { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Invite_EndUserAppOrg, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Invite_EndUserAppOrg, IsRequired: false, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string EndUserAppOrg { get; set; }
-        [FormField(LabelResource: UserAdminResources.Names.Invite_EndUserAppOrgId, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Invite_EndUserAppOrgId, IsRequired: false, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string EndUserAppOrgId { get; set; }
 
 
-        [FormField(LabelResource: UserAdminResources.Names.Invite_Customer, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Invite_Customer, IsRequired: false, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string Customer { get; set; }
-        [FormField(LabelResource: UserAdminResources.Names.Invite_CustomerId, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Invite_CustomerId, IsRequired: false, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string CustomerId { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Invite_CustomerContact, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Invite_CustomerContact, IsRequired: false, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string CustomerContact { get; set; }
-        [FormField(LabelResource: UserAdminResources.Names.Invite_CustomerContactId, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Invite_CustomerContactId, IsRequired: false, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string CustomerContactId { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
