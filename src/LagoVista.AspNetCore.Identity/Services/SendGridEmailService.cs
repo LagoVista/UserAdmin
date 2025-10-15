@@ -668,14 +668,20 @@ namespace LagoVista.AspNetCore.Identity.Services
             return await SendAsync(user.Email, subject, body);
         }
 
-        public Task<InvokeResult> SendAsync(string email, string subject, string body, EntityHeader org, EntityHeader user)
+        public Task<InvokeResult> SendAsync(string email, string subject, string body, EntityHeader org, EntityHeader user, string appName = "", string appLogo = "")
         {
-            return SendAsync(email, subject, body);
+            return SendAsync(email, subject, body, false, appName, appLogo);
         }
 
 
-        public async Task<InvokeResult> SendAsync(string email, string subject, string body, bool hasFullEmail = false)
-        {
+        public async Task<InvokeResult> SendAsync(string email, string subject, string body, bool hasFullEmail = false, string appName = "", string appLogo = "")
+        { 
+            if (String.IsNullOrEmpty(appName))
+                appName = _appConfig.AppName;
+
+            if (String.IsNullOrEmpty(appLogo))
+                appLogo = _appConfig.AppLogo;
+
             //IT IS POSSIBLE THAT ORG IS NULL HERE, IF THAT"S THE CASE WE NEED TO FALLBACK TO A MASTER ORG, this will be the case when the user does 
             //not have a default org set for them and we need to send them email.
 
@@ -954,8 +960,8 @@ namespace LagoVista.AspNetCore.Identity.Services
 		<table width=""100%"" cellpadding=""20"" cellspacing=""0"" border=""0"" style=""max-width:600px; background-color:white""><div>
             <tr>
                 <td>
-                    <img src=""{_appConfig.AppLogo}"" />
-                    <h1>{_appConfig.AppName}</h1>
+                    <img src=""{appLogo}"" />
+                    <h1>{appName}</h1>
                     <div style=""width:550px"">
                     {body}
                     </div>

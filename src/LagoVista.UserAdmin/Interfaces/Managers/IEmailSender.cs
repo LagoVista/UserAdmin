@@ -12,13 +12,13 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
     public interface IEmailSender
     {
         Task<InvokeResult> SendToAppUserAsync(string appuUserId, string subject, string body);
-        Task<InvokeResult> SendAsync(string email, string subject, string body, bool hasFullEmail = false);
+        Task<InvokeResult> SendAsync(string email, string subject, string body, bool hasFullEmail = false, string appName = "", string appLogo = "");
 
         Task<InvokeResult<string>> SendAsync(Email email, EntityHeader org, EntityHeader user);
 
         Task<InvokeResult> SendInBackgroundAsync(Email email, EntityHeader org, EntityHeader user);
 
-        Task<InvokeResult> SendAsync(string email, string subject, string message, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> SendAsync(string email, string subject, string message, EntityHeader org, EntityHeader user, string appName = "", string appLogo = "");
         Task<InvokeResult> SendInBackgroundAsync(string email, string subject, string body, EntityHeader org, EntityHeader user);
         Task<InvokeResult<string>> RegisterContactAsync(Contact contact, Company company, EntityHeader org, EntityHeader user);
         Task<InvokeResult<string>> RegisterContactAsync(Contact contact, EntityHeader org, EntityHeader user);

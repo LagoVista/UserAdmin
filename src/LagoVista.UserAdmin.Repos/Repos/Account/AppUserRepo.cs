@@ -63,8 +63,11 @@ namespace LagoVista.UserAdmin.Repos.Users
                 await DeleteDocumentAsync(user.Id);
                 foreach(var org in user.Organizations)
                     await _rdbmsUserManager.RemoveAppUserFromOrgAsync(org.Id, user.Id);
+
+                await _cacheProvider.RemoveAsync(UserNameCacheKey(user.UserName));
+                await _cacheProvider.RemoveAsync(EmailCacheKey(user.Email));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var msg = new StringBuilder();
                 msg.Append(ex.Message);

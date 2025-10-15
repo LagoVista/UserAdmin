@@ -80,7 +80,7 @@ namespace LagoVista.UserAdmin.Managers
             return environment;
         }
 
-        public async Task<InvokeResult<string>> SendConfirmationEmailAsync(EntityHeader userHeader)
+        public async Task<InvokeResult<string>> SendConfirmationEmailAsync(EntityHeader userHeader, string confirmSubject = "", string confirmBody = "", string appName = "", string logoFile= "")
         {
             var appUser = await _userManager.FindByIdAsync(userHeader.Id);
             if (appUser == null)
@@ -113,9 +113,11 @@ namespace LagoVista.UserAdmin.Managers
                      appUser.Email.ToKVP("toEmailAddress"));
 #endif
 
-                var subject = UserAdminResources.Email_Verification_Subject.Replace("[APP_NAME]", _appConfig.AppName);
-                var body = UserAdminResources.Email_Verification_Body.Replace("[CALLBACK_URL]", callbackUrl).Replace("[MOBILE_CALLBACK_URL]", mobileCallbackUrl);
-                var result = await _emailSender.SendAsync(appUser.Email, subject, body, _appConfig.SystemOwnerOrg, appUser.ToEntityHeader());
+                var subject = String.IsNullOrEmpty(confirmSubject) ? UserAdminResources.Email_Verification_Subject.Replace("[APP_NAME]", _appConfig.AppName) : confirmSubject;
+                var body = String.IsNullOrEmpty(confirmBody) ? UserAdminResources.Email_Verification_Body.Replace("[CALLBACK_URL]", callbackUrl).Replace("[MOBILE_CALLBACK_URL]", mobileCallbackUrl) :
+                                        confirmBody.Replace("[CALLBACK_URL]", callbackUrl).Replace("[MOBILE_CALLBACK_URL]", mobileCallbackUrl);
+
+                var result = await _emailSender.SendAsync(appUser.Email, subject, body, _appConfig.SystemOwnerOrg, appUser.ToEntityHeader(), appName, logoFile);
 
                 _adminLogger.LogInvokeResult("[UserVerficationManager_SendConfirmationEmailAsync]", result,
                     new KeyValuePair<string, string>("callbackLink", callbackUrl),

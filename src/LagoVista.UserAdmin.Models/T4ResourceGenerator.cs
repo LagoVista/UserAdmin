@@ -1,4 +1,4 @@
-﻿/*10/7/2025 1:19:48 PM*/
+﻿/*10/15/2025 12:07:45 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1427,6 +1427,18 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_Details
 
 		public static string Organization_Details { get { return GetResourceString("Organization_Details"); } }
+//Resources:UserAdminResources:Organization_EmailConfirmBody
+
+		public static string Organization_EmailConfirmBody { get { return GetResourceString("Organization_EmailConfirmBody"); } }
+//Resources:UserAdminResources:Organization_EmailConfirmBody_Help
+
+		public static string Organization_EmailConfirmBody_Help { get { return GetResourceString("Organization_EmailConfirmBody_Help"); } }
+//Resources:UserAdminResources:Organization_EmailConfirmSubject
+
+		public static string Organization_EmailConfirmSubject { get { return GetResourceString("Organization_EmailConfirmSubject"); } }
+//Resources:UserAdminResources:Organization_EmailConfirmSubject_Help
+
+		public static string Organization_EmailConfirmSubject_Help { get { return GetResourceString("Organization_EmailConfirmSubject_Help"); } }
 //Resources:UserAdminResources:Organization_EndUserHomePage
 
 		public static string Organization_EndUserHomePage { get { return GetResourceString("Organization_EndUserHomePage"); } }
@@ -2497,6 +2509,10 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_DefaultTheme = "Organization_DefaultTheme";
 			public const string Organization_Description = "Organization_Description";
 			public const string Organization_Details = "Organization_Details";
+			public const string Organization_EmailConfirmBody = "Organization_EmailConfirmBody";
+			public const string Organization_EmailConfirmBody_Help = "Organization_EmailConfirmBody_Help";
+			public const string Organization_EmailConfirmSubject = "Organization_EmailConfirmSubject";
+			public const string Organization_EmailConfirmSubject_Help = "Organization_EmailConfirmSubject_Help";
 			public const string Organization_EndUserHomePage = "Organization_EndUserHomePage";
 			public const string Organization_EndUserHomePage_Help = "Organization_EndUserHomePage_Help";
 			public const string Organization_FacebookUrl = "Organization_FacebookUrl";
