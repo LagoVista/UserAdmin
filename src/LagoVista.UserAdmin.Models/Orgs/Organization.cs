@@ -225,6 +225,12 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultTeamsWebHook, HelpResource: UserAdminResources.Names.Organization_DefaultTeamsWebHook_Help, FieldType: FieldTypes.WebLink, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public string DefaultTeamsWebHook { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Organization_EmailConfirmSubject, HelpResource: UserAdminResources.Names.Organization_EmailConfirmSubject_Help, FieldType: FieldTypes.Text, IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        public string EmailConfirmSubject { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_EmailConfirmBody, HelpResource: UserAdminResources.Names.Organization_EmailConfirmBody_Help, FieldType: FieldTypes.HtmlEditor, IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        public string EmailConfirmMessage { get; set; }
+
         public List<string> GetFormFields()
         {
             return new List<string>()
@@ -247,6 +253,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(LinkeInUrl),
                 nameof(VimeoUrl),
                 nameof(YouTubeUrl),
+                nameof(EmailConfirmSubject),
+                nameof(EmailConfirmMessage),
             };
         }
 

@@ -385,7 +385,7 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public ISummaryData CreateSummary()
         {
-            return CreateSummary();
+            return this.CreateSummary(false, false);
         }
 
         public List<PushNotificationChannel> PushNotificationChannels { get; set; } = new List<PushNotificationChannel>();

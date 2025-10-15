@@ -285,6 +285,11 @@ namespace LagoVista.UserAdmin.Managers
 
             await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "New User Registered", null, appUser.ToEntityHeader());
 
+            var confirmSubject = "";
+            var confirmBody = "";
+            var appName = "";
+            var appLogo = "";
+
             // this is if we create a profileImage by registering them, they will not get an invite but they should be added to the org.
             if (!String.IsNullOrEmpty(newUser.OrgId))
             {
@@ -292,6 +297,11 @@ namespace LagoVista.UserAdmin.Managers
                 var orgEH = new EntityHeader() { Id = newUser.OrgId, Text = newUser.FirstName + " " + newUser.LastName };
                 await _orgManager.AddUserToOrgAsync(newUser.OrgId, appUser.Id, org.ToEntityHeader(), orgEH);
                 appUser.CurrentOrganization = org.CreateSummary();
+
+                confirmSubject = org.EmailConfirmSubject;
+                confirmBody = org.EmailConfirmMessage;
+                appName = org.Name;
+                appLogo = $"{_appConfig.WebAddress.TrimEnd('/')}/api/media/resource/{org.Id}/{org.LightLogo.Id}/download";
 
                 if(!String.IsNullOrEmpty(org.EndUserHomePage))
                 {
@@ -315,7 +325,7 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             Console.WriteLine("[UserRegistrationManager_CreateUserAsync] - Send Email Confirmation - Start.");
-            var sendEmailResult = await _userVerificationmanager.SendConfirmationEmailAsync(appUser.ToEntityHeader());
+            var sendEmailResult = await _userVerificationmanager.SendConfirmationEmailAsync(appUser.ToEntityHeader(), confirmSubject, confirmBody, appName, appLogo);
             if (!sendEmailResult.Successful)
             {
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, appUser, errors: sendEmailResult.ErrorMessage, extras: $"Submitted by client: {newUser.ClientType}.");
