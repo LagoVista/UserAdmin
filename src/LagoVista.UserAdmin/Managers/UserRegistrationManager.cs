@@ -301,7 +301,8 @@ namespace LagoVista.UserAdmin.Managers
                 confirmSubject = org.EmailConfirmSubject;
                 confirmBody = org.EmailConfirmMessage;
                 appName = org.Name;
-                appLogo = $"{_appConfig.WebAddress.TrimEnd('/')}/api/media/resource/{org.Id}/{org.LightLogo.Id}/download";
+                if(!EntityHeader.IsNullOrEmpty(org.LightLogo ))
+                    appLogo = $"{_appConfig.WebAddress.TrimEnd('/')}/api/media/resource/{org.Id}/{org.LightLogo.Id}/download";
 
                 if(!String.IsNullOrEmpty(org.EndUserHomePage))
                 {
