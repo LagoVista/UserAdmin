@@ -1,4 +1,8 @@
-﻿using LagoVista.UserAdmin.Interfaces.Repos.Security;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: eff274127ffb1a5530f817a7874f4e6321ba0ed106b94fb937a3255d1de0a5d2
+// IndexVersion: 0
+// --- END CODE INDEX META ---
+using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using System.Threading;

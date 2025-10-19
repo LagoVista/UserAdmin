@@ -1,4 +1,8 @@
-﻿using System;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 852e82425f820167a3a8eba2a20d8de921fdd51b25a7d49553286ccd575c1c7c
+// IndexVersion: 0
+// --- END CODE INDEX META ---
+using System;
 
 namespace LagoVista.IoT.ProductStore
 {

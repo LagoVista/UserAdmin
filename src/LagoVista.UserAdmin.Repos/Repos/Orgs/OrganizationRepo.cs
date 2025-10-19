@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 1f2b77f8fead09f7850878b617fe625e3b4bc958f279aac00813c7f484c9af76
+// IndexVersion: 0
+// --- END CODE INDEX META ---
+using System.Threading.Tasks;
 using LagoVista.CloudStorage.DocumentDB;
 using System.Linq;
 using Microsoft.Azure.Documents;

@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 22e3b06a5d4cb4287e6ea2f5646f568cd40405bb0d65b1f79d773f571f7704d0
+// IndexVersion: 0
+// --- END CODE INDEX META ---
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using System.Security.Claims;

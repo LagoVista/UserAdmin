@@ -1,4 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 873b7298fab2197454ffc9c44d6af2043c569c08d6749bc656db659a05f1f974
+// IndexVersion: 0
+// --- END CODE INDEX META ---
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Tests.User

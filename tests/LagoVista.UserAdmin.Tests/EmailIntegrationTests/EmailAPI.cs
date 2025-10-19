@@ -1,4 +1,8 @@
-﻿using LagoVista.AspNetCore.Identity.Services;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 6e40bdd5cefe6c629acbcad873e4da1c3efa6505a61185e51c5e3c0cdbcebc35
+// IndexVersion: 0
+// --- END CODE INDEX META ---
+using LagoVista.AspNetCore.Identity.Services;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.IoT.Logging.Loggers;

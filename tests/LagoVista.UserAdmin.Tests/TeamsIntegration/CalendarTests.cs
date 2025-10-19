@@ -1,4 +1,8 @@
-﻿using Azure.Core;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 9083933da25f05976f8987f190b6a44942a2d645cde0bf2e962bed1d403a6988
+// IndexVersion: 0
+// --- END CODE INDEX META ---
+using Azure.Core;
 using Azure.Identity;
 using Microsoft.Graph;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

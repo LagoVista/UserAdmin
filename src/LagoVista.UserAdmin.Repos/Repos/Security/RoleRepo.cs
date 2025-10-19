@@ -1,4 +1,8 @@
-﻿using LagoVista.CloudStorage.DocumentDB;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: be1182c795e60f7b95710ed590427a4a18dbb0e29665062918c0ee5af795083e
+// IndexVersion: 0
+// --- END CODE INDEX META ---
+using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.Core.PlatformSupport;
 using System.Threading.Tasks;
 using System;

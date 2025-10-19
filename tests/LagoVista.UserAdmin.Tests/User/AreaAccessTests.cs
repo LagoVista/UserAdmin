@@ -1,4 +1,8 @@
-﻿using LagoVista.UserAdmin.Models.Security;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: d4be84d4bcbbec1b8afba692ef47fcee9d4d77758f710afd31d0c3a595ee6ccb
+// IndexVersion: 0
+// --- END CODE INDEX META ---
+using LagoVista.UserAdmin.Models.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Threading.Tasks;

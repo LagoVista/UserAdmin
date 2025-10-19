@@ -1,4 +1,8 @@
-﻿namespace LagoVista.UserAdmin
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: cc445af142eac307e4155367d2d3dac56ee6258eb0100bfb1201b82fd1289d57
+// IndexVersion: 0
+// --- END CODE INDEX META ---
+namespace LagoVista.UserAdmin
 {
     public interface IOAuthSettings
     {

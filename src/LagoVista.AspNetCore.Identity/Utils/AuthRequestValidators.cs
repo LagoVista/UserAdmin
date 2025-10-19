@@ -1,4 +1,8 @@
-﻿using LagoVista.Core.Authentication.Models;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 36f254cb245353068cd8557ad4e7ca1f11fa72135d9bba9eba2da92dadd77057
+// IndexVersion: 0
+// --- END CODE INDEX META ---
+using LagoVista.Core.Authentication.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos;

@@ -1,4 +1,8 @@
-﻿//#define DIAG
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 44fe8b563193fe121e24a94f08919222860237c681124e41bbc58edbc517b411
+// IndexVersion: 0
+// --- END CODE INDEX META ---
+//#define DIAG
 
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
