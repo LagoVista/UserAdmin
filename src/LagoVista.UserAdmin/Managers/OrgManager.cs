@@ -1,5 +1,5 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: ba90d7f6d9ccd960a2724b40260e6ac2d4ca1b334e7a32aa43984b874a153dc5
+// ContentHash: 67a2dad5d3358203a24789771f4755f340f707e7b6338c5c746f63cccab21b86
 // IndexVersion: 0
 // --- END CODE INDEX META ---
 using LagoVista.Core.Models;
@@ -688,6 +688,8 @@ namespace LagoVista.UserAdmin.Managers
         #region Organization User Methods
         public async Task<InvokeResult> AddUserToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy, bool isOrgAdmin = false, bool isAppBuilder = false)
         {
+            var timeStamp = DateTime.UtcNow.ToJSONString();
+
             await AuthorizeOrgAccessAsync(addedBy, org, typeof(OrgUser), Actions.Create, new SecurityHelper() { OrgId = org.Id, UserId = userToAdd.Id });
 
             var result = InvokeResult.Success;
@@ -712,16 +714,26 @@ namespace LagoVista.UserAdmin.Managers
 
             user.CreatedBy = appUser.Name;
             user.CreatedById = appUser.Id;
-            user.CreationDate = DateTime.UtcNow.ToJSONString();
+            user.CreationDate = timeStamp;
             user.LastUpdatedBy = appUser.Name;
             user.LastUpdatedById = appUser.Id;
-            user.LastUpdatedDate = user.CreationDate;
+            user.LastUpdatedDate = timeStamp;
 
             await AuthorizeOrgAccessAsync(addedBy, org, typeof(OrgUser), Actions.Create, user);
 
             await _orgUserRepo.AddOrgUserAsync(user);
 
             await _authLogMgr.AddAsync(AuthLogTypes.AddUserToOrg, userToAdd.Id, userToAdd.Text, org.Id, org.Text, extras: $"added by id: {addedBy.Id}, name: {addedBy.Text}");
+
+            if (null == appUser.CurrentOrganization)
+            {
+                var orgDetail = await _organizationRepo.GetOrganizationAsync(org.Id);
+                appUser.CurrentOrganization = orgDetail.CreateSummary();
+                appUser.LastUpdatedBy = addedBy;
+                appUser.LastUpdatedDate = timeStamp;
+                appUser.AddChange(nameof(AppUser.CurrentOrganization), "none", appUser.CurrentOrganization.Text);
+                await _appUserRepo.UpdateAsync(appUser);
+            }
 
             return result;
         }
@@ -775,6 +787,8 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> AddUserToOrgAsync(string orgId, string userId, EntityHeader userOrg, EntityHeader addedBy)
         {
+            var timeStamp = DateTime.UtcNow.ToJSONString();
+
             await AuthorizeOrgAccessAsync(addedBy, userOrg, typeof(OrgUser), Actions.Create, new SecurityHelper() { OrgId = orgId, UserId = userId });
 
             var appUser = await _appUserRepo.FindByIdAsync(userId);
@@ -810,13 +824,24 @@ namespace LagoVista.UserAdmin.Managers
 
             user.CreatedBy = addedBy.Text;
             user.CreatedById = addedBy.Id;
-            user.CreationDate = DateTime.UtcNow.ToJSONString();
+            user.CreationDate = timeStamp;
             user.LastUpdatedBy = addedBy.Text;
             user.LastUpdatedById = addedBy.Id;
-            user.LastUpdatedDate = user.CreationDate;
+            user.LastUpdatedDate = timeStamp;
 
             await _orgUserRepo.AddOrgUserAsync(user);
             await _authLogMgr.AddAsync(AuthLogTypes.AddUserToOrg, appUser.Id, appUser.Name, org.Id, org.Name, extras: $"added by id: {addedBy.Id}, name: {addedBy.Text}");
+
+            if (null == appUser.CurrentOrganization)
+            {
+                var orgDetail = await _organizationRepo.GetOrganizationAsync(org.Id);
+                appUser.CurrentOrganization = orgDetail.CreateSummary();
+                appUser.LastUpdatedBy = addedBy;
+                appUser.LastUpdatedDate = timeStamp;
+                appUser.AddChange(nameof(AppUser.CurrentOrganization), "none", appUser.CurrentOrganization.Text);
+                await _appUserRepo.UpdateAsync(appUser);
+            }
+
 
             return InvokeResult.Success;
         }

@@ -1,5 +1,5 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: fc912d4057141c3d314249af5c51c431ec794839738d4bf40cb51a670d139877
+// ContentHash: d2f076fa2916ba2231e1e6d4a73ee91e0f45aff79f3ff1b71b2f13e25bbba24c
 // IndexVersion: 0
 // --- END CODE INDEX META ---
 using LagoVista.Core.Models;
@@ -73,5 +73,7 @@ namespace LagoVista.UserAdmin.Managers
 
         Task<InvokeResult> ClearEndUserContactAsCustomerAdminAsync(string contactAppUserId, EntityHeader customer, EntityHeader org, EntityHeader user);
         Task<InvokeResult> SetEndUserContactAsCustomerAdminAsync(string contactAppUserId, EntityHeader customer, EntityHeader org, EntityHeader user);
+
+        Task<ListResponse<UserInfoSummary>> SearchUsersAsync(string eamil, string firstName, string lastName, EntityHeader org, EntityHeader user, ListRequest listRequest);
     }
 }

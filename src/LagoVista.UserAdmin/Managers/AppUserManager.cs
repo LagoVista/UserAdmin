@@ -1,5 +1,5 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: 56cc7932bd28b2aebe2f8d70516d40b870b21c56e9376768253d30eeb194d458
+// ContentHash: a77e7681868b2415b581263b07e235cbc6c1145fce94c5f503f1225a69364b76
 // IndexVersion: 0
 // --- END CODE INDEX META ---
 using System;
@@ -11,18 +11,14 @@ using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.Core.Interfaces;
 using LagoVista.IoT.Logging.Loggers;
-using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
-using LagoVista.Core.Authentication.Models;
 using LagoVista.UserAdmin.Resources;
-using System.Text.RegularExpressions;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.Core;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Exceptions;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using System.Linq;
-using LagoVista.UserAdmin.Models.Auth;
 using System.Text;
 using System.IO;
 using Svg;
@@ -983,6 +979,15 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             return InvokeResult.Success;
+        }
+
+        public async Task<ListResponse<UserInfoSummary>> SearchUsersAsync(string eamil, string firstName, string lastName, EntityHeader org, EntityHeader user, ListRequest listRequest)
+        {
+            var appUser = await _userManager.FindByIdAsync(user.Id);
+            if (!appUser.IsSystemAdmin)
+                throw new NotAuthorizedException("Must be a system admin to do a global search of users.");
+
+            return await _appUserRepo.SearchUsersAsync(firstName,lastName, eamil, listRequest); 
         }
     }
 }

@@ -2123,4 +2123,13 @@
   <data name="Organization_EmailConfirmBody_Help" xml:space="preserve">
     <value>This is the body of the email message that will be sent to ask the user to confirm their account.   If one is not provided, the standard message associated with NuvIoT will be used. This method should include some tags that will be replaced by links the user should click on, those links are [CALLBACK_URL] and [MOBILE_CALLBACK_URL].</value>
   </data>
+  <data name="AppUser_UserName" xml:space="preserve">
+    <value>User Name</value>
+  </data>
+  <data name="AppUser_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="AppUser_Language_Select" xml:space="preserve">
+    <value>-select language-</value>
+  </data>
 </root>

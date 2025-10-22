@@ -1,5 +1,5 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: 0a17e0cac3890825010e4d92c9e575e618fe19b1656dfe3de4a633c0e5584328
+// ContentHash: 7784b1ea2793f4eb0e8ee2576b431f23112b1cbec942ea6dec64e63f16edb9f0
 // IndexVersion: 0
 // --- END CODE INDEX META ---
 using LagoVista.Core.Models;
@@ -32,5 +32,6 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Users
         Task<AppUser> GetUserByExternalLoginAsync(ExternalLoginTypes loginType, string id);
         Task<AppUser> AssociateExternalLoginAsync(string userId, ExternalLogin external);
         Task<AppUser> RemoveExternalLoginAsync(string userId, string externalLoginId);
+        Task<ListResponse<UserInfoSummary>> SearchUsersAsync(string firstName, string lastName, string email, ListRequest listRequest);
     }
 }

@@ -1,4 +1,8 @@
-﻿/*10/15/2025 12:07:45 PM*/
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 3f8d8d4e53653ee77f436d03cec938450a9bdbe91381bcfebc82192f6608b3b7
+// IndexVersion: 0
+// --- END CODE INDEX META ---
+/*10/21/2025 12:15:34 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -111,6 +115,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AppUser_IsUserDevice
 
 		public static string AppUser_IsUserDevice { get { return GetResourceString("AppUser_IsUserDevice"); } }
+//Resources:UserAdminResources:AppUser_Language
+
+		public static string AppUser_Language { get { return GetResourceString("AppUser_Language"); } }
+//Resources:UserAdminResources:AppUser_Language_Select
+
+		public static string AppUser_Language_Select { get { return GetResourceString("AppUser_Language_Select"); } }
 //Resources:UserAdminResources:AppUser_LastName
 
 		public static string AppUser_LastName { get { return GetResourceString("AppUser_LastName"); } }
@@ -159,6 +169,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AppUser_Title
 
 		public static string AppUser_Title { get { return GetResourceString("AppUser_Title"); } }
+//Resources:UserAdminResources:AppUser_UserName
+
+		public static string AppUser_UserName { get { return GetResourceString("AppUser_UserName"); } }
 //Resources:UserAdminResources:AppUser_UserTitle
 
 		public static string AppUser_UserTitle { get { return GetResourceString("AppUser_UserTitle"); } }
@@ -2073,6 +2086,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Appuser_IsRuntimeUser = "Appuser_IsRuntimeUser";
 			public const string AppUser_IsSystemAdmin = "AppUser_IsSystemAdmin";
 			public const string AppUser_IsUserDevice = "AppUser_IsUserDevice";
+			public const string AppUser_Language = "AppUser_Language";
+			public const string AppUser_Language_Select = "AppUser_Language_Select";
 			public const string AppUser_LastName = "AppUser_LastName";
 			public const string AppUser_NewPassword = "AppUser_NewPassword";
 			public const string AppUser_OldPassword = "AppUser_OldPassword";
@@ -2089,6 +2104,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AppUser_StateProvince = "AppUser_StateProvince";
 			public const string AppUser_TeamsAccountName = "AppUser_TeamsAccountName";
 			public const string AppUser_Title = "AppUser_Title";
+			public const string AppUser_UserName = "AppUser_UserName";
 			public const string AppUser_UserTitle = "AppUser_UserTitle";
 			public const string Area_Help = "Area_Help";
 			public const string Area_IsForProductLine = "Area_IsForProductLine";

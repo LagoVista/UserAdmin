@@ -1,5 +1,5 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: c2f7513ddf02426b72286c6d1e20c521b84ea81eb1a77abe377f4583a184fa1c
+// ContentHash: c9ae3e045a75f873d74b4a3a328b35679c7c3f242d29350aaf6c24e99f58f767
 // IndexVersion: 0
 // --- END CODE INDEX META ---
 using LagoVista.Core;
@@ -26,7 +26,7 @@ namespace LagoVista.UserAdmin.Models.Users
     }
 
     [EntityDescription(Domains.UserDomain, UserAdminResources.Names.AppUser_Title, UserAdminResources.Names.AppUser_Help, UserAdminResources.Names.AppUser_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class AppUser : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, ISummaryFactory
+    public class AppUser : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, ISummaryFactory, IFormDescriptor, IFormDescriptorCol2
     {
         public AppUser(String email, String createdBy) : this(email, email, createdBy)
         {
@@ -210,6 +210,10 @@ namespace LagoVista.UserAdmin.Models.Users
         public string SsnSecretId { get; set; }
 
 
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_Language, IsRequired: false, WaterMark: UserAdminResources.Names.AppUser_Language_Select, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
+        public EntityHeader Language { get; set; }
+
+
         [FormField(LabelResource: UserAdminResources.Names.Common_TimeZome, IsRequired: false, WaterMark:UserAdminResources.Names.Common_TimeZome_Picker, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
         public EntityHeader TimeZone { get; set; }
 
@@ -265,6 +269,7 @@ namespace LagoVista.UserAdmin.Models.Users
 
 
         private string _userName;
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_UserName, IsUserEditable:false, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string UserName
         {
             get { return _userName; }
@@ -379,6 +384,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 Title = Title,
                 Customer = Customer,
                 CustomerContact = CustomerContact,
+                LoginType = LoginType.ToString(),
                 TeamsAccountName = TeamsAccountName,
                 CurrentOrganization = CurrentOrganization?.ToEntityHeader(),
                 Key = Id,
@@ -390,6 +396,34 @@ namespace LagoVista.UserAdmin.Models.Users
         public ISummaryData CreateSummary()
         {
             return this.CreateSummary(false, false);
+        }
+
+        public List<string> GetFormFields()
+        {
+            return new List<string>()
+            {
+                nameof(Name),
+                nameof(UserName),
+                nameof(Email),
+                nameof(PhoneNumber),
+                nameof(Address1),
+                nameof(Address2),
+                nameof(City),
+                nameof(State),
+                nameof(PostalCode),
+                nameof(Country),
+            };
+        }
+
+        public List<string> GetFormFieldsCol2()
+        {
+            return new List<string>()
+            {
+                nameof(Title),
+                nameof(Bio),
+                nameof(Language),
+                nameof(TimeZone),
+            };
         }
 
         public List<PushNotificationChannel> PushNotificationChannels { get; set; } = new List<PushNotificationChannel>();

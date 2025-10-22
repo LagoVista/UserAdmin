@@ -1,5 +1,5 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: ee0d3866372e50763ea76bf5ba1c48e663191fa861c995912700c55c0d55de41
+// ContentHash: 319d883348ec27aee05d067bd7d111f8f9411aac37e24ab6450b12206b732624
 // IndexVersion: 0
 // --- END CODE INDEX META ---
 using LagoVista.CloudStorage;
@@ -366,6 +366,20 @@ namespace LagoVista.UserAdmin.Repos.Users
             return appUser;
         }
 
+        public async Task<ListResponse<UserInfoSummary>> SearchUsersAsync(string firstName, string lastName, string email, ListRequest listRequest)
+        {
+            Console.WriteLine($"----------------> Searchfor users: {firstName} {lastName} {email}");
+
+            if (String.IsNullOrEmpty(firstName)) firstName = String.Empty;
+            if (String.IsNullOrEmpty(lastName)) lastName = String.Empty;
+            if (String.IsNullOrEmpty(email)) email = String.Empty;
+
+            return await QuerySummaryAsync<UserInfoSummary, AppUser>(usr =>// ( usr.FirstName.ToLower().Contains(firstName.ToLower())),
+                ((String.IsNullOrEmpty(firstName) || usr.FirstName.ToLower().StartsWith(firstName.ToLower())) &&
+                (String.IsNullOrEmpty(lastName) || usr.LastName.ToLower().StartsWith(lastName.ToLower())) &&
+                (String.IsNullOrEmpty(email) || usr.Email.ToLower().StartsWith(email.ToLower()))), 
+                usr => usr.Name, listRequest);
+        }
 
         public async Task<AppUser> AssociateExternalLoginAsync(string userId, ExternalLogin external)
         {
