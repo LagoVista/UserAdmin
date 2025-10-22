@@ -1,8 +1,4 @@
-// --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: 3f8d8d4e53653ee77f436d03cec938450a9bdbe91381bcfebc82192f6608b3b7
-// IndexVersion: 0
-// --- END CODE INDEX META ---
-/*10/21/2025 12:15:34 PM*/
+﻿/*10/22/2025 7:06:07 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1434,6 +1430,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_DefaultTheme
 
 		public static string Organization_DefaultTheme { get { return GetResourceString("Organization_DefaultTheme"); } }
+//Resources:UserAdminResources:Organization_DefaultVectorDb
+
+		public static string Organization_DefaultVectorDb { get { return GetResourceString("Organization_DefaultVectorDb"); } }
+//Resources:UserAdminResources:Organization_DefaultVectorDb_Help
+
+		public static string Organization_DefaultVectorDb_Help { get { return GetResourceString("Organization_DefaultVectorDb_Help"); } }
+//Resources:UserAdminResources:Organization_DefaultVectorDb_Select
+
+		public static string Organization_DefaultVectorDb_Select { get { return GetResourceString("Organization_DefaultVectorDb_Select"); } }
 //Resources:UserAdminResources:Organization_Description
 
 		public static string Organization_Description { get { return GetResourceString("Organization_Description"); } }
@@ -2523,6 +2528,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_DefaultTeamsWebHook_Help = "Organization_DefaultTeamsWebHook_Help";
 			public const string Organization_DefaultTestInstance = "Organization_DefaultTestInstance";
 			public const string Organization_DefaultTheme = "Organization_DefaultTheme";
+			public const string Organization_DefaultVectorDb = "Organization_DefaultVectorDb";
+			public const string Organization_DefaultVectorDb_Help = "Organization_DefaultVectorDb_Help";
+			public const string Organization_DefaultVectorDb_Select = "Organization_DefaultVectorDb_Select";
 			public const string Organization_Description = "Organization_Description";
 			public const string Organization_Details = "Organization_Details";
 			public const string Organization_EmailConfirmBody = "Organization_EmailConfirmBody";
