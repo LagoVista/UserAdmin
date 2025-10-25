@@ -14,6 +14,7 @@ using LagoVista.UserAdmin.Models.Users;
 using Microsoft.AspNetCore.Http;
 using RingCentral;
 using System;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Managers
@@ -62,6 +63,9 @@ namespace LagoVista.UserAdmin.Managers
                 RedirectUri = redirectUri
             };
 
+            Console.WriteLine($"=====>>>> PARITION KEY {auth.PartitionKey} <<======");
+
+
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AuthLog_AddAsync]", $"[AuthLog_AddAsync] - {type}",
                 userId.ToKVP("userId"), userName.ToKVP("username"), orgId.ToKVP("orgId"), orgName.ToKVP("orgName"), errors.ToKVP("errors"),
                 extras.ToKVP("extras"), oauthProvier.ToKVP("oauthProvider"), type.ToString().ToKVP("authType"), "true".ToKVP("authlog")); 
@@ -100,6 +104,16 @@ namespace LagoVista.UserAdmin.Managers
         public Task<ListResponse<AuthenticationLog>> GetAllAsync(string orgId, ListRequest listRequest, EntityHeader org, EntityHeader user)
         {
             return _authLogRepo.GetAllAsync(orgId, listRequest);
+        }
+
+        public Task<ListResponse<AuthenticationLog>> GetForUserIdAsync(string userId, ListRequest listRequest, EntityHeader org, EntityHeader user)
+        {
+            return _authLogRepo.GetForUserIdAsync(userId, listRequest);
+        }
+
+        public Task<ListResponse<AuthenticationLog>> GetForUserNameAsync(string userId, ListRequest listRequest, EntityHeader org, EntityHeader user)
+        {
+            return _authLogRepo.GetForUserNameAsync(userId, listRequest);
         }
 
         public Task<ListResponse<AuthenticationLog>> GetAsync(AuthLogTypes type, ListRequest listRequest, EntityHeader org, EntityHeader user)

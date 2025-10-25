@@ -212,12 +212,12 @@ namespace LagoVista.UserAdmin.Managers
                 Console.WriteLine("[UserRegistrationManager_CreateUserAsync] - Not 3rd party registration.");
             }
 
-            if (_appConfig.Environment == Environments.Local ||
-                _appConfig.Environment == Environments.LocalDevelopment)
-            {
-                appUser.EmailConfirmed = true;
-                appUser.PhoneNumberConfirmed = true;
-            }
+            //if (_appConfig.Environment == Environments.Local ||
+            //    _appConfig.Environment == Environments.LocalDevelopment)
+            //{
+            //    appUser.EmailConfirmed = true;
+            //    appUser.PhoneNumberConfirmed = true;
+            //}
 
             Console.WriteLine($"[UserRegistrationManager_CreateUserAsync] - Before User Manager - Creating User Email: {appUser.Email} and User Name: {appUser.UserName}");
 
@@ -330,7 +330,7 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             Console.WriteLine("[UserRegistrationManager_CreateUserAsync] - Send Email Confirmation - Start.");
-            var sendEmailResult = await _userVerificationmanager.SendConfirmationEmailAsync(appUser.ToEntityHeader(), confirmSubject, confirmBody, appName, appLogo);
+            var sendEmailResult = await _userVerificationmanager.SendConfirmationEmailAsync(appUser.Id, confirmSubject, confirmBody, appName, appLogo);
             if (!sendEmailResult.Successful)
             {
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, appUser, errors: sendEmailResult.ErrorMessage, extras: $"Submitted by client: {newUser.ClientType}.");

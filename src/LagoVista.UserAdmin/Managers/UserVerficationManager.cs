@@ -84,15 +84,17 @@ namespace LagoVista.UserAdmin.Managers
             return environment;
         }
 
-        public async Task<InvokeResult<string>> SendConfirmationEmailAsync(EntityHeader userHeader, string confirmSubject = "", string confirmBody = "", string appName = "", string logoFile= "")
+        public async Task<InvokeResult<string>> SendConfirmationEmailAsync(string userId, string confirmSubject = "", string confirmBody = "", string appName = "", string logoFile= "")
         {
-            var appUser = await _userManager.FindByIdAsync(userHeader.Id);
+            var appUser = await _userManager.FindByIdAsync(userId);
             if (appUser == null)
             {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendEmailConfirmFailed, userId: userHeader.Id, userName: userHeader.Text, extras: $"Could not find user with id: {userHeader.Id}");
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendEmailConfirmFailed, userId: userId, extras: $"Could not find user with id: {userId}");
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "[UserVerifyManager__SendConfirmationEmailAsync]", "Could not get current user.");
                 return InvokeResult<string>.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
+
+            var userHeader = appUser.ToEntityHeader();
 
             try
             {

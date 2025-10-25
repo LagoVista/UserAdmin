@@ -39,8 +39,12 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         [FormField(LabelResource: UserAdminResources.Names.InviteUser_InvitedByName, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public String InvitedByName { get; set; }
+        
         [FormField(LabelResource: UserAdminResources.Names.InviteUser_InvitedById, IsRequired: true, FieldType: FieldTypes.RowId, ResourceType: typeof(UserAdminResources))]
         public String InvitedById { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.InviteUser_InvitedByEmail, IsRequired: true, FieldType: FieldTypes.Email, ResourceType: typeof(UserAdminResources))]
+        public String InvitedByEmail { get; set; }
 
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_Name, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]

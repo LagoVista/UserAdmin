@@ -1,4 +1,4 @@
-﻿/*10/22/2025 7:06:07 AM*/
+﻿/*10/24/2025 9:43:02 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -997,6 +997,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 		///WIll replace [USERS_FULL_NAME] with the first/last name of current user, [ORG_NAME] as the name of the organization.
 		///</summary>
 		public static string InviteUser_Greeting_Message { get { return GetResourceString("InviteUser_Greeting_Message"); } }
+//Resources:UserAdminResources:InviteUser_InvitedByEmail
+
+		public static string InviteUser_InvitedByEmail { get { return GetResourceString("InviteUser_InvitedByEmail"); } }
 //Resources:UserAdminResources:InviteUser_InvitedById
 
 
@@ -2385,6 +2388,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string InviteUser_ClickHere = "InviteUser_ClickHere";
 			public const string InviteUser_Greeting_Label = "InviteUser_Greeting_Label";
 			public const string InviteUser_Greeting_Message = "InviteUser_Greeting_Message";
+			public const string InviteUser_InvitedByEmail = "InviteUser_InvitedByEmail";
 			public const string InviteUser_InvitedById = "InviteUser_InvitedById";
 			public const string InviteUser_InvitedByName = "InviteUser_InvitedByName";
 			public const string InviteUser_Name = "InviteUser_Name";

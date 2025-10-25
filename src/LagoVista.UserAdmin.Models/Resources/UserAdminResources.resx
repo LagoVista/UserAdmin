@@ -2141,4 +2141,7 @@
   <data name="Organization_DefaultVectorDb_Help" xml:space="preserve">
     <value>This is the default vector database that is used for RAG (Retrieval-Augment Generation) for the large language model that support AI within NuvIoT.</value>
   </data>
+  <data name="InviteUser_InvitedByEmail" xml:space="preserve">
+    <value>Invited By Email</value>
+  </data>
 </root>

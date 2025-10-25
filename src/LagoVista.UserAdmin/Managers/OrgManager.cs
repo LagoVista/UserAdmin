@@ -397,18 +397,8 @@ namespace LagoVista.UserAdmin.Managers
                 return acceptResult;
             }
 
-            
-            invite.Accepted = true;
-            invite.Status = Invitation.StatusTypes.Accepted;
-            invite.DateAccepted = DateTime.UtcNow.ToJSONString();
-            await _inviteUserRepo.UpdateInvitationAsync(invite);
-
             var invitingUser = EntityHeader.Create(invite.InvitedById, invite.InvitedByName);
             var orgHeader = EntityHeader.Create(invite.OrganizationId, invite.OrganizationName);
-
-            await LogEntityActionAsync(acceptedUser.Id, typeof(AppUser).Name, "Accepted Invitation to: " + invite.OrganizationName, orgHeader, acceptedUser.ToEntityHeader());
-            await LogEntityActionAsync(invite.InvitedById, typeof(AppUser).Name, "Accepted Invitation to: " + invite.OrganizationName, orgHeader, acceptedUser.ToEntityHeader());
-            await LogEntityActionAsync(invite.OrganizationId, typeof(AppUser).Name, $"User {acceptedUser.FirstName} {acceptedUser.LastName} accepted invitation to organization", orgHeader, acceptedUser.ToEntityHeader());
 
             var result = await AddUserToOrgAsync(acceptedUser.ToEntityHeader(), orgHeader, invitingUser);
             if (!result.Successful)
@@ -418,7 +408,16 @@ namespace LagoVista.UserAdmin.Managers
                 acceptResult.RedirectURL = $"{CommonLinks.InviteAcceptedFailed}?err={result.ErrorMessage}";
                 return acceptResult;
             }
-            
+
+            invite.Accepted = true;
+            invite.Status = Invitation.StatusTypes.Accepted;
+            invite.DateAccepted = DateTime.UtcNow.ToJSONString();
+            await _inviteUserRepo.UpdateInvitationAsync(invite);
+
+            await LogEntityActionAsync(acceptedUser.Id, typeof(AppUser).Name, "Accepted Invitation to: " + invite.OrganizationName, orgHeader, acceptedUser.ToEntityHeader());
+            await LogEntityActionAsync(invite.InvitedById, typeof(AppUser).Name, "Accepted Invitation to: " + invite.OrganizationName, orgHeader, acceptedUser.ToEntityHeader());
+            await LogEntityActionAsync(invite.OrganizationId, typeof(AppUser).Name, $"User {acceptedUser.FirstName} {acceptedUser.LastName} accepted invitation to organization", orgHeader, acceptedUser.ToEntityHeader());
+
             acceptedUser.CurrentOrganization = (await _organizationRepo.GetOrganizationAsync(invite.OrganizationId)).CreateSummary();
             var existing = acceptedUser.Organizations.FirstOrDefault(org => org.Id == invite.OrganizationId);
             if(existing != null)
@@ -650,6 +649,8 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult<Invitation>.FromError("Could not Load Org");
             }
 
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+
             var inviteModel = new Invitation()
             {
                 RowKey = Guid.NewGuid().ToId(),
@@ -658,6 +659,7 @@ namespace LagoVista.UserAdmin.Managers
                 OrganizationName = org.Text,
                 InvitedById = user.Id,
                 InvitedByName = user.Text,
+                InvitedByEmail = appUser.Email,
                 Message = inviteViewModel.Message,
                 Name = inviteViewModel.Name,
                 Email = inviteViewModel.Email,

@@ -13,6 +13,8 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
     {
         Task AddAsync(AuthenticationLog authLog);
         Task<ListResponse<AuthenticationLog>> GetAllAsync(ListRequest listRequest);
+        Task<ListResponse<AuthenticationLog>> GetForUserNameAsync(string userName, ListRequest listRequest);
+        Task<ListResponse<AuthenticationLog>> GetForUserIdAsync(string userId, ListRequest listRequest);
         Task<ListResponse<AuthenticationLog>> GetAllAsync(string orgId, ListRequest listRequest);
         Task<ListResponse<AuthenticationLog>> GetAsync(AuthLogTypes type, ListRequest listRequest);
         Task<ListResponse<AuthenticationLog>> GetAsync(string orgId, AuthLogTypes type, ListRequest listRequest);
