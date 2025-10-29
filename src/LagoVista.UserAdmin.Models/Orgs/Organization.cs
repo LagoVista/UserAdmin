@@ -239,6 +239,18 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Organization_EmailConfirmBody, HelpResource: UserAdminResources.Names.Organization_EmailConfirmBody_Help, FieldType: FieldTypes.HtmlEditor, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public string EmailConfirmMessage { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Organization_SupportEmailAddress, HelpResource: UserAdminResources.Names.Organization_SupportEmailAddress_Help, FieldType: FieldTypes.Email, IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        public string SupportEmailAddress { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_HrEmailAddress, HelpResource: UserAdminResources.Names.Organization_HrEmailAddress_Help, FieldType: FieldTypes.Email, IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        public string HrEmailAddress { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_ArEmailAddress, HelpResource: UserAdminResources.Names.Organization_ArEmailAddress_Help, FieldType: FieldTypes.Email, IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        public string ArEmailAddress { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_ApEmailAddress, HelpResource: UserAdminResources.Names.Organization_ApEmailAddress_Help, FieldType: FieldTypes.Email, IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        public string ApEmailAddress { get; set; }
+
         public List<string> GetFormFields()
         {
             return new List<string>()
@@ -263,6 +275,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(YouTubeUrl),
                 nameof(EmailConfirmSubject),
                 nameof(EmailConfirmMessage),
+                nameof(SupportEmailAddress),
+                nameof(HrEmailAddress),
+                nameof(ArEmailAddress),
+                nameof(ApEmailAddress),
             };
         }
 

@@ -1,4 +1,4 @@
-﻿/*10/24/2025 9:43:02 AM*/
+﻿/*10/28/2025 2:18:25 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1334,12 +1334,24 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_AccentColor
 
 		public static string Organization_AccentColor { get { return GetResourceString("Organization_AccentColor"); } }
+//Resources:UserAdminResources:Organization_ApEmailAddress
+
+		public static string Organization_ApEmailAddress { get { return GetResourceString("Organization_ApEmailAddress"); } }
+//Resources:UserAdminResources:Organization_ApEmailAddress_Help
+
+		public static string Organization_ApEmailAddress_Help { get { return GetResourceString("Organization_ApEmailAddress_Help"); } }
 //Resources:UserAdminResources:Organization_AppUrl
 
 		public static string Organization_AppUrl { get { return GetResourceString("Organization_AppUrl"); } }
 //Resources:UserAdminResources:Organization_AppUrl_Help
 
 		public static string Organization_AppUrl_Help { get { return GetResourceString("Organization_AppUrl_Help"); } }
+//Resources:UserAdminResources:Organization_ArEmailAddress
+
+		public static string Organization_ArEmailAddress { get { return GetResourceString("Organization_ArEmailAddress"); } }
+//Resources:UserAdminResources:Organization_ArEmailAddress_Help
+
+		public static string Organization_ArEmailAddress_Help { get { return GetResourceString("Organization_ArEmailAddress_Help"); } }
 //Resources:UserAdminResources:Organization_BillingLocation
 
 		public static string Organization_BillingLocation { get { return GetResourceString("Organization_BillingLocation"); } }
@@ -1484,6 +1496,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_HomePage_Help
 
 		public static string Organization_HomePage_Help { get { return GetResourceString("Organization_HomePage_Help"); } }
+//Resources:UserAdminResources:Organization_HrEmailAddress
+
+		public static string Organization_HrEmailAddress { get { return GetResourceString("Organization_HrEmailAddress"); } }
+//Resources:UserAdminResources:Organization_HrEmailAddress_Help
+
+		public static string Organization_HrEmailAddress_Help { get { return GetResourceString("Organization_HrEmailAddress_Help"); } }
 //Resources:UserAdminResources:Organization_IsForProductLine
 
 		public static string Organization_IsForProductLine { get { return GetResourceString("Organization_IsForProductLine"); } }
@@ -1568,6 +1586,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_SubLocations
 
 		public static string Organization_SubLocations { get { return GetResourceString("Organization_SubLocations"); } }
+//Resources:UserAdminResources:Organization_SupportEmailAddress
+
+		public static string Organization_SupportEmailAddress { get { return GetResourceString("Organization_SupportEmailAddress"); } }
+//Resources:UserAdminResources:Organization_SupportEmailAddress_Help
+
+		public static string Organization_SupportEmailAddress_Help { get { return GetResourceString("Organization_SupportEmailAddress_Help"); } }
 //Resources:UserAdminResources:Organization_TagLine
 
 		public static string Organization_TagLine { get { return GetResourceString("Organization_TagLine"); } }
@@ -2499,8 +2523,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Month_September = "Month_September";
 			public const string Organization = "Organization";
 			public const string Organization_AccentColor = "Organization_AccentColor";
+			public const string Organization_ApEmailAddress = "Organization_ApEmailAddress";
+			public const string Organization_ApEmailAddress_Help = "Organization_ApEmailAddress_Help";
 			public const string Organization_AppUrl = "Organization_AppUrl";
 			public const string Organization_AppUrl_Help = "Organization_AppUrl_Help";
+			public const string Organization_ArEmailAddress = "Organization_ArEmailAddress";
+			public const string Organization_ArEmailAddress_Help = "Organization_ArEmailAddress_Help";
 			public const string Organization_BillingLocation = "Organization_BillingLocation";
 			public const string Organization_BillingLocation_Select = "Organization_BillingLocation_Select";
 			public const string Organization_CantCreate = "Organization_CantCreate";
@@ -2549,6 +2577,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_HeroTitle = "Organization_HeroTitle";
 			public const string Organization_HomePage = "Organization_HomePage";
 			public const string Organization_HomePage_Help = "Organization_HomePage_Help";
+			public const string Organization_HrEmailAddress = "Organization_HrEmailAddress";
+			public const string Organization_HrEmailAddress_Help = "Organization_HrEmailAddress_Help";
 			public const string Organization_IsForProductLine = "Organization_IsForProductLine";
 			public const string Organization_LandingPageHostName = "Organization_LandingPageHostName";
 			public const string Organization_LandingPageHostName_Help = "Organization_LandingPageHostName_Help";
@@ -2577,6 +2607,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_SubLocation = "Organization_SubLocation";
 			public const string Organization_SubLocation_Details = "Organization_SubLocation_Details";
 			public const string Organization_SubLocations = "Organization_SubLocations";
+			public const string Organization_SupportEmailAddress = "Organization_SupportEmailAddress";
+			public const string Organization_SupportEmailAddress_Help = "Organization_SupportEmailAddress_Help";
 			public const string Organization_TagLine = "Organization_TagLine";
 			public const string Organization_TestingIndustry = "Organization_TestingIndustry";
 			public const string Organization_TestingIndustry_Help = "Organization_TestingIndustry_Help";

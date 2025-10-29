@@ -2144,4 +2144,28 @@
   <data name="InviteUser_InvitedByEmail" xml:space="preserve">
     <value>Invited By Email</value>
   </data>
+  <data name="Organization_SupportEmailAddress" xml:space="preserve">
+    <value>Support Email Address</value>
+  </data>
+  <data name="Organization_SupportEmailAddress_Help" xml:space="preserve">
+    <value>Email address that can be used in documentation and web sites for support.</value>
+  </data>
+  <data name="Organization_HrEmailAddress" xml:space="preserve">
+    <value>Human Resources Email Address</value>
+  </data>
+  <data name="Organization_HrEmailAddress_Help" xml:space="preserve">
+    <value>Email address that can be used to address human resources issues like hiring.</value>
+  </data>
+  <data name="Organization_ArEmailAddress" xml:space="preserve">
+    <value>Accounts Receivable Email Address</value>
+  </data>
+  <data name="Organization_ArEmailAddress_Help" xml:space="preserve">
+    <value>Email Address that should be used to contact accounts receivables, this is used on things like invoices.</value>
+  </data>
+  <data name="Organization_ApEmailAddress" xml:space="preserve">
+    <value>Accounts Payable Email Address</value>
+  </data>
+  <data name="Organization_ApEmailAddress_Help" xml:space="preserve">
+    <value>Email address for accounts payable, can be used on things like purchase orders.</value>
+  </data>
 </root>
