@@ -337,7 +337,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 Namespace = Namespace,
                 PrimaryBgColor = PrimaryBgColor,
                 PrimaryTextColor = PrimaryTextColor,
-                TagLine = TagLine
+                TagLine = TagLine,
+                HomePage = HomePage,
+                EndUserHomePage = EndUserHomePage,
+
             };
         }
 
@@ -447,5 +450,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public string PrimaryTextColor { get; set; }
         public string HeroBackgroundImage { get; set; }
         public string HeroTitle { get; set; }
+        public string HomePage { get; set; }
+        public string EndUserHomePage { get; set; }
     }
 }

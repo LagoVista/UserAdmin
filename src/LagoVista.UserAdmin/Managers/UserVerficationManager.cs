@@ -284,12 +284,12 @@ namespace LagoVista.UserAdmin.Managers
 
                 if(null != appUser.CurrentOrganization)
                 {
-                    var org = await _orgManager.GetOrganizationAsync(appUser.CurrentOrganization.Id, userHeader, userHeader);
+                    var org = await _orgManager.GetPublicOrginfoAsync(appUser.CurrentOrganization.Namespace);
                     if(!String.IsNullOrEmpty(org.EndUserHomePage) && appUser.LoginType == Models.Users.LoginTypes.AppEndUser)
-                            return InvokeResult.SuccessRedirect(CommonLinks.CreateDefaultOrg);
+                            return InvokeResult.SuccessRedirect(org.EndUserHomePage);
 
                     if(!String.IsNullOrEmpty(org.HomePage))
-                            return InvokeResult.SuccessRedirect(CommonLinks.CreateDefaultOrg);
+                            return InvokeResult.SuccessRedirect(org.HomePage);
 
                     if(appUser.ShowWelcome)
                         return InvokeResult.SuccessRedirect(CommonLinks.HomeWelcome);
