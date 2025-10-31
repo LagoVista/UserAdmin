@@ -31,9 +31,10 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IAppUserRepo _appUserRepo;
         private readonly ISignInManager _signInManager;
         private readonly IAuthenticationLogManager _authLogMgr;
+        private readonly IOrganizationManager _orgManager;
 
          public UserVerficationManager(IAdminLogger adminLogger, IUserManager userMananger, IAppConfig appConfig, ISmsSender smsSender, IAppUserRepo appUserRepo, IAuthenticationLogManager authLogManager,
-                                    ISignInManager signInManager, IEmailSender emailSender, IDependencyManager depManager, ISecurity security) : base(adminLogger, appConfig, depManager, security)
+                                       IOrganizationManager orgManager, ISignInManager signInManager, IEmailSender emailSender, IDependencyManager depManager, ISecurity security) : base(adminLogger, appConfig, depManager, security)
         {
             _authLogMgr = authLogManager ?? throw new ArgumentNullException(nameof(authLogManager));
             _smsSender = smsSender ?? throw new ArgumentNullException(nameof(smsSender));
@@ -43,6 +44,7 @@ namespace LagoVista.UserAdmin.Managers
             _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
             _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+            _orgManager = orgManager ?? throw new ArgumentNullException(nameof(orgManager));
         }
 
         public async Task<InvokeResult> CheckConfirmedAsync(EntityHeader userHeader)
@@ -279,6 +281,21 @@ namespace LagoVista.UserAdmin.Managers
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "UserVerficationManager_ValidateEmailAsync", "Success_ConfirmEmail",
                     new KeyValuePair<string, string>("userId", appUser.Id),
                     new KeyValuePair<string, string>("code", confirmemaildto.ReceivedCode));
+
+                if(null != appUser.CurrentOrganization)
+                {
+                    var org = await _orgManager.GetOrganizationAsync(appUser.CurrentOrganization.Id, userHeader, userHeader);
+                    if(!String.IsNullOrEmpty(org.EndUserHomePage) && appUser.LoginType == Models.Users.LoginTypes.AppEndUser)
+                            return InvokeResult.SuccessRedirect(CommonLinks.CreateDefaultOrg);
+
+                    if(!String.IsNullOrEmpty(org.HomePage))
+                            return InvokeResult.SuccessRedirect(CommonLinks.CreateDefaultOrg);
+
+                    if(appUser.ShowWelcome)
+                        return InvokeResult.SuccessRedirect(CommonLinks.HomeWelcome);
+
+                    return InvokeResult.SuccessRedirect(CommonLinks.Home);
+                }
 
                 return InvokeResult.SuccessRedirect(CommonLinks.CreateDefaultOrg);
             }
