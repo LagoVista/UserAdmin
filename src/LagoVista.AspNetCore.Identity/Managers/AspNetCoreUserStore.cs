@@ -1,6 +1,6 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
 // ContentHash: 8524ca467efa06d896ba7376e020dbe9ebd1d23790890c609b2eef95178f91c0
-// IndexVersion: 0
+// IndexVersion: 2
 // --- END CODE INDEX META ---
 using Microsoft.AspNetCore.Identity;
 using System;

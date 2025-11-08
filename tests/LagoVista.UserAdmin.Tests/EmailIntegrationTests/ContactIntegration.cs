@@ -1,6 +1,6 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
 // ContentHash: 6ffd6932d32b6bdbf1c9b3bb3eca967bae1f7d0da14dedaef3f6125440f12fd9
-// IndexVersion: 0
+// IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.AspNetCore.Identity.Services;
 using LagoVista.Core;

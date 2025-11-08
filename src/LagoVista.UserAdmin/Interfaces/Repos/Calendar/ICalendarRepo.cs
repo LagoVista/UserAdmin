@@ -1,6 +1,6 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
 // ContentHash: ee971ef2687409f1b51ac8f8546a284743a9048c949d4ec4521fabe5c15bb9ae
-// IndexVersion: 0
+// IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.UserAdmin.Models.Calendar;

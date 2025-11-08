@@ -1,6 +1,6 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
 // ContentHash: 0333c0a05c2ed51d07d3278b4ad6bf21cbd868799cf353e4b04efb437623aff4
-// IndexVersion: 0
+// IndexVersion: 2
 // --- END CODE INDEX META ---
 namespace LagoVista.UserAdmin.Resources
 {

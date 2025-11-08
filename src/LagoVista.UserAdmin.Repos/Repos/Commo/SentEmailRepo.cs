@@ -1,6 +1,6 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
 // ContentHash: e83be0e0bfb63b208af22c57c84d240b7d40d5b4a2bcbf451af1db2719255e05
-// IndexVersion: 0
+// IndexVersion: 2
 // --- END CODE INDEX META ---
 using Azure.Storage.Blobs;
 using LagoVista.CloudStorage.Storage;

@@ -1,6 +1,6 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
 // ContentHash: 90428e94dbc182769c650c73781c7c5054eb181cdaca4650a6fd84ee4d1d9f76
-// IndexVersion: 0
+// IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Repos.RDBMS.Models;
