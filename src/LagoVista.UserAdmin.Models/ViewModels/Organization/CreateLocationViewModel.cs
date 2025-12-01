@@ -15,7 +15,6 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.CreateLocationVM_Title, UserAdminResources.Names.CreateOrganizationVM_Help, UserAdminResources.Names.CreateOrganizationVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class CreateLocationViewModel : LocationViewModel
     {
-        [FormField(FieldType: FieldTypes.Hidden)]
         public String OrganizationId { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Namespace, HelpResource: UserAdminResources.Names.LocationNamespace_Help, NamespaceType: NamespaceTypes.Location, NamespaceUniqueMessageResource: UserAdminResources.Names.OrganizationLocation_NamespaceInUse, FieldType: FieldTypes.NameSpace, IsRequired: true, ResourceType: typeof(UserAdminResources))]
@@ -23,12 +22,10 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
 
         [FormField(LabelResource: UserAdminResources.Names.Admin_Contact, FieldType: FieldTypes.Picker, PickerType: Constants.PeoplePicker, PickerFor: nameof(AdminContactId), ResourceType: typeof(UserAdminResources))]
         public String AdminContact { get; set; }
-        [FormField(IsRequired: true, FieldType: FieldTypes.Hidden)]
         public String AdminContactId { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Technical_Contact, FieldType: FieldTypes.Picker, PickerType: Constants.PeoplePicker, PickerFor: nameof(TechnicalContactId), ResourceType: typeof(UserAdminResources))]
         public String TechnicalContact { get; set; }
-        [FormField(IsRequired: true, FieldType: FieldTypes.Hidden)]
         public String TechnicalContactId { get; set; }
 
 

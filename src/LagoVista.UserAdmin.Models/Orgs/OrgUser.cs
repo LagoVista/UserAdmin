@@ -22,29 +22,17 @@ namespace LagoVista.UserAdmin.Models.Orgs
             OrgId = orgId;
         }
 
-        [FormField(IsRequired: true)]
         public String UserId { get; set; }
-        [FormField(IsRequired: true)]
         public String UserName { get; set; }
-        [FormField(IsRequired: true)]
         public String OrgId { get; set; }
-        [FormField(IsRequired: true)]
         public String OrganizationName { get; set; }
-        [FormField(IsRequired: true)]
         public String ProfileImageUrl { get; set; }
-        [FormField(IsRequired: true)]
         public String Email { get; set; }
-        [FormField(IsRequired: true)]
         public String CreatedBy { get; set; }
-        [FormField(IsRequired: true)]
         public String CreatedById { get; set; }
-        [FormField(IsRequired: true)]
         public String CreationDate { get; set; }
-        [FormField(IsRequired: true)]
         public String LastUpdatedBy { get; set; }
-        [FormField(IsRequired: true)]
         public String LastUpdatedById { get; set; }
-        [FormField(IsRequired: true)]
         public String LastUpdatedDate { get; set; }
 
         public string IsEndUser { get; set; }

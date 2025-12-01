@@ -142,7 +142,7 @@ namespace LagoVista.UserAdmin.Models.Contacts
         [JsonProperty("nickname")]
         public string NickName { get; set; }
 
-        [FormField(UserAdminResources.Names.Common_Name, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Common_Name, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string Name { get; set; }
 
 
@@ -152,38 +152,38 @@ namespace LagoVista.UserAdmin.Models.Contacts
         [JsonProperty("reply_to")]
         public EmailSenderAddress ReplyTo { get; set; }
 
-        [FormField(UserAdminResources.Names.EmailSender_FromName, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource:UserAdminResources.Names.EmailSender_FromName, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string FromName { get; set; }
 
-        [FormField(UserAdminResources.Names.EmailSender_FromAddress, FieldType: FieldTypes.Email, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource:UserAdminResources.Names.EmailSender_FromAddress, FieldType: FieldTypes.Email, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string FromAddress { get; set; }
 
 
 
-        [FormField(UserAdminResources.Names.EmailSender_ReplyToName, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource:UserAdminResources.Names.EmailSender_ReplyToName, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string ReplyToName { get; set; }
 
-        [FormField(UserAdminResources.Names.EmailSender_ReplyToAddress, FieldType: FieldTypes.Email, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource:UserAdminResources.Names.EmailSender_ReplyToAddress, FieldType: FieldTypes.Email, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string ReplyToAddress { get; set; }
 
 
         [JsonProperty("address")]
-        [FormField(UserAdminResources.Names.Common_Address1, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource:UserAdminResources.Names.Common_Address1, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string Address { get; set; }
 
         [JsonProperty("address_2")]
         public string OrganizationId { get; set; }
         [JsonProperty("city")]
-        [FormField(UserAdminResources.Names.Common_City, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource:UserAdminResources.Names.Common_City, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string City { get; set; }
         [JsonProperty("state")]
-        [FormField(UserAdminResources.Names.Common_State, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource:UserAdminResources.Names.Common_State, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string State { get; set; }
         [JsonProperty("zip")]
-        [FormField(UserAdminResources.Names.Common_PostalCode, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource:UserAdminResources.Names.Common_PostalCode, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string Zip { get; set; }
         [JsonProperty("country")]
-        [FormField(UserAdminResources.Names.Common_Country, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource:UserAdminResources.Names.Common_Country, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string Country { get; set; }
         [JsonProperty("updated_at")]
 

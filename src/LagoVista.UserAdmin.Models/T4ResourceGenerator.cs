@@ -1,8 +1,4 @@
-// --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: b35286b7ef14a04ade56a31fd2b9aa26e3e064aa03e85816ab21a2591c8ce810
-// IndexVersion: 2
-// --- END CODE INDEX META ---
-/*10/28/2025 2:18:25 PM*/
+﻿/*12/1/2025 5:37:35 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -2061,6 +2057,18 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:User
 
 		public static string User { get { return GetResourceString("User"); } }
+//Resources:UserAdminResources:VerifyCodeViewModel_Code
+
+		public static string VerifyCodeViewModel_Code { get { return GetResourceString("VerifyCodeViewModel_Code"); } }
+//Resources:UserAdminResources:VerifyCodeViewModel_Provider
+
+		public static string VerifyCodeViewModel_Provider { get { return GetResourceString("VerifyCodeViewModel_Provider"); } }
+//Resources:UserAdminResources:VerifyCodeViewModel_RememberBrowser
+
+		public static string VerifyCodeViewModel_RememberBrowser { get { return GetResourceString("VerifyCodeViewModel_RememberBrowser"); } }
+//Resources:UserAdminResources:VerifyCodeViewModel_RememberMe
+
+		public static string VerifyCodeViewModel_RememberMe { get { return GetResourceString("VerifyCodeViewModel_RememberMe"); } }
 //Resources:UserAdminResources:VerifyCodeVM_Description
 
 		public static string VerifyCodeVM_Description { get { return GetResourceString("VerifyCodeVM_Description"); } }
@@ -2768,6 +2776,10 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string UpdateOrganizationVM_Help = "UpdateOrganizationVM_Help";
 			public const string UpdateOrganizationVM_Title = "UpdateOrganizationVM_Title";
 			public const string User = "User";
+			public const string VerifyCodeViewModel_Code = "VerifyCodeViewModel_Code";
+			public const string VerifyCodeViewModel_Provider = "VerifyCodeViewModel_Provider";
+			public const string VerifyCodeViewModel_RememberBrowser = "VerifyCodeViewModel_RememberBrowser";
+			public const string VerifyCodeViewModel_RememberMe = "VerifyCodeViewModel_RememberMe";
 			public const string VerifyCodeVM_Description = "VerifyCodeVM_Description";
 			public const string VerifyCodeVM_Help = "VerifyCodeVM_Help";
 			public const string VerifyCodeVM_Title = "VerifyCodeVM_Title";

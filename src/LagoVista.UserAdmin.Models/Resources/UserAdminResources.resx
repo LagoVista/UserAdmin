@@ -2168,4 +2168,16 @@
   <data name="Organization_ApEmailAddress_Help" xml:space="preserve">
     <value>Email address for accounts payable, can be used on things like purchase orders.</value>
   </data>
+  <data name="VerifyCodeViewModel_Code" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="VerifyCodeViewModel_RememberBrowser" xml:space="preserve">
+    <value>Remember Browser</value>
+  </data>
+  <data name="VerifyCodeViewModel_RememberMe" xml:space="preserve">
+    <value>Remember Me</value>
+  </data>
+  <data name="VerifyCodeViewModel_Provider" xml:space="preserve">
+    <value>Provider</value>
+  </data>
 </root>

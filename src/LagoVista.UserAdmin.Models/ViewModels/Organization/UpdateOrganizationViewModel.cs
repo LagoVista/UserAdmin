@@ -15,15 +15,12 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
     [EntityDescription(Domains.OrganizationViewModels, UserAdminResources.Names.UpdateOrganizationVM_Title, UserAdminResources.Names.UpdateOrganizationVM_Help, UserAdminResources.Names.UpdateOrganizationVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class UpdateOrganizationViewModel : OrganizationViewModel, IValidateable
     {
-        [FormField(IsRequired: true, FieldType: FieldTypes.Hidden)]
         public String OrganziationId { get; set; }
 
-        [FormField(IsRequired: true, FieldType: FieldTypes.Hidden)]
         public String LastUpdatedDate { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_Primary_Location, FieldType: FieldTypes.Picker, PickerType: Constants.LocationPicker, PickerFor: (nameof(PrimaryLocationId)), ResourceType: typeof(UserAdminResources))]
         public String PrimaryLocation { get; set; }
-        [FormField(IsRequired: true, FieldType: FieldTypes.Hidden)]
         public String PrimaryLocationId { get; set; }
 
 
@@ -35,13 +32,11 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
 
         [FormField(LabelResource: UserAdminResources.Names.Billing_Contact, FieldType: FieldTypes.Picker, PickerType: Constants.PeoplePicker, PickerFor: nameof(BillingContactId), ResourceType: typeof(UserAdminResources))]
         public String BillingContact { get; set; }
-        [FormField(IsRequired: true, FieldType: FieldTypes.Hidden)]
         public String BillingContactId { get; set; }
 
 
         [FormField(LabelResource: UserAdminResources.Names.Technical_Contact, FieldType: FieldTypes.Picker, PickerType: Constants.PeoplePicker, PickerFor: nameof(TechnicalContactId), ResourceType: typeof(UserAdminResources))]
         public String TechnicalContact { get; set; }
-        [FormField(IsRequired: true, FieldType: FieldTypes.Hidden)]
         public String TechnicalContactId { get; set; }
 
         public void MapToOrganziation(Models.Orgs.Organization organization)

@@ -15,7 +15,6 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
     [EntityDescription(Domains.OrganizationViewModels, UserAdminResources.Names.UpdateLocationVM_Title, UserAdminResources.Names.UpdateLocationVM_Help, UserAdminResources.Names.UpdateLocatoinVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class UpdateLocationViewModel : LocationViewModel
     {
-        [FormField(FieldType: FieldTypes.Hidden)]
         public String LocationId { get; set; }
   
         public String LastUpdatedDate { get; set; }
@@ -25,12 +24,10 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
 
         [FormField(LabelResource: UserAdminResources.Names.Admin_Contact, FieldType: FieldTypes.Picker, PickerType: Constants.PeoplePicker, PickerFor: nameof(AdminContactId), ResourceType: typeof(UserAdminResources))]
         public String AdminContact { get; set; }
-        [FormField(IsRequired: true, FieldType: FieldTypes.Hidden)]
         public String AdminContactId { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Technical_Contact, FieldType: FieldTypes.Picker, PickerType: Constants.PeoplePicker, PickerFor: nameof(TechnicalContactId), ResourceType: typeof(UserAdminResources))]
         public String TechnicalContact { get; set; }
-        [FormField(IsRequired: true, FieldType: FieldTypes.Hidden)]
         public String TechnicalContactId { get; set; }
        
         public override void MapToOrganizationLocation(OrgLocation location)

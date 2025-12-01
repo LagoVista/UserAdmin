@@ -47,15 +47,10 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
 
 
 
-        [FormField(IsRequired: true, FieldType: FieldTypes.Hidden)]
         public String OrganizationId { get; set; }
-        [FormField(IsRequired: true, FieldType: FieldTypes.Hidden)]
         public String OrganizationName { get; set; }
 
-
-        [FormField(IsRequired: true, FieldType: FieldTypes.Hidden)]
         public String InvitedById { get; set; }
-        [FormField(IsRequired: true, FieldType: FieldTypes.Hidden)]
         public String InvitedByName { get; set; }
 
          
