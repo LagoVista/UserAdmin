@@ -127,7 +127,7 @@
     <value>Refresh Token Expired</value>
   </data>
   <data name="EmailSender_Description" xml:space="preserve">
-    <value>An Email Sender is used to send emails to a list.</value>
+    <value>Use this page to configure and manage email senders that deliver messages to your specified recipients.</value>
   </data>
   <data name="EmailSender_TItle" xml:space="preserve">
     <value>Email Sender</value>

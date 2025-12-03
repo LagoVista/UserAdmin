@@ -20,7 +20,6 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
     [EntityDescription(Domains.UserViewModels, UserAdminResources.Names.AcceptInviteVM_Title, UserAdminResources.Names.AcceptInviteVM_Help, UserAdminResources.Names.AcceptInviteVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class AcceptInviteViewModel
     {
-        [FormField(FieldType: FieldTypes.Hidden, IsRequired: true)]
         public string InviteId { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.AppUser_FirstName, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]

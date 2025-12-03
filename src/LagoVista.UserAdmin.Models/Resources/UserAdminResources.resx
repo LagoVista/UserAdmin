@@ -124,7 +124,7 @@
     <value>Confirm Password</value>
   </data>
   <data name="AppUser_Description" xml:space="preserve">
-    <value>Base Class for implementing ASP.NET Identity in LagoVista Applications</value>
+    <value>Represents the primary user account in LagoVista applications, used for authentication, authorization, and managing user profile details based on ASP.NET Identity.</value>
   </data>
   <data name="AppUser_Email" xml:space="preserve">
     <value>Email Address</value>
@@ -133,7 +133,7 @@
     <value>First Name</value>
   </data>
   <data name="AppUser_Help" xml:space="preserve">
-    <value>Base Class for implementing ASP.NET Identity in LagoVista Applications</value>
+    <value>Core user account model for LagoVista applications built on ASP.NET Identity.</value>
   </data>
   <data name="AppUser_LastName" xml:space="preserve">
     <value>Last Name</value>
@@ -226,10 +226,10 @@
     <value>Declined</value>
   </data>
   <data name="Invitation_Description" xml:space="preserve">
-    <value>Invitations are a storage object that used to invite additional people to partipipate in an organization.</value>
+    <value>Create, send, and track invitations for people to join an organization.</value>
   </data>
   <data name="Invitation_Help" xml:space="preserve">
-    <value>Invitations are a storage object that used to invite additional people to partipipate in an organization.</value>
+    <value>Stores and manages invitations sent to people to join an organization.</value>
   </data>
   <data name="Invitation_Title" xml:space="preserve">
     <value>Organization Invitation</value>
@@ -273,22 +273,22 @@
     <value>[APP_NAME] Invitation for [ORG_NAME]</value>
   </data>
   <data name="LocationUserRole_Description" xml:space="preserve">
-    <value>In some caes, user have different roles depending on which location they are working in.  This entity manages those roles.</value>
+    <value>Assign and manage user roles for specific locations. A user can have different roles depending on where they work within the organization.</value>
   </data>
   <data name="LocationUserRole_Help" xml:space="preserve">
-    <value>In some caes, user have different roles depending on which location they are working in.  This entity manages those roles.</value>
+    <value>Defines user roles that are scoped to specific locations, allowing a user to have different roles at each location.</value>
   </data>
   <data name="LocationUserRole_Title" xml:space="preserve">
-    <value>User Roles for a Location</value>
+    <value>Location-Specific User Roles</value>
   </data>
   <data name="LocationUser_Description" xml:space="preserve">
-    <value>Cross Reference Table that can be used to relate a app user to a location within an organization.</value>
+    <value>Use locations to link devices and application users to specific places in your organization.</value>
   </data>
   <data name="LocationUser_Help" xml:space="preserve">
-    <value>Cross Reference Table that can be used to relate a app user to a location within an organization.</value>
+    <value>Links an application user to a specific location within the organization.</value>
   </data>
   <data name="LocationUser_Title" xml:space="preserve">
-    <value>Location User Cross Reference</value>
+    <value>Location–User Mapping</value>
   </data>
   <data name="LocationNamespace_Help" xml:space="preserve">
     <value>The location namespace is used when adding a device to a specific location in conjunction with the organizatoin namespace to generate a unique human readable device id. The namespaces must be unique across your organization.  Namespace can only contain lower case letters and number with no spaces or special characters other than dash or [-]</value>
@@ -321,7 +321,7 @@
     <value>The Organization User Roles Structures defines which roles the user hold in a particular organization.</value>
   </data>
   <data name="OrganizationUserRole_Title" xml:space="preserve">
-    <value>User Roles for an Organization</value>
+    <value>Organization User</value>
   </data>
   <data name="OrganizationUser_CouldntAdd" xml:space="preserve">
     <value>Could not add user to organization</value>
@@ -348,10 +348,10 @@
     <value>Could not create organization</value>
   </data>
   <data name="Organization_Description" xml:space="preserve">
-    <value>An organization is a container that can be used to group user, locations, devices, device configurations and any other data or functionalality.</value>
+    <value>Use an organization to group related users, locations, devices, configurations, and data into a single container.</value>
   </data>
   <data name="Organization_Help" xml:space="preserve">
-    <value>An organization is a container that can be used to group user, locations, devices, device configurations and any other data or functionalality.</value>
+    <value>A container for grouping users, locations, devices, configurations, and related data or functionality.</value>
   </data>
   <data name="Organization_Location" xml:space="preserve">
     <value>Organization Location</value>
@@ -360,10 +360,10 @@
     <value>Locations</value>
   </data>
   <data name="Organization_Location_Description" xml:space="preserve">
-    <value>Locations are part of an Organization and can be used to organize resources.</value>
+    <value>Create and manage locations within an organization to group related resources and simplify administration.</value>
   </data>
   <data name="Organization_Location_Help" xml:space="preserve">
-    <value>Locations are part of an Organization and can be used to organize resources.</value>
+    <value>Locations within an organization used to group and manage related resources.</value>
   </data>
   <data name="Organization_Location_Title" xml:space="preserve">
     <value>Organization Location</value>
@@ -393,10 +393,10 @@
     <value>Web Site</value>
   </data>
   <data name="Role_Description" xml:space="preserve">
-    <value>Roles are used to assigned to a user to give them access to certain functionality of the system.</value>
+    <value>Assign this role to users to manage which features and areas of the system they can access.</value>
   </data>
   <data name="Role_Help" xml:space="preserve">
-    <value>Roles are used to assigned to a user to give them access to certain functionality of the system.</value>
+    <value>Create and manage roles that control user access to specific features and areas of the system.</value>
   </data>
   <data name="Role_Title" xml:space="preserve">
     <value>User Role</value>
@@ -420,19 +420,19 @@
     <value>Phone Number Confirmed</value>
   </data>
   <data name="AcceptInviteVM_Description" xml:space="preserve">
-    <value>Allows a user to accept an inviation by logging in or creating a new account.</value>
+    <value>Use this page to accept your invitation by signing in with an existing account or registering a new one.</value>
   </data>
   <data name="AcceptInviteVM_Help" xml:space="preserve">
-    <value>Please login if you have an existing account, or register a new one if you are a new user.</value>
+    <value>Log in if you already have an account, or create a new account to accept your invitation.</value>
   </data>
   <data name="AcceptInviteVM_Title" xml:space="preserve">
     <value>Accept Invitation</value>
   </data>
   <data name="ChangePasswordVM_Description" xml:space="preserve">
-    <value>Allows the user to change their password</value>
+    <value>Enter your current password, then enter and confirm your new password to update it.</value>
   </data>
   <data name="ChangePasswordVM_Help" xml:space="preserve">
-    <value>Please enter your old password and choose a new one.</value>
+    <value>Change your password by providing your current password and a new one.</value>
   </data>
   <data name="ChangePasswordVM_Title" xml:space="preserve">
     <value>Change Password</value>
@@ -444,157 +444,157 @@
     <value>Your organization can contain multiple locations, you can add those here.</value>
   </data>
   <data name="CreateLocationVM_Title" xml:space="preserve">
-    <value>Create new Location</value>
+    <value>Create New Location</value>
   </data>
   <data name="CreateOrganizationVM_Description" xml:space="preserve">
-    <value>Allows the uesr to create a new organization.  An organization is the primary structure to contain resources</value>
+    <value>Create a new organization as a container for your related resources. You can optionally include starter data to help you get started.</value>
   </data>
   <data name="CreateOrganizationVM_Help" xml:space="preserve">
-    <value>Please enter information about your organization</value>
+    <value>Enter the details needed to create your new organization.</value>
   </data>
   <data name="CreateOrganizationVM_Title" xml:space="preserve">
-    <value>Create new Organization</value>
+    <value>Create New Organization</value>
   </data>
   <data name="ExternalLoginConfirmVM_Title" xml:space="preserve">
     <value>Confirm External Login</value>
   </data>
   <data name="ExternalLoginConfirmVM_Description" xml:space="preserve">
-    <value>Allows the user to confirm their external login</value>
+    <value>Review and confirm your external account details, including your email address, to finish signing in.</value>
   </data>
   <data name="ExternalLoginConfirmVM_Help" xml:space="preserve">
-    <value>Please confirm your external login</value>
+    <value>Confirm and link your external account to complete sign-in.</value>
   </data>
   <data name="ForgotPasswordVM_Description" xml:space="preserve">
-    <value>Allows the user to enter their email address so they can reset their password</value>
+    <value>Enter the email address associated with your account. If it matches an existing account, we’ll email you a link to reset your password.</value>
   </data>
   <data name="ForgotPasswordVM_Help" xml:space="preserve">
-    <value>Please enter your email address, if it matches a record in our system, you will receive an email to reset your password</value>
+    <value>Enter the email address associated with your account. If it matches an existing account, we’ll email you a link to reset your password.</value>
   </data>
   <data name="ForgotPasswordVM_Title" xml:space="preserve">
     <value>Forgot Password</value>
   </data>
   <data name="IndexVM_Description" xml:space="preserve">
-    <value>Allows the user to view settings and manage their account</value>
+    <value>Use this page to review your account details and manage settings, including contact information, sign-in options, and security preferences.</value>
   </data>
   <data name="IndexVM_Help" xml:space="preserve">
-    <value>View Settings and Manage your Account</value>
+    <value>Review and update your account settings and preferences.</value>
   </data>
   <data name="IndexVM_Title" xml:space="preserve">
-    <value>Manage your Account</value>
+    <value>Manage Your Account</value>
   </data>
   <data name="InviteUserVM_Description" xml:space="preserve">
-    <value>Allows one user to invite another user to their organization</value>
+    <value>Complete this form with the person’s name, email address, and an optional message to send them an invitation to join your organization.</value>
   </data>
   <data name="InviteUserVM_Help" xml:space="preserve">
-    <value>Please enter the users name, email and message to invite them to your organization.</value>
+    <value>Invite someone to your organization by providing their contact details and an optional message.</value>
   </data>
   <data name="InviteUserVM_Title" xml:space="preserve">
-    <value>Invite a User to your Organization</value>
+    <value>Invite a User to Your Organization</value>
   </data>
   <data name="LocationVM_Description" xml:space="preserve">
     <value>A location is a structure that can be used to organize your devices.  An organization can be a physical address, a room or even a conceptual entity.</value>
   </data>
   <data name="LocationVM_Help" xml:space="preserve">
-    <value>A location is a structure that can be used to organize your devices.  An organization can be a physical address, a room or even a conceptual entity.</value>
+    <value>Represents a location used to organize devices, such as a physical address, room, or other defined area within your organization.</value>
   </data>
   <data name="LocationVM_Title" xml:space="preserve">
     <value>Location</value>
   </data>
   <data name="LoginVM_Description" xml:space="preserve">
-    <value>Allows the user to enter their email address and password so they can login to the system.</value>
+    <value>Enter your email and password to sign in to your account. Select "Remember me" to stay signed in on this device.</value>
   </data>
   <data name="LoginVM_Help" xml:space="preserve">
-    <value>Please enter your login information</value>
+    <value>Sign in to securely access your account.</value>
   </data>
   <data name="LoginVM_Title" xml:space="preserve">
-    <value>Login</value>
+    <value>Sign In</value>
   </data>
   <data name="OrganizationDetailsVM_Description" xml:space="preserve">
-    <value>Details about your organization</value>
+    <value>Review and update your organization’s information.</value>
   </data>
   <data name="OrganizationDetailVM_Help" xml:space="preserve">
-    <value>Your Organization Details</value>
+    <value>View and manage your organization’s details.</value>
   </data>
   <data name="OrganizationDetailVM_Title" xml:space="preserve">
-    <value>Organization Details</value>
+    <value>Organization details</value>
   </data>
   <data name="OrganizationVM_Description" xml:space="preserve">
-    <value>Record used to display a list of organizations</value>
+    <value>Displays key organization details in list views, including the name, namespace, and website.</value>
   </data>
   <data name="OrganizationVM_Help" xml:space="preserve">
-    <value>Organization Summary</value>
+    <value>Provides a summary of each organization for use in list views.</value>
   </data>
   <data name="OrganizationVM_Title" xml:space="preserve">
-    <value>Organization Summary</value>
+    <value>Organization Overview</value>
   </data>
   <data name="RegisterVM_Description" xml:space="preserve">
-    <value>Allows a new user to register for an account.</value>
+    <value>Complete this form to create your account.</value>
   </data>
   <data name="RegisterVM_Help" xml:space="preserve">
-    <value>Please register your account information</value>
+    <value>Create a new account by entering your details.</value>
   </data>
   <data name="RegisterVM_Title" xml:space="preserve">
     <value>Register</value>
   </data>
   <data name="ResetPassword_Description" xml:space="preserve">
-    <value>Allows a user to reset their password</value>
+    <value>Use this form to reset your password and regain access to your account by entering your email address and creating a new password.</value>
   </data>
   <data name="ResetPassword_Help" xml:space="preserve">
-    <value>Please enter your email address and new password.</value>
+    <value>Restore access to your account by entering your email address and choosing a new password.</value>
   </data>
   <data name="ResetPassword_Title" xml:space="preserve">
     <value>Reset Password</value>
   </data>
   <data name="SendCodeVM_Description" xml:space="preserve">
-    <value>Sends a two factor authentication code to a secondary device to confirm the users account</value>
+    <value>Send a two-factor authentication code to a secondary device to verify your account.</value>
   </data>
   <data name="SendCodeVM_Help" xml:space="preserve">
-    <value>Send a two factor authentication code to confirm your acount.</value>
+    <value>Send a two-factor authentication code to verify your account.</value>
   </data>
   <data name="SendCodeVM_Title" xml:space="preserve">
     <value>Send Code</value>
   </data>
   <data name="SetPasswordVM_Description" xml:space="preserve">
-    <value>Allows the user to add a password to their account.</value>
+    <value>Set a new password of at least 6 characters to protect your account.</value>
   </data>
   <data name="SetPasswordVM_Help" xml:space="preserve">
-    <value>Please enter a new password, it must be at least 6 characters long.</value>
+    <value>Create a new password with at least 6 characters.</value>
   </data>
   <data name="SetPasswordVM_Title" xml:space="preserve">
     <value>Set Password</value>
   </data>
   <data name="UpdateLocationVM_Help" xml:space="preserve">
-    <value>Update a Location</value>
+    <value>Update the details and settings for an existing location.</value>
   </data>
   <data name="UpdateLocationVM_Title" xml:space="preserve">
     <value>Update Location</value>
   </data>
   <data name="UpdateLocatoinVM_Description" xml:space="preserve">
-    <value>Allows the user to Update a Location</value>
+    <value>Edit this location’s configuration, including its identifiers and contact information.</value>
   </data>
   <data name="UpdateOrganizationVM_Description" xml:space="preserve">
-    <value>Allows a user to Update an Organization</value>
+    <value>Update the organization’s information, including key details such as locations and contacts.</value>
   </data>
   <data name="UpdateOrganizationVM_Help" xml:space="preserve">
-    <value>Update an Organization</value>
+    <value>Edit an existing organization’s details.</value>
   </data>
   <data name="UpdateOrganizationVM_Title" xml:space="preserve">
     <value>Update Organization</value>
   </data>
   <data name="VerifyCodeVM_Description" xml:space="preserve">
-    <value>Verify the two factor authentication code.</value>
+    <value>Enter the code from your chosen authentication method to complete two-factor verification. You may also choose to remember this device or browser for future sign-ins.</value>
   </data>
   <data name="VerifyCodeVM_Help" xml:space="preserve">
-    <value>Verify the two factor authentication code.</value>
+    <value>Enter your two-factor authentication code to continue.</value>
   </data>
   <data name="VerifyCodeVM_Title" xml:space="preserve">
     <value>Verify Code</value>
   </data>
   <data name="VerifyPhoneNumberVM_Description" xml:space="preserve">
-    <value>Allows the uesr to verify their phone number</value>
+    <value>Confirm your phone number, typically by entering the verification code that was sent to you.</value>
   </data>
   <data name="VerifyPhoneNumberVM_Help" xml:space="preserve">
-    <value>Please Verify your Phone Number</value>
+    <value>Verify your phone number to continue.</value>
   </data>
   <data name="VerifyPhoneNumberVM_Title" xml:space="preserve">
     <value>Verify Phone Number</value>
@@ -615,7 +615,7 @@
     <value>A subscription is used to track usage of compute and storage resources used by your application, it is also associated with a payment method that will be billed as per terms.</value>
   </data>
   <data name="Subscription_Help" xml:space="preserve">
-    <value>A subscription is used to track usage of compute and storage resources used by your application, it is also associated with a payment method that will be billed as per terms.</value>
+    <value>Tracks your application’s compute and storage usage and the payment method billed according to your plan’s terms.</value>
   </data>
   <data name="Subscription_Title" xml:space="preserve">
     <value>Subscription</value>
@@ -624,10 +624,10 @@
     <value>Name</value>
   </data>
   <data name="AssetSet_Description" xml:space="preserve">
-    <value>An Asset Set is used to organizes groups of assets, they are also used to manage security</value>
+    <value>Use Asset Sets to organize related assets and control which teams or users can access them. In a Restricted Asset Set, assigned assets are hidden by default until a team or user is granted access to the Asset Set.</value>
   </data>
   <data name="AssetSet_Help" xml:space="preserve">
-    <value>An Asset Set is used to organizes groups of assets, they are also used to manage security</value>
+    <value>Groups related assets and manages which teams or users can access them.</value>
   </data>
   <data name="AssetSet_IsRestricted" xml:space="preserve">
     <value>Is Restricted</value>
@@ -639,10 +639,10 @@
     <value>Asset Set</value>
   </data>
   <data name="Team_Description" xml:space="preserve">
-    <value>A Team is used to organize the people within your organization so you can assign permissions to perform tasks as well as assign access to Assset Sets.</value>
+    <value>Create and manage teams to control which users can perform specific tasks and access particular Asset Sets.</value>
   </data>
   <data name="Team_Help" xml:space="preserve">
-    <value>A Team is used to organize the people within your organization so you can assign permissions to perform tasks as well as assign access to Assset Sets.</value>
+    <value>Organize people into teams to manage task permissions and access to Asset Sets.</value>
   </data>
   <data name="Team_Title" xml:space="preserve">
     <value>Team</value>
@@ -894,10 +894,10 @@
     <value>When you create your organization it can be populated with a few objects that will help getting started a little easier.</value>
   </data>
   <data name="DistroList_Description" xml:space="preserve">
-    <value>A distribution list refers to a compilation of users or email addresses within an organization. This list is designed to facilitate notifications when specific triggers occur, such as a device going offline or surpassing a predefined threshold. Essentially, it allows for efficient communication with a targeted group, ensuring that relevant parties are promptly informed of critical events or issues for swift response and resolution.</value>
+    <value>Create and manage distribution lists to group users or email addresses that should receive notifications for specific events, such as devices going offline or exceeding configured thresholds. This helps ensure the right people are informed promptly and can act quickly.</value>
   </data>
   <data name="DistroList_Help" xml:space="preserve">
-    <value>A distribution list refers to a compilation of users or email addresses within an organization. This list is designed to facilitate notifications when specific triggers occur, such as a device going offline or surpassing a predefined threshold. Essentially, it allows for efficient communication with a targeted group, ensuring that relevant parties are promptly informed of critical events or issues for swift response and resolution.</value>
+    <value>Groups of users or email addresses that receive notifications when specific events occur, such as devices going offline or exceeding configured thresholds. Distribution lists support fast, targeted communication so the right people are notified and can respond quickly.</value>
   </data>
   <data name="DistroList_Name" xml:space="preserve">
     <value>Distribution List</value>
@@ -921,10 +921,10 @@
     <value>Culture or Country</value>
   </data>
   <data name="HolidaySet_Description" xml:space="preserve">
-    <value>A Holiday Set is a collection of predefined holidays for a culture, these are used to seed down time for organizations.</value>
+    <value>A Holiday Set is a predefined set of holidays for a specific culture. Use Holiday Sets to initialize downtime calendars for your organization.</value>
   </data>
   <data name="HolidaySet_Help" xml:space="preserve">
-    <value>A Holiday Set is a collection of predefined holidays for a culture, these are used to seed down time for organizations.</value>
+    <value>Predefined sets of holidays for a specific culture, used to initialize organizational downtime calendars.</value>
   </data>
   <data name="HolidaySet_Holidays" xml:space="preserve">
     <value>Holidays</value>
@@ -933,7 +933,7 @@
     <value>Holiday Set</value>
   </data>
   <data name="ScheduledDowntimePeriod_Description" xml:space="preserve">
-    <value>A Scheduled Downtime Period is when equipment or processes are down for a portion of a day. </value>
+    <value>Define a Scheduled Downtime Period to set up a recurring daily time window when equipment or processes are intentionally taken out of service.</value>
   </data>
   <data name="ScheduledDowntimePeriod_End" xml:space="preserve">
     <value>End</value>
@@ -942,7 +942,7 @@
     <value>End time for the down tme period, must be number representing the time such as 1030 for 10:30 AM and 1415 for 2:15 PM</value>
   </data>
   <data name="ScheduledDowntimePeriod_Help" xml:space="preserve">
-    <value>A Scheduled Downtime Period is when equipment or processes are down for a portion of a day.</value>
+    <value>A recurring daily time window when equipment or processes are planned to be unavailable.</value>
   </data>
   <data name="ScheduledDowntimePeriod_Start" xml:space="preserve">
     <value>Start</value>
@@ -963,13 +963,13 @@
     <value>Day of Week</value>
   </data>
   <data name="ScheduledDowntime_Description" xml:space="preserve">
-    <value>Scheduled downtime refers to a planned period during which a system, service, or equipment is intentionally taken offline or unavailable for maintenance, upgrades, or other planned activities.  Adding scheduled downtime is useful so that users will not be notified if it is deteced that the devices are offline or do not send any messages.</value>
+    <value>A planned period when systems, services, or devices are intentionally taken offline for maintenance, upgrades, or other planned activities. Configure scheduled downtime to suppress notifications when devices are offline or not sending messages during these times.</value>
   </data>
   <data name="ScheduledDowntime_DowntimeType" xml:space="preserve">
     <value>Downtime Type</value>
   </data>
   <data name="ScheduledDowntime_Help" xml:space="preserve">
-    <value>Scheduled downtime refers to a planned period during which a system, service, or equipment is intentionally taken offline or unavailable for maintenance, upgrades, or other planned activities.  Adding scheduled downtime is useful so that users will not be notified if it is deteced that the devices are offline or do not send any messages.</value>
+    <value>A planned period when systems, services, or devices are intentionally taken offline for maintenance, upgrades, or other planned activities. Use scheduled downtime to suppress notifications when devices are offline or not sending messages during these periods.</value>
   </data>
   <data name="ScheduledDowntime_Month" xml:space="preserve">
     <value>Month</value>
@@ -1128,10 +1128,10 @@
     <value>Card Title</value>
   </data>
   <data name="Area_Help" xml:space="preserve">
-    <value>An Area allows you to group pages together into a logical organizational structure.  If an area does not contain any pages, the area may be used to represent a page within user interface.</value>
+    <value>Create an Area to organize related pages into a logical section of the user interface. If an Area does not contain any pages, you can use it to represent a single page instead.</value>
   </data>
   <data name="Area_Title" xml:space="preserve">
-    <value>User Interface Area</value>
+    <value>UI Area</value>
   </data>
   <data name="Feature_Help" xml:space="preserve">
     <value>A feature is an element of a page to allow configuration of security.</value>
@@ -1140,10 +1140,10 @@
     <value>Application Feature</value>
   </data>
   <data name="Module_Help" xml:space="preserve">
-    <value>Modules are top level components that can be used to organize the user interface. They are presented to the user as top level options for users to navigate to different parts of the application.</value>
+    <value>Modules are top-level sections of the application. They appear in the main navigation and let users switch between different areas of the interface.</value>
   </data>
   <data name="Module_Title" xml:space="preserve">
-    <value>User Interface Module</value>
+    <value>UI Module</value>
   </data>
   <data name="Page_Help" xml:space="preserve">
     <value>Features are aspects of a module, area or page that can be used in code to secure an activity or user interface component, they can also be used to render menus or a section of a user interface.</value>
@@ -1233,7 +1233,7 @@
     <value>-select event type-</value>
   </data>
   <data name="Calendar_ObjectDescription" xml:space="preserve">
-    <value>A Calendar Event is a date and time of an event of something we want to manage and keep track of for a company</value>
+    <value>Use this page to create and manage company events. Specify the event date, time, and relevant details so others can view and access the event information.</value>
   </data>
   <data name="Calendar_ObjectTitle" xml:space="preserve">
     <value>Calendar Event</value>
@@ -1353,7 +1353,7 @@
     <value>Area Categories</value>
   </data>
   <data name="UiCategory_Description" xml:space="preserve">
-    <value>A UI Category is a way of organizing launcher cards within the user interface.</value>
+    <value>Use UI Categories to organize related launcher cards into logical groups in the user interface. Create, edit, and manage these categories to keep the launcher organized and easy to navigate.</value>
   </data>
   <data name="UiCateogry_Title" xml:space="preserve">
     <value>UI Category</value>
@@ -1428,7 +1428,7 @@
     <value>Distribution Lists</value>
   </data>
   <data name="ScheduledDowntimes_Title" xml:space="preserve">
-    <value>Scheduled Downtimes</value>
+    <value>Scheduled Downtime</value>
   </data>
   <data name="ScheduledDowntime_DayOfWeek_Select" xml:space="preserve">
     <value>-select day of week-</value>
@@ -1458,7 +1458,7 @@
     <value>Week End</value>
   </data>
   <data name="AuthenticationLogs_Description" xml:space="preserve">
-    <value>Provides details about authentication events within NuvIoT</value>
+    <value>View detailed information about each authentication event in NuvIoT.</value>
   </data>
   <data name="AuthenticationLogs_Title" xml:space="preserve">
     <value>Authentication Logs</value>
@@ -1500,7 +1500,7 @@
     <value>Send SMS</value>
   </data>
   <data name="LocationDiagrams_Description" xml:space="preserve">
-    <value>A location diagram is a drawing that represents a phsyical location</value>
+    <value>Create and view location diagrams to visually represent and organize physical locations.</value>
   </data>
   <data name="LocationDiagrams_Title" xml:space="preserve">
     <value>Location Diagrams</value>
@@ -1515,7 +1515,7 @@
     <value>Location Diagram Shape</value>
   </data>
   <data name="LocationDiagram_Shape_Help" xml:space="preserve">
-    <value>The Location Diagram Shape is a shape on a location diagram that could represent a room or an object.  </value>
+    <value>Create or edit a shape on the location diagram to represent a room or other object. You can adjust its size, position, rotation, and visual style as needed.</value>
   </data>
   <data name="LocationDiagram_Shape_OrgLocation" xml:space="preserve">
     <value>Org Location</value>
@@ -1608,7 +1608,7 @@
     <value>Shapes</value>
   </data>
   <data name="LocationDiagramLayer_Description" xml:space="preserve">
-    <value>A layer is a collection of shapes</value>
+    <value>Create and manage layers to group related shapes in a diagram. Use layers to organize shapes, control their visibility, and manage them together.</value>
   </data>
   <data name="LocationDiagramLayer_Shapes" xml:space="preserve">
     <value>Shapes</value>
@@ -1617,7 +1617,7 @@
     <value>Diagram Layer</value>
   </data>
   <data name="LocationDiagramShapeGroup_Help" xml:space="preserve">
-    <value>A group of shapes hat can be acted on together</value>
+    <value>Group multiple shapes so they can be selected and edited together as a single unit.</value>
   </data>
   <data name="LocationDiagram_Layers" xml:space="preserve">
     <value>Layers</value>
@@ -1734,7 +1734,7 @@
     <value>Device Owner</value>
   </data>
   <data name="ExternalContact_Description" xml:space="preserve">
-    <value>An external contact is a user that is not in the system as a user that can be notified.</value>
+    <value>A person outside the system who is not a registered user but can receive notifications.</value>
   </data>
   <data name="ExternalContact_Title" xml:space="preserve">
     <value>External Contact</value>
@@ -1842,7 +1842,7 @@
     <value>Contact List</value>
   </data>
   <data name="ContactList_Description" xml:space="preserve">
-    <value>A contact list is a list managed by a third party service that we can send emails to.  Originally this will be SendGrid however in the future it could be other servies.</value>
+    <value>A list of contacts managed by a third-party email service that we can send email to. Currently uses SendGrid, with potential support for other services in the future.</value>
   </data>
   <data name="Organization_LinkedInUrl" xml:space="preserve">
     <value>LinkedIn URL</value>
@@ -1869,7 +1869,7 @@
     <value>Function Map</value>
   </data>
   <data name="FunctionMap_Description" xml:space="preserve">
-    <value>A Function Map is a User Interface that shows functions within the system and how they are related.</value>
+    <value>Use the Function Map to browse system functions and understand how they relate to each other. Access to this resource may be restricted based on your role, administrator settings, or specific access grants.</value>
   </data>
   <data name="FunctionMapFunction_Title" xml:space="preserve">
     <value>Function</value>
@@ -2013,7 +2013,7 @@
     <value>Sent Email</value>
   </data>
   <data name="SentEmail_Description" xml:space="preserve">
-    <value>Detail records of emails that have been sent.</value>
+    <value>View detailed records of sent emails, including message content and delivery details when available.</value>
   </data>
   <data name="SentEmails_Title" xml:space="preserve">
     <value>Sent Emails</value>
@@ -2179,5 +2179,8 @@
   </data>
   <data name="VerifyCodeViewModel_Provider" xml:space="preserve">
     <value>Provider</value>
+  </data>
+  <data name="FunctionMapFunction_Description" xml:space="preserve">
+    <value>Define a function on this page to control or secure specific behavior for users who can access it.</value>
   </data>
 </root>

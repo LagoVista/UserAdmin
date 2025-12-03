@@ -19,7 +19,6 @@ namespace LagoVista.UserAdmin.Models
         public const string SecurityViewModels = "SecurityViewModels";
         public const string EmailServicesDomain = "EmailServices";
         public const string MiscDomain = "MiscDomain";
-
         [DomainDescription(UserDomain)]
         public static DomainDescription UserDomainDescription
         {
@@ -27,7 +26,7 @@ namespace LagoVista.UserAdmin.Models
             {
                 return new DomainDescription()
                 {
-                    Description = "Models and Data Structures that allow a user to create or update entities associated with users.",
+                    Description = "Models and data structures for managing user accounts, ownership, roles, and related associations.",
                     DomainType = DomainDescription.DomainTypes.BusinessObject,
                     Name = "User",
                     CurrentVersion = new Core.Models.VersionInfo()
@@ -180,7 +179,6 @@ namespace LagoVista.UserAdmin.Models
                 };
             }
         }
-
 
         [DomainDescription(EmailServicesDomain)]
         public static DomainDescription EmaailServicesDescription

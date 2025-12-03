@@ -26,7 +26,6 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
 
         [FormField(LabelResource: UserAdminResources.Names.Admin_Contact, FieldType: FieldTypes.Picker, PickerType: Constants.PeoplePicker, PickerFor: nameof(AdminContactId), ResourceType: typeof(UserAdminResources))]
         public String AdminContact { get; set; }
-        [FormField(IsRequired: true, FieldType: FieldTypes.Hidden)]
         public String AdminContactId { get; set; }
 
 

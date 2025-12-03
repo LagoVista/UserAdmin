@@ -1,0 +1,2769 @@
+{
+  "repoId": "ua.UserAdmin",
+  "records": {
+    "readme.md": {
+      "filePath": "readme.md",
+      "docId": "1102257196DD58EFA2992CE7393AC600",
+      "contentHash": "3d7e7252c63712010ba6242832388f903ce225faa9b362b029a37651af4abb27",
+      "activeContentHash": "3d7e7252c63712010ba6242832388f903ce225faa9b362b029a37651af4abb27",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/ilagovistaaspnetcoreidentityprovidersettings.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/ilagovistaaspnetcoreidentityprovidersettings.cs",
+      "docId": "86374A292BBE544B9EDA7D9ED42CFEB9",
+      "contentHash": "1e126d26400ea69fe3bda4331144e1bd86c4da67e795901fcf5a1367e7d8261b",
+      "activeContentHash": "1e126d26400ea69fe3bda4331144e1bd86c4da67e795901fcf5a1367e7d8261b",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/startup.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/startup.cs",
+      "docId": "5CF9401C77635EC39345A0E865A6136A",
+      "contentHash": "c11b1fce03713de4cda34c102c37ed802a0a619bfbc3c3dc92a0b3a8fd6f8a6f",
+      "activeContentHash": "c11b1fce03713de4cda34c102c37ed802a0a619bfbc3c3dc92a0b3a8fd6f8a6f",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.iot.productstore/iproductstore.cs": {
+      "filePath": "src/lagovista.iot.productstore/iproductstore.cs",
+      "docId": "B59B801C9ADD5A6F9384AA51E8B49029",
+      "contentHash": "2825537475db2ed209a992d121097510145a8af91e6979296b2d926010d6a49c",
+      "activeContentHash": "2825537475db2ed209a992d121097510145a8af91e6979296b2d926010d6a49c",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.iot.productstore/productoffering.cs": {
+      "filePath": "src/lagovista.iot.productstore/productoffering.cs",
+      "docId": "AFB390312FEF5790A4105A5516884099",
+      "contentHash": "acbc20838cc86833f469db0dec5aaac0aa656451dc175ac240f1c08f657f146b",
+      "activeContentHash": "acbc20838cc86833f469db0dec5aaac0aa656451dc175ac240f1c08f657f146b",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/commonlinks.cs": {
+      "filePath": "src/lagovista.useradmin/commonlinks.cs",
+      "docId": "677EF9E3303C5790B74299DA86E7CB82",
+      "contentHash": "b9e883696f940c8fe5599ab752b8f47df4b3d81516b7ccf27f416d46a9403766",
+      "activeContentHash": "b9e883696f940c8fe5599ab752b8f47df4b3d81516b7ccf27f416d46a9403766",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/startup.cs": {
+      "filePath": "src/lagovista.useradmin/startup.cs",
+      "docId": "C918F67B0DE25FC69EF89190A26FFD60",
+      "contentHash": "99ca23f9792c55ac912e47b9be8f8306f3955cc3db68a10621ca085e13eb0922",
+      "activeContentHash": "99ca23f9792c55ac912e47b9be8f8306f3955cc3db68a10621ca085e13eb0922",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/constants.cs": {
+      "filePath": "src/lagovista.useradmin.models/constants.cs",
+      "docId": "4188DD3A03415C9ABE40A3E4EDABC418",
+      "contentHash": "33d4945209dd4e96f3f8881a8cd56c3c278e123fa945c3055a17f5be037f2539",
+      "activeContentHash": "33d4945209dd4e96f3f8881a8cd56c3c278e123fa945c3055a17f5be037f2539",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/domains.cs": {
+      "filePath": "src/lagovista.useradmin.models/domains.cs",
+      "docId": "ABF2974118AC5499B914F5FEF2BB74D5",
+      "contentHash": "65988fbbc56386e0f3aa4995352ccceb872e91241f3ac54c621c8d86216c2241",
+      "activeContentHash": "65988fbbc56386e0f3aa4995352ccceb872e91241f3ac54c621c8d86216c2241",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/useradminmodelbase.cs": {
+      "filePath": "src/lagovista.useradmin.models/useradminmodelbase.cs",
+      "docId": "9DEBCF61184A596B9B7653AD20ABF868",
+      "contentHash": "9b09d7c189e31e08d47735b3d2c6c239bef7cbaee07c4dfff05544b9e4dd1a69",
+      "activeContentHash": "9b09d7c189e31e08d47735b3d2c6c239bef7cbaee07c4dfff05544b9e4dd1a69",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/iappusermanagementsettings.cs": {
+      "filePath": "src/lagovista.useradmin.repos/iappusermanagementsettings.cs",
+      "docId": "6EF105AD51BE588FA4DF04F0F0E201D9",
+      "contentHash": "dc0fa5d8c620233928b0a32049bfb86103d24f0b5e9e51203bae5c65a2cefded",
+      "activeContentHash": "dc0fa5d8c620233928b0a32049bfb86103d24f0b5e9e51203bae5c65a2cefded",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/startup.cs": {
+      "filePath": "src/lagovista.useradmin.repos/startup.cs",
+      "docId": "52CBFFA55942546C8157DA591788C158",
+      "contentHash": "f73b6338c6b8cafd88f34f551fc392cffd5e21d306a2b69de6395b60e30bd12f",
+      "activeContentHash": "f73b6338c6b8cafd88f34f551fc392cffd5e21d306a2b69de6395b60e30bd12f",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos.rdbms/rdbmsconnectionsettings.cs": {
+      "filePath": "src/lagovista.useradmin.repos.rdbms/rdbmsconnectionsettings.cs",
+      "docId": "3E7EDA48BC4B5081A06692DE4929343D",
+      "contentHash": "b6c99d3e7e8583746d732692d0490d4a5f20504818778fe17b71ead8b2babcf4",
+      "activeContentHash": "b6c99d3e7e8583746d732692d0490d4a5f20504818778fe17b71ead8b2babcf4",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos.rdbms/rdbmsmanager.cs": {
+      "filePath": "src/lagovista.useradmin.repos.rdbms/rdbmsmanager.cs",
+      "docId": "53F35E03A48A573BA601EFC02893EF03",
+      "contentHash": "8adb1fd80206614817add78585b0cd5a5e382c56588d2821c520349f3cac1e2f",
+      "activeContentHash": "8adb1fd80206614817add78585b0cd5a5e382c56588d2821c520349f3cac1e2f",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos.rdbms/startup.cs": {
+      "filePath": "src/lagovista.useradmin.repos.rdbms/startup.cs",
+      "docId": "93CE166AB57A5F0591B325623B6ECD46",
+      "contentHash": "68e19f519232b47ca603d525fb98c47347a3b6704c7edabdd706a6aaea6bb6a9",
+      "activeContentHash": "68e19f519232b47ca603d525fb98c47347a3b6704c7edabdd706a6aaea6bb6a9",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos.rdbms/subscriptionrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos.rdbms/subscriptionrepo.cs",
+      "docId": "87FD35F8493556FDB93E20A04B827167",
+      "contentHash": "8ed2f7a87b954bbd027868d28c2e6cf3613aec3f0f9628b2a5bb4ffd21a852f0",
+      "activeContentHash": "8ed2f7a87b954bbd027868d28c2e6cf3613aec3f0f9628b2a5bb4ffd21a852f0",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos.rdbms/useradmindatacontext.cs": {
+      "filePath": "src/lagovista.useradmin.repos.rdbms/useradmindatacontext.cs",
+      "docId": "BEA6923420BE53BE8A840B179BACC174",
+      "contentHash": "9f524a0527460b96f8df1ce93ecae9a3a6c6021d983bc7c3ec0e735790557137",
+      "activeContentHash": "9f524a0527460b96f8df1ce93ecae9a3a6c6021d983bc7c3ec0e735790557137",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/identitysettings.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/identitysettings.cs",
+      "docId": "C8AD22419F2B5BD8BBC4244E6D462451",
+      "contentHash": "423b681517d84afe9e7aca63f122581f6c79f368bcf6021180485ab712fc18cb",
+      "activeContentHash": "423b681517d84afe9e7aca63f122581f6c79f368bcf6021180485ab712fc18cb",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/securitybase.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/securitybase.cs",
+      "docId": "270C983454305073B5681E7FC4C66B3D",
+      "contentHash": "7d6294f4491389840dc468c2593171eb5261d6791ae00b68905eb89809563eda",
+      "activeContentHash": "7d6294f4491389840dc468c2593171eb5261d6791ae00b68905eb89809563eda",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/testbase.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/testbase.cs",
+      "docId": "56C887BF10B45E34BB1D3F8CF9C18908",
+      "contentHash": "2ee953f42f05b4fee1d14e124f3dc4cdeb7267dd4dc3c1e6b110230ce44076cf",
+      "activeContentHash": "2ee953f42f05b4fee1d14e124f3dc4cdeb7267dd4dc3c1e6b110230ce44076cf",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/ringcentralintegrationtests/unittest1.cs": {
+      "filePath": "tests/ringcentralintegrationtests/unittest1.cs",
+      "docId": "2B70260CC7BB5B6098FA4DB8E3494998",
+      "contentHash": "268031ae09c71321b1024dc57f90882934f70dd8f6c685c9020325f4c1519a66",
+      "activeContentHash": "268031ae09c71321b1024dc57f90882934f70dd8f6c685c9020325f4c1519a66",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/extensions/identityresults.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/extensions/identityresults.cs",
+      "docId": "14E891DD7ACD5008B18CE0F4A1AD794D",
+      "contentHash": "835a3bd86376e0baddfb911a2029389fb410ddd9487433dbebef0899692075da",
+      "activeContentHash": "835a3bd86376e0baddfb911a2029389fb410ddd9487433dbebef0899692075da",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/interfaces/iclaimsfactory.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/interfaces/iclaimsfactory.cs",
+      "docId": "AFA431B5D792504584A40B0FA0012DAB",
+      "contentHash": "d68216a91b467c92bd50fe0bbdad79e94e268a406d88acc0cd399ebfc77f6ce9",
+      "activeContentHash": "d68216a91b467c92bd50fe0bbdad79e94e268a406d88acc0cd399ebfc77f6ce9",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/interfaces/iexternalloginmanager.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/interfaces/iexternalloginmanager.cs",
+      "docId": "1E9EA9DF37B05A8CB76E4A9CE931AE37",
+      "contentHash": "0af32d56911357cdb68851a4c487a96e123ea7868429eaad5f9b59a67f4aca56",
+      "activeContentHash": "0af32d56911357cdb68851a4c487a96e123ea7868429eaad5f9b59a67f4aca56",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/managers/aspnetcoreuserstore.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/managers/aspnetcoreuserstore.cs",
+      "docId": "1487B294C2605A8AA1C87AC6B3A925CB",
+      "contentHash": "e570803efdb585749e61721b21e83cb93efb4cf512bff388c9e809445b11b364",
+      "activeContentHash": "e570803efdb585749e61721b21e83cb93efb4cf512bff388c9e809445b11b364",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/managers/aspnetcoreuservalidator.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/managers/aspnetcoreuservalidator.cs",
+      "docId": "B2C2A3D7E42C500AA92691FED9FD3D5A",
+      "contentHash": "f3a29ee97e10feb8acd29a4bf183a938cb11189f55c226b6f2e3870e84969edf",
+      "activeContentHash": "f3a29ee97e10feb8acd29a4bf183a938cb11189f55c226b6f2e3870e84969edf",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/managers/aspnetrolestore.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/managers/aspnetrolestore.cs",
+      "docId": "C5913DBE60D355DBBD91A1FB53A0BE68",
+      "contentHash": "1aa79c37f177865b5a92b2aa103583ff21e68cd9b53d0aca8cb9dd0c9e6f481e",
+      "activeContentHash": "1aa79c37f177865b5a92b2aa103583ff21e68cd9b53d0aca8cb9dd0c9e6f481e",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/managers/authtokenmanager.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/managers/authtokenmanager.cs",
+      "docId": "2E56B64A667A5EF083DF3749FA29AB9F",
+      "contentHash": "7ed63f96859b9a13bff6dea6079c65727f4664f389295c718c58c2b19e6c26a3",
+      "activeContentHash": "7ed63f96859b9a13bff6dea6079c65727f4664f389295c718c58c2b19e6c26a3",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/managers/claimsfactory.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/managers/claimsfactory.cs",
+      "docId": "226DB5AE71CD535982409F8FF36DB2BC",
+      "contentHash": "5ce106656be8e5e9261f1fd5fedac3c9bb57b4c2b4dc8744c07f67d548034602",
+      "activeContentHash": "5ce106656be8e5e9261f1fd5fedac3c9bb57b4c2b4dc8744c07f67d548034602",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/managers/claimsprincipalfactory.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/managers/claimsprincipalfactory.cs",
+      "docId": "FD470DC2ED005D789A428EF3F39B8208",
+      "contentHash": "cadbe0be6f7d45835388ff47d7e2584ae5220a2b6b4806c57f35513b96f6b953",
+      "activeContentHash": "cadbe0be6f7d45835388ff47d7e2584ae5220a2b6b4806c57f35513b96f6b953",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/managers/devicepinauthuserstore.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/managers/devicepinauthuserstore.cs",
+      "docId": "E24DE119833253F2954A37FEDF31723A",
+      "contentHash": "881174c2e33c70ad2b0390326f7dbab04345c40716298dedac9788ee1ac1ba35",
+      "activeContentHash": "881174c2e33c70ad2b0390326f7dbab04345c40716298dedac9788ee1ac1ba35",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/managers/externalloginmanager.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/managers/externalloginmanager.cs",
+      "docId": "525BF9220DF255A592FAECC8C0CDE74D",
+      "contentHash": "8f7793c4c564535f5275601b33fbfc603e6dc6502c65c043cb5014decb1525ac",
+      "activeContentHash": "8f7793c4c564535f5275601b33fbfc603e6dc6502c65c043cb5014decb1525ac",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/managers/refreshtokenmanager.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/managers/refreshtokenmanager.cs",
+      "docId": "88EDB000DBAD503D937ACBB6453FC1C4",
+      "contentHash": "b0aeb848d23157726de0b14fac1801c803ddc838a6bdf08298c4407a13420209",
+      "activeContentHash": "b0aeb848d23157726de0b14fac1801c803ddc838a6bdf08298c4407a13420209",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/managers/signinmanager.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/managers/signinmanager.cs",
+      "docId": "22574215F5E45D5184A5AC8CB9DA31A2",
+      "contentHash": "d30f5d6d04a3f625f30f8712aae053fcb67378dfc2660f077596e15b722b6601",
+      "activeContentHash": "d30f5d6d04a3f625f30f8712aae053fcb67378dfc2660f077596e15b722b6601",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/managers/usermanager.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/managers/usermanager.cs",
+      "docId": "C3F0905C5B0A5FC88FCC3279A6B0CA0D",
+      "contentHash": "33266849bb4d4e6b210c742ca8e57fe99ac200cdacfa4fa558958ed561956121",
+      "activeContentHash": "33266849bb4d4e6b210c742ca8e57fe99ac200cdacfa4fa558958ed561956121",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/models/authfailedrecord.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/models/authfailedrecord.cs",
+      "docId": "1B1C1DB3A4A85FCA8F2E0EEAE530C479",
+      "contentHash": "a68d5ce3ae98a52dc312e09c635186e12097bb356fd9eb27cc34740797328381",
+      "activeContentHash": "a68d5ce3ae98a52dc312e09c635186e12097bb356fd9eb27cc34740797328381",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/models/tokenauthoptions.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/models/tokenauthoptions.cs",
+      "docId": "CFD6048F960D5C9B8ED65181A34ECA43",
+      "contentHash": "1a5a6baa876c86481a43ab8b8b4b1d5f2cbd24d38164a53db150c31dcf2bf920",
+      "activeContentHash": "1a5a6baa876c86481a43ab8b8b4b1d5f2cbd24d38164a53db150c31dcf2bf920",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/services/twiliosmssender.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/services/twiliosmssender.cs",
+      "docId": "2E82858881795FD881977933F4886B89",
+      "contentHash": "6021076484a437adf4e15f9cd4d34cea867ef7cd4a6b705bb6db1b151eba67b4",
+      "activeContentHash": "6021076484a437adf4e15f9cd4d34cea867ef7cd4a6b705bb6db1b151eba67b4",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/services/twitterauthservices.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/services/twitterauthservices.cs",
+      "docId": "C6CC83DFC7AB5DFEB5127BAD9C2CCBAC",
+      "contentHash": "217eb69ced1497e3f440f29c93b078e5017a94ffd5b6492038112a48f431fb49",
+      "activeContentHash": "217eb69ced1497e3f440f29c93b078e5017a94ffd5b6492038112a48f431fb49",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/utils/authrequestvalidators.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/utils/authrequestvalidators.cs",
+      "docId": "0C1AA7809DA95A8FBC50DE0108C96249",
+      "contentHash": "9749ee57d38d8b14786decbd9d65c8bf03e61bc6f32c73b661e345df8181147f",
+      "activeContentHash": "9749ee57d38d8b14786decbd9d65c8bf03e61bc6f32c73b661e345df8181147f",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/utils/orghelper.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/utils/orghelper.cs",
+      "docId": "B414F68FC9875D8D8C722E70B198531C",
+      "contentHash": "589563d6169ad7dad98a9550028e7683920fdfb2c8fe90b9bfa1bd4b930359ca",
+      "activeContentHash": "589563d6169ad7dad98a9550028e7683920fdfb2c8fe90b9bfa1bd4b930359ca",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/utils/rsakeyutils.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/utils/rsakeyutils.cs",
+      "docId": "88414F2C25435D69959927B4B0516248",
+      "contentHash": "5984a63bb8797b3a427d8b3c1517f3290696235bffdd5e8e17a33543e5e0b70d",
+      "activeContentHash": "5984a63bb8797b3a427d8b3c1517f3290696235bffdd5e8e17a33543e5e0b70d",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.aspnetcore.identity/utils/tokenhelper.cs": {
+      "filePath": "src/lagovista.aspnetcore.identity/utils/tokenhelper.cs",
+      "docId": "10291878D14D5446822A5EAC166C6E99",
+      "contentHash": "dc23e7b507e520f94b8cb0d1f0e3f32178126857d1d3b37107fcd52bf51e833e",
+      "activeContentHash": "dc23e7b507e520f94b8cb0d1f0e3f32178126857d1d3b37107fcd52bf51e833e",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/iappuserinboxrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/iappuserinboxrepo.cs",
+      "docId": "BCBBAAA70B2B514DA9228E625433AC9F",
+      "contentHash": "05c58becb4c1cf2674c310bf3ea309417e84ccc4b0f382b5b2730dfcbdea0bff",
+      "activeContentHash": "05c58becb4c1cf2674c310bf3ea309417e84ccc4b0f382b5b2730dfcbdea0bff",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/iassetsetentity.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/iassetsetentity.cs",
+      "docId": "07B0F849BCE45EF0AE2E066366029A87",
+      "contentHash": "932adaea9afddd0c5592d8563f9157ee45de7486cec93b27c89e2d14ee9e4554",
+      "activeContentHash": "932adaea9afddd0c5592d8563f9157ee45de7486cec93b27c89e2d14ee9e4554",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/iauthclient.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/iauthclient.cs",
+      "docId": "C959E1881DEF5D5A9A7259349E332953",
+      "contentHash": "e47b656d883371a8ec9f0da0b17f4f74d3582dd747c02e68598c49423f05d3bb",
+      "activeContentHash": "e47b656d883371a8ec9f0da0b17f4f74d3582dd747c02e68598c49423f05d3bb",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/iauthrequestvalidators.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/iauthrequestvalidators.cs",
+      "docId": "2A168E14D0E458579C653E90BEBCADC0",
+      "contentHash": "3a5c93a13778fa5b114fa3eeb88d8204520409b6ddbe4c07713b7bd32ac251b1",
+      "activeContentHash": "3a5c93a13778fa5b114fa3eeb88d8204520409b6ddbe4c07713b7bd32ac251b1",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/idefaultrolelist.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/idefaultrolelist.cs",
+      "docId": "866455CE94695DC3919F20C7F3CD6813",
+      "contentHash": "351677f9b995e906f7ee05b9cea8cbf37dae2c6f73376575cbc672750bbda5bd",
+      "activeContentHash": "351677f9b995e906f7ee05b9cea8cbf37dae2c6f73376575cbc672750bbda5bd",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/ioauthsettings.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/ioauthsettings.cs",
+      "docId": "7234A52E8D665E829DD7939A9EA019C9",
+      "contentHash": "9890919ad0a920936c01097c6402de70254479654822e60d17535bd677287c7c",
+      "activeContentHash": "9890919ad0a920936c01097c6402de70254479654822e60d17535bd677287c7c",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/iorghelper.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/iorghelper.cs",
+      "docId": "1D482A8E9D7E5A9A897EDEF480629D51",
+      "contentHash": "22eaf2a60c2c1f00d49d5629cdaf978ec0294f4cf8bd33c9f25bbd9f5d8bcac2",
+      "activeContentHash": "22eaf2a60c2c1f00d49d5629cdaf978ec0294f4cf8bd33c9f25bbd9f5d8bcac2",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/iorginitializer.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/iorginitializer.cs",
+      "docId": "237F8F01C55153E291AE0E82D9A5EAC4",
+      "contentHash": "afdba5eec156809536475ab59a69c9ce03103bf51a473b3a2448613153e73d61",
+      "activeContentHash": "afdba5eec156809536475ab59a69c9ce03103bf51a473b3a2448613153e73d61",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/iorgutils.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/iorgutils.cs",
+      "docId": "7BBA6136702D58238DD3B6B30DDAB500",
+      "contentHash": "491be1379a3efcf50c2f082aa01365c51af47ca9d20f0a2af7835851ddcf608e",
+      "activeContentHash": "491be1379a3efcf50c2f082aa01365c51af47ca9d20f0a2af7835851ddcf608e",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/iownedobjectrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/iownedobjectrepo.cs",
+      "docId": "39635D3B20BC5CAB8416CE9F21923F84",
+      "contentHash": "8c01b5e9899689f8dfe973d3d0304787e2bb1c74b5f7bdbb82491fdace877bb7",
+      "activeContentHash": "8c01b5e9899689f8dfe973d3d0304787e2bb1c74b5f7bdbb82491fdace877bb7",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/irdbmsconnectionsettings.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/irdbmsconnectionsettings.cs",
+      "docId": "CF932D9940D5557CBA7C59B053780464",
+      "contentHash": "a7b6a82a632195c59456c3fb64efa4b945451021e7a8cf0eeeba1f928606bb4d",
+      "activeContentHash": "a7b6a82a632195c59456c3fb64efa4b945451021e7a8cf0eeeba1f928606bb4d",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/iringcentralcredentials.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/iringcentralcredentials.cs",
+      "docId": "2B6989FA436F5916817DFDAADB53F7F1",
+      "contentHash": "fa779ff54a4d44c5ff15d5d1ef9ac3d603f7dcb7d1c0e72bd68325505e6d07c8",
+      "activeContentHash": "fa779ff54a4d44c5ff15d5d1ef9ac3d603f7dcb7d1c0e72bd68325505e6d07c8",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/isingleusetokenmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/isingleusetokenmanager.cs",
+      "docId": "663668B830D853D9BF038237F91AE749",
+      "contentHash": "65cd754bb22906a70d09f87e716260f7219ddc2ff915f52cb9e091cb50ccb849",
+      "activeContentHash": "65cd754bb22906a70d09f87e716260f7219ddc2ff915f52cb9e091cb50ccb849",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/isystemnotificationsrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/isystemnotificationsrepo.cs",
+      "docId": "9EB4588B3881579BA87248A899E675BB",
+      "contentHash": "a4cbd1d07720a5b00e8361d27ef73250cdbd5fde177e35e57f286b3d0f0ff07f",
+      "activeContentHash": "a4cbd1d07720a5b00e8361d27ef73250cdbd5fde177e35e57f286b3d0f0ff07f",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/itokenhelper.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/itokenhelper.cs",
+      "docId": "2E5AFC42AFDB5F748671EC3B4A7396DB",
+      "contentHash": "ca447db33f2cd88c6c2064422357abeb94abdcc3000d82fc21d971a9f5ab0706",
+      "activeContentHash": "ca447db33f2cd88c6c2064422357abeb94abdcc3000d82fc21d971a9f5ab0706",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/itwitterauthservice.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/itwitterauthservice.cs",
+      "docId": "D6EED94271205655B30E4FC4B9FE23B7",
+      "contentHash": "bcf3cd4fd79c9f3cc7050a372ac58f7719859f1c53bbe22b4f5cb8e59858a4d2",
+      "activeContentHash": "bcf3cd4fd79c9f3cc7050a372ac58f7719859f1c53bbe22b4f5cb8e59858a4d2",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/iusersecurityservices.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/iusersecurityservices.cs",
+      "docId": "FB6763F7FE00563782F631FB2F65BC9D",
+      "contentHash": "b031ac2c18ace9a7823c9ec4f15aa922ae31802942de2432d35cc6d4e949a854",
+      "activeContentHash": "b031ac2c18ace9a7823c9ec4f15aa922ae31802942de2432d35cc6d4e949a854",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/appinstancemanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/appinstancemanager.cs",
+      "docId": "D7B393A07DEA51D99FEDC26FB943E762",
+      "contentHash": "a7b8f5f67dd08daa5f14e755412913149dac0229d0aa1c0bb1b27d280aa22ebe",
+      "activeContentHash": "a7b8f5f67dd08daa5f14e755412913149dac0229d0aa1c0bb1b27d280aa22ebe",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/appuserinboxmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/appuserinboxmanager.cs",
+      "docId": "141D05532AC853E9BA8367F7B868EBA9",
+      "contentHash": "f1d5d28dcb2cd4c9832feee59411f3cdcbde3ec26463f1a1802715fb11706f55",
+      "activeContentHash": "f1d5d28dcb2cd4c9832feee59411f3cdcbde3ec26463f1a1802715fb11706f55",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/appusermanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/appusermanager.cs",
+      "docId": "E0D5718321D55F8DA7A35A7809ED7FAC",
+      "contentHash": "ba4d87607db59bab2b169fde732f00bc6d7c88fb516372a084d6f4a0ac3de2f6",
+      "activeContentHash": "ba4d87607db59bab2b169fde732f00bc6d7c88fb516372a084d6f4a0ac3de2f6",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/appusermanagerreadonly.cs": {
+      "filePath": "src/lagovista.useradmin/managers/appusermanagerreadonly.cs",
+      "docId": "0043B40BED945ACFB43C5074F5F7F3A0",
+      "contentHash": "dab36beeca172c733d78556f5cd7c464f972a41b1b3b77dfc867eba7088a01d7",
+      "activeContentHash": "dab36beeca172c733d78556f5cd7c464f972a41b1b3b77dfc867eba7088a01d7",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/assetsetmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/assetsetmanager.cs",
+      "docId": "2D7EDCD0920055FBBC44840A631801ED",
+      "contentHash": "a2f7dbf9789d851849271e34a6d9b297eea9b47a1f88ca1eb6ca55f8c95e0149",
+      "activeContentHash": "a2f7dbf9789d851849271e34a6d9b297eea9b47a1f88ca1eb6ca55f8c95e0149",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/authenticationlogmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/authenticationlogmanager.cs",
+      "docId": "AC3E0F41A4DA5F7FBBDF1CA8AE261604",
+      "contentHash": "651a6996e0a378da872ad97c8720bc3d1ac33188859db3967adc3318a060eebd",
+      "activeContentHash": "651a6996e0a378da872ad97c8720bc3d1ac33188859db3967adc3318a060eebd",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/authlinkmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/authlinkmanager.cs",
+      "docId": "5FD54F6F0C455B0FABF4A14AEB459D88",
+      "contentHash": "a8ef0569d83b582b75da0d5eb0d2e4c9b4ec3982355705d4a834b1614a1be37f",
+      "activeContentHash": "a8ef0569d83b582b75da0d5eb0d2e4c9b4ec3982355705d4a834b1614a1be37f",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/calendarmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/calendarmanager.cs",
+      "docId": "11941511F51A573A8D33F3F467737F85",
+      "contentHash": "b550edfe80ff18a184013e502d0ba8e7518d7a933a4f8985dbacbf0c738b2f14",
+      "activeContentHash": "b550edfe80ff18a184013e502d0ba8e7518d7a933a4f8985dbacbf0c738b2f14",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/defaultrolelist.cs": {
+      "filePath": "src/lagovista.useradmin/managers/defaultrolelist.cs",
+      "docId": "2FAD7B71414454638FCE67F9A4D5A038",
+      "contentHash": "f8a6ef372222847ecc46261c959c90e8052a784df139906e67a93c23b196a27a",
+      "activeContentHash": "f8a6ef372222847ecc46261c959c90e8052a784df139906e67a93c23b196a27a",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/distributionmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/distributionmanager.cs",
+      "docId": "7CEB4472A1315F06A6DE2D539326F262",
+      "contentHash": "287143c60dad6a966cdf8d6f56fc85ee081731fe601caa661a5beeb2a2ba7743",
+      "activeContentHash": "287143c60dad6a966cdf8d6f56fc85ee081731fe601caa661a5beeb2a2ba7743",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/functionmapmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/functionmapmanager.cs",
+      "docId": "EF1CA770F5695B6BAE2A9C195E391E99",
+      "contentHash": "ce4aaf5be8e542bc3fa6cc1033baa608b6d9a9b033b704aafd72985572fca313",
+      "activeContentHash": "ce4aaf5be8e542bc3fa6cc1033baa608b6d9a9b033b704aafd72985572fca313",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/holidaysetmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/holidaysetmanager.cs",
+      "docId": "EB7D0B8C77EB5D32810CA662833C561E",
+      "contentHash": "15b0664e42f6f6c8a242fde4f7e872d50e2b2443daa7dd997bb4739a4d70f398",
+      "activeContentHash": "15b0664e42f6f6c8a242fde4f7e872d50e2b2443daa7dd997bb4739a4d70f398",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/locationdiagrammanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/locationdiagrammanager.cs",
+      "docId": "72CD6C08396957A88FEB24DFEDAB6EA4",
+      "contentHash": "76ac5d430b100fcb50b3a734ea93a74b33e21d6408863af4e75ad7d229de3490",
+      "activeContentHash": "76ac5d430b100fcb50b3a734ea93a74b33e21d6408863af4e75ad7d229de3490",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/modulemanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/modulemanager.cs",
+      "docId": "DE294C46DB0D55FABDA31FAB554D725C",
+      "contentHash": "76018391b0987e565674744f25b3613d71451575a030d6768fb54e38e5c5960f",
+      "activeContentHash": "76018391b0987e565674744f25b3613d71451575a030d6768fb54e38e5c5960f",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/mostrecentlyusedmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/mostrecentlyusedmanager.cs",
+      "docId": "631E4AD6BAEF5FA18C213E0F798A9ADA",
+      "contentHash": "e0dd38ead37f528cba5eee8aec24d49dd823e2b4b088abaa74a3d02a06026520",
+      "activeContentHash": "e0dd38ead37f528cba5eee8aec24d49dd823e2b4b088abaa74a3d02a06026520",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/orgutils.cs": {
+      "filePath": "src/lagovista.useradmin/managers/orgutils.cs",
+      "docId": "456E3B9AF2D45D82BD673846E87BB883",
+      "contentHash": "ce36cd6d4ae993843644ef1cc5e180a2ce86e6f633c7db0aecfb6f858c8ec045",
+      "activeContentHash": "ce36cd6d4ae993843644ef1cc5e180a2ce86e6f633c7db0aecfb6f858c8ec045",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/passwordmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/passwordmanager.cs",
+      "docId": "3B65FB9DE4315A128251DA62EB3AFAD7",
+      "contentHash": "d85934b531d2eff0e5b9a8f58c5e14304d82276e0e27139fc6a8e99cb50e12a5",
+      "activeContentHash": "d85934b531d2eff0e5b9a8f58c5e14304d82276e0e27139fc6a8e99cb50e12a5",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/ringcentralmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/ringcentralmanager.cs",
+      "docId": "4A88DA20AB1B5C2393643331A9F2067A",
+      "contentHash": "d6aea9ee0995957879b082f2774f06bbe324fda4ea07a7daca7e305965a84e5e",
+      "activeContentHash": "d6aea9ee0995957879b082f2774f06bbe324fda4ea07a7daca7e305965a84e5e",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/rolemanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/rolemanager.cs",
+      "docId": "21A20D87C40C590F8FEDB7982F923E62",
+      "contentHash": "9a828dea9120394df26dac9dfe97bf71141c83cfa7914dc96ed439d872adbb69",
+      "activeContentHash": "9a828dea9120394df26dac9dfe97bf71141c83cfa7914dc96ed439d872adbb69",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/scheduleddowntimemanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/scheduleddowntimemanager.cs",
+      "docId": "1953D90B002C5D2DAA0F0C4C4FEECCBC",
+      "contentHash": "0ad60268113e3d56437d6a540992e4f2b6c4c9ca80c8d2e27aff49fb64d1942e",
+      "activeContentHash": "0ad60268113e3d56437d6a540992e4f2b6c4c9ca80c8d2e27aff49fb64d1942e",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/securelinkmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/securelinkmanager.cs",
+      "docId": "801969CE4A9C5D43A7DFDB8EF8CB9942",
+      "contentHash": "a17a0d6a2bfcd99da416ad4381e0793095406a174946b18649ac5261b1dc3f85",
+      "activeContentHash": "a17a0d6a2bfcd99da416ad4381e0793095406a174946b18649ac5261b1dc3f85",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/singleusetokenmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/singleusetokenmanager.cs",
+      "docId": "DD184632D548556480411B9EA921C33E",
+      "contentHash": "cae95013654217bb61957d3aa45ed010222cb5183562c1200ac24e0f9ac03a0e",
+      "activeContentHash": "cae95013654217bb61957d3aa45ed010222cb5183562c1200ac24e0f9ac03a0e",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/subscriptionmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/subscriptionmanager.cs",
+      "docId": "86A514CC0D9F5E1B9F73F367F410F9F9",
+      "contentHash": "54488088d3f393082bb8522698fd4771c30f87e73ff811c4368964062272e817",
+      "activeContentHash": "54488088d3f393082bb8522698fd4771c30f87e73ff811c4368964062272e817",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/systemnotificationmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/systemnotificationmanager.cs",
+      "docId": "AA794210E0F55D11BFFC8BBF49F641A5",
+      "contentHash": "b652e577e01e8fce7416f9d2c0f16e9b5f22a2bc47a196c87f724977e9f6d097",
+      "activeContentHash": "b652e577e01e8fce7416f9d2c0f16e9b5f22a2bc47a196c87f724977e9f6d097",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/teammanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/teammanager.cs",
+      "docId": "37EECBE1294452068743E1D7A15EFB4E",
+      "contentHash": "e74315d5b6dadcca61f3cbf4fad8ac0672f1d0d2740597b25f5ba646cc559b1f",
+      "activeContentHash": "e74315d5b6dadcca61f3cbf4fad8ac0672f1d0d2740597b25f5ba646cc559b1f",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/useraccessmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/useraccessmanager.cs",
+      "docId": "F18629AA018C5452BE4E0200F58D25EA",
+      "contentHash": "28fd8e870c4296aa456016f5bddc9ff90e41acd06234a3326cf3925f55242a49",
+      "activeContentHash": "28fd8e870c4296aa456016f5bddc9ff90e41acd06234a3326cf3925f55242a49",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/userfavoritesmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/userfavoritesmanager.cs",
+      "docId": "4D9CF19B111E508F9D7DD2D4A1D61F44",
+      "contentHash": "128fc84a7f9d3ad15c27e06eb44ca792e9392b60561614c84fe01045740a47e1",
+      "activeContentHash": "128fc84a7f9d3ad15c27e06eb44ca792e9392b60561614c84fe01045740a47e1",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/userregistrationmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/userregistrationmanager.cs",
+      "docId": "E09D7CECD87954B1887B5ADEEB673318",
+      "contentHash": "50fcc9a2936c705cc3c78720e2d33551a9929f65a1965fffe77365e266ba2c03",
+      "activeContentHash": "50fcc9a2936c705cc3c78720e2d33551a9929f65a1965fffe77365e266ba2c03",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/userrolemanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/userrolemanager.cs",
+      "docId": "DF44D96DBAFB577C80848FF30C15AACA",
+      "contentHash": "0b47c6a8dc51490ff539d0c7f43d631dafefa4ce3e6df3d64464427ba98a8890",
+      "activeContentHash": "0b47c6a8dc51490ff539d0c7f43d631dafefa4ce3e6df3d64464427ba98a8890",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/managers/userverficationmanager.cs": {
+      "filePath": "src/lagovista.useradmin/managers/userverficationmanager.cs",
+      "docId": "400CE4FEF8165CD989028EB24C1386C1",
+      "contentHash": "5f8f9d434eecdf9aa5af1b05b9a2890e527c40011ab3a707ee3f001b6fc510b2",
+      "activeContentHash": "5f8f9d434eecdf9aa5af1b05b9a2890e527c40011ab3a707ee3f001b6fc510b2",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/apps/appinstance.cs": {
+      "filePath": "src/lagovista.useradmin.models/apps/appinstance.cs",
+      "docId": "42846378E2F952188A0C891026050458",
+      "contentHash": "d362da5b59a05191286a6424a78287c21a30eca61312fdc46ab3e63e130ba2b9",
+      "activeContentHash": "d362da5b59a05191286a6424a78287c21a30eca61312fdc46ab3e63e130ba2b9",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/apps/inboxitem.cs": {
+      "filePath": "src/lagovista.useradmin.models/apps/inboxitem.cs",
+      "docId": "2FA215B29BA85DD4868709BF1543AB5A",
+      "contentHash": "646567b6a7cb034c04ec6bb06a708c8cad244df5f683e0d5b0e34f6f51517479",
+      "activeContentHash": "646567b6a7cb034c04ec6bb06a708c8cad244df5f683e0d5b0e34f6f51517479",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/apps/systemnotification.cs": {
+      "filePath": "src/lagovista.useradmin.models/apps/systemnotification.cs",
+      "docId": "33179167084C554196B39A3474B70CB7",
+      "contentHash": "af6d5668872ab01c67cacf2434321045655510f93cf1cc6eec7b4ab7511ccde8",
+      "activeContentHash": "af6d5668872ab01c67cacf2434321045655510f93cf1cc6eec7b4ab7511ccde8",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/auth/acceptinviteresponse.cs": {
+      "filePath": "src/lagovista.useradmin.models/auth/acceptinviteresponse.cs",
+      "docId": "8E4DCC1D68985F399D6C39BD30AF2D81",
+      "contentHash": "8c3bd21a928abe597b021063f71bfdb21162215977375cfa6092d4230ba86bfe",
+      "activeContentHash": "8c3bd21a928abe597b021063f71bfdb21162215977375cfa6092d4230ba86bfe",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/auth/authloginrequest.cs": {
+      "filePath": "src/lagovista.useradmin.models/auth/authloginrequest.cs",
+      "docId": "8AE677494F8F5058811FA571800D39C5",
+      "contentHash": "e381971fe350caf4fc9c7f0a3e3d30e65c483b4b76f8d390094bc2b7fc176870",
+      "activeContentHash": "e381971fe350caf4fc9c7f0a3e3d30e65c483b4b76f8d390094bc2b7fc176870",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/auth/authresponse.cs": {
+      "filePath": "src/lagovista.useradmin.models/auth/authresponse.cs",
+      "docId": "66D1FFF3E9075934A27F3AB5ED8ACF41",
+      "contentHash": "5bf82abf8476326df8784b06e2bc1d0b197987515891745514c0a33fb8788d56",
+      "activeContentHash": "5bf82abf8476326df8784b06e2bc1d0b197987515891745514c0a33fb8788d56",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/auth/createuserresponse.cs": {
+      "filePath": "src/lagovista.useradmin.models/auth/createuserresponse.cs",
+      "docId": "B068DA71D2345B328D243C690BBB5D7D",
+      "contentHash": "b2d0c807e7e35de85a005fda7d3e1246cb3475e93399e6384a8beae1f5c1c116",
+      "activeContentHash": "b2d0c807e7e35de85a005fda7d3e1246cb3475e93399e6384a8beae1f5c1c116",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/auth/userloginresponse.cs": {
+      "filePath": "src/lagovista.useradmin.models/auth/userloginresponse.cs",
+      "docId": "C20F6733A0A15EACA7B9BD123383A9D1",
+      "contentHash": "68bda09fc7e98c8c79bb2112911fcea343d37ffa7d5bb29b285fb3d93c4655d4",
+      "activeContentHash": "68bda09fc7e98c8c79bb2112911fcea343d37ffa7d5bb29b285fb3d93c4655d4",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/calendar/calendarevent.cs": {
+      "filePath": "src/lagovista.useradmin.models/calendar/calendarevent.cs",
+      "docId": "C427C0B6043E5EEDABE63E856AFD056C",
+      "contentHash": "3c0fe87d363fbc56d1ac487e9a73901c4222067ca6c8cb6bef38ce71e4b3bcd8",
+      "activeContentHash": "3c0fe87d363fbc56d1ac487e9a73901c4222067ca6c8cb6bef38ce71e4b3bcd8",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/commo/sentemail.cs": {
+      "filePath": "src/lagovista.useradmin.models/commo/sentemail.cs",
+      "docId": "7E3343E0967E5BDC90FA675F84A230CD",
+      "contentHash": "089e975e2586eec67a5335a986b45e1ef5f13f13bb1918efdf06398da665a8b1",
+      "activeContentHash": "089e975e2586eec67a5335a986b45e1ef5f13f13bb1918efdf06398da665a8b1",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/contacts/contactlist.cs": {
+      "filePath": "src/lagovista.useradmin.models/contacts/contactlist.cs",
+      "docId": "CFE97B61154A5DCD917C9A9281C89E8F",
+      "contentHash": "9319560b5b52daa785c822064d5546dab96f4af564e05d73302df1980c53aacf",
+      "activeContentHash": "9319560b5b52daa785c822064d5546dab96f4af564e05d73302df1980c53aacf",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/dtos/changepassword.cs": {
+      "filePath": "src/lagovista.useradmin.models/dtos/changepassword.cs",
+      "docId": "739FB6AFF5305C42B6494C7565EE51D5",
+      "contentHash": "dc50889ae970b0d1746953bdac906d351e1ed11d682763738051abf650b13336",
+      "activeContentHash": "dc50889ae970b0d1746953bdac906d351e1ed11d682763738051abf650b13336",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/dtos/confirmemail.cs": {
+      "filePath": "src/lagovista.useradmin.models/dtos/confirmemail.cs",
+      "docId": "AF6E643BFD735B1F9DF976C1DF3C36C1",
+      "contentHash": "94ebb464fc3864ea975ef7475af807d159c25a31c4f1c59089db0d3f80d60580",
+      "activeContentHash": "94ebb464fc3864ea975ef7475af807d159c25a31c4f1c59089db0d3f80d60580",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/dtos/inviteuser.cs": {
+      "filePath": "src/lagovista.useradmin.models/dtos/inviteuser.cs",
+      "docId": "3124903F591A5D6CA5F3B9FC011A91E6",
+      "contentHash": "d2098da739477766f2665a4eae087e5699053080632c3e6698b42c9a0242c924",
+      "activeContentHash": "d2098da739477766f2665a4eae087e5699053080632c3e6698b42c9a0242c924",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/dtos/registeruser.cs": {
+      "filePath": "src/lagovista.useradmin.models/dtos/registeruser.cs",
+      "docId": "F3EDE6F17E5F512FBD4942F93574D6B2",
+      "contentHash": "4f1d5e3acb7e496dd9091a55bd1903b0bab5a9986eac9d848fc8cd72b07182f8",
+      "activeContentHash": "4f1d5e3acb7e496dd9091a55bd1903b0bab5a9986eac9d848fc8cd72b07182f8",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/dtos/resetpassword.cs": {
+      "filePath": "src/lagovista.useradmin.models/dtos/resetpassword.cs",
+      "docId": "D9D2BFC84C4B5D86BC340FBCF317E332",
+      "contentHash": "bec6e41e1c00878744436c7d4bd2fb178fdf8169d7a3a201f1122648c86e5fdf",
+      "activeContentHash": "bec6e41e1c00878744436c7d4bd2fb178fdf8169d7a3a201f1122648c86e5fdf",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/dtos/roleaccessdto.cs": {
+      "filePath": "src/lagovista.useradmin.models/dtos/roleaccessdto.cs",
+      "docId": "3BDCD917C9E85A678F9048FC634DBDD7",
+      "contentHash": "ae2c25e65e1e2225ba30865c2baac0a3d372cb27f711ea58641190128d11152b",
+      "activeContentHash": "ae2c25e65e1e2225ba30865c2baac0a3d372cb27f711ea58641190128d11152b",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/dtos/sendresetpasswordlink.cs": {
+      "filePath": "src/lagovista.useradmin.models/dtos/sendresetpasswordlink.cs",
+      "docId": "4795917161485672A856BB171DC08288",
+      "contentHash": "d1321168367dbfc2807bb92da96317834dfb1dbdce8a624f3a7b2d586d462c61",
+      "activeContentHash": "d1321168367dbfc2807bb92da96317834dfb1dbdce8a624f3a7b2d586d462c61",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/dtos/userroledto.cs": {
+      "filePath": "src/lagovista.useradmin.models/dtos/userroledto.cs",
+      "docId": "BAA2E80134AD5F0B82E0028EADA200E3",
+      "contentHash": "f661c24397361387ae93e82f01b5cc5f299098897491c066642908d234672cc7",
+      "activeContentHash": "f661c24397361387ae93e82f01b5cc5f299098897491c066642908d234672cc7",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/dtos/verfiyphonenumber.cs": {
+      "filePath": "src/lagovista.useradmin.models/dtos/verfiyphonenumber.cs",
+      "docId": "724DCFBB64ED5452A2DACD570A856408",
+      "contentHash": "34ce494855a141818945ed07a94de5bc94202b210791d2f05af4e9c4b33abee6",
+      "activeContentHash": "34ce494855a141818945ed07a94de5bc94202b210791d2f05af4e9c4b33abee6",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/distrolist.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/distrolist.cs",
+      "docId": "22424FCD3E3D5F9F895D29745B3E3BB0",
+      "contentHash": "b1258a620e86fec98bda7c48dc8b69d3a80af4e3988d3d63aea1669f4f0383b3",
+      "activeContentHash": "b1258a620e86fec98bda7c48dc8b69d3a80af4e3988d3d63aea1669f4f0383b3",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/externalcontact.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/externalcontact.cs",
+      "docId": "B1EFB9C746305847B64ADC00DE20DD41",
+      "contentHash": "30e5e1f7e7a6dc7ef364db90cbb97648df2780771f8586c55210c757baa351d1",
+      "activeContentHash": "30e5e1f7e7a6dc7ef364db90cbb97648df2780771f8586c55210c757baa351d1",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/holidayset.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/holidayset.cs",
+      "docId": "96F02220C269512583D7FDFC5D78ECB9",
+      "contentHash": "97adafc41eaa51cbfc4b4d1d341a7c704bb0cc79b530760a5aca73408f4d388c",
+      "activeContentHash": "97adafc41eaa51cbfc4b4d1d341a7c704bb0cc79b530760a5aca73408f4d388c",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/invitation.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/invitation.cs",
+      "docId": "B1C2896411905A58A69EB6742D38E22B",
+      "contentHash": "f262e5de0d55770e900b14d91fb4aebe125e4d68f8fea8cd9e520b13dbc2ffb4",
+      "activeContentHash": "f262e5de0d55770e900b14d91fb4aebe125e4d68f8fea8cd9e520b13dbc2ffb4",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/ivalidationresult.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/ivalidationresult.cs",
+      "docId": "C37A6A0D2D555852980507A1D5A8D0F6",
+      "contentHash": "6b7a835b358dc34e9080f5a0bd1ec72ba8f152b34a6ffa8b8a597ff5779061a6",
+      "activeContentHash": "6b7a835b358dc34e9080f5a0bd1ec72ba8f152b34a6ffa8b8a597ff5779061a6",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/locationdevice.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/locationdevice.cs",
+      "docId": "C979E1E2B1425A65B24C5405BA3009BE",
+      "contentHash": "373ccc0d9b581e9f0aaf97c66ed220db752b9fbaad61bff99c64db5808734e3c",
+      "activeContentHash": "373ccc0d9b581e9f0aaf97c66ed220db752b9fbaad61bff99c64db5808734e3c",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/locationdiagram.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/locationdiagram.cs",
+      "docId": "F52A2F37B1B65202977AA9357EFC2C25",
+      "contentHash": "3f02cf9d5d0d7c27d637535952bcd546480f5b80fc200b763c8cd22015bb4766",
+      "activeContentHash": "3f02cf9d5d0d7c27d637535952bcd546480f5b80fc200b763c8cd22015bb4766",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/organization.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/organization.cs",
+      "docId": "6C2875DB7255567096631E8EB35BF0D6",
+      "contentHash": "d23182a2b8f5462a503718ab888a898efe4c5c2fce0c3c81b8793c9280011ece",
+      "activeContentHash": "d23182a2b8f5462a503718ab888a898efe4c5c2fce0c3c81b8793c9280011ece",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/organizationlocation.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/organizationlocation.cs",
+      "docId": "4EF7F44B6D675D168A20F33BE4B8DD77",
+      "contentHash": "abe5ef01fb7b8f5ad921c6d32449e838339e27663059cd58d2e9d138e92563d5",
+      "activeContentHash": "abe5ef01fb7b8f5ad921c6d32449e838339e27663059cd58d2e9d138e92563d5",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/orguser.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/orguser.cs",
+      "docId": "AAEF65C719605C32B94B09F0856B2122",
+      "contentHash": "a487e89631f9ee8cfa84c5a4390438bf4cd1c7cb15c414ff77c95da4023a2849",
+      "activeContentHash": "a487e89631f9ee8cfa84c5a4390438bf4cd1c7cb15c414ff77c95da4023a2849",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/ownedobject.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/ownedobject.cs",
+      "docId": "2DC90AE8FF1551978268F65F16AB28DA",
+      "contentHash": "955f04f8bb4c7b2e6213a7c35e7f31561c04d47d88074610abd27c189f6f34c2",
+      "activeContentHash": "955f04f8bb4c7b2e6213a7c35e7f31561c04d47d88074610abd27c189f6f34c2",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/scheduleddowntime.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/scheduleddowntime.cs",
+      "docId": "6904AAFE420B5364BF1BF19509950373",
+      "contentHash": "9c142feecbd6303323871cb35c2c4a884f0b626d3fe477547151814f857256af",
+      "activeContentHash": "9c142feecbd6303323871cb35c2c4a884f0b626d3fe477547151814f857256af",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/scheduleddowntimeperiod.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/scheduleddowntimeperiod.cs",
+      "docId": "1BDED5A9368F56419E5177DB326F6646",
+      "contentHash": "1d9d05eef156420f0689c26633de4d802968ddfe078f4416058d86d7cb68cb43",
+      "activeContentHash": "1d9d05eef156420f0689c26633de4d802968ddfe078f4416058d86d7cb68cb43",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/sublocation.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/sublocation.cs",
+      "docId": "DE91B1FC52BD5651A4D1D271F5D531B4",
+      "contentHash": "88dfdd9c0a7811e5e4bd973c73b484b9ff9c55567b34f39cc13b1ae2457c6f72",
+      "activeContentHash": "88dfdd9c0a7811e5e4bd973c73b484b9ff9c55567b34f39cc13b1ae2457c6f72",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/subscriptiondto.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/subscriptiondto.cs",
+      "docId": "34B8F3862D8B59B38293A61396DD79FA",
+      "contentHash": "b113c03398521d09c33a611a6635e10b7b301f0f3345ab23a2b3ce0b0de7e395",
+      "activeContentHash": "b113c03398521d09c33a611a6635e10b7b301f0f3345ab23a2b3ce0b0de7e395",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/subscriptionresource.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/subscriptionresource.cs",
+      "docId": "F9F8926B8E8F5C078639A3976D7251F8",
+      "contentHash": "05fb29ebcad7360c9b30430739f6d34c3dad5d9dcd9f54cbe121e6ee79080938",
+      "activeContentHash": "05fb29ebcad7360c9b30430739f6d34c3dad5d9dcd9f54cbe121e6ee79080938",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/team.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/team.cs",
+      "docId": "2CD3E7F8A2385B38B3715F3CF7903D78",
+      "contentHash": "19900494957385a2e1e1ef4893df95eff34b38db64a94ee0face0872930f2bee",
+      "activeContentHash": "19900494957385a2e1e1ef4893df95eff34b38db64a94ee0face0872930f2bee",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/teamuser.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/teamuser.cs",
+      "docId": "88B6B7ADC0735993A155D4A6029BDD29",
+      "contentHash": "edca2a3dcd8eef96acde8e3b4b78fc7019f688e23884b5902d420034b4cd9e6d",
+      "activeContentHash": "edca2a3dcd8eef96acde8e3b4b78fc7019f688e23884b5902d420034b4cd9e6d",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/orgs/theme.cs": {
+      "filePath": "src/lagovista.useradmin.models/orgs/theme.cs",
+      "docId": "0AC1667BCB9050E581C9259E7CC6C5CF",
+      "contentHash": "3ee196a4a9fa2d959a76aa94225876e11832d65e7afa334d3583c9d0d6ec847e",
+      "activeContentHash": "3ee196a4a9fa2d959a76aa94225876e11832d65e7afa334d3583c9d0d6ec847e",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/phone/calllog.cs": {
+      "filePath": "src/lagovista.useradmin.models/phone/calllog.cs",
+      "docId": "13AA3333674A50958DF292B94FC6BCC3",
+      "contentHash": "2aeb4a554ba882e5f55ec1bc265bfc3f6576a04922e3a468f2aa52e42ebbb43a",
+      "activeContentHash": "2aeb4a554ba882e5f55ec1bc265bfc3f6576a04922e3a468f2aa52e42ebbb43a",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/resources/tokens.cs": {
+      "filePath": "src/lagovista.useradmin.models/resources/tokens.cs",
+      "docId": "6663D561F69C55D8A18DF28475D89CE7",
+      "contentHash": "ec18ffc68ab2552a635e1c8bb5d1c142690dc5dd626cb186a092f0f0766b6b12",
+      "activeContentHash": "ec18ffc68ab2552a635e1c8bb5d1c142690dc5dd626cb186a092f0f0766b6b12",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/resources/useradminerrorcodes.cs": {
+      "filePath": "src/lagovista.useradmin.models/resources/useradminerrorcodes.cs",
+      "docId": "9873C932130D532C96982464ED89FAF9",
+      "contentHash": "0e7b56822ea4848cf5d8d76c063531f9b947d6c7b07c9efee86b2ed892d7c95a",
+      "activeContentHash": "0e7b56822ea4848cf5d8d76c063531f9b947d6c7b07c9efee86b2ed892d7c95a",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/security/accesslog.cs": {
+      "filePath": "src/lagovista.useradmin.models/security/accesslog.cs",
+      "docId": "90194210E5375AE08A5AFCCA2BA4B614",
+      "contentHash": "f0fd65b6170d5e760aecedacb70e73234c398c80748f61f5f654a63ff9845ae8",
+      "activeContentHash": "f0fd65b6170d5e760aecedacb70e73234c398c80748f61f5f654a63ff9845ae8",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/security/area.cs": {
+      "filePath": "src/lagovista.useradmin.models/security/area.cs",
+      "docId": "140D93E560BF568DA838547DB2C607EA",
+      "contentHash": "4b010ba0ba6a0a5c42c7cb51619ef2b2f471ea69b9a7905207f4fbe45920b2b6",
+      "activeContentHash": "4b010ba0ba6a0a5c42c7cb51619ef2b2f471ea69b9a7905207f4fbe45920b2b6",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/security/assetset.cs": {
+      "filePath": "src/lagovista.useradmin.models/security/assetset.cs",
+      "docId": "3854902200785B0BAA4C5491C6F71BC0",
+      "contentHash": "b46128fe154e38ac81c65456804f4e2c0b4aa853af526faca7875b109bc77da7",
+      "activeContentHash": "b46128fe154e38ac81c65456804f4e2c0b4aa853af526faca7875b109bc77da7",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/security/authenticationlog.cs": {
+      "filePath": "src/lagovista.useradmin.models/security/authenticationlog.cs",
+      "docId": "46D88D99712D5379BAF71A5C1A386E63",
+      "contentHash": "b8e0a418bd29f77d7cb5a54650baec169b9b86d9928aede4b96017596014d0d1",
+      "activeContentHash": "b8e0a418bd29f77d7cb5a54650baec169b9b86d9928aede4b96017596014d0d1",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/security/feature.cs": {
+      "filePath": "src/lagovista.useradmin.models/security/feature.cs",
+      "docId": "B7228CC731FF57AAA60553AB196DC867",
+      "contentHash": "13288fcf9f9c0e80c21b7f968e0b2741658b021cec508b7bb2559f486267f90d",
+      "activeContentHash": "13288fcf9f9c0e80c21b7f968e0b2741658b021cec508b7bb2559f486267f90d",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/security/functionmap.cs": {
+      "filePath": "src/lagovista.useradmin.models/security/functionmap.cs",
+      "docId": "4AA23C4989835886B99A13280185C710",
+      "contentHash": "56a8ab7646e7a682cb2dce80d48551b6781979a17f0d1844f2959d04c9d27133",
+      "activeContentHash": "56a8ab7646e7a682cb2dce80d48551b6781979a17f0d1844f2959d04c9d27133",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/security/helpresource.cs": {
+      "filePath": "src/lagovista.useradmin.models/security/helpresource.cs",
+      "docId": "C42CD293483E5EA6B0F66391953885EA",
+      "contentHash": "ad50199e8e5e7157e696a73a3a066e43e4f0bdd1b82380f72ab26bef16e9d3b9",
+      "activeContentHash": "ad50199e8e5e7157e696a73a3a066e43e4f0bdd1b82380f72ab26bef16e9d3b9",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/security/locationuserroles.cs": {
+      "filePath": "src/lagovista.useradmin.models/security/locationuserroles.cs",
+      "docId": "693813939037586783346B825A2230A5",
+      "contentHash": "96f6240c2e6c916ef97fa4d61eef043dd697cf4c9d720d8cecfd51ddb7828362",
+      "activeContentHash": "96f6240c2e6c916ef97fa4d61eef043dd697cf4c9d720d8cecfd51ddb7828362",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/security/managedasset.cs": {
+      "filePath": "src/lagovista.useradmin.models/security/managedasset.cs",
+      "docId": "0747087E55B85C899C733F2980B19529",
+      "contentHash": "14a5c078f44e3060aba60ba59a0e730ed5d5605d70a4ec0343eadcb2ca9d0697",
+      "activeContentHash": "14a5c078f44e3060aba60ba59a0e730ed5d5605d70a4ec0343eadcb2ca9d0697",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/security/module.cs": {
+      "filePath": "src/lagovista.useradmin.models/security/module.cs",
+      "docId": "4AF13EF276A757C98E77390BAB83CB5F",
+      "contentHash": "71c1e3def3868fd6debb6f2ad84266e6c3efb475bdbcc6116c846dc0691bbb0f",
+      "activeContentHash": "71c1e3def3868fd6debb6f2ad84266e6c3efb475bdbcc6116c846dc0691bbb0f",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/security/page.cs": {
+      "filePath": "src/lagovista.useradmin.models/security/page.cs",
+      "docId": "73335CD0A3AD5D4FBABC1C1B6259623E",
+      "contentHash": "ab28b87066b85f2eb3026e42b87d86f8dd8900a2c297069d3b660685cbe9ed8e",
+      "activeContentHash": "ab28b87066b85f2eb3026e42b87d86f8dd8900a2c297069d3b660685cbe9ed8e",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/security/roleaccess.cs": {
+      "filePath": "src/lagovista.useradmin.models/security/roleaccess.cs",
+      "docId": "598B5115650F53E1AA8DC0322FCB309C",
+      "contentHash": "63581d20a256b8c2a570b7483ce23834693bba07570c1fbff14509636f49da7d",
+      "activeContentHash": "63581d20a256b8c2a570b7483ce23834693bba07570c1fbff14509636f49da7d",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/security/securelink.cs": {
+      "filePath": "src/lagovista.useradmin.models/security/securelink.cs",
+      "docId": "10805269E516537EB965EE6B369AFAD4",
+      "contentHash": "971ced5705a78661993c68be72c701711624fc051549574ea730840f59d93078",
+      "activeContentHash": "971ced5705a78661993c68be72c701711624fc051549574ea730840f59d93078",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/security/twitter.cs": {
+      "filePath": "src/lagovista.useradmin.models/security/twitter.cs",
+      "docId": "113F89B9797859D5A1B72F3E0BB4FA89",
+      "contentHash": "1e3e2ae0ba9facdd879a349d03cc4aca5db3d98b4c03a2f0ec14dea527159eeb",
+      "activeContentHash": "1e3e2ae0ba9facdd879a349d03cc4aca5db3d98b4c03a2f0ec14dea527159eeb",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/security/twitterrequesttoken.cs": {
+      "filePath": "src/lagovista.useradmin.models/security/twitterrequesttoken.cs",
+      "docId": "43E1C9754B775F4FB8B858DF1F5B97C2",
+      "contentHash": "4418755eb4d0589a7beab1937a9bab58d21c8710d9fb0a1cbba538887c3491cc",
+      "activeContentHash": "4418755eb4d0589a7beab1937a9bab58d21c8710d9fb0a1cbba538887c3491cc",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/security/uicategory.cs": {
+      "filePath": "src/lagovista.useradmin.models/security/uicategory.cs",
+      "docId": "F38F65F3FDB65A5AA479EAE2CC7B6B70",
+      "contentHash": "f0417e886658ce8890d21829abd2224e2ca881e3ca5b3250bdd6e44031f5f8af",
+      "activeContentHash": "f0417e886658ce8890d21829abd2224e2ca881e3ca5b3250bdd6e44031f5f8af",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/security/useraccess.cs": {
+      "filePath": "src/lagovista.useradmin.models/security/useraccess.cs",
+      "docId": "3CB8DCC6A63857BBB9359C6703593141",
+      "contentHash": "3a43843a4bb54d7892e8fcb06a28b9f33e107aca60fb86a7217296d00158b1e2",
+      "activeContentHash": "3a43843a4bb54d7892e8fcb06a28b9f33e107aca60fb86a7217296d00158b1e2",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/users/appuser.cs": {
+      "filePath": "src/lagovista.useradmin.models/users/appuser.cs",
+      "docId": "8B9F0795A97359B9B4A94D40B84ECDCD",
+      "contentHash": "b4f63aea939315f0d1a58222a6d149399add0af295d6e5573d78227fc8a4b365",
+      "activeContentHash": "b4f63aea939315f0d1a58222a6d149399add0af295d6e5573d78227fc8a4b365",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/users/appuserinboxitem.cs": {
+      "filePath": "src/lagovista.useradmin.models/users/appuserinboxitem.cs",
+      "docId": "E1ECD85998535BE4BC31DF9071F2977A",
+      "contentHash": "0e4c1c82c5edef14567547fb0d2356b8315db3818eac92b7e4c2c5bce6b422ec",
+      "activeContentHash": "0e4c1c82c5edef14567547fb0d2356b8315db3818eac92b7e4c2c5bce6b422ec",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/users/coreuserinfo.cs": {
+      "filePath": "src/lagovista.useradmin.models/users/coreuserinfo.cs",
+      "docId": "8E75265AA88251598561A46E029EBD72",
+      "contentHash": "bd80787c6a713a46eaa4842696ef070505b3f566be25db02af633c991c243880",
+      "activeContentHash": "bd80787c6a713a46eaa4842696ef070505b3f566be25db02af633c991c243880",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/users/deviceowneruser.cs": {
+      "filePath": "src/lagovista.useradmin.models/users/deviceowneruser.cs",
+      "docId": "22FF202610495841ADFF15863A3E52CE",
+      "contentHash": "ceaea29532ad712bf6da4834b2db84355263f31012f8744fa6e95ec8105c3378",
+      "activeContentHash": "ceaea29532ad712bf6da4834b2db84355263f31012f8744fa6e95ec8105c3378",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/users/locationuser.cs": {
+      "filePath": "src/lagovista.useradmin.models/users/locationuser.cs",
+      "docId": "462B8A0C299852EBB6C1D034753A485D",
+      "contentHash": "62d36391c020375090eda7963c00f16d07889c80bfa2029c9c93217709741f0a",
+      "activeContentHash": "62d36391c020375090eda7963c00f16d07889c80bfa2029c9c93217709741f0a",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/users/mostrecentlyused.cs": {
+      "filePath": "src/lagovista.useradmin.models/users/mostrecentlyused.cs",
+      "docId": "AF42E734705559219BCC369EB453173C",
+      "contentHash": "c3b526e49e6318f01cc6389d4a65310c17ac17754b2e72f4262724c4607a920d",
+      "activeContentHash": "c3b526e49e6318f01cc6389d4a65310c17ac17754b2e72f4262724c4607a920d",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/users/notificationcontact.cs": {
+      "filePath": "src/lagovista.useradmin.models/users/notificationcontact.cs",
+      "docId": "395E07D0B1B158EB80926FFA33339F80",
+      "contentHash": "00c2e449816025d25d84c3f78241d736a3f31e764b72fa3c4152de15fdc2dd8c",
+      "activeContentHash": "00c2e449816025d25d84c3f78241d736a3f31e764b72fa3c4152de15fdc2dd8c",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/users/paymentaccounts.cs": {
+      "filePath": "src/lagovista.useradmin.models/users/paymentaccounts.cs",
+      "docId": "7A657E36E02C58B9B1DB0CCD026AE2BD",
+      "contentHash": "bfbbac7197c513b5f05dc2c99e7312da6a2b6c5523abaf6dcef4d53b81f1b6da",
+      "activeContentHash": "bfbbac7197c513b5f05dc2c99e7312da6a2b6c5523abaf6dcef4d53b81f1b6da",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/users/pushnotificationchannel.cs": {
+      "filePath": "src/lagovista.useradmin.models/users/pushnotificationchannel.cs",
+      "docId": "A82E62578BB452F493C8AA1CD66E2288",
+      "contentHash": "c76ef996334ff9f8cf7dd7a61c05172f0737121865423a9aee03e8b21b85ece3",
+      "activeContentHash": "c76ef996334ff9f8cf7dd7a61c05172f0737121865423a9aee03e8b21b85ece3",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/users/role.cs": {
+      "filePath": "src/lagovista.useradmin.models/users/role.cs",
+      "docId": "FE1BD6491B595C109B14DA4FE94821D5",
+      "contentHash": "19bc7cdac12e03cbf1b420229d7b3035686260fd1fb033262044a02a264c96f8",
+      "activeContentHash": "19bc7cdac12e03cbf1b420229d7b3035686260fd1fb033262044a02a264c96f8",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/users/singleusetoken.cs": {
+      "filePath": "src/lagovista.useradmin.models/users/singleusetoken.cs",
+      "docId": "82297053124B5FC6B66BE70AB739BF18",
+      "contentHash": "ae848b7301711b694c67860473fe14a9dbf8f3b5dd450fd3e352d7fc29393308",
+      "activeContentHash": "ae848b7301711b694c67860473fe14a9dbf8f3b5dd450fd3e352d7fc29393308",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/users/userfavorite.cs": {
+      "filePath": "src/lagovista.useradmin.models/users/userfavorite.cs",
+      "docId": "A4DDFED1433C5094AB768361D0D2EA7D",
+      "contentHash": "14a0b86760a9b5037457be46c48c62aabb0574b42334c59d044a229719f606d7",
+      "activeContentHash": "14a0b86760a9b5037457be46c48c62aabb0574b42334c59d044a229719f606d7",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/users/userrole.cs": {
+      "filePath": "src/lagovista.useradmin.models/users/userrole.cs",
+      "docId": "C5D7C608D813552F8A6DFF7F8AC03BD8",
+      "contentHash": "c8775610f43da30a88e8f57e7ef9f5ce9c21d6b0e5be7b0f420c99dbedc032a9",
+      "activeContentHash": "c8775610f43da30a88e8f57e7ef9f5ce9c21d6b0e5be7b0f420c99dbedc032a9",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos.rdbms/models/rdbmsappuser.cs": {
+      "filePath": "src/lagovista.useradmin.repos.rdbms/models/rdbmsappuser.cs",
+      "docId": "C01635FF583C5C18972459BCFFC8F165",
+      "contentHash": "5294c73f931408e726d2887d18b6390953148255fda6913acb695d46fdd3ac54",
+      "activeContentHash": "5294c73f931408e726d2887d18b6390953148255fda6913acb695d46fdd3ac54",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos.rdbms/models/rdbmsorg.cs": {
+      "filePath": "src/lagovista.useradmin.repos.rdbms/models/rdbmsorg.cs",
+      "docId": "5A702829CE155CEB9C5CD80014515EBD",
+      "contentHash": "b0946e6ae96f784755c6f598d56764af9d51ddc50a8113720827694bd21917a4",
+      "activeContentHash": "b0946e6ae96f784755c6f598d56764af9d51ddc50a8113720827694bd21917a4",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/distribution/uniquedistributiontests.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/distribution/uniquedistributiontests.cs",
+      "docId": "E06393748BA05814923FBAAF8AD0CE6B",
+      "contentHash": "93902a8781d9de84b489266a0cd289ffc40861e2682f13e440237706fabff27f",
+      "activeContentHash": "93902a8781d9de84b489266a0cd289ffc40861e2682f13e440237706fabff27f",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/emailintegrationtests/contactimporttests.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/emailintegrationtests/contactimporttests.cs",
+      "docId": "3EA2D10F750457F291A42DDD7BC71759",
+      "contentHash": "9aa7a76275287181719dbe7e29802fe499264de41465c825a6770c2d75fc67a3",
+      "activeContentHash": "9aa7a76275287181719dbe7e29802fe499264de41465c825a6770c2d75fc67a3",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/emailintegrationtests/contactintegration.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/emailintegrationtests/contactintegration.cs",
+      "docId": "2D0DB7843CF051F4A430CFAC7598674B",
+      "contentHash": "8ad9c12707c135743b417b34a7fc68c4856ad5deabd688e92932133c26b581dd",
+      "activeContentHash": "8ad9c12707c135743b417b34a7fc68c4856ad5deabd688e92932133c26b581dd",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/emailintegrationtests/emailapi.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/emailintegrationtests/emailapi.cs",
+      "docId": "AB2456D046295341BE318F174A535BFC",
+      "contentHash": "1a4a6b63c318e06b01a1828f62954616349990832999534989255a485dd8b61c",
+      "activeContentHash": "1a4a6b63c318e06b01a1828f62954616349990832999534989255a485dd8b61c",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/emailintegrationtests/emaildesigntests.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/emailintegrationtests/emaildesigntests.cs",
+      "docId": "D43EABE275805931A414034871193F8A",
+      "contentHash": "995a38ba7167fc650ec14c3567bf6290445d9cb17e0e5c00bf3c57a7871bce2f",
+      "activeContentHash": "995a38ba7167fc650ec14c3567bf6290445d9cb17e0e5c00bf3c57a7871bce2f",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/emailintegrationtests/emaillistsending.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/emailintegrationtests/emaillistsending.cs",
+      "docId": "CFD4F2E13C815E70BA5737C202C10462",
+      "contentHash": "fd845458e965cebbb9847d7e098908b4cd4e8ff34e952cc5b211b5db1e8d609b",
+      "activeContentHash": "fd845458e965cebbb9847d7e098908b4cd4e8ff34e952cc5b211b5db1e8d609b",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/subscriptiontests/subscriptions.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/subscriptiontests/subscriptions.cs",
+      "docId": "1E66D6052DBF5DA8A271D775051E444D",
+      "contentHash": "7b0b04718c68b48e4ce4ecc53163dec74f1101a581929076c719c9d8a77ec583",
+      "activeContentHash": "7b0b04718c68b48e4ce4ecc53163dec74f1101a581929076c719c9d8a77ec583",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/teamsintegration/calendartests.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/teamsintegration/calendartests.cs",
+      "docId": "3BAD10C82A5555B790FF4D1DFEA398D4",
+      "contentHash": "dff0ec7f37f3b4fdd07c190799f1cf3f00630bd14b513db369e40a47d952b291",
+      "activeContentHash": "dff0ec7f37f3b4fdd07c190799f1cf3f00630bd14b513db369e40a47d952b291",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/tokentests/authtokentests.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/tokentests/authtokentests.cs",
+      "docId": "946210875E9054E7AF33F6B404789AF8",
+      "contentHash": "5cede585205c1df8321d4321be2eedb2e1403df19e3af9cd30d24ed3b9bd66a3",
+      "activeContentHash": "5cede585205c1df8321d4321be2eedb2e1403df19e3af9cd30d24ed3b9bd66a3",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/user/adminconnectivitysettings.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/user/adminconnectivitysettings.cs",
+      "docId": "ECD15CFF59C05ED080CCCA719E6D902F",
+      "contentHash": "465a09d1d3cabbb4f312eb62c11ba06c9afeeac781cd0216bcf6ee099136bfea",
+      "activeContentHash": "465a09d1d3cabbb4f312eb62c11ba06c9afeeac781cd0216bcf6ee099136bfea",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/user/areaaccesstests.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/user/areaaccesstests.cs",
+      "docId": "EA30FB4B72CA5DA7A1C0F72877706D7C",
+      "contentHash": "d6abf70cbb1db240fd16606d188786186f3c34b68eab9fcbb3b24a5395138224",
+      "activeContentHash": "d6abf70cbb1db240fd16606d188786186f3c34b68eab9fcbb3b24a5395138224",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/user/featureaccesstests.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/user/featureaccesstests.cs",
+      "docId": "90449755B4165BE9BE3BAF4C5EB14475",
+      "contentHash": "e204eb724cc6815d40460fe2e7fab11b7e0f1b3265371ce9b8bc0169d08a783b",
+      "activeContentHash": "e204eb724cc6815d40460fe2e7fab11b7e0f1b3265371ce9b8bc0169d08a783b",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/user/moduleaccesstests.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/user/moduleaccesstests.cs",
+      "docId": "D56D417B4A205CE3B4E3DB4AE53FB8E4",
+      "contentHash": "9694d8a26960852d59535f021dc8e193777999ec4d6a1e22eeb35edc180e5732",
+      "activeContentHash": "9694d8a26960852d59535f021dc8e193777999ec4d6a1e22eeb35edc180e5732",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/user/pageaccesstest.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/user/pageaccesstest.cs",
+      "docId": "40A68085681A56C5AB70A55BDBBA5721",
+      "contentHash": "7699847a1693785e288bf9c9cad00ee2eb307a60f3ae2c223b4810af77e6cb21",
+      "activeContentHash": "7699847a1693785e288bf9c9cad00ee2eb307a60f3ae2c223b4810af77e6cb21",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/user/securityintegrationtests.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/user/securityintegrationtests.cs",
+      "docId": "3CBD2C42B6A5572B815FBE475F40BF79",
+      "contentHash": "b5796c21795de1b1ff4ed66053b1aa2b23b0873ad8df1173affd553b75dcd65a",
+      "activeContentHash": "b5796c21795de1b1ff4ed66053b1aa2b23b0873ad8df1173affd553b75dcd65a",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "tests/lagovista.useradmin.tests/user/userorgrdbmstest.cs": {
+      "filePath": "tests/lagovista.useradmin.tests/user/userorgrdbmstest.cs",
+      "docId": "337C2253B70F57C8BAAB3923B8A2CA11",
+      "contentHash": "b498f47c4526daa352f24e13bfc06e33a91ac5787a7fbb8b0a8ab0a2f3537219",
+      "activeContentHash": "b498f47c4526daa352f24e13bfc06e33a91ac5787a7fbb8b0a8ab0a2f3537219",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/iaccessmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/iaccessmanager.cs",
+      "docId": "CCC19EED1259596E9763F484E560E1F7",
+      "contentHash": "82e3336144ee85e4f55e9f775e81c07332f3f808bfc1155a02514cdf30bd9155",
+      "activeContentHash": "82e3336144ee85e4f55e9f775e81c07332f3f808bfc1155a02514cdf30bd9155",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/iappinstancemanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/iappinstancemanager.cs",
+      "docId": "E169E3E05FC35A6AA277314200B83722",
+      "contentHash": "24da4364fe12d865314f4990264a746aea5aede3cd476682e524a86d217ffcc2",
+      "activeContentHash": "24da4364fe12d865314f4990264a746aea5aede3cd476682e524a86d217ffcc2",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/iappuserinboxmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/iappuserinboxmanager.cs",
+      "docId": "D1B986E12EC55C5C81136A84B0C0F829",
+      "contentHash": "fd7900c929abe49797df05077a35e3509264be901807aa1dfab55aba5538429b",
+      "activeContentHash": "fd7900c929abe49797df05077a35e3509264be901807aa1dfab55aba5538429b",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/iappusermanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/iappusermanager.cs",
+      "docId": "45A9C2F5910E539F8ABA4A1EF6AE80D7",
+      "contentHash": "b41b1582c2cd142a3c6ac22a953be05e67df9f719f627ec93897da2386d19f80",
+      "activeContentHash": "b41b1582c2cd142a3c6ac22a953be05e67df9f719f627ec93897da2386d19f80",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/iassetsetmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/iassetsetmanager.cs",
+      "docId": "3D81E3893DF9513BAD2E2925501495CD",
+      "contentHash": "6adb08c7caf3bc0251d0172884dccfcd7a7785cbf6e0477028ec98c6043d52ea",
+      "activeContentHash": "6adb08c7caf3bc0251d0172884dccfcd7a7785cbf6e0477028ec98c6043d52ea",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/iauthenticationlogmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/iauthenticationlogmanager.cs",
+      "docId": "2A428E2CF20754AF9044918E0E118CAE",
+      "contentHash": "39acea471df384783a5f08809ab9980ef2b8bc8b598804bdba8e3b22c0041057",
+      "activeContentHash": "39acea471df384783a5f08809ab9980ef2b8bc8b598804bdba8e3b22c0041057",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/icalendarmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/icalendarmanager.cs",
+      "docId": "7430124F5840599F8C06BB80F5EA2B5E",
+      "contentHash": "5060d2e60c16db1f89349bc775ed9101db9fc9087032a93ecf7da2095b52eafa",
+      "activeContentHash": "5060d2e60c16db1f89349bc775ed9101db9fc9087032a93ecf7da2095b52eafa",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/icalllogmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/icalllogmanager.cs",
+      "docId": "B75B570C051154ADB33D96D73EEA7382",
+      "contentHash": "f46134cf2f7da35d58c2b745a4763fd0af9b84dec70b31f54e87074f3dab1bf9",
+      "activeContentHash": "f46134cf2f7da35d58c2b745a4763fd0af9b84dec70b31f54e87074f3dab1bf9",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/idistributionmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/idistributionmanager.cs",
+      "docId": "E36D489B2BAA5D29AD28154A5FE21547",
+      "contentHash": "ba1d16cb7d8b26a9746de3fecd43d0ea400ee92937b7f77cb736ad592be11c22",
+      "activeContentHash": "ba1d16cb7d8b26a9746de3fecd43d0ea400ee92937b7f77cb736ad592be11c22",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/iemailsender.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/iemailsender.cs",
+      "docId": "06B93C034F805C79A2936CBD6FC0606D",
+      "contentHash": "9f04356d6d53107f2a09bef603635e30cb696932ad726d040c1b5ef6264def07",
+      "activeContentHash": "9f04356d6d53107f2a09bef603635e30cb696932ad726d040c1b5ef6264def07",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/ifunctionmapmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/ifunctionmapmanager.cs",
+      "docId": "CDFC21DB34335A7D80250FA9EFE9472C",
+      "contentHash": "258d6bcd79514776c4df3c10a1fd5e3ddc25087e7df3f775f4fc1da8fffa2429",
+      "activeContentHash": "258d6bcd79514776c4df3c10a1fd5e3ddc25087e7df3f775f4fc1da8fffa2429",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/iholidaysetmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/iholidaysetmanager.cs",
+      "docId": "508D010933A15F50B771104A426B31BE",
+      "contentHash": "64fc8cbc4646a8547f4a82d7b3eea5c663942e2823548d8f795dedb394feb1c5",
+      "activeContentHash": "64fc8cbc4646a8547f4a82d7b3eea5c663942e2823548d8f795dedb394feb1c5",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/ilocationdiagrammanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/ilocationdiagrammanager.cs",
+      "docId": "756DA37010AE5DCA92CA12AE9BD490A7",
+      "contentHash": "7f2804366ccee5f79bb958629346a48197e8c12e48a63741c02771b732c02407",
+      "activeContentHash": "7f2804366ccee5f79bb958629346a48197e8c12e48a63741c02771b732c02407",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/imodulemanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/imodulemanager.cs",
+      "docId": "976DCE45CEA556BF8EBDE12A7B4317EB",
+      "contentHash": "836fd74b2354ed453b6c1d183d19e142580a207cd7ec7971b95b8b614533009f",
+      "activeContentHash": "836fd74b2354ed453b6c1d183d19e142580a207cd7ec7971b95b8b614533009f",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/imostrecentlyusedmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/imostrecentlyusedmanager.cs",
+      "docId": "A99914E8EB0D5251A362990C2923316D",
+      "contentHash": "ac74f4e3b2552da39864677d6446e79e3c9aee2a2a026bf3ab8fbe51228a4733",
+      "activeContentHash": "ac74f4e3b2552da39864677d6446e79e3c9aee2a2a026bf3ab8fbe51228a4733",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/iorganizationmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/iorganizationmanager.cs",
+      "docId": "DA2F4D89C52E56B9A34408DFFAA8DC75",
+      "contentHash": "9f9eaf9b66c740f924100274b390105ae8423364c73329082c762fb02870a777",
+      "activeContentHash": "9f9eaf9b66c740f924100274b390105ae8423364c73329082c762fb02870a777",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/ipasswordmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/ipasswordmanager.cs",
+      "docId": "BAE76D3ABDFF5805A6F41440EA12879B",
+      "contentHash": "f8fa56087a3c6757731a864a16bd45cc7b62ea4d4d2497c4d7abc43585d8bd3b",
+      "activeContentHash": "f8fa56087a3c6757731a864a16bd45cc7b62ea4d4d2497c4d7abc43585d8bd3b",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/ipaymentcustomers.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/ipaymentcustomers.cs",
+      "docId": "A32AB554ED225B939D91D6E3CEEAB4DE",
+      "contentHash": "88c2fe4a32eb428707d66366a30af10e23a8b09282cd3e6568756b6375c25622",
+      "activeContentHash": "88c2fe4a32eb428707d66366a30af10e23a8b09282cd3e6568756b6375c25622",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/ipushnotificationsender.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/ipushnotificationsender.cs",
+      "docId": "8C839F6F0B4653129592C80E94D8812D",
+      "contentHash": "35ef3c5ca086f3abe3e066e42c929b32aaa87d0bada9dc77217ce087619c539f",
+      "activeContentHash": "35ef3c5ca086f3abe3e066e42c929b32aaa87d0bada9dc77217ce087619c539f",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/irdbmsmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/irdbmsmanager.cs",
+      "docId": "D1489B36EB01588C94A0B66538459C0F",
+      "contentHash": "d2e7e3f1308e9e7d3d57602246f6e472f1aac9aedba6f177ee6c1ca147e96bc3",
+      "activeContentHash": "d2e7e3f1308e9e7d3d57602246f6e472f1aac9aedba6f177ee6c1ca147e96bc3",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/irolemanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/irolemanager.cs",
+      "docId": "4E80010E547F58349C1A21566C284574",
+      "contentHash": "c17be8ac02135574f5c193f934b9ea8e914fb5724231323a9ce85531ff9b00bf",
+      "activeContentHash": "c17be8ac02135574f5c193f934b9ea8e914fb5724231323a9ce85531ff9b00bf",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/ischeduleddowntimemanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/ischeduleddowntimemanager.cs",
+      "docId": "1E3E9C849FF05556A6CA2DDEEAC51E05",
+      "contentHash": "38eb085da28057d1e766569906b1acf7dc1826544f1657dbbdea6560689708c0",
+      "activeContentHash": "38eb085da28057d1e766569906b1acf7dc1826544f1657dbbdea6560689708c0",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/isecurelinkmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/isecurelinkmanager.cs",
+      "docId": "95105FBED8ED56208FE49269C7BB698F",
+      "contentHash": "e242a42f890ae12ec3f3469908d0340a214d9c3b4e355de2319066ecd48898ed",
+      "activeContentHash": "e242a42f890ae12ec3f3469908d0340a214d9c3b4e355de2319066ecd48898ed",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/isigninmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/isigninmanager.cs",
+      "docId": "A95374BE058A58F8BD58D75BD29A36AE",
+      "contentHash": "23d0895804ff0da1159dcb7d92b7faa9703e0057f2688b876b5b378a108b726c",
+      "activeContentHash": "23d0895804ff0da1159dcb7d92b7faa9703e0057f2688b876b5b378a108b726c",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/ismssender.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/ismssender.cs",
+      "docId": "F4349A607C2852D39921DCD0034AC351",
+      "contentHash": "cea32aaecff5c3c1583921ef7079bf9b71ed5f4238d4f7db29663ee763db57f4",
+      "activeContentHash": "cea32aaecff5c3c1583921ef7079bf9b71ed5f4238d4f7db29663ee763db57f4",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/isubscriptionmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/isubscriptionmanager.cs",
+      "docId": "C89110BA840F5D049631AA726188ADA5",
+      "contentHash": "7eb05a40077df8967021bc2956d5175e467d0efe6c2efe37eec5b941bf65ab8c",
+      "activeContentHash": "7eb05a40077df8967021bc2956d5175e467d0efe6c2efe37eec5b941bf65ab8c",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/isystemnotificationmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/isystemnotificationmanager.cs",
+      "docId": "DB5254A624A155C5B6EB3BE98D72CA60",
+      "contentHash": "0c800e36886a65b67518ab9686ab13ee59934d2aff731c6185a1deee5a947a4d",
+      "activeContentHash": "0c800e36886a65b67518ab9686ab13ee59934d2aff731c6185a1deee5a947a4d",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/iteammanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/iteammanager.cs",
+      "docId": "F6517B6BD7925C55986CC3E8D2AFBECE",
+      "contentHash": "9e109bd7578acb3f9683124b293552450fba9e7509c51fce5c3e7683022e9bf8",
+      "activeContentHash": "9e109bd7578acb3f9683124b293552450fba9e7509c51fce5c3e7683022e9bf8",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/iuserfavoritesmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/iuserfavoritesmanager.cs",
+      "docId": "9CD9247E1B7855E1A4710347BF7A04AD",
+      "contentHash": "6445cf61658e07a6870297cee8e5c9b99993b5a628c59bf5893341f698ad52cf",
+      "activeContentHash": "6445cf61658e07a6870297cee8e5c9b99993b5a628c59bf5893341f698ad52cf",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/iusermanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/iusermanager.cs",
+      "docId": "94B077629A4655B5BC0199A47C05C7C7",
+      "contentHash": "e43afab9b2a054a1ca04fb10f8c21b63ca3db9ea8e270479c10b29d56461f546",
+      "activeContentHash": "e43afab9b2a054a1ca04fb10f8c21b63ca3db9ea8e270479c10b29d56461f546",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/iuserregistrationmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/iuserregistrationmanager.cs",
+      "docId": "998AC9CAE2735E759DBEB618944202CC",
+      "contentHash": "6950fbfda728e21399918ff19efc0123be65c6889836baad24c532198d73ac40",
+      "activeContentHash": "6950fbfda728e21399918ff19efc0123be65c6889836baad24c532198d73ac40",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/iuserrolemanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/iuserrolemanager.cs",
+      "docId": "4FD1ABBE2B4A578AA487A7AD9F91E6F2",
+      "contentHash": "8bfa7d8a97c048d75b1b1236c3dcd1c63099cd01bf6878ac909c50ed25d291a9",
+      "activeContentHash": "8bfa7d8a97c048d75b1b1236c3dcd1c63099cd01bf6878ac909c50ed25d291a9",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/managers/iuserverficationmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/managers/iuserverficationmanager.cs",
+      "docId": "832FA4F1E21B5BFF9578E77035EC091E",
+      "contentHash": "303567a8238be8d42605d14863e886a4cdc0c5ea9cfe5cdd80e0f75e4aee0f25",
+      "activeContentHash": "303567a8238be8d42605d14863e886a4cdc0c5ea9cfe5cdd80e0f75e4aee0f25",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/irefreshtokenrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/irefreshtokenrepo.cs",
+      "docId": "8AFF0672541258F19C1645649DB6D4FA",
+      "contentHash": "b99f1244c6fd57f0e567e574b7966009fdda2780512cb47eeb641a26e5dea440",
+      "activeContentHash": "b99f1244c6fd57f0e567e574b7966009fdda2780512cb47eeb641a26e5dea440",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/manageusers/changepasswordviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/manageusers/changepasswordviewmodel.cs",
+      "docId": "B852451774565CDD8F25F945AC7927F7",
+      "contentHash": "c26438c3d0ab8f6a39e32af121c998e44ab6e434d6e007820627cdfc7df04a2e",
+      "activeContentHash": "c26438c3d0ab8f6a39e32af121c998e44ab6e434d6e007820627cdfc7df04a2e",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/manageusers/indexviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/manageusers/indexviewmodel.cs",
+      "docId": "E9A2074FC42A57B0B05B05C76D173D36",
+      "contentHash": "f83c19146623d850c169061c76d2ac30c0b07de2f9823e7b0e0ada1969444f17",
+      "activeContentHash": "f83c19146623d850c169061c76d2ac30c0b07de2f9823e7b0e0ada1969444f17",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/manageusers/setpasswordviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/manageusers/setpasswordviewmodel.cs",
+      "docId": "55F43B5917A75747A89752D9CA58BCE6",
+      "contentHash": "a1da2937c85c8e46f53f23b1c7e92da6ebbd41ff2dd15f70a032e69b934551ac",
+      "activeContentHash": "a1da2937c85c8e46f53f23b1c7e92da6ebbd41ff2dd15f70a032e69b934551ac",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/organization/acceptinviteviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/organization/acceptinviteviewmodel.cs",
+      "docId": "6C70B86F40B85834A69CB09AEEAFC95D",
+      "contentHash": "3e0054adfbd1259fc154297cf5f62aa7bf33a91bcdfe4e7d6cb95cbea4d908ca",
+      "activeContentHash": "3e0054adfbd1259fc154297cf5f62aa7bf33a91bcdfe4e7d6cb95cbea4d908ca",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/organization/createlocationviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/organization/createlocationviewmodel.cs",
+      "docId": "440BE45EDEBB5FA48535E698A9BBF980",
+      "contentHash": "ede975cad5c36c7bd3a0d35c631c9cac538eb41071dc6fc6c3121d1c979a520c",
+      "activeContentHash": "ede975cad5c36c7bd3a0d35c631c9cac538eb41071dc6fc6c3121d1c979a520c",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/organization/createorganizationviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/organization/createorganizationviewmodel.cs",
+      "docId": "CBB28A60B1F55D0A990DD5CFFC239C47",
+      "contentHash": "5134a70371ffe9291936e3123f0f27cae7bbc53d58507a9b02681ac772269736",
+      "activeContentHash": "5134a70371ffe9291936e3123f0f27cae7bbc53d58507a9b02681ac772269736",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/organization/inviteuserviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/organization/inviteuserviewmodel.cs",
+      "docId": "BF35299F57465BDABD2CC8011A9C3141",
+      "contentHash": "da73df1f278c109ffa73e5c1d15e249d8f8b76b0098175eadf594cde2130528a",
+      "activeContentHash": "da73df1f278c109ffa73e5c1d15e249d8f8b76b0098175eadf594cde2130528a",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/organization/locationviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/organization/locationviewmodel.cs",
+      "docId": "05719EB7BBC651FEADF2BC7F5E0247AE",
+      "contentHash": "49a48da6a74fb119f7ea1eae0048467e0d1c865942ece053c4323df7976587bd",
+      "activeContentHash": "49a48da6a74fb119f7ea1eae0048467e0d1c865942ece053c4323df7976587bd",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/organization/organizationdetailsviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/organization/organizationdetailsviewmodel.cs",
+      "docId": "775AC0F02FB85129A903648AC4DDF03E",
+      "contentHash": "a9bbb1e9d3a504a577307a5a38d0f760ef57e04af678593c70cb7d7d1aa73508",
+      "activeContentHash": "a9bbb1e9d3a504a577307a5a38d0f760ef57e04af678593c70cb7d7d1aa73508",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/organization/organizationviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/organization/organizationviewmodel.cs",
+      "docId": "99B9268A24035AB1BF3AE88B5A1E3239",
+      "contentHash": "80107b6689da16ea1533b7a94ed43a09f006a81e91cdb4d5a5ceb4026ec0481f",
+      "activeContentHash": "80107b6689da16ea1533b7a94ed43a09f006a81e91cdb4d5a5ceb4026ec0481f",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/organization/updatelocationviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/organization/updatelocationviewmodel.cs",
+      "docId": "97DE355276715411A257D1E0CEEA1B54",
+      "contentHash": "34d7daff8649ecb88ac168441a4821fb4799a0bf95583817ed1e238a174f060d",
+      "activeContentHash": "34d7daff8649ecb88ac168441a4821fb4799a0bf95583817ed1e238a174f060d",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/organization/updateorganizationviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/organization/updateorganizationviewmodel.cs",
+      "docId": "60521E7599EF550184D666181CCC258B",
+      "contentHash": "fe8369f1892259a9a5d507dce63c414dd7131a68695bba82f742ea11178159e8",
+      "activeContentHash": "fe8369f1892259a9a5d507dce63c414dd7131a68695bba82f742ea11178159e8",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/users/externalloginconfirmationviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/users/externalloginconfirmationviewmodel.cs",
+      "docId": "C8731AB4E8745F86AACC84690D82B367",
+      "contentHash": "4c63d485c748060cec37abd3b16bbe56c4227834ef25e9db39f7f9ffe7bc1cd4",
+      "activeContentHash": "4c63d485c748060cec37abd3b16bbe56c4227834ef25e9db39f7f9ffe7bc1cd4",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/users/forgotpasswordviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/users/forgotpasswordviewmodel.cs",
+      "docId": "A7A6226BB46254F1A0EAB03F47D5A5E7",
+      "contentHash": "869f1702a9fe3b6c2859687013de861cd62cf3c1ac5aac3cc937b8d118e919c6",
+      "activeContentHash": "869f1702a9fe3b6c2859687013de861cd62cf3c1ac5aac3cc937b8d118e919c6",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/users/kioskloginviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/users/kioskloginviewmodel.cs",
+      "docId": "ADE83DADB1025841AEB4B973CD11DEAB",
+      "contentHash": "8e612460982ddb7cb5dab4a1f690db614cb6936035951f93bda5c034dc30c0a8",
+      "activeContentHash": "8e612460982ddb7cb5dab4a1f690db614cb6936035951f93bda5c034dc30c0a8",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/users/loginviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/users/loginviewmodel.cs",
+      "docId": "99D5235C9C3C594CA4F0DE93DFF74C3C",
+      "contentHash": "6f89bf2c38d39bad04022853150434a255999ec151d21ef6cc75e025a297cc81",
+      "activeContentHash": "6f89bf2c38d39bad04022853150434a255999ec151d21ef6cc75e025a297cc81",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/users/registerviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/users/registerviewmodel.cs",
+      "docId": "3B6AE94720A6564D8E28EB98BC0C23C2",
+      "contentHash": "6a4873f9c7cf86747c894b23b9d308bfa012ffd1aefb2ce5d5c9c43f19a0e224",
+      "activeContentHash": "6a4873f9c7cf86747c894b23b9d308bfa012ffd1aefb2ce5d5c9c43f19a0e224",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/users/resetpasswordviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/users/resetpasswordviewmodel.cs",
+      "docId": "2A3DD589D9315FF28DFA96FC9632E001",
+      "contentHash": "53d0e542cf635e46c19cc0cbafb6b25a8360d6b51a2d10bc720f7cb0d4740328",
+      "activeContentHash": "53d0e542cf635e46c19cc0cbafb6b25a8360d6b51a2d10bc720f7cb0d4740328",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/users/sendcodeviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/users/sendcodeviewmodel.cs",
+      "docId": "5B2FB0877935534DB465AF938D3CAE25",
+      "contentHash": "9ff82860a4abaca0befe3c5314d75fb0ee435790618a726dd5295707372fb774",
+      "activeContentHash": "9ff82860a4abaca0befe3c5314d75fb0ee435790618a726dd5295707372fb774",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/users/verifycodeviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/users/verifycodeviewmodel.cs",
+      "docId": "ABC75EF224475065A33591A3D4280DA1",
+      "contentHash": "c8a8dd5be3bc85055772b22c8846ffbed806c3d1b3f1bcd57b13e32bb81ee1a0",
+      "activeContentHash": "c8a8dd5be3bc85055772b22c8846ffbed806c3d1b3f1bcd57b13e32bb81ee1a0",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.models/viewmodels/verifyidentity/verifyphonenumberviewmodel.cs": {
+      "filePath": "src/lagovista.useradmin.models/viewmodels/verifyidentity/verifyphonenumberviewmodel.cs",
+      "docId": "30539C1014C65E51BE98EC466052693E",
+      "contentHash": "a572024270a9c8dc3a6103a3c8dac6d8469cfc6f8e45d4dca789e3523bd18bbc",
+      "activeContentHash": "a572024270a9c8dc3a6103a3c8dac6d8469cfc6f8e45d4dca789e3523bd18bbc",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/account/appuserindboxrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/account/appuserindboxrepo.cs",
+      "docId": "17E9F04443055F19990810728AAA5A86",
+      "contentHash": "b1f079f647c66aa44b910b0c3b77ef97a3a86b767cbb6e5c4d4b5b7ab82d42fa",
+      "activeContentHash": "b1f079f647c66aa44b910b0c3b77ef97a3a86b767cbb6e5c4d4b5b7ab82d42fa",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/account/appuserrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/account/appuserrepo.cs",
+      "docId": "6F826E9B67005A0EA97645D782320C04",
+      "contentHash": "d92ead564623673922e9ee0bc4706ca0f694aa9f81bbe809d7c6e0fbe5538cd5",
+      "activeContentHash": "d92ead564623673922e9ee0bc4706ca0f694aa9f81bbe809d7c6e0fbe5538cd5",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/account/assetsetrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/account/assetsetrepo.cs",
+      "docId": "8451DBEB2CB75F3892BAFEAF58D07A38",
+      "contentHash": "17058862ce6773a0a4ae49c06e0c9c6dab3371b4d6731ecc4b63a12b1c331557",
+      "activeContentHash": "17058862ce6773a0a4ae49c06e0c9c6dab3371b4d6731ecc4b63a12b1c331557",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/account/deviceownerrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/account/deviceownerrepo.cs",
+      "docId": "FBE4E48A971A543AA808700F41032B09",
+      "contentHash": "1bbfdd0b02c51ac42edf9b5a2672b352ae4689d7b1f76950dc891dc25b64c7a6",
+      "activeContentHash": "1bbfdd0b02c51ac42edf9b5a2672b352ae4689d7b1f76950dc891dc25b64c7a6",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/account/locationuserrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/account/locationuserrepo.cs",
+      "docId": "85D0A78A28CD5AEB8E7E54317D87A99A",
+      "contentHash": "8eebfc1e73448709bc5134767a7a841b4b0766cf6b0ad7e40f531ed56fea2e5a",
+      "activeContentHash": "8eebfc1e73448709bc5134767a7a841b4b0766cf6b0ad7e40f531ed56fea2e5a",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/account/managedassetrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/account/managedassetrepo.cs",
+      "docId": "FEAAFB319DD552B2BE9F9131BB78253E",
+      "contentHash": "4e570863eeb26e2cd94394c3695bd51abd7d2766de88507a9f31b1059e9148cf",
+      "activeContentHash": "4e570863eeb26e2cd94394c3695bd51abd7d2766de88507a9f31b1059e9148cf",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/account/mostrecentusedrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/account/mostrecentusedrepo.cs",
+      "docId": "9FAB8DEC4A9E5A928C5D541D149B7E59",
+      "contentHash": "3ebfc1ff5a6240c153f16d89f5194b7bec399d5914c237273a25dc0889fb398b",
+      "activeContentHash": "3ebfc1ff5a6240c153f16d89f5194b7bec399d5914c237273a25dc0889fb398b",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/account/refreshtokenrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/account/refreshtokenrepo.cs",
+      "docId": "7366DE0B13A75A6E820959B1AD295145",
+      "contentHash": "1f4bd5f9d25fba80bcd3f1292ecd7174b05918486087015c81fe927e9e8cca6c",
+      "activeContentHash": "1f4bd5f9d25fba80bcd3f1292ecd7174b05918486087015c81fe927e9e8cca6c",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/account/teamrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/account/teamrepo.cs",
+      "docId": "B6384296B1DF5512AB659963F9DE0D24",
+      "contentHash": "1d8204c2a5d73a43405446ba16bba8c1f54eb1c6d70def48d08a51e4431bb4a4",
+      "activeContentHash": "1d8204c2a5d73a43405446ba16bba8c1f54eb1c6d70def48d08a51e4431bb4a4",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/account/teamuserrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/account/teamuserrepo.cs",
+      "docId": "6D2641172463559E8B96B731347C8E30",
+      "contentHash": "db28946e1265585a94d443c6cec4ffab10bf7f0152223a6f62572ade63b500e2",
+      "activeContentHash": "db28946e1265585a94d443c6cec4ffab10bf7f0152223a6f62572ade63b500e2",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/account/userfavoritesrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/account/userfavoritesrepo.cs",
+      "docId": "8475A4AC3C77551DA0D61A4C2251CCEC",
+      "contentHash": "ed9985ba4efbe4846a4e3d0dbbbc34cc3d0d490aa7844f38a54342bd6e10240d",
+      "activeContentHash": "ed9985ba4efbe4846a4e3d0dbbbc34cc3d0d490aa7844f38a54342bd6e10240d",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/apps/appinstancerepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/apps/appinstancerepo.cs",
+      "docId": "1B4D767BE59257B5981E746FF3D3D89D",
+      "contentHash": "231fee5ac879b12771419b4797e9309f697abdac8c3d5abb9a604efc4256a557",
+      "activeContentHash": "231fee5ac879b12771419b4797e9309f697abdac8c3d5abb9a604efc4256a557",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/apps/systemnotificationsrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/apps/systemnotificationsrepo.cs",
+      "docId": "7907F6753F29569E99870848D736A1FD",
+      "contentHash": "91d55c440cd2bc015634c6676b8604ab1b72a7aea1b9f4be2259694a70f1ed87",
+      "activeContentHash": "91d55c440cd2bc015634c6676b8604ab1b72a7aea1b9f4be2259694a70f1ed87",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/calendar/calendarrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/calendar/calendarrepo.cs",
+      "docId": "7852AAA2B6775EBBA7AEA93C505B9C12",
+      "contentHash": "f46f470678f2fc19005718ee32d88dd38f9d08366ff1e79eba01012fe5a1e243",
+      "activeContentHash": "f46f470678f2fc19005718ee32d88dd38f9d08366ff1e79eba01012fe5a1e243",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/commo/sentemaildto.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/commo/sentemaildto.cs",
+      "docId": "A6325C0167C050BDA22DF7075EA196CE",
+      "contentHash": "72d0e1b807c0847cebd6f9f9953b463b518ee50878717c7284fd0c1b70880370",
+      "activeContentHash": "72d0e1b807c0847cebd6f9f9953b463b518ee50878717c7284fd0c1b70880370",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/commo/sentemailrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/commo/sentemailrepo.cs",
+      "docId": "0B74E572F893523195CE52C8FD6713FE",
+      "contentHash": "fd176390728705b7cb75577b9b7e1a2e206343a05d7a1bab39303cbaeec07c7a",
+      "activeContentHash": "fd176390728705b7cb75577b9b7e1a2e206343a05d7a1bab39303cbaeec07c7a",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/commo/sentemailxrefdto.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/commo/sentemailxrefdto.cs",
+      "docId": "32337B03B5D2519BAF6FE04F098D3552",
+      "contentHash": "ab165f5aed3a5a18ba4e014622c842c92b7a57ae17168735b32a53a3cd96b6eb",
+      "activeContentHash": "ab165f5aed3a5a18ba4e014622c842c92b7a57ae17168735b32a53a3cd96b6eb",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/commo/sentemailxrefrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/commo/sentemailxrefrepo.cs",
+      "docId": "4B794B135A055C20B0893A3E897BBBF4",
+      "contentHash": "67df0ea84e65ecc6fe6e9733c1a6ae02b163f65d17d2be22e3d7b1445a693efd",
+      "activeContentHash": "67df0ea84e65ecc6fe6e9733c1a6ae02b163f65d17d2be22e3d7b1445a693efd",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/orgs/distributionlistrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/orgs/distributionlistrepo.cs",
+      "docId": "24AEFF8F46A95248B96256F7E3DDF1CC",
+      "contentHash": "7f0f82290c3bbc19857f72c23814a9752c5961a91ac62e767a9ede9a2ed741ef",
+      "activeContentHash": "7f0f82290c3bbc19857f72c23814a9752c5961a91ac62e767a9ede9a2ed741ef",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/orgs/holidaysetrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/orgs/holidaysetrepo.cs",
+      "docId": "0F691317BF975B43BAF942F2E9725FFC",
+      "contentHash": "39b66c8c521129fe4f5001aebb2d6fdb73a1e4377b609d8a33150238f09b0c17",
+      "activeContentHash": "39b66c8c521129fe4f5001aebb2d6fdb73a1e4377b609d8a33150238f09b0c17",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/orgs/inviteuserrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/orgs/inviteuserrepo.cs",
+      "docId": "B12F6A35727A5953BA7BC33667878B24",
+      "contentHash": "ad4797d4c6801636ee36e452cb0e055c2d3f8fa51ffec4636c33b57d126228b0",
+      "activeContentHash": "ad4797d4c6801636ee36e452cb0e055c2d3f8fa51ffec4636c33b57d126228b0",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/orgs/locationdiagramrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/orgs/locationdiagramrepo.cs",
+      "docId": "DBF61E4480B956E68D470499A8ADC3A1",
+      "contentHash": "02ab97eca7df41bf591287dc4b642a52acc113bc36ee1edc59434a96c7692332",
+      "activeContentHash": "02ab97eca7df41bf591287dc4b642a52acc113bc36ee1edc59434a96c7692332",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/orgs/organizationrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/orgs/organizationrepo.cs",
+      "docId": "AD5705B408CD5FAAB1E232198C1511A3",
+      "contentHash": "511584771be2f902b1620e01250a0fc5bb6faf941455344a2db6b257fd4bf93e",
+      "activeContentHash": "511584771be2f902b1620e01250a0fc5bb6faf941455344a2db6b257fd4bf93e",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/orgs/orglocationrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/orgs/orglocationrepo.cs",
+      "docId": "DE86FE2AAA585EE480B960BB38E65A44",
+      "contentHash": "2e6e3664e615c8c194cd18f8e3914a0caa47fd96ffb5ab9d75f5a5bd0a9e831f",
+      "activeContentHash": "2e6e3664e615c8c194cd18f8e3914a0caa47fd96ffb5ab9d75f5a5bd0a9e831f",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/orgs/orguserrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/orgs/orguserrepo.cs",
+      "docId": "1C5D4E006DDD525E82A30221D78E1DCE",
+      "contentHash": "e58e5a85b430527fbde095c5765e0feefc31d82772d7582eef5efd693faaba88",
+      "activeContentHash": "e58e5a85b430527fbde095c5765e0feefc31d82772d7582eef5efd693faaba88",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/orgs/ownedobjectrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/orgs/ownedobjectrepo.cs",
+      "docId": "2EBFE21966305A0EB8D5A375634ACD60",
+      "contentHash": "db931b900c0aafdeebe8381982274ce0218ed008a3e071a2e3493b1bdfe6eb18",
+      "activeContentHash": "db931b900c0aafdeebe8381982274ce0218ed008a3e071a2e3493b1bdfe6eb18",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/orgs/scheduleddowntimerepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/orgs/scheduleddowntimerepo.cs",
+      "docId": "4493B38CE7ED5FAF84442745D40A8F3A",
+      "contentHash": "5a5833dd204a5412eaa0a5761e7f45069de41870ecd933538a2340c11c885b94",
+      "activeContentHash": "5a5833dd204a5412eaa0a5761e7f45069de41870ecd933538a2340c11c885b94",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/orgs/subscriptionresourcerepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/orgs/subscriptionresourcerepo.cs",
+      "docId": "E538B327828F595CAADAD42B074CF08D",
+      "contentHash": "7cb5a311add98792900831e06c1384fad0f93039dee7d8608d33e51dc225ae45",
+      "activeContentHash": "7cb5a311add98792900831e06c1384fad0f93039dee7d8608d33e51dc225ae45",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/security/accesslogrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/security/accesslogrepo.cs",
+      "docId": "850FC70EDDDD5D0ABFAB447521E4C194",
+      "contentHash": "b98ab8e4dc2e83c84430e51bafc7a84d3d908291ff7d14e817fedf8e0c25e12e",
+      "activeContentHash": "b98ab8e4dc2e83c84430e51bafc7a84d3d908291ff7d14e817fedf8e0c25e12e",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/security/authenticationlogrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/security/authenticationlogrepo.cs",
+      "docId": "D4D8ADAB7D1B5294A7A2A2AD8682573D",
+      "contentHash": "a2db6931d36578ec9c9f8bc0a4d6b53ffc5caabe486be9e079d4c8bb1083fe56",
+      "activeContentHash": "a2db6931d36578ec9c9f8bc0a4d6b53ffc5caabe486be9e079d4c8bb1083fe56",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/security/functionmaprepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/security/functionmaprepo.cs",
+      "docId": "B4C6AC018E2A5EC7BAAAC2CEC7DCE782",
+      "contentHash": "b347679429d458075b34999ae6b1fb3f3a55f11c6a23542ee7f62926eadcf43c",
+      "activeContentHash": "b347679429d458075b34999ae6b1fb3f3a55f11c6a23542ee7f62926eadcf43c",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/security/locationrolerepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/security/locationrolerepo.cs",
+      "docId": "A519CA33F1CA590EBE313D1B91ADFFA4",
+      "contentHash": "54dc28eb44941257be5a4589b4f1307886b0bc1699114e746033a43a15110762",
+      "activeContentHash": "54dc28eb44941257be5a4589b4f1307886b0bc1699114e746033a43a15110762",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/security/modulerepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/security/modulerepo.cs",
+      "docId": "F258CED2874B5BB0B7842F01454EC1C4",
+      "contentHash": "05e8607a85516e9dcee6deb73be401b9562d501955963f5bdb440f62f411d353",
+      "activeContentHash": "05e8607a85516e9dcee6deb73be401b9562d501955963f5bdb440f62f411d353",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/security/roleaccessrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/security/roleaccessrepo.cs",
+      "docId": "73DED7D8DC215467AD626073CB23C94F",
+      "contentHash": "99a53779eaea0c714412527a63c2693734079a086e458674860cf23b67c42174",
+      "activeContentHash": "99a53779eaea0c714412527a63c2693734079a086e458674860cf23b67c42174",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/security/rolerepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/security/rolerepo.cs",
+      "docId": "2C14F86304DA5407A1F8D81701FC676D",
+      "contentHash": "5ce56d1e1bdeeab33929adcc0d31e5fa82cae0ae5186ba834ab8569165641495",
+      "activeContentHash": "5ce56d1e1bdeeab33929adcc0d31e5fa82cae0ae5186ba834ab8569165641495",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/security/securelinkrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/security/securelinkrepo.cs",
+      "docId": "5388232508FB536DBD960BAAEE812E07",
+      "contentHash": "6040fc21b1e00c2fc61148a6a34c44e0f0c7b506cbfd4e6b45ae27acd949ffdd",
+      "activeContentHash": "6040fc21b1e00c2fc61148a6a34c44e0f0c7b506cbfd4e6b45ae27acd949ffdd",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/security/singleusetokenrepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/security/singleusetokenrepo.cs",
+      "docId": "3BFE2186EFA85650B042AA11811FC4D6",
+      "contentHash": "1e6835e2e382045cf1e687b87a97a70ad140f056d516dce7b9f0e8320f613b5c",
+      "activeContentHash": "1e6835e2e382045cf1e687b87a97a70ad140f056d516dce7b9f0e8320f613b5c",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin.repos/repos/security/userrolerepo.cs": {
+      "filePath": "src/lagovista.useradmin.repos/repos/security/userrolerepo.cs",
+      "docId": "56AB4AB0E66857CEB3F5D5720A0D7947",
+      "contentHash": "7e7ce27b0a5ac3f47a8b6f37a852a33a199c24bf81d1ca386a9834199ec2807e",
+      "activeContentHash": "7e7ce27b0a5ac3f47a8b6f37a852a33a199c24bf81d1ca386a9834199ec2807e",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/account/iappuserrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/account/iappuserrepo.cs",
+      "docId": "71D8772F6BC559DEABF3AD1FA3ED07B6",
+      "contentHash": "b837182b69d376adc417d087754cefe773eef308ca32f8cd24da4c2b351b93f6",
+      "activeContentHash": "b837182b69d376adc417d087754cefe773eef308ca32f8cd24da4c2b351b93f6",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/account/ideviceownerrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/account/ideviceownerrepo.cs",
+      "docId": "06FF68CF186A5F9AAB70509DD9E5BBBA",
+      "contentHash": "d7a3573edc497cd4a429cc245356e1a146af2510edd0d1fb36d3f863a78d89e5",
+      "activeContentHash": "d7a3573edc497cd4a429cc245356e1a146af2510edd0d1fb36d3f863a78d89e5",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/account/imostrecentlyusedrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/account/imostrecentlyusedrepo.cs",
+      "docId": "B32AD3F9C8175828BBAF11873B379B5E",
+      "contentHash": "f51d4165fb292a1652d404e03cc80d9a9464d143a63ccb26a7abcb9ff4a8265b",
+      "activeContentHash": "f51d4165fb292a1652d404e03cc80d9a9464d143a63ccb26a7abcb9ff4a8265b",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/account/iuserfavoritesrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/account/iuserfavoritesrepo.cs",
+      "docId": "9F2C9DD405945387A47D82F88171B18D",
+      "contentHash": "99f4a6f99edaf5bb93a6be0c73fb783dc83ce406b562c41e035f79b075197f05",
+      "activeContentHash": "99f4a6f99edaf5bb93a6be0c73fb783dc83ce406b562c41e035f79b075197f05",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/apps/iappinstancerepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/apps/iappinstancerepo.cs",
+      "docId": "B1345002B3F55C8E86FF2E5DFFFDC6BB",
+      "contentHash": "83bbd5941f2ac9aaf784ea3a2447c495c5824a9e2bfc5bdf6c5e60bb222819fc",
+      "activeContentHash": "83bbd5941f2ac9aaf784ea3a2447c495c5824a9e2bfc5bdf6c5e60bb222819fc",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/calendar/icalendarrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/calendar/icalendarrepo.cs",
+      "docId": "0E66A9BA78575895955CA6DBE1C342A2",
+      "contentHash": "977e2180edfb2dcf978b17195a9ccdc79c4e4fdf3ca0cd58f2fe8c8867a036f7",
+      "activeContentHash": "977e2180edfb2dcf978b17195a9ccdc79c4e4fdf3ca0cd58f2fe8c8867a036f7",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/commo/isentemailrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/commo/isentemailrepo.cs",
+      "docId": "66551C4A49FA55089E8F27FD19FA0A66",
+      "contentHash": "68a19eeb4e058d49c366ab6a1488c250ca1125f247a3c849c37b6fa9ce307148",
+      "activeContentHash": "68a19eeb4e058d49c366ab6a1488c250ca1125f247a3c849c37b6fa9ce307148",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/orgs/idistributionlistrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/orgs/idistributionlistrepo.cs",
+      "docId": "FD8AF0428A8D5A9C924CEBE66BD0E4C7",
+      "contentHash": "6aeab45fe254fb34accd1cdcde06162dbc87468b05b88178e123afe553c7c90d",
+      "activeContentHash": "6aeab45fe254fb34accd1cdcde06162dbc87468b05b88178e123afe553c7c90d",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/orgs/iholidaysetrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/orgs/iholidaysetrepo.cs",
+      "docId": "4CB4BAE6E11159DB933C925D330EB5A4",
+      "contentHash": "b016bafb73b4abdf0fca9761e9459d3303b1a91cb28a84ad7bae149377714c6c",
+      "activeContentHash": "b016bafb73b4abdf0fca9761e9459d3303b1a91cb28a84ad7bae149377714c6c",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/orgs/iinviteuserrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/orgs/iinviteuserrepo.cs",
+      "docId": "8F5B548B71815971887C8FEF2E5504D1",
+      "contentHash": "7a56f3618eda8ed02472ea1403e85cf5854a0621c715925c8685d6853c28f940",
+      "activeContentHash": "7a56f3618eda8ed02472ea1403e85cf5854a0621c715925c8685d6853c28f940",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/orgs/ilocationdiagramrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/orgs/ilocationdiagramrepo.cs",
+      "docId": "38DFD7188BE854958EE02C042A6DE262",
+      "contentHash": "65a0488c70d574672ddcd435f23b4b541c3b2b8e3720a403d3817e3999fe1d4a",
+      "activeContentHash": "65a0488c70d574672ddcd435f23b4b541c3b2b8e3720a403d3817e3999fe1d4a",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/orgs/ilocationuserrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/orgs/ilocationuserrepo.cs",
+      "docId": "975CCC8B47D451D1B48BA32BB123D15C",
+      "contentHash": "ce2ec258ebd80d0ee112801e02bcee34215ce284ed3ae1e62f0d502681cb299b",
+      "activeContentHash": "ce2ec258ebd80d0ee112801e02bcee34215ce284ed3ae1e62f0d502681cb299b",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/orgs/iorganizationrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/orgs/iorganizationrepo.cs",
+      "docId": "0F1F697C6C325208847A03E4343B3C69",
+      "contentHash": "53da2fc34d9f03ab38193d3a80509fe6c55f13fc6717a5bac11058bde8c5f8f0",
+      "activeContentHash": "53da2fc34d9f03ab38193d3a80509fe6c55f13fc6717a5bac11058bde8c5f8f0",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/orgs/iorglocationrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/orgs/iorglocationrepo.cs",
+      "docId": "365FC0CC2D3D58A69B99C77E4E367983",
+      "contentHash": "985f3f009945434dfb370cd09a36619ebcbb1488729c0a1062a064b1f8eb4be3",
+      "activeContentHash": "985f3f009945434dfb370cd09a36619ebcbb1488729c0a1062a064b1f8eb4be3",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/orgs/iorguserrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/orgs/iorguserrepo.cs",
+      "docId": "13DE40AC13E35140A4004310068D6E0F",
+      "contentHash": "4ecbd25fa6ec3b771d1e5d345b6b095fb64726cd05055ad3432f2ba51e486f5f",
+      "activeContentHash": "4ecbd25fa6ec3b771d1e5d345b6b095fb64726cd05055ad3432f2ba51e486f5f",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/orgs/ischeduleddowntimerepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/orgs/ischeduleddowntimerepo.cs",
+      "docId": "4C46AE2A3F295446B5CAC193BAABC47E",
+      "contentHash": "7fdee9412ec30acce251a038e2eb0936f93cddc13adf2c6052abd035d438c2cb",
+      "activeContentHash": "7fdee9412ec30acce251a038e2eb0936f93cddc13adf2c6052abd035d438c2cb",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/orgs/isubscriptionrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/orgs/isubscriptionrepo.cs",
+      "docId": "CEB3AFE2B6565F069441416B0C3D2DA8",
+      "contentHash": "4c49765c77ef3927a18b25370bfda7ef664b4e7625d9321dcd4f5541fbc8d945",
+      "activeContentHash": "4c49765c77ef3927a18b25370bfda7ef664b4e7625d9321dcd4f5541fbc8d945",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/orgs/isubscriptionresourcerepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/orgs/isubscriptionresourcerepo.cs",
+      "docId": "40693EF4C77B54ACA5EB213748EB216D",
+      "contentHash": "198a3ab8db29f3ff71e0ec7215d0fd12d0d870e5b2c2134b18381fc80bb18734",
+      "activeContentHash": "198a3ab8db29f3ff71e0ec7215d0fd12d0d870e5b2c2134b18381fc80bb18734",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/orgs/iteamrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/orgs/iteamrepo.cs",
+      "docId": "791A409C09AE5FF8BAEC5D92457F7878",
+      "contentHash": "cad7a34315db51daef0f50b32b024fe93692248faaee1cf59bfd20288ac48e26",
+      "activeContentHash": "cad7a34315db51daef0f50b32b024fe93692248faaee1cf59bfd20288ac48e26",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/orgs/iteamuserrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/orgs/iteamuserrepo.cs",
+      "docId": "9162A96352175D85826F4CC1C1C73231",
+      "contentHash": "6ad436f9ca31eb2c5111b86564fe133cdaf10af65183eb9b1c87d45e3bf1c9eb",
+      "activeContentHash": "6ad436f9ca31eb2c5111b86564fe133cdaf10af65183eb9b1c87d45e3bf1c9eb",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/security/iaccesslogrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/security/iaccesslogrepo.cs",
+      "docId": "C6B60A7B98C65B8FABEFC03DEB2A3634",
+      "contentHash": "20fc0fd41accfb3193edc2a297ee160f3e93191dc95559c4b9bec4d963968f5f",
+      "activeContentHash": "20fc0fd41accfb3193edc2a297ee160f3e93191dc95559c4b9bec4d963968f5f",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/security/iassetsetrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/security/iassetsetrepo.cs",
+      "docId": "A31897920D9853FA94F77B7D51B94DEB",
+      "contentHash": "509b175fa1fd042c769f0886eedf00669ce81157c515b823498461826a1d9456",
+      "activeContentHash": "509b175fa1fd042c769f0886eedf00669ce81157c515b823498461826a1d9456",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/security/iauthenticationlogrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/security/iauthenticationlogrepo.cs",
+      "docId": "2346E055494A59E6A52864CED129C3FA",
+      "contentHash": "6f1467af1a3def0ac58bd35daa966dd818e6e725b9c9058853099a008dcc33f5",
+      "activeContentHash": "6f1467af1a3def0ac58bd35daa966dd818e6e725b9c9058853099a008dcc33f5",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/security/iauthtokenmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/security/iauthtokenmanager.cs",
+      "docId": "F9F0BB515F615F7CBF3EF3B6D1CEBEE1",
+      "contentHash": "17156a3ffdfd5fb10be84f015358b5d015a4849db9bcf106fc6169c01c173a47",
+      "activeContentHash": "17156a3ffdfd5fb10be84f015358b5d015a4849db9bcf106fc6169c01c173a47",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/security/ifunctionmaprepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/security/ifunctionmaprepo.cs",
+      "docId": "B2A7FB161F5A5895ADEB28C82E2A7DFB",
+      "contentHash": "164e4f5d3061e8d0bde2dc52790fb3c42a5f48ac80ea1519de41e8272eeef202",
+      "activeContentHash": "164e4f5d3061e8d0bde2dc52790fb3c42a5f48ac80ea1519de41e8272eeef202",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/security/ilocationrolerepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/security/ilocationrolerepo.cs",
+      "docId": "630C08BBBBB5525EB7FABB1715386FAD",
+      "contentHash": "ce800e30138f65e3fb58856351266a61b69bfe131849f31d09df0c78e528d440",
+      "activeContentHash": "ce800e30138f65e3fb58856351266a61b69bfe131849f31d09df0c78e528d440",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/security/imanagedassetrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/security/imanagedassetrepo.cs",
+      "docId": "4A0675CD0BD35C2B94CA60D739027C13",
+      "contentHash": "ca90cc1a32d142ac1e05e18f871c8ed5792c0565e8abcb3c0ced852986d6fef0",
+      "activeContentHash": "ca90cc1a32d142ac1e05e18f871c8ed5792c0565e8abcb3c0ced852986d6fef0",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/security/imodulerepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/security/imodulerepo.cs",
+      "docId": "45496FE6751550719DC4B2F9FC41CBE7",
+      "contentHash": "bc8c4cbb2ea9b1d327f00a3edbfdefc4ba01c9fe94b13ad11c52d682cfffac6b",
+      "activeContentHash": "bc8c4cbb2ea9b1d327f00a3edbfdefc4ba01c9fe94b13ad11c52d682cfffac6b",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/security/irefreshtokenmanager.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/security/irefreshtokenmanager.cs",
+      "docId": "23A767D21940518E9E08B5EFE59CD6B9",
+      "contentHash": "bdd89bea197939733f37b114af7cac242a59c802584ac834c4cbbfedfe104587",
+      "activeContentHash": "bdd89bea197939733f37b114af7cac242a59c802584ac834c4cbbfedfe104587",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/security/iroleaccessrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/security/iroleaccessrepo.cs",
+      "docId": "31AAB87FFE2F58359CA800B1347CBCED",
+      "contentHash": "3db0c08970ab8adb6915d2d8a881c10ab62728d6e3741590781e4c6407e67634",
+      "activeContentHash": "3db0c08970ab8adb6915d2d8a881c10ab62728d6e3741590781e4c6407e67634",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/security/irolerepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/security/irolerepo.cs",
+      "docId": "DD92C6D5173E5CFFA8A8396CFE24640A",
+      "contentHash": "92d81848ed813b7092549a6eaf1ef8d54f8f7cb30a2ea8ee41574349093d5766",
+      "activeContentHash": "92d81848ed813b7092549a6eaf1ef8d54f8f7cb30a2ea8ee41574349093d5766",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/security/isecurelinkrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/security/isecurelinkrepo.cs",
+      "docId": "FB83B80B2B375E4484388F22B589E395",
+      "contentHash": "e0a4848361743b3945ffd17ab192f9e81e7d44f00590ac3be34257b8d52e52f7",
+      "activeContentHash": "e0a4848361743b3945ffd17ab192f9e81e7d44f00590ac3be34257b8d52e52f7",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/security/isingleusetokenrepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/security/isingleusetokenrepo.cs",
+      "docId": "07B6EC4B33A35C3C8236C2842EC3A107",
+      "contentHash": "88e8d5227967412f8b04bcb5c97fc29534f1b88a0803ea82c7e01c4a75e05d54",
+      "activeContentHash": "88e8d5227967412f8b04bcb5c97fc29534f1b88a0803ea82c7e01c4a75e05d54",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    },
+    "src/lagovista.useradmin/interfaces/repos/security/iuserrolerepo.cs": {
+      "filePath": "src/lagovista.useradmin/interfaces/repos/security/iuserrolerepo.cs",
+      "docId": "596319950486503588E9385FC4B95D85",
+      "contentHash": "40a15dbe413c55b193396615fcee4354339d3ffdd07dcfaa1e5d30cac811f836",
+      "activeContentHash": "40a15dbe413c55b193396615fcee4354339d3ffdd07dcfaa1e5d30cac811f836",
+      "reindex": "full",
+      "facets": [],
+      "isActive": false
+    }
+  },
+  "count": 307
+}
