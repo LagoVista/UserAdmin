@@ -13,10 +13,10 @@ namespace LagoVista.UserAdmin.ViewModels.Users
     [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.VerifyCodeVM_Title, UserAdminResources.Names.VerifyCodeVM_Help, UserAdminResources.Names.VerifyCodeVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class VerifyCodeViewModel : IValidateable
     {
-        [FormField(LabelResource: UserAdminResources.Names.VerifyCodeViewModel_Provider, IsRequired: true)]
+        [FormField(LabelResource: UserAdminResources.Names.VerifyCodeViewModel_Provider, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string Provider { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.VerifyCodeViewModel_RememberMe,  IsRequired:true, FieldType:FieldTypes.Integer)]
+        [FormField(LabelResource: UserAdminResources.Names.VerifyCodeViewModel_RememberMe,  IsRequired:true, FieldType:FieldTypes.Integer, ResourceType: typeof(UserAdminResources))]
         public string Code { get; set; }
 
         public string ReturnUrl { get; set; }
