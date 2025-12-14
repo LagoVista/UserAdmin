@@ -1,4 +1,4 @@
-﻿/*12/6/2025 7:39:59 AM*/
+﻿/*12/14/2025 8:41:33 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1367,6 +1367,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_CreateGettingStartedData_Help
 
 		public static string Organization_CreateGettingStartedData_Help { get { return GetResourceString("Organization_CreateGettingStartedData_Help"); } }
+//Resources:UserAdminResources:Organization_DefaultAgentContext
+
+		public static string Organization_DefaultAgentContext { get { return GetResourceString("Organization_DefaultAgentContext"); } }
+//Resources:UserAdminResources:Organization_DefaultAgentContext_Help
+
+		public static string Organization_DefaultAgentContext_Help { get { return GetResourceString("Organization_DefaultAgentContext_Help"); } }
+//Resources:UserAdminResources:Organization_DefaultAgentContext_Select
+
+		public static string Organization_DefaultAgentContext_Select { get { return GetResourceString("Organization_DefaultAgentContext_Select"); } }
 //Resources:UserAdminResources:Organization_DefaultBusinessDevelopmentRep
 
 		public static string Organization_DefaultBusinessDevelopmentRep { get { return GetResourceString("Organization_DefaultBusinessDevelopmentRep"); } }
@@ -1445,15 +1454,6 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_DefaultTheme
 
 		public static string Organization_DefaultTheme { get { return GetResourceString("Organization_DefaultTheme"); } }
-//Resources:UserAdminResources:Organization_DefaultVectorDb
-
-		public static string Organization_DefaultVectorDb { get { return GetResourceString("Organization_DefaultVectorDb"); } }
-//Resources:UserAdminResources:Organization_DefaultVectorDb_Help
-
-		public static string Organization_DefaultVectorDb_Help { get { return GetResourceString("Organization_DefaultVectorDb_Help"); } }
-//Resources:UserAdminResources:Organization_DefaultVectorDb_Select
-
-		public static string Organization_DefaultVectorDb_Select { get { return GetResourceString("Organization_DefaultVectorDb_Select"); } }
 //Resources:UserAdminResources:Organization_Description
 
 		public static string Organization_Description { get { return GetResourceString("Organization_Description"); } }
@@ -2546,6 +2546,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_CantCreate = "Organization_CantCreate";
 			public const string Organization_CreateGettingStartedData = "Organization_CreateGettingStartedData";
 			public const string Organization_CreateGettingStartedData_Help = "Organization_CreateGettingStartedData_Help";
+			public const string Organization_DefaultAgentContext = "Organization_DefaultAgentContext";
+			public const string Organization_DefaultAgentContext_Help = "Organization_DefaultAgentContext_Help";
+			public const string Organization_DefaultAgentContext_Select = "Organization_DefaultAgentContext_Select";
 			public const string Organization_DefaultBusinessDevelopmentRep = "Organization_DefaultBusinessDevelopmentRep";
 			public const string Organization_DefaultBusinessDevelopmentRep_Help = "Organization_DefaultBusinessDevelopmentRep_Help";
 			public const string Organization_DefaultContributor = "Organization_DefaultContributor";
@@ -2572,9 +2575,6 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_DefaultTeamsWebHook_Help = "Organization_DefaultTeamsWebHook_Help";
 			public const string Organization_DefaultTestInstance = "Organization_DefaultTestInstance";
 			public const string Organization_DefaultTheme = "Organization_DefaultTheme";
-			public const string Organization_DefaultVectorDb = "Organization_DefaultVectorDb";
-			public const string Organization_DefaultVectorDb_Help = "Organization_DefaultVectorDb_Help";
-			public const string Organization_DefaultVectorDb_Select = "Organization_DefaultVectorDb_Select";
 			public const string Organization_Description = "Organization_Description";
 			public const string Organization_Details = "Organization_Details";
 			public const string Organization_EmailConfirmBody = "Organization_EmailConfirmBody";

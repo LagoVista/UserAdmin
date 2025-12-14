@@ -224,9 +224,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public string EndUserHomePage { get; set; }
 
 
-        [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultVectorDb, FieldType: FieldTypes.EntityHeaderPicker, IsRequired: false, EntityHeaderPickerUrl: "/api/ml/vectordbs",
-            WaterMark: UserAdminResources.Names.Organization_DefaultVectorDb_Select, HelpResource:UserAdminResources.Names.Organization_DefaultVectorDb_Help, ResourceType: typeof(UserAdminResources))]
-        public EntityHeader DefaultVectorDatabase { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultAgentContext, FieldType: FieldTypes.EntityHeaderPicker, IsRequired: false, EntityHeaderPickerUrl: "/api/ai/agentcontexts",
+            WaterMark: UserAdminResources.Names.Organization_DefaultAgentContext_Select, HelpResource:UserAdminResources.Names.Organization_DefaultAgentContext_Help, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader DefaultAgentContext { get; set; }
 
         public bool IsArchived { get; set; }
 
@@ -299,7 +299,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(DefaultTestInstance),
                 nameof(DefaultDevelopmentInstance),
                 nameof(DefaultDeviceRepository),
-                nameof(DefaultVectorDatabase),
+                nameof(DefaultAgentContext),
                 nameof(DefaultTeamsWebHook),
                 nameof(TestingIndustry),
                 nameof(TestingIndustryNiche),
