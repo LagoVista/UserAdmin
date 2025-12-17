@@ -87,6 +87,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public GeoLocation GeoLocationCenter { get; set; }
 
+        public double GeoMetersPerUnit { get; set; }
+
         public List<GeoLocation> GeoPoints { get; set; } = new List<GeoLocation>();
 
         public decimal DefaultGeoZoomLevel { get; set; } = 10;
@@ -289,7 +291,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public double Scale { get; set; }
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.Shape_FontSize, FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: true, IsUserEditable: true)]
-        public double FontSize { get; set; } = 12;
+        public double FontSize { get; set; } = 24;
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.Shape_TextOffsetX, FieldType: FieldTypes.Decimal, ResourceType: typeof(UserAdminResources), IsRequired: true, IsUserEditable: true)]
         public double TextOffsetX { get; set; }
