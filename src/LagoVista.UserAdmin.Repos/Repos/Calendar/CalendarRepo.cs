@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LagoVista.Core;
 using LagoVista.Core.Interfaces;
+using LagoVista.CloudStorage.Interfaces;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Calendar
 {
@@ -20,8 +21,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Calendar
     {
         private readonly bool _shouldConsolidateCollections;
 
-        public CalendarRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider, IDependencyManager dependencyManager) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider, dependencyManager)
+        public CalendarRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services,) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }

@@ -3,6 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.CloudStorage.DocumentDB;
+using LagoVista.CloudStorage.Interfaces;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
@@ -16,8 +17,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
     {
         private readonly bool _shouldConsolidateCollections;
 
-        public LocationDiagramRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider, IDependencyManager dependencyManager) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider, dependencyManager)
+        public LocationDiagramRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services,) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }

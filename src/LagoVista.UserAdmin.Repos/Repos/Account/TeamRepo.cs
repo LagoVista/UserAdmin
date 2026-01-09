@@ -12,14 +12,16 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.CloudStorage.Interfaces;
+using SharpCompress.Archives.SevenZip;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Users
 {
     public class TeamRepo : DocumentDBRepoBase<Team>, ITeamRepo
     {
         bool _shouldConsolidateCollections;
-        public TeamRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger) : 
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
+        public TeamRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services,) : 
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }

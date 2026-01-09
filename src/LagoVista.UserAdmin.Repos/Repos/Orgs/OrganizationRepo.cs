@@ -20,6 +20,7 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.Exceptions;
 using Newtonsoft.Json;
 using MongoDB.Bson.Serialization.IdGenerators;
+using LagoVista.CloudStorage.Interfaces;
 
 
 namespace LagoVista.UserAdmin.Repos.Orgs
@@ -30,12 +31,12 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         private readonly IRDBMSManager _rdbmsUserManager;
         private readonly ICacheProvider _cacheProvider;
 
-        public OrganizationRepo(IRDBMSManager rdbmsUserManager, IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider, IDependencyManager dependencyMgr) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider, dependencyMgr)
+        public OrganizationRepo(IRDBMSManager rdbmsUserManager, IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services,) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
             _rdbmsUserManager = rdbmsUserManager ?? throw new ArgumentNullException(nameof(rdbmsUserManager));
-            _cacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
+            _cacheProvider = services.CacheProvider;
         }
 
         private string GetCacheKey(String orgId)

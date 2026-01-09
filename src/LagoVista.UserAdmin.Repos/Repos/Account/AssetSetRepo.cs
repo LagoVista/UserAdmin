@@ -9,14 +9,15 @@ using LagoVista.UserAdmin.Models.Security;
 using System.Threading.Tasks;
 using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.CloudStorage.Interfaces;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Users
 {
     public class AssetSetRepo : DocumentDBRepoBase<AssetSet>, IAssetSetRepo
     {
         bool _shouldConsolidateCollections;
-        public AssetSetRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
+        public AssetSetRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services,) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }

@@ -12,6 +12,7 @@ using LagoVista.IoT.Logging.Loggers;
 using Microsoft.Azure.Cosmos;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Interfaces;
+using LagoVista.CloudStorage.Interfaces;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
@@ -19,8 +20,8 @@ namespace LagoVista.UserAdmin.Repos.Orgs
     {
         bool _shouldConsolidateCollections;
 
-        public OrgLocationRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider, IDependencyManager dependencyManager) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider: cacheProvider, dependencyManager)
+        public OrgLocationRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services,) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }

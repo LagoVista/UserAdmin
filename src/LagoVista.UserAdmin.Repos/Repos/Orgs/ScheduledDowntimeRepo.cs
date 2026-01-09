@@ -3,6 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.CloudStorage.DocumentDB;
+using LagoVista.CloudStorage.Interfaces;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
@@ -17,8 +18,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
     {
         private readonly bool _shouldConsolidateCollections;
 
-        public ScheduledDowntimeRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
+        public ScheduledDowntimeRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }
