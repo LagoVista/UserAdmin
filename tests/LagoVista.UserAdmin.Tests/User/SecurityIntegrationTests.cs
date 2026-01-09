@@ -3,7 +3,9 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.AspNetCore.Identity.Managers;
+using LagoVista.CloudStorage.Interfaces;
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models;
 using LagoVista.IoT;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Logging.Utils;
@@ -59,7 +61,7 @@ namespace LagoVista.UserAdmin.Tests.User
             //var securityManager = new SecurityUserService(httpContext.Object, new RoleRepo(new AdminConnectivitySettings(), new DefaultRoleList(), adminLogger, cacheProvider), new UserRoleRepo(new AdminConnectivitySettings(), adminLogger), _roleAccessRepo);
             var securityManager = new Mock<IUserSecurityServices>();
 
-            _accessMangager = new UserAccessManager(securityManager.Object, _orgRepo, new ModuleRepo(new AdminConnectivitySettings(), adminLogger, cacheProvider), adminLogger);
+            _accessMangager = new UserAccessManager(securityManager.Object, _orgRepo, new ModuleRepo(new AdminConnectivitySettings(), new Mock<IDocumentCloudCachedServices>().Object), adminLogger);
         }
 
         [TestMethod]

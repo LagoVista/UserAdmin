@@ -16,7 +16,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Users
     public class AssetSetRepo : DocumentDBRepoBase<AssetSet>, IAssetSetRepo
     {
         bool _shouldConsolidateCollections;
-        public AssetSetRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services,) :
+        public AssetSetRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;

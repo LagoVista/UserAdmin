@@ -20,7 +20,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Users
     public class TeamRepo : DocumentDBRepoBase<Team>, ITeamRepo
     {
         bool _shouldConsolidateCollections;
-        public TeamRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services,) : 
+        public TeamRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) : 
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;

@@ -4,6 +4,7 @@
 // --- END CODE INDEX META ---
 using LagoVista.CloudStorage;
 using LagoVista.CloudStorage.DocumentDB;
+using LagoVista.CloudStorage.Interfaces;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
@@ -28,12 +29,12 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
         private ICacheProvider _cacheProvider;
         private IAdminLogger _adminLogger;
 
-        public ModuleRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider)
+        public ModuleRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName,services)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
-            this._cacheProvider = cacheProvider!;
-            this._adminLogger = logger;
+            this._cacheProvider = services.CacheProvider;
+            this._adminLogger = services.AdminLogger;
         }
 
         protected override bool ShouldConsolidateCollections

@@ -15,6 +15,7 @@ using LagoVista.UserAdmin.Interfaces;
 using LagoVista.CloudStorage;
 using Newtonsoft.Json;
 using LagoVista.Core.Interfaces;
+using LagoVista.CloudStorage.Interfaces;
 
 namespace LagoVista.UserAdmin.Repos.Security
 {
@@ -27,12 +28,12 @@ namespace LagoVista.UserAdmin.Repos.Security
 
         private bool _condolidateCollections;
 
-        public RoleRepo(IUserAdminSettings settings, IDefaultRoleList defaultRoleList, IAdminLogger logger, ICacheProvider cacheProvider) : 
-            base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, cacheProvider)
+        public RoleRepo(IUserAdminSettings settings, IDefaultRoleList defaultRoleList, IDocumentCloudCachedServices services) : 
+            base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, services)
         {
             _condolidateCollections = settings.ShouldConsolidateCollections;
             _defaultRoleList = defaultRoleList;
-            _cacheProvider = cacheProvider;
+            _cacheProvider = services.CacheProvider;
         }
 
         protected override bool ShouldConsolidateCollections => _condolidateCollections;

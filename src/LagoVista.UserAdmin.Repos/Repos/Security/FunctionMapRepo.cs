@@ -3,6 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.CloudStorage.DocumentDB;
+using LagoVista.CloudStorage.Interfaces;
 using LagoVista.Core.Interfaces;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces;
@@ -19,11 +20,11 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
     {
         private ICacheProvider _cacheProvider;
         private IAdminLogger _adminLogger;
-        public FunctionMapRepo(IUserAdminSettings settings, IDefaultRoleList defaultRoleList, IAdminLogger logger, ICacheProvider cacheProvider) :
-           base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, cacheProvider)
+        public FunctionMapRepo(IUserAdminSettings settings, IDefaultRoleList defaultRoleList, IDocumentCloudCachedServices services) :
+           base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, services)
         {
-            _adminLogger = logger ?? throw new ArgumentNullException(nameof(logger));   
-            _cacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
+            _adminLogger = services.AdminLogger;   
+            _cacheProvider =  services.CacheProvider;
         }
 
         protected override bool ShouldConsolidateCollections

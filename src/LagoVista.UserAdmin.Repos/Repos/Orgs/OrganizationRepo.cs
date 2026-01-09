@@ -31,7 +31,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         private readonly IRDBMSManager _rdbmsUserManager;
         private readonly ICacheProvider _cacheProvider;
 
-        public OrganizationRepo(IRDBMSManager rdbmsUserManager, IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services,) :
+        public OrganizationRepo(IRDBMSManager rdbmsUserManager, IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;

@@ -21,7 +21,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Calendar
     {
         private readonly bool _shouldConsolidateCollections;
 
-        public CalendarRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services,) :
+        public CalendarRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
