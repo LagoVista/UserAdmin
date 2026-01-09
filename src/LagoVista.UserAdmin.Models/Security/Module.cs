@@ -2,12 +2,17 @@
 // ContentHash: f162483c5a979bbc97500b6ad2eef4cc382136dbcdce689a880144bd2e098b16
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.AI.Interfaces;
+using LagoVista.Core.AI.Models;
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using LagoVista.Core.Utils.Types.Nuviot.RagIndexing;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Resources;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
@@ -35,7 +40,7 @@ namespace LagoVista.UserAdmin.Models.Security
     [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.Module_Title, UserAdminResources.Names.Module_Help, UserAdminResources.Names.Module_Help, 
         EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources), Icon: "icon-ae-coding-metal",
         GetListUrl: "/api/modules", GetUrl: "/api/module/{id}", SaveUrl: "/api/module", DeleteUrl: "/api/module/{id}", FactoryUrl: "/api/module/factory")]
-    public class Module : UserAdminModelBase, IKeyedEntity, INamedEntity, IOwnedEntity, IValidateable, IFormDescriptor, IFormDescriptorCol2, IFormDescriptorBottom, ISummaryFactory
+    public class Module : UserAdminModelBase, IKeyedEntity, INamedEntity, IOwnedEntity, IValidateable, IFormDescriptor, IFormDescriptorCol2, IFormDescriptorBottom, ISummaryFactory, IRagableEntity
     {
         public const string ModuleStatus_Development = "development";
         public const string ModuleStatus_Preview = "preview";
@@ -57,9 +62,6 @@ namespace LagoVista.UserAdmin.Models.Security
             UiCategory = new EntityHeader() { Id = "48C14BE40FDA4E9587EFA66502F05F82", Key = "other", Text = "Other" }; 
         }
        
-        [FormField(LabelResource: UserAdminResources.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
-        public string Description { get; set; }
-
 
         [FormField(LabelResource: UserAdminResources.Names.Module_CardIcon, IsRequired: true, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources))]
         public string CardIcon { get; set; }
@@ -196,6 +198,26 @@ namespace LagoVista.UserAdmin.Models.Security
         ISummaryData ISummaryFactory.CreateSummary()
         {
             return CreateSummary();
+        }
+
+        public Task<List<EntityRagContent>> GetRagContentAsync()
+        {
+            var contentItems = new List<EntityRagContent>();
+
+            var point = RagVectorPayload.FromEntity(this);
+
+            var content = new EntityRagContent()
+            {
+                Payload = RagVectorPayload.FromEntity(this),
+
+            };
+
+            foreach (var ara in Areas)
+            {
+                contentItems.AddRange(ara.GetRagContentAsync().Result);
+            }
+
+            return Task.FromResult(contentItems);
         }
     }
 

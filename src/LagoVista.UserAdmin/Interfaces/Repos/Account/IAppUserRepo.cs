@@ -12,6 +12,12 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Interfaces.Repos.Users
 {
+
+    public interface IAppUserLoaderRepo
+    {
+        Task<AppUser> FindByIdAsync(string userId);
+    }
+
     public interface IAppUserRepo 
     {
         Task<IEnumerable<UserInfoSummary>> GetUserSummaryForListAsync(IEnumerable<OrgUser> orgUsers, bool useCache);

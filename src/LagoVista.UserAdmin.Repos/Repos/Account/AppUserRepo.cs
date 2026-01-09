@@ -4,6 +4,7 @@
 // --- END CODE INDEX META ---
 using LagoVista.CloudStorage;
 using LagoVista.CloudStorage.DocumentDB;
+using LagoVista.CloudStorage.Interfaces;
 using LagoVista.Core;
 using LagoVista.Core.Exceptions;
 using LagoVista.Core.Interfaces;
@@ -15,6 +16,7 @@ using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Users;
+using LagoVista.UserAdmin.Repos.Repos.Security;
 using Microsoft.Azure.Documents;
 using Newtonsoft.Json;
 using System;
@@ -28,6 +30,36 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.Users
 {
+    public class AppUserLoadRepo : DocumentDBRepoBase<AppUser>, IAppUserLoaderRepo
+    {
+        private readonly bool _shouldConsolidateCollections;
+        private readonly IUserRoleRepo _userRoleRepo;
+
+        public AppUserLoadRepo(IUserAdminSettings settings, IUserRoleRepo userRoleRepo, IAdminLogger logger, ICacheProvider cacheProvider) : 
+            base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, cacheProvider)
+        {
+            _userRoleRepo = userRoleRepo ?? throw new ArgumentNullException(nameof(userRoleRepo)); 
+        }
+
+        protected override bool ShouldConsolidateCollections => _shouldConsolidateCollections;
+
+        public async Task<AppUser> FindByIdAsync(string userId)
+        {
+            var appUser = await GetDocumentAsync(userId, false);
+            if (appUser == null)
+                return null;
+
+            if (appUser.CurrentOrganization != null)
+            {
+                var userRoles = await _userRoleRepo.GetRolesForUserAsync(userId, appUser.CurrentOrganization.Id);
+                appUser.CurrentOrganizationRoles = userRoles.Select(role => role.ToEntityHeader()).ToList();
+            }
+
+            return appUser;
+        }
+
+    }
+
     public class AppUserRepo : DocumentDBRepoBase<AppUser>, IAppUserRepo
     {
         private readonly bool _shouldConsolidateCollections;
@@ -38,16 +70,16 @@ namespace LagoVista.UserAdmin.Repos.Users
         private readonly IAuthenticationLogManager _authLogMgr;
         private readonly IAdminLogger _adminLogger;
 
-        public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserRoleRepo userRoleRepo, IUserAdminSettings userAdminSettings, IAdminLogger logger, IAuthenticationLogManager authLogMgr, ICacheProvider cacheProvider, IDependencyManager dependencyMgr) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider, dependencyManager: dependencyMgr)
+        public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserRoleRepo userRoleRepo, IUserAdminSettings userAdminSettings,  IAuthenticationLogManager authLogMgr, IDocumentCloudCachedServices services) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
             _adminSettings = userAdminSettings;
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
             _rdbmsUserManager = rdbmsUserManager;
             _userRoleRepo = userRoleRepo;
-            _adminLogger = logger;
-            _cacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
-            _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(cacheProvider));
+            _adminLogger = services.AdminLogger;
+            _cacheProvider = services.CacheProvider;
+            _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(authLogMgr));
         }
 
         protected override bool ShouldConsolidateCollections

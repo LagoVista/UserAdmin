@@ -32,7 +32,7 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
         [TestInitialize]
         public void Init()
         {
-            _emailSenderService = new SendGridEmailService(new IdentitySettings(), new Mock<IOrganizationRepo>().Object, new Mock<IAppUserRepo>().Object, new Moq.Mock<IBackgroundServiceTaskQueue>().Object, new Moq.Mock<IAppConfig>().Object,  new Moq.Mock<IAdminLogger>().Object);
+            _emailSenderService = new SendGridEmailService(new IdentitySettings(), new Mock<IOrganizationLoaderRepo>().Object, new Mock<IAppUserLoaderRepo>().Object, new Moq.Mock<IBackgroundServiceTaskQueue>().Object, new Moq.Mock<IAppConfig>().Object,  new Moq.Mock<IAdminLogger>().Object);
         }
 
       

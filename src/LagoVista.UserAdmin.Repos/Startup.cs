@@ -33,6 +33,7 @@ namespace LagoVista.UserAdmin.Repos
         {
             services.AddSingleton<IDeviceOwnerRepo, DeviceOwnerRepo>();
             services.AddSingleton<IAppUserRepo, AppUserRepo>();
+            services.AddSingleton<IAppUserLoaderRepo, AppUserLoadRepo>();
             services.AddSingleton<ILocationUserRepo, LocationUserRepo>();
             services.AddSingleton<IRefreshTokenRepo, RefreshTokenRepo>();
             services.AddSingleton<IInviteUserRepo, InviteUserRepo>();
@@ -40,6 +41,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddSingleton<IOwnedObjectRepo, OwnedObjectRepo>();
             services.AddSingleton<IOrgLocationRepo, OrgLocationRepo>();
             services.AddSingleton<IOrganizationRepo, OrganizationRepo>();
+            services.AddSingleton<IOrganizationLoaderRepo, OrganizationLoaderRepo>();
             services.AddSingleton<ISubscriptionResourceRepo, SubscriptionResourceRepo>();
             services.AddSingleton<ILocationRoleRepo, LocationRoleRepo>();
             services.AddSingleton<IRoleRepo, RoleRepo>();

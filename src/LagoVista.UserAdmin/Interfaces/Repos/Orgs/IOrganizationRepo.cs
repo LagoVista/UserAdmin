@@ -10,6 +10,16 @@ using LagoVista.UserAdmin.Models.Orgs;
 
 namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
 {
+
+    /// <summary>
+    /// We need a real simple one of these that doesn't use all the document db services 
+    /// document services can get the org w/o a circular reference.
+    /// </summary>
+    public interface IOrganizationLoaderRepo
+    {
+        Task<Organization> GetOrganizationAsync(string id);
+    }
+
     public interface IOrganizationRepo
     {
         Task AddOrganizationAsync(Organization org);

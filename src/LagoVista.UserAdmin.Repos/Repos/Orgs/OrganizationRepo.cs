@@ -25,6 +25,25 @@ using LagoVista.CloudStorage.Interfaces;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
+    public class OrganizationLoaderRepo : DocumentDBRepoBase<Organization>, IOrganizationLoaderRepo
+    {
+        private readonly bool _shouldConsolidateCollections;
+
+        public OrganizationLoaderRepo(IUserAdminSettings settings, IAdminLogger logger, ICacheProvider cacheProvider) : 
+            base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, cacheProvider)
+        {
+            _shouldConsolidateCollections = settings.ShouldConsolidateCollections;
+
+        }
+
+        protected override bool ShouldConsolidateCollections => _shouldConsolidateCollections;
+
+        public Task<Organization> GetOrganizationAsync(string id)
+        {
+            return GetDocumentAsync(id);
+        }
+    }
+
     public class OrganizationRepo : DocumentDBRepoBase<Organization>, IOrganizationRepo
     {
         private readonly bool _shouldConsolidateCollections;

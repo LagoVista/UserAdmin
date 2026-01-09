@@ -36,12 +36,12 @@ namespace LagoVista.AspNetCore.Identity.Services
     {
         protected static readonly Counter SendEmailMessage = Metrics.CreateCounter("nuviot_send_email", "Send Email Message to a user account", "entity");
 
-        private readonly IAppUserRepo _appUserRepo;
+        private readonly IAppUserLoaderRepo _appUserRepo;
         private readonly ILagoVistaAspNetCoreIdentityProviderSettings _settings;
         private readonly IBackgroundServiceTaskQueue _taskQueue;
         private readonly IAppConfig _appConfig;
         private readonly IAdminLogger _adminLogger;
-        private readonly IOrganizationRepo _organizationRepo;
+        private readonly IOrganizationLoaderRepo _organizationRepo;
         
         public List<string> GetRequiredImportFields()
         {
@@ -58,7 +58,7 @@ namespace LagoVista.AspNetCore.Identity.Services
         }
 
 
-        public SendGridEmailService(ILagoVistaAspNetCoreIdentityProviderSettings settings, IOrganizationRepo organizationRepo, IAppUserRepo appuserRepo, IBackgroundServiceTaskQueue taskQueue, IAppConfig appConfig, IAdminLogger adminLogger)
+        public SendGridEmailService(ILagoVistaAspNetCoreIdentityProviderSettings settings, IOrganizationLoaderRepo organizationRepo, IAppUserLoaderRepo appuserRepo, IBackgroundServiceTaskQueue taskQueue, IAppConfig appConfig, IAdminLogger adminLogger)
         {
             _settings = settings;
             _appConfig = appConfig;

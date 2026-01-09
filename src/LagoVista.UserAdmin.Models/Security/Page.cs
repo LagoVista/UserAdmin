@@ -3,12 +3,14 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core;
+using LagoVista.Core.AI.Models;
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
@@ -90,6 +92,11 @@ namespace LagoVista.UserAdmin.Models.Security
         public List<Feature> Features { get; set; } = new List<Feature>();
 
         public UserAccess UserAccess { get; set; }
+
+        public Task<List<EntityRagContent>> GetRagContentAsync()
+        {
+            throw new System.NotImplementedException();
+        }
 
         public List<string> GetFormFields()
         {
