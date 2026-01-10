@@ -7,9 +7,12 @@ using LagoVista.Core.AI.Models;
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using LagoVista.Core.Utils.Types.Nuviot.RagIndexing;
 using LagoVista.UserAdmin.Models.Resources;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Models.Security
@@ -93,9 +96,42 @@ namespace LagoVista.UserAdmin.Models.Security
 
         public UserAccess UserAccess { get; set; }
 
-        public Task<List<EntityRagContent>> GetRagContentAsync()
+        public Task<EntityRagContent> GetRagContentAsync(Module parentModule, Area parentArea, RagVectorPayload areaPayload)
         {
-            throw new System.NotImplementedException();
+            var areaContent = new EntityRagContent();
+            var contentItems = new List<EntityRagContent>();
+            var descriptionBuilder = new StringBuilder();
+            var embeddingsBuilder = new StringBuilder();
+
+            var pagePayload = JsonConvert.DeserializeObject<RagVectorPayload>(JsonConvert.SerializeObject(areaPayload));
+            pagePayload.Meta.DocId = this.Id;
+            pagePayload.Meta.Title = this.Name;
+            pagePayload.Meta.SemanticId = $"{areaPayload.Meta.SemanticId}:{nameof(Page)}:{Id}";
+            pagePayload.Meta.Subtype = nameof(Page);
+            pagePayload.Extra.EditorUrl = $"/admin/module/{parentModule.Id}/area/{parentArea.Id}/page/{Id}";
+            pagePayload.Extra.PreviewUrl = $"/{parentModule.Key}/{parentArea.Key}/{Key}";
+            areaPayload.Extra.RestPUTUrl = null;
+            areaPayload.Extra.RestGETUrl = null;
+
+            descriptionBuilder.AppendLine("# User Interface Page");
+            embeddingsBuilder.AppendLine($"{CardTitle}: {CardSummary}");
+            descriptionBuilder.AppendLine($"Page Name: {Name}");
+            descriptionBuilder.AppendLine($"Launcher Path: /{parentModule.Key}/{parentArea.Key}/{Key}");
+            descriptionBuilder.AppendLine($"Descriptioon: {Description}");
+            descriptionBuilder.AppendLine($"Launcher Card Title: {CardTitle}");
+            descriptionBuilder.AppendLine($"Launcher Card Icon: {CardIcon}");
+            descriptionBuilder.AppendLine($"Launcher Card Summary: {CardSummary}");
+            descriptionBuilder.AppendLine();
+
+            var pageContent = new EntityRagContent()
+            {
+                Payload = areaPayload,
+                EmbeddingContent = embeddingsBuilder.ToString(),
+                ModelDescription = descriptionBuilder.ToString(),
+                HumanDescription = descriptionBuilder.ToString()
+            };
+
+            return Task.FromResult(pageContent);
         }
 
         public List<string> GetFormFields()

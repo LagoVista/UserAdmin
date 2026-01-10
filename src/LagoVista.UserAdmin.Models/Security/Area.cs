@@ -7,12 +7,18 @@ using LagoVista.Core.AI.Models;
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
+using LagoVista.Core.Utils.Types.Nuviot.RagIndexing;
 using LagoVista.UserAdmin.Models.Resources;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using static LagoVista.Core.Models.AdaptiveCard.MSTeams;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
@@ -102,22 +108,69 @@ namespace LagoVista.UserAdmin.Models.Security
 
         public UserAccess UserAccess { get; set; }
 
-        public async Task<List<EntityRagContent>> GetRagContentAsync()
+        public async Task<List<EntityRagContent>> GetRagContentAsync(Module parentModule, RagVectorPayload modulePayload)
         {
+            var areaContent = new EntityRagContent();
             var contentItems = new List<EntityRagContent>();
+
+            var areaPayload = JsonConvert.DeserializeObject<RagVectorPayload>(JsonConvert.SerializeObject(modulePayload));
+            areaPayload.Meta.DocId = this.Id;
+            areaPayload.Meta.Title = this.Name;
+            areaPayload.Meta.SemanticId = $"{modulePayload.Meta.SemanticId}:{nameof(Area)}:{Id}";
+            areaPayload.Meta.Subtype = nameof(Area);
+            areaPayload.Extra.EditorUrl = $"/admin/module/{parentModule.Id}/area/{Id}";
+            areaPayload.Extra.PreviewUrl = $"/{parentModule.Key}/{Key}";
+            areaPayload.Extra.RestPUTUrl = null;
+            areaPayload.Extra.RestGETUrl = null;
+
+            var descriptionBuilder = new StringBuilder();
+            var embeddingsBuilder = new StringBuilder();
+
+            embeddingsBuilder.AppendLine($"User Interface Area Map: {Name}");
+            embeddingsBuilder.AppendLine($"{CardTitle}: {CardSummary}");
+
+            descriptionBuilder.AppendLine("# User Interface Area");
+            descriptionBuilder.AppendLine($"Name: {Name}");
+            descriptionBuilder.AppendLine($"Dscription: {Description}");
+            descriptionBuilder.AppendLine($"Home Path: /{Key}");
+            descriptionBuilder.AppendLine($"Launcher Card Title: {CardTitle}");
+            descriptionBuilder.AppendLine($"Launcher Card Icon: {CardIcon}");
+            descriptionBuilder.AppendLine($"Launcher Card Summary: {CardSummary}");
+
+            descriptionBuilder.AppendLine();
+            var pageIndex = 1;
+
+            descriptionBuilder.AppendLine("### Area Pages");
+            foreach (var page in Pages)
+            {
+                embeddingsBuilder.AppendLine($"{page.CardTitle}: {page.CardSummary}");
+                descriptionBuilder.AppendLine($"{pageIndex++} Page Name: {page.Name}");
+                descriptionBuilder.AppendLine($"Launcher Path: /{parentModule.Key}/{Key}/{page.Key}");
+                descriptionBuilder.AppendLine($"Descriptioon: {page.Description}");
+                descriptionBuilder.AppendLine($"Launcher Card Title: {page.CardTitle}");
+                descriptionBuilder.AppendLine($"Launcher Card Icon: {page.CardIcon}");
+                descriptionBuilder.AppendLine($"Launcher Card Summary: {page.CardSummary}");
+                descriptionBuilder.AppendLine();
+            }
+
+            var pageContent = new EntityRagContent()
+            {
+                Payload = areaPayload,
+                EmbeddingContent = embeddingsBuilder.ToString(),
+                ModelDescription = descriptionBuilder.ToString(),
+                HumanDescription = descriptionBuilder.ToString()
+            };
+
+            contentItems.Add(pageContent);
 
             if (Pages.Any())
             {
                 foreach (var page in Pages)
                 {
-                    contentItems.AddRange(await page.GetRagContentAsync());
+                    contentItems.Add(await page.GetRagContentAsync(parentModule, this, areaPayload ));
                 }
             }
-            else
-            {
-
-            }
-
+            
             return contentItems;
         }
 

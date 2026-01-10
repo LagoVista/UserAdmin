@@ -5,6 +5,7 @@
 using LagoVista.Core.AI.Interfaces;
 using LagoVista.Core.AI.Models;
 using LagoVista.Core.Attributes;
+using LagoVista.Core.Exceptions;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Utils.Types.Nuviot.RagIndexing;
@@ -12,6 +13,8 @@ using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Resources;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Models.Security
@@ -200,24 +203,96 @@ namespace LagoVista.UserAdmin.Models.Security
             return CreateSummary();
         }
 
-        public Task<List<EntityRagContent>> GetRagContentAsync()
+        public async Task<List<EntityRagContent>> GetRagContentAsync()
         {
             var contentItems = new List<EntityRagContent>();
 
-            var point = RagVectorPayload.FromEntity(this);
+            var embeddingsBuilder = new StringBuilder();
+            embeddingsBuilder.AppendLine($"User Interface Module Map: {Name}");
+            embeddingsBuilder.AppendLine($"{CardTitle}: {CardSummary}");
+
+            var descriptionBuilder = new StringBuilder();
+            descriptionBuilder.AppendLine("# User Interface Module");
+            descriptionBuilder.AppendLine($"Name: {Name}");
+            descriptionBuilder.AppendLine($"Dscription: {Description}");
+            descriptionBuilder.AppendLine($"Home Path: /{Key}");
+            descriptionBuilder.AppendLine($"Launcher Card Title: {CardTitle}");
+            descriptionBuilder.AppendLine($"Launcher Card Icon: {CardIcon}");
+            descriptionBuilder.AppendLine($"Launcher Card Summary: {CardSummary}");
+
+            descriptionBuilder.AppendLine();
+
+            var modulePages = Areas.Where(ar => !ar.Pages.Any()).ToList();
+            if (modulePages.Any())
+            {
+                embeddingsBuilder.AppendLine($"Area: {Name}: {Description}");
+
+                var modulePageIndex = 1;
+                descriptionBuilder.AppendLine("## Module Pages");
+                foreach (var page in modulePages)
+                {
+                    embeddingsBuilder.AppendLine($"{page.CardTitle}: {page.CardSummary}");
+                    descriptionBuilder.AppendLine($"{modulePageIndex++} Page Name: {page.Name}");
+                    descriptionBuilder.AppendLine($"Launcher Path: /{Key}/{page.Key}");
+                    descriptionBuilder.AppendLine($"Descriptioon: {page.Description}");
+                    descriptionBuilder.AppendLine($"Launcher Card Title: {page.CardTitle}");
+                    descriptionBuilder.AppendLine($"Launcher Card Icon: {page.CardIcon}");
+                    descriptionBuilder.AppendLine($"Launcher Card Summary: {page.CardSummary}");
+                    descriptionBuilder.AppendLine();
+                }
+            }
+
+            var moduleAreas = Areas.Where(ar => ar.Pages.Any()).ToList();
+            if (moduleAreas.Any())
+            {
+                var areaIndex = 1;
+                descriptionBuilder.AppendLine("## Module Areas");
+                foreach (var area in Areas.Where(ar => ar.Pages.Any()))
+                {
+                    embeddingsBuilder.AppendLine($"{area.CardTitle}: {area.CardSummary}");
+                    descriptionBuilder.AppendLine($"{areaIndex++}. Area Name: {area.Name}");
+                    descriptionBuilder.AppendLine($"Area Home Path: /{Key}/{area.Key}");
+                    descriptionBuilder.AppendLine($"Descriptioon: {area.Description}");
+                    descriptionBuilder.AppendLine($"Card Title: {area.CardTitle}");
+                    descriptionBuilder.AppendLine($"Card Icon: {area.CardIcon}");
+                    descriptionBuilder.AppendLine($"Card Summary: {area.CardSummary}");
+                    descriptionBuilder.AppendLine();
+
+                    var pageIndex = 1;
+                    descriptionBuilder.AppendLine("### Area Pages");
+                    foreach (var page in area.Pages)
+                    {
+                        embeddingsBuilder.AppendLine($"{page.CardTitle}: {page.CardSummary}");
+                        descriptionBuilder.AppendLine($"{areaIndex}.{pageIndex++} Page Name: {page.Name}");
+                        descriptionBuilder.AppendLine($"Launcher Path: /{Key}/{area.Key}/{page.Key}");
+                        descriptionBuilder.AppendLine($"Descriptioon: {page.Description}");
+                        descriptionBuilder.AppendLine($"Launcher Card Title: {page.CardTitle}");
+                        descriptionBuilder.AppendLine($"Launcher Card Icon: {page.CardIcon}");
+                        descriptionBuilder.AppendLine($"Launcher Card Summary: {page.CardSummary}");
+                        descriptionBuilder.AppendLine();
+                    }
+                }
+            }
 
             var content = new EntityRagContent()
             {
                 Payload = RagVectorPayload.FromEntity(this),
-
+                HumanDescription = descriptionBuilder.ToString(),
+                ModelDescription = descriptionBuilder.ToString(),
+                EmbeddingContent = embeddingsBuilder.ToString(),
             };
+
+            content.Payload.Extra.EditorUrl = $"/admin/module/{Id}";
+            content.Payload.Extra.PreviewUrl = $"/{Key}";
+
+            contentItems.Add(content);
 
             foreach (var ara in Areas)
             {
-                contentItems.AddRange(ara.GetRagContentAsync().Result);
+                contentItems.AddRange(await ara.GetRagContentAsync(this, content.Payload));
             }
 
-            return Task.FromResult(contentItems);
+            return contentItems;
         }
     }
 

@@ -12,6 +12,7 @@ using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core;
 using LagoVista.Core.Models;
+using LagoVista.CloudStorage.Interfaces;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Orgs
 {
@@ -19,8 +20,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
     {
         private readonly bool _shouldConsolidateCollections;
 
-        public DistributionListRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger, IDependencyManager dependencyMgr, ICacheProvider cacheProvider) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider, dependencyManager: dependencyMgr)
+        public DistributionListRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }
