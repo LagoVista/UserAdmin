@@ -143,6 +143,22 @@ namespace LagoVista.UserAdmin.Models.Users
         public string MobileHomePage { get; set; }
         public string CurrentDeviceId { get; set; }
 
+        /* MFA (Platform) */
+
+        // Plaintext slot used only during set/rotate; manager encrypts/stores and sets SecretId.
+        public string AuthenticatorKey { get; set; }
+        public string AuthenticatorKeySecretId { get; set; }
+
+        // One string containing recovery-code material (e.g., JSON of hashed codes + metadata).
+        public string RecoveryCodes { get; set; }
+        public string RecoveryCodesSecretId { get; set; }
+
+        // ISO8601 timestamp (DateTime.UtcNow.ToJSONString()) of last successful MFA (for step-up freshness).
+        public string LastMfaDateTimeUtc { get; set; }
+
+        // Replay protection: last accepted TOTP timestep (30s steps). 0 => never accepted.
+        public long LastTotpAcceptedTimeStep { get; set; }
+
 
         public EntityHeader EndUserAppOrg { get; set; }
 
@@ -427,5 +443,11 @@ namespace LagoVista.UserAdmin.Models.Users
         }
 
         public List<PushNotificationChannel> PushNotificationChannels { get; set; } = new List<PushNotificationChannel>();
+    }
+
+    public class AppUserTotpEnrollmentInfo
+    {
+        public string Secret { get; set; }
+        public string OtpAuthUri { get; set; }
     }
 }
