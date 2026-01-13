@@ -18,6 +18,9 @@ namespace LagoVista.UserAdmin.Models.Security.Passkeys
         public string RpId { get; set; }
         public string Origin { get; set; }
 
+        // Relative URL starting with /auth. Used for InvokeResult.SuccessRedirect after completion.
+        public string PasskeyUrl { get; set; }
+
         public PasskeyChallengePurpose Purpose { get; set; }
 
         // base64url

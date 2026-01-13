@@ -6,6 +6,7 @@ using LagoVista.Core.Exceptions;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Models;
+using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;

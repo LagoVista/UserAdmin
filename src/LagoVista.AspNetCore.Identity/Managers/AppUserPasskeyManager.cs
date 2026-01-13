@@ -1,0 +1,221 @@
+using Fido2NetLib;
+using Fido2NetLib.Objects;
+using LagoVista.Core;
+using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models;
+using LagoVista.Core.Validation;
+using LagoVista.IoT.Logging.Loggers;
+using LagoVista.UserAdmin.Interfaces.Managers.Passkeys;
+using LagoVista.UserAdmin.Interfaces.Repos.Security.Passkeys;
+using LagoVista.UserAdmin.Interfaces.Repos.Users;
+using LagoVista.UserAdmin.Models.Security.Passkeys;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace LagoVista.AspNetCore.Identity.Managers
+{
+    public class AppUserPasskeyManager : IAppUserPasskeyManager
+    {
+        private const int ChallengeTtlMinutes = 5;
+
+        private readonly IAppUserRepo _appUserRepo;
+        private readonly IAppUserPasskeyCredentialRepo _credentialRepo;
+        private readonly IPasskeyChallengeStore _challengeStore;
+        private readonly IAppConfig _appConfig;
+        private readonly IAdminLogger _logger;
+        private readonly IFido2 _fido2;
+
+        public AppUserPasskeyManager(IAppUserRepo appUserRepo, IAppUserPasskeyCredentialRepo credentialRepo, IPasskeyChallengeStore challengeStore, IAppConfig appConfig, IAdminLogger logger, IFido2 fido2)
+        {
+            _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
+            _credentialRepo = credentialRepo ?? throw new ArgumentNullException(nameof(credentialRepo));
+            _challengeStore = challengeStore ?? throw new ArgumentNullException(nameof(challengeStore));
+            _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _fido2 = fido2 ?? throw new ArgumentNullException(nameof(fido2));
+        }
+
+        public async Task<InvokeResult<string>> BeginRegistrationOptionsAsync(string userId, string passkeyUrl, EntityHeader org, EntityHeader user)
+        {
+            if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
+
+            var appUser = await _appUserRepo.FindByIdAsync(userId);
+            if (appUser == null) return InvokeResult<string>.FromError("user_not_found");
+            if (String.IsNullOrEmpty(appUser.Email)) return InvokeResult<string>.FromError("missing_email");
+
+            var (rpId, origin) = GetRpIdAndOrigin();
+            var safeUrl = NormalizePasskeyUrl(passkeyUrl);
+
+            var existing = await _credentialRepo.GetByUserAsync(userId, rpId);
+            var exclude = existing.Select(c => new PublicKeyCredentialDescriptor(Base64UrlDecode(c.CredentialId))).ToList();
+
+            var fidoUser = new Fido2User() { DisplayName = appUser.Email, Name = appUser.Email, Id = System.Text.Encoding.UTF8.GetBytes(userId) };
+            var options = _fido2.RequestNewCredential(new RequestNewCredentialParams() { User = fidoUser, ExcludeCredentials = exclude, AuthenticatorSelection = AuthenticatorSelection.Default, AttestationPreference = AttestationConveyancePreference.None, Extensions = new AuthenticationExtensionsClientInputs() });
+
+            var challenge = new PasskeyChallenge() { UserId = userId, RpId = rpId, Origin = origin, PasskeyUrl = safeUrl, Purpose = PasskeyChallengePurpose.Register, Challenge = Base64UrlEncode(options.Challenge), CreatedUtc = DateTime.UtcNow.ToJSONString(), ExpiresUtc = DateTime.UtcNow.AddMinutes(ChallengeTtlMinutes).ToJSONString() };
+
+            var storeResult = await _challengeStore.CreateAsync(challenge);
+            if (!storeResult.Successful) return storeResult.ToInvokeResult<string>();
+
+            var payload = new { challengeId = storeResult.Result.Id, rpId = rpId, origin = origin, options = options };
+            return InvokeResult<string>.Create(JsonConvert.SerializeObject(payload));
+        }
+
+        public async Task<InvokeResult> CompleteRegistrationAsync(string userId, string attestationResponseJson, EntityHeader org, EntityHeader user)
+        {
+            if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
+            if (String.IsNullOrEmpty(attestationResponseJson)) return InvokeResult.FromError("missing_attestation");
+
+            var (rpId, origin) = GetRpIdAndOrigin();
+
+            dynamic payload;
+            try { payload = JsonConvert.DeserializeObject(attestationResponseJson); }
+            catch { return InvokeResult.FromError("invalid_attestation_json"); }
+
+            string challengeId = payload.challengeId;
+            if (String.IsNullOrEmpty(challengeId)) return InvokeResult.FromError("missing_challenge_id");
+
+            var challengeResult = await _challengeStore.ConsumeAsync(challengeId);
+            if (!challengeResult.Successful) return challengeResult.ToInvokeResult();
+            if (challengeResult.Result.Purpose != PasskeyChallengePurpose.Register) return InvokeResult.FromError("invalid_challenge_purpose");
+            if (!String.Equals(challengeResult.Result.UserId, userId, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_user_mismatch");
+            if (!String.Equals(challengeResult.Result.RpId, rpId, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_rpid_mismatch");
+            if (!String.Equals(challengeResult.Result.Origin, origin, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_origin_mismatch");
+
+            var options = JsonConvert.DeserializeObject<CredentialCreateOptions>(JsonConvert.SerializeObject(payload.options));
+            var attestationResponse = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(JsonConvert.SerializeObject(payload.attestation));
+
+            IsCredentialIdUniqueToUserAsyncDelegate isUnique = async (args, cancellationToken) =>
+            {
+                var credentialId = Base64UrlEncode(args.CredentialId);
+                var existing = await _credentialRepo.FindByCredentialIdAsync(rpId, credentialId);
+                return existing == null;
+            };
+
+            var makeResult = await _fido2.MakeNewCredentialAsync(new MakeNewCredentialParams() { AttestationResponse = attestationResponse, OriginalOptions = options, IsCredentialIdUniqueToUserCallback = isUnique }, CancellationToken.None);
+
+            var cred = new PasskeyCredential() { UserId = userId, RpId = rpId, CredentialId = Base64UrlEncode(makeResult.Id), PublicKey = Base64UrlEncode(makeResult.PublicKey), SignCount = makeResult.SignCount, CreatedUtc = DateTime.UtcNow.ToJSONString(), LastUsedUtc = null, Name = null };
+
+            var addResult = await _credentialRepo.AddAsync(cred);
+            if (!addResult.Successful) return addResult;
+
+            return InvokeResult.SuccessRedirect(NormalizePasskeyUrl(challengeResult.Result.PasskeyUrl));
+        }
+
+        public async Task<InvokeResult<string>> BeginAuthenticationOptionsAsync(string userId, bool isStepUp, string passkeyUrl, EntityHeader org, EntityHeader user)
+        {
+            if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
+
+            var (rpId, origin) = GetRpIdAndOrigin();
+            var safeUrl = NormalizePasskeyUrl(passkeyUrl);
+
+            var creds = await _credentialRepo.GetByUserAsync(userId, rpId);
+            var allow = creds.Select(c => new PublicKeyCredentialDescriptor(Base64UrlDecode(c.CredentialId))).ToList();
+            if (allow.Count == 0) return InvokeResult<string>.FromError("no_passkeys_registered");
+
+            var uv = isStepUp ? UserVerificationRequirement.Required : UserVerificationRequirement.Preferred;
+            var options = _fido2.GetAssertionOptions(new GetAssertionOptionsParams() { AllowedCredentials = allow, UserVerification = uv, Extensions = new AuthenticationExtensionsClientInputs() });
+
+            var challenge = new PasskeyChallenge() { UserId = userId, RpId = rpId, Origin = origin, PasskeyUrl = safeUrl, Purpose = PasskeyChallengePurpose.Authenticate, Challenge = Base64UrlEncode(options.Challenge), CreatedUtc = DateTime.UtcNow.ToJSONString(), ExpiresUtc = DateTime.UtcNow.AddMinutes(ChallengeTtlMinutes).ToJSONString() };
+
+            var storeResult = await _challengeStore.CreateAsync(challenge);
+            if (!storeResult.Successful) return storeResult.ToInvokeResult<string>();
+
+            var payload = new { challengeId = storeResult.Result.Id, rpId = rpId, origin = origin, options = options };
+            return InvokeResult<string>.Create(JsonConvert.SerializeObject(payload));
+        }
+
+        public async Task<InvokeResult> CompleteAuthenticationAsync(string userId, string assertionResponseJson, bool isStepUp, EntityHeader org, EntityHeader user)
+        {
+            if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
+            if (String.IsNullOrEmpty(assertionResponseJson)) return InvokeResult.FromError("missing_assertion");
+
+            var (rpId, origin) = GetRpIdAndOrigin();
+
+            dynamic payload;
+            try { payload = JsonConvert.DeserializeObject(assertionResponseJson); }
+            catch { return InvokeResult.FromError("invalid_assertion_json"); }
+
+            string challengeId = payload.challengeId;
+            if (String.IsNullOrEmpty(challengeId)) return InvokeResult.FromError("missing_challenge_id");
+
+            var challengeResult = await _challengeStore.ConsumeAsync(challengeId);
+            if (!challengeResult.Successful) return challengeResult.ToInvokeResult();
+            if (challengeResult.Result.Purpose != PasskeyChallengePurpose.Authenticate) return InvokeResult.FromError("invalid_challenge_purpose");
+            if (!String.Equals(challengeResult.Result.UserId, userId, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_user_mismatch");
+            if (!String.Equals(challengeResult.Result.RpId, rpId, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_rpid_mismatch");
+            if (!String.Equals(challengeResult.Result.Origin, origin, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_origin_mismatch");
+
+            var options = JsonConvert.DeserializeObject<AssertionOptions>(JsonConvert.SerializeObject(payload.options));
+            var assertionResponse = JsonConvert.DeserializeObject<AuthenticatorAssertionRawResponse>(JsonConvert.SerializeObject(payload.assertion));
+
+            var credentialId = Base64UrlEncode(assertionResponse.Id);
+            var stored = await _credentialRepo.FindByCredentialIdAsync(rpId, credentialId);
+            if (stored == null) return InvokeResult.FromError("credential_not_found");
+            if (!String.Equals(stored.UserId, userId, StringComparison.Ordinal)) return InvokeResult.FromError("credential_user_mismatch");
+
+            IsUserHandleOwnerOfCredentialIdAsync callback = async (args, cancellationToken) =>
+            {
+                return true;
+            };
+
+            var res = await _fido2.MakeAssertionAsync(new MakeAssertionParams() { AssertionResponse = assertionResponse, OriginalOptions = options, StoredPublicKey = Base64UrlDecode(stored.PublicKey), StoredSignatureCounter = stored.SignCount, IsUserHandleOwnerOfCredentialIdCallback = callback }, CancellationToken.None);
+
+            var updateResult = await _credentialRepo.UpdateSignCountAsync(userId, rpId, stored.CredentialId, res.SignCount, DateTime.UtcNow.ToJSONString());
+            if (!updateResult.Successful) return updateResult;
+
+            if (isStepUp)
+            {
+                var appUser = await _appUserRepo.FindByIdAsync(userId);
+                if (appUser != null)
+                {
+                    appUser.LastMfaDateTimeUtc = DateTime.UtcNow.ToJSONString();
+                    await _appUserRepo.UpdateAsync(appUser);
+                }
+            }
+
+            return InvokeResult.SuccessRedirect(NormalizePasskeyUrl(challengeResult.Result.PasskeyUrl));
+        }
+
+        private (string rpId, string origin) GetRpIdAndOrigin()
+        {
+            if (String.IsNullOrEmpty(_appConfig.WebAddress)) throw new InvalidOperationException("WebAddress not configured");
+            var uri = new Uri(_appConfig.WebAddress);
+            var origin = $"{uri.Scheme}://{uri.Host}{(uri.IsDefaultPort ? String.Empty : ":" + uri.Port)}";
+            return (uri.Host, origin);
+        }
+
+        private static string NormalizePasskeyUrl(string passkeyUrl)
+        {
+            if (String.IsNullOrEmpty(passkeyUrl)) return "/auth";
+            if (!passkeyUrl.StartsWith("/auth", StringComparison.Ordinal)) return "/auth";
+            if (Uri.TryCreate(passkeyUrl, UriKind.Absolute, out _)) return "/auth";
+            return passkeyUrl;
+        }
+
+        private static string Base64UrlEncode(byte[] bytes)
+        {
+            var s = Convert.ToBase64String(bytes);
+            s = s.TrimEnd('=');
+            s = s.Replace('+', '-');
+            s = s.Replace('/', '_');
+            return s;
+        }
+
+        private static byte[] Base64UrlDecode(string base64Url)
+        {
+            if (String.IsNullOrEmpty(base64Url)) return Array.Empty<byte>();
+            var s = base64Url.Replace('-', '+').Replace('_', '/');
+            switch (s.Length % 4)
+            {
+                case 2: s += "=="; break;
+                case 3: s += "="; break;
+            }
+            return Convert.FromBase64String(s);
+        }
+    }
+}

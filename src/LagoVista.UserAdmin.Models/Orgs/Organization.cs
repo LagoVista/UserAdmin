@@ -403,6 +403,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader DefaultTestInstance { get; set; }
         public EntityHeader DefaultDevelopmentInstance { get; set; }
 
+        public bool RequireMfa {get; set;}
+
+        public int MfaFreshWindowMinutes {get; set;}
+
         public bool IsForProductLine { get; set; }
 
         public EntityHeader ToEntityHeader()
