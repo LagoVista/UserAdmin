@@ -3,7 +3,7 @@
   <metadata>
     <id>LagoVista.AspNetCore.Identity</id>
     <title>LagoVista ASP.NET Core Identity Provider</title>
-    <version>3.0.3097.0925</version>
+    <version>3.0.3163.0724</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -11,21 +11,21 @@
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
     <description>ASP.NET Core Identity Provider with DocumentDB and Table Storage backend for LagoVista IoT, Devices and Home Automation Frameworks</description>
     <summary>ASP.NET Core Identity Provider with DocumentDB and Table Storage backend for LagoVista IoT, Devices and Home Automation Frameworks</summary>
-    <copyright>Copyright Software Logistics - 2025</copyright>
+    <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 11/8/2025 2:25:52 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 1/13/2026 12:24:26 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net9.0">
-        <dependency id="LagoVista.IoT.Logging" version="3.0.3097.0925" />
+        <dependency id="LagoVista.IoT.Logging" version="3.0.3163.0724" />
         <dependency id="SendGrid" version="9.29.3" />
         <dependency id="System.ComponentModel.Annotations" version="5.0.0" />
         <dependency id="Twilio" version="7.13.0" />
         <dependency id="Microsoft.AspNetCore.Authentication.Twitter" version="9.0.9" />
-        <dependency id="LagoVista.Core.Authentication" version="3.0.3097.0925" />
+        <dependency id="LagoVista.Core.Authentication" version="3.0.3163.0724" />
         <dependency id="prometheus-net" version="8.2.1" />
-        <dependency id="LagoVista.UserAdmin" version="3.0.3097.0925" />
+        <dependency id="LagoVista.UserAdmin" version="3.0.3163.0724" />
       </group>
     </dependencies>
   </metadata>

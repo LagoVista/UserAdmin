@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.UserAdmin.Repos.RDBMS</id>
-    <version>3.0.3097.0925</version>
+    <version>3.0.3163.0724</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <title>LagoVista Relational DB Repo for Orgs and Users</title>
@@ -11,10 +11,10 @@
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
     <summary>User and Organizations primarily exist in NOSQL storage, however the headers for these records are helpful (and used for referential integrity) of relational DBs, so they are also stored there</summary>
     <description>User and Organizations primarily exist in NOSQL storage, however the headers for these records are helpful (and used for referential integrity) of relational DBs, so they are also stored there</description>
-    <copyright>Copyright Software Logistics - 2025</copyright>
+    <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT Devices NuvIoT LagoVista</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 11/8/2025 2:25:52 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 1/13/2026 12:24:26 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="NET9.0">
@@ -22,7 +22,7 @@
         <dependency id="Microsoft.EntityFrameworkCore.SqlServer" version="9.0.9" />
         <dependency id="Microsoft.Extensions.Logging.Console" version="9.0.9" />
         <dependency id="Npgsql.EntityFrameworkCore.PostgreSQL" version="9.0.4" />
-        <dependency id="LagoVista.UserAdmin" version="3.0.3097.0925" />
+        <dependency id="LagoVista.UserAdmin" version="3.0.3163.0724" />
       </group>
     </dependencies>
   </metadata>

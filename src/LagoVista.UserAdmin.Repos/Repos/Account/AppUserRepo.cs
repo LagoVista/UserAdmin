@@ -4,12 +4,14 @@
 // --- END CODE INDEX META ---
 using LagoVista.CloudStorage;
 using LagoVista.CloudStorage.DocumentDB;
+using LagoVista.CloudStorage.Exceptions;
 using LagoVista.CloudStorage.Interfaces;
 using LagoVista.Core;
 using LagoVista.Core.Exceptions;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
@@ -411,6 +413,36 @@ namespace LagoVista.UserAdmin.Repos.Users
                 (String.IsNullOrEmpty(lastName) || usr.LastName.ToLower().StartsWith(lastName.ToLower())) &&
                 (String.IsNullOrEmpty(email) || usr.Email.ToLower().StartsWith(email.ToLower()))), 
                 usr => usr.Name, listRequest);
+        }
+
+        public async Task<InvokeResult<long>> TryAcceptTotpTimeStepAsync(string userId, long candidateStep, bool updateLastMfaDateTimeUtc, string lastMfaDateTimeUtc)
+        {
+            if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
+            if (candidateStep <= 0) return InvokeResult<long>.FromError("invalid_candidate_step");
+            if (updateLastMfaDateTimeUtc && String.IsNullOrEmpty(lastMfaDateTimeUtc)) return InvokeResult<long>.FromError("invalid_last_mfa_datetime_utc");
+
+            var maxAttempts = 5;
+            for (var attempt = 0; attempt < maxAttempts; attempt++)
+            {
+                var user = await GetDocumentAsync(userId, false);
+                if (user == null) return InvokeResult<long>.FromError("user_not_found");
+                if (candidateStep <= user.LastTotpAcceptedTimeStep) return InvokeResult<long>.FromError("replay_detected");
+
+                user.LastTotpAcceptedTimeStep = candidateStep;
+                if (updateLastMfaDateTimeUtc) user.LastMfaDateTimeUtc = lastMfaDateTimeUtc;
+
+                try
+                {
+                    await UpsertDocumentAsync(user, checkEtag: true);
+                    return InvokeResult<long>.Create(candidateStep);
+                }
+                catch (ContentModifiedException)
+                {
+                    continue;
+                }
+            }
+
+            return InvokeResult<long>.FromError("concurrency_conflict");
         }
 
         public async Task<AppUser> AssociateExternalLoginAsync(string userId, ExternalLogin external)

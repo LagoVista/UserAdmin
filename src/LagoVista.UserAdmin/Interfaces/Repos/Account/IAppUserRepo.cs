@@ -4,6 +4,7 @@
 // --- END CODE INDEX META ---
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Users;
 using System;
@@ -36,6 +37,8 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Users
         Task DeleteAsync(AppUser user);
         Task DeleteAsync(string userId);
         Task<AppUser> GetUserByExternalLoginAsync(ExternalLoginTypes loginType, string id);
+        Task<InvokeResult<long>> TryAcceptTotpTimeStepAsync(string userId, long candidateStep, bool updateLastMfaDateTimeUtc, string lastMfaDateTimeUtc);
+
         Task<AppUser> AssociateExternalLoginAsync(string userId, ExternalLogin external);
         Task<AppUser> RemoveExternalLoginAsync(string userId, string externalLoginId);
         Task<ListResponse<UserInfoSummary>> SearchUsersAsync(string firstName, string lastName, string email, ListRequest listRequest);

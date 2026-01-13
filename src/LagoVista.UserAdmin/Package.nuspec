@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.UserAdmin</id>
-    <version>3.0.3097.0925</version>
+    <version>3.0.3163.0724</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <title>LagoVista User Administration</title>
@@ -11,18 +11,18 @@
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
     <summary>User, Organization and Location Management Models and API for LagoVista IoT, Devices and Home Automation Framework</summary>
     <description>User, Organization and Location Management Models and API for LagoVista IoT, Devices and Home Automation Framework</description>
-    <copyright>Copyright Software Logistics - 2025</copyright>
+    <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT Devices NuvIoT LagoVista</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 11/8/2025 2:25:52 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 1/13/2026 12:24:26 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1">
-        <dependency id="LagoVista.Core.Authentication" version="3.0.3097.0925" />
-        <dependency id="LagoVista.PDFServices" version="3.0.3097.0925" />
+        <dependency id="LagoVista.Core.Authentication" version="3.0.3163.0724" />
+        <dependency id="LagoVista.PDFServices" version="3.0.3163.0724" />
         <dependency id="Microsoft.AspNetCore.Http.Abstractions" version="2.3.0" />
         <dependency id="RingCentral.Net" version="6.4.1" />
-        <dependency id="LagoVista.UserAdmin.Models" version="3.0.3097.0925" />
+        <dependency id="LagoVista.UserAdmin.Models" version="3.0.3163.0724" />
       </group>
     </dependencies>
   </metadata>
