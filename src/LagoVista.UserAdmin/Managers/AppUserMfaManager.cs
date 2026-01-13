@@ -179,7 +179,7 @@ namespace LagoVista.UserAdmin.Managers
             if (String.IsNullOrEmpty(codesResult.Result)) return InvokeResult.FromError("recovery_codes_missing");
 
             var consumeResult = TryConsumeRecoveryCode(codesResult.Result, recoveryCode);
-            if (!consumeResult.Successful) return consumeResult;
+            if (!consumeResult.Successful) return consumeResult.ToInvokeResult();
 
             var removeResult = await _secureStorage.RemoveUserSecretAsync(appUser.ToEntityHeader(), appUser.RecoveryCodesSecretId);
             if (!removeResult.Successful) return removeResult.ToInvokeResult();
@@ -280,9 +280,13 @@ namespace LagoVista.UserAdmin.Managers
         private string GenerateRecoveryCode()
         {
             const string alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-            var bytes = RandomNumberGenerator.GetBytes(10);
+
+            var bytes = new byte[10];
+            using (var rng = RandomNumberGenerator.Create()) rng.GetBytes(bytes);
+
             var chars = new char[10];
             for (var i = 0; i < chars.Length; i++) chars[i] = alphabet[bytes[i] % alphabet.Length];
+
             return new string(chars, 0, 5) + "-" + new string(chars, 5, 5);
         }
 
@@ -295,11 +299,16 @@ namespace LagoVista.UserAdmin.Managers
 
         private string HashRecoveryCodeLine(string plaintextCode)
         {
-            var salt = RandomNumberGenerator.GetBytes(16);
-            var hash = Rfc2898DeriveBytes.Pbkdf2(Encoding.UTF8.GetBytes(plaintextCode), salt, Pbkdf2Iterations, HashAlgorithmName.SHA256, 32);
-            var saltB64 = Convert.ToBase64String(salt);
-            var hashB64 = Convert.ToBase64String(hash);
-            return $"{RecoveryCodeLineVersion}|{RecoveryCodeAlgorithm}|{Pbkdf2Iterations}|{saltB64}|{hashB64}";
+            var salt = new byte[16];
+            using (var rng = RandomNumberGenerator.Create()) rng.GetBytes(salt);
+
+            byte[] hash;
+            using (var pbkdf2 = new Rfc2898DeriveBytes(Encoding.UTF8.GetBytes(plaintextCode), salt, Pbkdf2Iterations, HashAlgorithmName.SHA256)) hash = pbkdf2.GetBytes(32);
+            {
+                var saltB64 = Convert.ToBase64String(salt);
+                var hashB64 = Convert.ToBase64String(hash);
+                return $"{RecoveryCodeLineVersion}|{RecoveryCodeAlgorithm}|{Pbkdf2Iterations}|{saltB64}|{hashB64}";
+            }
         }
 
         private InvokeResult<string> TryConsumeRecoveryCode(string blob, string plaintextCode)
@@ -327,9 +336,9 @@ namespace LagoVista.UserAdmin.Managers
                 {
                     continue;
                 }
-
-                var actualHash = Rfc2898DeriveBytes.Pbkdf2(Encoding.UTF8.GetBytes(plaintextCode), salt, iterations, HashAlgorithmName.SHA256, expectedHash.Length);
-                if (!CryptographicOperations.FixedTimeEquals(actualHash, expectedHash)) continue;
+                byte[] actualHash;
+                using (var pbkdf2 = new Rfc2898DeriveBytes(Encoding.UTF8.GetBytes(plaintextCode), salt, iterations, HashAlgorithmName.SHA256)) actualHash = pbkdf2.GetBytes(expectedHash.Length);
+                    if (!CryptographicOperations.FixedTimeEquals(actualHash, expectedHash)) continue;
 
                 lines.RemoveAt(i);
                 return InvokeResult<string>.Create(String.Join("\n", lines));

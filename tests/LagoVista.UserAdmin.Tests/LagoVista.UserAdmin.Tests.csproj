@@ -12,7 +12,7 @@
     <!--<PackageReference Include="LagoVista.IoT.SecurityManager" Version="3.0.3163.0554" />-->
     <PackageReference Include="Azure.Identity" Version="1.16.0" />
     <PackageReference Include="Microsoft.Graph" Version="5.92.0" />
-    <PackageReference Include="LagoVista.Core.TestBase" Version="3.0.3163.0724" />
+    <PackageReference Include="LagoVista.Core.TestBase" Version="3.0.3163.0733" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\LagoVista.AspNetCore.Identity\LagoVista.AspNetCore.Identity.csproj" />
