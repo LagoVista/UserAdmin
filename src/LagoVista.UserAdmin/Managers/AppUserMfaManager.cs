@@ -85,8 +85,6 @@ namespace LagoVista.UserAdmin.Managers
             var matchResult = TryMatchTotpTimeStep(secretResult.Result, totp);
             if (!matchResult.Successful) return matchResult.ToInvokeResult<List<string>>();
 
-            appUser.TwoFactorEnabled = true;
-
             var nowUtc = DateTime.UtcNow.ToJSONString();
             var acceptResult = await _appUserRepo.TryAcceptTotpTimeStepAsync(userId, matchResult.Result, true, nowUtc);
             if (!acceptResult.Successful) return acceptResult.ToInvokeResult<List<string>>();
@@ -106,8 +104,18 @@ namespace LagoVista.UserAdmin.Managers
             appUser.RecoveryCodesSecretId = addRecoveryResult.Result;
             appUser.RecoveryCodes = null;
             appUser.LastMfaDateTimeUtc = nowUtc;
+            appUser.TwoFactorEnabled = true;
 
-            await _appUserRepo.UpdateAsync(appUser);
+            try
+            {
+                await _appUserRepo.UpdateAsync(appUser);
+            }
+            catch
+            {
+                // Compensating cleanup: avoid orphaned recovery-code secret if user update fails.
+                await _secureStorage.RemoveUserSecretAsync(appUser.ToEntityHeader(), addRecoveryResult.Result);
+                throw;
+            }
 
             return InvokeResult<List<string>>.Create(codes);
         }
