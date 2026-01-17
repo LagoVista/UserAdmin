@@ -75,6 +75,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<ISecureLinkRepo, SecureLinkRepo>();
             services.AddSingleton<IFunctionMapRepo, FunctionMapRepo>();
             services.AddSingleton<IAppUserTestingDslRepo, AppUserTestingDslRepo>();
+            services.AddSingleton<IAppUserTestRunRepo, AppUserTestRunRepo>();
             services.AddSingleton<IAppUserPasskeyCredentialRepo, PasskeyCredentialRepo>();
             services.AddSingleton<IPasskeyCredentialIndexRepo, PasskeyCredentialIndexRepo>();
 

@@ -24,6 +24,8 @@ namespace LagoVista.UserAdmin.Models.Testing
         /// </summary>
         public string CeremonyId { get; set; }
 
+        public string StartUIPath { get; set; }
+
         /// <summary>
         /// Back-compat / convenience for existing code paths.
         /// Prefer CeremonyId for new work.
