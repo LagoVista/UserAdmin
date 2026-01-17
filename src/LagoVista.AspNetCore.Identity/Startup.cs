@@ -9,6 +9,7 @@ using LagoVista.AspNetCore.Identity.Utils;
 using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Interfaces.Managers.Passkeys;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Managers;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,6 +38,10 @@ namespace LagoVista.AspNetCore.Identity
             services.AddSingleton<IAuthTokenManager, AuthTokenManager>();
             services.AddSingleton<IRefreshTokenManager, RefreshTokenManager>();
             services.AddScoped<IExternalLoginManager, ExternalLoginManager>();
+
+            services.AddSingleton<IAppUserMfaManager, AppUserMfaManager>();
+            services.AddSingleton<IAppUserPasskeyManager, AppUserPasskeyManager>();
+
         }
     }
 }
