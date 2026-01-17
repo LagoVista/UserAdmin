@@ -1,36 +1,73 @@
 using LagoVista.CloudStorage.Storage;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.UserAdmin.Interfaces.Repos.Security.Passkeys;
 using LagoVista.UserAdmin.Models.Security.Passkeys;
 using System;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.TableStorage.Passkeys
 {
-    public class PasskeyCredentialIndexRepo : TableStorageBase<PasskeyCredentialIndexEntity>
+    public class PasskeyCredentialIndexRepo : TableStorageBase<PasskeyCredentialIndexEntity>, IPasskeyCredentialIndexRepo
     {
         public PasskeyCredentialIndexRepo(IUserAdminSettings settings, IAdminLogger logger) : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
         }
 
-        public async Task<PasskeyCredentialIndexEntity> FindAsync(string rpId, string credentialId)
+
+        public async Task InsertAsync(PasskeyCredentialIndex index)
+        {
+            if (index == null) throw new ArgumentNullException(nameof(index));
+            await InsertAsync(ToEntity(index));
+        }
+
+        private async Task<PasskeyCredentialIndexEntity> FindEntityAsync(string rpId, string credentialId)
         {
             var partitionKey = PasskeyCredentialIndexEntity.CreatePartitionKey(rpId, credentialId);
             var rowKey = PasskeyCredentialIndexEntity.CreateRowKey(credentialId);
             return await GetAsync(partitionKey, rowKey);
         }
 
-        public async Task RemoveAsync(string rpId, string credentialId)
-        {
-            var entity = await FindAsync(rpId, credentialId);
-            if (entity != null) await RemoveAsync(entity);
-        }
-
-        public static PasskeyCredentialIndexEntity ToIndexEntity(PasskeyCredential credential)
+        private static PasskeyCredentialIndexEntity ToEntity(PasskeyCredentialIndex index)
         {
             return new PasskeyCredentialIndexEntity()
             {
-                PartitionKey = PasskeyCredentialIndexEntity.CreatePartitionKey(credential.RpId, credential.CredentialId),
-                RowKey = PasskeyCredentialIndexEntity.CreateRowKey(credential.CredentialId),
+                PartitionKey = PasskeyCredentialIndexEntity.CreatePartitionKey(index.RpId, index.CredentialId),
+                RowKey = PasskeyCredentialIndexEntity.CreateRowKey(index.CredentialId),
+                UserId = index.UserId,
+                RpId = index.RpId,
+                CredentialId = index.CredentialId,
+                CreatedUtc = index.CreatedUtc,
+            };
+        }
+
+        private static PasskeyCredentialIndex ToModel(PasskeyCredentialIndexEntity entity)
+        {
+            return new PasskeyCredentialIndex()
+            {
+                UserId = entity.UserId,
+                RpId = entity.RpId,
+                CredentialId = entity.CredentialId,
+                CreatedUtc = entity.CreatedUtc,
+            };
+        }
+        public async Task<PasskeyCredentialIndex> FindAsync(string rpId, string credentialId)
+        {
+            var partitionKey = PasskeyCredentialIndexEntity.CreatePartitionKey(rpId, credentialId);
+            var rowKey = PasskeyCredentialIndexEntity.CreateRowKey(credentialId);
+            var entity = await GetAsync(partitionKey, rowKey);
+            return entity == null ? null : ToModel(entity);
+        }
+
+        public async Task RemoveAsync(string rpId, string credentialId)
+        {
+            var entity = await FindEntityAsync(rpId, credentialId);
+            if (entity != null) await RemoveAsync(entity);
+        }
+
+        public static PasskeyCredentialIndex ToIndexModel(PasskeyCredential credential)
+        {
+            return new PasskeyCredentialIndex()
+            {
                 UserId = credential.UserId,
                 RpId = credential.RpId,
                 CredentialId = credential.CredentialId,

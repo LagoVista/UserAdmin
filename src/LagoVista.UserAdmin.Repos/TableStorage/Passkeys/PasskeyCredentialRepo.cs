@@ -12,9 +12,9 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.Passkeys
 {
     public class PasskeyCredentialRepo : TableStorageBase<PasskeyCredentialEntity>, IAppUserPasskeyCredentialRepo
     {
-        private readonly PasskeyCredentialIndexRepo _indexRepo;
+        private readonly IPasskeyCredentialIndexRepo _indexRepo;
 
-        public PasskeyCredentialRepo(IUserAdminSettings settings, IAdminLogger logger, PasskeyCredentialIndexRepo indexRepo) : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
+        public PasskeyCredentialRepo(IUserAdminSettings settings, IAdminLogger logger, IPasskeyCredentialIndexRepo indexRepo) : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
             _indexRepo = indexRepo ?? throw new ArgumentNullException(nameof(indexRepo));
         }
@@ -30,8 +30,8 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.Passkeys
             var entity = ToEntity(credential);
             await InsertAsync(entity);
 
-            var indexEntity = PasskeyCredentialIndexRepo.ToIndexEntity(credential);
-            await _indexRepo.InsertAsync(indexEntity);
+            var indexModel = PasskeyCredentialIndexRepo.ToIndexModel(credential);
+            await _indexRepo.InsertAsync(indexModel);
 
             return InvokeResult.Success;
         }
@@ -90,6 +90,23 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.Passkeys
             entity.SignCount = signCount;
             entity.LastUsedUtc = lastUsedUtc;
 
+            await UpdateAsync(entity);
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> UpdateNameAsync(string userId, string rpId, string credentialId, string name)
+        {
+            if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
+            if (String.IsNullOrEmpty(rpId)) throw new ArgumentNullException(nameof(rpId));
+            if (String.IsNullOrEmpty(credentialId)) throw new ArgumentNullException(nameof(credentialId));
+            if (String.IsNullOrEmpty(name)) return InvokeResult.FromError("missing_name");
+
+            var partitionKey = PasskeyCredentialEntity.CreatePartitionKey(userId, rpId);
+            var rowKey = PasskeyCredentialEntity.CreateRowKey(credentialId);
+            var entity = await GetAsync(partitionKey, rowKey);
+            if (entity == null) return InvokeResult.FromError("credential_not_found");
+
+            entity.Name = name;
             await UpdateAsync(entity);
             return InvokeResult.Success;
         }
