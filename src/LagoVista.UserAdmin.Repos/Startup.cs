@@ -24,6 +24,8 @@ using LagoVista.UserAdmin.Interfaces.Repos.Account;
 using LagoVista.UserAdmin.Repos.Repos.Account;
 using LagoVista.UserAdmin.Interfaces.Repos.Commo;
 using LagoVista.UserAdmin.Repos.Repos.Commo;
+using LagoVista.UserAdmin.Repos.Testing;
+using LagoVista.UserAdmin.Models.Testing;
 
 namespace LagoVista.UserAdmin.Repos
 {
@@ -70,6 +72,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<ILocationDiagramRepo, LocationDiagramRepo>();
             services.AddScoped<ISecureLinkRepo, SecureLinkRepo>();
             services.AddSingleton<IFunctionMapRepo, FunctionMapRepo>();
+            services.AddSingleton<IAppUserTestingDslRepo, AppUserTestingDslRepo>();
 
             ErrorCodes.Register(typeof(UserAdminErrorCodes));
         }

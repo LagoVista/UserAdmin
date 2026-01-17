@@ -10,6 +10,7 @@ using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Resources;
+using LagoVista.UserAdmin.Models.Testing;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace LagoVista.UserAdmin.Models.Users
     }
 
     [EntityDescription(Domains.UserDomain, UserAdminResources.Names.AppUser_Title, UserAdminResources.Names.AppUser_Help, UserAdminResources.Names.AppUser_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
-    public class AppUser : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, ISummaryFactory, IFormDescriptor, IFormDescriptorCol2
+    public class AppUser : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, ISummaryFactory, IFormDescriptor, IFormDescriptorCol2, IAppUserAuthTenantState
     {
         public AppUser(String email, String createdBy) : this(email, email, createdBy)
         {

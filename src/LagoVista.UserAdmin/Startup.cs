@@ -35,6 +35,7 @@ namespace LagoVista.UserAdmin
             services.AddSingleton<ISingleUseTokenManager, SingleUseTokenManager>();
             services.AddSingleton<ICalendarManager, CalendarManager>();
             services.AddSingleton<IMostRecentlyUsedManager, MostRecentlyUsedManager>();
+            services.AddScoped<IAppUserTestingManager, AppUserTestingManager>();
             services.AddSingleton<IUserFavoritesManager, UserFavoritesManager>();            
             services.AddSingleton<ISystemNotificationManager, SystemNotificationManager>();
             services.AddSingleton<IAppUserInboxManager, AppUserInboxManager>();
