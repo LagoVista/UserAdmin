@@ -12,5 +12,6 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security.Passkeys
         Task<PasskeyCredential> FindByCredentialIdAsync(string rpId, string credentialId);
         Task<InvokeResult> RemovePasskeyCredentialAsync(string userId, string rpId, string credentialId);
         Task<InvokeResult> UpdateSignCountAsync(string userId, string rpId, string credentialId, uint signCount, string lastUsedUtc);
+        Task<InvokeResult> UpdateNameAsync(string userId, string rpId, string credentialId, string name);
     }
 }

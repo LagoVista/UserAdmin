@@ -9,6 +9,7 @@ using LagoVista.UserAdmin.Interfaces.Managers.Passkeys;
 using LagoVista.UserAdmin.Interfaces.Repos.Security.Passkeys;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Security.Passkeys;
+using LagoVista.UserAdmin.Models.Users;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
     public class AppUserPasskeyManager : IAppUserPasskeyManager
     {
         private const int ChallengeTtlMinutes = 5;
+        private const int MaxPasskeyNameLength = 128;
 
         private readonly IAppUserRepo _appUserRepo;
         private readonly IAppUserPasskeyCredentialRepo _credentialRepo;
@@ -39,6 +41,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
             _fido2 = fido2 ?? throw new ArgumentNullException(nameof(fido2));
         }
 
+        /* Existing user-bound flows (attach/use passkeys for a known user) */
+
         public async Task<InvokeResult<string>> BeginRegistrationOptionsAsync(string userId, string passkeyUrl, EntityHeader org, EntityHeader user)
         {
             if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
@@ -53,10 +57,33 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var existing = await _credentialRepo.GetByUserAsync(userId, rpId);
             var exclude = existing.Select(c => new PublicKeyCredentialDescriptor(Base64UrlDecode(c.CredentialId))).ToList();
 
-            var fidoUser = new Fido2User() { DisplayName = appUser.Email, Name = appUser.Email, Id = System.Text.Encoding.UTF8.GetBytes(userId) };
-            var options = _fido2.RequestNewCredential(new RequestNewCredentialParams() { User = fidoUser, ExcludeCredentials = exclude, AuthenticatorSelection = AuthenticatorSelection.Default, AttestationPreference = AttestationConveyancePreference.None, Extensions = new AuthenticationExtensionsClientInputs() });
+            var fidoUser = new Fido2User()
+            {
+                DisplayName = appUser.Email,
+                Name = appUser.Email,
+                Id = System.Text.Encoding.UTF8.GetBytes(userId),
+            };
 
-            var challenge = new PasskeyChallenge() { UserId = userId, RpId = rpId, Origin = origin, PasskeyUrl = safeUrl, Purpose = PasskeyChallengePurpose.Register, Challenge = Base64UrlEncode(options.Challenge), CreatedUtc = DateTime.UtcNow.ToJSONString(), ExpiresUtc = DateTime.UtcNow.AddMinutes(ChallengeTtlMinutes).ToJSONString() };
+            var options = _fido2.RequestNewCredential(new RequestNewCredentialParams()
+            {
+                User = fidoUser,
+                ExcludeCredentials = exclude,
+                AuthenticatorSelection = AuthenticatorSelection.Default,
+                AttestationPreference = AttestationConveyancePreference.None,
+                Extensions = new AuthenticationExtensionsClientInputs(),
+            });
+
+            var challenge = new PasskeyChallenge()
+            {
+                UserId = userId,
+                RpId = rpId,
+                Origin = origin,
+                PasskeyUrl = safeUrl,
+                Purpose = PasskeyChallengePurpose.Register,
+                Challenge = Base64UrlEncode(options.Challenge),
+                CreatedUtc = DateTime.UtcNow.ToJSONString(),
+                ExpiresUtc = DateTime.UtcNow.AddMinutes(ChallengeTtlMinutes).ToJSONString(),
+            };
 
             var storeResult = await _challengeStore.CreateAsync(challenge);
             if (!storeResult.Successful) return storeResult.ToInvokeResult<string>();
@@ -80,11 +107,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (String.IsNullOrEmpty(challengeId)) return InvokeResult.FromError("missing_challenge_id");
 
             var challengeResult = await _challengeStore.ConsumeAsync(challengeId);
-            if (!challengeResult.Successful) return challengeResult.ToInvokeResult();
-            if (challengeResult.Result.Purpose != PasskeyChallengePurpose.Register) return InvokeResult.FromError("invalid_challenge_purpose");
+            var validateChallenge = ValidateChallenge(challengeResult, PasskeyChallengePurpose.Register, rpId, origin);
+            if (!validateChallenge.Successful) return validateChallenge;
             if (!String.Equals(challengeResult.Result.UserId, userId, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_user_mismatch");
-            if (!String.Equals(challengeResult.Result.RpId, rpId, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_rpid_mismatch");
-            if (!String.Equals(challengeResult.Result.Origin, origin, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_origin_mismatch");
 
             var options = JsonConvert.DeserializeObject<CredentialCreateOptions>(JsonConvert.SerializeObject(payload.options));
             var attestationResponse = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(JsonConvert.SerializeObject(payload.attestation));
@@ -96,9 +121,24 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 return existing == null;
             };
 
-            var makeResult = await _fido2.MakeNewCredentialAsync(new MakeNewCredentialParams() { AttestationResponse = attestationResponse, OriginalOptions = options, IsCredentialIdUniqueToUserCallback = isUnique }, CancellationToken.None);
+            var makeResult = await _fido2.MakeNewCredentialAsync(new MakeNewCredentialParams()
+            {
+                AttestationResponse = attestationResponse,
+                OriginalOptions = options,
+                IsCredentialIdUniqueToUserCallback = isUnique,
+            }, CancellationToken.None);
 
-            var cred = new PasskeyCredential() { UserId = userId, RpId = rpId, CredentialId = Base64UrlEncode(makeResult.Id), PublicKey = Base64UrlEncode(makeResult.PublicKey), SignCount = makeResult.SignCount, CreatedUtc = DateTime.UtcNow.ToJSONString(), LastUsedUtc = null, Name = null };
+            var cred = new PasskeyCredential()
+            {
+                UserId = userId,
+                RpId = rpId,
+                CredentialId = Base64UrlEncode(makeResult.Id),
+                PublicKey = Base64UrlEncode(makeResult.PublicKey),
+                SignCount = makeResult.SignCount,
+                CreatedUtc = DateTime.UtcNow.ToJSONString(),
+                LastUsedUtc = null,
+                Name = null,
+            };
 
             var addResult = await _credentialRepo.AddAsync(cred);
             if (!addResult.Successful) return addResult;
@@ -118,9 +158,24 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (allow.Count == 0) return InvokeResult<string>.FromError("no_passkeys_registered");
 
             var uv = isStepUp ? UserVerificationRequirement.Required : UserVerificationRequirement.Preferred;
-            var options = _fido2.GetAssertionOptions(new GetAssertionOptionsParams() { AllowedCredentials = allow, UserVerification = uv, Extensions = new AuthenticationExtensionsClientInputs() });
+            var options = _fido2.GetAssertionOptions(new GetAssertionOptionsParams()
+            {
+                AllowedCredentials = allow,
+                UserVerification = uv,
+                Extensions = new AuthenticationExtensionsClientInputs(),
+            });
 
-            var challenge = new PasskeyChallenge() { UserId = userId, RpId = rpId, Origin = origin, PasskeyUrl = safeUrl, Purpose = PasskeyChallengePurpose.Authenticate, Challenge = Base64UrlEncode(options.Challenge), CreatedUtc = DateTime.UtcNow.ToJSONString(), ExpiresUtc = DateTime.UtcNow.AddMinutes(ChallengeTtlMinutes).ToJSONString() };
+            var challenge = new PasskeyChallenge()
+            {
+                UserId = userId,
+                RpId = rpId,
+                Origin = origin,
+                PasskeyUrl = safeUrl,
+                Purpose = PasskeyChallengePurpose.Authenticate,
+                Challenge = Base64UrlEncode(options.Challenge),
+                CreatedUtc = DateTime.UtcNow.ToJSONString(),
+                ExpiresUtc = DateTime.UtcNow.AddMinutes(ChallengeTtlMinutes).ToJSONString(),
+            };
 
             var storeResult = await _challengeStore.CreateAsync(challenge);
             if (!storeResult.Successful) return storeResult.ToInvokeResult<string>();
@@ -144,11 +199,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (String.IsNullOrEmpty(challengeId)) return InvokeResult.FromError("missing_challenge_id");
 
             var challengeResult = await _challengeStore.ConsumeAsync(challengeId);
-            if (!challengeResult.Successful) return challengeResult.ToInvokeResult();
-            if (challengeResult.Result.Purpose != PasskeyChallengePurpose.Authenticate) return InvokeResult.FromError("invalid_challenge_purpose");
+            var validateChallenge = ValidateChallenge(challengeResult, PasskeyChallengePurpose.Authenticate, rpId, origin);
+            if (!validateChallenge.Successful) return validateChallenge;
             if (!String.Equals(challengeResult.Result.UserId, userId, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_user_mismatch");
-            if (!String.Equals(challengeResult.Result.RpId, rpId, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_rpid_mismatch");
-            if (!String.Equals(challengeResult.Result.Origin, origin, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_origin_mismatch");
 
             var options = JsonConvert.DeserializeObject<AssertionOptions>(JsonConvert.SerializeObject(payload.options));
             var assertionResponse = JsonConvert.DeserializeObject<AuthenticatorAssertionRawResponse>(JsonConvert.SerializeObject(payload.assertion));
@@ -160,7 +213,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             IsUserHandleOwnerOfCredentialIdAsync callback = async (args, cancellationToken) =>
             {
-                return true;
+                if (args.UserHandle == null || args.UserHandle.Length == 0) return true;
+                var handle = System.Text.Encoding.UTF8.GetString(args.UserHandle);
+                return String.Equals(handle, userId, StringComparison.Ordinal);
             };
 
             var res = await _fido2.MakeAssertionAsync(new MakeAssertionParams() { AssertionResponse = assertionResponse, OriginalOptions = options, StoredPublicKey = Base64UrlDecode(stored.PublicKey), StoredSignatureCounter = stored.SignCount, IsUserHandleOwnerOfCredentialIdCallback = callback }, CancellationToken.None);
@@ -179,6 +234,262 @@ namespace LagoVista.AspNetCore.Identity.Managers
             }
 
             return InvokeResult.SuccessRedirect(NormalizePasskeyUrl(challengeResult.Result.PasskeyUrl));
+        }
+
+        /* Passwordless (discoverable/resident) flows */
+
+        public async Task<InvokeResult<string>> BeginPasswordlessRegistrationOptionsAsync(string passkeyUrl, EntityHeader org, EntityHeader user)
+        {
+            var (rpId, origin) = GetRpIdAndOrigin();
+            var safeUrl = NormalizePasskeyUrl(passkeyUrl);
+
+            var provisional = new AppUser()
+            {
+                Id = Guid.NewGuid().ToId(),
+                Key = Guid.NewGuid().ToId().ToLower(),
+                Email = null,
+                EmailConfirmed = false,
+                FirstName = null,
+                LastName = null,
+            };
+
+            await _appUserRepo.CreateAsync(provisional);
+
+            var fidoUser = new Fido2User()
+            {
+                Id = System.Text.Encoding.UTF8.GetBytes(provisional.Id),
+                Name = provisional.Id,
+                DisplayName = provisional.Id,
+            };
+
+            var options = _fido2.RequestNewCredential(new RequestNewCredentialParams()
+            {
+                User = fidoUser,
+                ExcludeCredentials = new List<PublicKeyCredentialDescriptor>(),
+                AuthenticatorSelection = AuthenticatorSelection.Default,
+                AttestationPreference = AttestationConveyancePreference.None,
+                Extensions = new AuthenticationExtensionsClientInputs(),
+            });
+
+            var challenge = new PasskeyChallenge()
+            {
+                UserId = provisional.Id,
+                RpId = rpId,
+                Origin = origin,
+                PasskeyUrl = safeUrl,
+                Purpose = PasskeyChallengePurpose.Register,
+                Challenge = Base64UrlEncode(options.Challenge),
+                CreatedUtc = DateTime.UtcNow.ToJSONString(),
+                ExpiresUtc = DateTime.UtcNow.AddMinutes(ChallengeTtlMinutes).ToJSONString(),
+            };
+
+            var storeResult = await _challengeStore.CreateAsync(challenge);
+            if (!storeResult.Successful) return storeResult.ToInvokeResult<string>();
+
+            var payload = new { challengeId = storeResult.Result.Id, rpId = rpId, origin = origin, options = options };
+            return InvokeResult<string>.Create(JsonConvert.SerializeObject(payload));
+        }
+
+        public async Task<InvokeResult<PasskeySignInResult>> CompletePasswordlessRegistrationAsync(string attestationResponseJson, EntityHeader org, EntityHeader user)
+        {
+            if (String.IsNullOrEmpty(attestationResponseJson)) return InvokeResult<PasskeySignInResult>.FromError("missing_attestation");
+
+            var (rpId, origin) = GetRpIdAndOrigin();
+
+            dynamic payload;
+            try { payload = JsonConvert.DeserializeObject(attestationResponseJson); }
+            catch { return InvokeResult<PasskeySignInResult>.FromError("invalid_attestation_json"); }
+
+            string challengeId = payload.challengeId;
+            if (String.IsNullOrEmpty(challengeId)) return InvokeResult<PasskeySignInResult>.FromError("missing_challenge_id");
+
+            var challengeResult = await _challengeStore.ConsumeAsync(challengeId);
+            var validateChallenge = ValidateChallenge(challengeResult, PasskeyChallengePurpose.Register, rpId, origin);
+            if (!validateChallenge.Successful) return validateChallenge.ToInvokeResult<PasskeySignInResult>();
+
+            var userId = challengeResult.Result.UserId;
+            if (String.IsNullOrEmpty(userId)) return InvokeResult<PasskeySignInResult>.FromError("missing_user_id");
+
+            var options = JsonConvert.DeserializeObject<CredentialCreateOptions>(JsonConvert.SerializeObject(payload.options));
+            var attestationResponse = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(JsonConvert.SerializeObject(payload.attestation));
+
+            IsCredentialIdUniqueToUserAsyncDelegate isUnique = async (args, cancellationToken) =>
+            {
+                var credentialId = Base64UrlEncode(args.CredentialId);
+                var existing = await _credentialRepo.FindByCredentialIdAsync(rpId, credentialId);
+                return existing == null;
+            };
+
+            var makeResult = await _fido2.MakeNewCredentialAsync(new MakeNewCredentialParams()
+            {
+                AttestationResponse = attestationResponse,
+                OriginalOptions = options,
+                IsCredentialIdUniqueToUserCallback = isUnique,
+            }, CancellationToken.None);
+
+            var cred = new PasskeyCredential()
+            {
+                UserId = userId,
+                RpId = rpId,
+                CredentialId = Base64UrlEncode(makeResult.Id),
+                PublicKey = Base64UrlEncode(makeResult.PublicKey),
+                SignCount = makeResult.SignCount,
+                CreatedUtc = DateTime.UtcNow.ToJSONString(),
+                LastUsedUtc = null,
+                Name = null,
+            };
+
+            var addResult = await _credentialRepo.AddAsync(cred);
+            if (!addResult.Successful) return addResult.ToInvokeResult<PasskeySignInResult>();
+
+            return InvokeResult<PasskeySignInResult>.Create(new PasskeySignInResult()
+            {
+                UserId = userId,
+                RequiresOnboarding = true,
+                RedirectUrl = "/auth/onboarding",
+                Message = "Onboarding required.",
+            });
+        }
+
+        public async Task<InvokeResult<string>> BeginPasswordlessAuthenticationOptionsAsync(string passkeyUrl, EntityHeader org, EntityHeader user)
+        {
+            var (rpId, origin) = GetRpIdAndOrigin();
+            var safeUrl = NormalizePasskeyUrl(passkeyUrl);
+
+            var options = _fido2.GetAssertionOptions(new GetAssertionOptionsParams()
+            {
+                AllowedCredentials = new List<PublicKeyCredentialDescriptor>(),
+                UserVerification = UserVerificationRequirement.Preferred,
+                Extensions = new AuthenticationExtensionsClientInputs(),
+            });
+
+            var challenge = new PasskeyChallenge()
+            {
+                UserId = null,
+                RpId = rpId,
+                Origin = origin,
+                PasskeyUrl = safeUrl,
+                Purpose = PasskeyChallengePurpose.Authenticate,
+                Challenge = Base64UrlEncode(options.Challenge),
+                CreatedUtc = DateTime.UtcNow.ToJSONString(),
+                ExpiresUtc = DateTime.UtcNow.AddMinutes(ChallengeTtlMinutes).ToJSONString(),
+            };
+
+            var storeResult = await _challengeStore.CreateAsync(challenge);
+            if (!storeResult.Successful) return storeResult.ToInvokeResult<string>();
+
+            var payload = new { challengeId = storeResult.Result.Id, rpId = rpId, origin = origin, options = options };
+            return InvokeResult<string>.Create(JsonConvert.SerializeObject(payload));
+        }
+
+        public async Task<InvokeResult<PasskeySignInResult>> CompletePasswordlessAuthenticationAsync(string assertionResponseJson, EntityHeader org, EntityHeader user)
+        {
+            if (String.IsNullOrEmpty(assertionResponseJson)) return InvokeResult<PasskeySignInResult>.FromError("missing_assertion");
+
+            var (rpId, origin) = GetRpIdAndOrigin();
+
+            dynamic payload;
+            try { payload = JsonConvert.DeserializeObject(assertionResponseJson); }
+            catch { return InvokeResult<PasskeySignInResult>.FromError("invalid_assertion_json"); }
+
+            string challengeId = payload.challengeId;
+            if (String.IsNullOrEmpty(challengeId)) return InvokeResult<PasskeySignInResult>.FromError("missing_challenge_id");
+
+            var challengeResult = await _challengeStore.ConsumeAsync(challengeId);
+            var validateChallenge = ValidateChallenge(challengeResult, PasskeyChallengePurpose.Authenticate, rpId, origin);
+            if (!validateChallenge.Successful) return validateChallenge.ToInvokeResult<PasskeySignInResult>();
+
+            var options = JsonConvert.DeserializeObject<AssertionOptions>(JsonConvert.SerializeObject(payload.options));
+            var assertionResponse = JsonConvert.DeserializeObject<AuthenticatorAssertionRawResponse>(JsonConvert.SerializeObject(payload.assertion));
+
+            var credentialId = Base64UrlEncode(assertionResponse.Id);
+            var stored = await _credentialRepo.FindByCredentialIdAsync(rpId, credentialId);
+            if (stored == null) return InvokeResult<PasskeySignInResult>.FromError("credential_not_found");
+
+            var userId = stored.UserId;
+            if (String.IsNullOrEmpty(userId)) return InvokeResult<PasskeySignInResult>.FromError("missing_user_id");
+
+            IsUserHandleOwnerOfCredentialIdAsync callback = async (args, cancellationToken) =>
+            {
+                if (args.UserHandle == null || args.UserHandle.Length == 0) return true;
+                var handle = System.Text.Encoding.UTF8.GetString(args.UserHandle);
+                return String.Equals(handle, userId, StringComparison.Ordinal);
+            };
+
+            var res = await _fido2.MakeAssertionAsync(new MakeAssertionParams()
+            {
+                AssertionResponse = assertionResponse,
+                OriginalOptions = options,
+                StoredPublicKey = Base64UrlDecode(stored.PublicKey),
+                StoredSignatureCounter = stored.SignCount,
+                IsUserHandleOwnerOfCredentialIdCallback = callback,
+            }, CancellationToken.None);
+
+            var updateResult = await _credentialRepo.UpdateSignCountAsync(userId, rpId, stored.CredentialId, res.SignCount, DateTime.UtcNow.ToJSONString());
+            if (!updateResult.Successful) return updateResult.ToInvokeResult<PasskeySignInResult>();
+
+            var appUser = await _appUserRepo.FindByIdAsync(userId);
+            var requiresOnboarding = appUser == null || !appUser.EmailConfirmed;
+
+            return InvokeResult<PasskeySignInResult>.Create(new PasskeySignInResult()
+            {
+                UserId = userId,
+                RequiresOnboarding = requiresOnboarding,
+                RedirectUrl = requiresOnboarding ? "/auth/onboarding" : NormalizePasskeyUrl(challengeResult.Result.PasskeyUrl),
+                Message = requiresOnboarding ? "Onboarding required." : null,
+            });
+        }
+
+        public async Task<InvokeResult<PasskeyCredentialSummary[]>> ListPasskeysAsync(string userId, EntityHeader org, EntityHeader user)
+        {
+            if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
+
+            var (rpId, _) = GetRpIdAndOrigin();
+            var creds = await _credentialRepo.GetByUserAsync(userId, rpId);
+            var summaries = creds.Select(c => new PasskeyCredentialSummary()
+            {
+                CredentialId = c.CredentialId,
+                Name = c.Name,
+                CreatedUtc = c.CreatedUtc,
+                LastUsedUtc = c.LastUsedUtc,
+            }).ToArray();
+
+            return InvokeResult<PasskeyCredentialSummary[]>.Create(summaries);
+        }
+
+        public async Task<InvokeResult> RenamePasskeyAsync(string userId, string credentialId, string name, EntityHeader org, EntityHeader user)
+        {
+            if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
+            if (String.IsNullOrEmpty(credentialId)) throw new ArgumentNullException(nameof(credentialId));
+            if (String.IsNullOrEmpty(name)) return InvokeResult.FromError("missing_name");
+            if (name.Length > MaxPasskeyNameLength) return InvokeResult.FromError("name_too_long");
+
+            var (rpId, _) = GetRpIdAndOrigin();
+            var stored = await _credentialRepo.FindByCredentialIdAsync(rpId, credentialId);
+            if (stored == null) return InvokeResult.FromError("credential_not_found");
+            if (!String.Equals(stored.UserId, userId, StringComparison.Ordinal)) return InvokeResult.FromError("credential_user_mismatch");
+
+            return await _credentialRepo.UpdateNameAsync(userId, rpId, credentialId, name);
+        }
+
+        public async Task<InvokeResult> RemovePasskeyAsync(string userId, string credentialId, EntityHeader org, EntityHeader user)
+        {
+            if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
+            if (String.IsNullOrEmpty(credentialId)) throw new ArgumentNullException(nameof(credentialId));
+
+            var (rpId, _) = GetRpIdAndOrigin();
+            return await _credentialRepo.RemovePasskeyCredentialAsync(userId, rpId, credentialId);
+        }
+
+        private InvokeResult ValidateChallenge(InvokeResult<PasskeyChallenge> challengeResult, PasskeyChallengePurpose purpose, string rpId, string origin)
+        {
+            if (!challengeResult.Successful) return challengeResult.ToInvokeResult();
+            if (challengeResult.Result == null) return InvokeResult.FromError("challenge_not_found");
+            if (challengeResult.Result.IsExpired) return InvokeResult.FromError("challenge_expired");
+            if (challengeResult.Result.Purpose != purpose) return InvokeResult.FromError("invalid_challenge_purpose");
+            if (!String.Equals(challengeResult.Result.RpId, rpId, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_rpid_mismatch");
+            if (!String.Equals(challengeResult.Result.Origin, origin, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_origin_mismatch");
+            return InvokeResult.Success;
         }
 
         private (string rpId, string origin) GetRpIdAndOrigin()
