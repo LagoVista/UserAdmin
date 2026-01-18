@@ -18,7 +18,7 @@ namespace LagoVista.UserAdmin.Managers
     /// <summary>
     /// Server-side manager behind /api/sys/testing endpoints.
     /// </summary>
-    public class AppUserTestingManager : ManagerBase, IAppUserTestingManager
+    public partial class AppUserTestingManager : ManagerBase, IAppUserTestingManager
     {
         private readonly IAppUserTestingDslRepo _testScenarioRepo;
         private readonly IAppUserTestRunRepo _testRunStore;

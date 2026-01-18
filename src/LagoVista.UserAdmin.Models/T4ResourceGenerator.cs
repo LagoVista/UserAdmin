@@ -1,4 +1,4 @@
-﻿/*1/18/2026 10:21:00 AM*/
+﻿/*1/18/2026 1:52:39 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -492,6 +492,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AuthView_Title
 
 		public static string AuthView_Title { get { return GetResourceString("AuthView_Title"); } }
+//Resources:UserAdminResources:AuthView_ViewId
+
+		public static string AuthView_ViewId { get { return GetResourceString("AuthView_ViewId"); } }
 //Resources:UserAdminResources:AuthView_Views
 
 		public static string AuthView_Views { get { return GetResourceString("AuthView_Views"); } }
@@ -510,6 +513,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AuthViewField_FieldName
 
 		public static string AuthViewField_FieldName { get { return GetResourceString("AuthViewField_FieldName"); } }
+//Resources:UserAdminResources:AuthViewField_FieldType
+
+		public static string AuthViewField_FieldType { get { return GetResourceString("AuthViewField_FieldType"); } }
 //Resources:UserAdminResources:AuthViewField_Finder
 
 		public static string AuthViewField_Finder { get { return GetResourceString("AuthViewField_Finder"); } }
@@ -2509,12 +2515,14 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AuthView_Route_Help = "AuthView_Route_Help";
 			public const string AuthView_RouteHelp = "AuthView_RouteHelp";
 			public const string AuthView_Title = "AuthView_Title";
+			public const string AuthView_ViewId = "AuthView_ViewId";
 			public const string AuthView_Views = "AuthView_Views";
 			public const string AuthView_Views_Help = "AuthView_Views_Help";
 			public const string AuthViewAction_Description = "AuthViewAction_Description";
 			public const string AuthViewAction_Finder = "AuthViewAction_Finder";
 			public const string AuthViewField_Description = "AuthViewField_Description";
 			public const string AuthViewField_FieldName = "AuthViewField_FieldName";
+			public const string AuthViewField_FieldType = "AuthViewField_FieldType";
 			public const string AuthViewField_Finder = "AuthViewField_Finder";
 			public const string AuthViewField_Finder_Help = "AuthViewField_Finder_Help";
 			public const string AuthViewField_Help = "AuthViewField_Help";

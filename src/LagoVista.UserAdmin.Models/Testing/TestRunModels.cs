@@ -36,9 +36,8 @@ namespace LagoVista.UserAdmin.Models.Testing
         public string BaseUrl { get; set; }
         public string TenantId { get; set; }
 
-        public DateTime CreatedUtc { get; set; }
-        public DateTime? StartedUtc { get; set; }
-        public DateTime? FinishedUtc { get; set; }
+        public string Started { get; set; }
+        public string Finished { get; set; }
 
         public TestRunStatus Status { get; set; } = TestRunStatus.Created;
 
@@ -88,8 +87,8 @@ namespace LagoVista.UserAdmin.Models.Testing
 
     public class AuthLogReviewSummary
     {
-        public DateTime? FromUtc { get; set; }
-        public DateTime? ToUtc { get; set; }
+        public string FromUtc { get; set; }
+        public string ToUtc { get; set; }
 
         public List<string> ExpectedEventsMissing { get; set; } = new List<string>();
         public List<string> ObservedEvents { get; set; } = new List<string>();

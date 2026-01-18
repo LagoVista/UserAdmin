@@ -65,10 +65,8 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
         #region Run Persistence
 
-        Task<InvokeResult> AddTestRunAsync(AppUserTestRun run, EntityHeader org, EntityHeader user);
-        Task<InvokeResult> AppendRunEventAsync(string runId, AppUserTestRunEvent evt, EntityHeader org, EntityHeader user);
-        Task<InvokeResult> FinishRunAsync(string runId, TestRunStatus status, EntityHeader org, EntityHeader user, TestRunVerification verification = null);
-
+        Task<InvokeResult> AddTestRunAsync(AppUserTestRun run, byte[] images, EntityHeader org, EntityHeader user);
+        
         Task<ListResponse<AppUserTestRunSummary>> GetTestRunsAsync(ListRequest request, EntityHeader org, EntityHeader user);
         Task<AppUserTestRun> GetTestRunAsync(string runId, EntityHeader org, EntityHeader user);
 
@@ -79,5 +77,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult<AuthLogReviewSummary>> GetAuthLogReviewAsync(DateTime fromUtc, DateTime toUtc, EntityHeader org, EntityHeader user);
 
         #endregion
+
+        Task<InvokeResult<AuthRunnerPlan>> BuildRunnerPlanAsync(string scenarioId, bool headless, EntityHeader org, EntityHeader user);
     }
 }
