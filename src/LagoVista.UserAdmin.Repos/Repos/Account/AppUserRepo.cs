@@ -40,7 +40,8 @@ namespace LagoVista.UserAdmin.Repos.Users
         public AppUserLoadRepo(IUserAdminSettings settings, IUserRoleRepo userRoleRepo, IAdminLogger logger, ICacheProvider cacheProvider) : 
             base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, cacheProvider)
         {
-            _userRoleRepo = userRoleRepo ?? throw new ArgumentNullException(nameof(userRoleRepo)); 
+            _userRoleRepo = userRoleRepo ?? throw new ArgumentNullException(nameof(userRoleRepo));
+            _shouldConsolidateCollections = settings.ShouldConsolidateCollections;
         }
 
         protected override bool ShouldConsolidateCollections => _shouldConsolidateCollections;

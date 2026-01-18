@@ -1,4 +1,4 @@
-﻿/*12/14/2025 8:41:33 AM*/
+﻿/*1/18/2026 10:21:00 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -171,6 +171,69 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AppUser_UserTitle
 
 		public static string AppUser_UserTitle { get { return GetResourceString("AppUser_UserTitle"); } }
+//Resources:UserAdminResources:AppUserTestingDSL_Action
+
+		public static string AppUserTestingDSL_Action { get { return GetResourceString("AppUserTestingDSL_Action"); } }
+//Resources:UserAdminResources:AppUserTestingDSL_Action_Help
+
+		public static string AppUserTestingDSL_Action_Help { get { return GetResourceString("AppUserTestingDSL_Action_Help"); } }
+//Resources:UserAdminResources:AppUserTestingDSL_AuthView
+
+		public static string AppUserTestingDSL_AuthView { get { return GetResourceString("AppUserTestingDSL_AuthView"); } }
+//Resources:UserAdminResources:AppUserTestingDSL_AuthView_Help
+
+		public static string AppUserTestingDSL_AuthView_Help { get { return GetResourceString("AppUserTestingDSL_AuthView_Help"); } }
+//Resources:UserAdminResources:AppUserTestingDSL_Expected
+
+		public static string AppUserTestingDSL_Expected { get { return GetResourceString("AppUserTestingDSL_Expected"); } }
+//Resources:UserAdminResources:AppUserTestingDSL_Expected_Help
+
+		public static string AppUserTestingDSL_Expected_Help { get { return GetResourceString("AppUserTestingDSL_Expected_Help"); } }
+//Resources:UserAdminResources:AppUserTestingDSL_Inputs
+
+		public static string AppUserTestingDSL_Inputs { get { return GetResourceString("AppUserTestingDSL_Inputs"); } }
+//Resources:UserAdminResources:AppUserTestingDSL_Inputs_Help
+
+		public static string AppUserTestingDSL_Inputs_Help { get { return GetResourceString("AppUserTestingDSL_Inputs_Help"); } }
+//Resources:UserAdminResources:AppUserTestingDSL_Preconditions
+
+		public static string AppUserTestingDSL_Preconditions { get { return GetResourceString("AppUserTestingDSL_Preconditions"); } }
+//Resources:UserAdminResources:AppUserTestingDSL_Preconditions_Help
+
+		public static string AppUserTestingDSL_Preconditions_Help { get { return GetResourceString("AppUserTestingDSL_Preconditions_Help"); } }
+//Resources:UserAdminResources:AppUserTestingExpectedOutcome_Description
+
+		public static string AppUserTestingExpectedOutcome_Description { get { return GetResourceString("AppUserTestingExpectedOutcome_Description"); } }
+//Resources:UserAdminResources:AppUserTestingExpectedOutcome_ExpectedAuthLogEvents
+
+		public static string AppUserTestingExpectedOutcome_ExpectedAuthLogEvents { get { return GetResourceString("AppUserTestingExpectedOutcome_ExpectedAuthLogEvents"); } }
+//Resources:UserAdminResources:AppUserTestingExpectedOutcome_ExpectedAuthLogEvents_Help
+
+		public static string AppUserTestingExpectedOutcome_ExpectedAuthLogEvents_Help { get { return GetResourceString("AppUserTestingExpectedOutcome_ExpectedAuthLogEvents_Help"); } }
+//Resources:UserAdminResources:AppUserTestingExpectedOutcome_ExpectedLanding
+
+		public static string AppUserTestingExpectedOutcome_ExpectedLanding { get { return GetResourceString("AppUserTestingExpectedOutcome_ExpectedLanding"); } }
+//Resources:UserAdminResources:AppUserTestingExpectedOutcome_ExpectedLanding_Help
+
+		public static string AppUserTestingExpectedOutcome_ExpectedLanding_Help { get { return GetResourceString("AppUserTestingExpectedOutcome_ExpectedLanding_Help"); } }
+//Resources:UserAdminResources:AppUserTestingExpectedOutcome_Help
+
+		public static string AppUserTestingExpectedOutcome_Help { get { return GetResourceString("AppUserTestingExpectedOutcome_Help"); } }
+//Resources:UserAdminResources:AppUserTestingExpectedOutcome_Postconditions
+
+		public static string AppUserTestingExpectedOutcome_Postconditions { get { return GetResourceString("AppUserTestingExpectedOutcome_Postconditions"); } }
+//Resources:UserAdminResources:AppUserTestingExpectedOutcome_Postconditions_Help
+
+		public static string AppUserTestingExpectedOutcome_Postconditions_Help { get { return GetResourceString("AppUserTestingExpectedOutcome_Postconditions_Help"); } }
+//Resources:UserAdminResources:AppUserTestingExpectedOutcome_Title
+
+		public static string AppUserTestingExpectedOutcome_Title { get { return GetResourceString("AppUserTestingExpectedOutcome_Title"); } }
+//Resources:UserAdminResources:AppUserTestScenario_AuthView
+
+		public static string AppUserTestScenario_AuthView { get { return GetResourceString("AppUserTestScenario_AuthView"); } }
+//Resources:UserAdminResources:AppUserTestScenario_AuthView_Help
+
+		public static string AppUserTestScenario_AuthView_Help { get { return GetResourceString("AppUserTestScenario_AuthView_Help"); } }
 //Resources:UserAdminResources:Area_Help
 
 		public static string Area_Help { get { return GetResourceString("Area_Help"); } }
@@ -198,6 +261,18 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AssetSet_Title
 
 		public static string AssetSet_Title { get { return GetResourceString("AssetSet_Title"); } }
+//Resources:UserAdminResources:AuthDSL_AuthView
+
+		public static string AuthDSL_AuthView { get { return GetResourceString("AuthDSL_AuthView"); } }
+//Resources:UserAdminResources:AuthDSL_Description
+
+		public static string AuthDSL_Description { get { return GetResourceString("AuthDSL_Description"); } }
+//Resources:UserAdminResources:AuthDSL_Help
+
+		public static string AuthDSL_Help { get { return GetResourceString("AuthDSL_Help"); } }
+//Resources:UserAdminResources:AuthDSL_Title
+
+		public static string AuthDSL_Title { get { return GetResourceString("AuthDSL_Title"); } }
 //Resources:UserAdminResources:AuthenticationLogs_Description
 
 		public static string AuthenticationLogs_Description { get { return GetResourceString("AuthenticationLogs_Description"); } }
@@ -285,12 +360,180 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AuthError_NotSysAdmin
 
 		public static string AuthError_NotSysAdmin { get { return GetResourceString("AuthError_NotSysAdmin"); } }
+//Resources:UserAdminResources:AuthFieldAction_Description
+
+		public static string AuthFieldAction_Description { get { return GetResourceString("AuthFieldAction_Description"); } }
+//Resources:UserAdminResources:AuthFieldAction_Finder
+
+		public static string AuthFieldAction_Finder { get { return GetResourceString("AuthFieldAction_Finder"); } }
+//Resources:UserAdminResources:AuthFieldAction_Finder_Help
+
+		public static string AuthFieldAction_Finder_Help { get { return GetResourceString("AuthFieldAction_Finder_Help"); } }
+//Resources:UserAdminResources:AuthFieldAction_Help
+
+		public static string AuthFieldAction_Help { get { return GetResourceString("AuthFieldAction_Help"); } }
+//Resources:UserAdminResources:AuthFieldAction_Name
+
+		public static string AuthFieldAction_Name { get { return GetResourceString("AuthFieldAction_Name"); } }
+//Resources:UserAdminResources:AuthFieldAction_Name_Help
+
+		public static string AuthFieldAction_Name_Help { get { return GetResourceString("AuthFieldAction_Name_Help"); } }
+//Resources:UserAdminResources:AuthFieldAction_Title
+
+		public static string AuthFieldAction_Title { get { return GetResourceString("AuthFieldAction_Title"); } }
 //Resources:UserAdminResources:AuthSingleuseToken_TokenNotFound
 
 		public static string AuthSingleuseToken_TokenNotFound { get { return GetResourceString("AuthSingleuseToken_TokenNotFound"); } }
 //Resources:UserAdminResources:AuthSingleuseToken_UserNotFound
 
 		public static string AuthSingleuseToken_UserNotFound { get { return GetResourceString("AuthSingleuseToken_UserNotFound"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_BelongsToOrg
+
+		public static string AuthTenantStateSnapshot_BelongsToOrg { get { return GetResourceString("AuthTenantStateSnapshot_BelongsToOrg"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_BelongsToOrg_Help
+
+		public static string AuthTenantStateSnapshot_BelongsToOrg_Help { get { return GetResourceString("AuthTenantStateSnapshot_BelongsToOrg_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_Description
+
+		public static string AuthTenantStateSnapshot_Description { get { return GetResourceString("AuthTenantStateSnapshot_Description"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_EmailConfirmed
+
+		public static string AuthTenantStateSnapshot_EmailConfirmed { get { return GetResourceString("AuthTenantStateSnapshot_EmailConfirmed"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_EmailConfirmed_Help
+
+		public static string AuthTenantStateSnapshot_EmailConfirmed_Help { get { return GetResourceString("AuthTenantStateSnapshot_EmailConfirmed_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_EnsureUserDoesNotExist
+
+		public static string AuthTenantStateSnapshot_EnsureUserDoesNotExist { get { return GetResourceString("AuthTenantStateSnapshot_EnsureUserDoesNotExist"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_EnsureUserDoesNotExist_Help
+
+		public static string AuthTenantStateSnapshot_EnsureUserDoesNotExist_Help { get { return GetResourceString("AuthTenantStateSnapshot_EnsureUserDoesNotExist_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_EnsureUserExists
+
+		public static string AuthTenantStateSnapshot_EnsureUserExists { get { return GetResourceString("AuthTenantStateSnapshot_EnsureUserExists"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_EnsureUserExists_Help
+
+		public static string AuthTenantStateSnapshot_EnsureUserExists_Help { get { return GetResourceString("AuthTenantStateSnapshot_EnsureUserExists_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_ExternalLoginProviders
+
+		public static string AuthTenantStateSnapshot_ExternalLoginProviders { get { return GetResourceString("AuthTenantStateSnapshot_ExternalLoginProviders"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_ExternalLoginProviders_Help
+
+		public static string AuthTenantStateSnapshot_ExternalLoginProviders_Help { get { return GetResourceString("AuthTenantStateSnapshot_ExternalLoginProviders_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_Help
+
+		public static string AuthTenantStateSnapshot_Help { get { return GetResourceString("AuthTenantStateSnapshot_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_IsAccountDisabled
+
+		public static string AuthTenantStateSnapshot_IsAccountDisabled { get { return GetResourceString("AuthTenantStateSnapshot_IsAccountDisabled"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_IsAccountDisabled_Help
+
+		public static string AuthTenantStateSnapshot_IsAccountDisabled_Help { get { return GetResourceString("AuthTenantStateSnapshot_IsAccountDisabled_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_IsAnonymous
+
+		public static string AuthTenantStateSnapshot_IsAnonymous { get { return GetResourceString("AuthTenantStateSnapshot_IsAnonymous"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_IsAnonymous_Help
+
+		public static string AuthTenantStateSnapshot_IsAnonymous_Help { get { return GetResourceString("AuthTenantStateSnapshot_IsAnonymous_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_LastMfaDateTimeUtc
+
+		public static string AuthTenantStateSnapshot_LastMfaDateTimeUtc { get { return GetResourceString("AuthTenantStateSnapshot_LastMfaDateTimeUtc"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_LastMfaDateTimeUtc_Help
+
+		public static string AuthTenantStateSnapshot_LastMfaDateTimeUtc_Help { get { return GetResourceString("AuthTenantStateSnapshot_LastMfaDateTimeUtc_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_PhoneNumberConfirmed
+
+		public static string AuthTenantStateSnapshot_PhoneNumberConfirmed { get { return GetResourceString("AuthTenantStateSnapshot_PhoneNumberConfirmed"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_PhoneNumberConfirmed_Help
+
+		public static string AuthTenantStateSnapshot_PhoneNumberConfirmed_Help { get { return GetResourceString("AuthTenantStateSnapshot_PhoneNumberConfirmed_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_ShowWelcome
+
+		public static string AuthTenantStateSnapshot_ShowWelcome { get { return GetResourceString("AuthTenantStateSnapshot_ShowWelcome"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_ShowWelcome_Help
+
+		public static string AuthTenantStateSnapshot_ShowWelcome_Help { get { return GetResourceString("AuthTenantStateSnapshot_ShowWelcome_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_Title
+
+		public static string AuthTenantStateSnapshot_Title { get { return GetResourceString("AuthTenantStateSnapshot_Title"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_TwoFactorEnabled
+
+		public static string AuthTenantStateSnapshot_TwoFactorEnabled { get { return GetResourceString("AuthTenantStateSnapshot_TwoFactorEnabled"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_TwoFactorEnabled_Help
+
+		public static string AuthTenantStateSnapshot_TwoFactorEnabled_Help { get { return GetResourceString("AuthTenantStateSnapshot_TwoFactorEnabled_Help"); } }
+//Resources:UserAdminResources:AuthView_Actions
+
+		public static string AuthView_Actions { get { return GetResourceString("AuthView_Actions"); } }
+//Resources:UserAdminResources:AuthView_Actions_Help
+
+		public static string AuthView_Actions_Help { get { return GetResourceString("AuthView_Actions_Help"); } }
+//Resources:UserAdminResources:AuthView_Description
+
+		public static string AuthView_Description { get { return GetResourceString("AuthView_Description"); } }
+//Resources:UserAdminResources:AuthView_Fields
+
+		public static string AuthView_Fields { get { return GetResourceString("AuthView_Fields"); } }
+//Resources:UserAdminResources:AuthView_FormFiield_Description
+
+		public static string AuthView_FormFiield_Description { get { return GetResourceString("AuthView_FormFiield_Description"); } }
+//Resources:UserAdminResources:AuthView_Help
+
+		public static string AuthView_Help { get { return GetResourceString("AuthView_Help"); } }
+//Resources:UserAdminResources:AuthView_Route
+
+		public static string AuthView_Route { get { return GetResourceString("AuthView_Route"); } }
+//Resources:UserAdminResources:AuthView_Route_Help
+
+		public static string AuthView_Route_Help { get { return GetResourceString("AuthView_Route_Help"); } }
+//Resources:UserAdminResources:AuthView_RouteHelp
+
+		public static string AuthView_RouteHelp { get { return GetResourceString("AuthView_RouteHelp"); } }
+//Resources:UserAdminResources:AuthView_Title
+
+		public static string AuthView_Title { get { return GetResourceString("AuthView_Title"); } }
+//Resources:UserAdminResources:AuthView_Views
+
+		public static string AuthView_Views { get { return GetResourceString("AuthView_Views"); } }
+//Resources:UserAdminResources:AuthView_Views_Help
+
+		public static string AuthView_Views_Help { get { return GetResourceString("AuthView_Views_Help"); } }
+//Resources:UserAdminResources:AuthViewAction_Description
+
+		public static string AuthViewAction_Description { get { return GetResourceString("AuthViewAction_Description"); } }
+//Resources:UserAdminResources:AuthViewAction_Finder
+
+		public static string AuthViewAction_Finder { get { return GetResourceString("AuthViewAction_Finder"); } }
+//Resources:UserAdminResources:AuthViewField_Description
+
+		public static string AuthViewField_Description { get { return GetResourceString("AuthViewField_Description"); } }
+//Resources:UserAdminResources:AuthViewField_FieldName
+
+		public static string AuthViewField_FieldName { get { return GetResourceString("AuthViewField_FieldName"); } }
+//Resources:UserAdminResources:AuthViewField_Finder
+
+		public static string AuthViewField_Finder { get { return GetResourceString("AuthViewField_Finder"); } }
+//Resources:UserAdminResources:AuthViewField_Finder_Help
+
+		public static string AuthViewField_Finder_Help { get { return GetResourceString("AuthViewField_Finder_Help"); } }
+//Resources:UserAdminResources:AuthViewField_Help
+
+		public static string AuthViewField_Help { get { return GetResourceString("AuthViewField_Help"); } }
+//Resources:UserAdminResources:AuthViewField_Name
+
+		public static string AuthViewField_Name { get { return GetResourceString("AuthViewField_Name"); } }
+//Resources:UserAdminResources:AuthViewField_Name_Help
+
+		public static string AuthViewField_Name_Help { get { return GetResourceString("AuthViewField_Name_Help"); } }
+//Resources:UserAdminResources:AuthViewField_Title
+
+		public static string AuthViewField_Title { get { return GetResourceString("AuthViewField_Title"); } }
+//Resources:UserAdminResources:AuthViewFormField_Title
+
+		public static string AuthViewFormField_Title { get { return GetResourceString("AuthViewFormField_Title"); } }
+//Resources:UserAdminResources:AuthViews_Title
+
+		public static string AuthViews_Title { get { return GetResourceString("AuthViews_Title"); } }
 //Resources:UserAdminResources:Billing_Contact
 
 		public static string Billing_Contact { get { return GetResourceString("Billing_Contact"); } }
@@ -1901,6 +2144,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:SentEmails_Title
 
 		public static string SentEmails_Title { get { return GetResourceString("SentEmails_Title"); } }
+//Resources:UserAdminResources:SetCondition_DontCare
+
+		public static string SetCondition_DontCare { get { return GetResourceString("SetCondition_DontCare"); } }
+//Resources:UserAdminResources:SetCondition_NotSet
+
+		public static string SetCondition_NotSet { get { return GetResourceString("SetCondition_NotSet"); } }
+//Resources:UserAdminResources:SetCondition_Set
+
+		public static string SetCondition_Set { get { return GetResourceString("SetCondition_Set"); } }
 //Resources:UserAdminResources:SetPasswordVM_Description
 
 		public static string SetPasswordVM_Description { get { return GetResourceString("SetPasswordVM_Description"); } }
@@ -2150,6 +2402,27 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AppUser_Title = "AppUser_Title";
 			public const string AppUser_UserName = "AppUser_UserName";
 			public const string AppUser_UserTitle = "AppUser_UserTitle";
+			public const string AppUserTestingDSL_Action = "AppUserTestingDSL_Action";
+			public const string AppUserTestingDSL_Action_Help = "AppUserTestingDSL_Action_Help";
+			public const string AppUserTestingDSL_AuthView = "AppUserTestingDSL_AuthView";
+			public const string AppUserTestingDSL_AuthView_Help = "AppUserTestingDSL_AuthView_Help";
+			public const string AppUserTestingDSL_Expected = "AppUserTestingDSL_Expected";
+			public const string AppUserTestingDSL_Expected_Help = "AppUserTestingDSL_Expected_Help";
+			public const string AppUserTestingDSL_Inputs = "AppUserTestingDSL_Inputs";
+			public const string AppUserTestingDSL_Inputs_Help = "AppUserTestingDSL_Inputs_Help";
+			public const string AppUserTestingDSL_Preconditions = "AppUserTestingDSL_Preconditions";
+			public const string AppUserTestingDSL_Preconditions_Help = "AppUserTestingDSL_Preconditions_Help";
+			public const string AppUserTestingExpectedOutcome_Description = "AppUserTestingExpectedOutcome_Description";
+			public const string AppUserTestingExpectedOutcome_ExpectedAuthLogEvents = "AppUserTestingExpectedOutcome_ExpectedAuthLogEvents";
+			public const string AppUserTestingExpectedOutcome_ExpectedAuthLogEvents_Help = "AppUserTestingExpectedOutcome_ExpectedAuthLogEvents_Help";
+			public const string AppUserTestingExpectedOutcome_ExpectedLanding = "AppUserTestingExpectedOutcome_ExpectedLanding";
+			public const string AppUserTestingExpectedOutcome_ExpectedLanding_Help = "AppUserTestingExpectedOutcome_ExpectedLanding_Help";
+			public const string AppUserTestingExpectedOutcome_Help = "AppUserTestingExpectedOutcome_Help";
+			public const string AppUserTestingExpectedOutcome_Postconditions = "AppUserTestingExpectedOutcome_Postconditions";
+			public const string AppUserTestingExpectedOutcome_Postconditions_Help = "AppUserTestingExpectedOutcome_Postconditions_Help";
+			public const string AppUserTestingExpectedOutcome_Title = "AppUserTestingExpectedOutcome_Title";
+			public const string AppUserTestScenario_AuthView = "AppUserTestScenario_AuthView";
+			public const string AppUserTestScenario_AuthView_Help = "AppUserTestScenario_AuthView_Help";
 			public const string Area_Help = "Area_Help";
 			public const string Area_IsForProductLine = "Area_IsForProductLine";
 			public const string Area_PageCategories = "Area_PageCategories";
@@ -2159,6 +2432,10 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AssetSet_IsRestricted = "AssetSet_IsRestricted";
 			public const string AssetSet_IsRestricted_Help = "AssetSet_IsRestricted_Help";
 			public const string AssetSet_Title = "AssetSet_Title";
+			public const string AuthDSL_AuthView = "AuthDSL_AuthView";
+			public const string AuthDSL_Description = "AuthDSL_Description";
+			public const string AuthDSL_Help = "AuthDSL_Help";
+			public const string AuthDSL_Title = "AuthDSL_Title";
 			public const string AuthenticationLogs_Description = "AuthenticationLogs_Description";
 			public const string AuthenticationLogs_Title = "AuthenticationLogs_Title";
 			public const string AuthErr_AuthRequestNull = "AuthErr_AuthRequestNull";
@@ -2188,8 +2465,64 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AuthErr_UserIsNullForRefresh = "AuthErr_UserIsNullForRefresh";
 			public const string AuthErr_UserLockedOut = "AuthErr_UserLockedOut";
 			public const string AuthError_NotSysAdmin = "AuthError_NotSysAdmin";
+			public const string AuthFieldAction_Description = "AuthFieldAction_Description";
+			public const string AuthFieldAction_Finder = "AuthFieldAction_Finder";
+			public const string AuthFieldAction_Finder_Help = "AuthFieldAction_Finder_Help";
+			public const string AuthFieldAction_Help = "AuthFieldAction_Help";
+			public const string AuthFieldAction_Name = "AuthFieldAction_Name";
+			public const string AuthFieldAction_Name_Help = "AuthFieldAction_Name_Help";
+			public const string AuthFieldAction_Title = "AuthFieldAction_Title";
 			public const string AuthSingleuseToken_TokenNotFound = "AuthSingleuseToken_TokenNotFound";
 			public const string AuthSingleuseToken_UserNotFound = "AuthSingleuseToken_UserNotFound";
+			public const string AuthTenantStateSnapshot_BelongsToOrg = "AuthTenantStateSnapshot_BelongsToOrg";
+			public const string AuthTenantStateSnapshot_BelongsToOrg_Help = "AuthTenantStateSnapshot_BelongsToOrg_Help";
+			public const string AuthTenantStateSnapshot_Description = "AuthTenantStateSnapshot_Description";
+			public const string AuthTenantStateSnapshot_EmailConfirmed = "AuthTenantStateSnapshot_EmailConfirmed";
+			public const string AuthTenantStateSnapshot_EmailConfirmed_Help = "AuthTenantStateSnapshot_EmailConfirmed_Help";
+			public const string AuthTenantStateSnapshot_EnsureUserDoesNotExist = "AuthTenantStateSnapshot_EnsureUserDoesNotExist";
+			public const string AuthTenantStateSnapshot_EnsureUserDoesNotExist_Help = "AuthTenantStateSnapshot_EnsureUserDoesNotExist_Help";
+			public const string AuthTenantStateSnapshot_EnsureUserExists = "AuthTenantStateSnapshot_EnsureUserExists";
+			public const string AuthTenantStateSnapshot_EnsureUserExists_Help = "AuthTenantStateSnapshot_EnsureUserExists_Help";
+			public const string AuthTenantStateSnapshot_ExternalLoginProviders = "AuthTenantStateSnapshot_ExternalLoginProviders";
+			public const string AuthTenantStateSnapshot_ExternalLoginProviders_Help = "AuthTenantStateSnapshot_ExternalLoginProviders_Help";
+			public const string AuthTenantStateSnapshot_Help = "AuthTenantStateSnapshot_Help";
+			public const string AuthTenantStateSnapshot_IsAccountDisabled = "AuthTenantStateSnapshot_IsAccountDisabled";
+			public const string AuthTenantStateSnapshot_IsAccountDisabled_Help = "AuthTenantStateSnapshot_IsAccountDisabled_Help";
+			public const string AuthTenantStateSnapshot_IsAnonymous = "AuthTenantStateSnapshot_IsAnonymous";
+			public const string AuthTenantStateSnapshot_IsAnonymous_Help = "AuthTenantStateSnapshot_IsAnonymous_Help";
+			public const string AuthTenantStateSnapshot_LastMfaDateTimeUtc = "AuthTenantStateSnapshot_LastMfaDateTimeUtc";
+			public const string AuthTenantStateSnapshot_LastMfaDateTimeUtc_Help = "AuthTenantStateSnapshot_LastMfaDateTimeUtc_Help";
+			public const string AuthTenantStateSnapshot_PhoneNumberConfirmed = "AuthTenantStateSnapshot_PhoneNumberConfirmed";
+			public const string AuthTenantStateSnapshot_PhoneNumberConfirmed_Help = "AuthTenantStateSnapshot_PhoneNumberConfirmed_Help";
+			public const string AuthTenantStateSnapshot_ShowWelcome = "AuthTenantStateSnapshot_ShowWelcome";
+			public const string AuthTenantStateSnapshot_ShowWelcome_Help = "AuthTenantStateSnapshot_ShowWelcome_Help";
+			public const string AuthTenantStateSnapshot_Title = "AuthTenantStateSnapshot_Title";
+			public const string AuthTenantStateSnapshot_TwoFactorEnabled = "AuthTenantStateSnapshot_TwoFactorEnabled";
+			public const string AuthTenantStateSnapshot_TwoFactorEnabled_Help = "AuthTenantStateSnapshot_TwoFactorEnabled_Help";
+			public const string AuthView_Actions = "AuthView_Actions";
+			public const string AuthView_Actions_Help = "AuthView_Actions_Help";
+			public const string AuthView_Description = "AuthView_Description";
+			public const string AuthView_Fields = "AuthView_Fields";
+			public const string AuthView_FormFiield_Description = "AuthView_FormFiield_Description";
+			public const string AuthView_Help = "AuthView_Help";
+			public const string AuthView_Route = "AuthView_Route";
+			public const string AuthView_Route_Help = "AuthView_Route_Help";
+			public const string AuthView_RouteHelp = "AuthView_RouteHelp";
+			public const string AuthView_Title = "AuthView_Title";
+			public const string AuthView_Views = "AuthView_Views";
+			public const string AuthView_Views_Help = "AuthView_Views_Help";
+			public const string AuthViewAction_Description = "AuthViewAction_Description";
+			public const string AuthViewAction_Finder = "AuthViewAction_Finder";
+			public const string AuthViewField_Description = "AuthViewField_Description";
+			public const string AuthViewField_FieldName = "AuthViewField_FieldName";
+			public const string AuthViewField_Finder = "AuthViewField_Finder";
+			public const string AuthViewField_Finder_Help = "AuthViewField_Finder_Help";
+			public const string AuthViewField_Help = "AuthViewField_Help";
+			public const string AuthViewField_Name = "AuthViewField_Name";
+			public const string AuthViewField_Name_Help = "AuthViewField_Name_Help";
+			public const string AuthViewField_Title = "AuthViewField_Title";
+			public const string AuthViewFormField_Title = "AuthViewFormField_Title";
+			public const string AuthViews_Title = "AuthViews_Title";
 			public const string Billing_Contact = "Billing_Contact";
 			public const string Calendar_AllDay = "Calendar_AllDay";
 			public const string Calendar_Date = "Calendar_Date";
@@ -2724,6 +3057,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string SentEmail_Description = "SentEmail_Description";
 			public const string SentEmail_Title = "SentEmail_Title";
 			public const string SentEmails_Title = "SentEmails_Title";
+			public const string SetCondition_DontCare = "SetCondition_DontCare";
+			public const string SetCondition_NotSet = "SetCondition_NotSet";
+			public const string SetCondition_Set = "SetCondition_Set";
 			public const string SetPasswordVM_Description = "SetPasswordVM_Description";
 			public const string SetPasswordVM_Help = "SetPasswordVM_Help";
 			public const string SetPasswordVM_Title = "SetPasswordVM_Title";

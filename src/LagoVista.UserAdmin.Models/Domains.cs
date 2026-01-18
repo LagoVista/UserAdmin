@@ -19,6 +19,31 @@ namespace LagoVista.UserAdmin.Models
         public const string SecurityViewModels = "SecurityViewModels";
         public const string EmailServicesDomain = "EmailServices";
         public const string MiscDomain = "MiscDomain";
+        public const string AuthTesting = "AuthTesting";
+
+        [DomainDescription(AuthTesting)]
+        public static DomainDescription AuthTestingDomainDescription
+        {
+            get
+            {
+                return new DomainDescription()
+                {
+                    Description = "Models and data structures for testing user authentication.",
+                    DomainType = DomainDescription.DomainTypes.BusinessObject,
+                    Name = "Auth Testing",
+                    CurrentVersion = new Core.Models.VersionInfo()
+                    {
+                        Major = 0,
+                        Minor = 8,
+                        Build = 001,
+                        DateStamp = new DateTime(2016, 12, 20),
+                        Revision = 1,
+                        ReleaseNotes = "Initial unstable preview"
+                    }
+                };
+            }
+        }
+
         [DomainDescription(UserDomain)]
         public static DomainDescription UserDomainDescription
         {

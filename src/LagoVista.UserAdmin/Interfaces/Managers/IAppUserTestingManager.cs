@@ -1,8 +1,11 @@
+using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Testing;
+using LagoVista.UserAdmin.Models.Users;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Interfaces.Managers
@@ -15,78 +18,65 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
     public interface IAppUserTestingManager
     {
         #region Preconditions / Setup
-
-        Task<InvokeResult> SignInTestUser();
-
-        Task<InvokeResult> SignOutTestUser();
-
         /// <summary>
         /// Ensure the fixed test user does not exist.
         /// </summary>
-        Task<InvokeResult> DeleteTestUserAsync();
+        Task<InvokeResult> DeleteTestUserAsync(EntityHeader org, EntityHeader user);
 
         /// <summary>
         /// Apply a declarative setup intent (seeds) and/or precondition snapshot for the fixed test user.
         /// This should only support the subset of fields the server can enforce.
         /// </summary>
-        Task<InvokeResult> ApplySetupAsync(AuthTenantStateSnapshot preconditions, bool loginUser);
+        Task<InvokeResult> ApplySetupAsync(AuthTenantStateSnapshot preconditions, EntityHeader org, EntityHeader user);
 
         /// <summary>
         /// For out-of-band verification flows: return the last email token/code sent to the fixed test user.
         /// </summary>
-        Task<InvokeResult<string>> GetLastEmailTokenAsync();
+        Task<InvokeResult<string>> GetLastEmailTokenAsync(EntityHeader org, EntityHeader user);
 
         /// <summary>
         /// For out-of-band verification flows: return the last sms token/code sent to the fixed test user.
         /// </summary>
-        Task<InvokeResult<string>> GetLastSmsTokenAsync();
+        Task<InvokeResult<string>> GetLastSmsTokenAsync(EntityHeader org, EntityHeader user);
 
+        Task<AppUser> GetTestUserAsync(EntityHeader org, EntityHeader user);
         #endregion
 
-        #region Snapshot Getter
-
-        /// <summary>
-        /// Get the current auth+tenant/org snapshot for the fixed test user.
-        /// CeremonyId may influence computed fields (e.g., landing).
-        /// </summary>
-        Task<InvokeResult<AuthTenantStateSnapshot>> GetUserSnapshotAsync(string ceremonyId = null);
-
-        /// <summary>
-        /// Get computed values used for verification (e.g., default landing, fully configured) for the fixed test user.
-        /// </summary>
-        Task<InvokeResult<TestRunVerification>> GetVerificationAsync(string ceremonyId = null);
-
-        #endregion
 
         #region DSL Case Management
 
         /// <summary>
-        /// Create or update a DSL spec. If dsl.Id is empty, the store should assign one (create).
+        /// Create or update a DSL spec. If testSceenario.Id is empty, the store should assign one (create).
         /// ScenarioName is display-only (may still be unique, but not used as the key).
         /// </summary>
-        Task<InvokeResult> CreateDslAsync(AppUserTestingDSL dsl);
-        Task<InvokeResult> UpdateDslAsync(AppUserTestingDSL dsl);
+        Task<InvokeResult> AddTestScenarioAsync(AppUserTestScenario testSceenario, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> UpdateTestScenarioAsync(AppUserTestScenario testSceenario, EntityHeader org, EntityHeader user);
+        Task<AppUserTestScenario> GetTestScenarioAsync(string id, EntityHeader org, EntityHeader user);
+        Task<ListResponse<AppUserTestScenarioSummary>> GetTestScenariosForOrganizationAsync(ListRequest request, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> DeleteTestScenarioAsync(string id, EntityHeader org, EntityHeader user);
 
-        Task<InvokeResult<AppUserTestingDSL>> GetDslAsync(string id);
-        Task<ListResponse<AppUserTestingDSLSummary>> ListDslAsync(ListRequest request);
-        Task<InvokeResult> DeleteDslAsync(string id);
+        Task<InvokeResult> AddAuthViewAsync(AuthView testSceenario, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> UpdateAuthViewAsync(AuthView testSceenario, EntityHeader org, EntityHeader user);
+        Task<AuthView> GetAuthViewAsync(string id, EntityHeader org, EntityHeader user);
+        Task<ListResponse<AuthViewSummary>> GetAuthViewsForOrgAsync(ListRequest request, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> DeleteAuthViewAsync(string id, EntityHeader org, EntityHeader user);
 
         #endregion
 
         #region Run Persistence
 
-        Task<InvokeResult<AppUserTestRun>> CreateRunAsync(AppUserTestRun run);
-        Task<InvokeResult> AppendRunEventAsync(string runId, AppUserTestRunEvent evt);
-        Task<InvokeResult<AppUserTestRun>> FinishRunAsync(string runId, TestRunStatus status, TestRunVerification verification = null);
+        Task<InvokeResult> AddTestRunAsync(AppUserTestRun run, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> AppendRunEventAsync(string runId, AppUserTestRunEvent evt, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> FinishRunAsync(string runId, TestRunStatus status, EntityHeader org, EntityHeader user, TestRunVerification verification = null);
 
-        Task<ListResponse<AppUserTestRunSummary>> GetTestRunsAsync(ListRequest request);
-        Task<InvokeResult<AppUserTestRun>> GetRunAsync(string runId);
+        Task<ListResponse<AppUserTestRunSummary>> GetTestRunsAsync(ListRequest request, EntityHeader org, EntityHeader user);
+        Task<AppUserTestRun> GetTestRunAsync(string runId, EntityHeader org, EntityHeader user);
 
         #endregion
 
         #region Auth Log Review
 
-        Task<InvokeResult<AuthLogReviewSummary>> GetAuthLogReviewAsync(DateTime fromUtc, DateTime toUtc);
+        Task<InvokeResult<AuthLogReviewSummary>> GetAuthLogReviewAsync(DateTime fromUtc, DateTime toUtc, EntityHeader org, EntityHeader user);
 
         #endregion
     }

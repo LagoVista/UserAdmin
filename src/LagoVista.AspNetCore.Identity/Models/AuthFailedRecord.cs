@@ -22,7 +22,7 @@ namespace LagoVista.AspNetCore.Identity.Models
         public string QueryString { get; init; }
         public string UserId { get; init; }
         public string UserName { get; init; }
-        public string?RemoteIp { get; init; }
+        public string RemoteIp { get; init; }
         public string UserAgent { get; init; }
         public string[] Schemes { get; init; }
         public string[] RequiredPolicies { get; init; }

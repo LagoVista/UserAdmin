@@ -25,9 +25,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
             Icon = "icon-ae-calendar";
         }
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
-        public string Description { get; set; }
-
         [FormField(LabelResource: UserAdminResources.Names.HolidaySet_Culture_Or_Country, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string CultureOrCountry { get; set; }
 
@@ -39,19 +36,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public HolidaySetSummary CreateSummary()
         {
-            return new HolidaySetSummary()
-            {
-                Description = Description,
-                Id = Id,
-                Icon = Icon,
-                Name = Name,
-                IsPublic = IsPublic,
-                Key = Key,
-                CategoryId = Category?.Id,
-                Category = Category?.Text,
-                CategoryKey = Category?.Key,
-                CultureOrCountry = CultureOrCountry
-            };
+            var holiday = new HolidaySetSummary();
+            holiday.CultureOrCountry = CultureOrCountry;
+            holiday.Populate(this);
+            return holiday;
         }
 
         public List<string> GetFormFields()

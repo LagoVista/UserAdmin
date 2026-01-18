@@ -8,7 +8,7 @@ using LagoVista.UserAdmin.Models.Testing;
 
 namespace LagoVista.UserAdmin.Repos.Testing
 {
-    public class AppUserTestingDslRepo : DocumentDBRepoBase<AppUserTestingDSL>, IAppUserTestingDslRepo
+    public class AppUserTestingDslRepo : DocumentDBRepoBase<AppUserTestScenario>, IAppUserTestingDslRepo
     {
         bool _shouldConsolidateCollections;
         public AppUserTestingDslRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) : 
@@ -19,7 +19,7 @@ namespace LagoVista.UserAdmin.Repos.Testing
 
         protected override bool ShouldConsolidateCollections => _shouldConsolidateCollections;
 
-        public async Task AddDSLAsync(AppUserTestingDSL dsl)
+        public async Task AddDSLAsync(AppUserTestScenario dsl)
         {
             await CreateDocumentAsync(dsl);
         }
@@ -29,17 +29,17 @@ namespace LagoVista.UserAdmin.Repos.Testing
             return base.DeleteDocumentAsync(id);
         }
 
-        public Task<AppUserTestingDSL> GetByIdAsync(string id)
+        public Task<AppUserTestScenario> GetByIdAsync(string id)
         {
             return base.GetDocumentAsync(id);
         }
 
-        public Task<ListResponse<AppUserTestingDSLSummary>> ListAsync(string orgId, ListRequest request)
+        public Task<ListResponse<AppUserTestScenarioSummary>> ListAsync(string orgId, ListRequest request)
         {
-             return QuerySummaryDescendingAsync< AppUserTestingDSLSummary, AppUserTestingDSL>(qry => qry.OwnerOrganization.Id == orgId, qry=>qry.Name, request);
+             return QuerySummaryDescendingAsync<AppUserTestScenarioSummary, AppUserTestScenario>(qry => qry.OwnerOrganization.Id == orgId, qry=>qry.Name, request);
         }
 
-        public Task UpdateDSLAsync(AppUserTestingDSL dsl)
+        public Task UpdateDSLAsync(AppUserTestScenario dsl)
         {      
             return UpsertDocumentAsync(dsl); 
         }

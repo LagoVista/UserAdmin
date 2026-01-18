@@ -145,12 +145,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Common_Notes, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(UserAdminResources))]
         public string Notes { get; set; }
 
-        /// <summary>
-        /// A description that can be added to this location
-        /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.Common_Description, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
-        public String Description { get; set; }
-
         public string HeroTitle { get; set; }
 
         public string HeroImage { get; set; }

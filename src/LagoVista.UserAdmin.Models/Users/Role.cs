@@ -15,9 +15,6 @@ namespace LagoVista.UserAdmin.Models.Users
     [EntityDescription(Domains.UserDomain, UserAdminResources.Names.Role_Title, UserAdminResources.Names.Role_Help, UserAdminResources.Names.Role_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
     public class Role : UserAdminModelBase, IKeyedEntity, IOwnedEntity, IValidateable, INamedEntity
     {
-        [FormField(LabelResource: UserAdminResources.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
-        public string Description { get; set; }
-
 
         [FormField(LabelResource: UserAdminResources.Names.Role_IsSystemRole, IsUserEditable:false,  FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool IsSystemRole { get; set; }

@@ -48,7 +48,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
     }
 
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.LocationDiagram_Title, UserAdminResources.Names.LocationDiagrams_Description, UserAdminResources.Names.LocationDiagrams_Description,
-        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "icon-pz-worldwide-1", GetListUrl: "/api/org/location/diagrams", DeleteUrl: "/api/org/location/diagram/{id}", 
+        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "icon-pz-worldwide-1",
+        GetListUrl: "/api/org/location/diagrams", DeleteUrl: "/api/org/location/diagram/{id}", 
         GetUrl: "/api/org/location/diagram/{id}", SaveUrl: "/api/org/location/diagram", FactoryUrl: "/api/org/location/diagram")]
     public class LocationDiagram : EntityBase, IValidateable, ISummaryFactory, IFormDescriptor
     {
@@ -137,14 +138,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public LocationDiagramSummary CreateSummary()
         {
-            return new LocationDiagramSummary()
-            {
-                Id = Id,
-                Name = Name,
-                Key = Key,
-                Location = Location,
-                IsPublic = false
-            };
+            var summary = new LocationDiagramSummary();
+            summary.Populate(this);
+            return summary;
         }
 
         public List<string> GetFormFields()

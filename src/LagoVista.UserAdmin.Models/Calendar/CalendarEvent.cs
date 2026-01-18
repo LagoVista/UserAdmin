@@ -31,7 +31,9 @@ namespace LagoVista.UserAdmin.Models.Calendar
     }
 
     [EntityDescription(Domains.MiscDomain, UserAdminResources.Names.Calendar_ObjectTitle, UserAdminResources.Names.Calendar_ObjectDescription, UserAdminResources.Names.Calendar_ObjectDescription,
-        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources))]
+        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources),
+        ListUIUrl: "/business/calendar", 
+        SaveUrl: "/api/calendar/event", GetListUrl:"/api/calendar/month/{year}/{month}", FactoryUrl: "/api/calendar/event/factory", DeleteUrl: "/api/calendar/event/{id}", GetUrl: "/api/calendar/event/{id}")]
     public class CalendarEvent : UserAdminModelBase, IKeyedEntity, INamedEntity, IOwnedEntity, IValidateable
     {
         public const string CalendarEventType_Networking = "networking";
@@ -55,17 +57,19 @@ namespace LagoVista.UserAdmin.Models.Calendar
 
         public CalendarEventSummary CreateSummary()
         {
-            return new CalendarEventSummary()
+            var summary = new CalendarEventSummary()
             {
                 AllDay = AllDay,
+                Name = Name, 
                 Id = Id,
                 Date = Date,
                 StartTime = StartTime,
                 EndTime = EndTime,
-                Name = Name,
                 EventType = EventType.Text,
                 EventTypeKey = EventType.Key
             };
+            
+            return summary;
         }
 
         [FormField(LabelResource: UserAdminResources.Names.Calendar_Start, FieldType: FieldTypes.Time, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
@@ -80,10 +84,7 @@ namespace LagoVista.UserAdmin.Models.Calendar
         [FormField(LabelResource: UserAdminResources.Names.Calendar_EventType, ResourceType: typeof(UserAdminResources), IsRequired: true, FieldType: FieldTypes.Picker, EnumType: typeof(CalendarEventTypes),
             WaterMark: UserAdminResources.Names.Calendar_EventType_Select)]
         public EntityHeader<CalendarEventTypes> EventType { get; set; }
-
-        [FormField(LabelResource: UserAdminResources.Names.Calendar_Description, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
-        public string Description { get; set; }
-        
+ 
         [CustomValidator]
         public void Validate(ValidationResult result)
         {

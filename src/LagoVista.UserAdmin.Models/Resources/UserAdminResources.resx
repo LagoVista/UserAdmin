@@ -2180,4 +2180,300 @@
   <data name="FunctionMapFunction_Description" xml:space="preserve">
     <value>Define a function on this page to control or secure specific behavior for users who can access it.</value>
   </data>
+  <data name="AuthView_Title" xml:space="preserve">
+    <value>Authentication View</value>
+  </data>
+  <data name="AuthViews_Title" xml:space="preserve">
+    <value>Authentication Views</value>
+  </data>
+  <data name="AuthView_Help" xml:space="preserve">
+    <value>Authentication views are used to build UI integration tests for authentication</value>
+  </data>
+  <data name="AuthView_Description" xml:space="preserve">
+    <value>Authentication views are used to build UI integration tests for authentication</value>
+  </data>
+  <data name="AuthView_Route" xml:space="preserve">
+    <value>Route</value>
+  </data>
+  <data name="AuthView_RouteHelp" xml:space="preserve">
+    <value>The actual route in the user inteface for this authentication view</value>
+  </data>
+  <data name="AuthView_Fields" xml:space="preserve">
+    <value>Form Fields</value>
+  </data>
+  <data name="AuthView_Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="AuthViewFormField_Title" xml:space="preserve">
+    <value>Form Field</value>
+  </data>
+  <data name="AuthView_FormFiield_Description" xml:space="preserve">
+    <value>A form field is an input on the form used to provide a value during an authentication process</value>
+  </data>
+  <data name="AuthViewAction_Description" xml:space="preserve">
+    <value>An Auth View Action is a link or button that can be clicked on an authentication view to trigger an action</value>
+  </data>
+  <data name="AuthViewField_FieldName" xml:space="preserve">
+    <value>Field Name</value>
+  </data>
+  <data name="AuthViewAction_Finder" xml:space="preserve">
+    <value>Action Finder</value>
+  </data>
+  <data name="AuthDSL_Title" xml:space="preserve">
+    <value>Auth View Test Scenario</value>
+  </data>
+  <data name="AuthDSL_Help" xml:space="preserve">
+    <value>A test scenario is exactly one step that can be performed on an authenticatlon flow it has a setup, an action and expected end-state</value>
+  </data>
+  <data name="AuthDSL_Description" xml:space="preserve">
+    <value>A test scenario is exactly one step that can be performed on an authenticatlon flow it has a setup, an action and expected end-state</value>
+  </data>
+  <data name="AuthDSL_AuthView" xml:space="preserve">
+    <value>Authentication View</value>
+  </data>
+  <data name="SetCondition_Set" xml:space="preserve">
+    <value>Set</value>
+  </data>
+  <data name="SetCondition_NotSet" xml:space="preserve">
+    <value>Not Set</value>
+  </data>
+  <data name="SetCondition_DontCare" xml:space="preserve">
+    <value>Don't Care</value>
+  </data>
+
+  <data name="AuthView_Route_Help" xml:space="preserve">
+  <value>The route used to navigate to this authentication view.</value>
+</data>
+
+  <data name="AuthView_Actions_Help" xml:space="preserve">
+  <value>The available actions a user can take on this authentication view.</value>
+</data>
+
+  <data name="AuthView_Views" xml:space="preserve">
+  <value>Views</value>
+</data>
+  <data name="AuthView_Views_Help" xml:space="preserve">
+  <value>The fields that appear on this authentication view.</value>
+</data>
+
+  <data name="AuthViewField_Name" xml:space="preserve">
+  <value>Name</value>
+</data>
+  <data name="AuthViewField_Name_Help" xml:space="preserve">
+  <value>The display name for this field.</value>
+</data>
+
+  <data name="AuthViewField_Finder" xml:space="preserve">
+  <value>Finder</value>
+</data>
+  <data name="AuthViewField_Finder_Help" xml:space="preserve">
+  <value>The selector or lookup key used to find this field in the UI.</value>
+</data>
+
+  <data name="AuthFieldAction_Name" xml:space="preserve">
+  <value>Name</value>
+</data>
+  <data name="AuthFieldAction_Name_Help" xml:space="preserve">
+  <value>The display name for this action.</value>
+</data>
+
+  <data name="AuthFieldAction_Finder" xml:space="preserve">
+  <value>Finder</value>
+</data>
+  <data name="AuthFieldAction_Finder_Help" xml:space="preserve">
+  <value>The selector or lookup key used to find this action in the UI.</value>
+</data>
+
+  <data name="AuthViewField_Title" xml:space="preserve">
+  <value>Authentication View Field</value>
+</data>
+  <data name="AuthViewField_Help" xml:space="preserve">
+  <value>Defines a field displayed within an authentication view.</value>
+</data>
+  <data name="AuthViewField_Description" xml:space="preserve">
+  <value>Represents a single field definition used to locate and render authentication inputs.</value>
+</data>
+
+  <data name="AuthFieldAction_Title" xml:space="preserve">
+  <value>Authentication Field Action</value>
+</data>
+
+  <data name="AuthFieldAction_Help" xml:space="preserve">
+  <value>Defines an action that can be performed within an authentication view.</value>
+</data>
+
+  <data name="AuthFieldAction_Description" xml:space="preserve">
+  <value>Represents a user-invokable action associated with an authentication field, including its display name and UI locator.</value>
+</data>
+
+  <!-- (2) XML resources (.resx <data> blocks) -->
+
+  <data name="AuthTenantStateSnapshot_Title" xml:space="preserve">
+  <value>Auth Tenant State Snapshot</value>
+</data>
+  <data name="AuthTenantStateSnapshot_Help" xml:space="preserve">
+  <value>Defines the tenant and user state conditions used to drive authentication flow behavior.</value>
+</data>
+  <data name="AuthTenantStateSnapshot_Description" xml:space="preserve">
+  <value>Represents a snapshot of condition flags and provider settings used to evaluate which authentication steps and UI elements should apply.</value>
+</data>
+
+  <data name="AuthTenantStateSnapshot_BelongsToOrg" xml:space="preserve">
+  <value>Belongs to Organization</value>
+</data>
+  <data name="AuthTenantStateSnapshot_BelongsToOrg_Help" xml:space="preserve">
+  <value>Condition indicating whether the user must belong to an organization, must not belong, or it does not matter.</value>
+</data>
+
+  <data name="AuthTenantStateSnapshot_EmailConfirmed" xml:space="preserve">
+  <value>Email Confirmed</value>
+</data>
+  <data name="AuthTenantStateSnapshot_EmailConfirmed_Help" xml:space="preserve">
+  <value>Condition indicating whether the user's email must be confirmed, must not be confirmed, or it does not matter.</value>
+</data>
+
+  <data name="AuthTenantStateSnapshot_PhoneNumberConfirmed" xml:space="preserve">
+  <value>Phone Number Confirmed</value>
+</data>
+  <data name="AuthTenantStateSnapshot_PhoneNumberConfirmed_Help" xml:space="preserve">
+  <value>Condition indicating whether the user's phone number must be confirmed, must not be confirmed, or it does not matter.</value>
+</data>
+
+  <data name="AuthTenantStateSnapshot_TwoFactorEnabled" xml:space="preserve">
+  <value>Two-Factor Enabled</value>
+</data>
+  <data name="AuthTenantStateSnapshot_TwoFactorEnabled_Help" xml:space="preserve">
+  <value>Condition indicating whether two-factor authentication must be enabled, must be disabled, or it does not matter.</value>
+</data>
+
+  <data name="AuthTenantStateSnapshot_IsAccountDisabled" xml:space="preserve">
+  <value>Account Disabled</value>
+</data>
+  <data name="AuthTenantStateSnapshot_IsAccountDisabled_Help" xml:space="preserve">
+  <value>Condition indicating whether the account must be disabled, must be enabled, or it does not matter.</value>
+</data>
+
+  <data name="AuthTenantStateSnapshot_IsAnonymous" xml:space="preserve">
+  <value>Anonymous</value>
+</data>
+  <data name="AuthTenantStateSnapshot_IsAnonymous_Help" xml:space="preserve">
+  <value>Condition indicating whether the user must be anonymous, must be authenticated, or it does not matter.</value>
+</data>
+
+  <data name="AuthTenantStateSnapshot_ShowWelcome" xml:space="preserve">
+  <value>Show Welcome</value>
+</data>
+  <data name="AuthTenantStateSnapshot_ShowWelcome_Help" xml:space="preserve">
+  <value>Condition indicating whether a welcome experience should be shown.</value>
+</data>
+
+  <data name="AuthTenantStateSnapshot_ExternalLoginProviders" xml:space="preserve">
+  <value>External Login Providers</value>
+</data>
+  <data name="AuthTenantStateSnapshot_ExternalLoginProviders_Help" xml:space="preserve">
+  <value>List of external authentication providers that should be available for sign-in.</value>
+</data>
+
+  <data name="AuthTenantStateSnapshot_LastMfaDateTimeUtc" xml:space="preserve">
+  <value>Last MFA Date/Time (UTC)</value>
+</data>
+  <data name="AuthTenantStateSnapshot_LastMfaDateTimeUtc_Help" xml:space="preserve">
+  <value>The most recent multi-factor authentication time in UTC, used to evaluate MFA freshness.</value>
+</data>
+
+  <data name="AuthTenantStateSnapshot_EnsureUserExists" xml:space="preserve">
+  <value>Ensure User Exists</value>
+</data>
+  <data name="AuthTenantStateSnapshot_EnsureUserExists_Help" xml:space="preserve">
+  <value>Condition indicating whether the system must ensure a user exists before proceeding.</value>
+</data>
+
+  <data name="AuthTenantStateSnapshot_EnsureUserDoesNotExist" xml:space="preserve">
+  <value>Ensure User Does Not Exist</value>
+</data>
+  <data name="AuthTenantStateSnapshot_EnsureUserDoesNotExist_Help" xml:space="preserve">
+  <value>Condition indicating whether the system must ensure a user does not exist before proceeding.</value>
+</data>
+
+  <!-- (2) XML resources (.resx <data> blocks) -->
+
+  <data name="AppUserTestingDSL_AuthView" xml:space="preserve">
+  <value>Auth View</value>
+</data>
+  <data name="AppUserTestingDSL_AuthView_Help" xml:space="preserve">
+  <value>The authentication view to execute as part of this test ceremony.</value>
+</data>
+
+  <data name="AppUserTestingDSL_Inputs" xml:space="preserve">
+  <value>Inputs</value>
+</data>
+  <data name="AppUserTestingDSL_Inputs_Help" xml:space="preserve">
+  <value>Input values required by the runner for this ceremony (for example username, password, tokens, or return URLs).</value>
+</data>
+
+  <data name="AppUserTestingDSL_Action" xml:space="preserve">
+  <value>Action</value>
+</data>
+  <data name="AppUserTestingDSL_Action_Help" xml:space="preserve">
+  <value>The action to invoke when executing the ceremony (for example Back, Next, Done, or Cancel).</value>
+</data>
+
+  <data name="AppUserTestingDSL_Preconditions" xml:space="preserve">
+  <value>Preconditions</value>
+</data>
+  <data name="AppUserTestingDSL_Preconditions_Help" xml:space="preserve">
+  <value>Declarative conditions that should be satisfied before executing the ceremony.</value>
+</data>
+
+  <data name="AppUserTestingDSL_Expected" xml:space="preserve">
+  <value>Expected Outcome</value>
+</data>
+  <data name="AppUserTestingDSL_Expected_Help" xml:space="preserve">
+  <value>The expected result after the ceremony completes.</value>
+</data>
+
+  <!-- (2) XML resources (.resx <data> blocks) -->
+
+  <data name="AppUserTestingExpectedOutcome_Title" xml:space="preserve">
+  <value>Expected Outcome</value>
+</data>
+
+  <data name="AppUserTestingExpectedOutcome_Help" xml:space="preserve">
+  <value>Defines the expected results after an authentication ceremony completes.</value>
+</data>
+
+  <data name="AppUserTestingExpectedOutcome_Description" xml:space="preserve">
+  <value>Represents the expected landing behavior, postconditions, and audit signals used to verify successful authentication flows.</value>
+</data>
+
+  <data name="AppUserTestingExpectedOutcome_ExpectedLanding" xml:space="preserve">
+  <value>Expected Landing Route</value>
+</data>
+
+  <data name="AppUserTestingExpectedOutcome_ExpectedLanding_Help" xml:space="preserve">
+  <value>The route the user is expected to land on after the ceremony completes, once all redirects and rules are applied.</value>
+</data>
+
+  <data name="AppUserTestingExpectedOutcome_Postconditions" xml:space="preserve">
+  <value>Postconditions</value>
+</data>
+
+  <data name="AppUserTestingExpectedOutcome_Postconditions_Help" xml:space="preserve">
+  <value>Expected authentication and tenant state conditions that should hold after the ceremony completes.</value>
+</data>
+
+  <data name="AppUserTestingExpectedOutcome_ExpectedAuthLogEvents" xml:space="preserve">
+  <value>Expected Auth Log Events</value>
+</data>
+
+  <data name="AppUserTestingExpectedOutcome_ExpectedAuthLogEvents_Help" xml:space="preserve">
+  <value>List of authentication log events that are expected to be emitted during or after the ceremony.</value>
+</data>
+  <data name="AppUserTestScenario_AuthView" xml:space="preserve">
+  <value>Auth View</value>
+</data>
+  <data name="AppUserTestScenario_AuthView_Help" xml:space="preserve">
+  <value>The authentication view that this scenario targets.</value>
+</data>
+
 </root>

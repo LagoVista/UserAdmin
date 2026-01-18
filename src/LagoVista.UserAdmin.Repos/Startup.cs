@@ -28,6 +28,8 @@ using LagoVista.UserAdmin.Repos.Testing;
 using LagoVista.UserAdmin.Models.Testing;
 using LagoVista.UserAdmin.Interfaces.Repos.Security.Passkeys;
 using LagoVista.UserAdmin.Repos.TableStorage.Passkeys;
+using LagoVista.UserAdmin.Interfaces.Repos.Testing;
+using LagoVista.UserAdmin.Repos.Repos.Testing;
 
 namespace LagoVista.UserAdmin.Repos
 {
@@ -76,6 +78,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddSingleton<IFunctionMapRepo, FunctionMapRepo>();
             services.AddSingleton<IAppUserTestingDslRepo, AppUserTestingDslRepo>();
             services.AddSingleton<IAppUserTestRunRepo, AppUserTestRunRepo>();
+            services.AddSingleton<IAuthViewRepo, AuthViewRepo>();
             services.AddSingleton<IAppUserPasskeyCredentialRepo, PasskeyCredentialRepo>();
             services.AddSingleton<IPasskeyCredentialIndexRepo, PasskeyCredentialIndexRepo>();
 

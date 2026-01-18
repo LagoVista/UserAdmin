@@ -27,10 +27,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Icon { get; set; }
 
-
-        [FormField(LabelResource: UserAdminResources.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
-        public string Description { get; set; }
-
         [FormField(LabelResource: UserAdminResources.Names.Common_Customer, IsRequired: false, FieldType: FieldTypes.CustomerPicker, ResourceType: typeof(UserAdminResources))]
         public EntityHeader Customer { get; set; }
 
@@ -46,19 +42,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public DistroListSummary CreateSummary()
         {
-            return new DistroListSummary()
-            {
-                Description = Description,
-                Id = Id,
-                IsPublic = IsPublic,
-                Key = Key,
-                Icon = Icon,
-                Name = Name,
-                Category = Category?.Text,
-                CategoryId = Category?.Id,
-                CategoryKey = Category?.Key
-
-            };
+            var summary = new DistroListSummary();
+            summary.Populate(this);
+                return summary;
         }
 
         public List<string> GetFormFields()

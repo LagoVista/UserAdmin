@@ -21,16 +21,14 @@ namespace LagoVista.UserAdmin.Models.Testing
     public class AppUserTestRun : EntityBase, ISummaryFactory
     {
 
-        public string CeremonyId { get; set; }
-
         /// <summary>
         /// Human-friendly sequential identifier for support/log review (e.g., LOG-000123).
         /// Assigned by the runner or persistence layer using a serial number manager.
         /// </summary>
         public string RunCode { get; set; }
 
-        public string ScenarioName { get; set; }
-        public CeremonyTypes CeremonyType { get; set; }
+
+        public EntityHeader<AppUserTestScenario> TestScenario { get; set; }
 
         /// <summary>
         /// Environment metadata.
@@ -38,21 +36,11 @@ namespace LagoVista.UserAdmin.Models.Testing
         public string BaseUrl { get; set; }
         public string TenantId { get; set; }
 
-        /// <summary>
-        /// Primary user under test.
-        /// </summary>
-        public string UserName { get; set; }
-
         public DateTime CreatedUtc { get; set; }
         public DateTime? StartedUtc { get; set; }
         public DateTime? FinishedUtc { get; set; }
 
         public TestRunStatus Status { get; set; } = TestRunStatus.Created;
-
-        /// <summary>
-        /// Optional: the DSL/spec used for the run (or a subset). Keep secrets out.
-        /// </summary>
-        public AppUserTestingDSL Spec { get; set; }
 
         /// <summary>
         /// Final verification payloads.

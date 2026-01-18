@@ -1,4 +1,3 @@
-using ExCSS;
 using LagoVista.Core;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
@@ -7,28 +6,26 @@ using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Interfaces.Repos.Testing;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Testing;
-using RingCentral;
+using LagoVista.UserAdmin.Models.Users;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Managers
 {
     /// <summary>
-    /// Server-side manager behind /api/testadmin endpoints.
-    /// V1: operations target a fixed test user/org resolved internally (no ids over the wire).
+    /// Server-side manager behind /api/sys/testing endpoints.
     /// </summary>
     public class AppUserTestingManager : ManagerBase, IAppUserTestingManager
     {
-        private readonly IAppUserTestingDslRepo _dslStore;
+        private readonly IAppUserTestingDslRepo _testScenarioRepo;
         private readonly IAppUserTestRunRepo _testRunStore;
         private readonly IAppUserManager _userManager;  
         private readonly ISignInManager _signInManager; 
         private readonly IAppUserRepo _appUserRepo;
+        private readonly IAuthViewRepo _authViewRepo;
 
 
 
@@ -40,243 +37,223 @@ namespace LagoVista.UserAdmin.Managers
                                    IAppUserManager userManager,
                                    ISignInManager signInManager,
                                    IAdminLogger logger,
+                                   IAuthViewRepo authViewRepo,
                                    IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
-            _dslStore = dslStore ?? throw new ArgumentNullException(nameof(dslStore));
+            _testScenarioRepo = dslStore ?? throw new ArgumentNullException(nameof(dslStore));
             _testRunStore = testRunStore ?? throw new ArgumentNullException(nameof(testRunStore));
             _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager)); 
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+            _authViewRepo = authViewRepo ?? throw new ArgumentNullException(nameof(authViewRepo));
         }
 
-        /* Preconditions / Setup */
-        public Task<InvokeResult> SignInTestUser()
+        public async Task<InvokeResult> DeleteTestUserAsync(EntityHeader org, EntityHeader user)
         {
-            return Task.FromResult(InvokeResult.FromError("NotImplemented", "SignInTestUser not implemented yet."));
+            return await _userManager.DeleteUserAsync(TestUserSeed.User.Id, org, user);
         }
 
-        public Task<InvokeResult> SignOutTestUser()
+        public async Task<InvokeResult> ApplySetupAsync(AuthTenantStateSnapshot preconditions, EntityHeader org, EntityHeader user)
         {
-            return Task.FromResult(InvokeResult.FromError("NotImplemented", "SignOutTestUser not implemented yet."));
-        }
+            ValidationCheck(preconditions, Actions.Any);
 
-        public Task<InvokeResult> DeleteTestUserAsync()
-        {
-            return _userManager.DeleteUserAsync(TestUserSeed.User.Id, TestUserSeed.Org1, TestUserSeed.User );
-        }
-
-        public async Task<InvokeResult> ApplySetupAsync(AuthTenantStateSnapshot preconditions, bool loginUser)
-        {
             var timeStamp = DateTime.UtcNow.ToJSONString();
 
-            var user = await _appUserRepo.FindByIdAsync( TestUserSeed.User.Id );
-            var existing = user != null;
+            var testUser = await _appUserRepo.FindByIdAsync( TestUserSeed.User.Id );
+            var existing = testUser != null;
 
-            if(preconditions.UserExists == false)
+            if(preconditions.EnsureUserExists.Value == SetCondition.NotSet)
             {
-                if(user == null)
+                if(testUser == null)
                 {
                     return InvokeResult.Success;
                 }
              
-                await _userManager.DeleteUserAsync( TestUserSeed.User.Id, TestUserSeed.Org1, TestUserSeed.User );
+                // User Manager enforces Authorization
+                await _userManager.DeleteUserAsync( TestUserSeed.User.Id, org, user );
                 return InvokeResult.Success;
             }
-            
-            if(user == null)
+
+            if (testUser == null)
             {
-                user = new Models.Users.AppUser();
-                user.Id = TestUserSeed.User.Id;
-                user.FirstName = TestUserSeed.FirstName;
-                user.LastName = TestUserSeed.LastName;
-                user.Email = TestUserSeed.Email;
-                user.PhoneNumber = TestUserSeed.PhoneNumber;
-                user.UserName = TestUserSeed.Email;
-                user.CreatedBy = TestUserSeed.User;
-                user.LastUpdatedBy = TestUserSeed.User;
-                user.LastUpdatedDate = timeStamp;
-                user.CreationDate = timeStamp;
+                testUser = new Models.Users.AppUser();
+                testUser.Id = TestUserSeed.User.Id;
+                testUser.FirstName = TestUserSeed.FirstName;
+                testUser.LastName = TestUserSeed.LastName;
+                testUser.Email = TestUserSeed.Email;
+                testUser.PhoneNumber = TestUserSeed.PhoneNumber;
+                testUser.UserName = TestUserSeed.Email;
+                testUser.CreatedBy = TestUserSeed.User;
+                testUser.LastUpdatedBy = TestUserSeed.User;
+                testUser.LastUpdatedDate = timeStamp;
+                testUser.CreationDate = timeStamp;
             }
 
-            if(preconditions.EmailConfirmed.HasValue)  user.EmailConfirmed = preconditions.EmailConfirmed.Value;
-            if(preconditions.PhoneNumberConfirmed.HasValue)  user.PhoneNumberConfirmed = preconditions.PhoneNumberConfirmed.Value;
-            if(preconditions.TwoFactorEnabled.HasValue)  user.TwoFactorEnabled = preconditions.TwoFactorEnabled.Value;
-            if(preconditions.IsAccountDisabled.HasValue)  user.IsAccountDisabled = preconditions.IsAccountDisabled.Value;
-            if(preconditions.IsAccountDisabled.HasValue)  user.IsAccountDisabled = preconditions.IsAccountDisabled.Value;
+            if (preconditions.EmailConfirmed.Value != SetCondition.DontCare)  testUser.EmailConfirmed = preconditions.EmailConfirmed.Value == SetCondition.Set;
+            if(preconditions.PhoneNumberConfirmed.Value != SetCondition.DontCare)  testUser.PhoneNumberConfirmed = preconditions.PhoneNumberConfirmed.Value == SetCondition.Set;
+            if(preconditions.TwoFactorEnabled.Value != SetCondition.DontCare)  testUser.TwoFactorEnabled = preconditions.TwoFactorEnabled.Value == SetCondition.Set;
+            if(preconditions.IsAccountDisabled.Value != SetCondition.DontCare)  testUser.IsAccountDisabled = preconditions.IsAccountDisabled.Value == SetCondition.Set;
 
-            if(!existing)
-                await _appUserRepo.CreateAsync(user);
-            else 
-                await _appUserRepo.UpdateAsync(user);
-        
+            if (!existing)
+            {
+                await AuthorizeAsync(testUser, AuthorizeResult.AuthorizeActions.Create, user, org);
+                await _appUserRepo.CreateAsync(testUser);
+            }
+            else
+            {
+                await AuthorizeAsync(testUser, AuthorizeResult.AuthorizeActions.Update, user, org);
+                await _appUserRepo.UpdateAsync(testUser);
+            }
             return InvokeResult.Success;
         }
 
-        public Task<InvokeResult<string>> GetLastEmailTokenAsync()
+        public async Task<AppUser> GetTestUserAsync(EntityHeader org, EntityHeader user)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(TestUserSeed.User.Id);
+            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Read, user, org);
+            return appUser;
+        }
+
+        public Task<InvokeResult<string>> GetLastEmailTokenAsync(EntityHeader org, EntityHeader user)
         {
             return Task.FromResult(InvokeResult<string>.FromError("NotImplemented", "GetLastEmailTokenAsync not implemented yet."));
         }
 
-        public Task<InvokeResult<string>> GetLastSmsTokenAsync()
+        public Task<InvokeResult<string>> GetLastSmsTokenAsync(EntityHeader org, EntityHeader user)
         {
             return Task.FromResult(InvokeResult<string>.FromError("NotImplemented", "GetLastSmsTokenAsync not implemented yet."));
         }
 
-        /* Snapshot Getter */
-
-        public Task<InvokeResult<AuthTenantStateSnapshot>> GetUserSnapshotAsync(string ceremonyId = null)
+        public async Task<InvokeResult> AddAuthViewAsync(AuthView authView, EntityHeader org, EntityHeader user)
         {
-            return Task.FromResult(InvokeResult<AuthTenantStateSnapshot>.FromError("NotImplemented", "GetUserSnapshotAsync not implemented yet."));
-        }
-
-        public Task<InvokeResult<TestRunVerification>> GetVerificationAsync(string ceremonyId = null)
-        {
-            return Task.FromResult(InvokeResult<TestRunVerification>.FromError("NotImplemented", "GetVerificationAsync not implemented yet."));
-        }
-
-        /* DSL Case Management */
-
-        public async Task<InvokeResult> CreateDslAsync(AppUserTestingDSL dsl)
-        {
-            if (dsl == null)
-            {
-                throw new ArgumentNullException(nameof(dsl)); 
-            }
-
-            var now = DateTime.UtcNow.ToJSONString();
-            dsl.OwnerOrganization = TestUserSeed.Org1;
-            dsl.CreatedBy = TestUserSeed.User;
-            dsl.LastUpdatedBy = TestUserSeed.User;
-            dsl.CreationDate = now;
-            dsl.LastUpdatedDate = now;
-
-            await _dslStore.AddDSLAsync(dsl);
+            ValidationCheck(authView, Actions.Create);
+            await AuthorizeAsync(user, org, typeof(AuthView), Actions.Create);
+            await _authViewRepo.AddAuthViewAsync(authView);
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> UpdateDslAsync(AppUserTestingDSL dsl)
+        public async Task<InvokeResult> UpdateAuthViewAsync(AuthView authView, EntityHeader org, EntityHeader user)
         {
-            if (dsl == null)
-            {
-                throw new ArgumentNullException(nameof(dsl)); 
-            }
-
-            await _dslStore.UpdateDSLAsync(dsl);
+            ValidationCheck(authView, Actions.Update);
+            await AuthorizeAsync(user, org, typeof(AuthView), Actions.Update);
+            await _authViewRepo.UpdateAuthViewAsync(authView);
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult<AppUserTestingDSL>> GetDslAsync(string id)
+        public async Task<AuthView> GetAuthViewAsync(string id, EntityHeader org, EntityHeader user)
         {
-            if (String.IsNullOrEmpty(id))
-            {
-                return InvokeResult<AppUserTestingDSL>.FromError("ArgumentNull", "id is required.");
-            }
-
-            var dsl = await _dslStore.GetByIdAsync(id);
-            if (dsl == null)
-            {
-                return InvokeResult<AppUserTestingDSL>.FromError("NotFound", $"DSL not found: {id}");
-            }
-
-            return InvokeResult<AppUserTestingDSL>.Create(dsl);
+            var authView = await _authViewRepo.GetByIdAsync(id);
+            await AuthorizeAsync(authView, AuthorizeResult.AuthorizeActions.Read, user, org);
+            return authView;
         }
 
-        public async Task<ListResponse<AppUserTestingDSLSummary>> ListDslAsync(ListRequest request)
+        public async Task<ListResponse<AuthViewSummary>> GetAuthViewsForOrgAsync(ListRequest request, EntityHeader org, EntityHeader user)
         {
-            return  await _dslStore.ListAsync(TestUserSeed.Org1.Id, request);
+            await AuthorizeOrgAccessAsync(user, org, typeof(AuthView), Actions.Read);
+            return await _authViewRepo.ListAsync(org.Id, request);
         }
 
-        public async Task<InvokeResult> DeleteDslAsync(string id)
+        public async Task<InvokeResult> DeleteAuthViewAsync(string id, EntityHeader org, EntityHeader user)
         {
-            if (String.IsNullOrEmpty(id))
-            {
-                return InvokeResult.FromError("ArgumentNull", "id is required.");
-            }
+            var view = await _authViewRepo.GetByIdAsync(id);
+            await AuthorizeAsync(view, AuthorizeResult.AuthorizeActions.Delete, user, org);
+            await _authViewRepo.DeleteByIdAsync(id);
+            return InvokeResult.Success;
+        }
 
-            await _dslStore.DeleteByIdAsync(id);
+        /* Test Scenario Management */
+
+        public async Task<InvokeResult> AddTestScenarioAsync(AppUserTestScenario testScenario, EntityHeader org, EntityHeader user)
+        {
+            ValidationCheck(testScenario, Actions.Create);
+            await AuthorizeAsync(user, org, typeof(AppUserTestScenario), Actions.Create);
+            await _testScenarioRepo.AddDSLAsync(testScenario);
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> UpdateTestScenarioAsync(AppUserTestScenario testScenario, EntityHeader org, EntityHeader user)
+        {
+            ValidationCheck(testScenario, Actions.Update);
+            await AuthorizeAsync(user, org, typeof(AppUserTestScenario), Actions.Update);
+            await _testScenarioRepo.UpdateDSLAsync(testScenario);
+            return InvokeResult.Success;
+        }
+
+        public async Task<AppUserTestScenario> GetTestScenarioAsync(string id, EntityHeader org, EntityHeader user)
+        {
+            var scenario = await _testScenarioRepo.GetByIdAsync(id);
+            await AuthorizeAsync(scenario, AuthorizeResult.AuthorizeActions.Read, user, org);
+            return scenario;
+        }
+
+        public async Task<ListResponse<AppUserTestScenarioSummary>> GetTestScenariosForOrganizationAsync(ListRequest request, EntityHeader org, EntityHeader user)
+        {
+            await AuthorizeOrgAccessAsync(user, org, typeof(AppUserTestScenario), Actions.Read);
+            return await _testScenarioRepo.ListAsync(org.Id, request);
+        }
+
+        public async Task<InvokeResult> DeleteTestScenarioAsync(string id, EntityHeader org, EntityHeader user)
+        {
+            var scenario = await _testScenarioRepo.GetByIdAsync(id);
+            await AuthorizeAsync(scenario, AuthorizeResult.AuthorizeActions.Delete, user, org);
+            await _testScenarioRepo.DeleteByIdAsync(id);
             return InvokeResult.Success;
         }
 
         /* Run Persistence */
 
-        public async Task<InvokeResult<AppUserTestRun>> CreateRunAsync(AppUserTestRun run)
+        public async Task<InvokeResult> AddTestRunAsync(AppUserTestRun run, EntityHeader org, EntityHeader user)
         {
-            if (run == null)
-            {
-                throw new ArgumentNullException(nameof(run));
-            }
+            await AuthorizeAsync(user, org, typeof(AppUserTestRun), Actions.Create);
 
-        
             var now = DateTime.UtcNow.ToJSONString();
-            run.OwnerOrganization = TestUserSeed.Org1;
-            run.CreatedBy = TestUserSeed.User;
-            run.LastUpdatedBy = TestUserSeed.User;
+            run.OwnerOrganization = org;
+            run.CreatedBy = user;
+            run.LastUpdatedBy = user;
             run.CreationDate = now;
             run.LastUpdatedDate = now;
 
             await _testRunStore.CreateRunAsync(run);
-            return InvokeResult<AppUserTestRun>.Create(run);
+            return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> AppendRunEventAsync(string runId, AppUserTestRunEvent evt)
+        public async Task<InvokeResult> AppendRunEventAsync(string runId, AppUserTestRunEvent evt, EntityHeader org, EntityHeader user)
         {
-            if (String.IsNullOrEmpty(runId))
-            {
-                return InvokeResult.FromError("ArgumentNull", "runId is required.");
-            }
-
-            if (evt == null)
-            {
-                return InvokeResult.FromError("ArgumentNull", "evt is required.");
-            }
+            await AuthorizeAsync(user, org, typeof(AppUserTestRun), Actions.Update);
 
             await _testRunStore.AppendEventsAsync(runId, new[] { evt });
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult<AppUserTestRun>> FinishRunAsync(string runId, TestRunStatus status, TestRunVerification verification = null)
+        public async Task<InvokeResult> FinishRunAsync(string runId, TestRunStatus status, EntityHeader org, EntityHeader user, TestRunVerification verification = null)
         {
-            if (String.IsNullOrEmpty(runId))
-            {
-                return InvokeResult<AppUserTestRun>.FromError("ArgumentNull", "runId is required.");
-            }
+            await AuthorizeAsync(user, org, typeof(AppUserTestRun), Actions.Update);
 
             var finishedUtc = DateTime.UtcNow;
             await _testRunStore.FinishRunAsync(runId, status, finishedUtc, verification);
 
-            var run = await _testRunStore.GetRunAsync(runId);
-            return InvokeResult<AppUserTestRun>.Create(run);
+            return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult<AppUserTestRun>> GetRunAsync(string runId)
+        public async Task<AppUserTestRun> GetTestRunAsync(string runId, EntityHeader org, EntityHeader user)
         {
-            if (String.IsNullOrEmpty(runId))
-            {
-                return InvokeResult<AppUserTestRun>.FromError("ArgumentNull", "runId is required.");
-            }
-
-            var run = await _testRunStore.GetRunAsync(runId);
-            if (run == null)
-            {
-                return InvokeResult<AppUserTestRun>.FromError("NotFound", $"Run not found: {runId}");
-            }
-
-            return InvokeResult<AppUserTestRun>.Create(run);
+            var testRun = await _testRunStore.GetRunAsync(runId);
+            await AuthorizeAsync(testRun, AuthorizeResult.AuthorizeActions.Read, user, org);
+            return testRun;
         }
 
-        public Task<ListResponse<AppUserTestRunSummary>> GetTestRunsAsync(ListRequest request)
+        public async Task<ListResponse<AppUserTestRunSummary>> GetTestRunsAsync(ListRequest request, EntityHeader org, EntityHeader user)
         {
-            return _testRunStore.GetRunsFoOrgAsync(TestUserSeed.Org1.Id, request);
+            await AuthorizeOrgAccessAsync(user, org, typeof(AppUserTestRun), Actions.Read);
+            return await _testRunStore.GetRunsFoOrgAsync(org.Id, request);
         }
 
         /* Auth Log Review */
 
-        public Task<InvokeResult<AuthLogReviewSummary>> GetAuthLogReviewAsync(DateTime fromUtc, DateTime toUtc)
+        public async Task<InvokeResult<AuthLogReviewSummary>> GetAuthLogReviewAsync(DateTime fromUtc, DateTime toUtc, EntityHeader org, EntityHeader user)
         {
-            return Task.FromResult(InvokeResult<AuthLogReviewSummary>.FromError("NotImplemented", "GetAuthLogReviewAsync not implemented yet."));
+            await AuthorizeOrgAccessAsync(user, org, typeof(AuthLogReviewSummary), Actions.Read);
+            return InvokeResult<AuthLogReviewSummary>.FromError("NotImplemented", "GetAuthLogReviewAsync not implemented yet.");
         }
-
-    
-
     }
 }
