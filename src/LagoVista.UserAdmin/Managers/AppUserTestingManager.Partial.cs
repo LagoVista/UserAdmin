@@ -25,6 +25,9 @@ namespace LagoVista.UserAdmin.Managers
             var authView = await _authViewRepo.GetByIdAsync(scenario.AuthView.Id);
             if (authView == null) return InvokeResult<AuthRunnerPlan>.FromError("AuthViewNotFound", $"AuthView '{scenario.AuthView.Id}' not found.");
 
+            var expectedView = await _authViewRepo.GetByIdAsync(scenario.ExpectedView.Id);
+            if (expectedView == null) return InvokeResult<AuthRunnerPlan>.FromError("AuthViewNotFound", $"Expected View '{scenario.ExpectedView.Id}' not found.");
+
             await AuthorizeAsync(authView, AuthorizeResult.AuthorizeActions.Read, user, org);
 
             // Resolve action (prefer exact id match; fall back to name/key/text comparisons).
@@ -47,7 +50,7 @@ namespace LagoVista.UserAdmin.Managers
             var plan = new AuthRunnerPlan()
             {
                 RunId = Guid.NewGuid().ToString("N"),
-                ScenarioName = scenario.Name,
+                Scenario = scenario.ToEntityHeader(),
                 StartRoute = NormalizeRoute(authView.Route),
                 StartViewId = authView.ViewId,
                 Inputs = (scenario.Inputs ?? new List<AppUserTestSettingsValue>()).Select(i => new AuthRunnerInput()
@@ -55,7 +58,7 @@ namespace LagoVista.UserAdmin.Managers
                     Name = i.Name,
                     Finder = i.Finder,
                     Value = i.Value,
-                    Kind = AuthRunnerInputKind.Text
+                    Kind = authView.Fields?.FirstOrDefault(f => String.Equals(f.Finder, i.Finder, StringComparison.OrdinalIgnoreCase)).FieldType ?? "unknown"   
                 }).ToList(),
                 Action = new AuthRunnerAction()
                 {
@@ -64,8 +67,8 @@ namespace LagoVista.UserAdmin.Managers
                 },
                 Observations = new AuthRunnerObservations()
                 {
-                    ExpectedEndViewId = scenario.ExpectedView?.Text,  // optional hint (or Id if you store it that way)
-                    ExpectedEndRoute = null,
+                    ExpectedEndViewId = expectedView.ViewId,  // optional hint (or Id if you store it that way)
+                    ExpectedEndRoute = expectedView.Route,
                     BusyStateFinder = "[data-testid=\"state:busy\"]"
                 },
                 Options = new AuthRunnerOptions()

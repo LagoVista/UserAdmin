@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LagoVista.Core.Models;
+using System;
 using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.Models.Testing
@@ -14,7 +15,7 @@ namespace LagoVista.UserAdmin.Models.Testing
         public string RunId { get; set; }
 
         /// <summary>Human-friendly name for UI/logging.</summary>
-        public string ScenarioName { get; set; }
+        public EntityHeader Scenario { get; set; }
 
         /// <summary>Optional: base URL (runner may override via config).</summary>
         public string BaseUrl { get; set; }
@@ -64,14 +65,7 @@ namespace LagoVista.UserAdmin.Models.Testing
         /// Optional: informs runner how to set the value (Text is default).
         /// If omitted, runner can infer for checkboxes by element type at runtime.
         /// </summary>
-        public AuthRunnerInputKind Kind { get; set; } = AuthRunnerInputKind.Text;
-    }
-
-    public enum AuthRunnerInputKind
-    {
-        Text = 0,
-        Checkbox = 1,
-        Select = 2
+        public string Kind { get; set; }
     }
 
     /// <summary>

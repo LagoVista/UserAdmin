@@ -996,7 +996,7 @@ namespace LagoVista.AspNetCore.Identity.Services
 
                 SendEmailMessage.Inc();
 
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "[SendGridEmailServices_SendAsync]", $"[SendGridEmailServices_SendAsync] EmailSent - {email}: {subject}",
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, this.Tag(), $"EmailSent - {email}: {subject}",
                     new System.Collections.Generic.KeyValuePair<string, string>("Subject", subject),
                     new System.Collections.Generic.KeyValuePair<string, string>("to", email));
 
@@ -1004,11 +1004,11 @@ namespace LagoVista.AspNetCore.Identity.Services
             }
             catch (Exception ex)
             {
-                _adminLogger.AddException("SendGridEmailServices_SendAsync", ex,
+                _adminLogger.AddException(this.Tag(), ex,
                     new System.Collections.Generic.KeyValuePair<string, string>("Subject", subject),
                     new System.Collections.Generic.KeyValuePair<string, string>("to", email));
 
-                return InvokeResult.FromException("SendGridEmailServices_SendAsync", ex);
+                return InvokeResult.FromException(this.Tag(), ex);
             }
 
         }

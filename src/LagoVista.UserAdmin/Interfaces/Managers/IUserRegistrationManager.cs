@@ -12,6 +12,6 @@ namespace LagoVista.UserAdmin.Managers
 {
     public interface IUserRegistrationManager
     {
-        Task<InvokeResult<CreateUserResponse>> CreateUserAsync(RegisterUser newUser, bool autoLogin = true, ExternalLogin externalLogin = null);
+        Task<InvokeResult<CreateUserResponse>> CreateUserAsync(RegisterUser newUser, bool autoLogin = true, ExternalLogin externalLogin = null, string userId = null);
     }
 }

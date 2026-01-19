@@ -48,7 +48,7 @@ namespace LagoVista.UserAdmin.Models.Testing
         /// Preconditions to apply before executing the ceremony.
         /// This is declarative; the runner (or server-side setup helper) decides how to enforce.
         /// </summary>
-        [FormField(LabelResource: UserAdminResources.Names.AppUserTestingDSL_Preconditions, HelpResource: UserAdminResources.Names.AppUserTestingDSL_Preconditions_Help, FactoryUrl:"/", FieldType: FieldTypes.ChildItem, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.AppUserTestingDSL_Preconditions, HelpResource: UserAdminResources.Names.AppUserTestingDSL_Preconditions_Help, FieldType: FieldTypes.ChildItem, ResourceType: typeof(UserAdminResources))]
         public AuthTenantStateSnapshot PreConditions { get; set; } = new AuthTenantStateSnapshot();
 
         /// <summary>
@@ -57,11 +57,19 @@ namespace LagoVista.UserAdmin.Models.Testing
         [FormField(LabelResource: UserAdminResources.Names.AppUserTestingDSL_Expected, HelpResource: UserAdminResources.Names.AppUserTestingDSL_Expected_Help, FieldType: FieldTypes.ChildItem, ResourceType: typeof(UserAdminResources))]
         public AuthTenantStateSnapshot PostConditions { get; set; } = new AuthTenantStateSnapshot();
 
+        public string LastStatus { get; set; }
+
+        public string LastRun { get; set; }
+
+        public string LastError { get; set; }
 
         public AppUserTestScenarioSummary CreateSummary()
         {
             var summary = new AppUserTestScenarioSummary();
             summary.Populate(this);
+            summary.LastError = LastError;
+            summary.LastRun = LastRun;
+            summary.LastStatus = LastStatus;
             return summary;
         }
 
@@ -99,7 +107,7 @@ namespace LagoVista.UserAdmin.Models.Testing
                 nameof(AuthView),
                 nameof(Action),
                 nameof(ExpectedView),
-                nameof(ExpectedAuthLogEvents)
+                nameof(ExpectedAuthLogEvents),
             };
         }
 
@@ -123,14 +131,16 @@ namespace LagoVista.UserAdmin.Models.Testing
      SaveUrl: "/api/sys/testing/dsl", GetListUrl: "/api/sys/testing/dsls", FactoryUrl: "/api/sys/testing/dslfactory", DeleteUrl: "/api/sys/testing/dsl/{id}", GetUrl: "/api/sys/testing/dsl/{id}")]
     public class AppUserTestScenarioSummary : SummaryData
     {
-        
+        public string LastError { get; set; }
+        public string LastStatus { get; set; }
+        public string LastRun { get; set; }
     }
 
     public static class TestUserSeed
     {
         public static string FirstName { get; } = "Fred";
         public static string LastName { get; } = "Flintstone";
-        public static string Email { get; } = "30458D0723764ACDBB10DA73AD98D088@5C00C94DB4D14B0E8E625F8FB47B9911.DOESNOTEXIST";
+        public static string Email { get; } = "FREDF@FAKEDOMAIN.NUVIOT";
         public static string PhoneNumber {get; } = "6125551212";
 
         private const string TEST_USER_ID = "30458D0723764ACDBB10DA73AD98D088";

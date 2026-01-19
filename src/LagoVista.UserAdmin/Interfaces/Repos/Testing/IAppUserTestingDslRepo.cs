@@ -15,7 +15,7 @@ namespace LagoVista.UserAdmin.Models.Testing
  
         Task AddDSLAsync(AppUserTestScenario dsl);
 
-        Task UpdateDSLAsync(AppUserTestScenario dsl);
+        Task UpdateTestScenarioAsync(AppUserTestScenario dsl);
 
         Task DeleteByIdAsync(string id);
     }

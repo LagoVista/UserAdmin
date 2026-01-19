@@ -28,18 +28,26 @@ namespace LagoVista.UserAdmin.Models.Testing
         public string RunCode { get; set; }
 
 
-        public EntityHeader<AppUserTestScenario> TestScenario { get; set; }
+        public EntityHeader TestScenario { get; set; }
 
         /// <summary>
         /// Environment metadata.
         /// </summary>
         public string BaseUrl { get; set; }
-        public string TenantId { get; set; }
+      
+        public string StartPath { get; set; }
+
+        public string StartViewId { get; set; }
+        public string FinalViewId { get; set; }
+
+        public string EndPath { get; set; }
 
         public string Started { get; set; }
         public string Finished { get; set; }
 
         public TestRunStatus Status { get; set; } = TestRunStatus.Created;
+
+        public string ErrorMesage { get; set; }
 
         /// <summary>
         /// Final verification payloads.
@@ -92,6 +100,7 @@ namespace LagoVista.UserAdmin.Models.Testing
         public string Name { get; set; }
         public string FileName { get; set; }
         public string Url { get; set; }
+        public string RelativePath { get; set; }
     }
 
     public class AuthLogReviewSummary

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.CloudStorage.Interfaces;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Models.Testing;
 
 namespace LagoVista.UserAdmin.Repos.Testing
@@ -11,8 +12,8 @@ namespace LagoVista.UserAdmin.Repos.Testing
     public class AppUserTestingDslRepo : DocumentDBRepoBase<AppUserTestScenario>, IAppUserTestingDslRepo
     {
         bool _shouldConsolidateCollections;
-        public AppUserTestingDslRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) : 
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
+        public AppUserTestingDslRepo(IUserAdminSettings userAdminSettings, IAdminLogger adminLogger) : 
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, adminLogger)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }
@@ -39,7 +40,7 @@ namespace LagoVista.UserAdmin.Repos.Testing
              return QuerySummaryDescendingAsync<AppUserTestScenarioSummary, AppUserTestScenario>(qry => qry.OwnerOrganization.Id == orgId, qry=>qry.Name, request);
         }
 
-        public Task UpdateDSLAsync(AppUserTestScenario dsl)
+        public Task UpdateTestScenarioAsync(AppUserTestScenario dsl)
         {      
             return UpsertDocumentAsync(dsl); 
         }

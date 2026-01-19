@@ -2,6 +2,7 @@ using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Managers;
+using LagoVista.UserAdmin.Models.Security;
 using LagoVista.UserAdmin.Models.Testing;
 using LagoVista.UserAdmin.Models.Users;
 using System;
@@ -74,8 +75,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         #endregion
 
         #region Auth Log Review
-
-        Task<InvokeResult<AuthLogReviewSummary>> GetAuthLogReviewAsync(DateTime fromUtc, DateTime toUtc, EntityHeader org, EntityHeader user);
+        Task<ListResponse<AuthenticationLog>> GetAuthLogReviewAsync(ListRequest listRequest, EntityHeader org, EntityHeader user);
 
         #endregion
 

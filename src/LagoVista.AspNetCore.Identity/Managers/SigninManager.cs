@@ -246,14 +246,17 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 }
                 else
                 {
-                    response.RedirectPage = CommonLinks.CreateDefaultOrg;
+                    if (!appUser.EmailConfirmed)
+                        response.RedirectPage = $"{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}";
+                    else if (appUser.CurrentOrganization == null)
+                        response.RedirectPage = CommonLinks.CreateDefaultOrg;
                 }
 
-                if(String.IsNullOrEmpty(response.RedirectPage)) {
-                    if(appUser.CurrentOrganization == null)
-                        response.RedirectPage = CommonLinks.CreatingOrganization;
-                    else if (!appUser.EmailConfirmed)
+                if (String.IsNullOrEmpty(response.RedirectPage)) {
+                    if (!appUser.EmailConfirmed)
                         response.RedirectPage = $"{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}";
+                    else if (appUser.CurrentOrganization == null)
+                        response.RedirectPage = CommonLinks.CreateDefaultOrg;
                 }
 
                 appUser.LastLogin = DateTime.UtcNow.ToJSONString();

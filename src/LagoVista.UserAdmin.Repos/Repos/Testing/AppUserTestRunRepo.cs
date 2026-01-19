@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.CloudStorage.Interfaces;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Models.Testing;
 using RingCentral;
 
@@ -13,8 +14,8 @@ namespace LagoVista.UserAdmin.Repos.Testing
     public class AppUserTestRunRepo : DocumentDBRepoBase<AppUserTestRun>, IAppUserTestRunRepo
     {
         bool _shouldConsolidateCollections;
-        public AppUserTestRunRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) : 
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
+        public AppUserTestRunRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger) : 
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }

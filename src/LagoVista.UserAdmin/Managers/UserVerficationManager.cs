@@ -53,7 +53,7 @@ namespace LagoVista.UserAdmin.Managers
             var user = await _userManager.FindByIdAsync(userHeader.Id);
             if (user == null)
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "UserVerifyController_SendConfirmationEmailAsync", "Could not get current user.");
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), "Could not get current user.");
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
 
@@ -92,7 +92,7 @@ namespace LagoVista.UserAdmin.Managers
             if (appUser == null)
             {
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendEmailConfirmFailed, userId: userId, extras: $"Could not find user with id: {userId}");
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "[UserVerifyManager__SendConfirmationEmailAsync]", "Could not get current user.");
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), "Could not get current user.");
                 return InvokeResult<string>.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
 
@@ -102,19 +102,14 @@ namespace LagoVista.UserAdmin.Managers
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendingEmailConfirm, userId: userHeader.Id, userName: userHeader.Text, extras: $"Raw Token={token}");
-                Console.WriteLine($"[UserVerficationManager_SendConfirmationEmailAsync] Raw Token: [{token}]");
 
                 var encodedToken = System.Net.WebUtility.UrlEncode(token);
-
-                Console.WriteLine($"[UserVerficationManager_SendConfirmationEmailAsync] Encoded Token: [{encodedToken}]");
-
-                Console.WriteLine($"[UserVerficationManager_SendConfirmationEmailAsync] Decoded Token: [{System.Net.WebUtility.UrlDecode(encodedToken)}]");
 
                 var callbackUrl = $"{GetWebURI()}/api/verify/email?userid={appUser.Id}&code={encodedToken}";
                 var mobileCallbackUrl = $"nuviot:confirmemail/?userId={appUser.Id}&code={encodedToken}";
 
 #if DEBUG
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[UserVerifyManager_SendConfirmationEmailAsync]", "SentToken",
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), "SentToken",
                      token.ToKVP("token"),
                      appUser.Id.ToKVP("appUserId"),
                      encodedToken.ToKVP("encodedToken"),
@@ -127,25 +122,25 @@ namespace LagoVista.UserAdmin.Managers
 
                 var result = await _emailSender.SendAsync(appUser.Email, subject, body, _appConfig.SystemOwnerOrg, appUser.ToEntityHeader(), appName, logoFile);
 
-                _adminLogger.LogInvokeResult("[UserVerficationManager_SendConfirmationEmailAsync]", result,
-                    new KeyValuePair<string, string>("callbackLink", callbackUrl),
-                    new KeyValuePair<string, string>("token", token),
-                    new KeyValuePair<string, string>("toUserId", appUser.Id),
-                    new KeyValuePair<string, string>("toEmail", appUser.Email));
-
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendEmailConfirmSuccess, userId: userHeader.Id, userName: userHeader.Text);
                 if (result.Successful)
+                {
+                    _adminLogger.Trace($"{this.Tag()} Success Sending Verification Email",
+                        new KeyValuePair<string, string>("callbackLink", callbackUrl),
+                        new KeyValuePair<string, string>("token", token),
+                        new KeyValuePair<string, string>("toUserId", appUser.Id),
+                        new KeyValuePair<string, string>("toEmail", appUser.Email));
+
                     return InvokeResult<string>.Create(_appConfig.Environment == Environments.Development ||
                         _appConfig.Environment == Environments.Local ||
                         _appConfig.Environment == Environments.LocalDevelopment ? encodedToken : String.Empty);
+                }
                 else
                     return InvokeResult<string>.FromInvokeResult(result);
-
-
             }
             catch (Exception ex)
             {
-                _adminLogger.AddException("UserVerficationManager_SendConfirmationEmailAsync", ex,
+                _adminLogger.AddException(this.Tag(), ex,
                    new KeyValuePair<string, string>("toUserId", appUser.Id),
                    new KeyValuePair<string, string>("toEmail", appUser.Email));
 

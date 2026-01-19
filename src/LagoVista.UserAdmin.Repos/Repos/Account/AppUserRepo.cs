@@ -37,8 +37,8 @@ namespace LagoVista.UserAdmin.Repos.Users
         private readonly bool _shouldConsolidateCollections;
         private readonly IUserRoleRepo _userRoleRepo;
 
-        public AppUserLoadRepo(IUserAdminSettings settings, IUserRoleRepo userRoleRepo, IAdminLogger logger, ICacheProvider cacheProvider) : 
-            base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, cacheProvider)
+        public AppUserLoadRepo(IUserAdminSettings settings, IUserRoleRepo userRoleRepo, IAdminLogger logger, IAppConfig appConfig, ICacheProvider cacheProvider) : 
+            base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, appConfig.Environment == Environments.Development ? null : cacheProvider)
         {
             _userRoleRepo = userRoleRepo ?? throw new ArgumentNullException(nameof(userRoleRepo));
             _shouldConsolidateCollections = settings.ShouldConsolidateCollections;
@@ -100,11 +100,17 @@ namespace LagoVista.UserAdmin.Repos.Users
             try
             {
                 await DeleteDocumentAsync(user.Id);
-                foreach(var org in user.Organizations)
-                    await _rdbmsUserManager.RemoveAppUserFromOrgAsync(org.Id, user.Id);
+                if (user.Organizations != null)
+                {
+                    foreach (var org in user.Organizations)
+                        await _rdbmsUserManager.RemoveAppUserFromOrgAsync(org.Id, user.Id);
+                }
 
-                await _cacheProvider.RemoveAsync(UserNameCacheKey(user.UserName));
-                await _cacheProvider.RemoveAsync(EmailCacheKey(user.Email));
+                if (_cacheProvider != null)
+                {
+                    await _cacheProvider.RemoveAsync(UserNameCacheKey(user.UserName));
+                    await _cacheProvider.RemoveAsync(EmailCacheKey(user.Email));
+                }
             }
             catch (Exception ex)
             {

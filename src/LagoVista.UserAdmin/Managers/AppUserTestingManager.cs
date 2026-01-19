@@ -8,6 +8,7 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Testing;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
+using LagoVista.UserAdmin.Models.Security;
 using LagoVista.UserAdmin.Models.Testing;
 using LagoVista.UserAdmin.Models.Users;
 using RingCentral;
@@ -27,26 +28,34 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IAppUserTestRunRepo _testRunStore;
         private readonly IAppUserManager _appUserManager;
         private readonly IUserManager _userManager;
-        private readonly ISignInManager _signInManager; 
+        private readonly ISignInManager _signInManager;
+        private readonly IAuthenticationLogManager _authLogMgr;
         private readonly IOrganizationManager _orgManager;
         private readonly IAppUserRepo _appUserRepo;
         private readonly IAuthViewRepo _authViewRepo;
         private readonly ITestArtifactStorage _testArtifactStorage;
+        private readonly IUserRegistrationManager _userRegistrationManager;
+        private readonly IAdminLogger _adminLogger;
 
         public AppUserTestingManager(IAppUserTestingDslRepo dslStore,
                                    IAppUserTestRunRepo testRunStore,
                                    IDependencyManager depManager,
                                    ISecurity security,
+                                   IAdminLogger adminLogger,
                                    IOrganizationManager orgManager,
                                    IAppUserRepo appUserRepo,
                                    IAppUserManager appuUserManager,
                                    ISignInManager signInManager,
                                    IAdminLogger logger,
                                    IAuthViewRepo authViewRepo,
+                                   IAuthenticationLogManager authLogMgr,
                                    IUserManager userManager,
+                                   IUserRegistrationManager userRegistrationManager,
                                    ITestArtifactStorage testArtifactStorage,
                                    IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
+            _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(authLogMgr));
+            _adminLogger = adminLogger ?? throw new ArgumentNullException(nameof(adminLogger));
             _orgManager = orgManager ?? throw new ArgumentNullException(nameof(orgManager));
             _testScenarioRepo = dslStore ?? throw new ArgumentNullException(nameof(dslStore));
             _testRunStore = testRunStore ?? throw new ArgumentNullException(nameof(testRunStore));
@@ -56,6 +65,7 @@ namespace LagoVista.UserAdmin.Managers
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
             _authViewRepo = authViewRepo ?? throw new ArgumentNullException(nameof(authViewRepo));
             _testArtifactStorage = testArtifactStorage ?? throw new ArgumentNullException(nameof(testArtifactStorage));
+            _userRegistrationManager = userRegistrationManager ?? throw new ArgumentNullException(nameof(userRegistrationManager)); 
         }
 
         public async Task<InvokeResult> DeleteTestUserAsync(EntityHeader org, EntityHeader user)
@@ -66,7 +76,7 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<InvokeResult<TestUserCredentials>> GetTestUserCredentials(EntityHeader user, EntityHeader pwd)
         {
             var testUser = await _appUserRepo.FindByIdAsync(TestUserSeed.User.Id);
-            var newPwd = Guid.NewGuid().ToId();
+            var newPwd = $"test!{Guid.NewGuid().ToId()}1234";
             var token = await _userManager.GeneratePasswordResetTokenAsync(testUser);
             await _userManager.ResetPasswordAsync(testUser, token, newPwd);
 
@@ -81,7 +91,9 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult<TestUserCredentials>> ApplySetupAsync(string testSceanrioId, EntityHeader org, EntityHeader user)
         {
+
             var scanario = await _testScenarioRepo.GetByIdAsync(testSceanrioId);
+            _adminLogger.Trace($"{this.Tag()} Applying test user setup for scenario: {scanario.Name}");
 
             var preconditions = scanario.PreConditions;   
 
@@ -94,29 +106,50 @@ namespace LagoVista.UserAdmin.Managers
 
             if(preconditions.EnsureUserExists.Value == SetCondition.NotSet)
             {
-                if(testUser == null)
+                _adminLogger.Trace($"{this.Tag()} User Should Not Exist");
+
+                if (testUser == null)
                 {
+                    _adminLogger.Trace($"{this.Tag()} User Should Not Exist - It Didn't");
                     return InvokeResult<TestUserCredentials>.Create(new TestUserCredentials());
                 }
              
                 // User Manager enforces Authorization
                 await _appUserManager.DeleteUserAsync( TestUserSeed.User.Id, org, user );
+                _adminLogger.Trace($"{this.Tag()} User Should Not Exist - Deleted");
+
                 return InvokeResult<TestUserCredentials>.Create(new TestUserCredentials());
             }
 
+            _adminLogger.Trace($"{this.Tag()} User Should Exist");
+
+
+            var generatedPassword = $"a55{Guid.NewGuid().ToId()}!1234";
+
             if (testUser == null)
             {
-                testUser = new Models.Users.AppUser();
-                testUser.Id = TestUserSeed.User.Id;
-                testUser.FirstName = TestUserSeed.FirstName;
-                testUser.LastName = TestUserSeed.LastName;
-                testUser.Email = TestUserSeed.Email;
-                testUser.PhoneNumber = TestUserSeed.PhoneNumber;
-                testUser.UserName = TestUserSeed.Email;
-                testUser.CreatedBy = TestUserSeed.User;
-                testUser.LastUpdatedBy = TestUserSeed.User;
-                testUser.LastUpdatedDate = timeStamp;
-                testUser.CreationDate = timeStamp;
+                _adminLogger.Trace($"{this.Tag()} User Should Exist - It Didn't");
+                var result = await _userRegistrationManager.CreateUserAsync(new Models.DTOs.RegisterUser()
+                {
+                    AppId = "WPF-AUTHTESTING",
+                    ClientType = "WEBAPP",
+                    DeviceId = "WPF-AUTHTESTING",
+                    LoginType = LoginTypes.AppUser,
+                    Email = TestUserSeed.Email,
+                    FirstName = TestUserSeed.FirstName,
+                    LastName = TestUserSeed.LastName,
+                    Password = generatedPassword
+                }, userId: TestUserSeed.User.Id);
+
+                if (!result.Successful)
+                {
+                    _adminLogger.AddError(this.Tag(), result.ErrorMessage);
+                    return result.ToInvokeResult<TestUserCredentials>();
+                }
+
+                _adminLogger.Trace($"{this.Tag()} User Should Exist - Created.");
+
+                testUser = result.Result.AppUser;
             }
 
             if(preconditions.EmailConfirmed.Value != SetCondition.DontCare)  testUser.EmailConfirmed = preconditions.EmailConfirmed.Value == SetCondition.Set;
@@ -124,43 +157,103 @@ namespace LagoVista.UserAdmin.Managers
             if(preconditions.TwoFactorEnabled.Value != SetCondition.DontCare)  testUser.TwoFactorEnabled = preconditions.TwoFactorEnabled.Value == SetCondition.Set;
             if(preconditions.IsAccountDisabled.Value != SetCondition.DontCare)  testUser.IsAccountDisabled = preconditions.IsAccountDisabled.Value == SetCondition.Set;
             if (preconditions.IsOrgAdmin.Value != SetCondition.DontCare) testUser.IsOrgAdmin = preconditions.IsOrgAdmin.Value == SetCondition.Set;
-            if (preconditions.ShowWelcome.Value != SetCondition.DontCare) testUser.ShowWelcome = preconditions.ShowWelcome.Value == SetCondition.Set;
+            if(preconditions.ShowWelcome.Value != SetCondition.DontCare) testUser.ShowWelcome = preconditions.ShowWelcome.Value == SetCondition.Set;
+
+            _adminLogger.Trace($"{this.Tag()} Set Pre Conditions on User");
 
             if (preconditions.BelongsToOrg.Value == SetCondition.Set)
             {
+                _adminLogger.Trace($"{this.Tag()} Use Should belong to an Org");
+
                 var existingOrg = await _orgManager.QueryOrgNamespaceInUseAsync(TestUserSeed.TEST_ORG_NS1);
                 if (!existingOrg)
                 {
+                    _adminLogger.Trace($"{this.Tag()} Use Should belong to an Org - Does Not Exist - Creating - {TestUserSeed.TEST_ORG_NS1}");
+
                     var orgCreateResult = await _orgManager.CreateNewOrganizationAsync(new ViewModels.Organization.CreateOrganizationViewModel()
                     {
                         CreateGettingStartedData = false,
                         Namespace = TestUserSeed.TEST_ORG_NS1,
                         Name = TestUserSeed.Org1.Text
                     }, user, TestUserSeed.Org1.Id);
+
+
+                    if (!orgCreateResult.Successful)
+                    {
+                        _adminLogger.AddError(this.Tag(), orgCreateResult.ErrorMessage);
+                        return orgCreateResult.ToInvokeResult<TestUserCredentials>();
+                    }
+
+                    _adminLogger.Trace($"{this.Tag()} Use Should belong to an Org - Created {TestUserSeed.TEST_ORG_NS1}");
+
+                    var addUserResult = await _orgManager.AddUserToOrgAsync(TestUserSeed.Org2.Id, TestUserSeed.User.Id, org, user);
+                    if (!addUserResult.Successful)
+                    {
+                        _adminLogger.AddError(this.Tag(), addUserResult.ErrorMessage);
+                        return addUserResult.ToInvokeResult<TestUserCredentials>();
+                    }
+
+                    _adminLogger.Trace($"{this.Tag()} Use Should belong to an Org - Added to Org {TestUserSeed.TEST_ORG_NS1}");
+                }
+                else
+                {
+                    _adminLogger.Trace($"{this.Tag()} Use Should belong to an Org - Already Exists {TestUserSeed.TEST_ORG_NS1}");
+                
+                    var result = await _orgManager.QueryOrganizationHasUserAsync(TestUserSeed.Org1.Id, TestUserSeed.User.Id, org, user);
+                    if (!result)
+                    {
+                        var addUserToOrgresult = await _orgManager.AddUserToOrgAsync(TestUserSeed.Org1.Id, TestUserSeed.User.Id, org, user);
+                        if(!addUserToOrgresult.Successful)
+                        {
+                            _adminLogger.AddError(this.Tag(), $"Could not add to org: {addUserToOrgresult.ErrorMessage}");
+                            return addUserToOrgresult.ToInvokeResult<TestUserCredentials>();
+                        }
+                    }
                 }
             }
             if(preconditions.BelongsToOrg.Value == SetCondition.NotSet)
             {
+                _adminLogger.Trace($"{this.Tag()} Use should not belong to an org"); 
+                
+                if (testUser.Organizations.Any())
+                {
+                    testUser.Organizations.Clear();
+                    testUser.CurrentOrganizationRoles.Clear();
+                    testUser.CurrentOrganization = null;
+                    testUser.IsOrgAdmin = false;
+                    testUser.OwnerOrganization = null;
+                }
+
+                _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- Cleared");
+            }
+
+            await AuthorizeAsync(testUser, AuthorizeResult.AuthorizeActions.Update, user, org);
+            await _appUserRepo.UpdateAsync(testUser);
+
+            if (preconditions.BelongsToOrg.Value == SetCondition.NotSet)
+            {
+                _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- Should we remove org?");
+           
                 testUser.OwnerOrganization = null;
                 var existingOrg = await _orgManager.QueryOrgNamespaceInUseAsync(TestUserSeed.TEST_ORG_NS1);
                 if (existingOrg)
                 {
-                    await _orgManager.DeleteOrgAsync(TestUserSeed.Org1.Id, TestUserSeed.Org1, TestUserSeed.User);
+                    _adminLogger.Trace($"{this.Tag()} Use should not belong to an org - exists deleteing");
+
+                    var deleteOrgresult = await _orgManager.DeleteOrgAsync(TestUserSeed.Org1.Id, org, user);
+                    if (!deleteOrgresult.Successful)
+                    {
+                        _adminLogger.AddError(this.Tag(), $"Could not delete org: {deleteOrgresult.ErrorMessage}");
+                        return deleteOrgresult.ToInvokeResult<TestUserCredentials>();
+                    }
+
+                    _adminLogger.Trace($"{this.Tag()} Use should not belong to an org - deleted");
                 }
+                else
+                    _adminLogger.Trace($"{this.Tag()} Use should not belong to an org - did not exist, nothing to do.");
             }
 
-            if (!existing)
-            {
-                await AuthorizeAsync(testUser, AuthorizeResult.AuthorizeActions.Create, user, org);
-                await _appUserRepo.CreateAsync(testUser);
-            }
-            else
-            {
-                await AuthorizeAsync(testUser, AuthorizeResult.AuthorizeActions.Update, user, org);
-                await _appUserRepo.UpdateAsync(testUser);
-            }
-
-            if(preconditions.HasPassword.Value == SetCondition.Set)
+            if (preconditions.HasPassword.Value == SetCondition.Set)
             {
                 var credentials = await GetTestUserCredentials(org, user);
                 return InvokeResult<TestUserCredentials>.Create(credentials.Result);
@@ -239,7 +332,7 @@ namespace LagoVista.UserAdmin.Managers
         {
             ValidationCheck(testScenario, Actions.Update);
             await AuthorizeAsync(user, org, typeof(AppUserTestScenario), Actions.Update);
-            await _testScenarioRepo.UpdateDSLAsync(testScenario);
+            await _testScenarioRepo.UpdateTestScenarioAsync(testScenario);
             return InvokeResult.Success;
         }
 
@@ -288,6 +381,14 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             await _testRunStore.CreateRunAsync(run);
+
+            var scenario = await _testScenarioRepo.GetByIdAsync(run.TestScenario.Id);
+            scenario.LastRun = run.Finished;
+            scenario.LastStatus = run.Status.ToString();
+            scenario.LastUpdatedDate = now;
+            scenario.LastUpdatedBy = user;
+            scenario.LastError = run.ErrorMesage;
+            await _testScenarioRepo.UpdateTestScenarioAsync(scenario);
             return InvokeResult.Success;
         }
 
@@ -306,10 +407,10 @@ namespace LagoVista.UserAdmin.Managers
 
         /* Auth Log Review */
 
-        public async Task<InvokeResult<AuthLogReviewSummary>> GetAuthLogReviewAsync(DateTime fromUtc, DateTime toUtc, EntityHeader org, EntityHeader user)
+        public async Task<ListResponse<AuthenticationLog>> GetAuthLogReviewAsync(ListRequest listRequest, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(AuthLogReviewSummary), Actions.Read);
-            return InvokeResult<AuthLogReviewSummary>.FromError("NotImplemented", "GetAuthLogReviewAsync not implemented yet.");
+            return await _authLogMgr.GetForUserIdAsync(TestUserSeed.User.Id, listRequest, org, user);
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.CloudStorage.Interfaces;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Testing;
 using LagoVista.UserAdmin.Models.Testing;
 using System;
@@ -13,8 +14,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Testing
     internal class AuthViewRepo : DocumentDBRepoBase<AuthView>, IAuthViewRepo
     {
         bool _shouldConsolidateCollections;
-        public AuthViewRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
+        public AuthViewRepo(IUserAdminSettings userAdminSettings, IAdminLogger adminLogger) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, adminLogger)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }

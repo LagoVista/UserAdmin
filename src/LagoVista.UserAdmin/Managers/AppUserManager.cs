@@ -96,6 +96,8 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> DeleteUserAsync(String id, EntityHeader org, EntityHeader deletedByUser)
         {
+            _adminLogger.Trace($"{this.Tag()} - {deletedByUser.Text} deleting user id: {id}");
+
             if (String.IsNullOrEmpty(id)) throw new ArgumentNullException(nameof(id));
 
             if (id != deletedByUser.Id)
@@ -124,22 +126,25 @@ namespace LagoVista.UserAdmin.Managers
 
             
             var orgsToDelete = new List<EntityHeader>();
-            foreach (var userOrg in appUser.Organizations)
+            if (appUser.Organizations != null)
             {
-                var users = await _orgUserRepo.GetUsersForOrgAsync(userOrg.Id);
-                var billingContactOrgs = await _orgRepo.GetBillingContactOrgsForUserAsync(userOrg.Id, id);
+                foreach (var userOrg in appUser.Organizations)
+                {
+                    var users = await _orgUserRepo.GetUsersForOrgAsync(userOrg.Id);
+                    var billingContactOrgs = await _orgRepo.GetBillingContactOrgsForUserAsync(userOrg.Id, id);
 
-                if (users.Count() == 1 && users.First().UserId == id)
-                {
-                    if (await _orgRepo.HasBillingRecords(userOrg.Id))
-                        cantDeleteReason.AppendLine($"Can not delete user, user is only contact for the organization {userOrg.Text} and can't remove the oranization.");
+                    if (users.Count() == 1 && users.First().UserId == id)
+                    {
+                        if (await _orgRepo.HasBillingRecords(userOrg.Id))
+                            cantDeleteReason.AppendLine($"Can not delete user, user is only contact for the organization {userOrg.Text} and can't remove the oranization.");
+                        else
+                            orgsToDelete.Add(userOrg);
+                    }
                     else
-                        orgsToDelete.Add(userOrg);
-                }
-                else
-                {
-                    if(billingContactOrgs.Any(org => org.Id == userOrg.Id))
-                        cantDeleteReason.AppendLine($"Can not delete user, user is billing contact for the organization [{userOrg.Text}].");
+                    {
+                        if (billingContactOrgs.Any(org => org.Id == userOrg.Id))
+                            cantDeleteReason.AppendLine($"Can not delete user, user is billing contact for the organization [{userOrg.Text}].");
+                    }
                 }
             }
 
@@ -160,7 +165,7 @@ namespace LagoVista.UserAdmin.Managers
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletedOrg, appUser, extras: $"Org: {orgToDelete.Text}");
             }
 
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserManager__DeleteUserAsync]", $"\"[AppUserManager__DeleteUserAsync] - [{deletedByUser.Text}] deleted the user [{appUser.Name}]");
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"[{deletedByUser.Text}] deleted the user [{appUser.Name}]");
 
             await _appUserRepo.DeleteAsync(appUser);
 
