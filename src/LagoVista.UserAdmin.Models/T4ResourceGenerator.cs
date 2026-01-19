@@ -1,4 +1,4 @@
-﻿/*1/18/2026 1:52:39 PM*/
+﻿/*1/19/2026 7:14:39 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -420,6 +420,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AuthTenantStateSnapshot_ExternalLoginProviders_Help
 
 		public static string AuthTenantStateSnapshot_ExternalLoginProviders_Help { get { return GetResourceString("AuthTenantStateSnapshot_ExternalLoginProviders_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_HasPassword
+
+		public static string AuthTenantStateSnapshot_HasPassword { get { return GetResourceString("AuthTenantStateSnapshot_HasPassword"); } }
 //Resources:UserAdminResources:AuthTenantStateSnapshot_Help
 
 		public static string AuthTenantStateSnapshot_Help { get { return GetResourceString("AuthTenantStateSnapshot_Help"); } }
@@ -435,6 +438,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AuthTenantStateSnapshot_IsAnonymous_Help
 
 		public static string AuthTenantStateSnapshot_IsAnonymous_Help { get { return GetResourceString("AuthTenantStateSnapshot_IsAnonymous_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_IsOrgAdmin
+
+		public static string AuthTenantStateSnapshot_IsOrgAdmin { get { return GetResourceString("AuthTenantStateSnapshot_IsOrgAdmin"); } }
 //Resources:UserAdminResources:AuthTenantStateSnapshot_LastMfaDateTimeUtc
 
 		public static string AuthTenantStateSnapshot_LastMfaDateTimeUtc { get { return GetResourceString("AuthTenantStateSnapshot_LastMfaDateTimeUtc"); } }
@@ -2491,11 +2497,13 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AuthTenantStateSnapshot_EnsureUserExists_Help = "AuthTenantStateSnapshot_EnsureUserExists_Help";
 			public const string AuthTenantStateSnapshot_ExternalLoginProviders = "AuthTenantStateSnapshot_ExternalLoginProviders";
 			public const string AuthTenantStateSnapshot_ExternalLoginProviders_Help = "AuthTenantStateSnapshot_ExternalLoginProviders_Help";
+			public const string AuthTenantStateSnapshot_HasPassword = "AuthTenantStateSnapshot_HasPassword";
 			public const string AuthTenantStateSnapshot_Help = "AuthTenantStateSnapshot_Help";
 			public const string AuthTenantStateSnapshot_IsAccountDisabled = "AuthTenantStateSnapshot_IsAccountDisabled";
 			public const string AuthTenantStateSnapshot_IsAccountDisabled_Help = "AuthTenantStateSnapshot_IsAccountDisabled_Help";
 			public const string AuthTenantStateSnapshot_IsAnonymous = "AuthTenantStateSnapshot_IsAnonymous";
 			public const string AuthTenantStateSnapshot_IsAnonymous_Help = "AuthTenantStateSnapshot_IsAnonymous_Help";
+			public const string AuthTenantStateSnapshot_IsOrgAdmin = "AuthTenantStateSnapshot_IsOrgAdmin";
 			public const string AuthTenantStateSnapshot_LastMfaDateTimeUtc = "AuthTenantStateSnapshot_LastMfaDateTimeUtc";
 			public const string AuthTenantStateSnapshot_LastMfaDateTimeUtc_Help = "AuthTenantStateSnapshot_LastMfaDateTimeUtc_Help";
 			public const string AuthTenantStateSnapshot_PhoneNumberConfirmed = "AuthTenantStateSnapshot_PhoneNumberConfirmed";

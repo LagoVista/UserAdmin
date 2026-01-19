@@ -10,7 +10,10 @@ using LagoVista.UserAdmin.Interfaces.Repos.Testing;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Testing;
 using LagoVista.UserAdmin.Models.Users;
+using RingCentral;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Managers
@@ -22,39 +25,66 @@ namespace LagoVista.UserAdmin.Managers
     {
         private readonly IAppUserTestingDslRepo _testScenarioRepo;
         private readonly IAppUserTestRunRepo _testRunStore;
-        private readonly IAppUserManager _userManager;  
+        private readonly IAppUserManager _appUserManager;
+        private readonly IUserManager _userManager;
         private readonly ISignInManager _signInManager; 
+        private readonly IOrganizationManager _orgManager;
         private readonly IAppUserRepo _appUserRepo;
         private readonly IAuthViewRepo _authViewRepo;
-
-
+        private readonly ITestArtifactStorage _testArtifactStorage;
 
         public AppUserTestingManager(IAppUserTestingDslRepo dslStore,
                                    IAppUserTestRunRepo testRunStore,
                                    IDependencyManager depManager,
                                    ISecurity security,
+                                   IOrganizationManager orgManager,
                                    IAppUserRepo appUserRepo,
-                                   IAppUserManager userManager,
+                                   IAppUserManager appuUserManager,
                                    ISignInManager signInManager,
                                    IAdminLogger logger,
                                    IAuthViewRepo authViewRepo,
+                                   IUserManager userManager,
+                                   ITestArtifactStorage testArtifactStorage,
                                    IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
+            _orgManager = orgManager ?? throw new ArgumentNullException(nameof(orgManager));
             _testScenarioRepo = dslStore ?? throw new ArgumentNullException(nameof(dslStore));
             _testRunStore = testRunStore ?? throw new ArgumentNullException(nameof(testRunStore));
             _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager)); 
+            _appUserManager = appuUserManager ?? throw new ArgumentNullException(nameof(appUserRepo));
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
             _authViewRepo = authViewRepo ?? throw new ArgumentNullException(nameof(authViewRepo));
+            _testArtifactStorage = testArtifactStorage ?? throw new ArgumentNullException(nameof(testArtifactStorage));
         }
 
         public async Task<InvokeResult> DeleteTestUserAsync(EntityHeader org, EntityHeader user)
         {
-            return await _userManager.DeleteUserAsync(TestUserSeed.User.Id, org, user);
+            return await _appUserManager.DeleteUserAsync(TestUserSeed.User.Id, org, user);
         }
 
-        public async Task<InvokeResult> ApplySetupAsync(AuthTenantStateSnapshot preconditions, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult<TestUserCredentials>> GetTestUserCredentials(EntityHeader user, EntityHeader pwd)
         {
+            var testUser = await _appUserRepo.FindByIdAsync(TestUserSeed.User.Id);
+            var newPwd = Guid.NewGuid().ToId();
+            var token = await _userManager.GeneratePasswordResetTokenAsync(testUser);
+            await _userManager.ResetPasswordAsync(testUser, token, newPwd);
+
+            var credentials = new TestUserCredentials()
+            {
+                EmailAddress = testUser.Email,
+                Password = newPwd
+            };  
+
+            return InvokeResult<TestUserCredentials>.Create(credentials);
+        }
+
+        public async Task<InvokeResult<TestUserCredentials>> ApplySetupAsync(string testSceanrioId, EntityHeader org, EntityHeader user)
+        {
+            var scanario = await _testScenarioRepo.GetByIdAsync(testSceanrioId);
+
+            var preconditions = scanario.PreConditions;   
+
             ValidationCheck(preconditions, Actions.Any);
 
             var timeStamp = DateTime.UtcNow.ToJSONString();
@@ -66,12 +96,12 @@ namespace LagoVista.UserAdmin.Managers
             {
                 if(testUser == null)
                 {
-                    return InvokeResult.Success;
+                    return InvokeResult<TestUserCredentials>.Create(new TestUserCredentials());
                 }
              
                 // User Manager enforces Authorization
-                await _userManager.DeleteUserAsync( TestUserSeed.User.Id, org, user );
-                return InvokeResult.Success;
+                await _appUserManager.DeleteUserAsync( TestUserSeed.User.Id, org, user );
+                return InvokeResult<TestUserCredentials>.Create(new TestUserCredentials());
             }
 
             if (testUser == null)
@@ -89,10 +119,35 @@ namespace LagoVista.UserAdmin.Managers
                 testUser.CreationDate = timeStamp;
             }
 
-            if (preconditions.EmailConfirmed.Value != SetCondition.DontCare)  testUser.EmailConfirmed = preconditions.EmailConfirmed.Value == SetCondition.Set;
+            if(preconditions.EmailConfirmed.Value != SetCondition.DontCare)  testUser.EmailConfirmed = preconditions.EmailConfirmed.Value == SetCondition.Set;
             if(preconditions.PhoneNumberConfirmed.Value != SetCondition.DontCare)  testUser.PhoneNumberConfirmed = preconditions.PhoneNumberConfirmed.Value == SetCondition.Set;
             if(preconditions.TwoFactorEnabled.Value != SetCondition.DontCare)  testUser.TwoFactorEnabled = preconditions.TwoFactorEnabled.Value == SetCondition.Set;
             if(preconditions.IsAccountDisabled.Value != SetCondition.DontCare)  testUser.IsAccountDisabled = preconditions.IsAccountDisabled.Value == SetCondition.Set;
+            if (preconditions.IsOrgAdmin.Value != SetCondition.DontCare) testUser.IsOrgAdmin = preconditions.IsOrgAdmin.Value == SetCondition.Set;
+            if (preconditions.ShowWelcome.Value != SetCondition.DontCare) testUser.ShowWelcome = preconditions.ShowWelcome.Value == SetCondition.Set;
+
+            if (preconditions.BelongsToOrg.Value == SetCondition.Set)
+            {
+                var existingOrg = await _orgManager.QueryOrgNamespaceInUseAsync(TestUserSeed.TEST_ORG_NS1);
+                if (!existingOrg)
+                {
+                    var orgCreateResult = await _orgManager.CreateNewOrganizationAsync(new ViewModels.Organization.CreateOrganizationViewModel()
+                    {
+                        CreateGettingStartedData = false,
+                        Namespace = TestUserSeed.TEST_ORG_NS1,
+                        Name = TestUserSeed.Org1.Text
+                    }, user, TestUserSeed.Org1.Id);
+                }
+            }
+            if(preconditions.BelongsToOrg.Value == SetCondition.NotSet)
+            {
+                testUser.OwnerOrganization = null;
+                var existingOrg = await _orgManager.QueryOrgNamespaceInUseAsync(TestUserSeed.TEST_ORG_NS1);
+                if (existingOrg)
+                {
+                    await _orgManager.DeleteOrgAsync(TestUserSeed.Org1.Id, TestUserSeed.Org1, TestUserSeed.User);
+                }
+            }
 
             if (!existing)
             {
@@ -104,7 +159,16 @@ namespace LagoVista.UserAdmin.Managers
                 await AuthorizeAsync(testUser, AuthorizeResult.AuthorizeActions.Update, user, org);
                 await _appUserRepo.UpdateAsync(testUser);
             }
-            return InvokeResult.Success;
+
+            if(preconditions.HasPassword.Value == SetCondition.Set)
+            {
+                var credentials = await GetTestUserCredentials(org, user);
+                return InvokeResult<TestUserCredentials>.Create(credentials.Result);
+            }
+            else
+            {
+                return InvokeResult<TestUserCredentials>.Create(new TestUserCredentials() { EmailAddress = TestUserSeed.Email});
+            }
         }
 
         public async Task<AppUser> GetTestUserAsync(EntityHeader org, EntityHeader user)
@@ -202,7 +266,7 @@ namespace LagoVista.UserAdmin.Managers
 
         /* Run Persistence */
 
-        public async Task<InvokeResult> AddTestRunAsync(AppUserTestRun run, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> AddTestRunAsync(AppUserTestRun run, List<ArtifactFlie> files, EntityHeader org, EntityHeader user)
         {
             await AuthorizeAsync(user, org, typeof(AppUserTestRun), Actions.Create);
 
@@ -213,25 +277,17 @@ namespace LagoVista.UserAdmin.Managers
             run.CreationDate = now;
             run.LastUpdatedDate = now;
 
+            foreach (var artififact in run.Artifacts)
+            {
+                var file = files.Where(fl => fl.FileName == artififact.FileName).FirstOrDefault();
+                if (file != null)
+                {
+                    // Now assign the name to retreive the file from the server.
+                    artififact.FileName = await _testArtifactStorage.SaveArtifactAsync(org.Id, run.Id, artififact.FileName, file.ContentType, file.Buffer);
+                }
+            }
+
             await _testRunStore.CreateRunAsync(run);
-            return InvokeResult.Success;
-        }
-
-        public async Task<InvokeResult> AppendRunEventAsync(string runId, AppUserTestRunEvent evt, EntityHeader org, EntityHeader user)
-        {
-            await AuthorizeAsync(user, org, typeof(AppUserTestRun), Actions.Update);
-
-            await _testRunStore.AppendEventsAsync(runId, new[] { evt });
-            return InvokeResult.Success;
-        }
-
-        public async Task<InvokeResult> FinishRunAsync(string runId, TestRunStatus status, EntityHeader org, EntityHeader user, TestRunVerification verification = null)
-        {
-            await AuthorizeAsync(user, org, typeof(AppUserTestRun), Actions.Update);
-
-            var finishedUtc = DateTime.UtcNow;
-            await _testRunStore.FinishRunAsync(runId, status, finishedUtc, verification);
-
             return InvokeResult.Success;
         }
 
@@ -256,4 +312,5 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult<AuthLogReviewSummary>.FromError("NotImplemented", "GetAuthLogReviewAsync not implemented yet.");
         }
     }
+
 }

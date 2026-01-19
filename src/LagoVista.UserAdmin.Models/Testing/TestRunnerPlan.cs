@@ -39,6 +39,15 @@ namespace LagoVista.UserAdmin.Models.Testing
 
         /// <summary>Execution options for debugging.</summary>
         public AuthRunnerOptions Options { get; set; } = new AuthRunnerOptions();
+    
+        public TestUserCredentials UserCredentials { get; set; }
+    }
+
+
+    public class TestUserCredentials
+    {
+        public string EmailAddress { get; set; }
+        public string Password { get; set; }
     }
 
     /// <summary>

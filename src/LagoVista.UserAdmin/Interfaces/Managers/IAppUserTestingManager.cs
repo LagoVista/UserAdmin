@@ -1,6 +1,7 @@
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
+using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Testing;
 using LagoVista.UserAdmin.Models.Users;
 using System;
@@ -27,7 +28,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         /// Apply a declarative setup intent (seeds) and/or precondition snapshot for the fixed test user.
         /// This should only support the subset of fields the server can enforce.
         /// </summary>
-        Task<InvokeResult> ApplySetupAsync(AuthTenantStateSnapshot preconditions, EntityHeader org, EntityHeader user);
+        Task<InvokeResult<TestUserCredentials>> ApplySetupAsync(string testScenarioId, EntityHeader org, EntityHeader user);
 
         /// <summary>
         /// For out-of-band verification flows: return the last email token/code sent to the fixed test user.
@@ -65,7 +66,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
         #region Run Persistence
 
-        Task<InvokeResult> AddTestRunAsync(AppUserTestRun run, byte[] images, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> AddTestRunAsync(AppUserTestRun run, List<ArtifactFlie> files, EntityHeader org, EntityHeader user);
         
         Task<ListResponse<AppUserTestRunSummary>> GetTestRunsAsync(ListRequest request, EntityHeader org, EntityHeader user);
         Task<AppUserTestRun> GetTestRunAsync(string runId, EntityHeader org, EntityHeader user);
@@ -79,5 +80,13 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         #endregion
 
         Task<InvokeResult<AuthRunnerPlan>> BuildRunnerPlanAsync(string scenarioId, bool headless, EntityHeader org, EntityHeader user);
+    }
+
+    public class ArtifactFlie
+    {
+        public byte[] Buffer { get; set; }
+        public string FileName { get; set; }
+    
+        public string ContentType { get; set; }
     }
 }

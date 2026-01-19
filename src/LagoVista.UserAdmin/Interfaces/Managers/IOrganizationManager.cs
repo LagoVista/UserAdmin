@@ -33,7 +33,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> AddUserToLocationAsync(string userId, string locationId, EntityHeader org, EntityHeader addedBy);
         Task<InvokeResult> AddLocationAsync(OrgLocation newLocation, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateLocationAsync(OrgLocation location, EntityHeader org, EntityHeader user);
-        Task<InvokeResult<Organization>> CreateNewOrganizationAsync(CreateOrganizationViewModel organizationViewModel, EntityHeader user);
+        Task<InvokeResult<Organization>> CreateNewOrganizationAsync(CreateOrganizationViewModel organizationViewModel, EntityHeader user, string orgId = null);
         Task<InvokeResult<List<GeoLocation>>> GetBoundingBoxForLocationAsync(string orgLocation, EntityHeader org, EntityHeader user);
 
         Task<InvokeResult> SetOrgAdminAsync(string userId, EntityHeader org, EntityHeader user);

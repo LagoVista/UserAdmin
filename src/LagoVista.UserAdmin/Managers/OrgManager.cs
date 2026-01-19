@@ -121,13 +121,12 @@ namespace LagoVista.UserAdmin.Managers
             return await _organizationRepo.QueryNamespaceInUseAsync(namespaceText);
         }
 
-        public async Task<InvokeResult<Organization>> CreateNewOrganizationAsync(CreateOrganizationViewModel organizationViewModel, EntityHeader user)
+        public async Task<InvokeResult<Organization>> CreateNewOrganizationAsync(CreateOrganizationViewModel organizationViewModel, EntityHeader user, string orgId = null)
         {
             var result = new InvokeResult<Organization>();
 
             ValidationCheck(organizationViewModel, Core.Validation.Actions.Create);
 
-            //HACK: Very, small chance, but it does exist...two entries could be added at exact same time and check would fail...need to make progress, can live with risk for now.
             if (await _organizationRepo.QueryNamespaceInUseAsync(organizationViewModel.Namespace))
             {
                 result.Errors.Add(new ErrorMessage(UserAdminResources.Organization_NamespaceInUse.Replace(Tokens.NAMESPACE, organizationViewModel.Namespace)));
@@ -135,7 +134,12 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             var organization = new Organization();
-            organization.SetId();
+            // Used to force a user id, to only be called by tests.
+            if(!String.IsNullOrEmpty(orgId))
+                organization.Id = orgId;
+            else
+                organization.SetId();
+          
             organization.SetCreationUpdatedFields(user);
             organizationViewModel.MapToOrganization(organization);
             organization.Status = UserAdminResources.Organization_Status_Active;
@@ -722,7 +726,6 @@ namespace LagoVista.UserAdmin.Managers
             user.LastUpdatedDate = timeStamp;
 
             await AuthorizeOrgAccessAsync(addedBy, org, typeof(OrgUser), Actions.Create, user);
-
             await _orgUserRepo.AddOrgUserAsync(user);
 
             await _authLogMgr.AddAsync(AuthLogTypes.AddUserToOrg, userToAdd.Id, userToAdd.Text, org.Id, org.Text, extras: $"added by id: {addedBy.Id}, name: {addedBy.Text}");

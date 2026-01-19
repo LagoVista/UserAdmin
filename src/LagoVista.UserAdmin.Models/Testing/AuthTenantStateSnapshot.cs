@@ -60,6 +60,13 @@ namespace LagoVista.UserAdmin.Models.Testing
         [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_IsAccountDisabled, HelpResource: UserAdminResources.Names.AuthTenantStateSnapshot_IsAccountDisabled_Help, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
         public EntityHeader<SetCondition> IsAccountDisabled { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
 
+        [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_IsOrgAdmin,  EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader<SetCondition> IsOrgAdmin { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
+
+        [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_HasPassword, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader<SetCondition> HasPassword { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.Set);
+
+
         [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_IsAnonymous, HelpResource: UserAdminResources.Names.AuthTenantStateSnapshot_IsAnonymous_Help, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
         public EntityHeader<SetCondition> IsAnonymous { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
 

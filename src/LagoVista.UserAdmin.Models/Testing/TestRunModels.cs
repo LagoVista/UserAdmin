@@ -53,6 +53,8 @@ namespace LagoVista.UserAdmin.Models.Testing
 
         public List<AppUserTestRunEvent> Events { get; set; } = new List<AppUserTestRunEvent>();
 
+        public List<TestRunArtifact> Artifacts { get; set; } = new List<TestRunArtifact>();
+
         public AppUserTestRunSummary CreateSummary()
         {
             var summary = new AppUserTestRunSummary();
@@ -85,6 +87,13 @@ namespace LagoVista.UserAdmin.Models.Testing
         public List<string> Warnings { get; set; } = new List<string>();
     }
 
+    public class TestRunArtifact
+    {
+        public string Name { get; set; }
+        public string FileName { get; set; }
+        public string Url { get; set; }
+    }
+
     public class AuthLogReviewSummary
     {
         public string FromUtc { get; set; }
@@ -114,7 +123,7 @@ namespace LagoVista.UserAdmin.Models.Testing
         /// </summary>
         public long Seq { get; set; }
 
-        public DateTime TimestampUtc { get; set; }
+        public string Timestamp { get; set; }
         public TestRunEventLevel Level { get; set; } = TestRunEventLevel.Info;
 
         /// <summary>

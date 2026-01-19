@@ -22,32 +22,10 @@ namespace LagoVista.UserAdmin.Repos.Testing
         protected override bool ShouldConsolidateCollections => _shouldConsolidateCollections;
 
 
-        public async Task AppendEventsAsync(string runId, IEnumerable<AppUserTestRunEvent> events)
-        {
-            var run = await GetDocumentAsync(runId);
-
-            var idx = run.Events.Count;
-
-            foreach(var evt in events)
-            {
-                evt.Seq = idx++;
-                run.Events.Add(evt);
-            }
-            await UpsertDocumentAsync(run); 
-        }
-
         public Task CreateRunAsync(AppUserTestRun run)
         {
             return CreateDocumentAsync(run);
         }
-
-        public async Task FinishRunAsync(string runId, TestRunStatus status, DateTime finishedUtc, TestRunVerification verification)
-        {
-            var run = await GetDocumentAsync(runId);
-            run.Status = status;
-            run.FinishedUtc = finishedUtc;
-            run.Verification = verification;
-            await UpsertDocumentAsync(run); }
 
         public Task<AppUserTestRun> GetRunAsync(string runId)
         {

@@ -73,15 +73,15 @@ namespace LagoVista.UserAdmin.Repos.Users
         private readonly IAuthenticationLogManager _authLogMgr;
         private readonly IAdminLogger _adminLogger;
 
-        public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserRoleRepo userRoleRepo, IUserAdminSettings userAdminSettings,  IAuthenticationLogManager authLogMgr, IDocumentCloudCachedServices services) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
+        public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserRoleRepo userRoleRepo, IUserAdminSettings userAdminSettings,  IAuthenticationLogManager authLogMgr, IAdminLogger logger, ICacheProvider cacheProvider) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider)
         {
             _adminSettings = userAdminSettings;
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
             _rdbmsUserManager = rdbmsUserManager;
             _userRoleRepo = userRoleRepo;
-            _adminLogger = services.AdminLogger;
-            _cacheProvider = services.CacheProvider;
+            _adminLogger = logger;
+            _cacheProvider = cacheProvider;
             _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(authLogMgr));
         }
 

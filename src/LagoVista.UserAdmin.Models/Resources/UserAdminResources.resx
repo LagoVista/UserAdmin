@@ -2438,4 +2438,10 @@
   <data name="AuthView_ViewId" xml:space="preserve">
     <value>View Id</value>
   </data>
+  <data name="AuthTenantStateSnapshot_IsOrgAdmin" xml:space="preserve">
+    <value>Is Organization Admin</value>
+  </data>
+  <data name="AuthTenantStateSnapshot_HasPassword" xml:space="preserve">
+    <value>Has Password</value>
+  </data>
 </root>

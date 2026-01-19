@@ -9,10 +9,10 @@
     <RootNamespace>LagoVista.UserAdmin.Tests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <!--<PackageReference Include="LagoVista.IoT.SecurityManager" Version="3.0.3163.0554" />-->
+    <!--<PackageReference Include="LagoVista.IoT.SecurityManager" Version="3.0.3169.0728" />-->
     <PackageReference Include="Azure.Identity" Version="1.16.0" />
     <PackageReference Include="Microsoft.Graph" Version="5.92.0" />
-    <PackageReference Include="LagoVista.Core.TestBase" Version="3.0.3163.0733" />
+    <PackageReference Include="LagoVista.Core.TestBase" Version="3.0.3169.0728" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\LagoVista.AspNetCore.Identity\LagoVista.AspNetCore.Identity.csproj" />

@@ -130,13 +130,17 @@ namespace LagoVista.UserAdmin.Models.Testing
     {
         public static string FirstName { get; } = "Fred";
         public static string LastName { get; } = "Flintstone";
-        public static string Email { get; } = "fred@BedRock.com";
+        public static string Email { get; } = "30458D0723764ACDBB10DA73AD98D088@5C00C94DB4D14B0E8E625F8FB47B9911.DOESNOTEXIST";
         public static string PhoneNumber {get; } = "6125551212";
 
         private const string TEST_USER_ID = "30458D0723764ACDBB10DA73AD98D088";
         private const string TEST_ORG1_ID = "5C00C94DB4D14B0E8E625F8FB47B9911";
         private const string TEST_ORG2_ID = "963F59BD3B0D43098212EB8EE26D3D3A";
         private const string TEST_ORG3_ID = "44A956C41AF0405AA5D7845FEB139B7B";
+
+        public const string TEST_ORG_NS1 = "orgns1";
+        public const string TEST_ORG_NS2 = "orgns2";
+        public const string TEST_ORG_NS3 = "orgns3";
 
         public static EntityHeader User {get;} = new EntityHeader()
         {
