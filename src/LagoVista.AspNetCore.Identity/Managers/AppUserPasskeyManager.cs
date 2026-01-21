@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Twilio.TwiML.Voice;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -43,13 +44,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         /* Existing user-bound flows (attach/use passkeys for a known user) */
 
-        public async Task<InvokeResult<string>> BeginRegistrationOptionsAsync(string userId, string passkeyUrl, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult<PasskeyBeginOptionsResponse>> BeginRegistrationOptionsAsync(string userId, string passkeyUrl, EntityHeader org, EntityHeader user)
         {
             if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
 
             var appUser = await _appUserRepo.FindByIdAsync(userId);
-            if (appUser == null) return InvokeResult<string>.FromError("user_not_found");
-            if (String.IsNullOrEmpty(appUser.Email)) return InvokeResult<string>.FromError("missing_email");
+            if (appUser == null) return InvokeResult<PasskeyBeginOptionsResponse>.FromError("user_not_found");
+            if (String.IsNullOrEmpty(appUser.Email)) return InvokeResult<PasskeyBeginOptionsResponse>.FromError("missing_email");
 
             var (rpId, origin) = GetRpIdAndOrigin();
             var safeUrl = NormalizePasskeyUrl(passkeyUrl);
@@ -85,34 +86,36 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 ExpiresUtc = DateTime.UtcNow.AddMinutes(ChallengeTtlMinutes).ToJSONString(),
             };
 
-            var storeResult = await _challengeStore.CreateAsync(challenge);
-            if (!storeResult.Successful) return storeResult.ToInvokeResult<string>();
+            var storeResult = await _challengeStore.CreateAsync( new PasskeyChallengePacket() 
+            { 
+                Challenge = challenge, 
+                OptionsJson = JsonConvert.SerializeObject(options) 
+            });
+            if (!storeResult.Successful) return storeResult.ToInvokeResult<PasskeyBeginOptionsResponse>();
 
-            var payload = new { challengeId = storeResult.Result.Id, rpId = rpId, origin = origin, options = options };
-            return InvokeResult<string>.Create(JsonConvert.SerializeObject(payload));
+            var payload = new PasskeyBeginOptionsResponse() { ChallengeId = storeResult.Result.Challenge.Id, Options = options };
+            return InvokeResult<PasskeyBeginOptionsResponse>.Create(payload);
         }
 
-        public async Task<InvokeResult> CompleteRegistrationAsync(string userId, string attestationResponseJson, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> CompleteRegistrationAsync(string userId, PasskeyRegistrationCompleteRequest payload, EntityHeader org, EntityHeader user)
         {
             if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
-            if (String.IsNullOrEmpty(attestationResponseJson)) return InvokeResult.FromError("missing_attestation");
 
             var (rpId, origin) = GetRpIdAndOrigin();
 
-            dynamic payload;
-            try { payload = JsonConvert.DeserializeObject(attestationResponseJson); }
-            catch { return InvokeResult.FromError("invalid_attestation_json"); }
-
-            string challengeId = payload.challengeId;
+            string challengeId = payload.ChallengeId;
             if (String.IsNullOrEmpty(challengeId)) return InvokeResult.FromError("missing_challenge_id");
 
             var challengeResult = await _challengeStore.ConsumeAsync(challengeId);
             var validateChallenge = ValidateChallenge(challengeResult, PasskeyChallengePurpose.Register, rpId, origin);
             if (!validateChallenge.Successful) return validateChallenge;
-            if (!String.Equals(challengeResult.Result.UserId, userId, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_user_mismatch");
+            if (!String.Equals(challengeResult.Result.Challenge.UserId, userId, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_user_mismatch");
 
-            var options = JsonConvert.DeserializeObject<CredentialCreateOptions>(JsonConvert.SerializeObject(payload.options));
-            var attestationResponse = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(JsonConvert.SerializeObject(payload.attestation));
+            var options = JsonConvert.DeserializeObject<CredentialCreateOptions>(challengeResult.Result.OptionsJson);
+            var optionsUserId = System.Text.Encoding.UTF8.GetString(options.User.Id);
+            if (!String.Equals(optionsUserId, userId, StringComparison.Ordinal)) return InvokeResult.FromError("options_user_mismatch");
+         
+            var attestationResponse = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(JsonConvert.SerializeObject(payload.AttestationJson));
 
             IsCredentialIdUniqueToUserAsyncDelegate isUnique = async (args, cancellationToken) =>
             {
@@ -143,10 +146,10 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var addResult = await _credentialRepo.AddAsync(cred);
             if (!addResult.Successful) return addResult;
 
-            return InvokeResult.SuccessRedirect(NormalizePasskeyUrl(challengeResult.Result.PasskeyUrl));
+            return InvokeResult.SuccessRedirect(NormalizePasskeyUrl(challengeResult.Result.Challenge.PasskeyUrl));
         }
 
-        public async Task<InvokeResult<string>> BeginAuthenticationOptionsAsync(string userId, bool isStepUp, string passkeyUrl, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult<PasskeyBeginOptionsResponse>> BeginAuthenticationOptionsAsync(string userId, bool isStepUp, string passkeyUrl, EntityHeader org, EntityHeader user)
         {
             if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
 
@@ -155,7 +158,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             var creds = await _credentialRepo.GetByUserAsync(userId, rpId);
             var allow = creds.Select(c => new PublicKeyCredentialDescriptor(Base64UrlDecode(c.CredentialId))).ToList();
-            if (allow.Count == 0) return InvokeResult<string>.FromError("no_passkeys_registered");
+            if (allow.Count == 0) return InvokeResult<PasskeyBeginOptionsResponse>.FromError("no_passkeys_registered");
 
             var uv = isStepUp ? UserVerificationRequirement.Required : UserVerificationRequirement.Preferred;
             var options = _fido2.GetAssertionOptions(new GetAssertionOptionsParams()
@@ -177,34 +180,35 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 ExpiresUtc = DateTime.UtcNow.AddMinutes(ChallengeTtlMinutes).ToJSONString(),
             };
 
-            var storeResult = await _challengeStore.CreateAsync(challenge);
-            if (!storeResult.Successful) return storeResult.ToInvokeResult<string>();
+            var storeResult = await _challengeStore.CreateAsync(new PasskeyChallengePacket() 
+            { 
+                Challenge = challenge, 
+                OptionsJson = JsonConvert.SerializeObject(options) 
+            });
+            if (!storeResult.Successful) return storeResult.ToInvokeResult<PasskeyBeginOptionsResponse>();
 
-            var payload = new { challengeId = storeResult.Result.Id, rpId = rpId, origin = origin, options = options };
-            return InvokeResult<string>.Create(JsonConvert.SerializeObject(payload));
+            var payload = new PasskeyBeginOptionsResponse() { ChallengeId = storeResult.Result.Challenge.Id, Options = options };
+            return InvokeResult<PasskeyBeginOptionsResponse>.Create(payload);
         }
 
-        public async Task<InvokeResult> CompleteAuthenticationAsync(string userId, string assertionResponseJson, bool isStepUp, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> CompleteAuthenticationAsync(string userId, PasskeyAuthenticationCompleteRequest payload, bool isStepUp, EntityHeader org, EntityHeader user)
         {
             if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
-            if (String.IsNullOrEmpty(assertionResponseJson)) return InvokeResult.FromError("missing_assertion");
+            if (payload == null || String.IsNullOrEmpty(payload.AssertionJson)) return InvokeResult.FromError("missing_assertion");
 
             var (rpId, origin) = GetRpIdAndOrigin();
 
-            dynamic payload;
-            try { payload = JsonConvert.DeserializeObject(assertionResponseJson); }
-            catch { return InvokeResult.FromError("invalid_assertion_json"); }
-
-            string challengeId = payload.challengeId;
+            string challengeId = payload.ChallengeId;
             if (String.IsNullOrEmpty(challengeId)) return InvokeResult.FromError("missing_challenge_id");
 
             var challengeResult = await _challengeStore.ConsumeAsync(challengeId);
             var validateChallenge = ValidateChallenge(challengeResult, PasskeyChallengePurpose.Authenticate, rpId, origin);
             if (!validateChallenge.Successful) return validateChallenge;
-            if (!String.Equals(challengeResult.Result.UserId, userId, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_user_mismatch");
+            if (!String.Equals(challengeResult.Result.Challenge.UserId, userId, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_user_mismatch");
 
-            var options = JsonConvert.DeserializeObject<AssertionOptions>(JsonConvert.SerializeObject(payload.options));
-            var assertionResponse = JsonConvert.DeserializeObject<AuthenticatorAssertionRawResponse>(JsonConvert.SerializeObject(payload.assertion));
+            var options = JsonConvert.DeserializeObject<AssertionOptions>(challengeResult.Result.OptionsJson);
+                
+            var assertionResponse = JsonConvert.DeserializeObject<AuthenticatorAssertionRawResponse>(JsonConvert.SerializeObject(payload.AssertionJson));
 
             var credentialId = Base64UrlEncode(assertionResponse.Id);
             var stored = await _credentialRepo.FindByCredentialIdAsync(rpId, credentialId);
@@ -233,12 +237,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 }
             }
 
-            return InvokeResult.SuccessRedirect(NormalizePasskeyUrl(challengeResult.Result.PasskeyUrl));
+            return InvokeResult.SuccessRedirect(NormalizePasskeyUrl(challengeResult.Result.Challenge.PasskeyUrl));
         }
 
         /* Passwordless (discoverable/resident) flows */
 
-        public async Task<InvokeResult<string>> BeginPasswordlessRegistrationOptionsAsync(string passkeyUrl, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult<PasskeyBeginOptionsResponse>> BeginPasswordlessRegistrationOptionsAsync(string passkeyUrl, EntityHeader org, EntityHeader user)
         {
             var (rpId, origin) = GetRpIdAndOrigin();
             var safeUrl = NormalizePasskeyUrl(passkeyUrl);
@@ -283,35 +287,36 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 ExpiresUtc = DateTime.UtcNow.AddMinutes(ChallengeTtlMinutes).ToJSONString(),
             };
 
-            var storeResult = await _challengeStore.CreateAsync(challenge);
-            if (!storeResult.Successful) return storeResult.ToInvokeResult<string>();
+            var storeResult = await _challengeStore.CreateAsync(new PasskeyChallengePacket() 
+            { 
+                Challenge = challenge, 
+                OptionsJson = JsonConvert.SerializeObject(options) 
+            });
+            if (!storeResult.Successful) return storeResult.ToInvokeResult<PasskeyBeginOptionsResponse>();
 
-            var payload = new { challengeId = storeResult.Result.Id, rpId = rpId, origin = origin, options = options };
-            return InvokeResult<string>.Create(JsonConvert.SerializeObject(payload));
+            var payload = new PasskeyBeginOptionsResponse() { ChallengeId = storeResult.Result.Challenge.Id, Options = options };
+            return InvokeResult<PasskeyBeginOptionsResponse>.Create(payload);
         }
 
-        public async Task<InvokeResult<PasskeySignInResult>> CompletePasswordlessRegistrationAsync(string attestationResponseJson, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult<PasskeySignInResult>> CompletePasswordlessRegistrationAsync(PasskeyRegistrationCompleteRequest payload, EntityHeader org, EntityHeader user)
         {
-            if (String.IsNullOrEmpty(attestationResponseJson)) return InvokeResult<PasskeySignInResult>.FromError("missing_attestation");
+            if (payload == null && String.IsNullOrEmpty(payload.AttestationJson)) return InvokeResult<PasskeySignInResult>.FromError("missing_attestation");
 
             var (rpId, origin) = GetRpIdAndOrigin();
 
-            dynamic payload;
-            try { payload = JsonConvert.DeserializeObject(attestationResponseJson); }
-            catch { return InvokeResult<PasskeySignInResult>.FromError("invalid_attestation_json"); }
-
-            string challengeId = payload.challengeId;
+            string challengeId = payload.ChallengeId;
             if (String.IsNullOrEmpty(challengeId)) return InvokeResult<PasskeySignInResult>.FromError("missing_challenge_id");
 
             var challengeResult = await _challengeStore.ConsumeAsync(challengeId);
             var validateChallenge = ValidateChallenge(challengeResult, PasskeyChallengePurpose.Register, rpId, origin);
             if (!validateChallenge.Successful) return validateChallenge.ToInvokeResult<PasskeySignInResult>();
 
-            var userId = challengeResult.Result.UserId;
+            var userId = challengeResult.Result.Challenge.UserId;
             if (String.IsNullOrEmpty(userId)) return InvokeResult<PasskeySignInResult>.FromError("missing_user_id");
 
-            var options = JsonConvert.DeserializeObject<CredentialCreateOptions>(JsonConvert.SerializeObject(payload.options));
-            var attestationResponse = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(JsonConvert.SerializeObject(payload.attestation));
+            var options = JsonConvert.DeserializeObject<CredentialCreateOptions>(challengeResult.Result.OptionsJson);
+           
+             var attestationResponse = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(JsonConvert.SerializeObject(payload.AttestationJson));
 
             IsCredentialIdUniqueToUserAsyncDelegate isUnique = async (args, cancellationToken) =>
             {
@@ -351,7 +356,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             });
         }
 
-        public async Task<InvokeResult<string>> BeginPasswordlessAuthenticationOptionsAsync(string passkeyUrl, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult<PasskeyBeginOptionsResponse>> BeginPasswordlessAuthenticationOptionsAsync(string passkeyUrl, EntityHeader org, EntityHeader user)
         {
             var (rpId, origin) = GetRpIdAndOrigin();
             var safeUrl = NormalizePasskeyUrl(passkeyUrl);
@@ -374,33 +379,35 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 CreatedUtc = DateTime.UtcNow.ToJSONString(),
                 ExpiresUtc = DateTime.UtcNow.AddMinutes(ChallengeTtlMinutes).ToJSONString(),
             };
+            
+            var storeResult = await _challengeStore.CreateAsync(new PasskeyChallengePacket() 
+            { 
+                Challenge = challenge, 
+                OptionsJson = JsonConvert.SerializeObject(options) 
+            });
+          
+            if (!storeResult.Successful) return storeResult.ToInvokeResult<PasskeyBeginOptionsResponse>();
 
-            var storeResult = await _challengeStore.CreateAsync(challenge);
-            if (!storeResult.Successful) return storeResult.ToInvokeResult<string>();
-
-            var payload = new { challengeId = storeResult.Result.Id, rpId = rpId, origin = origin, options = options };
-            return InvokeResult<string>.Create(JsonConvert.SerializeObject(payload));
+            var payload = new PasskeyBeginOptionsResponse() { ChallengeId = storeResult.Result.Challenge.Id,  Options = options };
+            return InvokeResult<PasskeyBeginOptionsResponse>.Create(payload);
         }
 
-        public async Task<InvokeResult<PasskeySignInResult>> CompletePasswordlessAuthenticationAsync(string assertionResponseJson, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult<PasskeySignInResult>> CompletePasswordlessAuthenticationAsync(PasskeyAuthenticationCompleteRequest payload, EntityHeader org, EntityHeader user)
         {
-            if (String.IsNullOrEmpty(assertionResponseJson)) return InvokeResult<PasskeySignInResult>.FromError("missing_assertion");
+            if (payload == null || String.IsNullOrEmpty(payload.AssertionJson)) return InvokeResult<PasskeySignInResult>.FromError("missing_assertion");
 
             var (rpId, origin) = GetRpIdAndOrigin();
 
-            dynamic payload;
-            try { payload = JsonConvert.DeserializeObject(assertionResponseJson); }
-            catch { return InvokeResult<PasskeySignInResult>.FromError("invalid_assertion_json"); }
-
-            string challengeId = payload.challengeId;
+            string challengeId = payload.ChallengeId;
             if (String.IsNullOrEmpty(challengeId)) return InvokeResult<PasskeySignInResult>.FromError("missing_challenge_id");
 
             var challengeResult = await _challengeStore.ConsumeAsync(challengeId);
             var validateChallenge = ValidateChallenge(challengeResult, PasskeyChallengePurpose.Authenticate, rpId, origin);
             if (!validateChallenge.Successful) return validateChallenge.ToInvokeResult<PasskeySignInResult>();
-
-            var options = JsonConvert.DeserializeObject<AssertionOptions>(JsonConvert.SerializeObject(payload.options));
-            var assertionResponse = JsonConvert.DeserializeObject<AuthenticatorAssertionRawResponse>(JsonConvert.SerializeObject(payload.assertion));
+    
+            var options = JsonConvert.DeserializeObject<AssertionOptions>(challengeResult.Result.OptionsJson);
+            
+            var assertionResponse = JsonConvert.DeserializeObject<AuthenticatorAssertionRawResponse>(JsonConvert.SerializeObject(payload.AssertionJson));
 
             var credentialId = Base64UrlEncode(assertionResponse.Id);
             var stored = await _credentialRepo.FindByCredentialIdAsync(rpId, credentialId);
@@ -435,7 +442,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             {
                 UserId = userId,
                 RequiresOnboarding = requiresOnboarding,
-                RedirectUrl = requiresOnboarding ? "/auth/onboarding" : NormalizePasskeyUrl(challengeResult.Result.PasskeyUrl),
+                RedirectUrl = requiresOnboarding ? "/auth/onboarding" : NormalizePasskeyUrl(challengeResult.Result.Challenge.PasskeyUrl),
                 Message = requiresOnboarding ? "Onboarding required." : null,
             });
         }
@@ -481,14 +488,14 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return await _credentialRepo.RemovePasskeyCredentialAsync(userId, rpId, credentialId);
         }
 
-        private InvokeResult ValidateChallenge(InvokeResult<PasskeyChallenge> challengeResult, PasskeyChallengePurpose purpose, string rpId, string origin)
+        private InvokeResult ValidateChallenge(InvokeResult<PasskeyChallengePacket> challengeResult, PasskeyChallengePurpose purpose, string rpId, string origin)
         {
             if (!challengeResult.Successful) return challengeResult.ToInvokeResult();
             if (challengeResult.Result == null) return InvokeResult.FromError("challenge_not_found");
-            if (challengeResult.Result.IsExpired) return InvokeResult.FromError("challenge_expired");
-            if (challengeResult.Result.Purpose != purpose) return InvokeResult.FromError("invalid_challenge_purpose");
-            if (!String.Equals(challengeResult.Result.RpId, rpId, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_rpid_mismatch");
-            if (!String.Equals(challengeResult.Result.Origin, origin, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_origin_mismatch");
+            if (challengeResult.Result.Challenge.IsExpired) return InvokeResult.FromError("challenge_expired");
+            if (challengeResult.Result.Challenge.Purpose != purpose) return InvokeResult.FromError("invalid_challenge_purpose");
+            if (!String.Equals(challengeResult.Result.Challenge.RpId, rpId, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_rpid_mismatch");
+            if (!String.Equals(challengeResult.Result.Challenge.Origin, origin, StringComparison.Ordinal)) return InvokeResult.FromError("challenge_origin_mismatch");
             return InvokeResult.Success;
         }
 

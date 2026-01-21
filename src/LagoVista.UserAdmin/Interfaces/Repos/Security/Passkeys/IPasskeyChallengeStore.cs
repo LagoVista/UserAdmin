@@ -6,8 +6,8 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security.Passkeys
 {
     public interface IPasskeyChallengeStore
     {
-        Task<InvokeResult<PasskeyChallenge>> CreateAsync(PasskeyChallenge challenge);
-        Task<InvokeResult<PasskeyChallenge>> GetAsync(string challengeId);
-        Task<InvokeResult<PasskeyChallenge>> ConsumeAsync(string challengeId);
+        Task<InvokeResult<PasskeyChallengePacket>> CreateAsync(PasskeyChallengePacket packet);
+        Task<InvokeResult<PasskeyChallengePacket>> GetAsync(string challengeId);
+        Task<InvokeResult<PasskeyChallengePacket>> ConsumeAsync(string challengeId);
     }
 }

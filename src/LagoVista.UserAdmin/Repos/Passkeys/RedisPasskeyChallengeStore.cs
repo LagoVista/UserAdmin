@@ -27,33 +27,38 @@ namespace LagoVista.UserAdmin.Repos.Passkeys
         {
             return $"passkey:challenge:{challengeId}";
         }
-
-        public async Task<InvokeResult<PasskeyChallenge>> CreateAsync(PasskeyChallenge challenge)
+        
+        private string GetOptionsKey(string challengeId)
         {
-            if (challenge == null) throw new ArgumentNullException(nameof(challenge));
-            if (String.IsNullOrEmpty(challenge.Id)) challenge.Id = Guid.NewGuid().ToId();
-            if (String.IsNullOrEmpty(challenge.CreatedUtc)) challenge.CreatedUtc = DateTime.UtcNow.ToJSONString();
-            if (String.IsNullOrEmpty(challenge.ExpiresUtc)) challenge.ExpiresUtc = DateTime.UtcNow.AddMinutes(DefaultTtlMinutes).ToJSONString();
-
-            await _cache.AddAsync(GetKey(challenge.Id), JsonConvert.SerializeObject(challenge));
-            return InvokeResult<PasskeyChallenge>.Create(challenge);
+            return $"passkey:challenge:options:{challengeId}";
         }
 
-        public async Task<InvokeResult<PasskeyChallenge>> GetAsync(string challengeId)
+        public async Task<InvokeResult<PasskeyChallengePacket>> CreateAsync(PasskeyChallengePacket packet)
+        {
+            if (packet == null) throw new ArgumentNullException(nameof(packet));
+            if (String.IsNullOrEmpty(packet.Challenge.Id)) packet.Challenge.Id = Guid.NewGuid().ToId();
+            if (String.IsNullOrEmpty(packet.Challenge.CreatedUtc)) packet.Challenge.CreatedUtc = DateTime.UtcNow.ToJSONString();
+            if (String.IsNullOrEmpty(packet.Challenge.ExpiresUtc)) packet.Challenge.ExpiresUtc = DateTime.UtcNow.AddMinutes(DefaultTtlMinutes).ToJSONString();
+
+            await _cache.AddAsync(GetKey(packet.Challenge.Id), JsonConvert.SerializeObject(packet));
+            return InvokeResult<PasskeyChallengePacket>.Create(packet);
+        }
+
+        public async Task<InvokeResult<PasskeyChallengePacket>> GetAsync(string challengeId)
         {
             if (String.IsNullOrEmpty(challengeId)) throw new ArgumentNullException(nameof(challengeId));
 
             var json = await _cache.GetAsync(GetKey(challengeId));
-            if (String.IsNullOrEmpty(json)) return InvokeResult<PasskeyChallenge>.FromError("challenge_not_found");
+            if (String.IsNullOrEmpty(json)) return InvokeResult<PasskeyChallengePacket>.FromError("challenge_not_found");
 
-            var challenge = JsonConvert.DeserializeObject<PasskeyChallenge>(json);
-            if (challenge == null) return InvokeResult<PasskeyChallenge>.FromError("challenge_invalid");
-            if (challenge.IsExpired) return InvokeResult<PasskeyChallenge>.FromError("challenge_expired");
+            var challenge = JsonConvert.DeserializeObject<PasskeyChallengePacket>(json);
+            if (challenge == null) return InvokeResult<PasskeyChallengePacket>.FromError("challenge_invalid");
+            if (challenge.Challenge.IsExpired) return InvokeResult<PasskeyChallengePacket>.FromError("challenge_expired");
 
-            return InvokeResult<PasskeyChallenge>.Create(challenge);
+            return InvokeResult<PasskeyChallengePacket>.Create(challenge);
         }
 
-        public async Task<InvokeResult<PasskeyChallenge>> ConsumeAsync(string challengeId)
+        public async Task<InvokeResult<PasskeyChallengePacket>> ConsumeAsync(string challengeId)
         {
             var getResult = await GetAsync(challengeId);
             if (!getResult.Successful) return getResult;
@@ -61,5 +66,6 @@ namespace LagoVista.UserAdmin.Repos.Passkeys
             await _cache.RemoveAsync(GetKey(challengeId));
             return getResult;
         }
+
     }
 }

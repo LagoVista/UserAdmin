@@ -40,4 +40,10 @@ namespace LagoVista.UserAdmin.Models.Security.Passkeys
             }
         }
     }
+
+    public class PasskeyChallengePacket
+    {
+        public PasskeyChallenge Challenge { get; set; }
+        public string OptionsJson { get; set; }
+    }
 }
