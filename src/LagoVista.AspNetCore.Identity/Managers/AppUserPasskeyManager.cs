@@ -1,5 +1,6 @@
 using Fido2NetLib;
 using Fido2NetLib.Objects;
+using LagoVista.AspNetCore.Identity.Utils;
 using LagoVista.Core;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
@@ -11,12 +12,12 @@ using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Security.Passkeys;
 using LagoVista.UserAdmin.Models.Users;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Twilio.TwiML.Voice;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -93,7 +94,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             });
             if (!storeResult.Successful) return storeResult.ToInvokeResult<PasskeyBeginOptionsResponse>();
 
-            var payload = new PasskeyBeginOptionsResponse() { ChallengeId = storeResult.Result.Challenge.Id, Options = options };
+            var payload = new PasskeyBeginOptionsResponse() { ChallengeId = storeResult.Result.Challenge.Id, Options = JToken.FromObject(options) };
             return InvokeResult<PasskeyBeginOptionsResponse>.Create(payload);
         }
 
@@ -115,7 +116,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var optionsUserId = System.Text.Encoding.UTF8.GetString(options.User.Id);
             if (!String.Equals(optionsUserId, userId, StringComparison.Ordinal)) return InvokeResult.FromError("options_user_mismatch");
          
-            var attestationResponse = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(JsonConvert.SerializeObject(payload.AttestationJson));
+            var attestationResponse = WebAuthnWireMapper.ToAttestationRawResponse(payload.Attestation);
 
             IsCredentialIdUniqueToUserAsyncDelegate isUnique = async (args, cancellationToken) =>
             {
@@ -187,14 +188,14 @@ namespace LagoVista.AspNetCore.Identity.Managers
             });
             if (!storeResult.Successful) return storeResult.ToInvokeResult<PasskeyBeginOptionsResponse>();
 
-            var payload = new PasskeyBeginOptionsResponse() { ChallengeId = storeResult.Result.Challenge.Id, Options = options };
+            var payload = new PasskeyBeginOptionsResponse() { ChallengeId = storeResult.Result.Challenge.Id, Options = JToken.FromObject(options) };
             return InvokeResult<PasskeyBeginOptionsResponse>.Create(payload);
         }
 
         public async Task<InvokeResult> CompleteAuthenticationAsync(string userId, PasskeyAuthenticationCompleteRequest payload, bool isStepUp, EntityHeader org, EntityHeader user)
         {
             if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
-            if (payload == null || String.IsNullOrEmpty(payload.AssertionJson)) return InvokeResult.FromError("missing_assertion");
+            if (payload == null) return InvokeResult.FromError("missing_assertion");
 
             var (rpId, origin) = GetRpIdAndOrigin();
 
@@ -208,9 +209,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             var options = JsonConvert.DeserializeObject<AssertionOptions>(challengeResult.Result.OptionsJson);
                 
-            var assertionResponse = JsonConvert.DeserializeObject<AuthenticatorAssertionRawResponse>(JsonConvert.SerializeObject(payload.AssertionJson));
+            var assertionResponse = WebAuthnWireMapper.ToFido2Assertion(payload.Assertion);
 
-            var credentialId = Base64UrlEncode(assertionResponse.Id);
+            var credentialId = Base64UrlEncode(assertionResponse.RawId);
             var stored = await _credentialRepo.FindByCredentialIdAsync(rpId, credentialId);
             if (stored == null) return InvokeResult.FromError("credential_not_found");
             if (!String.Equals(stored.UserId, userId, StringComparison.Ordinal)) return InvokeResult.FromError("credential_user_mismatch");
@@ -294,13 +295,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
             });
             if (!storeResult.Successful) return storeResult.ToInvokeResult<PasskeyBeginOptionsResponse>();
 
-            var payload = new PasskeyBeginOptionsResponse() { ChallengeId = storeResult.Result.Challenge.Id, Options = options };
+            var payload = new PasskeyBeginOptionsResponse() { ChallengeId = storeResult.Result.Challenge.Id, Options = JToken.FromObject(options) };
             return InvokeResult<PasskeyBeginOptionsResponse>.Create(payload);
         }
 
         public async Task<InvokeResult<PasskeySignInResult>> CompletePasswordlessRegistrationAsync(PasskeyRegistrationCompleteRequest payload, EntityHeader org, EntityHeader user)
         {
-            if (payload == null && String.IsNullOrEmpty(payload.AttestationJson)) return InvokeResult<PasskeySignInResult>.FromError("missing_attestation");
+            if (payload == null) return InvokeResult<PasskeySignInResult>.FromError("missing_attestation");
 
             var (rpId, origin) = GetRpIdAndOrigin();
 
@@ -315,9 +316,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (String.IsNullOrEmpty(userId)) return InvokeResult<PasskeySignInResult>.FromError("missing_user_id");
 
             var options = JsonConvert.DeserializeObject<CredentialCreateOptions>(challengeResult.Result.OptionsJson);
-           
-             var attestationResponse = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(JsonConvert.SerializeObject(payload.AttestationJson));
 
+
+            var attestationResponse = WebAuthnWireMapper.ToAttestationRawResponse(payload.Attestation);
             IsCredentialIdUniqueToUserAsyncDelegate isUnique = async (args, cancellationToken) =>
             {
                 var credentialId = Base64UrlEncode(args.CredentialId);
@@ -388,13 +389,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
           
             if (!storeResult.Successful) return storeResult.ToInvokeResult<PasskeyBeginOptionsResponse>();
 
-            var payload = new PasskeyBeginOptionsResponse() { ChallengeId = storeResult.Result.Challenge.Id,  Options = options };
+            var payload = new PasskeyBeginOptionsResponse() { ChallengeId = storeResult.Result.Challenge.Id,  Options = JToken.FromObject(options) };
             return InvokeResult<PasskeyBeginOptionsResponse>.Create(payload);
         }
 
         public async Task<InvokeResult<PasskeySignInResult>> CompletePasswordlessAuthenticationAsync(PasskeyAuthenticationCompleteRequest payload, EntityHeader org, EntityHeader user)
         {
-            if (payload == null || String.IsNullOrEmpty(payload.AssertionJson)) return InvokeResult<PasskeySignInResult>.FromError("missing_assertion");
+            if (payload == null) return InvokeResult<PasskeySignInResult>.FromError("missing_assertion");
 
             var (rpId, origin) = GetRpIdAndOrigin();
 
@@ -404,12 +405,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var challengeResult = await _challengeStore.ConsumeAsync(challengeId);
             var validateChallenge = ValidateChallenge(challengeResult, PasskeyChallengePurpose.Authenticate, rpId, origin);
             if (!validateChallenge.Successful) return validateChallenge.ToInvokeResult<PasskeySignInResult>();
-    
+
+
+            var assertionResponse = WebAuthnWireMapper.ToFido2Assertion(payload.Assertion);
+
             var options = JsonConvert.DeserializeObject<AssertionOptions>(challengeResult.Result.OptionsJson);
             
-            var assertionResponse = JsonConvert.DeserializeObject<AuthenticatorAssertionRawResponse>(JsonConvert.SerializeObject(payload.AssertionJson));
-
-            var credentialId = Base64UrlEncode(assertionResponse.Id);
+            var credentialId = Base64UrlEncode(assertionResponse.RawId);
             var stored = await _credentialRepo.FindByCredentialIdAsync(rpId, credentialId);
             if (stored == null) return InvokeResult<PasskeySignInResult>.FromError("credential_not_found");
 
