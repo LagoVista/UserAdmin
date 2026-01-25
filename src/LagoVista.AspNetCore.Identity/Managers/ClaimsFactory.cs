@@ -57,6 +57,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string CustomerContactId = "com.lagovista.iot.customercontactid";
         public const string CustomerContactName = "com.lagovista.iot.customercontactname";
 
+        public const string MfaStepUpTimeStamp = "com.lagovista.iot.mfa.stepuptimestamp";
+
         // support for unattended Kiosk authentication
         public const string KioskId = "com.lagovista.iot.kioskid";
 
