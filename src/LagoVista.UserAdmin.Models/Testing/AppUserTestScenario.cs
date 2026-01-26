@@ -127,8 +127,8 @@ namespace LagoVista.UserAdmin.Models.Testing
 
     [EntityDescription(Domains.AuthTesting, UserAdminResources.Names.AuthDSL_Title, UserAdminResources.Names.AuthDSL_Help, UserAdminResources.Names.AuthDSL_Description,
      EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "icon-fo-information-computer",
-     ListUIUrl: "/sysadmin/testing/dsls", EditUIUrl: "/sysadmin/testing/dsl/{id}", CreateUIUrl: "/sysadmin/testing/dsl/add", PreviewUIUrl: "/sysadmin/testing/dsk/{id}/preview",
-     SaveUrl: "/api/sys/testing/dsl", GetListUrl: "/api/sys/testing/dsls", FactoryUrl: "/api/sys/testing/dslfactory", DeleteUrl: "/api/sys/testing/dsl/{id}", GetUrl: "/api/sys/testing/dsl/{id}")]
+     ListUIUrl: "/sysadmin/testing/scenarios", EditUIUrl: "/sysadmin/testing/scenarios/{id}", CreateUIUrl: "/sysadmin/testing/scenarios/add", PreviewUIUrl: "/sysadmin/testing/scenarios/{id}/preview",
+     SaveUrl: "/api/sys/testing/auth/scenario", GetListUrl: "/api/sys/testing/auth/scenarios", FactoryUrl: "/api/sys/testing/auth/scenario/factory", DeleteUrl: "/api/sys/testing/auth/scenario/{id}", GetUrl: "/api/sys/testing/auth/scenario/{id}")]
     public class AppUserTestScenarioSummary : SummaryData
     {
         public string LastError { get; set; }

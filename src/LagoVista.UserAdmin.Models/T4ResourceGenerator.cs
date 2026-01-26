@@ -1,4 +1,4 @@
-﻿/*1/19/2026 7:14:39 AM*/
+﻿/*1/26/2026 11:50:04 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -438,6 +438,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AuthTenantStateSnapshot_IsAnonymous_Help
 
 		public static string AuthTenantStateSnapshot_IsAnonymous_Help { get { return GetResourceString("AuthTenantStateSnapshot_IsAnonymous_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_IsLoggedIn
+
+		public static string AuthTenantStateSnapshot_IsLoggedIn { get { return GetResourceString("AuthTenantStateSnapshot_IsLoggedIn"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_IsLoggedIn_Help
+
+		public static string AuthTenantStateSnapshot_IsLoggedIn_Help { get { return GetResourceString("AuthTenantStateSnapshot_IsLoggedIn_Help"); } }
 //Resources:UserAdminResources:AuthTenantStateSnapshot_IsOrgAdmin
 
 		public static string AuthTenantStateSnapshot_IsOrgAdmin { get { return GetResourceString("AuthTenantStateSnapshot_IsOrgAdmin"); } }
@@ -453,6 +459,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AuthTenantStateSnapshot_PhoneNumberConfirmed_Help
 
 		public static string AuthTenantStateSnapshot_PhoneNumberConfirmed_Help { get { return GetResourceString("AuthTenantStateSnapshot_PhoneNumberConfirmed_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_ShouldInviteToOrg
+
+		public static string AuthTenantStateSnapshot_ShouldInviteToOrg { get { return GetResourceString("AuthTenantStateSnapshot_ShouldInviteToOrg"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_ShouldSendConfirmationEmail
+
+		public static string AuthTenantStateSnapshot_ShouldSendConfirmationEmail { get { return GetResourceString("AuthTenantStateSnapshot_ShouldSendConfirmationEmail"); } }
 //Resources:UserAdminResources:AuthTenantStateSnapshot_ShowWelcome
 
 		public static string AuthTenantStateSnapshot_ShowWelcome { get { return GetResourceString("AuthTenantStateSnapshot_ShowWelcome"); } }
@@ -2503,11 +2515,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AuthTenantStateSnapshot_IsAccountDisabled_Help = "AuthTenantStateSnapshot_IsAccountDisabled_Help";
 			public const string AuthTenantStateSnapshot_IsAnonymous = "AuthTenantStateSnapshot_IsAnonymous";
 			public const string AuthTenantStateSnapshot_IsAnonymous_Help = "AuthTenantStateSnapshot_IsAnonymous_Help";
+			public const string AuthTenantStateSnapshot_IsLoggedIn = "AuthTenantStateSnapshot_IsLoggedIn";
+			public const string AuthTenantStateSnapshot_IsLoggedIn_Help = "AuthTenantStateSnapshot_IsLoggedIn_Help";
 			public const string AuthTenantStateSnapshot_IsOrgAdmin = "AuthTenantStateSnapshot_IsOrgAdmin";
 			public const string AuthTenantStateSnapshot_LastMfaDateTimeUtc = "AuthTenantStateSnapshot_LastMfaDateTimeUtc";
 			public const string AuthTenantStateSnapshot_LastMfaDateTimeUtc_Help = "AuthTenantStateSnapshot_LastMfaDateTimeUtc_Help";
 			public const string AuthTenantStateSnapshot_PhoneNumberConfirmed = "AuthTenantStateSnapshot_PhoneNumberConfirmed";
 			public const string AuthTenantStateSnapshot_PhoneNumberConfirmed_Help = "AuthTenantStateSnapshot_PhoneNumberConfirmed_Help";
+			public const string AuthTenantStateSnapshot_ShouldInviteToOrg = "AuthTenantStateSnapshot_ShouldInviteToOrg";
+			public const string AuthTenantStateSnapshot_ShouldSendConfirmationEmail = "AuthTenantStateSnapshot_ShouldSendConfirmationEmail";
 			public const string AuthTenantStateSnapshot_ShowWelcome = "AuthTenantStateSnapshot_ShowWelcome";
 			public const string AuthTenantStateSnapshot_ShowWelcome_Help = "AuthTenantStateSnapshot_ShowWelcome_Help";
 			public const string AuthTenantStateSnapshot_Title = "AuthTenantStateSnapshot_Title";

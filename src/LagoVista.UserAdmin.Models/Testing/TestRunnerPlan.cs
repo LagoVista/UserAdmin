@@ -28,6 +28,8 @@ namespace LagoVista.UserAdmin.Models.Testing
         /// Runner may log if mismatch but should not fail the run on its own.
         /// </summary>
         public string StartViewId { get; set; }
+        public string EmailConfirmToken { get; set; }
+        public string OrgInvitationId { get; set; }
 
         /// <summary>Inputs to apply before invoking the action.</summary>
         public List<AuthRunnerInput> Inputs { get; set; } = new List<AuthRunnerInput>();
@@ -47,6 +49,9 @@ namespace LagoVista.UserAdmin.Models.Testing
 
     public class TestUserCredentials
     {
+        public string InviteId { get; set; }
+        public string ConfirmEmailToken { get; set; }
+
         public string EmailAddress { get; set; }
         public string Password { get; set; }
     }

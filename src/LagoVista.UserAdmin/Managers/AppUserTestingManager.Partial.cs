@@ -82,7 +82,6 @@ namespace LagoVista.UserAdmin.Managers
 
             var credenentialsResult = await ApplySetupAsync(scenarioId, org, user);
             if (!credenentialsResult.Successful) return credenentialsResult.ToInvokeResult<AuthRunnerPlan>();
-
             plan.UserCredentials = credenentialsResult.Result;
 
             return InvokeResult<AuthRunnerPlan>.Create(plan);

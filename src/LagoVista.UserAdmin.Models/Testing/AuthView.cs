@@ -13,7 +13,7 @@ namespace LagoVista.UserAdmin.Models.Testing
     [EntityDescription(Domains.MiscDomain, UserAdminResources.Names.AuthView_Title, UserAdminResources.Names.AuthView_Help, UserAdminResources.Names.AuthView_Description,
          EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "icon-ae-computer-programming",
          ListUIUrl: "/sysadmin/testing/views", EditUIUrl: "/sysadmin/testing/view/{id}", CreateUIUrl: "/sysadmin/testing/view/add", PreviewUIUrl: "/sysadmin/testing/view/{id}/preview", 
-         SaveUrl: "/api/sys/testing/auth/view", GetListUrl: "/api/sys/testing/auth/views", FactoryUrl: "/api/sys/testing/auth/view/factory", DeleteUrl: "/api/sys/testing/authview/{id}", GetUrl: "/api/sys/testing/authview/{id}")]
+         SaveUrl: "/api/sys/testing/authview", GetListUrl: "/api/sys/testing/authviews", FactoryUrl: "/api/sys/testing/authview/factory", DeleteUrl: "/api/sys/testing/authview/{id}", GetUrl: "/api/sys/testing/authview/{id}")]
     public class AuthView : EntityBase, ISummaryFactory, IValidateable, IFormDescriptor
     {
         [FormField(LabelResource: UserAdminResources.Names.AuthView_Route, HelpResource: UserAdminResources.Names.AuthView_Route_Help, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
@@ -35,6 +35,8 @@ namespace LagoVista.UserAdmin.Models.Testing
         {
             var summary = new AuthViewSummary();
             summary.Populate(this);
+            summary.ViewId = this.ViewId;
+            summary.Route = this.Route;
             return summary;
         }
 
@@ -60,7 +62,7 @@ namespace LagoVista.UserAdmin.Models.Testing
     }
 
     [EntityDescription(Domains.MiscDomain, UserAdminResources.Names.AuthViewField_Title, UserAdminResources.Names.AuthViewField_Help, UserAdminResources.Names.AuthViewField_Description,
-        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), FactoryUrl: "/api/sys/testing/auth/view/field/factory")]
+        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), FactoryUrl: "/api/sys/testing/authview/field/factory")]
     public class AuthViewField : IFormDescriptor, IValidateable
     {
         public string Id { get; set; } = Guid.NewGuid().ToId();
@@ -94,7 +96,7 @@ namespace LagoVista.UserAdmin.Models.Testing
         UserAdminResources.Names.AuthFieldAction_Help,
         UserAdminResources.Names.AuthFieldAction_Description,
         EntityDescriptionAttribute.EntityTypes.SimpleModel,
-        typeof(UserAdminResources), Icon: "icon-ae-computer-programming", FactoryUrl: "/api/sys/testing/auth/view/action/factory")]
+        typeof(UserAdminResources), Icon: "icon-ae-computer-programming", FactoryUrl: "/api/sys/testing/authview/action/factory")]
     public class AuthFieldAction : IFormDescriptor, IValidateable
     {
         public string Id { get; set; } = Guid.NewGuid().ToId();
@@ -122,6 +124,7 @@ namespace LagoVista.UserAdmin.Models.Testing
          SaveUrl: "/api/sys/testing/authview", GetListUrl: "/api/sys/testing/authviews", FactoryUrl: "/api/sys/testing/authview/factory", DeleteUrl: "/api/sys/testing/authview/{id}", GetUrl: "/api/sys/testing/authview/{id}")]
     public class AuthViewSummary : SummaryData
     {
-        
+        public string Route { get; set; }
+        public string ViewId { get; set; }
     }
 }

@@ -2321,6 +2321,20 @@
   <data name="AuthTenantStateSnapshot_PhoneNumberConfirmed_Help" xml:space="preserve">
     <value>Condition indicating whether the user's phone number must be confirmed, must not be confirmed, or it does not matter.</value>
   </data>
+  <data name="AuthTenantStateSnapshot_ShouldInviteToOrg" xml:space="preserve">
+    <value>Should Invite To Organization</value>
+  </data>
+
+  <data name="AuthTenantStateSnapshot_ShouldSendConfirmationEmail" xml:space="preserve">
+    <value>Should Send Confirmation Email</value>
+  </data>
+  
+  <data name="AuthTenantStateSnapshot_IsLoggedIn" xml:space="preserve">
+    <value>Logged In</value>
+  </data>
+  <data name="AuthTenantStateSnapshot_IsLoggedIn_Help" xml:space="preserve">
+    <value>Condition indicating whether the user is logged in or logged out, if not-set, we assume that the user is not logged in.</value>
+  </data>
   <data name="AuthTenantStateSnapshot_TwoFactorEnabled" xml:space="preserve">
     <value>Two-Factor Enabled</value>
   </data>

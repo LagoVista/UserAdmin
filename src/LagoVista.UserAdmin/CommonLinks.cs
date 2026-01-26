@@ -17,12 +17,11 @@ namespace LagoVista.UserAdmin
         public const string Home = "/home";
         public const string HomeWelcome = "/home/welcome";
         public const string Register = "/auth/register";
-        public const string CreateDefaultOrg = "/auth/org/createdefault";
+        public const string CreateDefaultOrg = "/auth/org/create";
 
-        public const string ConfirmEmail = "/auth/email/confirm";
-        public const string EmailConfirmed = "/auth/email/confirmed";
-        public const string CouldNotConfirmEmail = "/auth/email/confirmed/failed";
-
+        public const string ConfirmEmail = "/auth/user/email/confirm/sent";
+        public const string EmailConfirmed = "/auth/user/email/confirmed";
+        public const string CouldNotConfirmEmail = "/auth/user/email/couldnotconfirm";
 
         public const string CreatingOrganization = "/auth/org/creating";
 
@@ -34,5 +33,11 @@ namespace LagoVista.UserAdmin
 
         public const string OAuthFault = "/auth/oauth/fault";
         public const string OAuthAccessDenied = "/auth/oauth/accessdenied";
+
+        public const string TOTPEnrollStart = "/auth/mfa/totp/enroll";
+        public const string TOTPEnrollConfirm = "/auth/mfa/totp/confirm";
+
+        public const string PasskeyEnrollStart = "/auth/passkey/enroll/start";
+        public const string PasskeyEnrollConfirm = "/auth/passkey/enroll/confirm";
     }
 }

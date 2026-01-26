@@ -65,7 +65,7 @@ namespace LagoVista.UserAdmin.Managers
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
             _authViewRepo = authViewRepo ?? throw new ArgumentNullException(nameof(authViewRepo));
             _testArtifactStorage = testArtifactStorage ?? throw new ArgumentNullException(nameof(testArtifactStorage));
-            _userRegistrationManager = userRegistrationManager ?? throw new ArgumentNullException(nameof(userRegistrationManager)); 
+            _userRegistrationManager = userRegistrationManager ?? throw new ArgumentNullException(nameof(userRegistrationManager));
         }
 
         public async Task<InvokeResult> DeleteTestUserAsync(EntityHeader org, EntityHeader user)
@@ -84,27 +84,26 @@ namespace LagoVista.UserAdmin.Managers
             {
                 EmailAddress = testUser.Email,
                 Password = newPwd
-            };  
+            };
 
             return InvokeResult<TestUserCredentials>.Create(credentials);
         }
 
         public async Task<InvokeResult<TestUserCredentials>> ApplySetupAsync(string testSceanrioId, EntityHeader org, EntityHeader user)
         {
-
             var scanario = await _testScenarioRepo.GetByIdAsync(testSceanrioId);
             _adminLogger.Trace($"{this.Tag()} Applying test user setup for scenario: {scanario.Name}");
 
-            var preconditions = scanario.PreConditions;   
+            var preconditions = scanario.PreConditions;
 
             ValidationCheck(preconditions, Actions.Any);
 
             var timeStamp = DateTime.UtcNow.ToJSONString();
 
-            var testUser = await _appUserRepo.FindByIdAsync( TestUserSeed.User.Id );
+            var testUser = await _appUserRepo.FindByIdAsync(TestUserSeed.User.Id);
             var existing = testUser != null;
 
-            if(preconditions.EnsureUserExists.Value == SetCondition.NotSet)
+            if (preconditions.EnsureUserExists.Value == SetCondition.NotSet)
             {
                 _adminLogger.Trace($"{this.Tag()} User Should Not Exist");
 
@@ -113,9 +112,9 @@ namespace LagoVista.UserAdmin.Managers
                     _adminLogger.Trace($"{this.Tag()} User Should Not Exist - It Didn't");
                     return InvokeResult<TestUserCredentials>.Create(new TestUserCredentials());
                 }
-             
+
                 // User Manager enforces Authorization
-                await _appUserManager.DeleteUserAsync( TestUserSeed.User.Id, org, user );
+                await _appUserManager.DeleteUserAsync(TestUserSeed.User.Id, org, user);
                 _adminLogger.Trace($"{this.Tag()} User Should Not Exist - Deleted");
 
                 return InvokeResult<TestUserCredentials>.Create(new TestUserCredentials());
@@ -152,12 +151,12 @@ namespace LagoVista.UserAdmin.Managers
                 testUser = result.Result.AppUser;
             }
 
-            if(preconditions.EmailConfirmed.Value != SetCondition.DontCare)  testUser.EmailConfirmed = preconditions.EmailConfirmed.Value == SetCondition.Set;
-            if(preconditions.PhoneNumberConfirmed.Value != SetCondition.DontCare)  testUser.PhoneNumberConfirmed = preconditions.PhoneNumberConfirmed.Value == SetCondition.Set;
-            if(preconditions.TwoFactorEnabled.Value != SetCondition.DontCare)  testUser.TwoFactorEnabled = preconditions.TwoFactorEnabled.Value == SetCondition.Set;
-            if(preconditions.IsAccountDisabled.Value != SetCondition.DontCare)  testUser.IsAccountDisabled = preconditions.IsAccountDisabled.Value == SetCondition.Set;
+            if (preconditions.EmailConfirmed.Value != SetCondition.DontCare) testUser.EmailConfirmed = preconditions.EmailConfirmed.Value == SetCondition.Set;
+            if (preconditions.PhoneNumberConfirmed.Value != SetCondition.DontCare) testUser.PhoneNumberConfirmed = preconditions.PhoneNumberConfirmed.Value == SetCondition.Set;
+            if (preconditions.TwoFactorEnabled.Value != SetCondition.DontCare) testUser.TwoFactorEnabled = preconditions.TwoFactorEnabled.Value == SetCondition.Set;
+            if (preconditions.IsAccountDisabled.Value != SetCondition.DontCare) testUser.IsAccountDisabled = preconditions.IsAccountDisabled.Value == SetCondition.Set;
             if (preconditions.IsOrgAdmin.Value != SetCondition.DontCare) testUser.IsOrgAdmin = preconditions.IsOrgAdmin.Value == SetCondition.Set;
-            if(preconditions.ShowWelcome.Value != SetCondition.DontCare) testUser.ShowWelcome = preconditions.ShowWelcome.Value == SetCondition.Set;
+            if (preconditions.ShowWelcome.Value != SetCondition.DontCare) testUser.ShowWelcome = preconditions.ShowWelcome.Value == SetCondition.Set;
 
             _adminLogger.Trace($"{this.Tag()} Set Pre Conditions on User");
 
@@ -198,12 +197,12 @@ namespace LagoVista.UserAdmin.Managers
                 else
                 {
                     _adminLogger.Trace($"{this.Tag()} Use Should belong to an Org - Already Exists {TestUserSeed.TEST_ORG_NS1}");
-                
+
                     var result = await _orgManager.QueryOrganizationHasUserAsync(TestUserSeed.Org1.Id, TestUserSeed.User.Id, org, user);
                     if (!result)
                     {
                         var addUserToOrgresult = await _orgManager.AddUserToOrgAsync(TestUserSeed.Org1.Id, TestUserSeed.User.Id, org, user);
-                        if(!addUserToOrgresult.Successful)
+                        if (!addUserToOrgresult.Successful)
                         {
                             _adminLogger.AddError(this.Tag(), $"Could not add to org: {addUserToOrgresult.ErrorMessage}");
                             return addUserToOrgresult.ToInvokeResult<TestUserCredentials>();
@@ -211,10 +210,10 @@ namespace LagoVista.UserAdmin.Managers
                     }
                 }
             }
-            if(preconditions.BelongsToOrg.Value == SetCondition.NotSet)
+            if (preconditions.BelongsToOrg.Value == SetCondition.NotSet)
             {
-                _adminLogger.Trace($"{this.Tag()} Use should not belong to an org"); 
-                
+                _adminLogger.Trace($"{this.Tag()} Use should not belong to an org");
+
                 if (testUser.Organizations.Any())
                 {
                     testUser.Organizations.Clear();
@@ -233,7 +232,7 @@ namespace LagoVista.UserAdmin.Managers
             if (preconditions.BelongsToOrg.Value == SetCondition.NotSet)
             {
                 _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- Should we remove org?");
-           
+
                 testUser.OwnerOrganization = null;
                 var existingOrg = await _orgManager.QueryOrgNamespaceInUseAsync(TestUserSeed.TEST_ORG_NS1);
                 if (existingOrg)
@@ -260,7 +259,7 @@ namespace LagoVista.UserAdmin.Managers
             }
             else
             {
-                return InvokeResult<TestUserCredentials>.Create(new TestUserCredentials() { EmailAddress = TestUserSeed.Email});
+                return InvokeResult<TestUserCredentials>.Create(new TestUserCredentials() { EmailAddress = TestUserSeed.Email });
             }
         }
 
