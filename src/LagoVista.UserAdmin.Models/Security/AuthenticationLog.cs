@@ -142,7 +142,67 @@ namespace LagoVista.UserAdmin.Models.Security
         SysAdminGetOrg,
         SysAdminUpdateOrg,
 
-        UnauthorizedCall
+        UnauthorizedCall,
+
+        PasskeyBeginRegistrationStart,
+        PasskeyBeginRegistrationSuccess,
+        PasskeyBeginRegistrationFailed,
+
+        PasskeyCompleteRegistrationStart,
+        PasskeyCompleteRegistrationSuccess,
+        PasskeyCompleteRegistrationFailed,
+
+        PasskeySetupBegin,
+        PasskeySetupConfirmed,
+        PasskeySetupFailed,
+
+        PasskeyAuthenticationOptionsBeginStart,
+        PasskeyAuthenticationOptionsBeginSent,
+        PasskeyAuthenticationOptionsBeginFailed,
+
+        PasskeyCompleteAuthenticationStart,
+        PasskeyCompleteAuthenticationSuccess,
+        PasskeyCompleteAuthenticationFailed,
+
+        PasskeyBeginPasswordlessRegistrationStart,
+        PasskeyBeginPasswordlessRegistrationFailed,
+        PasskeyBeginPasswordlessRegistrationSuccess,
+
+        PasskeyCompletePasswordlessRegistrationStart,
+        PasskeyCompletePasswordlessRegistrationFailed,
+        PasskeyCompletePasswordlessRegistrationSuccess,
+
+        PasskeyBeginPasswordlessAuthenticationStart,
+        PasskeyBeginPasswordlessAuthenticationFailed,
+        PasskeyBeginPasswordlessAuthenticationSuccess,
+    
+        PasskeyCompletePasswordlessAuthenticationStart,
+        PasskeyCompletePasswordlessAuthenticationFailed,
+        PasskeyCompletePasswordlessAuthenticationSuccess,
+
+        TotpBeginEnrollmentStart,
+        TotpBeginEnrollmentFailed,
+        TotpBeginEnrollmentSuccess,
+    
+        TotpConfirmEnrollmentStart,
+        TotpConfirmEnrollmentFailed,
+        TotpConfirmEnrollmentSuccess,
+
+        TotpVerifyStart,
+        TotpVerifyFailed,
+        TotpVerifySuccess,
+
+        TotpRotateRecoveryCodesStart,
+        TotpRotateRecoveryCodesFailed,
+        TotpRotateRecoveryCodesSuccess,
+
+        TotpConsumeRecoveryCodeStart,
+        TotpConsumeRecoveryCodeFailed,
+        TotpConsumeRecoveryCodeSuccess,
+
+        TotpDisableMfaStart,
+        TotpDisableMfaFailed,
+        TotpDisableMfaSuccess,
     }
 
     [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.AuthenticationLogs_Title, LoggingResources.Names.LogRecord_Description,
@@ -178,6 +238,10 @@ namespace LagoVista.UserAdmin.Models.Security
         public string OrgName { get; set; }
 
         public string AuthType { get; set; }
+
+        public string ChallengeId { get; set; }
+        public string CredentialId { get; set; }
+        public string AssertionId { get; set; }
 
         public string OAuthProvider { get; set; }
         public string Extras { get; set; }

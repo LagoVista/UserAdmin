@@ -20,8 +20,8 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<ListResponse<AuthenticationLog>> GetAsync(string orgId, AuthLogTypes type, ListRequest listRequest, EntityHeader org, EntityHeader user);
         Task<ListResponse<AuthenticationLog>> GetForUserIdAsync(string userId, ListRequest listRequest, EntityHeader org, EntityHeader user);
         Task<ListResponse<AuthenticationLog>> GetForUserNameAsync(string userName, ListRequest listRequest, EntityHeader org, EntityHeader user);
-        Task AddAsync(AuthLogTypes type, string userId = "?", string userName = "?", string orgId = "?", string orgName = "?", string oauthProvier = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none");
-        Task AddAsync(AuthLogTypes type, EntityHeader user = null, EntityHeader org = null, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none");
-        Task AddAsync(AuthLogTypes type, AppUser appUser, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none");
+        Task AddAsync(AuthLogTypes type, string userId = "?", string userName = "?", string orgId = "?", string orgName = "?", string oauthProvier = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none", string credentialId = "", string challengeId = "", string assertionId = "");
+        Task AddAsync(AuthLogTypes type, EntityHeader user = null, EntityHeader org = null, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none", string credentialId = "", string challengeId = "",string assertionId = "");
+        Task AddAsync(AuthLogTypes type, AppUser appUser, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none", string credentialId = "", string challengeId = "", string assertionId = "");
     }
 }

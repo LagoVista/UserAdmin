@@ -42,7 +42,8 @@ namespace LagoVista.UserAdmin.Managers
             });
         }
 
-        public Task AddAsync(AuthLogTypes type, string userId = "?", string userName = "?", string orgId = "?", string orgName = "?", string oauthProvier = "", string errors = "", string extras = "", string redirectUri = "none", string inviteId = "none")
+        public Task AddAsync(AuthLogTypes type, string userId = "?", string userName = "?", string orgId = "?", string orgName = "?", string oauthProvider = "", 
+        string errors = "", string extras = "", string redirectUri = "none", string inviteId = "none", string challengeId = "none", string credentialId = "none", string assertionId = "none")
         {
             String ip = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
 
@@ -59,21 +60,23 @@ namespace LagoVista.UserAdmin.Managers
                 Errors = errors,
                 Extras = extras,
                 InviteId  = inviteId,
-                OAuthProvider = oauthProvier,
-                RedirectUri = redirectUri
+                OAuthProvider = oauthProvider,
+                RedirectUri = redirectUri,
+                ChallengeId = challengeId,
+                CredentialId = credentialId,
+                AssertionId = assertionId
             };
 
-            Console.WriteLine($"=====>>>> PARITION KEY {auth.PartitionKey} <<======");
-
-
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AuthLog_AddAsync]", $"[AuthLog_AddAsync] - {type}",
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"{type}",
                 userId.ToKVP("userId"), userName.ToKVP("username"), orgId.ToKVP("orgId"), orgName.ToKVP("orgName"), errors.ToKVP("errors"),
-                extras.ToKVP("extras"), oauthProvier.ToKVP("oauthProvider"), type.ToString().ToKVP("authType"), "true".ToKVP("authlog")); 
+                extras.ToKVP("extras"), oauthProvider.ToKVP("oauthProvider"), type.ToString().ToKVP("authType"), challengeId.ToKVP("challengeId"),
+                credentialId.ToKVP("credentialId"), assertionId.ToKVP("assertionId"), "true".ToKVP("authlog")); 
 
             return AddAsync(auth);
         }
 
-        public Task AddAsync(AuthLogTypes type, EntityHeader user = null, EntityHeader org = null, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none")
+        public Task AddAsync(AuthLogTypes type, EntityHeader user = null, EntityHeader org = null, string oauthProvider = "", string errors = "", string extras = "", 
+        string redirectUri = "", string inviteId = "none", string challengeId = "none", string credentialId = "none", string assertionId = "none")
         {
             var orgId = org == null ? "?" : org.Id;
             var orgName = org == null ? "?" : org.Text;
@@ -81,10 +84,11 @@ namespace LagoVista.UserAdmin.Managers
             var userId = user == null ? "?" : user.Id;
             var userName = user == null ? "?" : user.Text;
 
-            return AddAsync(type, userId, userName, orgId, orgName, oauthProvider, errors, extras, redirectUri, inviteId);
+            return AddAsync(type, userId, userName, orgId, orgName, oauthProvider, errors, extras, redirectUri, inviteId, challengeId, credentialId, assertionId);
         }
 
-        public Task AddAsync(AuthLogTypes type, AppUser user, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none")
+        public Task AddAsync(AuthLogTypes type, AppUser user, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none",
+        string challengeId = "none", string credentialId = "none", string assertionId = "none")
         {
             var orgId = user.CurrentOrganization == null ? "?" : user.CurrentOrganization.Id;
             var orgName = user.CurrentOrganization == null ? "?" : user.CurrentOrganization.Text;
@@ -93,7 +97,7 @@ namespace LagoVista.UserAdmin.Managers
             var userName = user == null ? "?" : user.UserName;
 
 
-            return AddAsync(type, userId, userName, orgId, orgName, oauthProvider, errors, extras, redirectUri, inviteId);
+            return AddAsync(type, userId, userName, orgId, orgName, oauthProvider, errors, extras, redirectUri, inviteId, challengeId, credentialId, assertionId);
         }
 
         public Task<ListResponse<AuthenticationLog>> GetAllAsync(ListRequest listRequest, EntityHeader org, EntityHeader user)

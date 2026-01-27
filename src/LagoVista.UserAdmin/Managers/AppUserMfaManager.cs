@@ -31,10 +31,13 @@ namespace LagoVista.UserAdmin.Managers
         private readonly ISecureStorage _secureStorage;
         private readonly IAdminLogger _logger;
 
-        public AppUserMfaManager(IAppUserRepo appUserRepo, ISecureStorage secureStorage, IAdminLogger logger, IAppConfig appConfig, IDependencyManager depManager, ISecurity security) : base(logger, appConfig, depManager, security)
+        private readonly IAuthenticationLogManager _authLogMgr;
+
+        public AppUserMfaManager(IAppUserRepo appUserRepo, ISecureStorage secureStorage,IAuthenticationLogManager authLogMgr,  IAdminLogger logger, IAppConfig appConfig, IDependencyManager depManager, ISecurity security) : base(logger, appConfig, depManager, security)
         {
             _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
             _secureStorage = secureStorage ?? throw new ArgumentNullException(nameof(secureStorage));
+            _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(authLogMgr));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -42,21 +45,40 @@ namespace LagoVista.UserAdmin.Managers
         {
             if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
 
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpBeginEnrollmentStart, user, org);
+
             var appUser = await _appUserRepo.FindByIdAsync(userId);
-            if (appUser == null) return InvokeResult<AppUserTotpEnrollmentInfo>.FromError("user_not_found");
-            if (String.IsNullOrEmpty(appUser.Email)) return InvokeResult<AppUserTotpEnrollmentInfo>.FromError("missing_email");
+            if (appUser == null)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpBeginEnrollmentFailed, user, org, errors: "user_not_found");
+                return InvokeResult<AppUserTotpEnrollmentInfo>.FromError("user_not_found");
+            }
+
+            if (String.IsNullOrEmpty(appUser.Email))
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpBeginEnrollmentFailed, user, org, errors: "missing_email");
+                return InvokeResult<AppUserTotpEnrollmentInfo>.FromError("missing_email");
+            }
 
             if (!String.IsNullOrEmpty(appUser.AuthenticatorKeySecretId))
             {
                 var removeResult = await _secureStorage.RemoveUserSecretAsync(appUser.ToEntityHeader(), appUser.AuthenticatorKeySecretId);
-                if (!removeResult.Successful) return removeResult.ToInvokeResult<AppUserTotpEnrollmentInfo>();
+                if (!removeResult.Successful)
+                {
+                    await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpBeginEnrollmentFailed, user, org, errors: "remove_existing_secret_failed");
+                    return removeResult.ToInvokeResult<AppUserTotpEnrollmentInfo>();
+                }
             }
 
             var secretBytes = KeyGeneration.GenerateRandomKey(20);
             var secretBase32 = Base32Encoding.ToString(secretBytes);
 
             var addSecretResult = await _secureStorage.AddUserSecretAsync(appUser.ToEntityHeader(), secretBase32);
-            if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult<AppUserTotpEnrollmentInfo>();
+            if (!addSecretResult.Successful)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpBeginEnrollmentFailed, user, org, errors: "add_secret_failed");
+                return addSecretResult.ToInvokeResult<AppUserTotpEnrollmentInfo>();
+            }
 
             appUser.AuthenticatorKeySecretId = addSecretResult.Result;
             appUser.AuthenticatorKey = null;
@@ -68,28 +90,64 @@ namespace LagoVista.UserAdmin.Managers
             var issuer = Uri.EscapeDataString(Issuer);
             var otpAuthUri = $"otpauth://totp/{issuer}:{label}?secret={secretBase32}&issuer={issuer}&digits={TotpDigits}&period={TotpStepSeconds}";
 
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpBeginEnrollmentSuccess, user, org);
+
             return InvokeResult<AppUserTotpEnrollmentInfo>.Create(new AppUserTotpEnrollmentInfo() { Secret = secretBase32, OtpAuthUri = otpAuthUri });
         }
+
 
         public async Task<InvokeResult<List<string>>> ConfirmTotpEnrollmentAsync(string userId, string totp, EntityHeader org, EntityHeader user)
         {
             if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
-            if (String.IsNullOrEmpty(totp)) return InvokeResult<List<string>>.FromError("missing_totp");
+
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConfirmEnrollmentStart, user, org);
+
+            if (String.IsNullOrEmpty(totp))
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConfirmEnrollmentFailed, user, org, errors: "missing_totp");
+                return InvokeResult<List<string>>.FromError("missing_totp");
+            }
 
             var appUser = await _appUserRepo.FindByIdAsync(userId);
-            if (appUser == null) return InvokeResult<List<string>>.FromError("user_not_found");
-            if (String.IsNullOrEmpty(appUser.AuthenticatorKeySecretId)) return InvokeResult<List<string>>.FromError("mfa_not_started");
+            if (appUser == null)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConfirmEnrollmentFailed, user, org, errors: "user_not_found");
+                return InvokeResult<List<string>>.FromError("user_not_found");
+            }
+
+            if (String.IsNullOrEmpty(appUser.AuthenticatorKeySecretId))
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConfirmEnrollmentFailed, user, org, errors: "mfa_not_started");
+                return InvokeResult<List<string>>.FromError("mfa_not_started");
+            }
 
             var secretResult = await _secureStorage.GetUserSecretAsync(appUser.ToEntityHeader(), appUser.AuthenticatorKeySecretId);
-            if (!secretResult.Successful) return secretResult.ToInvokeResult<List<string>>();
-            if (String.IsNullOrEmpty(secretResult.Result)) return InvokeResult<List<string>>.FromError("mfa_secret_missing");
+            if (!secretResult.Successful)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConfirmEnrollmentFailed, user, org, errors: "get_secret_failed");
+                return secretResult.ToInvokeResult<List<string>>();
+            }
+
+            if (String.IsNullOrEmpty(secretResult.Result))
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConfirmEnrollmentFailed, user, org, errors: "mfa_secret_missing");
+                return InvokeResult<List<string>>.FromError("mfa_secret_missing");
+            }
 
             var matchResult = TryMatchTotpTimeStep(secretResult.Result, totp);
-            if (!matchResult.Successful) return matchResult.ToInvokeResult<List<string>>();
+            if (!matchResult.Successful)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConfirmEnrollmentFailed, user, org, errors: "totp_mismatch");
+                return matchResult.ToInvokeResult<List<string>>();
+            }
 
             var nowUtc = DateTime.UtcNow.ToJSONString();
             var acceptResult = await _appUserRepo.TryAcceptTotpTimeStepAsync(userId, matchResult.Result, true, nowUtc);
-            if (!acceptResult.Successful) return acceptResult.ToInvokeResult<List<string>>();
+            if (!acceptResult.Successful)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConfirmEnrollmentFailed, user, org, errors: "accept_timestep_failed");
+                return acceptResult.ToInvokeResult<List<string>>();
+            }
 
             var codes = GenerateRecoveryCodes();
             var blob = BuildRecoveryCodeBlob(codes);
@@ -97,11 +155,19 @@ namespace LagoVista.UserAdmin.Managers
             if (!String.IsNullOrEmpty(appUser.RecoveryCodesSecretId))
             {
                 var removeResult = await _secureStorage.RemoveUserSecretAsync(appUser.ToEntityHeader(), appUser.RecoveryCodesSecretId);
-                if (!removeResult.Successful) return removeResult.ToInvokeResult<List<string>>();
+                if (!removeResult.Successful)
+                {
+                    await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConfirmEnrollmentFailed, user, org, errors: "remove_existing_recoverycodes_failed");
+                    return removeResult.ToInvokeResult<List<string>>();
+                }
             }
 
             var addRecoveryResult = await _secureStorage.AddUserSecretAsync(appUser.ToEntityHeader(), blob);
-            if (!addRecoveryResult.Successful) return addRecoveryResult.ToInvokeResult<List<string>>();
+            if (!addRecoveryResult.Successful)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConfirmEnrollmentFailed, user, org, errors: "add_recoverycodes_failed");
+                return addRecoveryResult.ToInvokeResult<List<string>>();
+            }
 
             appUser.RecoveryCodesSecretId = addRecoveryResult.Result;
             appUser.RecoveryCodes = null;
@@ -114,10 +180,12 @@ namespace LagoVista.UserAdmin.Managers
             }
             catch
             {
-                // Compensating cleanup: avoid orphaned recovery-code secret if user update fails.
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConfirmEnrollmentFailed, user, org, errors: "update_user_failed");
                 await _secureStorage.RemoveUserSecretAsync(appUser.ToEntityHeader(), addRecoveryResult.Result);
                 throw;
             }
+
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConfirmEnrollmentSuccess, user, org);
 
             return InvokeResult<List<string>>.Create(codes);
         }
@@ -125,35 +193,87 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<InvokeResult> VerifyTotpAsync(string userId, string totp, bool isStepUp, EntityHeader org, EntityHeader user)
         {
             if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
-            if (String.IsNullOrEmpty(totp)) return InvokeResult.FromError("missing_totp");
+
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpVerifyStart, user, org);
+
+            if (String.IsNullOrEmpty(totp))
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpVerifyFailed, user, org, errors: "missing_totp");
+                return InvokeResult.FromError("missing_totp");
+            }
+
             totp = totp.Trim();
-            if (totp.Length < 6 || totp.Length > 8) return InvokeResult.FromError("invalid_totp_format");
+            if (totp.Length < 6 || totp.Length > 8)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpVerifyFailed, user, org, errors: "invalid_totp_format");
+                return InvokeResult.FromError("invalid_totp_format");
+            }
 
             var appUser = await _appUserRepo.FindByIdAsync(userId);
-            if (appUser == null) return InvokeResult.FromError("user_not_found");
-            if (!appUser.TwoFactorEnabled) return InvokeResult.FromError("mfa_not_enabled");
-            if (String.IsNullOrEmpty(appUser.AuthenticatorKeySecretId)) return InvokeResult.FromError("mfa_not_enrolled");
+            if (appUser == null)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpVerifyFailed, user, org, errors: "user_not_found");
+                return InvokeResult.FromError("user_not_found");
+            }
+
+            if (!appUser.TwoFactorEnabled)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpVerifyFailed, user, org, errors: "mfa_not_enabled");
+                return InvokeResult.FromError("mfa_not_enabled");
+            }
+
+            if (String.IsNullOrEmpty(appUser.AuthenticatorKeySecretId))
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpVerifyFailed, user, org, errors: "mfa_not_enrolled");
+                return InvokeResult.FromError("mfa_not_enrolled");
+            }
 
             var secretResult = await _secureStorage.GetUserSecretAsync(appUser.ToEntityHeader(), appUser.AuthenticatorKeySecretId);
-            if (!secretResult.Successful) return secretResult.ToInvokeResult();
-            if (String.IsNullOrEmpty(secretResult.Result)) return InvokeResult.FromError("mfa_secret_missing");
+            if (!secretResult.Successful)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpVerifyFailed, user, org, errors: "get_secret_failed");
+                return secretResult.ToInvokeResult();
+            }
+
+            if (String.IsNullOrEmpty(secretResult.Result))
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpVerifyFailed, user, org, errors: "mfa_secret_missing");
+                return InvokeResult.FromError("mfa_secret_missing");
+            }
 
             var matchResult = TryMatchTotpTimeStep(secretResult.Result, totp);
-            if (!matchResult.Successful) return matchResult.ToInvokeResult();
+            if (!matchResult.Successful)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpVerifyFailed, user, org, errors: "totp_mismatch");
+                return matchResult.ToInvokeResult();
+            }
 
             var lastMfaUtc = isStepUp ? DateTime.UtcNow.ToJSONString() : null;
             var acceptResult = await _appUserRepo.TryAcceptTotpTimeStepAsync(userId, matchResult.Result, isStepUp, lastMfaUtc);
-            if (!acceptResult.Successful) return acceptResult.ToInvokeResult();
+            if (!acceptResult.Successful)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpVerifyFailed, user, org, errors: "accept_timestep_failed");
+                return acceptResult.ToInvokeResult();
+            }
+
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpVerifySuccess, user, org);
 
             return InvokeResult.Success;
         }
+
 
         public async Task<InvokeResult<List<string>>> RotateRecoveryCodesAsync(string userId, EntityHeader org, EntityHeader user)
         {
             if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
 
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpRotateRecoveryCodesStart, user, org);
+
             var appUser = await _appUserRepo.FindByIdAsync(userId);
-            if (appUser == null) return InvokeResult<List<string>>.FromError("user_not_found");
+            if (appUser == null)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpRotateRecoveryCodesFailed, user, org, errors: "user_not_found");
+                return InvokeResult<List<string>>.FromError("user_not_found");
+            }
 
             var codes = GenerateRecoveryCodes();
             var blob = BuildRecoveryCodeBlob(codes);
@@ -161,16 +281,35 @@ namespace LagoVista.UserAdmin.Managers
             if (!String.IsNullOrEmpty(appUser.RecoveryCodesSecretId))
             {
                 var removeResult = await _secureStorage.RemoveUserSecretAsync(appUser.ToEntityHeader(), appUser.RecoveryCodesSecretId);
-                if (!removeResult.Successful) return removeResult.ToInvokeResult<List<string>>();
+                if (!removeResult.Successful)
+                {
+                    await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpRotateRecoveryCodesFailed, user, org, errors: "remove_existing_recoverycodes_failed");
+                    return removeResult.ToInvokeResult<List<string>>();
+                }
             }
 
             var addRecoveryResult = await _secureStorage.AddUserSecretAsync(appUser.ToEntityHeader(), blob);
-            if (!addRecoveryResult.Successful) return addRecoveryResult.ToInvokeResult<List<string>>();
+            if (!addRecoveryResult.Successful)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpRotateRecoveryCodesFailed, user, org, errors: "add_recoverycodes_failed");
+                return addRecoveryResult.ToInvokeResult<List<string>>();
+            }
 
             appUser.RecoveryCodesSecretId = addRecoveryResult.Result;
             appUser.RecoveryCodes = null;
 
-            await _appUserRepo.UpdateAsync(appUser);
+            try
+            {
+                await _appUserRepo.UpdateAsync(appUser);
+            }
+            catch
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpRotateRecoveryCodesFailed, user, org, errors: "update_user_failed");
+                await _secureStorage.RemoveUserSecretAsync(appUser.ToEntityHeader(), addRecoveryResult.Result);
+                throw;
+            }
+
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpRotateRecoveryCodesSuccess, user, org);
 
             return InvokeResult<List<string>>.Create(codes);
         }
@@ -178,24 +317,61 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<InvokeResult> ConsumeRecoveryCodeAsync(string userId, string recoveryCode, bool isStepUp, EntityHeader org, EntityHeader user)
         {
             if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
-            if (String.IsNullOrEmpty(recoveryCode)) return InvokeResult.FromError("missing_recovery_code");
+
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConsumeRecoveryCodeStart, user, org);
+
+            if (String.IsNullOrEmpty(recoveryCode))
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConsumeRecoveryCodeFailed, user, org, errors: "missing_recovery_code");
+                return InvokeResult.FromError("missing_recovery_code");
+            }
 
             var appUser = await _appUserRepo.FindByIdAsync(userId);
-            if (appUser == null) return InvokeResult.FromError("user_not_found");
-            if (String.IsNullOrEmpty(appUser.RecoveryCodesSecretId)) return InvokeResult.FromError("recovery_codes_not_configured");
+            if (appUser == null)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConsumeRecoveryCodeFailed, user, org, errors: "user_not_found");
+                return InvokeResult.FromError("user_not_found");
+            }
+
+            if (String.IsNullOrEmpty(appUser.RecoveryCodesSecretId))
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConsumeRecoveryCodeFailed, user, org, errors: "recovery_codes_not_configured");
+                return InvokeResult.FromError("recovery_codes_not_configured");
+            }
 
             var codesResult = await _secureStorage.GetUserSecretAsync(appUser.ToEntityHeader(), appUser.RecoveryCodesSecretId);
-            if (!codesResult.Successful) return codesResult.ToInvokeResult();
-            if (String.IsNullOrEmpty(codesResult.Result)) return InvokeResult.FromError("recovery_codes_missing");
+            if (!codesResult.Successful)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConsumeRecoveryCodeFailed, user, org, errors: "get_recoverycodes_failed");
+                return codesResult.ToInvokeResult();
+            }
+
+            if (String.IsNullOrEmpty(codesResult.Result))
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConsumeRecoveryCodeFailed, user, org, errors: "recovery_codes_missing");
+                return InvokeResult.FromError("recovery_codes_missing");
+            }
 
             var consumeResult = TryConsumeRecoveryCode(codesResult.Result, recoveryCode);
-            if (!consumeResult.Successful) return consumeResult.ToInvokeResult();
+            if (!consumeResult.Successful)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConsumeRecoveryCodeFailed, user, org, errors: "recovery_code_invalid");
+                return consumeResult.ToInvokeResult();
+            }
 
             var removeResult = await _secureStorage.RemoveUserSecretAsync(appUser.ToEntityHeader(), appUser.RecoveryCodesSecretId);
-            if (!removeResult.Successful) return removeResult.ToInvokeResult();
+            if (!removeResult.Successful)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConsumeRecoveryCodeFailed, user, org, errors: "remove_recoverycodes_failed");
+                return removeResult.ToInvokeResult();
+            }
 
             var addResult = await _secureStorage.AddUserSecretAsync(appUser.ToEntityHeader(), consumeResult.Result);
-            if (!addResult.Successful) return addResult.ToInvokeResult();
+            if (!addResult.Successful)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConsumeRecoveryCodeFailed, user, org, errors: "add_recoverycodes_failed");
+                return addResult.ToInvokeResult();
+            }
 
             appUser.RecoveryCodesSecretId = addResult.Result;
             appUser.RecoveryCodes = null;
@@ -211,42 +387,78 @@ namespace LagoVista.UserAdmin.Managers
             appUser.AuthenticatorKey = null;
             appUser.TwoFactorEnabled = false;
 
-            await _appUserRepo.UpdateAsync(appUser);
+            try
+            {
+                await _appUserRepo.UpdateAsync(appUser);
+            }
+            catch
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConsumeRecoveryCodeFailed, user, org, errors: "update_user_failed");
+                await _secureStorage.RemoveUserSecretAsync(appUser.ToEntityHeader(), addResult.Result);
+                throw;
+            }
+
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpConsumeRecoveryCodeSuccess, user, org);
 
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> DisableMfaAsync(string userId, EntityHeader org, EntityHeader user)
+public async Task<InvokeResult> DisableMfaAsync(string userId, EntityHeader org, EntityHeader user)
+{
+    if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
+
+    await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpDisableMfaStart, user, org);
+
+    var appUser = await _appUserRepo.FindByIdAsync(userId);
+    if (appUser == null)
+    {
+        await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpDisableMfaFailed, user, org, errors: "user_not_found");
+        return InvokeResult.FromError("user_not_found");
+    }
+
+    if (!String.IsNullOrEmpty(appUser.AuthenticatorKeySecretId))
+    {
+        var removeResult = await _secureStorage.RemoveUserSecretAsync(appUser.ToEntityHeader(), appUser.AuthenticatorKeySecretId);
+        if (!removeResult.Successful)
         {
-            if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
-
-            var appUser = await _appUserRepo.FindByIdAsync(userId);
-            if (appUser == null) return InvokeResult.FromError("user_not_found");
-
-            if (!String.IsNullOrEmpty(appUser.AuthenticatorKeySecretId))
-            {
-                var removeResult = await _secureStorage.RemoveUserSecretAsync(appUser.ToEntityHeader(), appUser.AuthenticatorKeySecretId);
-                if (!removeResult.Successful) return removeResult.ToInvokeResult();
-            }
-
-            if (!String.IsNullOrEmpty(appUser.RecoveryCodesSecretId))
-            {
-                var removeResult = await _secureStorage.RemoveUserSecretAsync(appUser.ToEntityHeader(), appUser.RecoveryCodesSecretId);
-                if (!removeResult.Successful) return removeResult.ToInvokeResult();
-            }
-
-            appUser.AuthenticatorKeySecretId = null;
-            appUser.AuthenticatorKey = null;
-            appUser.RecoveryCodesSecretId = null;
-            appUser.RecoveryCodes = null;
-            appUser.TwoFactorEnabled = false;
-            appUser.LastMfaDateTimeUtc = null;
-            appUser.LastTotpAcceptedTimeStep = 0;
-
-            await _appUserRepo.UpdateAsync(appUser);
-
-            return InvokeResult.Success;
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpDisableMfaFailed, user, org, errors: "remove_authenticator_secret_failed");
+            return removeResult.ToInvokeResult();
         }
+    }
+
+    if (!String.IsNullOrEmpty(appUser.RecoveryCodesSecretId))
+    {
+        var removeResult = await _secureStorage.RemoveUserSecretAsync(appUser.ToEntityHeader(), appUser.RecoveryCodesSecretId);
+        if (!removeResult.Successful)
+        {
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpDisableMfaFailed, user, org, errors: "remove_recoverycodes_failed");
+            return removeResult.ToInvokeResult();
+        }
+    }
+
+    appUser.AuthenticatorKeySecretId = null;
+    appUser.AuthenticatorKey = null;
+    appUser.RecoveryCodesSecretId = null;
+    appUser.RecoveryCodes = null;
+    appUser.TwoFactorEnabled = false;
+    appUser.LastMfaDateTimeUtc = null;
+    appUser.LastTotpAcceptedTimeStep = 0;
+
+    try
+    {
+        await _appUserRepo.UpdateAsync(appUser);
+    }
+    catch
+    {
+        await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpDisableMfaFailed, user, org, errors: "update_user_failed");
+        throw;
+    }
+
+    await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.TotpDisableMfaSuccess, user, org);
+
+    return InvokeResult.Success;
+}
+
 
         public async Task<InvokeResult> ResetMfaAsync(string userId, EntityHeader org, EntityHeader user)
         {

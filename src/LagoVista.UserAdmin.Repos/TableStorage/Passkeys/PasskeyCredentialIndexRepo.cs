@@ -9,15 +9,20 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.Passkeys
 {
     public class PasskeyCredentialIndexRepo : TableStorageBase<PasskeyCredentialIndexEntity>, IPasskeyCredentialIndexRepo
     {
+        IAdminLogger _adminLogger;
+
         public PasskeyCredentialIndexRepo(IUserAdminSettings settings, IAdminLogger logger) : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
+            _adminLogger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
 
         public async Task InsertAsync(PasskeyCredentialIndex index)
         {
             if (index == null) throw new ArgumentNullException(nameof(index));
-            await InsertAsync(ToEntity(index));
+            var entity = ToEntity(index);
+            _adminLogger.Trace($"{this.Tag()} - Inserting PasskeyCredentialIndex for UserId: {index.UserId}, RpId: {index.RpId}, CredentialId: {index.CredentialId}");
+            await InsertAsync(entity);
         }
 
         private async Task<PasskeyCredentialIndexEntity> FindEntityAsync(string rpId, string credentialId)
@@ -52,6 +57,8 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.Passkeys
         }
         public async Task<PasskeyCredentialIndex> FindAsync(string rpId, string credentialId)
         {
+            _adminLogger.Trace($"{this.Tag()} - Finding PasskeyCredentialIndex for RpId: {rpId}, CredentialId: {credentialId}");
+        
             var partitionKey = PasskeyCredentialIndexEntity.CreatePartitionKey(rpId, credentialId);
             var rowKey = PasskeyCredentialIndexEntity.CreateRowKey(credentialId);
             var entity = await GetAsync(partitionKey, rowKey);
@@ -60,7 +67,9 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.Passkeys
 
         public async Task RemoveAsync(string rpId, string credentialId)
         {
-            var entity = await FindEntityAsync(rpId, credentialId);
+            _adminLogger.Trace($"{this.Tag()} - Removing PasskeyCredentialIndex for RpId: {rpId}, CredentialId: {credentialId}");
+        
+         var entity = await FindEntityAsync(rpId, credentialId);
             if (entity != null) await RemoveAsync(entity);
         }
 
