@@ -29,11 +29,13 @@ namespace LagoVista.UserAdmin.Managers
 
         private readonly IAppUserRepo _appUserRepo;
         private readonly ISecureStorage _secureStorage;
+        private readonly IAdminLogger _logger;
 
         public AppUserMfaManager(IAppUserRepo appUserRepo, ISecureStorage secureStorage, IAdminLogger logger, IAppConfig appConfig, IDependencyManager depManager, ISecurity security) : base(logger, appConfig, depManager, security)
         {
             _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
             _secureStorage = secureStorage ?? throw new ArgumentNullException(nameof(secureStorage));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<InvokeResult<AppUserTotpEnrollmentInfo>> BeginTotpEnrollmentAsync(string userId, EntityHeader org, EntityHeader user)
@@ -273,9 +275,11 @@ namespace LagoVista.UserAdmin.Managers
                 var candidateTime = DateTimeOffset.FromUnixTimeSeconds(candidateStep * TotpStepSeconds);
                 var expected = totpGen.ComputeTotp(candidateTime.UtcDateTime);
                 if (String.Equals(expected, totp, StringComparison.Ordinal)) return InvokeResult<long>.Create(candidateStep);
+       
+                _logger.Trace($"{this.Tag()} - {offset} - Invalid TOP Code - {totp} for secret {expected} - {nowSeconds}");
             }
 
-            return InvokeResult<long>.FromError("invalid_totp");
+            return InvokeResult<long>.FromError("Sorry, you have entered an invalid code. Please try again.");
         }
 
         private List<string> GenerateRecoveryCodes()

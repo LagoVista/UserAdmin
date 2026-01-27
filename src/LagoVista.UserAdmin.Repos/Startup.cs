@@ -26,6 +26,7 @@ using LagoVista.UserAdmin.Interfaces.Repos.Security.Passkeys;
 using LagoVista.UserAdmin.Repos.TableStorage.Passkeys;
 using LagoVista.UserAdmin.Interfaces.Repos.Testing;
 using LagoVista.UserAdmin.Repos.Repos.Testing;
+using LagoVista.UserAdmin.Repos.Passkeys;
 
 namespace LagoVista.UserAdmin.Repos
 {
@@ -78,6 +79,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddSingleton<IAppUserPasskeyCredentialRepo, PasskeyCredentialRepo>();
             services.AddSingleton<IPasskeyCredentialIndexRepo, PasskeyCredentialIndexRepo>();
             services.AddTransient<ITestArtifactStorage, TestArtifactStorage>();
+            services.AddTransient<IPasskeyChallengeStore, RedisPasskeyChallengeStore>();
 
             ErrorCodes.Register(typeof(UserAdminErrorCodes));
         }
