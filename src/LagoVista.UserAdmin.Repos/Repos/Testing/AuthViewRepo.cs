@@ -39,7 +39,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Testing
 
         public Task<ListResponse<AuthViewSummary>> ListAsync(string orgId, ListRequest request)
         {
-            return QuerySummaryDescendingAsync<AuthViewSummary, AuthView>(qry => qry.OwnerOrganization.Id == orgId, qry => qry.Name, request);
+            return QuerySummaryAsync<AuthViewSummary, AuthView>(qry => qry.OwnerOrganization.Id == orgId, qry => qry.Name, request);
         }
 
         public Task UpdateAuthViewAsync(AuthView dsl)

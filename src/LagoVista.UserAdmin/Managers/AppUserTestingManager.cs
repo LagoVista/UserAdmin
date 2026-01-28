@@ -100,8 +100,15 @@ namespace LagoVista.UserAdmin.Managers
 
             var timeStamp = DateTime.UtcNow.ToJSONString();
 
+            var devTestUser = await _appUserRepo.FindByEmailAsync(TestUserSeed.Email);
+            if(devTestUser != null && devTestUser.Id != TestUserSeed.User.Id)
+            {
+                _adminLogger.Trace($"{this.Tag()} Test user already exists but has a different ID, likely created by OAuth deleting before applying setup.");
+                await _appUserManager.DeleteUserAsync(devTestUser.Id, org, user);
+                _adminLogger.Trace($"{this.Tag()} Test user deleted.");
+            }
+
             var testUser = await _appUserRepo.FindByIdAsync(TestUserSeed.User.Id);
-            var existing = testUser != null;
 
             if (preconditions.EnsureUserExists.Value == SetCondition.NotSet)
             {

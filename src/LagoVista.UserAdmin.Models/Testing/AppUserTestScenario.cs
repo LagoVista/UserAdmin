@@ -138,9 +138,9 @@ namespace LagoVista.UserAdmin.Models.Testing
 
     public static class TestUserSeed
     {
-        public static string FirstName { get; } = "Fred";
-        public static string LastName { get; } = "Flintstone";
-        public static string Email { get; } = "FREDF@FAKEDOMAIN.NUVIOT";
+        public static string FirstName { get; } = "OAUTH";
+        public static string LastName { get; } = "TESTING";
+        public static string Email { get; } = "DEVTEST1@SOFTWARE-LOGISTICS.COM";
         public static string PhoneNumber {get; } = "6125551212";
 
         private const string TEST_USER_ID = "30458D0723764ACDBB10DA73AD98D088";
