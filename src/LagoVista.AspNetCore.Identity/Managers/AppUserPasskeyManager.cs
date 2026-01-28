@@ -114,15 +114,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
             await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyBeginRegistrationSuccess, user, org, challengeId: payload.ChallengeId);
 
             return InvokeResult<PasskeyBeginOptionsResponse>.Create(payload);
-}
+        }
 
         public async Task<InvokeResult> CompleteRegistrationAsync(string userId, PasskeyRegistrationCompleteRequest payload, EntityHeader org, EntityHeader user)
         {
             if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
 
             var (rpId, origin) = GetRpIdAndOrigin();
-
-       
 
             string challengeId = payload.ChallengeId;
             if (String.IsNullOrEmpty(challengeId))
@@ -201,24 +199,31 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
 
             await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyAuthenticationOptionsBeginStart, user, org);
-        
+
             var (rpId, origin) = GetRpIdAndOrigin();
             var safeUrl = NormalizePasskeyUrl(passkeyUrl);
 
             await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeySetupBegin, user, org);
 
             var creds = await _credentialRepo.GetByUserAsync(userId, rpId);
-            var allow = creds.Select(c => new PublicKeyCredentialDescriptor(Base64UrlDecode(c.CredentialId))).ToList();
-            if (allow.Count == 0)
+
+            // IMPORTANT: store allow credential IDs as base64url strings (not descriptors) for Redis
+            var allowIds = creds?.Select(c => c.CredentialId).Where(id => !String.IsNullOrEmpty(id)).ToArray() ?? Array.Empty<string>();
+
+            if (allowIds.Length == 0)
             {
-                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyAuthenticationOptionsBeginFailed, user, org, errors:"no_passkeys_registered");
-                return InvokeResult<PasskeyBeginOptionsResponse>.FromError("no_passkeys_registered");  
-            } 
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyAuthenticationOptionsBeginFailed, user, org, errors: "no_passkeys_registered");
+                return InvokeResult<PasskeyBeginOptionsResponse>.FromError("no_passkeys_registered");
+            }
+
+            // Fido2 options still require descriptors in-memory (fine)
+            var allowDescriptors = allowIds.Select(id => new PublicKeyCredentialDescriptor(Base64UrlDecode(id))).ToList();
 
             var uv = isStepUp ? UserVerificationRequirement.Required : UserVerificationRequirement.Preferred;
+
             var options = _fido2.GetAssertionOptions(new GetAssertionOptionsParams()
             {
-                AllowedCredentials = allow,
+                AllowedCredentials = allowDescriptors,
                 UserVerification = uv,
                 Extensions = new AuthenticationExtensionsClientInputs(),
             });
@@ -233,25 +238,31 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 Challenge = Base64UrlEncode(options.Challenge),
                 CreatedUtc = DateTime.UtcNow.ToJSONString(),
                 ExpiresUtc = DateTime.UtcNow.AddMinutes(ChallengeTtlMinutes).ToJSONString(),
+
+                // NEW: persist primitives we need later
+                AllowCredentialIds = allowIds,
+                UserVerification = (int)uv,
+                TimeoutMs = (int)options.Timeout,
             };
 
-            var storeResult = await _challengeStore.CreateAsync(new PasskeyChallengePacket() 
-            { 
-                Challenge = challenge, 
-                OptionsJson = JsonConvert.SerializeObject(options) 
-            });
-        
-            if (!storeResult.Successful) 
+            // Optional: keep OptionsJson for debug/client replay only (do NOT deserialize it into AssertionOptions)
+            var optionsWireJson = JsonConvert.SerializeObject(JToken.FromObject(options));
+
+            var storeResult = await _challengeStore.CreateAsync(new PasskeyChallengePacket() { Challenge = challenge, OptionsJson = optionsWireJson });
+
+            if (!storeResult.Successful)
             {
                 await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyAuthenticationOptionsBeginFailed, user, org, errors: storeResult.ErrorMessage);
                 return storeResult.ToInvokeResult<PasskeyBeginOptionsResponse>();
             }
 
             var payload = new PasskeyBeginOptionsResponse() { ChallengeId = storeResult.Result.Challenge.Id, Options = JToken.FromObject(options) };
+
             await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyAuthenticationOptionsBeginSent, user, org, challengeId: storeResult.Result.Challenge.Id);
-      
+
             return InvokeResult<PasskeyBeginOptionsResponse>.Create(payload);
         }
+
 
         public async Task<InvokeResult> CompleteAuthenticationAsync(string userId, PasskeyAuthenticationCompleteRequest payload, bool isStepUp, EntityHeader org, EntityHeader user)
         {
@@ -288,7 +299,24 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 return InvokeResult.FromError("challenge_user_mismatch");
             }
 
-            var options = JsonConvert.DeserializeObject<AssertionOptions>(challengeResult.Result.OptionsJson);
+            // DO NOT deserialize AssertionOptions from JSON (Fido2 types are not JSON round-trippable)
+            var ch = challengeResult.Result.Challenge;
+            var uv = ch.UserVerification.HasValue ? (UserVerificationRequirement)ch.UserVerification.Value : (isStepUp ? UserVerificationRequirement.Required : UserVerificationRequirement.Preferred);
+            var timeout = (uint)(ch.TimeoutMs ?? 60000);
+
+            var allowDescriptors = (ch.AllowCredentialIds ?? Array.Empty<string>())
+                .Select(id => new PublicKeyCredentialDescriptor(Base64UrlDecode(id)))
+                .ToList();
+
+            var options = new AssertionOptions()
+            {
+                Challenge = Base64UrlDecode(ch.Challenge),
+                Timeout = timeout,
+                RpId = ch.RpId,
+                AllowCredentials = allowDescriptors,
+                UserVerification = uv,
+                Extensions = new AuthenticationExtensionsClientInputs()
+            };
 
             var assertionResponse = WebAuthnWireMapper.ToFido2Assertion(payload.Assertion);
 
@@ -313,7 +341,14 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 return String.Equals(handle, userId, StringComparison.Ordinal);
             };
 
-            var res = await _fido2.MakeAssertionAsync(new MakeAssertionParams() { AssertionResponse = assertionResponse, OriginalOptions = options, StoredPublicKey = Base64UrlDecode(stored.PublicKey), StoredSignatureCounter = stored.SignCount, IsUserHandleOwnerOfCredentialIdCallback = callback }, CancellationToken.None);
+            var res = await _fido2.MakeAssertionAsync(new MakeAssertionParams()
+            {
+                AssertionResponse = assertionResponse,
+                OriginalOptions = options,
+                StoredPublicKey = Base64UrlDecode(stored.PublicKey),
+                StoredSignatureCounter = stored.SignCount,
+                IsUserHandleOwnerOfCredentialIdCallback = callback
+            }, CancellationToken.None);
 
             var updateResult = await _credentialRepo.UpdateSignCountAsync(userId, rpId, stored.CredentialId, res.SignCount, DateTime.UtcNow.ToJSONString());
             if (!updateResult.Successful)

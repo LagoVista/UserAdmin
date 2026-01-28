@@ -11,11 +11,11 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.Passkeys
     {
         IAdminLogger _adminLogger;
 
-        public PasskeyCredentialIndexRepo(IUserAdminSettings settings, IAdminLogger logger) : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
+        public PasskeyCredentialIndexRepo(IUserAdminSettings settings, IAdminLogger logger) : 
+            base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
             _adminLogger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-
 
         public async Task InsertAsync(PasskeyCredentialIndex index)
         {
@@ -61,7 +61,7 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.Passkeys
         
             var partitionKey = PasskeyCredentialIndexEntity.CreatePartitionKey(rpId, credentialId);
             var rowKey = PasskeyCredentialIndexEntity.CreateRowKey(credentialId);
-            var entity = await GetAsync(partitionKey, rowKey);
+            var entity = await GetAsync(partitionKey, rowKey, false);
             return entity == null ? null : ToModel(entity);
         }
 

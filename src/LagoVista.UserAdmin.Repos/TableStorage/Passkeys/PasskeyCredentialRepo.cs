@@ -15,7 +15,8 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.Passkeys
         private readonly IPasskeyCredentialIndexRepo _indexRepo;
         private readonly IAdminLogger _adminLogger;
 
-        public PasskeyCredentialRepo(IUserAdminSettings settings, IAdminLogger logger, IPasskeyCredentialIndexRepo indexRepo) : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
+        public PasskeyCredentialRepo(IUserAdminSettings settings, IAdminLogger logger, IPasskeyCredentialIndexRepo indexRepo) : 
+            base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
             _indexRepo = indexRepo ?? throw new ArgumentNullException(nameof(indexRepo));
             _adminLogger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -49,7 +50,7 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.Passkeys
             _adminLogger.Trace($"{this.Tag()} - Getting PasskeyCredential for UserId: {userId}, RpId: {rpId}");
 
             var partitionKey = PasskeyCredentialEntity.CreatePartitionKey(userId, rpId);
-            var entities = await GetByParitionIdAsync(partitionKey);
+            var entities = await GetByPartitionIdAsync(partitionKey);
             return entities.Select(ToModel);
         }
 

@@ -29,6 +29,15 @@ namespace LagoVista.UserAdmin.Models.Security.Passkeys
         public string CreatedUtc { get; set; }
         public string ExpiresUtc { get; set; }
 
+        public string[] AllowCredentialIds { get; set; } = Array.Empty<string>();
+
+        // Store what you sent in options so server stays authoritative
+        public int? UserVerification { get; set; } // map to UserVerificationRequirement
+        public int? TimeoutMs { get; set; }
+
+        // For Register: prevent duplicates (base64url)
+        public string[] ExcludeCredentialIds { get; set; } = Array.Empty<string>();
+
         [JsonIgnore]
         public bool IsExpired
         {
