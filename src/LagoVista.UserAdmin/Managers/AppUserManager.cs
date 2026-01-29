@@ -94,7 +94,7 @@ namespace LagoVista.UserAdmin.Managers
             return await CheckForDepenenciesAsync(appUser);
         }
 
-        public async Task<InvokeResult> DeleteUserAsync(String id, EntityHeader org, EntityHeader deletedByUser)
+        public async Task<InvokeResult> DeleteUserAsync(String id, EntityHeader org, EntityHeader deletedByUser, bool softDelete = true)
         {
             _adminLogger.Trace($"{this.Tag()} - {deletedByUser.Text} deleting user id: {id}");
 
@@ -150,7 +150,7 @@ namespace LagoVista.UserAdmin.Managers
 
             if(cantDeleteReason.Length > 0)
             {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletedUser, deletedByUser, org, errors:cantDeleteReason.ToString(), extras: $"Coudl not delete user: {appUser.Name}, User Id: {appUser.Id}");
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletedUser, deletedByUser, org, errors:cantDeleteReason.ToString(), extras: $"Could not delete user: {appUser.Name}, User Id: {appUser.Id}");
                 return InvokeResult.FromError(cantDeleteReason.ToString());
             }
 
@@ -167,7 +167,7 @@ namespace LagoVista.UserAdmin.Managers
 
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"[{deletedByUser.Text}] deleted the user [{appUser.Name}]");
 
-            await _appUserRepo.DeleteAsync(appUser);
+            await _appUserRepo.DeleteAsync(appUser, softDelete);
 
             await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletedUser, deletedByUser, org, extras: $"Deleted user: {appUser.Name}, User Id: {appUser.Id}");
 

@@ -66,11 +66,8 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<ExternalLogin> GetExternalLoginAsync(ExternalLoginInfo loginInfo)
         {
-            var providerUserName = TryGetClaim(loginInfo, ClaimTypes.Name, defaultValue: Guid.NewGuid().ToId());
-            var generatedUserName = $"usr_{loginInfo.LoginProvider}_{providerUserName}".ToUpper();
-     
             var externalLogin = new ExternalLogin();
-            externalLogin.UserName = generatedUserName;
+            externalLogin.UserName = TryGetClaim(loginInfo, ClaimTypes.Name); 
 
             switch (loginInfo.LoginProvider)
             {
@@ -316,9 +313,9 @@ namespace LagoVista.UserAdmin.Managers
             if (!externalLoginInfo.Provider.HasValue)
                 throw new ArgumentNullException("externalLogin.Provider");
 
-            _adminLogger.Trace($"{this.Tag()} - {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value}");
+            _adminLogger.Trace($"{this.Tag()} - {externalLoginInfo.Provider.Value} {externalLoginInfo.UserName} {externalLoginInfo.Id} ");
 
-            await _authLogManager.AddAsync(AuthLogTypes.OAuthCallback, oauthProvier: externalLoginInfo.Provider.Text, inviteId: inviteId, extras: $"Email: {externalLoginInfo.Email}, First Name: {externalLoginInfo.FirstName}, Last Name: {externalLoginInfo.LastName}");
+            await _authLogManager.AddAsync(AuthLogTypes.OAuthCallback, oauthProvier: externalLoginInfo.Provider.Text, inviteId: inviteId, extras: $"UseName: {externalLoginInfo.UserName}, Email: {externalLoginInfo.Email}, First Name: {externalLoginInfo.FirstName}, Last Name: {externalLoginInfo.LastName}");
 
             _adminLogger.Trace($"{this.Tag()} - User not logged in, attempt to find - {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value}");
             var appUser = await _appUserManager.GetUserByExternalLoginAsync(externalLoginInfo.Provider.Value, externalLoginInfo.Id);
@@ -374,7 +371,10 @@ namespace LagoVista.UserAdmin.Managers
                     Password = $"External123-{Guid.NewGuid().ToId().ToLower()}", // For an external account just generate a guid.  The user can change at a later time if they want.
                     AppId = "1844A92CDDDF4B59A3BB294A1524D93A", // The one, the only app id for NuvIoT.
                     ClientType = "WEBAPP",
+                    LoginType = LoginTypes.AppUser
                 };
+
+                _adminLogger.Trace($"{this.Tag()} - Creating new user: {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value} - {externalLoginInfo.Email} - {newUser.FirstName} {newUser.LastName} {newUser.LoginType}");
 
                 var result = await _userRegistrationManager.CreateUserAsync(newUser, externalLogin: externalLoginInfo);
                 if (!result.Successful)

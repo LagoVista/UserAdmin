@@ -38,7 +38,7 @@ namespace LagoVista.UserAdmin.Managers
         Task<InvokeResult> UpdateUserAsync(CoreUserInfo user, EntityHeader org, EntityHeader updatedByUser);
         Task<InvokeResult<AppUser>> UpdateAppUserCompanyContactAsync(string userId, EntityHeader customer, EntityHeader contact, bool isCustomerAdmin, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateUserAsync(AppUser user, EntityHeader org, EntityHeader updatedByUser);
-        Task<InvokeResult> DeleteUserAsync(String id, EntityHeader org, EntityHeader deletedByUser);
+        Task<InvokeResult> DeleteUserAsync(String id, EntityHeader org, EntityHeader deletedByUser, bool softDelete = true);
         Task<InvokeResult> DisableAccountAsync(string userId, EntityHeader org, EntityHeader adminUser);
 
         Task<IEnumerable<EntityHeader>> SearchUsers(string firstName, string lastName, EntityHeader searchedBy);

@@ -95,7 +95,7 @@ namespace LagoVista.UserAdmin.Managers
                         throw new InvalidOperationException("ExternalLogin.UserName is required.");
                     }
 
-                    return externalLogin.UserName;
+                    return $"usr_{externalLogin.Provider.Text}_{externalLogin.UserName}".ToUpper();
                 }
 
                 // email-based username (existing behavior)
@@ -281,7 +281,7 @@ namespace LagoVista.UserAdmin.Managers
             // --- BEGIN: CreateUserAsync helper methods (block 5) ---
             private async Task<InvokeResult> CreateIdentityUserAsync(AppUser appUser, RegisterUser newUser, ExternalLogin externalLogin)
             {
-                _adminLogger.Trace($"{this.Tag()} - Before User Manager - Creating User Email: {appUser.Email} and User Name: {appUser.UserName}");
+                _adminLogger.Trace($"{this.Tag()} - Before User Manager - User Type {appUser.LoginType} {appUser.LoginTypeName} Creating User Email: {appUser.Email} and User Name: {appUser.UserName}");
 
                 InvokeResult identityResult;
                 if (externalLogin == null)

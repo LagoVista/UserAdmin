@@ -34,7 +34,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Users
         Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(ListRequest listRequest, bool? phoneConfirmed = true, bool? emailConfirmed = null);
         Task<ListResponse<UserInfoSummary>> GetUsersWithoutOrgsAsync(ListRequest listRequest);
         Task UpdateAsync(AppUser user);
-        Task DeleteAsync(AppUser user);
+        Task DeleteAsync(AppUser user, bool softDelete = true);
         Task DeleteAsync(string userId);
         Task<AppUser> GetUserByExternalLoginAsync(ExternalLoginTypes loginType, string id);
         Task<InvokeResult<long>> TryAcceptTotpTimeStepAsync(string userId, long candidateStep, bool updateLastMfaDateTimeUtc, string lastMfaDateTimeUtc);

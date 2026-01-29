@@ -95,11 +95,11 @@ namespace LagoVista.UserAdmin.Repos.Users
             await CreateDocumentAsync(user);
         }
 
-        public async Task DeleteAsync(AppUser user)
+        public async Task DeleteAsync(AppUser user, bool softDelete = true)
         {
             try
             {
-                await DeleteDocumentAsync(user.Id);
+                await DeleteDocumentAsync(user.Id, softDelete);
                 if (user.Organizations != null)
                 {
                     foreach (var org in user.Organizations)
@@ -109,7 +109,8 @@ namespace LagoVista.UserAdmin.Repos.Users
                 if (_cacheProvider != null)
                 {
                     await _cacheProvider.RemoveAsync(UserNameCacheKey(user.UserName));
-                    await _cacheProvider.RemoveAsync(EmailCacheKey(user.Email));
+                    if(!String.IsNullOrEmpty(user.Email))
+                        await _cacheProvider.RemoveAsync(EmailCacheKey(user.Email));
                 }
             }
             catch (Exception ex)
@@ -370,7 +371,7 @@ namespace LagoVista.UserAdmin.Repos.Users
                 throw new InvalidOperationException($"Attempt to find user with null or empty external login id for provider: {loginType}.");
             }
 
-            var user = (await QueryAsync(usr => usr.ExternalLogins != null && usr.ExternalLogins.Where(ext => ext.Provider.Value == loginType && ext.Id == id).Any())).FirstOrDefault();
+            var user = (await QueryAsync(usr => usr.ExternalLogins != null && usr.ExternalLogins.Where(ext => ext.Provider.Value == loginType && ext.Id == id || ext.UserName == id).Any())).FirstOrDefault();
             if (user == null)
             {
                 return null;
