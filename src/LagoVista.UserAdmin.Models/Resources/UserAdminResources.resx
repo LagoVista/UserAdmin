@@ -2324,11 +2324,9 @@
   <data name="AuthTenantStateSnapshot_ShouldInviteToOrg" xml:space="preserve">
     <value>Should Invite To Organization</value>
   </data>
-
   <data name="AuthTenantStateSnapshot_ShouldSendConfirmationEmail" xml:space="preserve">
     <value>Should Send Confirmation Email</value>
   </data>
-  
   <data name="AuthTenantStateSnapshot_IsLoggedIn" xml:space="preserve">
     <value>Logged In</value>
   </data>
@@ -2457,5 +2455,17 @@
   </data>
   <data name="AuthTenantStateSnapshot_HasPassword" xml:space="preserve">
     <value>Has Password</value>
+  </data>
+  <data name="AuthTenantStateSnapshot_UserHasFirstName" xml:space="preserve">
+    <value>User has First Name</value>
+  </data>
+  <data name="AuthTenantStateSnapshot_UserHasLastName" xml:space="preserve">
+    <value>User Has Last Name</value>
+  </data>
+  <data name="AuthTenantStateSnapshot_UserHasEmail" xml:space="preserve">
+    <value>User has Email</value>
+  </data>
+  <data name="AuthTenantStateSnapshot_UserHasOAuthGitHub" xml:space="preserve">
+    <value>User has OAuth GitHub</value>
   </data>
 </root>

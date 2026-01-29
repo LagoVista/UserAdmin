@@ -51,6 +51,22 @@ namespace LagoVista.UserAdmin.Models.Testing
         [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_EmailConfirmed, HelpResource: UserAdminResources.Names.AuthTenantStateSnapshot_EmailConfirmed_Help, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
         public EntityHeader<SetCondition> EmailConfirmed { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
 
+
+        [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_UserHasOAuthGitHub, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader<SetCondition> UserHasOAuthGitHub { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
+
+
+        [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_UserHasEmail, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader<SetCondition> UserHasEmail { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
+
+
+        [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_UserHasFirstName, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader<SetCondition> UserHasFirstName { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
+
+        [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_UserHasLastName, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader<SetCondition> UserHasLastName { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
+
+
         [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_PhoneNumberConfirmed, HelpResource: UserAdminResources.Names.AuthTenantStateSnapshot_PhoneNumberConfirmed_Help, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
         public EntityHeader<SetCondition> PhoneNumberConfirmed { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
 

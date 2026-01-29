@@ -1,4 +1,4 @@
-﻿/*1/26/2026 11:50:04 AM*/
+﻿/*1/29/2026 8:45:51 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -480,6 +480,18 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AuthTenantStateSnapshot_TwoFactorEnabled_Help
 
 		public static string AuthTenantStateSnapshot_TwoFactorEnabled_Help { get { return GetResourceString("AuthTenantStateSnapshot_TwoFactorEnabled_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_UserHasEmail
+
+		public static string AuthTenantStateSnapshot_UserHasEmail { get { return GetResourceString("AuthTenantStateSnapshot_UserHasEmail"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_UserHasFirstName
+
+		public static string AuthTenantStateSnapshot_UserHasFirstName { get { return GetResourceString("AuthTenantStateSnapshot_UserHasFirstName"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_UserHasLastName
+
+		public static string AuthTenantStateSnapshot_UserHasLastName { get { return GetResourceString("AuthTenantStateSnapshot_UserHasLastName"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_UserHasOAuthGitHub
+
+		public static string AuthTenantStateSnapshot_UserHasOAuthGitHub { get { return GetResourceString("AuthTenantStateSnapshot_UserHasOAuthGitHub"); } }
 //Resources:UserAdminResources:AuthView_Actions
 
 		public static string AuthView_Actions { get { return GetResourceString("AuthView_Actions"); } }
@@ -2529,6 +2541,10 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AuthTenantStateSnapshot_Title = "AuthTenantStateSnapshot_Title";
 			public const string AuthTenantStateSnapshot_TwoFactorEnabled = "AuthTenantStateSnapshot_TwoFactorEnabled";
 			public const string AuthTenantStateSnapshot_TwoFactorEnabled_Help = "AuthTenantStateSnapshot_TwoFactorEnabled_Help";
+			public const string AuthTenantStateSnapshot_UserHasEmail = "AuthTenantStateSnapshot_UserHasEmail";
+			public const string AuthTenantStateSnapshot_UserHasFirstName = "AuthTenantStateSnapshot_UserHasFirstName";
+			public const string AuthTenantStateSnapshot_UserHasLastName = "AuthTenantStateSnapshot_UserHasLastName";
+			public const string AuthTenantStateSnapshot_UserHasOAuthGitHub = "AuthTenantStateSnapshot_UserHasOAuthGitHub";
 			public const string AuthView_Actions = "AuthView_Actions";
 			public const string AuthView_Actions_Help = "AuthView_Actions_Help";
 			public const string AuthView_Description = "AuthView_Description";

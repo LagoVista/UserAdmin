@@ -104,11 +104,12 @@ namespace LagoVista.UserAdmin.Managers
             if(devTestUser != null && devTestUser.Id != TestUserSeed.User.Id)
             {
                 _adminLogger.Trace($"{this.Tag()} Test user already exists but has a different ID, likely created by OAuth deleting before applying setup.");
-                await _appUserManager.DeleteUserAsync(devTestUser.Id, org, user);
+                await _appUserManager.DeleteUserAsync(devTestUser.Id, org, user, false);
                 _adminLogger.Trace($"{this.Tag()} Test user deleted.");
             }
 
             var testUser = await _appUserRepo.FindByIdAsync(TestUserSeed.User.Id);
+
 
             if (preconditions.EnsureUserExists.Value == SetCondition.NotSet)
             {
@@ -118,7 +119,7 @@ namespace LagoVista.UserAdmin.Managers
                 if (gitHubUser != null)
                 {
                     _adminLogger.Trace($"{this.Tag()} User Should Not Exist - GitHub Login Found - Deleting");
-                    await _appUserManager.DeleteUserAsync(gitHubUser.Id, org, user);
+                    await _appUserManager.DeleteUserAsync(gitHubUser.Id, org, user, false);
                     _adminLogger.Trace($"{this.Tag()} User Should Not Exist - GitHub Login Found - Deleted");
                 }
 
@@ -129,31 +130,49 @@ namespace LagoVista.UserAdmin.Managers
                 }
 
                 // User Manager enforces Authorization
-                await _appUserManager.DeleteUserAsync(TestUserSeed.User.Id, org, user);
+                await _appUserManager.DeleteUserAsync(TestUserSeed.User.Id, org, user, false);
                 _adminLogger.Trace($"{this.Tag()} User Should Not Exist - Deleted");
 
                 return InvokeResult<TestUserCredentials>.Create(new TestUserCredentials());
             }
 
-            _adminLogger.Trace($"{this.Tag()} User Should Exist");
+            if (preconditions.UserHasOAuthGitHub.Value == SetCondition.Set && testUser == null)
+            {
+                testUser = await _appUserRepo.GetUserByExternalLoginAsync(ExternalLoginTypes.GitHub, "sloauth");
+            }
 
+            _adminLogger.Trace($"{this.Tag()} User Should Exist");
 
             var generatedPassword = $"a55{Guid.NewGuid().ToId()}!1234";
 
             if (testUser == null)
             {
                 _adminLogger.Trace($"{this.Tag()} User Should Exist - It Didn't");
-                var result = await _userRegistrationManager.CreateUserAsync(new Models.DTOs.RegisterUser()
+                var registration = new Models.DTOs.RegisterUser()
                 {
                     AppId = "WPF-AUTHTESTING",
                     ClientType = "WEBAPP",
                     DeviceId = "WPF-AUTHTESTING",
                     LoginType = LoginTypes.AppUser,
-                    Email = TestUserSeed.Email,
-                    FirstName = TestUserSeed.FirstName,
-                    LastName = TestUserSeed.LastName,
-                    Password = generatedPassword
-                }, userId: TestUserSeed.User.Id);
+                    Email = preconditions.HasPassword.Value == SetCondition.Set ? TestUserSeed.Email : String.Empty,
+                    FirstName = preconditions.UserHasFirstName.Value == SetCondition.Set ? TestUserSeed.FirstName : String.Empty,
+                    LastName = preconditions.UserHasLastName.Value == SetCondition.Set ? TestUserSeed.LastName : String.Empty,
+                    Password = preconditions.HasPassword.Value == SetCondition.Set ? generatedPassword : String.Empty
+                };
+
+                ExternalLogin externalLogin = null;
+
+                if(preconditions.UserHasOAuthGitHub.Value == SetCondition.Set)
+                {
+                    externalLogin = new ExternalLogin()
+                    {
+                         Id = "25768510",
+                         UserName = "sloauth",
+                         Provider = EntityHeader<ExternalLoginTypes>.Create(ExternalLoginTypes.GitHub)
+                    };
+                }
+
+                var result = await _userRegistrationManager.CreateUserAsync(registration, externalLogin: externalLogin, userId: TestUserSeed.User.Id);
 
                 if (!result.Successful)
                 {
@@ -172,6 +191,11 @@ namespace LagoVista.UserAdmin.Managers
             if (preconditions.IsAccountDisabled.Value != SetCondition.DontCare) testUser.IsAccountDisabled = preconditions.IsAccountDisabled.Value == SetCondition.Set;
             if (preconditions.IsOrgAdmin.Value != SetCondition.DontCare) testUser.IsOrgAdmin = preconditions.IsOrgAdmin.Value == SetCondition.Set;
             if (preconditions.ShowWelcome.Value != SetCondition.DontCare) testUser.ShowWelcome = preconditions.ShowWelcome.Value == SetCondition.Set;
+
+            if (preconditions.UserHasEmail.Value != SetCondition.DontCare) testUser.Email = preconditions.ShowWelcome.Value == SetCondition.Set ? TestUserSeed.Email : null;
+            if (preconditions.UserHasFirstName.Value != SetCondition.DontCare) testUser.FirstName = preconditions.ShowWelcome.Value == SetCondition.Set ? TestUserSeed.FirstName : null;
+            if (preconditions.UserHasLastName.Value != SetCondition.DontCare) testUser.LastName = preconditions.ShowWelcome.Value == SetCondition.Set ? TestUserSeed.LastName : null;
+
 
             _adminLogger.Trace($"{this.Tag()} Set Pre Conditions on User");
 
@@ -240,6 +264,8 @@ namespace LagoVista.UserAdmin.Managers
 
                 _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- Cleared");
             }
+
+
 
             await AuthorizeAsync(testUser, AuthorizeResult.AuthorizeActions.Update, user, org);
             await _appUserRepo.UpdateAsync(testUser);
