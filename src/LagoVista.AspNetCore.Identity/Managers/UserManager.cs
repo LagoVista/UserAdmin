@@ -46,6 +46,11 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return (await _userManager.CreateAsync(appUser, password)).ToInvokeResult();
         }
 
+        public async Task<InvokeResult> CreateAsync(AppUser appUser)
+        {
+            return (await _userManager.CreateAsync(appUser)).ToInvokeResult();
+        }
+
         public async Task<InvokeResult> UpdateAsync(AppUser appUser)
         {
             var org = appUser.CurrentOrganization == null ? EntityHeader.Create(Guid.Empty.ToId(), "????") : appUser.CurrentOrganization.ToEntityHeader();

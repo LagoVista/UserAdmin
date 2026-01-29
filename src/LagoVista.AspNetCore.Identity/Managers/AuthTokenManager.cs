@@ -108,7 +108,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AuthTokenManager_AccessTokenGrantAsync[", "UserLoggedIn", new KeyValuePair<string, string>("email", userName));
 
-            var appUser = await _userManager.FindByNameAsync(userName);
+            var appUser = await _userManager.FindByEmailAsync(userName);
             if (appUser == null)
             {
                 /* Should really never, ever happen, but well...let's track it */
@@ -264,7 +264,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.RefreshTokenGrantFailed, userName: userName, errors: refreshTokenRequestValidationResult.ErrorMessage);
                 return InvokeResult<AuthResponse>.FromInvokeResult(refreshTokenRequestValidationResult);
             }
-            AppUser appUser =  await _userManager.FindByNameAsync(authRequest.UserName);
+            AppUser appUser =  await _userManager.FindByEmailAsync(authRequest.UserName);
             
             if (appUser == null)
             {

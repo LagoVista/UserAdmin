@@ -18,6 +18,7 @@ using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Models.Testing;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Resources;
+using RingCentral;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -76,124 +77,186 @@ namespace LagoVista.UserAdmin.Managers
                 return false;
             }
         }
-
-        public async Task<InvokeResult<CreateUserResponse>> CreateUserAsync(RegisterUser newUser, bool autoLogin = true, ExternalLogin externalLogin = null, string defaultUserId = null)
-        {
-            if (String.IsNullOrEmpty(newUser.Email))
+// --- BEGIN: CreateUserAsync helper methods (block 1) ---
+            private static void EnsureInviteOrOrgExclusive(RegisterUser newUser)
             {
-                await _authLogMgr.AddAsync(externalLogin == null ? Models.Security.AuthLogTypes.CreateEmailUser : Models.Security.AuthLogTypes.CreateExernalLoginUser, userName: "NOT PROVIDED", extras: $"Client Type: {newUser.ClientType}, Login Type {newUser.LoginType}");
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: "?", errors: "Email address not provided.");
-
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.RegMissingEmail.Message);
-                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegMissingEmail.ToErrorMessage());
+                if (!String.IsNullOrEmpty(newUser.InviteId) && !String.IsNullOrEmpty(newUser.OrgId))
+                {
+                    throw new InvalidOperationException("InviteId and OrgId are mutually exclusive.");
+                }
             }
 
-            newUser.Email = newUser.Email.Trim();
-
-            var userName = EntityHeader.IsNullOrEmpty(newUser.EndUserAppOrg) ? newUser.Email : $"{newUser.Email}@{newUser.EndUserAppOrg.Id}";
-
-            await _authLogMgr.AddAsync(externalLogin == null ? Models.Security.AuthLogTypes.CreateEmailUser : Models.Security.AuthLogTypes.CreateExernalLoginUser,
-                userName: userName, oauthProvier: externalLogin?.Provider.ToString(), extras: $"Client Type: {newUser.ClientType}, Login Type: {newUser.LoginType}, Full User Name {userName}.");
-            if (!IsValidEmail(newUser.Email))
+            private static string ResolveUserName(RegisterUser newUser, ExternalLogin externalLogin)
             {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Invalid email address");
-                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.AuthEmailInvalidFormat.ToErrorMessage());
+                if (externalLogin != null)
+                {
+                    if (String.IsNullOrEmpty(externalLogin.UserName))
+                    {
+                        throw new InvalidOperationException("ExternalLogin.UserName is required.");
+                    }
+
+                    return externalLogin.UserName;
+                }
+
+                // email-based username (existing behavior)
+                if (String.IsNullOrEmpty(newUser.Email))
+                {
+                    return null;
+                }
+
+                return EntityHeader.IsNullOrEmpty(newUser.EndUserAppOrg)
+                    ? newUser.Email
+                    : $"{newUser.Email}@{newUser.EndUserAppOrg.Id}";
             }
 
-            var user = await _appUserRepo.FindByNameAsync(userName);
-            if (user != null)
+            private static void AddPendingInviteId(AppUser appUser, string inviteId)
             {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Email already exists");
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.RegErrorUserExists.Message);
+                if (String.IsNullOrEmpty(inviteId))
+                {
+                    return;
+                }
+
+                var existing = appUser.PendingInviteIds ?? Array.Empty<string>();
+
+                // de-dupe
+                foreach (var id in existing)
+                {
+                    if (String.Equals(id, inviteId, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return;
+                    }
+                }
+
+                var updated = new string[existing.Length + 1];
+                Array.Copy(existing, updated, existing.Length);
+                updated[existing.Length] = inviteId;
+
+                appUser.PendingInviteIds = updated;
+            }
+            // --- END: CreateUserAsync helper methods (block 1) ---
+
+
+            // --- BEGIN: CreateUserAsync helper methods (block 2) ---
+            private async Task<InvokeResult> ValidateCreateUserRequestAsync(RegisterUser newUser, ExternalLogin externalLogin, string userName)
+            {
+                // Core required fields (always)
+                if (String.IsNullOrEmpty(newUser.AppId))
+                {
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing app id");
+                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.AuthMissingAppId.Message);
+                    return InvokeResult.FromError(UserAdminErrorCodes.AuthMissingAppId.Message);
+                }
+
+                if (String.IsNullOrEmpty(newUser.ClientType))
+                {
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing client type");
+                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.AuthMissingClientType.Message);
+                    return InvokeResult.FromError(UserAdminErrorCodes.AuthMissingClientType.Message);
+                }
+
+                if (String.IsNullOrEmpty(newUser.DeviceId))
+                {
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing device id");
+                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.AuthMissingDeviceId.Message);
+                    return InvokeResult.FromError(UserAdminErrorCodes.AuthMissingDeviceId.Message);
+                }
+
+                // Email required only for non-external registrations
+                if (externalLogin == null && String.IsNullOrEmpty(newUser.Email))
+                {
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateEmailUser, userName: "NOT PROVIDED",
+                        extras: $"Client Type: {newUser.ClientType}, Login Type {newUser.LoginType}");
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: "?", errors: "Email address not provided.");
+
+                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.RegMissingEmail.Message);
+                    return InvokeResult.FromError(UserAdminErrorCodes.RegMissingEmail.Message);
+                }
+
+                // First/Last required only for non-external registrations
                 if (externalLogin == null)
                 {
-                    return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegErrorUserExists.ToErrorMessage());
+                    if (String.IsNullOrEmpty(newUser.FirstName) || String.IsNullOrEmpty(newUser.LastName))
+                    {
+                        await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing first/last name");
+                        _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.RegMissingFirstLastName.Message);
+                        return InvokeResult.FromError(UserAdminErrorCodes.RegMissingFirstLastName.Message);
+                    }
                 }
-                else
+
+                // Password required only for non-external registrations
+                if (externalLogin == null && String.IsNullOrEmpty(newUser.Password))
                 {
-                    return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegisterUserExists_3rdParty.ToErrorMessage());
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing password");
+                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.RegMissingPassword.Message);
+                    return InvokeResult.FromError(UserAdminErrorCodes.RegMissingPassword.Message);
                 }
+
+                // If email is present, validate it (both flows)
+                if (!String.IsNullOrEmpty(newUser.Email))
+                {
+                    newUser.Email = newUser.Email.Trim();
+
+                    if (!IsValidEmail(newUser.Email))
+                    {
+                        await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Invalid email address");
+                        return InvokeResult.FromError(UserAdminErrorCodes.AuthEmailInvalidFormat.Message);
+                    }
+
+                    var emailRegEx = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,12})+)$");
+                    if (!emailRegEx.Match(newUser.Email).Success)
+                    {
+                        await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: $"Invalid Email Address [{newUser.Email}]");
+                        _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.RegInvalidEmailAddress.Message);
+                        return InvokeResult.FromError(UserAdminErrorCodes.RegInvalidEmailAddress.Message);
+                    }
+                }
+
+                return InvokeResult.Success;
             }
-            else
+            // --- END: CreateUserAsync helper methods (block 2) ---
+
+            // --- BEGIN: CreateUserAsync helper methods (block 3) ---
+            private AppUser BuildAppUser(RegisterUser newUser, string userName, string defaultUserId)
             {
-                _adminLogger.Trace($"{this.Tag()} - User with user name {userName} and email {newUser.Email} does not exist.");
+                var createdBy = $"{newUser.FirstName} {newUser.LastName}".Trim();
+                if (String.IsNullOrEmpty(createdBy))
+                {
+                    createdBy = userName ?? "UNKNOWN";
+                }
+
+                var appUser = new AppUser(newUser.Email, userName, createdBy)
+                {
+                    FirstName = newUser.FirstName,
+                    LastName = newUser.LastName,
+                    EndUserAppOrg = newUser.EndUserAppOrg,
+                    Customer = newUser.Customer,
+                    CustomerContact = newUser.CustomerContact,
+                    LoginType = newUser.LoginType,
+                };
+
+                if (!String.IsNullOrEmpty(defaultUserId))
+                {
+                    if (defaultUserId != TestUserSeed.User.Id)
+                        throw new InvalidOperationException("Can only force the user id to the test user id to be used for testing");
+
+                    appUser.Id = defaultUserId;
+                }
+
+                // simplified invite handling: just stash id(s) for later UI flow
+                AddPendingInviteId(appUser, newUser.InviteId);
+
+                return appUser;
             }
+            // --- END: CreateUserAsync helper methods (block 3) ---
 
-            /* Need to check all these, if any fail, we want to aboart, we need to refactor this into the UserAdmin module :( */
-            if (String.IsNullOrEmpty(newUser.AppId))
+            // --- BEGIN: CreateUserAsync helper methods (block 4) ---
+            private async Task ApplyExternalLoginAsync(AppUser appUser, ExternalLogin externalLogin)
             {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing app id");
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.AuthMissingAppId.Message);
-                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.AuthMissingAppId.ToErrorMessage());
-            }
-
-            if (String.IsNullOrEmpty(newUser.ClientType))
-            {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing client type");
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.AuthMissingClientType.Message);
-                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.AuthMissingClientType.ToErrorMessage());
-            }
-
-            if (String.IsNullOrEmpty(newUser.DeviceId))
-            {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing device id");
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.AuthMissingDeviceId.Message);
-                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.AuthMissingDeviceId.ToErrorMessage());
-            }
-
-            if (String.IsNullOrEmpty(newUser.FirstName))
-            {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing first name");
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.RegMissingFirstLastName.Message);
-                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegMissingFirstLastName.ToErrorMessage());
-            }
-
-            if (String.IsNullOrEmpty(newUser.LastName))
-            {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing last name");
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.RegMissingLastName.Message);
-                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegMissingLastName.ToErrorMessage());
-            }
-
-            if (String.IsNullOrEmpty(newUser.Password))
-            {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing password");
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.RegMissingPassword.Message);
-                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegMissingPassword.ToErrorMessage());
-            }
-
-            var emailRegEx = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,12})+)$");
-            if (!emailRegEx.Match(newUser.Email).Success)
-            {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: $"Invalid Email Address [{newUser.Email}]");
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.RegInvalidEmailAddress.Message);
-                return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegInvalidEmailAddress.ToErrorMessage());
-            }
-
-            _adminLogger.Trace($"{this.Tag()} - Prevalidation complete.");
-
-            var appUser = new AppUser(newUser.Email, userName, $"{newUser.FirstName} {newUser.LastName}")
-            {
-                FirstName = newUser.FirstName,
-                LastName = newUser.LastName,
-                EndUserAppOrg = newUser.EndUserAppOrg,
-                Customer = newUser.Customer,
-                CustomerContact = newUser.CustomerContact,
-            };
-
-            if(!String.IsNullOrEmpty(defaultUserId))
-            {
-                if(defaultUserId != TestUserSeed.User.Id)
-                    throw new InvalidOperationException("Can only force the user id to the test user id to be used for testing");
-
-                appUser.Id = defaultUserId;
-            }
-
-            _adminLogger.Trace($"{this.Tag()} - Populated app user with Email: {appUser.Email} and User Name: {appUser.UserName}");
-
-            if (externalLogin != null)
-            {
-                _adminLogger.Trace($"{this.Tag()} - 3rd party registration - start.");
+                if (externalLogin == null)
+                {
+                    appUser.HasGeneratedPassword = false;
+                    return;
+                }
 
                 appUser.ExternalLogins.Add(externalLogin);
                 appUser.PhoneNumberConfirmedForBilling = false;
@@ -212,178 +275,238 @@ namespace LagoVista.UserAdmin.Managers
                     externalLogin.OAuthTokenVerifierSecretId = result.Result;
                     externalLogin.OAuthTokenVerifier = String.Empty;
                 }
-
-                _adminLogger.Trace($"{this.Tag()} - 3rd party registration - complete.");
             }
-            else
+            // --- END: CreateUserAsync helper methods (block 4) ---
+
+            // --- BEGIN: CreateUserAsync helper methods (block 5) ---
+            private async Task<InvokeResult> CreateIdentityUserAsync(AppUser appUser, RegisterUser newUser, ExternalLogin externalLogin)
             {
-                appUser.HasGeneratedPassword = false;
-                _adminLogger.Trace($"{this.Tag()} - Not 3rd party registration.");
-            }
+                _adminLogger.Trace($"{this.Tag()} - Before User Manager - Creating User Email: {appUser.Email} and User Name: {appUser.UserName}");
 
-            //if (_appConfig.Environment == Environments.Local ||
-            //    _appConfig.Environment == Environments.LocalDevelopment)
-            //{
-            //    appUser.EmailConfirmed = true;
-            //    appUser.PhoneNumberConfirmed = true;
-            //}
-
-            _adminLogger.Trace($"{this.Tag()} - Before User Manager - Creating User Email: {appUser.Email} and User Name: {appUser.UserName}");
-
-            var identityResult = await _userManager.CreateAsync(appUser, newUser.Password);
-            if (!identityResult.Successful)
-            {
-                _adminLogger.AddError(this.Tag()," Could not create user - {identityResult.ErrorMessage}.");
-          
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, appUser.Id, appUser.UserName, errors: identityResult.ErrorMessage);
-                return InvokeResult<CreateUserResponse>.FromInvokeResult(identityResult);
-            }
-
-            _adminLogger.Trace($"{this.Tag()} - After User Manager - Created User Email: {appUser.Email} and User Name: {appUser.UserName}");
-
-            var createUserResponse = new CreateUserResponse()
-            {
-                AccessToken = "N/A",
-                AccessTokenExpiresUTC = "N/A",
-                RefreshToken = "N/A",
-                AppInstanceId = "N/A",
-                RefreshTokenExpiresUTC = "N/A",
-                IsLockedOut = false,
-                AppUser = appUser,
-                User = appUser.ToEntityHeader(),
-                Roles = new List<EntityHeader>(),
-                RedirectPage = $"{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}"
-            };
-
-            if (_appConfig.Environment == Environments.Local ||
-               _appConfig.Environment == Environments.LocalDevelopment)
-            {
-                createUserResponse.RedirectPage = CommonLinks.Home;
-            }
-
-            appUser.LoginType = newUser.LoginType;
-
-            if (!String.IsNullOrEmpty(newUser.InviteId))
-            {
-                _adminLogger.Trace($"{this.Tag()} - invitation handling started.");
-          
-                var response = await _orgManager.AcceptInvitationAsync(newUser.InviteId, appUser);
-                if (!String.IsNullOrEmpty(response.Result.RedirectPage))
-                    createUserResponse.RedirectPage = response.Result.RedirectPage;
-
-                createUserResponse.ResponseMessage = response.Result.ResponseMessage;
-
-                // If we sent them an email and the used that same one to register, they have
-                // access to that email by definition.
-                if (appUser.Email.ToLower() == response.Result.OriginalEmail.ToLower())
+                InvokeResult identityResult;
+                if (externalLogin == null)
                 {
-                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.AutoConfirmEmail, appUser, extras: $"email: {newUser.Email}.");
-                    appUser.EmailConfirmed = true;
+                    identityResult = await _userManager.CreateAsync(appUser, newUser.Password);
+                }
+                else
+                {
+                    identityResult = await _userManager.CreateAsync(appUser);
                 }
 
-                if (!EntityHeader.IsNullOrEmpty(appUser.Customer) && !EntityHeader.IsNullOrEmpty(appUser.CustomerContact))
+                if (!identityResult.Successful)
                 {
-                    appUser.Customer = response.Result.Customer;
-                    appUser.CustomerContact = response.Result.CustomerContact;
-                    appUser.LoginType = LoginTypes.AppUser;
+                    _adminLogger.AddError(this.Tag(), $"Could not create user - {identityResult.ErrorMessage}.");
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, appUser.Id, appUser.UserName, errors: identityResult.ErrorMessage);
+                    return identityResult;
                 }
 
-                if (!EntityHeader.IsNullOrEmpty(appUser.EndUserAppOrg))
-                    appUser.EndUserAppOrg = response.Result.EndUserAppOrg;
-
-                _adminLogger.Trace($"{this.Tag()} invitation handling completed.");
+                _adminLogger.Trace($"{this.Tag()} - After User Manager - Created User Email: {appUser.Email} and User Name: {appUser.UserName}");
+                return InvokeResult.Success;
             }
-            else
-                _adminLogger.Trace($"{this.Tag()} - not invition handling.");
 
-            await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "New User Registered", null, appUser.ToEntityHeader());
-
-            var confirmSubject = "";
-            var confirmBody = "";
-            var appName = "";
-            var appLogo = "";
-
-            // this is if we create a profileImage by registering them, they will not get an invite but they should be added to the org.
-            if (!String.IsNullOrEmpty(newUser.OrgId))
+            // --- BEGIN: CreateUserAsync helper methods (block 6) ---
+            private async Task HandleOrgAssignmentAsync(RegisterUser newUser, AppUser appUser, CreateUserResponse response)
             {
+                EnsureInviteOrOrgExclusive(newUser);
+
+                if (String.IsNullOrEmpty(newUser.OrgId))
+                {
+                    return;
+                }
+
                 var org = await _orgRepo.GetOrganizationAsync(newUser.OrgId);
-                var orgEH = new EntityHeader() { Id = newUser.OrgId, Text = newUser.FirstName + " " + newUser.LastName };
+
+                // Keep existing behavior: add user to org + set current org summary
+                var orgEH = new EntityHeader() { Id = newUser.OrgId, Text = $"{newUser.FirstName} {newUser.LastName}".Trim() };
                 await _orgManager.AddUserToOrgAsync(newUser.OrgId, appUser.Id, org.ToEntityHeader(), orgEH);
                 appUser.CurrentOrganization = org.CreateSummary();
 
-                confirmSubject = org.EmailConfirmSubject;
-                confirmBody = org.EmailConfirmMessage;
-                appName = org.Name;
-                if(!EntityHeader.IsNullOrEmpty(org.LightLogo ))
-                    appLogo = $"{_appConfig.WebAddress.TrimEnd('/')}/api/media/resource/{org.Id}/{org.LightLogo.Id}/download";
-
-                if(!String.IsNullOrEmpty(org.EndUserHomePage))
+                // Redirect can be simplified later; keep minimal, non-breaking behavior for now
+                if (!String.IsNullOrEmpty(org.EndUserHomePage))
                 {
-                    createUserResponse.RedirectPage = org.EndUserHomePage;
+                    response.RedirectPage = org.EndUserHomePage;
                 }
                 else if (!String.IsNullOrEmpty(org.HomePage))
                 {
-                    createUserResponse.RedirectPage = org.HomePage;
+                    response.RedirectPage = org.HomePage;
                 }
             }
 
-            createUserResponse.IsSetupComplete = appUser.EmailConfirmed && appUser.CurrentOrganization != null;
-
-            await _appUserRepo.UpdateAsync(appUser);
-
-            if (autoLogin)
+            // --- BEGIN: CreateUserAsync helper methods (block 7) ---
+            private async Task<InvokeResult> SendEmailConfirmationIfNeededAsync(RegisterUser newUser, AppUser appUser)
             {
-                _adminLogger.Trace($"{this.Tag()} Auto-SignIn - Start.");
-                await _signInManager.SignInAsync(appUser);
-                _adminLogger.Trace($"{this.Tag()} Auto-SignIn - Complete.");
-            }
-
-            _adminLogger.Trace($"{this.Tag()} Send Email Confirmation - Start.");
-            var sendEmailResult = await _userVerificationmanager.SendConfirmationEmailAsync(appUser.Id, confirmSubject, confirmBody, appName, appLogo);
-            if (!sendEmailResult.Successful)
-            {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, appUser, errors: sendEmailResult.ErrorMessage, extras: $"Submitted by client: {newUser.ClientType}.");
-                return InvokeResult<CreateUserResponse>.FromInvokeResult(sendEmailResult.ToInvokeResult());
-            }
-            _adminLogger.Trace($"{this.Tag()} Send Email Confirmation - Complete.");
-
-            if (newUser.ClientType != "WEBAPP")
-            {
-                var authRequest = new AuthRequest()
+                // Per new contract: if no email, skip completely
+                if (String.IsNullOrEmpty(appUser.Email))
                 {
-                    AppId = newUser.AppId,
-                    DeviceId = newUser.DeviceId,
-                    AppInstanceId = newUser.AppInstanceId,
-                    ClientType = newUser.ClientType,
-                    GrantType = "password",
-                    Email = newUser.Email,
-                    UserName = userName,
-                    Password = newUser.Password,
+                    _adminLogger.Trace($"{this.Tag()} Send Email Confirmation - Skipped (no email).");
+                    return InvokeResult.Success;
+                }
+
+                var confirmSubject = "";
+                var confirmBody = "";
+                var appName = "";
+                var appLogo = "";
+
+                // If org is present, use org-provided email branding (existing behavior)
+                if (!String.IsNullOrEmpty(newUser.OrgId))
+                {
+                    var org = await _orgRepo.GetOrganizationAsync(newUser.OrgId);
+
+                    confirmSubject = org.EmailConfirmSubject;
+                    confirmBody = org.EmailConfirmMessage;
+                    appName = org.Name;
+
+                    if (!EntityHeader.IsNullOrEmpty(org.LightLogo))
+                    {
+                        appLogo = $"{_appConfig.WebAddress.TrimEnd('/')}/api/media/resource/{org.Id}/{org.LightLogo.Id}/download";
+                    }
+                }
+
+                _adminLogger.Trace($"{this.Tag()} Send Email Confirmation - Start.");
+                var sendEmailResult = await _userVerificationmanager.SendConfirmationEmailAsync(appUser.Id, confirmSubject, confirmBody, appName, appLogo);
+                if (!sendEmailResult.Successful)
+                {
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, appUser, errors: sendEmailResult.ErrorMessage, extras: $"Submitted by client: {newUser.ClientType}.");
+                    return sendEmailResult.ToInvokeResult();
+                }
+
+                _adminLogger.Trace($"{this.Tag()} Send Email Confirmation - Complete.");
+                return InvokeResult.Success;
+            }
+
+            private async Task FinalizeUserAsync(RegisterUser newUser, AppUser appUser, CreateUserResponse response, bool autoLogin)
+            {
+                await _appUserRepo.UpdateAsync(appUser);
+
+                if (autoLogin)
+                {
+                    _adminLogger.Trace($"{this.Tag()} Auto-SignIn - Start.");
+                    await _signInManager.SignInAsync(appUser);
+                    _adminLogger.Trace($"{this.Tag()} Auto-SignIn - Complete.");
+                }
+
+                response.UserSetupState = appUser.GetUserSetupState();
+            }
+
+            private async Task<InvokeResult<CreateUserResponse>> IssueTokenIfNecessary(RegisterUser newUser,  ExternalLogin externalLogin, AppUser appUser,CreateUserResponse response, string userName)
+            {
+                if (externalLogin == null && newUser.ClientType != "WEBAPP")
+                {
+                    var authRequest = new AuthRequest()
+                    {
+                        AppId = newUser.AppId,
+                        DeviceId = newUser.DeviceId,
+                        AppInstanceId = newUser.AppInstanceId,
+                        ClientType = newUser.ClientType,
+                        GrantType = "password",
+                        Email = newUser.Email,
+                        UserName = userName,
+                        Password = newUser.Password,
+                    };
+
+                    var tokenResponse = await _authTokenManager.AccessTokenGrantAsync(authRequest);
+                    if (!tokenResponse.Successful)
+                    {
+                        await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, appUser, errors: tokenResponse.ErrorMessage, extras: $"Client Type: {newUser.ClientType}.");
+                        var failed = new InvokeResult<CreateUserResponse>();
+                        failed.Concat(tokenResponse);
+                        return failed;
+                    }
+
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserSuccess, appUser, redirectUri: response.RedirectPage, extras: $"Submitted by client: {newUser.ClientType}.");
+
+                    // Preserve prior behavior: return token-derived response
+                    var tokenBased = CreateUserResponse.FromAuthResponse(tokenResponse.Result);
+                    tokenBased.RedirectPage = response.RedirectPage;
+                    tokenBased.ResponseMessage = response.ResponseMessage;
+                    tokenBased.UserSetupState = response.UserSetupState;
+
+                    return InvokeResult<CreateUserResponse>.Create(tokenBased, tokenBased.RedirectPage);
+                }
+                else
+                {
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserSuccess, appUser, redirectUri: response.RedirectPage, extras: $"Submitted by client: {newUser.ClientType}.");
+                    return InvokeResult<CreateUserResponse>.Create(response, response.RedirectPage);
+                }            
+        }
+
+            public async Task<InvokeResult<CreateUserResponse>> CreateUserAsync(RegisterUser newUser, bool autoLogin = true, ExternalLogin externalLogin = null, string defaultUserId = null)
+            {
+                if (externalLogin != null && newUser.ClientType != "WEBAPP")
+                    throw new InvalidOperationException("External login registration is only supported for WEBAPP clients.");
+
+                EnsureInviteOrOrgExclusive(newUser);
+
+                var userName = ResolveUserName(newUser, externalLogin);
+
+                // Validate request (implements external-login rules)
+                var validation = await ValidateCreateUserRequestAsync(newUser, externalLogin, userName);
+                if (!validation.Successful)
+                {
+                    return InvokeResult<CreateUserResponse>.FromInvokeResult(validation);
+                }
+
+                // If email is present (either flow), check for existing user by username
+                if (!String.IsNullOrEmpty(userName))
+                {
+                    var existing = await _appUserRepo.FindByNameAsync(userName);
+                    if (existing != null)
+                    {
+                        await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "User already exists");
+                        _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.RegErrorUserExists.Message);
+
+                        // Keep existing error selection behavior
+                        if (externalLogin == null)
+                        {
+                            return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegErrorUserExists.ToErrorMessage());
+                        }
+                        else
+                        {
+                            return InvokeResult<CreateUserResponse>.FromErrors(UserAdminErrorCodes.RegisterUserExists_3rdParty.ToErrorMessage());
+                        }
+                    }
+                }
+
+                _adminLogger.Trace($"{this.Tag()} - Prevalidation complete.");
+
+                var appUser = BuildAppUser(newUser, userName, defaultUserId);
+                await ApplyExternalLoginAsync(appUser, externalLogin);
+
+                var createIdentityResult = await CreateIdentityUserAsync(appUser, newUser, externalLogin);
+                if (!createIdentityResult.Successful)
+                {
+                    return InvokeResult<CreateUserResponse>.FromInvokeResult(createIdentityResult);
+                }
+
+                var response = new CreateUserResponse()
+                {
+                    AccessToken = "N/A",
+                    AccessTokenExpiresUTC = "N/A",
+                    RefreshToken = "N/A",
+                    RefreshTokenExpiresUTC = "N/A",
+                    AppInstanceId = "N/A",
+                    IsLockedOut = false,
+                    AppUser = appUser,
+                    User = appUser.ToEntityHeader(),
+                    Roles = new List<EntityHeader>(),
+                    RedirectPage = String.Empty,
                 };
 
-                var tokenResponse = await _authTokenManager.AccessTokenGrantAsync(authRequest);
-                if (!tokenResponse.Successful)
+                // Org assignment (InviteId is only stashed; OrgId is applied here)
+                await HandleOrgAssignmentAsync(newUser, appUser, response);
+
+                await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "New User Registered", null, appUser.ToEntityHeader());
+
+                // Email confirmation (skips if no email)
+                var emailConfirmResult = await SendEmailConfirmationIfNeededAsync(newUser, appUser);
+                if (!emailConfirmResult.Successful)
                 {
-                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, appUser, errors: tokenResponse.ErrorMessage, extras: $"Client Type: {newUser.ClientType}.");
-                    var failedValidationResult = new InvokeResult<CreateUserResponse>();
-                    failedValidationResult.Concat(tokenResponse);
-                    return failedValidationResult;
+                    return InvokeResult<CreateUserResponse>.FromInvokeResult(emailConfirmResult);
                 }
 
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserSuccess, appUser, redirectUri: createUserResponse.RedirectPage, extras: $"Submitted by client: {newUser.ClientType}.");
+                await FinalizeUserAsync(newUser, appUser, response, autoLogin);
 
-                _adminLogger.Trace($"{this.Tag()} Created {newUser.ClientType} User");
-
-                return InvokeResult<CreateUserResponse>.Create(CreateUserResponse.FromAuthResponse(tokenResponse.Result), createUserResponse.RedirectPage);
+                return await IssueTokenIfNecessary(newUser, externalLogin, appUser, response, userName);              
             }
-            else
-            {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserSuccess, appUser, redirectUri: createUserResponse.RedirectPage, extras: $"Submitted by client: {newUser.ClientType}.");
-                _adminLogger.Trace($"{this.Tag()} Created Web App User");
-
-                /* If we are logging in as web app, none of this applies */
-                return InvokeResult<CreateUserResponse>.Create(createUserResponse, createUserResponse.RedirectPage);
-            }
-        }
     }
 }

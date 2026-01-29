@@ -21,6 +21,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<AppUser> FindByIdAsync(string id);
         Task<InvokeResult> UpdateAsync(AppUser appUser);
         Task<InvokeResult> CreateAsync(AppUser user, string password);
+        Task<InvokeResult> CreateAsync(AppUser user);
         Task<string> GenerateEmailConfirmationTokenAsync(AppUser user);
         Task<string> GeneratePasswordResetTokenAsync(AppUser user);
         Task<string> GenerateChangePhoneNumberTokenAsync(AppUser user, string phone);

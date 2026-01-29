@@ -5,6 +5,7 @@
 using LagoVista.AspNetCore.Identity.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models.Users;
+using RingCentral;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,6 +64,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
         // support for unattended Kiosk authentication
         public const string KioskId = "com.lagovista.iot.kioskid";
 
+        public const string SetupStatus = "com.lagovista.iot.mfa.setupstatus";
+
         // MFA / Step-up claims (claim-only enforcement)
         public const string TwoFactorEnabled = "com.lagovista.iot.mfa.twofactorenabled";
         public const string LastMfaDateTimeUtc = "com.lagovista.iot.mfa.lastmfadatetimeutc";
@@ -78,9 +81,10 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var claims = new List<Claim> {
                 new Claim(Logintype, user.LoginType.ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(SetupStatus, user.GetUserSetupState().ToString()),
                 new Claim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(user.FirstName) ? user.FirstName : None),
                 new Claim(ClaimTypes.Surname, !string.IsNullOrWhiteSpace(user.LastName) ? user.LastName : None),
-                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Email, !string.IsNullOrEmpty(user.Email) ? user.Email : None),
                 new Claim(CurrentUserName, user.UserName),
                 new Claim(Avatar, user.ProfileImage.ImageUrl),
                 new Claim(CurrentUserId, user.Id),
@@ -154,9 +158,10 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var claims = new List<Claim> {
                 new Claim(Logintype, nameof(AppUser)),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(SetupStatus, user.GetUserSetupState().ToString()),
                 new Claim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(user.FirstName) ? user.FirstName : None),
                 new Claim(ClaimTypes.Surname, !string.IsNullOrWhiteSpace(user.LastName) ? user.LastName : None),
-                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Email, !string.IsNullOrEmpty(user.Email) ? user.Email : None),
                 new Claim(Avatar, user.ProfileImage.ImageUrl),
                 new Claim(CurrentUserId, user.Id),
                 new Claim(CurrentUserName, user.UserName),
@@ -228,8 +233,10 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var claims = new List<Claim>
             {
                 new Claim(CurrentUserId, owner.Id),
-                new Claim(ClaimTypes.GivenName, string.IsNullOrEmpty(owner.FirstName) ? "anonymous" : owner.FirstName),
-                new Claim(ClaimTypes.Surname, string.IsNullOrEmpty(owner.LastName) ? "anonymous" : owner.LastName),
+                new Claim(SetupStatus, owner.GetUserSetupState().ToString()),
+                new Claim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(owner.FirstName) ? owner.FirstName : None),
+                new Claim(ClaimTypes.Surname, !string.IsNullOrWhiteSpace(owner.LastName) ? owner.LastName : None),
+                new Claim(ClaimTypes.Email, !string.IsNullOrEmpty(owner.Email) ? owner.Email : None),
                 new Claim(CurrentUserName, owner.UserName),
                 new Claim(Logintype, "Customer"),
                 new Claim(Anonymous, owner.IsAnonymous.ToString()),
@@ -265,8 +272,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
             {
                 new Claim(CurrentUserId, owner.Id),
                 new Claim(CurrentUserName, owner.UserName),
-                new Claim(ClaimTypes.GivenName, string.IsNullOrEmpty(owner.FirstName) ? "anonymous" : owner.FirstName),
-                new Claim(ClaimTypes.Surname, string.IsNullOrEmpty(owner.LastName) ? "anonymous" : owner.LastName),
+                new Claim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(owner.FirstName) ? owner.FirstName : None),
+                new Claim(ClaimTypes.Surname, !string.IsNullOrWhiteSpace(owner.LastName) ? owner.LastName : None),
+                new Claim(ClaimTypes.Email, !string.IsNullOrEmpty(owner.Email) ? owner.Email : None),
                 new Claim(Logintype, nameof(DeviceOwnerUser)),
                 new Claim(Anonymous, owner.IsAnonymous.ToString()),
                 new Claim(EmailVerified, true.ToString()),

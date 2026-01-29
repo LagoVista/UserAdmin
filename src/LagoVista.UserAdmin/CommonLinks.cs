@@ -17,6 +17,7 @@ namespace LagoVista.UserAdmin
         public const string Home = "/home";
         public const string HomeWelcome = "/home/welcome";
         public const string Register = "/auth/register";
+        public const string CompleteUserRegistration = "/auth/user/register";
         public const string CreateDefaultOrg = "/auth/org/create";
 
         public const string ConfirmEmail = "/auth/user/email/confirm/sent";

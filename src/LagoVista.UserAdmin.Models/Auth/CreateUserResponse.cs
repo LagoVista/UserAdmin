@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using LagoVista.UserAdmin.Models.Users;
 
 namespace LagoVista.UserAdmin.Models.Auth
 {
@@ -26,11 +27,10 @@ namespace LagoVista.UserAdmin.Models.Auth
             };
         }
 
-        public bool IsSetupComplete { get; set; } = false;
+        public UserSetupStates UserSetupState { get; set; } = UserSetupStates.Unknown;
 
         public string ResponseMessage { get; set; }
 
         public string RedirectPage { get; set; }
-
     }
 }

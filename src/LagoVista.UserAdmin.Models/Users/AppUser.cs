@@ -26,6 +26,15 @@ namespace LagoVista.UserAdmin.Models.Users
         AppEndUser,
     }
 
+    public enum UserSetupStates
+    {
+        Unknown,
+        RequiresBasicRegistration, /* Has Valid Email (not confirmed), has Valid First/Last Name */
+        RequiresEmailConfirmation,
+        RequiresOrgAssingment,
+        Ready,
+    }
+
     [EntityDescription(Domains.UserDomain, UserAdminResources.Names.AppUser_Title, UserAdminResources.Names.AppUser_Help, UserAdminResources.Names.AppUser_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
     public class AppUser : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, ISummaryFactory, IFormDescriptor, IFormDescriptorCol2, IAppUserAuthTenantState
     {
@@ -70,6 +79,25 @@ namespace LagoVista.UserAdmin.Models.Users
             Organizations = new List<EntityHeader>();
             CurrentOrganizationRoles = new List<EntityHeader>();
             ExternalLogins = new List<ExternalLogin>();
+        }
+
+        public UserSetupStates GetUserSetupState() {
+            if(String.IsNullOrEmpty(Email) || String.IsNullOrEmpty(FirstName) || String.IsNullOrEmpty(LastName))
+            {
+                return UserSetupStates.RequiresBasicRegistration;
+            }
+            else if(!EmailConfirmed)
+            {
+                return UserSetupStates.RequiresEmailConfirmation;
+            }
+            else if(Organizations == null || Organizations.Count == 0)
+            {
+                return UserSetupStates.RequiresOrgAssingment;
+            }
+            else 
+            {
+                return UserSetupStates.Ready;
+            }
         }
 
         public AppUser()
@@ -171,7 +199,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public string Title { get; set; }
 
         private string _email;
-        [FormField(LabelResource: UserAdminResources.Names.AppUser_Email, IsRequired: true, FieldType: FieldTypes.Email, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_Email, IsRequired: false, FieldType: FieldTypes.Email, ResourceType: typeof(UserAdminResources))]
         public string Email
         {
             get { return _email; }
@@ -189,9 +217,9 @@ namespace LagoVista.UserAdmin.Models.Users
         }
         public bool EmailConfirmed { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.AppUser_FirstName, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_FirstName, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public string FirstName { get; set; }
-        [FormField(LabelResource: UserAdminResources.Names.AppUser_LastName, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_LastName, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public string LastName { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.AppUser_IsSystemAdmin, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
@@ -277,6 +305,8 @@ namespace LagoVista.UserAdmin.Models.Users
         public string RoutingAccount2 { get; set; }
         public string PaymentAccount2Secureid { get; set; }
         public string RoutingAccount2SecureId { get; set; }
+
+        public string[] PendingInviteIds {get; set;} = new string[] { };
 
         public override String Name
         {

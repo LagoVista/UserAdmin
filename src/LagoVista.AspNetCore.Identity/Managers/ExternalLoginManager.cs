@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using RingCentral;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -51,87 +52,101 @@ namespace LagoVista.UserAdmin.Managers
             _userRegistrationManager = userRegistrationManager ?? throw new ArgumentNullException(nameof(userRegistrationManager));
         }
 
+        private string TryGetClaim(ExternalLoginInfo loginInfo, string claimType, bool reqquired = false, string defaultValue = "")
+        {
+            var claim = loginInfo.Principal.Claims.Where(clm => clm.Type == claimType).FirstOrDefault();
+            if (claim != null)
+                return claim.Value;
+
+            if(!reqquired)
+                return defaultValue;
+
+            throw new InvalidDataException($"Missing claim on {loginInfo.LoginProvider} login: {claimType}");
+        }
+
         public async Task<ExternalLogin> GetExternalLoginAsync(ExternalLoginInfo loginInfo)
         {
+            var providerUserName = TryGetClaim(loginInfo, ClaimTypes.Name, defaultValue: Guid.NewGuid().ToId());
+            var generatedUserName = $"usr_{loginInfo.LoginProvider}_{providerUserName}".ToUpper();
+     
             var externalLogin = new ExternalLogin();
+            externalLogin.UserName = generatedUserName;
+
             switch (loginInfo.LoginProvider)
             {
                 case "Microsoft":
                     {
                         externalLogin.Provider = EntityHeader<ExternalLoginTypes>.Create(ExternalLoginTypes.Microsoft);
-
-                        externalLogin.Id = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.NameIdentifier).First().Value;
-                        externalLogin.UserName = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Email).First().Value;
-                        externalLogin.Email = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Email).First().Value;
-                        externalLogin.FirstName = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.GivenName).First().Value;
-                        externalLogin.LastName = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Surname).First().Value;
-                        externalLogin.Organization = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Surname).First().Value;
+                        externalLogin.Id = TryGetClaim(loginInfo, ClaimTypes.NameIdentifier, true);
+                        externalLogin.Email = TryGetClaim(loginInfo, ClaimTypes.Email, false);
+                        externalLogin.FirstName = TryGetClaim(loginInfo, ClaimTypes.GivenName, false);
+                        externalLogin.LastName = TryGetClaim(loginInfo, ClaimTypes.Surname, false);
+                        externalLogin.Organization = TryGetClaim(loginInfo, ClaimTypes.Surname, false);
                     }
                     break;
                 case "GitHub":
                     {
                         externalLogin.Provider = EntityHeader<ExternalLoginTypes>.Create(ExternalLoginTypes.GitHub);
-                        externalLogin.Id = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.NameIdentifier).First().Value;
-                        externalLogin.UserName = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Name).First().Value;
-                        externalLogin.Email = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Email).First().Value;
-                        externalLogin.FirstName = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.GivenName).First().Value;
-                        externalLogin.LastName = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Surname).First().Value;
+                        externalLogin.Id = TryGetClaim(loginInfo, ClaimTypes.NameIdentifier, true);
+                        externalLogin.Email = TryGetClaim(loginInfo, ClaimTypes.Email, false);
+                        externalLogin.FirstName = TryGetClaim(loginInfo, ClaimTypes.GivenName, false);
+                        externalLogin.LastName = TryGetClaim(loginInfo, ClaimTypes.Surname, false);
+
                         if (loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimsFactory.Organization).Any())
-                            externalLogin.Organization = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimsFactory.Organization).First().Value;
+                            externalLogin.Organization = TryGetClaim(loginInfo, ClaimsFactory.Organization, false);
                         else
-                            externalLogin.Organization = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Surname).First().Value;
+                            externalLogin.Organization = TryGetClaim(loginInfo, ClaimTypes.Surname, false);
                     }
                     break;
                 case "LinkedIn":
                     {
                         externalLogin.Provider = EntityHeader<ExternalLoginTypes>.Create(ExternalLoginTypes.LinkedIn);
-                        externalLogin.Id = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.NameIdentifier).First().Value;
-                        externalLogin.UserName = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Email).First().Value;
-                        externalLogin.Email = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Email).First().Value;
-                        externalLogin.FirstName = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.GivenName).First().Value;
-                        externalLogin.LastName = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Surname).First().Value;
-                        externalLogin.Organization = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Surname).First().Value;
+                        externalLogin.Id = TryGetClaim(loginInfo, ClaimTypes.NameIdentifier, true);
+                        externalLogin.Email = TryGetClaim(loginInfo, ClaimTypes.Email, false);
+                        externalLogin.FirstName = TryGetClaim(loginInfo, ClaimTypes.GivenName, false);
+                        externalLogin.LastName = TryGetClaim(loginInfo, ClaimTypes.Surname, false);
+                        externalLogin.Organization = TryGetClaim(loginInfo, ClaimTypes.Surname, false);
                     }
                     break;
                 case "Google":
                     {
                         externalLogin.Provider = EntityHeader<ExternalLoginTypes>.Create(ExternalLoginTypes.Google);
-                        externalLogin.Id = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.NameIdentifier).First().Value;
-                        externalLogin.UserName = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Email).First().Value;
-                        externalLogin.Email = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Email).First().Value;
-                        externalLogin.FirstName = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.GivenName).First().Value;
-                        externalLogin.LastName = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Surname).First().Value;
-                        externalLogin.Organization = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Surname).First().Value;
+                        externalLogin.Id = TryGetClaim(loginInfo, ClaimTypes.NameIdentifier, true);
+                        externalLogin.Email = TryGetClaim(loginInfo, ClaimTypes.Email, false);
+                        externalLogin.FirstName = TryGetClaim(loginInfo, ClaimTypes.GivenName, false);
+                        externalLogin.LastName = TryGetClaim(loginInfo, ClaimTypes.Surname, false);
+                        externalLogin.Organization = TryGetClaim(loginInfo, ClaimTypes.Surname, false);
                     }
                     break;
                 case "Twitter":
                     {
                         externalLogin.Provider = EntityHeader<ExternalLoginTypes>.Create(ExternalLoginTypes.Twitter);
-                        externalLogin.Id = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.NameIdentifier).First().Value;
-                        externalLogin.UserName = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Name).First().Value;
-                        externalLogin.Email = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Email).First().Value;
-                        externalLogin.FirstName = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimTypes.Name).First().Value;
-                        externalLogin.LastName = "From Twitter";
+                        externalLogin.Id = TryGetClaim(loginInfo, ClaimTypes.NameIdentifier, true);
+                        externalLogin.Email = TryGetClaim(loginInfo, ClaimTypes.Email, false);
+                        externalLogin.FirstName = TryGetClaim(loginInfo, ClaimTypes.Name, false);
+                        externalLogin.LastName = String.Empty;
                         externalLogin.Organization = externalLogin.UserName;
-                        externalLogin.OAuthToken = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimsFactory.OAuthToken).First().Value;
-                        externalLogin.OAuthTokenVerifier = loginInfo.Principal.Claims.Where(clm => clm.Type == ClaimsFactory.OAuthTokenVerifier).First().Value;
+                        externalLogin.OAuthToken = TryGetClaim(loginInfo, ClaimsFactory.OAuthToken, true);
+                        externalLogin.OAuthTokenVerifier = TryGetClaim(loginInfo, ClaimsFactory.OAuthTokenVerifier, true);
 
                         var requestToken = await _twitterAuthorization.ObtainRequestTokenAsync();
                     }
                     break;
                 default:
-                    throw new ArgumentNullException("");
+                    throw new ArgumentNullException($"Unknown external login provider: {loginInfo.LoginProvider}");
             }
+
+            _adminLogger.Trace($"{this.Tag()} External Login Parameters", externalLogin.Provider.Text.ToKVP("provider"), externalLogin.Id.ToKVP("id"),externalLogin.UserName.ToKVP("username"));
 
             return externalLogin;
         }
 
         private string NormalizeReturnUrl(string returnUrl)
         {
-            if(_appConfig.Environment == Environments.Local)
-            {
-                return $"http://localhost:4200{returnUrl}";
-            }
+            //if(_appConfig.Environment == Environments.Local)
+            //{
+            //    return $"http://localhost:4200{returnUrl}";
+            //}
 
             return returnUrl;
         }
@@ -148,7 +163,7 @@ namespace LagoVista.UserAdmin.Managers
                     returnUrl = null;
             }
 
-            _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] User: {appUser.Email}");
+            _adminLogger.Trace($"{this.Tag} User: {appUser.Email}");
             await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizingLogin, appUser, inviteId: inviteId, redirectUri: String.IsNullOrEmpty( returnUrl) ? String.Empty : returnUrl,  oauthProvider: provider);
 
             await _signInManager.SignInAsync(appUser, false);
@@ -226,6 +241,12 @@ namespace LagoVista.UserAdmin.Managers
                     return InvokeResult<string>.Create(NormalizeReturnUrl(returnUrl));
                 }
             }
+            else if(String.IsNullOrEmpty(appUser.Email) || string.IsNullOrEmpty(appUser.FirstName) || string.IsNullOrEmpty(appUser.LastName))
+            {
+                _adminLogger.Trace($"{this.Tag} - Email/FirstName/LastName is empty, sending to registration.");
+                await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, oauthProvider: provider, extras: $"Web - one of Email/FirstName/LastName empty");
+                return InvokeResult<string>.Create(NormalizeReturnUrl($"{CommonLinks.CompleteUserRegistration}"));
+            }
             // user does exist and is configured properly.
             else if (!String.IsNullOrEmpty(inviteId))
             {
@@ -234,7 +255,7 @@ namespace LagoVista.UserAdmin.Managers
                 var response = await _orgManager.AcceptInvitationAsync(inviteId, appUser);
                 if (response.Successful)
                 {
-                    _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] - Web - Email was confirmed, has invite");
+                    _adminLogger.Trace($"{this.Tag} - Web - Email was confirmed, has invite");
                     await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, inviteId: inviteId, oauthProvider: provider, extras: appUser.EmailConfirmed ?
                         $"Web - Email was confirmed, has invite" : $"Web - Email was not confirmed, has invite"
                         , redirectUri: redirectUri);
@@ -248,25 +269,25 @@ namespace LagoVista.UserAdmin.Managers
             }
             else if (!appUser.EmailConfirmed)
             {
-                _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] - Web - Email Not Confirmed");
+                _adminLogger.Trace($"{this.Tag} - Web - Email Not Confirmed");
                 await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, oauthProvider: provider, extras: $"Web - Email Not Confirmed", redirectUri: $"{CommonLinks.ConfirmEmail}?email={appUser.Email}");
                 return InvokeResult<string>.Create(NormalizeReturnUrl($"{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}"));
             }
             else if (appUser.CurrentOrganization == null)
             {
-                _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] - Web - No Current Organization");
+                _adminLogger.Trace($"{this.Tag} - Web - No Current Organization");
                 await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, oauthProvider: provider, extras: $"Web - No Current Organization", redirectUri: CommonLinks.CreateDefaultOrg);
                 return InvokeResult<string>.Create(NormalizeReturnUrl(CommonLinks.CreateDefaultOrg));
             }
             else if (appUser.ShowWelcome)
             {
-                _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] - Web - Welcome View");
+                _adminLogger.Trace($"{this.Tag} - Web - Welcome View");
                 await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser.ToEntityHeader(), appUser.CurrentOrganization.ToEntityHeader(), oauthProvider: provider, extras: $"Web - Welcome View", redirectUri: CommonLinks.HomeWelcome);
                 return InvokeResult<string>.Create(NormalizeReturnUrl(CommonLinks.HomeWelcome));
             }
             else
             {
-                _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] - Web - Return Home View");
+                _adminLogger.Trace($"{this.Tag} - Web - Return Home View");
                 await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, oauthProvider: provider, extras: $"Web - Home", redirectUri: CommonLinks.Home);
                 return InvokeResult<string>.Create(NormalizeReturnUrl(CommonLinks.Home));
             }
@@ -274,7 +295,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult<string>> AssociateExistingUserAsync(ExternalLogin externalLoginInfo, Dictionary<string, string> cookies, AppUser appUser, string inviteId, string returnUrl = null)
         {
-            _adminLogger.Trace("[OAUTH_HandleExternalLogin] - User currently logged in, associate user credentials.");
+            _adminLogger.Trace($"{this.Tag} - User currently logged in, associate user credentials.");
             await _appUserManager.AssociateExternalLoginAsync(appUser.Id, externalLoginInfo, appUser.ToEntityHeader());
 
             appUser = await _signInManager.UserManager.FindByIdAsync(appUser.Id);
@@ -295,15 +316,15 @@ namespace LagoVista.UserAdmin.Managers
             if (!externalLoginInfo.Provider.HasValue)
                 throw new ArgumentNullException("externalLogin.Provider");
 
-            _adminLogger.Trace($"[OAUTH_HandleEXternalLogin] - {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value}");
+            _adminLogger.Trace($"{this.Tag()} - {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value}");
 
             await _authLogManager.AddAsync(AuthLogTypes.OAuthCallback, oauthProvier: externalLoginInfo.Provider.Text, inviteId: inviteId, extras: $"Email: {externalLoginInfo.Email}, First Name: {externalLoginInfo.FirstName}, Last Name: {externalLoginInfo.LastName}");
 
-            _adminLogger.Trace($"[OAUTH_HandleExternalLogin] - User not logged in, attempt to find - {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value}");
+            _adminLogger.Trace($"{this.Tag()} - User not logged in, attempt to find - {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value}");
             var appUser = await _appUserManager.GetUserByExternalLoginAsync(externalLoginInfo.Provider.Value, externalLoginInfo.Id);
             if (appUser != null)
             {
-                _adminLogger.Trace($"[OAUTH_HandleExternalLogin] - Found a user by external credentials, finalize login and return - {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value}");
+                _adminLogger.Trace($"{this.Tag()} - Found a user by external credentials, finalize login and return - {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value}");
 
                 await _authLogManager.AddAsync(AuthLogTypes.OAuthLogin, appUser.Id, appUser.Name, inviteId: inviteId, oauthProvier: externalLoginInfo.Provider.Text, extras: $"found existing user, logging in, primary account name: {appUser.UserName} - found with id: {externalLoginInfo.Id}");
 
@@ -311,7 +332,7 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             // Path 1 - user does not exist as a OAuth user directly or is not logged in.
-            _adminLogger.Trace($"[OAUTH_HandleExternalLogin] - Could not find by external provider id - {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value}");
+            _adminLogger.Trace($"{this.Tag()} - Could not find by external provider id - {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value}");
 
             // it's possible the Email address is registered as primary NuvIoT account
             // but it's not associated with this OAuth login, if that's the case
@@ -320,7 +341,7 @@ namespace LagoVista.UserAdmin.Managers
 
             if (appUser != null)
             {
-                _adminLogger.Trace($"[OAUTH_HandleExternalLogin] - Found user by email address - {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value} - {externalLoginInfo.Email}");
+                _adminLogger.Trace($"{this.Tag()} - Found user by email address - {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value} - {externalLoginInfo.Email}");
 
                 // we found it, no OAuth login, but matching email, associate and login.
                 await _appUserManager.AssociateExternalLoginAsync(appUser.Id, externalLoginInfo, appUser.ToEntityHeader());
@@ -339,7 +360,7 @@ namespace LagoVista.UserAdmin.Managers
             }
             else
             {
-                _adminLogger.Trace($"[OAUTH_HandleExternalLogin] - Did not find existing user, creating new one: {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value} - {externalLoginInfo.Email}");
+                _adminLogger.Trace($"{this.Tag()} - Did not find existing user, creating new one: {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value} - {externalLoginInfo.Email}");
 
                 //  User does not exist, go ahead and create a new one along with org.
                 var newUser = new UserAdmin.Models.DTOs.RegisterUser()
@@ -359,13 +380,13 @@ namespace LagoVista.UserAdmin.Managers
                 if (!result.Successful)
                 {
                     await _authLogManager.AddAsync(AuthLogTypes.CreateUserError, inviteId: inviteId, oauthProvier: externalLoginInfo.Provider.Text, extras: $"New User Created: {newUser.FirstName} {newUser.LastName} - {newUser.Email}");
-                    _adminLogger.Trace($"[OAUTH_HandleEXternalLogin] - Could not create new user: {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value} - {externalLoginInfo.Email} - {result.Errors.First().Message}");
-                    return InvokeResult<string>.Create($"/auth/error?{result.ErrorMessage}");
+                    _adminLogger.Trace($"{this.Tag()} - Could not create new user: {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value} - {externalLoginInfo.Email} - {result.Errors.First().Message}");
+                    return InvokeResult<string>.FromError($"{result.ErrorMessage}");
                 }
 
                 appUser = result.Result.AppUser;
            
-                _adminLogger.Trace($"[OAUTH_HandleEXternalLogin] - Created new user: {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value} - {externalLoginInfo.Email} - {newUser.FirstName} {newUser.LastName}");
+                _adminLogger.Trace($"{this.Tag()} - Created new user: {externalLoginInfo.Id} - {externalLoginInfo.Provider.Value} - {externalLoginInfo.Email} - {newUser.FirstName} {newUser.LastName}");
                 //if (appUser.CurrentOrganization == null)
                 //{
                 //    var inUse = true;

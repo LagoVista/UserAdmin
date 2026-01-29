@@ -56,13 +56,11 @@ namespace LagoVista.UserAdmin.Models.DTOs
         [CustomValidator]
         public void Validate(Core.Validation.ValidationResult result, Actions action)
         {
-            if (!String.IsNullOrEmpty(Password)) result.AddUserError("Password is a Required Field.");
-            if (!String.IsNullOrEmpty(FirstName)) result.AddUserError("Contact First Name is a Required Field.");
-            if (!String.IsNullOrEmpty(LastName)) result.AddUserError("Contact Last Name is a Required Field.");
-            if (!String.IsNullOrEmpty(Email)) result.AddUserError("Contact Email is a Required Field.");
-            var email = new EmailAddressAttribute();
-            if (!email.IsValid(Email)) result.AddUserError("Invalid Email Address.");
-
+            if (!String.IsNullOrEmpty(Email))
+            {
+                var email = new EmailAddressAttribute();
+                if (!email.IsValid(Email)) result.AddUserError($"Invalid Email Address {Email}.");
+            }
             switch(LoginType)
             {
                 case LoginTypes.AppEndUser:

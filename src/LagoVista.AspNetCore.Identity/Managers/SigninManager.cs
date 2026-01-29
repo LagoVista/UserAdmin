@@ -107,7 +107,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var signIn = UserSignInMetrics.WithLabels(nameof(PasswordSignInAsync));
             UserLoginAttempts.Inc();
 
-            var appUser = await _userManager.FindByNameAsync(userName);
+            var appUser = await _userManager.FindByEmailAsync(userName);
             response.AddAuthMetric("Got User");
             timings.Add(new ResultTiming() { Key = $"Find by email", Ms = sw.Elapsed.TotalMilliseconds });
             sw.Restart();

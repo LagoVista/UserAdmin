@@ -108,11 +108,21 @@ namespace LagoVista.UserAdmin.Managers
                 _adminLogger.Trace($"{this.Tag()} Test user deleted.");
             }
 
+            var gitHubUser = await _appUserRepo.GetUserByExternalLoginAsync(ExternalLoginTypes.GitHub, "SLOAUTH");
+            
+
             var testUser = await _appUserRepo.FindByIdAsync(TestUserSeed.User.Id);
 
             if (preconditions.EnsureUserExists.Value == SetCondition.NotSet)
             {
                 _adminLogger.Trace($"{this.Tag()} User Should Not Exist");
+
+                if(gitHubUser != null)
+                {
+                    _adminLogger.Trace($"{this.Tag()} User Should Not Exist - GitHub Login Found - Deleting");
+                    await _appUserManager.DeleteUserAsync(gitHubUser.Id, org, user);
+                    _adminLogger.Trace($"{this.Tag()} User Should Not Exist - GitHub Login Found - Deleted");
+                }
 
                 if (testUser == null)
                 {
