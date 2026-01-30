@@ -1,4 +1,4 @@
-﻿/*1/29/2026 8:45:51 AM*/
+﻿/*1/30/2026 8:35:10 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -420,6 +420,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AuthTenantStateSnapshot_ExternalLoginProviders_Help
 
 		public static string AuthTenantStateSnapshot_ExternalLoginProviders_Help { get { return GetResourceString("AuthTenantStateSnapshot_ExternalLoginProviders_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_HasPasskey
+
+		public static string AuthTenantStateSnapshot_HasPasskey { get { return GetResourceString("AuthTenantStateSnapshot_HasPasskey"); } }
 //Resources:UserAdminResources:AuthTenantStateSnapshot_HasPassword
 
 		public static string AuthTenantStateSnapshot_HasPassword { get { return GetResourceString("AuthTenantStateSnapshot_HasPassword"); } }
@@ -2521,6 +2524,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AuthTenantStateSnapshot_EnsureUserExists_Help = "AuthTenantStateSnapshot_EnsureUserExists_Help";
 			public const string AuthTenantStateSnapshot_ExternalLoginProviders = "AuthTenantStateSnapshot_ExternalLoginProviders";
 			public const string AuthTenantStateSnapshot_ExternalLoginProviders_Help = "AuthTenantStateSnapshot_ExternalLoginProviders_Help";
+			public const string AuthTenantStateSnapshot_HasPasskey = "AuthTenantStateSnapshot_HasPasskey";
 			public const string AuthTenantStateSnapshot_HasPassword = "AuthTenantStateSnapshot_HasPassword";
 			public const string AuthTenantStateSnapshot_Help = "AuthTenantStateSnapshot_Help";
 			public const string AuthTenantStateSnapshot_IsAccountDisabled = "AuthTenantStateSnapshot_IsAccountDisabled";

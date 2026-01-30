@@ -239,7 +239,8 @@ namespace LagoVista.UserAdmin.Managers
 
                 if (!String.IsNullOrEmpty(defaultUserId))
                 {
-                    if (defaultUserId != TestUserSeed.User.Id)
+                    // Must prealocated user ids for pass key.
+                    if (defaultUserId != TestUserSeed.User.Id && newUser.Source != UserCreationSource.Passkey)
                         throw new InvalidOperationException("Can only force the user id to the test user id to be used for testing");
 
                     appUser.Id = defaultUserId;

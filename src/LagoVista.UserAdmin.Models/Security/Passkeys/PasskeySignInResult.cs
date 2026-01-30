@@ -1,9 +1,12 @@
+using LagoVista.UserAdmin.Models.Users;
 using System;
 
 namespace LagoVista.UserAdmin.Models.Security.Passkeys
 {
     public class PasskeySignInResult
     {
+        public AppUser User { get; set; }
+
         public string UserId { get; set; }
 
         /// <summary>

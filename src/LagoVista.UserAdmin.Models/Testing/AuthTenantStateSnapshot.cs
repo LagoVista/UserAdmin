@@ -88,6 +88,9 @@ namespace LagoVista.UserAdmin.Models.Testing
         public EntityHeader<SetCondition> HasPassword { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.Set);
 
 
+        [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_HasPasskey, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader<SetCondition> HasPasskey { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.Set);
+
 
         [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_IsAnonymous, HelpResource: UserAdminResources.Names.AuthTenantStateSnapshot_IsAnonymous_Help, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
         public EntityHeader<SetCondition> IsAnonymous { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);

@@ -73,7 +73,7 @@ namespace LagoVista.UserAdmin.Managers
             return await _appUserManager.DeleteUserAsync(TestUserSeed.User.Id, org, user);
         }
 
-        public async Task<InvokeResult<TestUserCredentials>> GetTestUserCredentials(EntityHeader user, EntityHeader pwd)
+        public async Task<InvokeResult<TestUserCredentials>> GetTestUserCredentials(EntityHeader user, EntityHeader pwd, string passKeyCredentialsId)
         {
             var testUser = await _appUserRepo.FindByIdAsync(TestUserSeed.User.Id);
             var newPwd = $"test!{Guid.NewGuid().ToId()}1234";
@@ -83,7 +83,8 @@ namespace LagoVista.UserAdmin.Managers
             var credentials = new TestUserCredentials()
             {
                 EmailAddress = testUser.Email,
-                Password = newPwd
+                Password = newPwd,
+                PasskeyCredentialsId = passKeyCredentialsId
             };
 
             return InvokeResult<TestUserCredentials>.Create(credentials);
@@ -293,14 +294,20 @@ namespace LagoVista.UserAdmin.Managers
                     _adminLogger.Trace($"{this.Tag()} Use should not belong to an org - did not exist, nothing to do.");
             }
 
+            var passKeyCredentialsId = String.Empty;
+            if(preconditions.HasPassword.Value == SetCondition.Set)
+            {
+                passKeyCredentialsId = "0Mzo4bIZX4GyggZOQGvRx3WWZrMXiLPsqPf625kAz44=";
+            }
+
             if (preconditions.HasPassword.Value == SetCondition.Set)
             {
-                var credentials = await GetTestUserCredentials(org, user);
+                var credentials = await GetTestUserCredentials(org, user, passKeyCredentialsId);
                 return InvokeResult<TestUserCredentials>.Create(credentials.Result);
             }
             else
             {
-                return InvokeResult<TestUserCredentials>.Create(new TestUserCredentials() { EmailAddress = TestUserSeed.Email });
+                return InvokeResult<TestUserCredentials>.Create(new TestUserCredentials() { PasskeyCredentialsId = passKeyCredentialsId, EmailAddress = TestUserSeed.Email });
             }
         }
 

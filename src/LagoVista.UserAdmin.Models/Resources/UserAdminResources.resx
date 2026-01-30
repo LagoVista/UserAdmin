@@ -2468,4 +2468,7 @@
   <data name="AuthTenantStateSnapshot_UserHasOAuthGitHub" xml:space="preserve">
     <value>User has OAuth GitHub</value>
   </data>
+  <data name="AuthTenantStateSnapshot_HasPasskey" xml:space="preserve">
+    <value>Has Passkey</value>
+  </data>
 </root>

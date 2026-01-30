@@ -495,7 +495,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             var credentialid = Base64UrlEncode(makeResult.Id);
 
-            var createUserResponse = await _userRegistrationManager.CreateUserAsync(registration, true);
+            var createUserResponse = await _userRegistrationManager.CreateUserAsync(registration, true, userId: userId);
             if(!createUserResponse.Successful) return createUserResponse.ToInvokeResult<PasskeySignInResult>();
             if (!createUserResponse.Successful)
             {
@@ -528,7 +528,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             return InvokeResult<PasskeySignInResult>.Create(new PasskeySignInResult()
             {
-                UserId = userId,
+                User = createUserResponse.Result.AppUser,
+                UserId = createUserResponse.Result.AppUser.Id,
                 RequiresOnboarding = true,
                 RedirectUrl = CommonLinks.CompleteUserRegistration,
                 Message = "Onboarding required.",
@@ -571,7 +572,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             var payload = new PasskeyBeginOptionsResponse() { ChallengeId = storeResult.Result.Challenge.Id, Options = JToken.FromObject(options) };
 
-            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyBeginPasswordlessAuthenticationSuccess, user, org, challengeId: payload.ChallengeId);
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyBeginPasswordlessAuthenticationSuccess, user, org,challengeId: payload.ChallengeId);
 
             return InvokeResult<PasskeyBeginOptionsResponse>.Create(payload);
         }
@@ -626,7 +627,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
             {
                 if (args.UserHandle == null || args.UserHandle.Length == 0) return true;
                 var handle = System.Text.Encoding.UTF8.GetString(args.UserHandle);
-                return String.Equals(handle, userId, StringComparison.Ordinal);
+                var isOwner = String.Equals(handle, userId, StringComparison.Ordinal);
+                if (!isOwner)
+                    _logger.AddError(this.Tag(), $"User is not owner of credentials Stored User Id: {userId} - Presented: {handle}");
+                else
+                    _logger.Trace($"{this.Tag()} - Verified Ownership {userId}");
+                
+                return isOwner;
             };
 
             var res = await _fido2.MakeAssertionAsync(new MakeAssertionParams() { AssertionResponse = assertionResponse, OriginalOptions = options, StoredPublicKey = Base64UrlDecode(stored.PublicKey), StoredSignatureCounter = stored.SignCount, IsUserHandleOwnerOfCredentialIdCallback = callback }, CancellationToken.None);
@@ -639,16 +646,29 @@ namespace LagoVista.AspNetCore.Identity.Managers
             }
 
             var appUser = await _appUserRepo.FindByIdAsync(userId);
-            var requiresOnboarding = appUser == null || !appUser.EmailConfirmed;
 
             await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyCompletePasswordlessAuthenticationSuccess, user, org, challengeId: challengeId, credentialId: stored.CredentialId, assertionId: payload.Assertion?.Id);
 
+            var redirect = appUser.ShowWelcome ? CommonLinks.HomeWelcome : CommonLinks.Home;
+            switch(appUser.GetUserSetupState())
+            {
+                case UserSetupStates.RequiresBasicRegistration:
+                    redirect = CommonLinks.CompleteUserRegistration;
+                    break;
+                case UserSetupStates.RequiresEmailConfirmation:
+                    redirect = CommonLinks.ConfirmEmail;
+                    break;
+                case UserSetupStates.RequiresOrgAssingment:
+                     redirect = CommonLinks.CreateDefaultOrg;
+                    break;
+            }
+
             return InvokeResult<PasskeySignInResult>.Create(new PasskeySignInResult()
             {
+                User = appUser,
                 UserId = userId,
-                RequiresOnboarding = requiresOnboarding,
-                RedirectUrl = requiresOnboarding ? "/auth/onboarding" : NormalizePasskeyUrl(challengeResult.Result.Challenge.PasskeyUrl),
-                Message = requiresOnboarding ? "Onboarding required." : null,
+                RequiresOnboarding = appUser.GetUserSetupState() != UserSetupStates.Ready,
+                RedirectUrl = redirect,
             });
         }
 

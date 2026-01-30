@@ -76,7 +76,7 @@ namespace LagoVista.UserAdmin.Managers
         }
 
         public Task AddAsync(AuthLogTypes type, EntityHeader user = null, EntityHeader org = null, string oauthProvider = "", string errors = "", string extras = "", 
-        string redirectUri = "", string inviteId = "none", string challengeId = "none", string credentialId = "none", string assertionId = "none")
+        string redirectUri = "", string inviteId = "none", string credentialId = "none", string challengeId = "none", string assertionId = "none")
         {
             var orgId = org == null ? "?" : org.Id;
             var orgName = org == null ? "?" : org.Text;
@@ -88,7 +88,7 @@ namespace LagoVista.UserAdmin.Managers
         }
 
         public Task AddAsync(AuthLogTypes type, AppUser user, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none",
-        string challengeId = "none", string credentialId = "none", string assertionId = "none")
+              string credentialId = "none", string challengeId = "none",  string assertionId = "none")
         {
             var orgId = user.CurrentOrganization == null ? "?" : user.CurrentOrganization.Id;
             var orgName = user.CurrentOrganization == null ? "?" : user.CurrentOrganization.Text;
