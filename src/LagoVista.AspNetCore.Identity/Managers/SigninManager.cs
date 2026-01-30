@@ -247,14 +247,14 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 else
                 {
                     if (!appUser.EmailConfirmed)
-                        response.RedirectPage = $"{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}";
+                        response.RedirectPage = $"/1/{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}";
                     else if (appUser.CurrentOrganization == null)
                         response.RedirectPage = CommonLinks.CreateDefaultOrg;
                 }
 
                 if (String.IsNullOrEmpty(response.RedirectPage)) {
                     if (!appUser.EmailConfirmed)
-                        response.RedirectPage = $"{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}";
+                        response.RedirectPage = $"/2/{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}";
                     else if (appUser.CurrentOrganization == null)
                         response.RedirectPage = CommonLinks.CreateDefaultOrg;
                 }

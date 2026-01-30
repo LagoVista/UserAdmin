@@ -6,10 +6,14 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Managers.Passkeys;
 using LagoVista.UserAdmin.Interfaces.Repos.Security.Passkeys;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
+using LagoVista.UserAdmin.Managers;
+using LagoVista.UserAdmin.Models.Auth;
+using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Models.Security.Passkeys;
 using LagoVista.UserAdmin.Models.Users;
 using Newtonsoft.Json;
@@ -34,9 +38,10 @@ namespace LagoVista.AspNetCore.Identity.Managers
         private readonly IAdminLogger _logger;
         private readonly IFido2 _fido2;
         private readonly IAuthenticationLogManager _authLogMgr;
+        private readonly IUserRegistrationManager _userRegistrationManager;
       
 
-        public AppUserPasskeyManager(IAppUserRepo appUserRepo, IAuthenticationLogManager authLogMgr, IAppUserPasskeyCredentialRepo credentialRepo, IPasskeyChallengeStore challengeStore, IAppConfig appConfig, IAdminLogger logger, IFido2 fido2)
+        public AppUserPasskeyManager(IAppUserRepo appUserRepo, IUserRegistrationManager userRegistrationManager, IAuthenticationLogManager authLogMgr, IAppUserPasskeyCredentialRepo credentialRepo, IPasskeyChallengeStore challengeStore, IAppConfig appConfig, IAdminLogger logger, IFido2 fido2)
         {
             _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
             _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(authLogMgr));
@@ -45,6 +50,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _fido2 = fido2 ?? throw new ArgumentNullException(nameof(fido2));
+            _userRegistrationManager = userRegistrationManager ?? throw new ArgumentNullException(nameof(userRegistrationManager));
         }
 
         /* Existing user-bound flows (attach/use passkeys for a known user) */
@@ -382,31 +388,15 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var (rpId, origin) = GetRpIdAndOrigin();
             var safeUrl = NormalizePasskeyUrl(passkeyUrl);
 
-            var provisional = new AppUser()
-            {
-                Id = Guid.NewGuid().ToId(),
-                Key = Guid.NewGuid().ToId().ToLower(),
-                Email = null,
-                EmailConfirmed = false,
-                FirstName = null,
-                LastName = null,
-            };
 
-            try
-            {
-                await _appUserRepo.CreateAsync(provisional);
-            }
-            catch (Exception ex)
-            {
-                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyBeginPasswordlessRegistrationFailed, user, org, errors: "create_provisional_user_failed");
-                return InvokeResult<PasskeyBeginOptionsResponse>.FromError("create_provisional_user_failed");
-            }
+            var provisionalGuid = Guid.NewGuid();
+            var provisionalUserId = provisionalGuid.ToId();
 
             var fidoUser = new Fido2User()
             {
-                Id = System.Text.Encoding.UTF8.GetBytes(provisional.Id),
-                Name = provisional.Id,
-                DisplayName = provisional.Id,
+                Id = System.Text.Encoding.UTF8.GetBytes(provisionalUserId),
+                Name = provisionalUserId,
+                DisplayName = provisionalUserId,
             };
 
             var options = _fido2.RequestNewCredential(new RequestNewCredentialParams()
@@ -420,7 +410,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             var challenge = new PasskeyChallenge()
             {
-                UserId = provisional.Id,
+                UserId = provisionalUserId,
                 RpId = rpId,
                 Origin = origin,
                 PasskeyUrl = safeUrl,
@@ -430,16 +420,18 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 ExpiresUtc = DateTime.UtcNow.AddMinutes(ChallengeTtlMinutes).ToJSONString(),
             };
 
+            var provisionUser = EntityHeader.Create(provisionalUserId, provisionalUserId);
+
             var storeResult = await _challengeStore.CreateAsync(new PasskeyChallengePacket() { Challenge = challenge, OptionsJson = JsonConvert.SerializeObject(options) });
             if (!storeResult.Successful)
             {
-                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyBeginPasswordlessRegistrationFailed, provisional.ToEntityHeader(), org, errors: "challenge_store_failed");
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyBeginPasswordlessRegistrationFailed, provisionUser, org, errors: "challenge_store_failed");
                 return storeResult.ToInvokeResult<PasskeyBeginOptionsResponse>();
             }
 
             var payload = new PasskeyBeginOptionsResponse() { ChallengeId = storeResult.Result.Challenge.Id, Options = JToken.FromObject(options) };
 
-            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyBeginPasswordlessRegistrationSuccess, provisional.ToEntityHeader(), org, challengeId: payload.ChallengeId);
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyBeginPasswordlessRegistrationSuccess, provisionUser, org, challengeId: payload.ChallengeId);
 
             return InvokeResult<PasskeyBeginOptionsResponse>.Create(payload);
         }
@@ -491,12 +483,31 @@ namespace LagoVista.AspNetCore.Identity.Managers
             };
 
             var makeResult = await _fido2.MakeNewCredentialAsync(new MakeNewCredentialParams() { AttestationResponse = attestationResponse, OriginalOptions = options, IsCredentialIdUniqueToUserCallback = isUnique }, CancellationToken.None);
+           
+            var registration = new RegisterUser()
+            {
+                AppId = "1844A92CDDDF4B59A3BB294A1524D93A", // The one, the only app id for NuvIoT.
+                ClientType = "WEBAPP",
+                DeviceId = "BROWSER",
+                Source = UserCreationSource.Passkey,
+                LoginType = LoginTypes.AppUser
+            };
+
+            var credentialid = Base64UrlEncode(makeResult.Id);
+
+            var createUserResponse = await _userRegistrationManager.CreateUserAsync(registration, true);
+            if(!createUserResponse.Successful) return createUserResponse.ToInvokeResult<PasskeySignInResult>();
+            if (!createUserResponse.Successful)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyCompletePasswordlessRegistrationFailed, user, org, errors: $"credential_add_failedn {createUserResponse.ErrorMessage}", challengeId: challengeId, credentialId: credentialid, assertionId: payload.Attestation?.Id);
+                return createUserResponse.ToInvokeResult<PasskeySignInResult>();
+            }
 
             var cred = new PasskeyCredential()
             {
-                UserId = userId,
+                UserId = createUserResponse.Result.AppUser.Id,
                 RpId = rpId,
-                CredentialId = Base64UrlEncode(makeResult.Id),
+                CredentialId = credentialid,
                 PublicKey = Base64UrlEncode(makeResult.PublicKey),
                 SignCount = makeResult.SignCount,
                 CreatedUtc = DateTime.UtcNow.ToJSONString(),
@@ -504,20 +515,22 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 Name = null,
             };
 
+            // creatweUserResponse.Result.AppUser
+
             var addResult = await _credentialRepo.AddAsync(cred);
             if (!addResult.Successful)
             {
-                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyCompletePasswordlessRegistrationFailed, user, org, errors: "credential_add_failed", challengeId: challengeId, credentialId: cred.CredentialId, assertionId: payload.Attestation?.Id);
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyCompletePasswordlessRegistrationFailed, user, org, errors: $"credential_add_failed {addResult.ErrorMessage}", challengeId: challengeId, credentialId: cred.CredentialId, assertionId: payload.Attestation?.Id);
                 return addResult.ToInvokeResult<PasskeySignInResult>();
             }
 
-            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyCompletePasswordlessRegistrationSuccess, user, org, challengeId: challengeId, credentialId: cred.CredentialId, assertionId: payload.Attestation?.Id);
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyCompletePasswordlessRegistrationSuccess, user, org, createUserResponse.Result.AppUser.Id, createUserResponse.Result.AppUser.UserName, challengeId: challengeId, credentialId: cred.CredentialId, assertionId: payload.Attestation?.Id);
 
             return InvokeResult<PasskeySignInResult>.Create(new PasskeySignInResult()
             {
                 UserId = userId,
                 RequiresOnboarding = true,
-                RedirectUrl = "/auth/onboarding",
+                RedirectUrl = CommonLinks.CompleteUserRegistration,
                 Message = "Onboarding required.",
             });
         }

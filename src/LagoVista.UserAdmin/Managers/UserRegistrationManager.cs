@@ -18,6 +18,7 @@ using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Models.Testing;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Resources;
+using LagoVista.UserAdmin.Utils;
 using RingCentral;
 using System;
 using System.Collections.Generic;
@@ -101,7 +102,9 @@ namespace LagoVista.UserAdmin.Managers
                 // email-based username (existing behavior)
                 if (String.IsNullOrEmpty(newUser.Email))
                 {
-                    return null;
+                    return EntityHeader.IsNullOrEmpty(newUser.EndUserAppOrg)
+                        ? RandomNameGenerator.Generate()
+                        : $"{RandomNameGenerator.Generate()}@{newUser.EndUserAppOrg.Id}";
                 }
 
                 return EntityHeader.IsNullOrEmpty(newUser.EndUserAppOrg)
@@ -162,7 +165,7 @@ namespace LagoVista.UserAdmin.Managers
                 }
 
                 // Email required only for non-external registrations
-                if (externalLogin == null && String.IsNullOrEmpty(newUser.Email))
+                if (newUser.Source == UserCreationSource.UserSelfRegistration && String.IsNullOrEmpty(newUser.Email))
                 {
                     await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateEmailUser, userName: "NOT PROVIDED",
                         extras: $"Client Type: {newUser.ClientType}, Login Type {newUser.LoginType}");
@@ -173,7 +176,7 @@ namespace LagoVista.UserAdmin.Managers
                 }
 
                 // First/Last required only for non-external registrations
-                if (externalLogin == null)
+                if (newUser.Source == UserCreationSource.UserSelfRegistration)
                 {
                     if (String.IsNullOrEmpty(newUser.FirstName) || String.IsNullOrEmpty(newUser.LastName))
                     {
@@ -184,7 +187,7 @@ namespace LagoVista.UserAdmin.Managers
                 }
 
                 // Password required only for non-external registrations
-                if (externalLogin == null && String.IsNullOrEmpty(newUser.Password))
+                if (newUser.Source == UserCreationSource.UserSelfRegistration && String.IsNullOrEmpty(newUser.Password))
                 {
                     await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "Missing password");
                     _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.RegMissingPassword.Message);
@@ -276,6 +279,7 @@ namespace LagoVista.UserAdmin.Managers
                     externalLogin.OAuthTokenVerifier = String.Empty;
                 }
             }
+
             // --- END: CreateUserAsync helper methods (block 4) ---
 
             // --- BEGIN: CreateUserAsync helper methods (block 5) ---
@@ -284,7 +288,7 @@ namespace LagoVista.UserAdmin.Managers
                 _adminLogger.Trace($"{this.Tag()} - Before User Manager - User Type {appUser.LoginType} {appUser.LoginTypeName} Creating User Email: {appUser.Email} and User Name: {appUser.UserName}");
 
                 InvokeResult identityResult;
-                if (externalLogin == null)
+                if (newUser.Source == UserCreationSource.UserSelfRegistration)
                 {
                     identityResult = await _userManager.CreateAsync(appUser, newUser.Password);
                 }
@@ -336,9 +340,9 @@ namespace LagoVista.UserAdmin.Managers
             private async Task<InvokeResult> SendEmailConfirmationIfNeededAsync(RegisterUser newUser, AppUser appUser)
             {
                 // Per new contract: if no email, skip completely
-                if (String.IsNullOrEmpty(appUser.Email))
+                if(newUser.Source != UserCreationSource.UserSelfRegistration)
                 {
-                    _adminLogger.Trace($"{this.Tag()} Send Email Confirmation - Skipped (no email).");
+                    _adminLogger.Trace($"{this.Tag()} Send Email Confirmation - Skipped for source {newUser.Source}.");
                     return InvokeResult.Success;
                 }
 

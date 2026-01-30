@@ -12,8 +12,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LagoVista.UserAdmin.Models.DTOs
 {
+    public enum UserCreationSource
+    {
+        NotSet,
+        UserSelfRegistration,
+        OAuth,
+        Passkey
+    }
+
     public class RegisterUser : IValidateable
     {
+        [JsonProperty("source")]
+        public UserCreationSource Source { get; set; } = UserCreationSource.NotSet;
 
         [JsonProperty("loginType")]
         public LoginTypes LoginType { get; set; } 
