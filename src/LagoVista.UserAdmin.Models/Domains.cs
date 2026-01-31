@@ -13,7 +13,6 @@ namespace LagoVista.UserAdmin.Models
     {
 
         public const string NotificationsDomain = "NotificationsDomain";
-        public const string AuthDomain = "AuthDomain";
         public const string UserDomain = "UserDomain";
         public const string OrganizationDomain = "OrganizationDomain";
         public const string OrgLocations = "OrgLocations";
@@ -21,6 +20,54 @@ namespace LagoVista.UserAdmin.Models
         public const string EmailServicesDomain = "EmailServices";
         public const string MiscDomain = "MiscDomain";
         public const string AuthTesting = "AuthTesting";
+        public const string AuthDomain = "AuthDomain";
+
+        [DomainDescription(AuthDomain)]
+        public static DomainDescription AuthDomainDescription
+        {
+            get
+            {
+                return new DomainDescription()
+                {
+                    Description = "Authentication and authorization services.",
+                    DomainType = DomainDescription.DomainTypes.BusinessObject,
+                    Name = "Auth",
+                    CurrentVersion = new Core.Models.VersionInfo()
+                    {
+                        Major = 0,
+                        Minor = 8,
+                        Build = 001,
+                        DateStamp = new DateTime(2016, 12, 20),
+                        Revision = 1,
+                        ReleaseNotes = "Initial unstable preview"
+                    }
+                };
+            }
+        }
+
+
+        [DomainDescription(AuthTesting)]
+        public static DomainDescription AuthTestingDomain
+        {
+            get
+            {
+                return new DomainDescription()
+                {
+                    Description = "Serices and Models for Authentication and authorization services.",
+                    DomainType = DomainDescription.DomainTypes.BusinessObject,
+                    Name = "AuthTesting",
+                    CurrentVersion = new Core.Models.VersionInfo()
+                    {
+                        Major = 0,
+                        Minor = 8,
+                        Build = 001,
+                        DateStamp = new DateTime(2016, 12, 20),
+                        Revision = 1,
+                        ReleaseNotes = "Initial unstable preview"
+                    }
+                };
+            }
+        }
 
         [DomainDescription(NotificationsDomain)]
         public static DomainDescription NotificationsDomainDescription
@@ -32,53 +79,6 @@ namespace LagoVista.UserAdmin.Models
                     Description = "Notifications for users or systems.",
                     DomainType = DomainDescription.DomainTypes.BusinessObject,
                     Name = "Notifications",
-                    CurrentVersion = new Core.Models.VersionInfo()
-                    {
-                        Major = 0,
-                        Minor = 8,
-                        Build = 001,
-                        DateStamp = new DateTime(2016, 12, 20),
-                        Revision = 1,
-                        ReleaseNotes = "Initial unstable preview"
-                    }
-                };
-            }
-        }
-
-        [DomainDescription(AuthDomain)]
-        public static DomainDescription AuthenticationDomain
-        {
-            get
-            {
-                return new DomainDescription()
-                {
-                    Description = "Authentication Models and Services.",
-                    DomainType = DomainDescription.DomainTypes.BusinessObject,
-                    Name = "Auth Domain",
-                    CurrentVersion = new Core.Models.VersionInfo()
-                    {
-                        Major = 0,
-                        Minor = 8,
-                        Build = 001,
-                        DateStamp = new DateTime(2016, 12, 20),
-                        Revision = 1,
-                        ReleaseNotes = "Initial unstable preview"
-                    }
-                };
-            }
-        }
-
-
-        [DomainDescription(AuthDomain)]
-        public static DomainDescription AuthDomainDescription
-        {
-            get
-            {
-                return new DomainDescription()
-                {
-                    Description = "Authentication Models and Services.",
-                    DomainType = DomainDescription.DomainTypes.BusinessObject,
-                    Name = "Auth Domain",
                     CurrentVersion = new Core.Models.VersionInfo()
                     {
                         Major = 0,

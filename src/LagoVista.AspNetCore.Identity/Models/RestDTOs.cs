@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 namespace LagoVista.UserAdmin.Models.Auth.Passkeys
 {
     [EntityDescription(
-        Domains.AuthDomain,
+          Domains.AuthDomain,
         UserAdminResources.Names.PasskeyRegistrationCompleteRequestWire_Name,
         UserAdminResources.Names.PasskeyRegistrationCompleteRequestWire_Help,
         UserAdminResources.Names.PasskeyRegistrationCompleteRequestWire_Description,
@@ -23,7 +23,7 @@ namespace LagoVista.UserAdmin.Models.Auth.Passkeys
     }
 
     [EntityDescription(
-        Domains.AuthDomain,
+          Domains.AuthDomain,
         UserAdminResources.Names.PasskeyAuthenticationCompleteRequestWire_Name,
         UserAdminResources.Names.PasskeyAuthenticationCompleteRequestWire_Help,
         UserAdminResources.Names.PasskeyAuthenticationCompleteRequestWire_Description,

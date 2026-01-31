@@ -6,7 +6,7 @@ using System;
 namespace LagoVista.UserAdmin.Models.Security.Passkeys
 {
     [EntityDescription(
-        Domains.AuthDomain,
+          Domains.AuthDomain,
         UserAdminResources.Names.PasskeySignInResult_Name,
         UserAdminResources.Names.PasskeySignInResult_Help,
         UserAdminResources.Names.PasskeySignInResult_Description,

@@ -2,6 +2,7 @@ using LagoVista.Core.Attributes;
 using LagoVista.Core.Authentication.Models;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
+using LagoVista.UserAdmin.Models;
 
 namespace Security.Models
 {
@@ -15,7 +16,7 @@ namespace Security.Models
     /// Optional attachment: Invite context.
     /// </summary>
     [EntityDescription(
-        Domains.AuthenticationDomain,
+        Domains.AuthDomain,
         UserAdminResources.Names.PendingIdentity_Name,
         UserAdminResources.Names.PendingIdentity_Help,
         UserAdminResources.Names.PendingIdentity_Description,

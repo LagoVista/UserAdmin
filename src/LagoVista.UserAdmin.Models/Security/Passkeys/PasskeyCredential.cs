@@ -8,7 +8,7 @@ using System;
 namespace LagoVista.UserAdmin.Models.Security.Passkeys
 {
     [EntityDescription(
-        Domains.AuthDomain,
+         Domains.AuthDomain,
         UserAdminResources.Names.PasskeyCredential_Name,
         UserAdminResources.Names.PasskeyCredential_Help,
         UserAdminResources.Names.PasskeyCredential_Description,
