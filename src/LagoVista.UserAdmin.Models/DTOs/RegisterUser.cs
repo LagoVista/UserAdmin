@@ -5,6 +5,7 @@
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
+using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Models.Users;
 using Newtonsoft.Json;
 using System;
@@ -20,34 +21,48 @@ namespace LagoVista.UserAdmin.Models.DTOs
         Passkey
     }
 
+    [EntityDescription(
+        Domains.UserDomain,
+        UserAdminResources.Names.RegisterUser_Name,
+        UserAdminResources.Names.RegisterUser_Help,
+        UserAdminResources.Names.RegisterUser_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class RegisterUser : IValidateable
     {
         [JsonProperty("source")]
         public UserCreationSource Source { get; set; } = UserCreationSource.NotSet;
 
         [JsonProperty("loginType")]
-        public LoginTypes LoginType { get; set; } 
+        public LoginTypes LoginType { get; set; }
 
         [JsonProperty("appId")]
-        public String AppId { get; set; }
+        public string AppId { get; set; }
 
         [JsonProperty("orgId")]
         public string OrgId { get; set; }
 
         [JsonProperty("appInstanceId")]
-        public String AppInstanceId { get; set; }
+        public string AppInstanceId { get; set; }
+
         [JsonProperty("clientType")]
-        public String ClientType { get; set; }
+        public string ClientType { get; set; }
+
         [JsonProperty("deviceId")]
-        public String DeviceId { get; set; }
+        public string DeviceId { get; set; }
+
         [JsonProperty("firstName")]
         public string FirstName { get; set; }
+
         [JsonProperty("lastName")]
         public string LastName { get; set; }
+
         [JsonProperty("email")]
         public string Email { get; set; }
+
         [JsonProperty("password")]
         public string Password { get; set; }
+
         [JsonProperty("inviteId")]
         public string InviteId { get; set; }
 
@@ -57,11 +72,12 @@ namespace LagoVista.UserAdmin.Models.DTOs
 
         [JsonProperty("customerName")]
         public string CustomerName { get; set; }
+
         [JsonProperty("customerCity")]
         public string CustomerCity { get; set; }
+
         [JsonProperty("customerState")]
         public string CustomerState { get; set; }
-
 
         [CustomValidator]
         public void Validate(Core.Validation.ValidationResult result, Actions action)
@@ -71,11 +87,12 @@ namespace LagoVista.UserAdmin.Models.DTOs
                 var email = new EmailAddressAttribute();
                 if (!email.IsValid(Email)) result.AddUserError($"Invalid Email Address {Email}.");
             }
-            switch(LoginType)
+
+            switch (LoginType)
             {
                 case LoginTypes.AppEndUser:
                     if (String.IsNullOrEmpty(OrgId) && EntityHeader.IsNullOrEmpty(EndUserAppOrg)) result.AddUserError("When LoginType is AppEnduser, either OrgId or EndUserAppOg is required.");
-                    if(String.IsNullOrEmpty(CustomerName)) result.AddUserError("When LoginType is AppEnduser, CustomerName is required.");
+                    if (String.IsNullOrEmpty(CustomerName)) result.AddUserError("When LoginType is AppEnduser, CustomerName is required.");
                     if (String.IsNullOrEmpty(CustomerCity)) result.AddUserError("When LoginType is AppEnduser, CustomerCity is required.");
                     if (String.IsNullOrEmpty(CustomerState)) result.AddUserError("When LoginType is AppEnduser, CustomerState is required.");
                     break;

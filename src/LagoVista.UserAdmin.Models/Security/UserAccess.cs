@@ -2,12 +2,21 @@
 // ContentHash: 421edffaf65a5704a9356226c5c507e0d2b987492d50ee8a4efde894c12246b6
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.Attributes;
+using LagoVista.UserAdmin.Models.Resources;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
+    [EntityDescription(
+        Domains.OrganizationDomain,
+        UserAdminResources.Names.UserAccess_Name,
+        UserAdminResources.Names.UserAccess_Help,
+        UserAdminResources.Names.UserAccess_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class UserAccess
     {
         public const int Revoke = -1;
@@ -68,10 +77,10 @@ namespace LagoVista.UserAdmin.Models.Security
             if (!Read.HasValue || Read.Value == UserAccess.NotSpecified)
                 Read = UserAccess.Revoke;
 
-            if(!Update.HasValue || Update.Value == UserAccess.NotSpecified)
+            if (!Update.HasValue || Update.Value == UserAccess.NotSpecified)
                 Update = UserAccess.Revoke;
 
-            if (!Delete.HasValue || Delete.Value == UserAccess.NotSpecified )
+            if (!Delete.HasValue || Delete.Value == UserAccess.NotSpecified)
                 Delete = UserAccess.Revoke;
         }
     }

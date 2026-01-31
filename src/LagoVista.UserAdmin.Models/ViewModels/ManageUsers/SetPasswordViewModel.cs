@@ -10,7 +10,7 @@ using LagoVista.UserAdmin.Resources;
 
 namespace LagoVista.UserAdmin.ViewModels.ManageUsers
 {
-    [EntityDescription(Domains.SecurityViewModels, UserAdminResources.Names.SetPasswordVM_Title, UserAdminResources.Names.SetPasswordVM_Help, UserAdminResources.Names.SetPasswordVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.SetPasswordVM_Title, UserAdminResources.Names.SetPasswordVM_Help, UserAdminResources.Names.SetPasswordVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class SetPasswordViewModel : IValidateable
     {       
         [FormField(LabelResource: UserAdminResources.Names.AppUser_Password, FieldType: FieldTypes.Password, IsRequired: true, ResourceType: typeof(UserAdminResources))]

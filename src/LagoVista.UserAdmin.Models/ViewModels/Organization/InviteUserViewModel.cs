@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.ViewModels.Organization
 {
-    [EntityDescription(Domains.OrganizationViewModels, UserAdminResources.Names.InviteUserVM_Title, UserAdminResources.Names.InviteUserVM_Help, 
+    [EntityDescription(Domains.UserDomain, UserAdminResources.Names.InviteUserVM_Title, UserAdminResources.Names.InviteUserVM_Help, 
         UserAdminResources.Names.InviteUserVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class InviteUserViewModel : IFormDescriptor
     {

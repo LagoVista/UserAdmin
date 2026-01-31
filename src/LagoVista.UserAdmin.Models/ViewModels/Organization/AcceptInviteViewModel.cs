@@ -17,7 +17,7 @@ namespace LagoVista.UserAdmin.ViewModels.Organization
         Register
     }
 
-    [EntityDescription(Domains.UserViewModels, UserAdminResources.Names.AcceptInviteVM_Title, UserAdminResources.Names.AcceptInviteVM_Help, UserAdminResources.Names.AcceptInviteVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(Domains.UserDomain, UserAdminResources.Names.AcceptInviteVM_Title, UserAdminResources.Names.AcceptInviteVM_Help, UserAdminResources.Names.AcceptInviteVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class AcceptInviteViewModel
     {
         public string InviteId { get; set; }

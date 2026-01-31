@@ -1,10 +1,19 @@
-﻿using System;
+﻿using LagoVista.Core.Attributes;
+using LagoVista.UserAdmin.Models.Resources;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Auth
 {
-    public sealed class MobileOAuthPendingAuth 
+    [EntityDescription(
+        Domains.AuthDomain,
+        UserAdminResources.Names.MobileOAuthPendingAuth_Name,
+        UserAdminResources.Names.MobileOAuthPendingAuth_Help,
+        UserAdminResources.Names.MobileOAuthPendingAuth_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
+    public sealed class MobileOAuthPendingAuth
     {
         /// <summary>
         /// One-time code returned to the mobile app via deep link.
@@ -42,7 +51,7 @@ namespace LagoVista.UserAdmin.Models.Auth
         /// <summary>
         /// When this record was created.
         /// </summary>
-        public string CreationDate { get; set; } 
+        public string CreationDate { get; set; }
 
         /// <summary>
         /// Absolute expiration time (usually CreatedAt + 1–2 minutes).

@@ -12,7 +12,7 @@ using System;
 
 namespace LagoVista.UserAdmin.Models.Users
 {
-    [EntityDescription(Domains.UserDomain, UserAdminResources.Names.LocationUser_Title, UserAdminResources.Names.LocationUser_Help, UserAdminResources.Names.LocationUser_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
+    [EntityDescription(Domains.OrgLocations, UserAdminResources.Names.LocationUser_Title, UserAdminResources.Names.LocationUser_Help, UserAdminResources.Names.LocationUser_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
     public class LocationUser : TableStorageEntity, IValidateable, ITableStorageAuditableEntity
     {
         /* Id will becomposed o */

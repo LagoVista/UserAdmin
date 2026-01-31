@@ -13,6 +13,7 @@ using LagoVista.UserAdmin.Interfaces.Repos.Security.Passkeys;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Auth;
+using LagoVista.UserAdmin.Models.Auth.Passkeys;
 using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Models.Security.Passkeys;
 using LagoVista.UserAdmin.Models.Users;

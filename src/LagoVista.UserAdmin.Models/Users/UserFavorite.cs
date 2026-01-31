@@ -3,14 +3,23 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core;
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
+using LagoVista.UserAdmin.Models.Resources;
 using System;
 using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.Models.Users
 {
+    [EntityDescription(
+        Domains.OrganizationDomain,
+        UserAdminResources.Names.UserFavorites_Name,
+        UserAdminResources.Names.UserFavorites_Help,
+        UserAdminResources.Names.UserFavorites_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class UserFavorites : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity
     {
         public UserFavorites()
@@ -20,10 +29,11 @@ namespace LagoVista.UserAdmin.Models.Users
             Modules = new List<FavoritesByModule>();
             Key = Id.ToLower();
         }
+
         public List<UserFavorite> Favorites { get; set; }
-        
+
         public List<FavoritesByModule> Modules { get; set; }
-        
+
         public static string GenerateId(EntityHeader org, EntityHeader user)
         {
             return $"{nameof(UserFavorites).ToLower()}-{org.Id}-{user.Id}";
@@ -35,6 +45,13 @@ namespace LagoVista.UserAdmin.Models.Users
         }
     }
 
+    [EntityDescription(
+        Domains.OrganizationDomain,
+        UserAdminResources.Names.FavoritesByModule_Name,
+        UserAdminResources.Names.FavoritesByModule_Help,
+        UserAdminResources.Names.FavoritesByModule_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class FavoritesByModule
     {
         public FavoritesByModule()
@@ -48,6 +65,13 @@ namespace LagoVista.UserAdmin.Models.Users
         public List<UserFavorite> Items { get; set; }
     }
 
+    [EntityDescription(
+        Domains.OrganizationDomain,
+        UserAdminResources.Names.UserFavorite_Name,
+        UserAdminResources.Names.UserFavorite_Help,
+        UserAdminResources.Names.UserFavorite_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class UserFavorite
     {
         public UserFavorite()

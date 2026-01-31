@@ -2,8 +2,10 @@
 // ContentHash: 96fa1b340cf8c42c73925f6a544ff4c45b27a08dd1c94e8a088c005658d00168
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models.DTOs;
+using LagoVista.UserAdmin.Models.Resources;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
@@ -15,6 +17,13 @@ namespace LagoVista.UserAdmin.Models.Security
         Feature
     }
 
+    [EntityDescription(
+        Domains.SecurityDomain,
+        UserAdminResources.Names.RoleAccess_Name,
+        UserAdminResources.Names.RoleAccess_Help,
+        UserAdminResources.Names.RoleAccess_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class RoleAccess
     {
         public string Id { get; set; }
@@ -37,7 +46,6 @@ namespace LagoVista.UserAdmin.Models.Security
         public int Update { get; set; }
         public int Delete { get; set; }
         public string Other { get; set; }
-
 
         public RoleAccessDTO ToDTO()
         {
@@ -101,12 +109,10 @@ namespace LagoVista.UserAdmin.Models.Security
             };
         }
 
-
         private int? Calculate(int? existingLevel, int? newLevel)
         {
             if (!existingLevel.HasValue || existingLevel.Value == UserAccess.NotSpecified)
                 return newLevel.Value;
-
 
             return newLevel.Value;
         }

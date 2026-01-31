@@ -5,13 +5,20 @@
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
-
+using LagoVista.UserAdmin.Models.Resources;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
+    [EntityDescription(
+        Domains.OrgLocations,
+        UserAdminResources.Names.LocationDevice_Name,
+        UserAdminResources.Names.LocationDevice_Help,
+        UserAdminResources.Names.LocationDevice_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class LocationDevice : IValidateable
     {
-        [FormField(IsRequired:true)]
+        [FormField(IsRequired: true)]
         public EntityHeader DeviceRepo { get; set; }
 
         [FormField(IsRequired: true)]

@@ -1,3 +1,6 @@
+using LagoVista.Core.Attributes;
+using LagoVista.Core.Authentication.Models;
+using LagoVista.UserAdmin.Models.Resources;
 using System;
 
 namespace Security.Models
@@ -11,6 +14,13 @@ namespace Security.Models
     /// Auth buckets: Password, NativeProvider, OAuthExternalLogin, Passkey.
     /// Optional attachment: Invite context.
     /// </summary>
+    [EntityDescription(
+        Domains.AuthenticationDomain,
+        UserAdminResources.Names.PendingIdentity_Name,
+        UserAdminResources.Names.PendingIdentity_Help,
+        UserAdminResources.Names.PendingIdentity_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class PendingIdentity
     {
         // -----------------------------

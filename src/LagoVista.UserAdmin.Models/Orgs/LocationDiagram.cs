@@ -47,7 +47,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         Bottom
     }
 
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.LocationDiagram_Title, UserAdminResources.Names.LocationDiagrams_Description, UserAdminResources.Names.LocationDiagrams_Description,
+    [EntityDescription(Domains.OrgLocations, UserAdminResources.Names.LocationDiagram_Title, UserAdminResources.Names.LocationDiagrams_Description, UserAdminResources.Names.LocationDiagrams_Description,
         EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "icon-pz-worldwide-1",
         GetListUrl: "/api/org/location/diagrams", DeleteUrl: "/api/org/location/diagram/{id}", 
         GetUrl: "/api/org/location/diagram/{id}", SaveUrl: "/api/org/location/diagram", FactoryUrl: "/api/org/location/diagram")]

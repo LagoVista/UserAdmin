@@ -1,5 +1,6 @@
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
+using LagoVista.UserAdmin.Models.Auth.Passkeys;
 using LagoVista.UserAdmin.Models.Security.Passkeys;
 using System.Threading.Tasks;
 

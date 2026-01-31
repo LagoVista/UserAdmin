@@ -1,8 +1,17 @@
+using LagoVista.Core.Attributes;
+using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Models.Users;
 using System;
 
 namespace LagoVista.UserAdmin.Models.Security.Passkeys
 {
+    [EntityDescription(
+        Domains.AuthDomain,
+        UserAdminResources.Names.PasskeySignInResult_Name,
+        UserAdminResources.Names.PasskeySignInResult_Help,
+        UserAdminResources.Names.PasskeySignInResult_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class PasskeySignInResult
     {
         public AppUser User { get; set; }

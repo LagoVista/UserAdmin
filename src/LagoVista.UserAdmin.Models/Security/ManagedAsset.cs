@@ -2,13 +2,22 @@
 // ContentHash: bb4bb8c06fef52d35514604b7b876a35af6beb4f2ba8e2228d9c719ac6215c1d
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
+using LagoVista.UserAdmin.Models.Resources;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
+    [EntityDescription(
+        Domains.UserDomain,
+        UserAdminResources.Names.ManagedAsset_Name,
+        UserAdminResources.Names.ManagedAsset_Help,
+        UserAdminResources.Names.ManagedAsset_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class ManagedAsset : TableStorageEntity
     {
         public ManagedAsset(EntityHeader assetSet, EntityHeader asset, String assetType)
@@ -20,27 +29,27 @@ namespace LagoVista.UserAdmin.Models.Security
             AssetSetId = assetSet.Id;
             AssetSetName = assetSet.Text;
         }
+
         public ManagedAsset()
         {
 
         }
 
-        public String AssetSetId { get; set; }
+        public string AssetSetId { get; set; }
         public string AssetSetName { get; set; }
-        public String AssetId { get; set; }
+        public string AssetId { get; set; }
         public string AssetName { get; set; }
-        public String AssetType { get; set; }
+        public string AssetType { get; set; }
 
-        public static String CreateRowKey(EntityHeader assetSet, EntityHeader asset)
+        public static string CreateRowKey(EntityHeader assetSet, EntityHeader asset)
         {
             return $"{assetSet.Id}.{asset.Id}";
         }
 
-        public static String CreateRowKey(string assetSetId, string assetId)
+        public static string CreateRowKey(string assetSetId, string assetId)
         {
             return $"{assetSetId}.{assetId}";
         }
-
 
         public ManagedAssetSummary CreateSummary()
         {
@@ -53,9 +62,15 @@ namespace LagoVista.UserAdmin.Models.Security
         }
     }
 
+    [EntityDescription(
+        Domains.OrganizationDomain,
+        UserAdminResources.Names.ManagedAssetSummary_Name,
+        UserAdminResources.Names.ManagedAssetSummary_Help,
+        UserAdminResources.Names.ManagedAssetSummary_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class ManagedAssetSummary : SummaryData
     {
-        public String AssetType { get; set; }
-
+        public string AssetType { get; set; }
     }
 }

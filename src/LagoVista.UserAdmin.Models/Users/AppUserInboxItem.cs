@@ -3,25 +3,33 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core;
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
+using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Repos.Repos.Account;
 using System;
 
 namespace LagoVista.UserAdmin.Models.Users
 {
+    [EntityDescription(
+        Domains.OrganizationDomain,
+        UserAdminResources.Names.AppUserInboxItem_Name,
+        UserAdminResources.Names.AppUserInboxItem_Help,
+        UserAdminResources.Names.AppUserInboxItem_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class AppUserInboxItem : TableStorageEntity, IValidateable, ITableStorageAuditableEntity
     {
-        public bool Viewed { get; set; }        
+        public bool Viewed { get; set; }
         public string ViewedTimeStamp { get; set; }
 
-
-        public String UserId { get; set; }
+        public string UserId { get; set; }
         public string OrgId { get; set; }
 
         public string Type { get; set; }
-        
+
         public string Icon { get; set; }
         public string Title { get; set; }
         public string Summary { get; set; }
@@ -58,6 +66,13 @@ namespace LagoVista.UserAdmin.Models.Users
         }
     }
 
+    [EntityDescription(
+        Domains.OrganizationDomain,
+        UserAdminResources.Names.NewAppUserInboxItemItem_Name,
+        UserAdminResources.Names.NewAppUserInboxItemItem_Help,
+        UserAdminResources.Names.NewAppUserInboxItemItem_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class NewAppUserInboxItemItem
     {
         public EntityHeader Organiation { get; set; }
@@ -99,7 +114,5 @@ namespace LagoVista.UserAdmin.Models.Users
                 LastUpdatedDate = timeStamp,
             };
         }
-
     }
-
 }

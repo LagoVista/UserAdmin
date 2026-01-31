@@ -16,7 +16,7 @@ using LagoVista.Core.Models.Geo;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Location_Title, UserAdminResources.Names.Organization_Location_Help,
+    [EntityDescription(Domains.OrgLocations, UserAdminResources.Names.Organization_Location_Title, UserAdminResources.Names.Organization_Location_Help,
         UserAdminResources.Names.Organization_Location_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
         GetListUrl: "/api/org/locations", GetUrl: "/api/org/location/{id}", SaveUrl: "/api/org/location", FactoryUrl: "/api/org/location/factory", DeleteUrl: "/api/org/location/{id}", Icon: "icon-fo-office")]
     public class OrgLocation : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IIconEntity, IFormDescriptor, IFormDescriptorAdvanced, IFormDescriptorAdvancedCol2, ISummaryFactory

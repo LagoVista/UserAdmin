@@ -2,7 +2,9 @@
 // ContentHash: 644566c8e53e254ae70665d51fbe5d0c5dcad02c90a6e5e7d52bc89cbf277d22
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
+using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Models.Security;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,13 @@ using System.Text;
 
 namespace LagoVista.UserAdmin.Models.DTOs
 {
+    [EntityDescription(
+        Domains.SecurityDomain,
+        UserAdminResources.Names.RoleAccessDTO_Name,
+        UserAdminResources.Names.RoleAccessDTO_Help,
+        UserAdminResources.Names.RoleAccessDTO_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class RoleAccessDTO : TableStorageEntity
     {
         public string RoleId { get; set; }
@@ -48,7 +57,6 @@ namespace LagoVista.UserAdmin.Models.DTOs
         public string FunctionMapFunctionId { get; set; }
         public string FunctionMapFunctionKey { get; set; }
         public string FunctionMapFunctionName { get; set; }
-
 
         public int Create { get; set; }
         public int Read { get; set; }
@@ -91,7 +99,6 @@ namespace LagoVista.UserAdmin.Models.DTOs
             {
                 roleAccess.Area = EntityHeader.Create(FeatureId, FeatureKey, FeatureName);
             }
-
 
             return roleAccess;
         }

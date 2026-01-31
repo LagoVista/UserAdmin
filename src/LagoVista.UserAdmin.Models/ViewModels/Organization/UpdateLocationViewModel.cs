@@ -12,7 +12,7 @@ using LagoVista.UserAdmin.Models.Resources;
 
 namespace LagoVista.UserAdmin.ViewModels.Organization
 {
-    [EntityDescription(Domains.OrganizationViewModels, UserAdminResources.Names.UpdateLocationVM_Title, UserAdminResources.Names.UpdateLocationVM_Help, UserAdminResources.Names.UpdateLocatoinVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.UpdateLocationVM_Title, UserAdminResources.Names.UpdateLocationVM_Help, UserAdminResources.Names.UpdateLocatoinVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class UpdateLocationViewModel : LocationViewModel
     {
         public String LocationId { get; set; }

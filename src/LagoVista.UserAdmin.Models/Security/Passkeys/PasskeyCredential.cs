@@ -1,10 +1,19 @@
 using LagoVista.Core;
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
+using LagoVista.UserAdmin.Models.Resources;
 using Newtonsoft.Json;
 using System;
 
 namespace LagoVista.UserAdmin.Models.Security.Passkeys
 {
+    [EntityDescription(
+        Domains.AuthDomain,
+        UserAdminResources.Names.PasskeyCredential_Name,
+        UserAdminResources.Names.PasskeyCredential_Help,
+        UserAdminResources.Names.PasskeyCredential_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class PasskeyCredential
     {
         public string Id { get; set; } = Guid.NewGuid().ToId();

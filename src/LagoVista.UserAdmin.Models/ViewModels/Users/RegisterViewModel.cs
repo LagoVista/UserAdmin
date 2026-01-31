@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.ViewModels.Users
 {
-    [EntityDescription(Domains.UserViewModels, UserAdminResources.Names.RegisterVM_Title, UserAdminResources.Names.RegisterVM_Help, UserAdminResources.Names.RegisterVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(Domains.UserDomain, UserAdminResources.Names.RegisterVM_Title, UserAdminResources.Names.RegisterVM_Help, UserAdminResources.Names.RegisterVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class RegisterViewModel : IValidateable, IFormDescriptor
     {
         public string AppId { get; set; }

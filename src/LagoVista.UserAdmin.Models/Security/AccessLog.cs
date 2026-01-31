@@ -2,12 +2,21 @@
 // ContentHash: 56c8d8aac08af0411f7cbb9b7afd19997ee9188d9b714fad03878b87dcba69f2
 // IndexVersion: 2
 // --- END CODE INDEX META ---
-using LagoVista.Core.Models;
-using System;
 using LagoVista.Core;
+using LagoVista.Core.Attributes;
+using LagoVista.Core.Models;
+using LagoVista.UserAdmin.Models.Resources;
+using System;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
+    [EntityDescription(
+        Domains.SecurityDomain,
+        UserAdminResources.Names.AccessLog_Name,
+        UserAdminResources.Names.AccessLog_Help,
+        UserAdminResources.Names.AccessLog_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class AccessLog : TableStorageEntity
     {
         public AccessLog(string resource, string resourceId)

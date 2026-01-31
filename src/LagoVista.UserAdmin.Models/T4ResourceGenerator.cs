@@ -1,8 +1,8 @@
-﻿/*1/30/2026 8:35:10 AM*/
+﻿/*1/31/2026 5:43:34 PM*/
 using System.Globalization;
 using System.Reflection;
 
-//Resources:UserAdminResources:AcceptInviteVM_Description
+//Resources:UserAdminResources:AcceptInviteResponse_Description
 namespace LagoVista.UserAdmin.Models.Resources
 {
 	public class UserAdminResources
@@ -56,6 +56,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 			return new HtmlString(str);
         }*/
 		
+		public static string AcceptInviteResponse_Description { get { return GetResourceString("AcceptInviteResponse_Description"); } }
+//Resources:UserAdminResources:AcceptInviteResponse_Help
+
+		public static string AcceptInviteResponse_Help { get { return GetResourceString("AcceptInviteResponse_Help"); } }
+//Resources:UserAdminResources:AcceptInviteResponse_Name
+
+		public static string AcceptInviteResponse_Name { get { return GetResourceString("AcceptInviteResponse_Name"); } }
+//Resources:UserAdminResources:AcceptInviteVM_Description
+
 		public static string AcceptInviteVM_Description { get { return GetResourceString("AcceptInviteVM_Description"); } }
 //Resources:UserAdminResources:AcceptInviteVM_Help
 
@@ -63,6 +72,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AcceptInviteVM_Title
 
 		public static string AcceptInviteVM_Title { get { return GetResourceString("AcceptInviteVM_Title"); } }
+//Resources:UserAdminResources:AccessLog_Description
+
+		public static string AccessLog_Description { get { return GetResourceString("AccessLog_Description"); } }
+//Resources:UserAdminResources:AccessLog_Help
+
+		public static string AccessLog_Help { get { return GetResourceString("AccessLog_Help"); } }
+//Resources:UserAdminResources:AccessLog_Name
+
+		public static string AccessLog_Name { get { return GetResourceString("AccessLog_Name"); } }
 //Resources:UserAdminResources:Admin_Contact
 
 		public static string Admin_Contact { get { return GetResourceString("Admin_Contact"); } }
@@ -171,6 +189,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AppUser_UserTitle
 
 		public static string AppUser_UserTitle { get { return GetResourceString("AppUser_UserTitle"); } }
+//Resources:UserAdminResources:AppUserInboxItem_Description
+
+		public static string AppUserInboxItem_Description { get { return GetResourceString("AppUserInboxItem_Description"); } }
+//Resources:UserAdminResources:AppUserInboxItem_Help
+
+		public static string AppUserInboxItem_Help { get { return GetResourceString("AppUserInboxItem_Help"); } }
+//Resources:UserAdminResources:AppUserInboxItem_Name
+
+		public static string AppUserInboxItem_Name { get { return GetResourceString("AppUserInboxItem_Name"); } }
 //Resources:UserAdminResources:AppUserTestingDSL_Action
 
 		public static string AppUserTestingDSL_Action { get { return GetResourceString("AppUserTestingDSL_Action"); } }
@@ -228,6 +255,33 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AppUserTestingExpectedOutcome_Title
 
 		public static string AppUserTestingExpectedOutcome_Title { get { return GetResourceString("AppUserTestingExpectedOutcome_Title"); } }
+//Resources:UserAdminResources:AppUserTestRun_Description
+
+		public static string AppUserTestRun_Description { get { return GetResourceString("AppUserTestRun_Description"); } }
+//Resources:UserAdminResources:AppUserTestRun_Help
+
+		public static string AppUserTestRun_Help { get { return GetResourceString("AppUserTestRun_Help"); } }
+//Resources:UserAdminResources:AppUserTestRun_Name
+
+		public static string AppUserTestRun_Name { get { return GetResourceString("AppUserTestRun_Name"); } }
+//Resources:UserAdminResources:AppUserTestRunEvent_Description
+
+		public static string AppUserTestRunEvent_Description { get { return GetResourceString("AppUserTestRunEvent_Description"); } }
+//Resources:UserAdminResources:AppUserTestRunEvent_Help
+
+		public static string AppUserTestRunEvent_Help { get { return GetResourceString("AppUserTestRunEvent_Help"); } }
+//Resources:UserAdminResources:AppUserTestRunEvent_Name
+
+		public static string AppUserTestRunEvent_Name { get { return GetResourceString("AppUserTestRunEvent_Name"); } }
+//Resources:UserAdminResources:AppUserTestRunSummary_Description
+
+		public static string AppUserTestRunSummary_Description { get { return GetResourceString("AppUserTestRunSummary_Description"); } }
+//Resources:UserAdminResources:AppUserTestRunSummary_Help
+
+		public static string AppUserTestRunSummary_Help { get { return GetResourceString("AppUserTestRunSummary_Help"); } }
+//Resources:UserAdminResources:AppUserTestRunSummary_Name
+
+		public static string AppUserTestRunSummary_Name { get { return GetResourceString("AppUserTestRunSummary_Name"); } }
 //Resources:UserAdminResources:AppUserTestScenario_AuthView
 
 		public static string AppUserTestScenario_AuthView { get { return GetResourceString("AppUserTestScenario_AuthView"); } }
@@ -360,6 +414,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AuthError_NotSysAdmin
 
 		public static string AuthError_NotSysAdmin { get { return GetResourceString("AuthError_NotSysAdmin"); } }
+//Resources:UserAdminResources:AuthFailureRecord_Description
+
+		public static string AuthFailureRecord_Description { get { return GetResourceString("AuthFailureRecord_Description"); } }
+//Resources:UserAdminResources:AuthFailureRecord_Help
+
+		public static string AuthFailureRecord_Help { get { return GetResourceString("AuthFailureRecord_Help"); } }
+//Resources:UserAdminResources:AuthFailureRecord_Name
+
+		public static string AuthFailureRecord_Name { get { return GetResourceString("AuthFailureRecord_Name"); } }
 //Resources:UserAdminResources:AuthFieldAction_Description
 
 		public static string AuthFieldAction_Description { get { return GetResourceString("AuthFieldAction_Description"); } }
@@ -381,6 +444,96 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AuthFieldAction_Title
 
 		public static string AuthFieldAction_Title { get { return GetResourceString("AuthFieldAction_Title"); } }
+//Resources:UserAdminResources:AuthLoginRequest_Description
+
+		public static string AuthLoginRequest_Description { get { return GetResourceString("AuthLoginRequest_Description"); } }
+//Resources:UserAdminResources:AuthLoginRequest_Help
+
+		public static string AuthLoginRequest_Help { get { return GetResourceString("AuthLoginRequest_Help"); } }
+//Resources:UserAdminResources:AuthLoginRequest_Name
+
+		public static string AuthLoginRequest_Name { get { return GetResourceString("AuthLoginRequest_Name"); } }
+//Resources:UserAdminResources:AuthLogReviewSummary_Description
+
+		public static string AuthLogReviewSummary_Description { get { return GetResourceString("AuthLogReviewSummary_Description"); } }
+//Resources:UserAdminResources:AuthLogReviewSummary_Help
+
+		public static string AuthLogReviewSummary_Help { get { return GetResourceString("AuthLogReviewSummary_Help"); } }
+//Resources:UserAdminResources:AuthLogReviewSummary_Name
+
+		public static string AuthLogReviewSummary_Name { get { return GetResourceString("AuthLogReviewSummary_Name"); } }
+//Resources:UserAdminResources:AuthResponse_Description
+
+		public static string AuthResponse_Description { get { return GetResourceString("AuthResponse_Description"); } }
+//Resources:UserAdminResources:AuthResponse_Help
+
+		public static string AuthResponse_Help { get { return GetResourceString("AuthResponse_Help"); } }
+//Resources:UserAdminResources:AuthResponse_Name
+
+		public static string AuthResponse_Name { get { return GetResourceString("AuthResponse_Name"); } }
+//Resources:UserAdminResources:AuthRunnerAction_Description
+
+		public static string AuthRunnerAction_Description { get { return GetResourceString("AuthRunnerAction_Description"); } }
+//Resources:UserAdminResources:AuthRunnerAction_Help
+
+		public static string AuthRunnerAction_Help { get { return GetResourceString("AuthRunnerAction_Help"); } }
+//Resources:UserAdminResources:AuthRunnerAction_Name
+
+		public static string AuthRunnerAction_Name { get { return GetResourceString("AuthRunnerAction_Name"); } }
+//Resources:UserAdminResources:AuthRunnerArtifact_Description
+
+		public static string AuthRunnerArtifact_Description { get { return GetResourceString("AuthRunnerArtifact_Description"); } }
+//Resources:UserAdminResources:AuthRunnerArtifact_Help
+
+		public static string AuthRunnerArtifact_Help { get { return GetResourceString("AuthRunnerArtifact_Help"); } }
+//Resources:UserAdminResources:AuthRunnerArtifact_Name
+
+		public static string AuthRunnerArtifact_Name { get { return GetResourceString("AuthRunnerArtifact_Name"); } }
+//Resources:UserAdminResources:AuthRunnerInput_Description
+
+		public static string AuthRunnerInput_Description { get { return GetResourceString("AuthRunnerInput_Description"); } }
+//Resources:UserAdminResources:AuthRunnerInput_Help
+
+		public static string AuthRunnerInput_Help { get { return GetResourceString("AuthRunnerInput_Help"); } }
+//Resources:UserAdminResources:AuthRunnerInput_Name
+
+		public static string AuthRunnerInput_Name { get { return GetResourceString("AuthRunnerInput_Name"); } }
+//Resources:UserAdminResources:AuthRunnerObservations_Description
+
+		public static string AuthRunnerObservations_Description { get { return GetResourceString("AuthRunnerObservations_Description"); } }
+//Resources:UserAdminResources:AuthRunnerObservations_Help
+
+		public static string AuthRunnerObservations_Help { get { return GetResourceString("AuthRunnerObservations_Help"); } }
+//Resources:UserAdminResources:AuthRunnerObservations_Name
+
+		public static string AuthRunnerObservations_Name { get { return GetResourceString("AuthRunnerObservations_Name"); } }
+//Resources:UserAdminResources:AuthRunnerOptions_Description
+
+		public static string AuthRunnerOptions_Description { get { return GetResourceString("AuthRunnerOptions_Description"); } }
+//Resources:UserAdminResources:AuthRunnerOptions_Help
+
+		public static string AuthRunnerOptions_Help { get { return GetResourceString("AuthRunnerOptions_Help"); } }
+//Resources:UserAdminResources:AuthRunnerOptions_Name
+
+		public static string AuthRunnerOptions_Name { get { return GetResourceString("AuthRunnerOptions_Name"); } }
+//Resources:UserAdminResources:AuthRunnerPlan_Description
+
+		public static string AuthRunnerPlan_Description { get { return GetResourceString("AuthRunnerPlan_Description"); } }
+//Resources:UserAdminResources:AuthRunnerPlan_Help
+
+		public static string AuthRunnerPlan_Help { get { return GetResourceString("AuthRunnerPlan_Help"); } }
+//Resources:UserAdminResources:AuthRunnerPlan_Name
+
+		public static string AuthRunnerPlan_Name { get { return GetResourceString("AuthRunnerPlan_Name"); } }
+//Resources:UserAdminResources:AuthRunnerResult_Description
+
+		public static string AuthRunnerResult_Description { get { return GetResourceString("AuthRunnerResult_Description"); } }
+//Resources:UserAdminResources:AuthRunnerResult_Help
+
+		public static string AuthRunnerResult_Help { get { return GetResourceString("AuthRunnerResult_Help"); } }
+//Resources:UserAdminResources:AuthRunnerResult_Name
+
+		public static string AuthRunnerResult_Name { get { return GetResourceString("AuthRunnerResult_Name"); } }
 //Resources:UserAdminResources:AuthSingleuseToken_TokenNotFound
 
 		public static string AuthSingleuseToken_TokenNotFound { get { return GetResourceString("AuthSingleuseToken_TokenNotFound"); } }
@@ -573,6 +726,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AuthViews_Title
 
 		public static string AuthViews_Title { get { return GetResourceString("AuthViews_Title"); } }
+//Resources:UserAdminResources:BasicTheme_Description
+
+		public static string BasicTheme_Description { get { return GetResourceString("BasicTheme_Description"); } }
+//Resources:UserAdminResources:BasicTheme_Help
+
+		public static string BasicTheme_Help { get { return GetResourceString("BasicTheme_Help"); } }
+//Resources:UserAdminResources:BasicTheme_Name
+
+		public static string BasicTheme_Name { get { return GetResourceString("BasicTheme_Name"); } }
 //Resources:UserAdminResources:Billing_Contact
 
 		public static string Billing_Contact { get { return GetResourceString("Billing_Contact"); } }
@@ -624,6 +786,24 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:CalendarEventType_UserGroup
 
 		public static string CalendarEventType_UserGroup { get { return GetResourceString("CalendarEventType_UserGroup"); } }
+//Resources:UserAdminResources:CallLog_Description
+
+		public static string CallLog_Description { get { return GetResourceString("CallLog_Description"); } }
+//Resources:UserAdminResources:CallLog_Help
+
+		public static string CallLog_Help { get { return GetResourceString("CallLog_Help"); } }
+//Resources:UserAdminResources:CallLog_Name
+
+		public static string CallLog_Name { get { return GetResourceString("CallLog_Name"); } }
+//Resources:UserAdminResources:ChangePassword_Description
+
+		public static string ChangePassword_Description { get { return GetResourceString("ChangePassword_Description"); } }
+//Resources:UserAdminResources:ChangePassword_Help
+
+		public static string ChangePassword_Help { get { return GetResourceString("ChangePassword_Help"); } }
+//Resources:UserAdminResources:ChangePassword_Name
+
+		public static string ChangePassword_Name { get { return GetResourceString("ChangePassword_Name"); } }
 //Resources:UserAdminResources:ChangePasswordVM_Description
 
 		public static string ChangePasswordVM_Description { get { return GetResourceString("ChangePasswordVM_Description"); } }
@@ -807,12 +987,30 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Common_VerticalAlign_Select
 
 		public static string Common_VerticalAlign_Select { get { return GetResourceString("Common_VerticalAlign_Select"); } }
+//Resources:UserAdminResources:ConfirmEmail_Description
+
+		public static string ConfirmEmail_Description { get { return GetResourceString("ConfirmEmail_Description"); } }
+//Resources:UserAdminResources:ConfirmEmail_Help
+
+		public static string ConfirmEmail_Help { get { return GetResourceString("ConfirmEmail_Help"); } }
+//Resources:UserAdminResources:ConfirmEmail_Name
+
+		public static string ConfirmEmail_Name { get { return GetResourceString("ConfirmEmail_Name"); } }
 //Resources:UserAdminResources:ContactList_Description
 
 		public static string ContactList_Description { get { return GetResourceString("ContactList_Description"); } }
 //Resources:UserAdminResources:ContactList_Title
 
 		public static string ContactList_Title { get { return GetResourceString("ContactList_Title"); } }
+//Resources:UserAdminResources:CoreUserInfo_Description
+
+		public static string CoreUserInfo_Description { get { return GetResourceString("CoreUserInfo_Description"); } }
+//Resources:UserAdminResources:CoreUserInfo_Help
+
+		public static string CoreUserInfo_Help { get { return GetResourceString("CoreUserInfo_Help"); } }
+//Resources:UserAdminResources:CoreUserInfo_Name
+
+		public static string CoreUserInfo_Name { get { return GetResourceString("CoreUserInfo_Name"); } }
 //Resources:UserAdminResources:CreateLocationVM_Description
 
 		public static string CreateLocationVM_Description { get { return GetResourceString("CreateLocationVM_Description"); } }
@@ -831,6 +1029,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:CreateOrganizationVM_Title
 
 		public static string CreateOrganizationVM_Title { get { return GetResourceString("CreateOrganizationVM_Title"); } }
+//Resources:UserAdminResources:CreateUserResponse_Description
+
+		public static string CreateUserResponse_Description { get { return GetResourceString("CreateUserResponse_Description"); } }
+//Resources:UserAdminResources:CreateUserResponse_Help
+
+		public static string CreateUserResponse_Help { get { return GetResourceString("CreateUserResponse_Help"); } }
+//Resources:UserAdminResources:CreateUserResponse_Name
+
+		public static string CreateUserResponse_Name { get { return GetResourceString("CreateUserResponse_Name"); } }
 //Resources:UserAdminResources:DayOfWeek_Friday
 
 		public static string DayOfWeek_Friday { get { return GetResourceString("DayOfWeek_Friday"); } }
@@ -1062,6 +1269,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:ExternalLoginConfirmVM_Title
 
 		public static string ExternalLoginConfirmVM_Title { get { return GetResourceString("ExternalLoginConfirmVM_Title"); } }
+//Resources:UserAdminResources:FavoritesByModule_Description
+
+		public static string FavoritesByModule_Description { get { return GetResourceString("FavoritesByModule_Description"); } }
+//Resources:UserAdminResources:FavoritesByModule_Help
+
+		public static string FavoritesByModule_Help { get { return GetResourceString("FavoritesByModule_Help"); } }
+//Resources:UserAdminResources:FavoritesByModule_Name
+
+		public static string FavoritesByModule_Name { get { return GetResourceString("FavoritesByModule_Name"); } }
 //Resources:UserAdminResources:Feature_Help
 
 		public static string Feature_Help { get { return GetResourceString("Feature_Help"); } }
@@ -1269,6 +1485,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:InviteUser_ClickHere
 
 		public static string InviteUser_ClickHere { get { return GetResourceString("InviteUser_ClickHere"); } }
+//Resources:UserAdminResources:InviteUser_Description
+
+		public static string InviteUser_Description { get { return GetResourceString("InviteUser_Description"); } }
 //Resources:UserAdminResources:InviteUser_Greeting_Label
 
 		public static string InviteUser_Greeting_Label { get { return GetResourceString("InviteUser_Greeting_Label"); } }
@@ -1279,6 +1498,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 		///WIll replace [USERS_FULL_NAME] with the first/last name of current user, [ORG_NAME] as the name of the organization.
 		///</summary>
 		public static string InviteUser_Greeting_Message { get { return GetResourceString("InviteUser_Greeting_Message"); } }
+//Resources:UserAdminResources:InviteUser_Help
+
+		public static string InviteUser_Help { get { return GetResourceString("InviteUser_Help"); } }
 //Resources:UserAdminResources:InviteUser_InvitedByEmail
 
 		public static string InviteUser_InvitedByEmail { get { return GetResourceString("InviteUser_InvitedByEmail"); } }
@@ -1313,6 +1535,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:InviteUserVM_Title
 
 		public static string InviteUserVM_Title { get { return GetResourceString("InviteUserVM_Title"); } }
+//Resources:UserAdminResources:KioskLoginViewModel_Description
+
+		public static string KioskLoginViewModel_Description { get { return GetResourceString("KioskLoginViewModel_Description"); } }
+//Resources:UserAdminResources:KioskLoginViewModel_Help
+
+		public static string KioskLoginViewModel_Help { get { return GetResourceString("KioskLoginViewModel_Help"); } }
+//Resources:UserAdminResources:KioskLoginViewModel_Name
+
+		public static string KioskLoginViewModel_Name { get { return GetResourceString("KioskLoginViewModel_Name"); } }
 //Resources:UserAdminResources:Location_Admin_Contact
 
 		public static string Location_Admin_Contact { get { return GetResourceString("Location_Admin_Contact"); } }
@@ -1334,6 +1565,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Location_State
 
 		public static string Location_State { get { return GetResourceString("Location_State"); } }
+//Resources:UserAdminResources:LocationDevice_Description
+
+		public static string LocationDevice_Description { get { return GetResourceString("LocationDevice_Description"); } }
+//Resources:UserAdminResources:LocationDevice_Help
+
+		public static string LocationDevice_Help { get { return GetResourceString("LocationDevice_Help"); } }
+//Resources:UserAdminResources:LocationDevice_Name
+
+		public static string LocationDevice_Name { get { return GetResourceString("LocationDevice_Name"); } }
 //Resources:UserAdminResources:LocationDiagram_BaseLocation
 
 		public static string LocationDiagram_BaseLocation { get { return GetResourceString("LocationDiagram_BaseLocation"); } }
@@ -1457,12 +1697,39 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:LoginVM_Title
 
 		public static string LoginVM_Title { get { return GetResourceString("LoginVM_Title"); } }
+//Resources:UserAdminResources:ManagedAsset_Description
+
+		public static string ManagedAsset_Description { get { return GetResourceString("ManagedAsset_Description"); } }
+//Resources:UserAdminResources:ManagedAsset_Help
+
+		public static string ManagedAsset_Help( string assetSetId, string assetId) { return GetResourceString("ManagedAsset_Help", "{assetSetId}", assetSetId, "{assetId}", assetId); }
+//Resources:UserAdminResources:ManagedAsset_Name
+
+		public static string ManagedAsset_Name { get { return GetResourceString("ManagedAsset_Name"); } }
+//Resources:UserAdminResources:ManagedAssetSummary_Description
+
+		public static string ManagedAssetSummary_Description { get { return GetResourceString("ManagedAssetSummary_Description"); } }
+//Resources:UserAdminResources:ManagedAssetSummary_Help
+
+		public static string ManagedAssetSummary_Help { get { return GetResourceString("ManagedAssetSummary_Help"); } }
+//Resources:UserAdminResources:ManagedAssetSummary_Name
+
+		public static string ManagedAssetSummary_Name { get { return GetResourceString("ManagedAssetSummary_Name"); } }
 //Resources:UserAdminResources:Menu_DoNotDisplay
 
 		public static string Menu_DoNotDisplay { get { return GetResourceString("Menu_DoNotDisplay"); } }
 //Resources:UserAdminResources:Menu_DoNotDisplay_Help
 
 		public static string Menu_DoNotDisplay_Help { get { return GetResourceString("Menu_DoNotDisplay_Help"); } }
+//Resources:UserAdminResources:MobileOAuthPendingAuth_Description
+
+		public static string MobileOAuthPendingAuth_Description { get { return GetResourceString("MobileOAuthPendingAuth_Description"); } }
+//Resources:UserAdminResources:MobileOAuthPendingAuth_Help
+
+		public static string MobileOAuthPendingAuth_Help { get { return GetResourceString("MobileOAuthPendingAuth_Help"); } }
+//Resources:UserAdminResources:MobileOAuthPendingAuth_Name
+
+		public static string MobileOAuthPendingAuth_Name { get { return GetResourceString("MobileOAuthPendingAuth_Name"); } }
 //Resources:UserAdminResources:Module_AreaCategories
 
 		public static string Module_AreaCategories { get { return GetResourceString("Module_AreaCategories"); } }
@@ -1610,6 +1877,51 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Month_September
 
 		public static string Month_September { get { return GetResourceString("Month_September"); } }
+//Resources:UserAdminResources:MostRecentlyUsed_Description
+
+		public static string MostRecentlyUsed_Description { get { return GetResourceString("MostRecentlyUsed_Description"); } }
+//Resources:UserAdminResources:MostRecentlyUsed_Help
+
+		public static string MostRecentlyUsed_Help { get { return GetResourceString("MostRecentlyUsed_Help"); } }
+//Resources:UserAdminResources:MostRecentlyUsed_Name
+
+		public static string MostRecentlyUsed_Name { get { return GetResourceString("MostRecentlyUsed_Name"); } }
+//Resources:UserAdminResources:MostRecentlyUsedItem_Description
+
+		public static string MostRecentlyUsedItem_Description { get { return GetResourceString("MostRecentlyUsedItem_Description"); } }
+//Resources:UserAdminResources:MostRecentlyUsedItem_Help
+
+		public static string MostRecentlyUsedItem_Help { get { return GetResourceString("MostRecentlyUsedItem_Help"); } }
+//Resources:UserAdminResources:MostRecentlyUsedItem_Name
+
+		public static string MostRecentlyUsedItem_Name { get { return GetResourceString("MostRecentlyUsedItem_Name"); } }
+//Resources:UserAdminResources:MostRecentlyUsedModule_Description
+
+		public static string MostRecentlyUsedModule_Description { get { return GetResourceString("MostRecentlyUsedModule_Description"); } }
+//Resources:UserAdminResources:MostRecentlyUsedModule_Help
+
+		public static string MostRecentlyUsedModule_Help { get { return GetResourceString("MostRecentlyUsedModule_Help"); } }
+//Resources:UserAdminResources:MostRecentlyUsedModule_Name
+
+		public static string MostRecentlyUsedModule_Name { get { return GetResourceString("MostRecentlyUsedModule_Name"); } }
+//Resources:UserAdminResources:NewAppUserInboxItemItem_Description
+
+		public static string NewAppUserInboxItemItem_Description { get { return GetResourceString("NewAppUserInboxItemItem_Description"); } }
+//Resources:UserAdminResources:NewAppUserInboxItemItem_Help
+
+		public static string NewAppUserInboxItemItem_Help { get { return GetResourceString("NewAppUserInboxItemItem_Help"); } }
+//Resources:UserAdminResources:NewAppUserInboxItemItem_Name
+
+		public static string NewAppUserInboxItemItem_Name { get { return GetResourceString("NewAppUserInboxItemItem_Name"); } }
+//Resources:UserAdminResources:NotificationContact_Description
+
+		public static string NotificationContact_Description { get { return GetResourceString("NotificationContact_Description"); } }
+//Resources:UserAdminResources:NotificationContact_Help
+
+		public static string NotificationContact_Help { get { return GetResourceString("NotificationContact_Help"); } }
+//Resources:UserAdminResources:NotificationContact_Name
+
+		public static string NotificationContact_Name { get { return GetResourceString("NotificationContact_Name"); } }
 //Resources:UserAdminResources:Organization
 
 		public static string Organization { get { return GetResourceString("Organization"); } }
@@ -2006,6 +2318,132 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Page_Title
 
 		public static string Page_Title { get { return GetResourceString("Page_Title"); } }
+//Resources:UserAdminResources:PasskeyAuthenticationCompleteRequest_Description
+
+		public static string PasskeyAuthenticationCompleteRequest_Description { get { return GetResourceString("PasskeyAuthenticationCompleteRequest_Description"); } }
+//Resources:UserAdminResources:PasskeyAuthenticationCompleteRequest_Help
+
+		public static string PasskeyAuthenticationCompleteRequest_Help { get { return GetResourceString("PasskeyAuthenticationCompleteRequest_Help"); } }
+//Resources:UserAdminResources:PasskeyAuthenticationCompleteRequest_Name
+
+		public static string PasskeyAuthenticationCompleteRequest_Name { get { return GetResourceString("PasskeyAuthenticationCompleteRequest_Name"); } }
+//Resources:UserAdminResources:PasskeyAuthenticationCompleteRequestWire_Description
+
+		public static string PasskeyAuthenticationCompleteRequestWire_Description { get { return GetResourceString("PasskeyAuthenticationCompleteRequestWire_Description"); } }
+//Resources:UserAdminResources:PasskeyAuthenticationCompleteRequestWire_Help
+
+		public static string PasskeyAuthenticationCompleteRequestWire_Help { get { return GetResourceString("PasskeyAuthenticationCompleteRequestWire_Help"); } }
+//Resources:UserAdminResources:PasskeyAuthenticationCompleteRequestWire_Name
+
+		public static string PasskeyAuthenticationCompleteRequestWire_Name { get { return GetResourceString("PasskeyAuthenticationCompleteRequestWire_Name"); } }
+//Resources:UserAdminResources:PasskeyBeginOptionsResponse_Description
+
+		public static string PasskeyBeginOptionsResponse_Description { get { return GetResourceString("PasskeyBeginOptionsResponse_Description"); } }
+//Resources:UserAdminResources:PasskeyBeginOptionsResponse_Help
+
+		public static string PasskeyBeginOptionsResponse_Help { get { return GetResourceString("PasskeyBeginOptionsResponse_Help"); } }
+//Resources:UserAdminResources:PasskeyBeginOptionsResponse_Name
+
+		public static string PasskeyBeginOptionsResponse_Name { get { return GetResourceString("PasskeyBeginOptionsResponse_Name"); } }
+//Resources:UserAdminResources:PasskeyChallenge_Description
+
+		public static string PasskeyChallenge_Description { get { return GetResourceString("PasskeyChallenge_Description"); } }
+//Resources:UserAdminResources:PasskeyChallenge_Help
+
+		public static string PasskeyChallenge_Help { get { return GetResourceString("PasskeyChallenge_Help"); } }
+//Resources:UserAdminResources:PasskeyChallenge_Name
+
+		public static string PasskeyChallenge_Name { get { return GetResourceString("PasskeyChallenge_Name"); } }
+//Resources:UserAdminResources:PasskeyChallengePacket_Description
+
+		public static string PasskeyChallengePacket_Description { get { return GetResourceString("PasskeyChallengePacket_Description"); } }
+//Resources:UserAdminResources:PasskeyChallengePacket_Help
+
+		public static string PasskeyChallengePacket_Help { get { return GetResourceString("PasskeyChallengePacket_Help"); } }
+//Resources:UserAdminResources:PasskeyChallengePacket_Name
+
+		public static string PasskeyChallengePacket_Name { get { return GetResourceString("PasskeyChallengePacket_Name"); } }
+//Resources:UserAdminResources:PasskeyCredential_Description
+
+		public static string PasskeyCredential_Description { get { return GetResourceString("PasskeyCredential_Description"); } }
+//Resources:UserAdminResources:PasskeyCredential_Help
+
+		public static string PasskeyCredential_Help { get { return GetResourceString("PasskeyCredential_Help"); } }
+//Resources:UserAdminResources:PasskeyCredential_Name
+
+		public static string PasskeyCredential_Name { get { return GetResourceString("PasskeyCredential_Name"); } }
+//Resources:UserAdminResources:PasskeyCredentialIndex_Description
+
+		public static string PasskeyCredentialIndex_Description { get { return GetResourceString("PasskeyCredentialIndex_Description"); } }
+//Resources:UserAdminResources:PasskeyCredentialIndex_Help
+
+		public static string PasskeyCredentialIndex_Help { get { return GetResourceString("PasskeyCredentialIndex_Help"); } }
+//Resources:UserAdminResources:PasskeyCredentialIndex_Name
+
+		public static string PasskeyCredentialIndex_Name { get { return GetResourceString("PasskeyCredentialIndex_Name"); } }
+//Resources:UserAdminResources:PasskeyCredentialSummary_Description
+
+		public static string PasskeyCredentialSummary_Description { get { return GetResourceString("PasskeyCredentialSummary_Description"); } }
+//Resources:UserAdminResources:PasskeyCredentialSummary_Help
+
+		public static string PasskeyCredentialSummary_Help { get { return GetResourceString("PasskeyCredentialSummary_Help"); } }
+//Resources:UserAdminResources:PasskeyCredentialSummary_Name
+
+		public static string PasskeyCredentialSummary_Name { get { return GetResourceString("PasskeyCredentialSummary_Name"); } }
+//Resources:UserAdminResources:PasskeyRegistrationCompleteRequest_Description
+
+		public static string PasskeyRegistrationCompleteRequest_Description { get { return GetResourceString("PasskeyRegistrationCompleteRequest_Description"); } }
+//Resources:UserAdminResources:PasskeyRegistrationCompleteRequest_Help
+
+		public static string PasskeyRegistrationCompleteRequest_Help { get { return GetResourceString("PasskeyRegistrationCompleteRequest_Help"); } }
+//Resources:UserAdminResources:PasskeyRegistrationCompleteRequest_Name
+
+		public static string PasskeyRegistrationCompleteRequest_Name { get { return GetResourceString("PasskeyRegistrationCompleteRequest_Name"); } }
+//Resources:UserAdminResources:PasskeyRegistrationCompleteRequestWire_Description
+
+		public static string PasskeyRegistrationCompleteRequestWire_Description { get { return GetResourceString("PasskeyRegistrationCompleteRequestWire_Description"); } }
+//Resources:UserAdminResources:PasskeyRegistrationCompleteRequestWire_Help
+
+		public static string PasskeyRegistrationCompleteRequestWire_Help { get { return GetResourceString("PasskeyRegistrationCompleteRequestWire_Help"); } }
+//Resources:UserAdminResources:PasskeyRegistrationCompleteRequestWire_Name
+
+		public static string PasskeyRegistrationCompleteRequestWire_Name { get { return GetResourceString("PasskeyRegistrationCompleteRequestWire_Name"); } }
+//Resources:UserAdminResources:PasskeySignInResult_Description
+
+		public static string PasskeySignInResult_Description { get { return GetResourceString("PasskeySignInResult_Description"); } }
+//Resources:UserAdminResources:PasskeySignInResult_Help
+
+		public static string PasskeySignInResult_Help { get { return GetResourceString("PasskeySignInResult_Help"); } }
+//Resources:UserAdminResources:PasskeySignInResult_Name
+
+		public static string PasskeySignInResult_Name { get { return GetResourceString("PasskeySignInResult_Name"); } }
+//Resources:UserAdminResources:PaymentAccounts_Description
+
+		public static string PaymentAccounts_Description { get { return GetResourceString("PaymentAccounts_Description"); } }
+//Resources:UserAdminResources:PaymentAccounts_Help
+
+		public static string PaymentAccounts_Help { get { return GetResourceString("PaymentAccounts_Help"); } }
+//Resources:UserAdminResources:PaymentAccounts_Name
+
+		public static string PaymentAccounts_Name { get { return GetResourceString("PaymentAccounts_Name"); } }
+//Resources:UserAdminResources:PendingIdentity_Description
+
+		public static string PendingIdentity_Description { get { return GetResourceString("PendingIdentity_Description"); } }
+//Resources:UserAdminResources:PendingIdentity_Help
+
+		public static string PendingIdentity_Help { get { return GetResourceString("PendingIdentity_Help"); } }
+//Resources:UserAdminResources:PendingIdentity_Name
+
+		public static string PendingIdentity_Name { get { return GetResourceString("PendingIdentity_Name"); } }
+//Resources:UserAdminResources:PushNotificationChannel_Description
+
+		public static string PushNotificationChannel_Description { get { return GetResourceString("PushNotificationChannel_Description"); } }
+//Resources:UserAdminResources:PushNotificationChannel_Help
+
+		public static string PushNotificationChannel_Help { get { return GetResourceString("PushNotificationChannel_Help"); } }
+//Resources:UserAdminResources:PushNotificationChannel_Name
+
+		public static string PushNotificationChannel_Name { get { return GetResourceString("PushNotificationChannel_Name"); } }
 //Resources:UserAdminResources:RegErr_ErrorSendingEmail
 
 		public static string RegErr_ErrorSendingEmail { get { return GetResourceString("RegErr_ErrorSendingEmail"); } }
@@ -2030,6 +2468,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:RegErr_UserAlreadyExists
 
 		public static string RegErr_UserAlreadyExists { get { return GetResourceString("RegErr_UserAlreadyExists"); } }
+//Resources:UserAdminResources:RegisterUser_Description
+
+		public static string RegisterUser_Description { get { return GetResourceString("RegisterUser_Description"); } }
+//Resources:UserAdminResources:RegisterUser_Help
+
+		public static string RegisterUser_Help { get { return GetResourceString("RegisterUser_Help"); } }
+//Resources:UserAdminResources:RegisterUser_Name
+
+		public static string RegisterUser_Name { get { return GetResourceString("RegisterUser_Name"); } }
 //Resources:UserAdminResources:RegisterUserExists_3rdParty
 
 		public static string RegisterUserExists_3rdParty { get { return GetResourceString("RegisterUserExists_3rdParty"); } }
@@ -2042,12 +2489,24 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:RegisterVM_Title
 
 		public static string RegisterVM_Title { get { return GetResourceString("RegisterVM_Title"); } }
+//Resources:UserAdminResources:RenamePasskeyRequest_Description
+
+		public static string RenamePasskeyRequest_Description { get { return GetResourceString("RenamePasskeyRequest_Description"); } }
+//Resources:UserAdminResources:RenamePasskeyRequest_Help
+
+		public static string RenamePasskeyRequest_Help { get { return GetResourceString("RenamePasskeyRequest_Help"); } }
+//Resources:UserAdminResources:RenamePasskeyRequest_Name
+
+		public static string RenamePasskeyRequest_Name { get { return GetResourceString("RenamePasskeyRequest_Name"); } }
 //Resources:UserAdminResources:ResetPassword_Description
 
 		public static string ResetPassword_Description { get { return GetResourceString("ResetPassword_Description"); } }
 //Resources:UserAdminResources:ResetPassword_Help
 
 		public static string ResetPassword_Help { get { return GetResourceString("ResetPassword_Help"); } }
+//Resources:UserAdminResources:ResetPassword_Name
+
+		public static string ResetPassword_Name { get { return GetResourceString("ResetPassword_Name"); } }
 //Resources:UserAdminResources:ResetPassword_Title
 
 		public static string ResetPassword_Title { get { return GetResourceString("ResetPassword_Title"); } }
@@ -2063,6 +2522,24 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Role_Title
 
 		public static string Role_Title { get { return GetResourceString("Role_Title"); } }
+//Resources:UserAdminResources:RoleAccess_Description
+
+		public static string RoleAccess_Description { get { return GetResourceString("RoleAccess_Description"); } }
+//Resources:UserAdminResources:RoleAccess_Help
+
+		public static string RoleAccess_Help { get { return GetResourceString("RoleAccess_Help"); } }
+//Resources:UserAdminResources:RoleAccess_Name
+
+		public static string RoleAccess_Name { get { return GetResourceString("RoleAccess_Name"); } }
+//Resources:UserAdminResources:RoleAccessDTO_Description
+
+		public static string RoleAccessDTO_Description { get { return GetResourceString("RoleAccessDTO_Description"); } }
+//Resources:UserAdminResources:RoleAccessDTO_Help
+
+		public static string RoleAccessDTO_Help { get { return GetResourceString("RoleAccessDTO_Help"); } }
+//Resources:UserAdminResources:RoleAccessDTO_Name
+
+		public static string RoleAccessDTO_Name { get { return GetResourceString("RoleAccessDTO_Name"); } }
 //Resources:UserAdminResources:ScheduledDowntime_AllDay
 
 		public static string ScheduledDowntime_AllDay { get { return GetResourceString("ScheduledDowntime_AllDay"); } }
@@ -2165,6 +2642,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:ScheudledDowntime_Week
 
 		public static string ScheudledDowntime_Week { get { return GetResourceString("ScheudledDowntime_Week"); } }
+//Resources:UserAdminResources:SecureLink_Description
+
+		public static string SecureLink_Description { get { return GetResourceString("SecureLink_Description"); } }
+//Resources:UserAdminResources:SecureLink_Help
+
+		public static string SecureLink_Help { get { return GetResourceString("SecureLink_Help"); } }
+//Resources:UserAdminResources:SecureLink_Name
+
+		public static string SecureLink_Name { get { return GetResourceString("SecureLink_Name"); } }
 //Resources:UserAdminResources:SendCodeVM_Description
 
 		public static string SendCodeVM_Description { get { return GetResourceString("SendCodeVM_Description"); } }
@@ -2174,6 +2660,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:SendCodeVM_Title
 
 		public static string SendCodeVM_Title { get { return GetResourceString("SendCodeVM_Title"); } }
+//Resources:UserAdminResources:SendResetPasswordLink_Description
+
+		public static string SendResetPasswordLink_Description { get { return GetResourceString("SendResetPasswordLink_Description"); } }
+//Resources:UserAdminResources:SendResetPasswordLink_Help
+
+		public static string SendResetPasswordLink_Help { get { return GetResourceString("SendResetPasswordLink_Help"); } }
+//Resources:UserAdminResources:SendResetPasswordLink_Name
+
+		public static string SendResetPasswordLink_Name { get { return GetResourceString("SendResetPasswordLink_Name"); } }
 //Resources:UserAdminResources:SentEmail_Description
 
 		public static string SentEmail_Description { get { return GetResourceString("SentEmail_Description"); } }
@@ -2267,6 +2762,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:ShapeType_Window
 
 		public static string ShapeType_Window { get { return GetResourceString("ShapeType_Window"); } }
+//Resources:UserAdminResources:SingleUseToken_Description
+
+		public static string SingleUseToken_Description { get { return GetResourceString("SingleUseToken_Description"); } }
+//Resources:UserAdminResources:SingleUseToken_Help
+
+		public static string SingleUseToken_Help { get { return GetResourceString("SingleUseToken_Help"); } }
+//Resources:UserAdminResources:SingleUseToken_Name
+
+		public static string SingleUseToken_Name { get { return GetResourceString("SingleUseToken_Name"); } }
 //Resources:UserAdminResources:SMS_CouldNotVerify
 
 		public static string SMS_CouldNotVerify { get { return GetResourceString("SMS_CouldNotVerify"); } }
@@ -2312,9 +2816,99 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Team_Title
 
 		public static string Team_Title { get { return GetResourceString("Team_Title"); } }
+//Resources:UserAdminResources:TeamUser_Description
+
+		public static string TeamUser_Description { get { return GetResourceString("TeamUser_Description"); } }
+//Resources:UserAdminResources:TeamUser_Help
+
+		public static string TeamUser_Help( string teamId, string userId) { return GetResourceString("TeamUser_Help", "{teamId}", teamId, "{userId}", userId); }
+//Resources:UserAdminResources:TeamUser_Name
+
+		public static string TeamUser_Name { get { return GetResourceString("TeamUser_Name"); } }
+//Resources:UserAdminResources:TeamUserSummary_Description
+
+		public static string TeamUserSummary_Description { get { return GetResourceString("TeamUserSummary_Description"); } }
+//Resources:UserAdminResources:TeamUserSummary_Help
+
+		public static string TeamUserSummary_Help { get { return GetResourceString("TeamUserSummary_Help"); } }
+//Resources:UserAdminResources:TeamUserSummary_Name
+
+		public static string TeamUserSummary_Name { get { return GetResourceString("TeamUserSummary_Name"); } }
 //Resources:UserAdminResources:Technical_Contact
 
 		public static string Technical_Contact { get { return GetResourceString("Technical_Contact"); } }
+//Resources:UserAdminResources:TestRunArtifact_Description
+
+		public static string TestRunArtifact_Description { get { return GetResourceString("TestRunArtifact_Description"); } }
+//Resources:UserAdminResources:TestRunArtifact_Help
+
+		public static string TestRunArtifact_Help { get { return GetResourceString("TestRunArtifact_Help"); } }
+//Resources:UserAdminResources:TestRunArtifact_Name
+
+		public static string TestRunArtifact_Name { get { return GetResourceString("TestRunArtifact_Name"); } }
+//Resources:UserAdminResources:TestRunVerification_Description
+
+		public static string TestRunVerification_Description { get { return GetResourceString("TestRunVerification_Description"); } }
+//Resources:UserAdminResources:TestRunVerification_Help
+
+		public static string TestRunVerification_Help { get { return GetResourceString("TestRunVerification_Help"); } }
+//Resources:UserAdminResources:TestRunVerification_Name
+
+		public static string TestRunVerification_Name { get { return GetResourceString("TestRunVerification_Name"); } }
+//Resources:UserAdminResources:TestUserCredentials_Description
+
+		public static string TestUserCredentials_Description { get { return GetResourceString("TestUserCredentials_Description"); } }
+//Resources:UserAdminResources:TestUserCredentials_Help
+
+		public static string TestUserCredentials_Help { get { return GetResourceString("TestUserCredentials_Help"); } }
+//Resources:UserAdminResources:TestUserCredentials_Name
+
+		public static string TestUserCredentials_Name { get { return GetResourceString("TestUserCredentials_Name"); } }
+//Resources:UserAdminResources:TokenAuthOptions_Description
+
+		public static string TokenAuthOptions_Description { get { return GetResourceString("TokenAuthOptions_Description"); } }
+//Resources:UserAdminResources:TokenAuthOptions_Help
+
+		public static string TokenAuthOptions_Help { get { return GetResourceString("TokenAuthOptions_Help"); } }
+//Resources:UserAdminResources:TokenAuthOptions_Name
+
+		public static string TokenAuthOptions_Name { get { return GetResourceString("TokenAuthOptions_Name"); } }
+//Resources:UserAdminResources:TwitterAccessToken_Description
+
+		public static string TwitterAccessToken_Description { get { return GetResourceString("TwitterAccessToken_Description"); } }
+//Resources:UserAdminResources:TwitterAccessToken_Help
+
+		public static string TwitterAccessToken_Help { get { return GetResourceString("TwitterAccessToken_Help"); } }
+//Resources:UserAdminResources:TwitterAccessToken_Name
+
+		public static string TwitterAccessToken_Name { get { return GetResourceString("TwitterAccessToken_Name"); } }
+//Resources:UserAdminResources:TwitterError_Description
+
+		public static string TwitterError_Description { get { return GetResourceString("TwitterError_Description"); } }
+//Resources:UserAdminResources:TwitterError_Help
+
+		public static string TwitterError_Help { get { return GetResourceString("TwitterError_Help"); } }
+//Resources:UserAdminResources:TwitterError_Name
+
+		public static string TwitterError_Name { get { return GetResourceString("TwitterError_Name"); } }
+//Resources:UserAdminResources:TwitterErrorResponse_Description
+
+		public static string TwitterErrorResponse_Description { get { return GetResourceString("TwitterErrorResponse_Description"); } }
+//Resources:UserAdminResources:TwitterErrorResponse_Help
+
+		public static string TwitterErrorResponse_Help { get { return GetResourceString("TwitterErrorResponse_Help"); } }
+//Resources:UserAdminResources:TwitterErrorResponse_Name
+
+		public static string TwitterErrorResponse_Name { get { return GetResourceString("TwitterErrorResponse_Name"); } }
+//Resources:UserAdminResources:TwitterRequestToken_Description
+
+		public static string TwitterRequestToken_Description { get { return GetResourceString("TwitterRequestToken_Description"); } }
+//Resources:UserAdminResources:TwitterRequestToken_Help
+
+		public static string TwitterRequestToken_Help { get { return GetResourceString("TwitterRequestToken_Help"); } }
+//Resources:UserAdminResources:TwitterRequestToken_Name
+
+		public static string TwitterRequestToken_Name { get { return GetResourceString("TwitterRequestToken_Name"); } }
 //Resources:UserAdminResources:UiCategory_Description
 
 		public static string UiCategory_Description { get { return GetResourceString("UiCategory_Description"); } }
@@ -2348,6 +2942,69 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:User
 
 		public static string User { get { return GetResourceString("User"); } }
+//Resources:UserAdminResources:UserAccess_Description
+
+		public static string UserAccess_Description { get { return GetResourceString("UserAccess_Description"); } }
+//Resources:UserAdminResources:UserAccess_Help
+
+		public static string UserAccess_Help { get { return GetResourceString("UserAccess_Help"); } }
+//Resources:UserAdminResources:UserAccess_Name
+
+		public static string UserAccess_Name { get { return GetResourceString("UserAccess_Name"); } }
+//Resources:UserAdminResources:UserFavorite_Description
+
+		public static string UserFavorite_Description { get { return GetResourceString("UserFavorite_Description"); } }
+//Resources:UserAdminResources:UserFavorite_Help
+
+		public static string UserFavorite_Help { get { return GetResourceString("UserFavorite_Help"); } }
+//Resources:UserAdminResources:UserFavorite_Name
+
+		public static string UserFavorite_Name { get { return GetResourceString("UserFavorite_Name"); } }
+//Resources:UserAdminResources:UserFavorites_Description
+
+		public static string UserFavorites_Description { get { return GetResourceString("UserFavorites_Description"); } }
+//Resources:UserAdminResources:UserFavorites_Help
+
+		public static string UserFavorites_Help { get { return GetResourceString("UserFavorites_Help"); } }
+//Resources:UserAdminResources:UserFavorites_Name
+
+		public static string UserFavorites_Name { get { return GetResourceString("UserFavorites_Name"); } }
+//Resources:UserAdminResources:UserLoginResponse_Description
+
+		public static string UserLoginResponse_Description { get { return GetResourceString("UserLoginResponse_Description"); } }
+//Resources:UserAdminResources:UserLoginResponse_Help
+
+		public static string UserLoginResponse_Help { get { return GetResourceString("UserLoginResponse_Help"); } }
+//Resources:UserAdminResources:UserLoginResponse_Name
+
+		public static string UserLoginResponse_Name { get { return GetResourceString("UserLoginResponse_Name"); } }
+//Resources:UserAdminResources:UserRole_Description
+
+		public static string UserRole_Description { get { return GetResourceString("UserRole_Description"); } }
+//Resources:UserAdminResources:UserRole_Help
+
+		public static string UserRole_Help { get { return GetResourceString("UserRole_Help"); } }
+//Resources:UserAdminResources:UserRole_Name
+
+		public static string UserRole_Name { get { return GetResourceString("UserRole_Name"); } }
+//Resources:UserAdminResources:UserRoleDTO_Description
+
+		public static string UserRoleDTO_Description { get { return GetResourceString("UserRoleDTO_Description"); } }
+//Resources:UserAdminResources:UserRoleDTO_Help
+
+		public static string UserRoleDTO_Help { get { return GetResourceString("UserRoleDTO_Help"); } }
+//Resources:UserAdminResources:UserRoleDTO_Name
+
+		public static string UserRoleDTO_Name { get { return GetResourceString("UserRoleDTO_Name"); } }
+//Resources:UserAdminResources:VerfiyPhoneNumber_Description
+
+		public static string VerfiyPhoneNumber_Description { get { return GetResourceString("VerfiyPhoneNumber_Description"); } }
+//Resources:UserAdminResources:VerfiyPhoneNumber_Help
+
+		public static string VerfiyPhoneNumber_Help { get { return GetResourceString("VerfiyPhoneNumber_Help"); } }
+//Resources:UserAdminResources:VerfiyPhoneNumber_Name
+
+		public static string VerfiyPhoneNumber_Name { get { return GetResourceString("VerfiyPhoneNumber_Name"); } }
 //Resources:UserAdminResources:VerifyCodeViewModel_Code
 
 		public static string VerifyCodeViewModel_Code { get { return GetResourceString("VerifyCodeViewModel_Code"); } }
@@ -2399,12 +3056,54 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:VerticalAlign_Top
 
 		public static string VerticalAlign_Top { get { return GetResourceString("VerticalAlign_Top"); } }
+//Resources:UserAdminResources:WebAuthnAssertionResponseWire_Description
+
+		public static string WebAuthnAssertionResponseWire_Description { get { return GetResourceString("WebAuthnAssertionResponseWire_Description"); } }
+//Resources:UserAdminResources:WebAuthnAssertionResponseWire_Help
+
+		public static string WebAuthnAssertionResponseWire_Help { get { return GetResourceString("WebAuthnAssertionResponseWire_Help"); } }
+//Resources:UserAdminResources:WebAuthnAssertionResponseWire_Name
+
+		public static string WebAuthnAssertionResponseWire_Name { get { return GetResourceString("WebAuthnAssertionResponseWire_Name"); } }
+//Resources:UserAdminResources:WebAuthnAssertionWire_Description
+
+		public static string WebAuthnAssertionWire_Description { get { return GetResourceString("WebAuthnAssertionWire_Description"); } }
+//Resources:UserAdminResources:WebAuthnAssertionWire_Help
+
+		public static string WebAuthnAssertionWire_Help { get { return GetResourceString("WebAuthnAssertionWire_Help"); } }
+//Resources:UserAdminResources:WebAuthnAssertionWire_Name
+
+		public static string WebAuthnAssertionWire_Name { get { return GetResourceString("WebAuthnAssertionWire_Name"); } }
+//Resources:UserAdminResources:WebAuthnAttestationResponseWire_Description
+
+		public static string WebAuthnAttestationResponseWire_Description { get { return GetResourceString("WebAuthnAttestationResponseWire_Description"); } }
+//Resources:UserAdminResources:WebAuthnAttestationResponseWire_Help
+
+		public static string WebAuthnAttestationResponseWire_Help { get { return GetResourceString("WebAuthnAttestationResponseWire_Help"); } }
+//Resources:UserAdminResources:WebAuthnAttestationResponseWire_Name
+
+		public static string WebAuthnAttestationResponseWire_Name { get { return GetResourceString("WebAuthnAttestationResponseWire_Name"); } }
+//Resources:UserAdminResources:WebAuthnAttestationWire_Description
+
+		public static string WebAuthnAttestationWire_Description { get { return GetResourceString("WebAuthnAttestationWire_Description"); } }
+//Resources:UserAdminResources:WebAuthnAttestationWire_Help
+
+		public static string WebAuthnAttestationWire_Help { get { return GetResourceString("WebAuthnAttestationWire_Help"); } }
+//Resources:UserAdminResources:WebAuthnAttestationWire_Name
+
+		public static string WebAuthnAttestationWire_Name { get { return GetResourceString("WebAuthnAttestationWire_Name"); } }
 
 		public static class Names
 		{
+			public const string AcceptInviteResponse_Description = "AcceptInviteResponse_Description";
+			public const string AcceptInviteResponse_Help = "AcceptInviteResponse_Help";
+			public const string AcceptInviteResponse_Name = "AcceptInviteResponse_Name";
 			public const string AcceptInviteVM_Description = "AcceptInviteVM_Description";
 			public const string AcceptInviteVM_Help = "AcceptInviteVM_Help";
 			public const string AcceptInviteVM_Title = "AcceptInviteVM_Title";
+			public const string AccessLog_Description = "AccessLog_Description";
+			public const string AccessLog_Help = "AccessLog_Help";
+			public const string AccessLog_Name = "AccessLog_Name";
 			public const string Admin_Contact = "Admin_Contact";
 			public const string AppUser_Bio = "AppUser_Bio";
 			public const string AppUser_City = "AppUser_City";
@@ -2441,6 +3140,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AppUser_Title = "AppUser_Title";
 			public const string AppUser_UserName = "AppUser_UserName";
 			public const string AppUser_UserTitle = "AppUser_UserTitle";
+			public const string AppUserInboxItem_Description = "AppUserInboxItem_Description";
+			public const string AppUserInboxItem_Help = "AppUserInboxItem_Help";
+			public const string AppUserInboxItem_Name = "AppUserInboxItem_Name";
 			public const string AppUserTestingDSL_Action = "AppUserTestingDSL_Action";
 			public const string AppUserTestingDSL_Action_Help = "AppUserTestingDSL_Action_Help";
 			public const string AppUserTestingDSL_AuthView = "AppUserTestingDSL_AuthView";
@@ -2460,6 +3162,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AppUserTestingExpectedOutcome_Postconditions = "AppUserTestingExpectedOutcome_Postconditions";
 			public const string AppUserTestingExpectedOutcome_Postconditions_Help = "AppUserTestingExpectedOutcome_Postconditions_Help";
 			public const string AppUserTestingExpectedOutcome_Title = "AppUserTestingExpectedOutcome_Title";
+			public const string AppUserTestRun_Description = "AppUserTestRun_Description";
+			public const string AppUserTestRun_Help = "AppUserTestRun_Help";
+			public const string AppUserTestRun_Name = "AppUserTestRun_Name";
+			public const string AppUserTestRunEvent_Description = "AppUserTestRunEvent_Description";
+			public const string AppUserTestRunEvent_Help = "AppUserTestRunEvent_Help";
+			public const string AppUserTestRunEvent_Name = "AppUserTestRunEvent_Name";
+			public const string AppUserTestRunSummary_Description = "AppUserTestRunSummary_Description";
+			public const string AppUserTestRunSummary_Help = "AppUserTestRunSummary_Help";
+			public const string AppUserTestRunSummary_Name = "AppUserTestRunSummary_Name";
 			public const string AppUserTestScenario_AuthView = "AppUserTestScenario_AuthView";
 			public const string AppUserTestScenario_AuthView_Help = "AppUserTestScenario_AuthView_Help";
 			public const string Area_Help = "Area_Help";
@@ -2504,6 +3215,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AuthErr_UserIsNullForRefresh = "AuthErr_UserIsNullForRefresh";
 			public const string AuthErr_UserLockedOut = "AuthErr_UserLockedOut";
 			public const string AuthError_NotSysAdmin = "AuthError_NotSysAdmin";
+			public const string AuthFailureRecord_Description = "AuthFailureRecord_Description";
+			public const string AuthFailureRecord_Help = "AuthFailureRecord_Help";
+			public const string AuthFailureRecord_Name = "AuthFailureRecord_Name";
 			public const string AuthFieldAction_Description = "AuthFieldAction_Description";
 			public const string AuthFieldAction_Finder = "AuthFieldAction_Finder";
 			public const string AuthFieldAction_Finder_Help = "AuthFieldAction_Finder_Help";
@@ -2511,6 +3225,36 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AuthFieldAction_Name = "AuthFieldAction_Name";
 			public const string AuthFieldAction_Name_Help = "AuthFieldAction_Name_Help";
 			public const string AuthFieldAction_Title = "AuthFieldAction_Title";
+			public const string AuthLoginRequest_Description = "AuthLoginRequest_Description";
+			public const string AuthLoginRequest_Help = "AuthLoginRequest_Help";
+			public const string AuthLoginRequest_Name = "AuthLoginRequest_Name";
+			public const string AuthLogReviewSummary_Description = "AuthLogReviewSummary_Description";
+			public const string AuthLogReviewSummary_Help = "AuthLogReviewSummary_Help";
+			public const string AuthLogReviewSummary_Name = "AuthLogReviewSummary_Name";
+			public const string AuthResponse_Description = "AuthResponse_Description";
+			public const string AuthResponse_Help = "AuthResponse_Help";
+			public const string AuthResponse_Name = "AuthResponse_Name";
+			public const string AuthRunnerAction_Description = "AuthRunnerAction_Description";
+			public const string AuthRunnerAction_Help = "AuthRunnerAction_Help";
+			public const string AuthRunnerAction_Name = "AuthRunnerAction_Name";
+			public const string AuthRunnerArtifact_Description = "AuthRunnerArtifact_Description";
+			public const string AuthRunnerArtifact_Help = "AuthRunnerArtifact_Help";
+			public const string AuthRunnerArtifact_Name = "AuthRunnerArtifact_Name";
+			public const string AuthRunnerInput_Description = "AuthRunnerInput_Description";
+			public const string AuthRunnerInput_Help = "AuthRunnerInput_Help";
+			public const string AuthRunnerInput_Name = "AuthRunnerInput_Name";
+			public const string AuthRunnerObservations_Description = "AuthRunnerObservations_Description";
+			public const string AuthRunnerObservations_Help = "AuthRunnerObservations_Help";
+			public const string AuthRunnerObservations_Name = "AuthRunnerObservations_Name";
+			public const string AuthRunnerOptions_Description = "AuthRunnerOptions_Description";
+			public const string AuthRunnerOptions_Help = "AuthRunnerOptions_Help";
+			public const string AuthRunnerOptions_Name = "AuthRunnerOptions_Name";
+			public const string AuthRunnerPlan_Description = "AuthRunnerPlan_Description";
+			public const string AuthRunnerPlan_Help = "AuthRunnerPlan_Help";
+			public const string AuthRunnerPlan_Name = "AuthRunnerPlan_Name";
+			public const string AuthRunnerResult_Description = "AuthRunnerResult_Description";
+			public const string AuthRunnerResult_Help = "AuthRunnerResult_Help";
+			public const string AuthRunnerResult_Name = "AuthRunnerResult_Name";
 			public const string AuthSingleuseToken_TokenNotFound = "AuthSingleuseToken_TokenNotFound";
 			public const string AuthSingleuseToken_UserNotFound = "AuthSingleuseToken_UserNotFound";
 			public const string AuthTenantStateSnapshot_BelongsToOrg = "AuthTenantStateSnapshot_BelongsToOrg";
@@ -2575,6 +3319,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AuthViewField_Title = "AuthViewField_Title";
 			public const string AuthViewFormField_Title = "AuthViewFormField_Title";
 			public const string AuthViews_Title = "AuthViews_Title";
+			public const string BasicTheme_Description = "BasicTheme_Description";
+			public const string BasicTheme_Help = "BasicTheme_Help";
+			public const string BasicTheme_Name = "BasicTheme_Name";
 			public const string Billing_Contact = "Billing_Contact";
 			public const string Calendar_AllDay = "Calendar_AllDay";
 			public const string Calendar_Date = "Calendar_Date";
@@ -2592,6 +3339,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string CalendarEventType_Other = "CalendarEventType_Other";
 			public const string CalendarEventType_OutOfOffice = "CalendarEventType_OutOfOffice";
 			public const string CalendarEventType_UserGroup = "CalendarEventType_UserGroup";
+			public const string CallLog_Description = "CallLog_Description";
+			public const string CallLog_Help = "CallLog_Help";
+			public const string CallLog_Name = "CallLog_Name";
+			public const string ChangePassword_Description = "ChangePassword_Description";
+			public const string ChangePassword_Help = "ChangePassword_Help";
+			public const string ChangePassword_Name = "ChangePassword_Name";
 			public const string ChangePasswordVM_Description = "ChangePasswordVM_Description";
 			public const string ChangePasswordVM_Help = "ChangePasswordVM_Help";
 			public const string ChangePasswordVM_Title = "ChangePasswordVM_Title";
@@ -2653,14 +3406,23 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Common_TimeZome_Picker = "Common_TimeZome_Picker";
 			public const string Common_VerticalAlign = "Common_VerticalAlign";
 			public const string Common_VerticalAlign_Select = "Common_VerticalAlign_Select";
+			public const string ConfirmEmail_Description = "ConfirmEmail_Description";
+			public const string ConfirmEmail_Help = "ConfirmEmail_Help";
+			public const string ConfirmEmail_Name = "ConfirmEmail_Name";
 			public const string ContactList_Description = "ContactList_Description";
 			public const string ContactList_Title = "ContactList_Title";
+			public const string CoreUserInfo_Description = "CoreUserInfo_Description";
+			public const string CoreUserInfo_Help = "CoreUserInfo_Help";
+			public const string CoreUserInfo_Name = "CoreUserInfo_Name";
 			public const string CreateLocationVM_Description = "CreateLocationVM_Description";
 			public const string CreateLocationVM_Help = "CreateLocationVM_Help";
 			public const string CreateLocationVM_Title = "CreateLocationVM_Title";
 			public const string CreateOrganizationVM_Description = "CreateOrganizationVM_Description";
 			public const string CreateOrganizationVM_Help = "CreateOrganizationVM_Help";
 			public const string CreateOrganizationVM_Title = "CreateOrganizationVM_Title";
+			public const string CreateUserResponse_Description = "CreateUserResponse_Description";
+			public const string CreateUserResponse_Help = "CreateUserResponse_Help";
+			public const string CreateUserResponse_Name = "CreateUserResponse_Name";
 			public const string DayOfWeek_Friday = "DayOfWeek_Friday";
 			public const string DayOfWeek_Monday = "DayOfWeek_Monday";
 			public const string DayOfWeek_Saturday = "DayOfWeek_Saturday";
@@ -2738,6 +3500,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string ExternalLoginConfirmVM_Description = "ExternalLoginConfirmVM_Description";
 			public const string ExternalLoginConfirmVM_Help = "ExternalLoginConfirmVM_Help";
 			public const string ExternalLoginConfirmVM_Title = "ExternalLoginConfirmVM_Title";
+			public const string FavoritesByModule_Description = "FavoritesByModule_Description";
+			public const string FavoritesByModule_Help = "FavoritesByModule_Help";
+			public const string FavoritesByModule_Name = "FavoritesByModule_Name";
 			public const string Feature_Help = "Feature_Help";
 			public const string Feature_Icon = "Feature_Icon";
 			public const string Feature_MenuTitle = "Feature_MenuTitle";
@@ -2807,8 +3572,10 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string InviteErr_NameIsRequired = "InviteErr_NameIsRequired";
 			public const string InviteUser_AlreadyPartOfOrg = "InviteUser_AlreadyPartOfOrg";
 			public const string InviteUser_ClickHere = "InviteUser_ClickHere";
+			public const string InviteUser_Description = "InviteUser_Description";
 			public const string InviteUser_Greeting_Label = "InviteUser_Greeting_Label";
 			public const string InviteUser_Greeting_Message = "InviteUser_Greeting_Message";
+			public const string InviteUser_Help = "InviteUser_Help";
 			public const string InviteUser_InvitedByEmail = "InviteUser_InvitedByEmail";
 			public const string InviteUser_InvitedById = "InviteUser_InvitedById";
 			public const string InviteUser_InvitedByName = "InviteUser_InvitedByName";
@@ -2819,6 +3586,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string InviteUserVM_Description = "InviteUserVM_Description";
 			public const string InviteUserVM_Help = "InviteUserVM_Help";
 			public const string InviteUserVM_Title = "InviteUserVM_Title";
+			public const string KioskLoginViewModel_Description = "KioskLoginViewModel_Description";
+			public const string KioskLoginViewModel_Help = "KioskLoginViewModel_Help";
+			public const string KioskLoginViewModel_Name = "KioskLoginViewModel_Name";
 			public const string Location_Admin_Contact = "Location_Admin_Contact";
 			public const string Location_City = "Location_City";
 			public const string Location_Country = "Location_Country";
@@ -2826,6 +3596,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Location_LocationName = "Location_LocationName";
 			public const string Location_RoomNumber = "Location_RoomNumber";
 			public const string Location_State = "Location_State";
+			public const string LocationDevice_Description = "LocationDevice_Description";
+			public const string LocationDevice_Help = "LocationDevice_Help";
+			public const string LocationDevice_Name = "LocationDevice_Name";
 			public const string LocationDiagram_BaseLocation = "LocationDiagram_BaseLocation";
 			public const string LocationDiagram_BaseLocation_Help = "LocationDiagram_BaseLocation_Help";
 			public const string LocationDiagram_Groups = "LocationDiagram_Groups";
@@ -2867,8 +3640,17 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string LoginVM_Description = "LoginVM_Description";
 			public const string LoginVM_Help = "LoginVM_Help";
 			public const string LoginVM_Title = "LoginVM_Title";
+			public const string ManagedAsset_Description = "ManagedAsset_Description";
+			public const string ManagedAsset_Help = "ManagedAsset_Help";
+			public const string ManagedAsset_Name = "ManagedAsset_Name";
+			public const string ManagedAssetSummary_Description = "ManagedAssetSummary_Description";
+			public const string ManagedAssetSummary_Help = "ManagedAssetSummary_Help";
+			public const string ManagedAssetSummary_Name = "ManagedAssetSummary_Name";
 			public const string Menu_DoNotDisplay = "Menu_DoNotDisplay";
 			public const string Menu_DoNotDisplay_Help = "Menu_DoNotDisplay_Help";
+			public const string MobileOAuthPendingAuth_Description = "MobileOAuthPendingAuth_Description";
+			public const string MobileOAuthPendingAuth_Help = "MobileOAuthPendingAuth_Help";
+			public const string MobileOAuthPendingAuth_Name = "MobileOAuthPendingAuth_Name";
 			public const string Module_AreaCategories = "Module_AreaCategories";
 			public const string Module_CardIcon = "Module_CardIcon";
 			public const string Module_CardSummary = "Module_CardSummary";
@@ -2918,6 +3700,21 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Month_October = "Month_October";
 			public const string Month_Select = "Month_Select";
 			public const string Month_September = "Month_September";
+			public const string MostRecentlyUsed_Description = "MostRecentlyUsed_Description";
+			public const string MostRecentlyUsed_Help = "MostRecentlyUsed_Help";
+			public const string MostRecentlyUsed_Name = "MostRecentlyUsed_Name";
+			public const string MostRecentlyUsedItem_Description = "MostRecentlyUsedItem_Description";
+			public const string MostRecentlyUsedItem_Help = "MostRecentlyUsedItem_Help";
+			public const string MostRecentlyUsedItem_Name = "MostRecentlyUsedItem_Name";
+			public const string MostRecentlyUsedModule_Description = "MostRecentlyUsedModule_Description";
+			public const string MostRecentlyUsedModule_Help = "MostRecentlyUsedModule_Help";
+			public const string MostRecentlyUsedModule_Name = "MostRecentlyUsedModule_Name";
+			public const string NewAppUserInboxItemItem_Description = "NewAppUserInboxItemItem_Description";
+			public const string NewAppUserInboxItemItem_Help = "NewAppUserInboxItemItem_Help";
+			public const string NewAppUserInboxItemItem_Name = "NewAppUserInboxItemItem_Name";
+			public const string NotificationContact_Description = "NotificationContact_Description";
+			public const string NotificationContact_Help = "NotificationContact_Help";
+			public const string NotificationContact_Name = "NotificationContact_Name";
 			public const string Organization = "Organization";
 			public const string Organization_AccentColor = "Organization_AccentColor";
 			public const string Organization_ApEmailAddress = "Organization_ApEmailAddress";
@@ -3050,6 +3847,48 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Page_Help = "Page_Help";
 			public const string Page_IsForProductLine = "Page_IsForProductLine";
 			public const string Page_Title = "Page_Title";
+			public const string PasskeyAuthenticationCompleteRequest_Description = "PasskeyAuthenticationCompleteRequest_Description";
+			public const string PasskeyAuthenticationCompleteRequest_Help = "PasskeyAuthenticationCompleteRequest_Help";
+			public const string PasskeyAuthenticationCompleteRequest_Name = "PasskeyAuthenticationCompleteRequest_Name";
+			public const string PasskeyAuthenticationCompleteRequestWire_Description = "PasskeyAuthenticationCompleteRequestWire_Description";
+			public const string PasskeyAuthenticationCompleteRequestWire_Help = "PasskeyAuthenticationCompleteRequestWire_Help";
+			public const string PasskeyAuthenticationCompleteRequestWire_Name = "PasskeyAuthenticationCompleteRequestWire_Name";
+			public const string PasskeyBeginOptionsResponse_Description = "PasskeyBeginOptionsResponse_Description";
+			public const string PasskeyBeginOptionsResponse_Help = "PasskeyBeginOptionsResponse_Help";
+			public const string PasskeyBeginOptionsResponse_Name = "PasskeyBeginOptionsResponse_Name";
+			public const string PasskeyChallenge_Description = "PasskeyChallenge_Description";
+			public const string PasskeyChallenge_Help = "PasskeyChallenge_Help";
+			public const string PasskeyChallenge_Name = "PasskeyChallenge_Name";
+			public const string PasskeyChallengePacket_Description = "PasskeyChallengePacket_Description";
+			public const string PasskeyChallengePacket_Help = "PasskeyChallengePacket_Help";
+			public const string PasskeyChallengePacket_Name = "PasskeyChallengePacket_Name";
+			public const string PasskeyCredential_Description = "PasskeyCredential_Description";
+			public const string PasskeyCredential_Help = "PasskeyCredential_Help";
+			public const string PasskeyCredential_Name = "PasskeyCredential_Name";
+			public const string PasskeyCredentialIndex_Description = "PasskeyCredentialIndex_Description";
+			public const string PasskeyCredentialIndex_Help = "PasskeyCredentialIndex_Help";
+			public const string PasskeyCredentialIndex_Name = "PasskeyCredentialIndex_Name";
+			public const string PasskeyCredentialSummary_Description = "PasskeyCredentialSummary_Description";
+			public const string PasskeyCredentialSummary_Help = "PasskeyCredentialSummary_Help";
+			public const string PasskeyCredentialSummary_Name = "PasskeyCredentialSummary_Name";
+			public const string PasskeyRegistrationCompleteRequest_Description = "PasskeyRegistrationCompleteRequest_Description";
+			public const string PasskeyRegistrationCompleteRequest_Help = "PasskeyRegistrationCompleteRequest_Help";
+			public const string PasskeyRegistrationCompleteRequest_Name = "PasskeyRegistrationCompleteRequest_Name";
+			public const string PasskeyRegistrationCompleteRequestWire_Description = "PasskeyRegistrationCompleteRequestWire_Description";
+			public const string PasskeyRegistrationCompleteRequestWire_Help = "PasskeyRegistrationCompleteRequestWire_Help";
+			public const string PasskeyRegistrationCompleteRequestWire_Name = "PasskeyRegistrationCompleteRequestWire_Name";
+			public const string PasskeySignInResult_Description = "PasskeySignInResult_Description";
+			public const string PasskeySignInResult_Help = "PasskeySignInResult_Help";
+			public const string PasskeySignInResult_Name = "PasskeySignInResult_Name";
+			public const string PaymentAccounts_Description = "PaymentAccounts_Description";
+			public const string PaymentAccounts_Help = "PaymentAccounts_Help";
+			public const string PaymentAccounts_Name = "PaymentAccounts_Name";
+			public const string PendingIdentity_Description = "PendingIdentity_Description";
+			public const string PendingIdentity_Help = "PendingIdentity_Help";
+			public const string PendingIdentity_Name = "PendingIdentity_Name";
+			public const string PushNotificationChannel_Description = "PushNotificationChannel_Description";
+			public const string PushNotificationChannel_Help = "PushNotificationChannel_Help";
+			public const string PushNotificationChannel_Name = "PushNotificationChannel_Name";
 			public const string RegErr_ErrorSendingEmail = "RegErr_ErrorSendingEmail";
 			public const string RegErr_ErrorSendingPhoneNumber = "RegErr_ErrorSendingPhoneNumber";
 			public const string RegErr_InvalidEmailAddress = "RegErr_InvalidEmailAddress";
@@ -3058,17 +3897,30 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string RegErr_MissingPassword = "RegErr_MissingPassword";
 			public const string RegErr_MissingPhoneNumber = "RegErr_MissingPhoneNumber";
 			public const string RegErr_UserAlreadyExists = "RegErr_UserAlreadyExists";
+			public const string RegisterUser_Description = "RegisterUser_Description";
+			public const string RegisterUser_Help = "RegisterUser_Help";
+			public const string RegisterUser_Name = "RegisterUser_Name";
 			public const string RegisterUserExists_3rdParty = "RegisterUserExists_3rdParty";
 			public const string RegisterVM_Description = "RegisterVM_Description";
 			public const string RegisterVM_Help = "RegisterVM_Help";
 			public const string RegisterVM_Title = "RegisterVM_Title";
+			public const string RenamePasskeyRequest_Description = "RenamePasskeyRequest_Description";
+			public const string RenamePasskeyRequest_Help = "RenamePasskeyRequest_Help";
+			public const string RenamePasskeyRequest_Name = "RenamePasskeyRequest_Name";
 			public const string ResetPassword_Description = "ResetPassword_Description";
 			public const string ResetPassword_Help = "ResetPassword_Help";
+			public const string ResetPassword_Name = "ResetPassword_Name";
 			public const string ResetPassword_Title = "ResetPassword_Title";
 			public const string Role_Description = "Role_Description";
 			public const string Role_Help = "Role_Help";
 			public const string Role_IsSystemRole = "Role_IsSystemRole";
 			public const string Role_Title = "Role_Title";
+			public const string RoleAccess_Description = "RoleAccess_Description";
+			public const string RoleAccess_Help = "RoleAccess_Help";
+			public const string RoleAccess_Name = "RoleAccess_Name";
+			public const string RoleAccessDTO_Description = "RoleAccessDTO_Description";
+			public const string RoleAccessDTO_Help = "RoleAccessDTO_Help";
+			public const string RoleAccessDTO_Name = "RoleAccessDTO_Name";
 			public const string ScheduledDowntime_AllDay = "ScheduledDowntime_AllDay";
 			public const string ScheduledDowntime_Day = "ScheduledDowntime_Day";
 			public const string ScheduledDowntime_DayOfWeek = "ScheduledDowntime_DayOfWeek";
@@ -3103,9 +3955,15 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string ScheduleType_WeekDay = "ScheduleType_WeekDay";
 			public const string ScheduleType_WeekEnd = "ScheduleType_WeekEnd";
 			public const string ScheudledDowntime_Week = "ScheudledDowntime_Week";
+			public const string SecureLink_Description = "SecureLink_Description";
+			public const string SecureLink_Help = "SecureLink_Help";
+			public const string SecureLink_Name = "SecureLink_Name";
 			public const string SendCodeVM_Description = "SendCodeVM_Description";
 			public const string SendCodeVM_Help = "SendCodeVM_Help";
 			public const string SendCodeVM_Title = "SendCodeVM_Title";
+			public const string SendResetPasswordLink_Description = "SendResetPasswordLink_Description";
+			public const string SendResetPasswordLink_Help = "SendResetPasswordLink_Help";
+			public const string SendResetPasswordLink_Name = "SendResetPasswordLink_Name";
 			public const string SentEmail_Description = "SentEmail_Description";
 			public const string SentEmail_Title = "SentEmail_Title";
 			public const string SentEmails_Title = "SentEmails_Title";
@@ -3137,6 +3995,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string ShapeType_Room = "ShapeType_Room";
 			public const string ShapeType_Select = "ShapeType_Select";
 			public const string ShapeType_Window = "ShapeType_Window";
+			public const string SingleUseToken_Description = "SingleUseToken_Description";
+			public const string SingleUseToken_Help = "SingleUseToken_Help";
+			public const string SingleUseToken_Name = "SingleUseToken_Name";
 			public const string SMS_CouldNotVerify = "SMS_CouldNotVerify";
 			public const string SMS_Verification_Body = "SMS_Verification_Body";
 			public const string Subscription_Description = "Subscription_Description";
@@ -3152,7 +4013,37 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Team_Description = "Team_Description";
 			public const string Team_Help = "Team_Help";
 			public const string Team_Title = "Team_Title";
+			public const string TeamUser_Description = "TeamUser_Description";
+			public const string TeamUser_Help = "TeamUser_Help";
+			public const string TeamUser_Name = "TeamUser_Name";
+			public const string TeamUserSummary_Description = "TeamUserSummary_Description";
+			public const string TeamUserSummary_Help = "TeamUserSummary_Help";
+			public const string TeamUserSummary_Name = "TeamUserSummary_Name";
 			public const string Technical_Contact = "Technical_Contact";
+			public const string TestRunArtifact_Description = "TestRunArtifact_Description";
+			public const string TestRunArtifact_Help = "TestRunArtifact_Help";
+			public const string TestRunArtifact_Name = "TestRunArtifact_Name";
+			public const string TestRunVerification_Description = "TestRunVerification_Description";
+			public const string TestRunVerification_Help = "TestRunVerification_Help";
+			public const string TestRunVerification_Name = "TestRunVerification_Name";
+			public const string TestUserCredentials_Description = "TestUserCredentials_Description";
+			public const string TestUserCredentials_Help = "TestUserCredentials_Help";
+			public const string TestUserCredentials_Name = "TestUserCredentials_Name";
+			public const string TokenAuthOptions_Description = "TokenAuthOptions_Description";
+			public const string TokenAuthOptions_Help = "TokenAuthOptions_Help";
+			public const string TokenAuthOptions_Name = "TokenAuthOptions_Name";
+			public const string TwitterAccessToken_Description = "TwitterAccessToken_Description";
+			public const string TwitterAccessToken_Help = "TwitterAccessToken_Help";
+			public const string TwitterAccessToken_Name = "TwitterAccessToken_Name";
+			public const string TwitterError_Description = "TwitterError_Description";
+			public const string TwitterError_Help = "TwitterError_Help";
+			public const string TwitterError_Name = "TwitterError_Name";
+			public const string TwitterErrorResponse_Description = "TwitterErrorResponse_Description";
+			public const string TwitterErrorResponse_Help = "TwitterErrorResponse_Help";
+			public const string TwitterErrorResponse_Name = "TwitterErrorResponse_Name";
+			public const string TwitterRequestToken_Description = "TwitterRequestToken_Description";
+			public const string TwitterRequestToken_Help = "TwitterRequestToken_Help";
+			public const string TwitterRequestToken_Name = "TwitterRequestToken_Name";
 			public const string UiCategory_Description = "UiCategory_Description";
 			public const string UiCategory_Icon = "UiCategory_Icon";
 			public const string UiCategory_Icon_Select = "UiCategory_Icon_Select";
@@ -3164,6 +4055,27 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string UpdateOrganizationVM_Help = "UpdateOrganizationVM_Help";
 			public const string UpdateOrganizationVM_Title = "UpdateOrganizationVM_Title";
 			public const string User = "User";
+			public const string UserAccess_Description = "UserAccess_Description";
+			public const string UserAccess_Help = "UserAccess_Help";
+			public const string UserAccess_Name = "UserAccess_Name";
+			public const string UserFavorite_Description = "UserFavorite_Description";
+			public const string UserFavorite_Help = "UserFavorite_Help";
+			public const string UserFavorite_Name = "UserFavorite_Name";
+			public const string UserFavorites_Description = "UserFavorites_Description";
+			public const string UserFavorites_Help = "UserFavorites_Help";
+			public const string UserFavorites_Name = "UserFavorites_Name";
+			public const string UserLoginResponse_Description = "UserLoginResponse_Description";
+			public const string UserLoginResponse_Help = "UserLoginResponse_Help";
+			public const string UserLoginResponse_Name = "UserLoginResponse_Name";
+			public const string UserRole_Description = "UserRole_Description";
+			public const string UserRole_Help = "UserRole_Help";
+			public const string UserRole_Name = "UserRole_Name";
+			public const string UserRoleDTO_Description = "UserRoleDTO_Description";
+			public const string UserRoleDTO_Help = "UserRoleDTO_Help";
+			public const string UserRoleDTO_Name = "UserRoleDTO_Name";
+			public const string VerfiyPhoneNumber_Description = "VerfiyPhoneNumber_Description";
+			public const string VerfiyPhoneNumber_Help = "VerfiyPhoneNumber_Help";
+			public const string VerfiyPhoneNumber_Name = "VerfiyPhoneNumber_Name";
 			public const string VerifyCodeViewModel_Code = "VerifyCodeViewModel_Code";
 			public const string VerifyCodeViewModel_Provider = "VerifyCodeViewModel_Provider";
 			public const string VerifyCodeViewModel_RememberBrowser = "VerifyCodeViewModel_RememberBrowser";
@@ -3181,6 +4093,18 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string VerticalAlign_Bottom = "VerticalAlign_Bottom";
 			public const string VerticalAlign_Middle = "VerticalAlign_Middle";
 			public const string VerticalAlign_Top = "VerticalAlign_Top";
+			public const string WebAuthnAssertionResponseWire_Description = "WebAuthnAssertionResponseWire_Description";
+			public const string WebAuthnAssertionResponseWire_Help = "WebAuthnAssertionResponseWire_Help";
+			public const string WebAuthnAssertionResponseWire_Name = "WebAuthnAssertionResponseWire_Name";
+			public const string WebAuthnAssertionWire_Description = "WebAuthnAssertionWire_Description";
+			public const string WebAuthnAssertionWire_Help = "WebAuthnAssertionWire_Help";
+			public const string WebAuthnAssertionWire_Name = "WebAuthnAssertionWire_Name";
+			public const string WebAuthnAttestationResponseWire_Description = "WebAuthnAttestationResponseWire_Description";
+			public const string WebAuthnAttestationResponseWire_Help = "WebAuthnAttestationResponseWire_Help";
+			public const string WebAuthnAttestationResponseWire_Name = "WebAuthnAttestationResponseWire_Name";
+			public const string WebAuthnAttestationWire_Description = "WebAuthnAttestationWire_Description";
+			public const string WebAuthnAttestationWire_Help = "WebAuthnAttestationWire_Help";
+			public const string WebAuthnAttestationWire_Name = "WebAuthnAttestationWire_Name";
 		}
 	}
 }

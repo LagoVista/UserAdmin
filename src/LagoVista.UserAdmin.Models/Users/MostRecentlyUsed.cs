@@ -3,14 +3,23 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core;
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
+using LagoVista.UserAdmin.Models.Resources;
 using System;
 using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.Models.Users
 {
+    [EntityDescription(
+        Domains.UserDomain,
+        UserAdminResources.Names.MostRecentlyUsed_Name,
+        UserAdminResources.Names.MostRecentlyUsed_Help,
+        UserAdminResources.Names.MostRecentlyUsed_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class MostRecentlyUsed : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity
     {
         public MostRecentlyUsed()
@@ -23,7 +32,7 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public List<MostRecentlyUsedItem> All { get; set; }
         public List<MostRecentlyUsedModule> Modules { get; set; }
-    
+
         public static string GenerateId(EntityHeader org, EntityHeader user)
         {
             return $"{nameof(MostRecentlyUsed).ToLower()}-key-{org.Id}-{user.Id}";
@@ -35,6 +44,13 @@ namespace LagoVista.UserAdmin.Models.Users
         }
     }
 
+    [EntityDescription(
+        Domains.UserDomain,
+        UserAdminResources.Names.MostRecentlyUsedModule_Name,
+        UserAdminResources.Names.MostRecentlyUsedModule_Help,
+        UserAdminResources.Names.MostRecentlyUsedModule_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class MostRecentlyUsedModule
     {
         public MostRecentlyUsedModule()
@@ -48,6 +64,13 @@ namespace LagoVista.UserAdmin.Models.Users
         public List<MostRecentlyUsedItem> Items { get; set; }
     }
 
+    [EntityDescription(
+        Domains.UserDomain,
+        UserAdminResources.Names.MostRecentlyUsedItem_Name,
+        UserAdminResources.Names.MostRecentlyUsedItem_Help,
+        UserAdminResources.Names.MostRecentlyUsedItem_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class MostRecentlyUsedItem
     {
         public MostRecentlyUsedItem()

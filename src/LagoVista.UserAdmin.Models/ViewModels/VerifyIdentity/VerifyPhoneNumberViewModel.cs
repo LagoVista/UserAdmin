@@ -10,7 +10,7 @@ using LagoVista.UserAdmin.Resources;
 
 namespace LagoVista.UserAdmin.ViewModels.VerifyIdentity
 {
-    [EntityDescription(Domains.SecurityViewModels, UserAdminResources.Names.VerifyPhoneNumberVM_Title, UserAdminResources.Names.VerifyPhoneNumberVM_Help, UserAdminResources.Names.VerifyPhoneNumberVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.VerifyPhoneNumberVM_Title, UserAdminResources.Names.VerifyPhoneNumberVM_Help, UserAdminResources.Names.VerifyPhoneNumberVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
 
     public class VerifyPhoneNumberViewModel : IValidateable
     {

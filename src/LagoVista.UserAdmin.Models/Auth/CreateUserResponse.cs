@@ -2,13 +2,22 @@
 // ContentHash: 5e840bdd4de0c8ac51b13ed2244ba71239553a3d75b1cde7d715f083d2e35dae
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.Attributes;
+using LagoVista.UserAdmin.Models.Resources;
+using LagoVista.UserAdmin.Models.Users;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using LagoVista.UserAdmin.Models.Users;
 
 namespace LagoVista.UserAdmin.Models.Auth
 {
+    [EntityDescription(
+        Domains.AuthDomain,
+        UserAdminResources.Names.CreateUserResponse_Name,
+        UserAdminResources.Names.CreateUserResponse_Help,
+        UserAdminResources.Names.CreateUserResponse_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class CreateUserResponse : AuthResponse
     {
         public static CreateUserResponse FromAuthResponse(AuthResponse response)

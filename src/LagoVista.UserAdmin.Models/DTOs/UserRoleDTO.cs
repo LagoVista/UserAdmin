@@ -2,11 +2,20 @@
 // ContentHash: 4fb3c633364f1b870d421640a1d7ec0f03c66b0f038fc232cf4f8ef82e9cfe26
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
+using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Models.Users;
 
 namespace LagoVista.UserAdmin.Models.DTOs
 {
+    [EntityDescription(
+        Domains.SecurityDomain,
+        UserAdminResources.Names.UserRoleDTO_Name,
+        UserAdminResources.Names.UserRoleDTO_Help,
+        UserAdminResources.Names.UserRoleDTO_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class UserRoleDTO : TableStorageEntity
     {
         public string UserId { get; set; }
@@ -32,6 +41,5 @@ namespace LagoVista.UserAdmin.Models.DTOs
                 CreationDate = CreationDate
             };
         }
-
     }
 }

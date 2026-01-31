@@ -13,7 +13,7 @@ using System;
 
 namespace LagoVista.UserAdmin.ViewModels.Organization
 {
-    [EntityDescription(Domains.OrganizationViewModels, UserAdminResources.Names.LocationVM_Title, UserAdminResources.Names.LocationVM_Help, UserAdminResources.Names.LocationUser_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(Domains.OrgLocations, UserAdminResources.Names.LocationVM_Title, UserAdminResources.Names.LocationVM_Help, UserAdminResources.Names.LocationUser_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class LocationViewModel : IValidateable
     {
         [FormField(LabelResource: UserAdminResources.Names.Location_LocationName, IsRequired: true, ResourceType: typeof(UserAdminResources))]

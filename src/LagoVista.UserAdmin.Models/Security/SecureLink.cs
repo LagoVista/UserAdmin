@@ -2,18 +2,27 @@
 // ContentHash: a31fde10e29f53200426eba26627899c02947003ba00290d0d69a106eeb932af
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
+using LagoVista.UserAdmin.Models.Resources;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
+    [EntityDescription(
+        Domains.AuthDomain,
+        UserAdminResources.Names.SecureLink_Name,
+        UserAdminResources.Names.SecureLink_Help,
+        UserAdminResources.Names.SecureLink_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class SecureLink : TableStorageEntity
     {
-        public string OrgId { get; set; } 
+        public string OrgId { get; set; }
         public string OrgName { get; set; }
-       
+
         public string CreatedByUserId { get; set; }
         public string CreatedByUser { get; set; }
         public string CreationDate { get; set; }

@@ -12,7 +12,7 @@ using System;
 
 namespace LagoVista.UserAdmin.ViewModels.Organization
 {
-    [EntityDescription(Domains.OrganizationViewModels, UserAdminResources.Names.UpdateOrganizationVM_Title, UserAdminResources.Names.UpdateOrganizationVM_Help, UserAdminResources.Names.UpdateOrganizationVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.UpdateOrganizationVM_Title, UserAdminResources.Names.UpdateOrganizationVM_Help, UserAdminResources.Names.UpdateOrganizationVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class UpdateOrganizationViewModel : OrganizationViewModel, IValidateable
     {
         public String OrganziationId { get; set; }

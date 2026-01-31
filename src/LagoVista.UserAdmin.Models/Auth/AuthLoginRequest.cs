@@ -2,12 +2,21 @@
 // ContentHash: 0801dff43253a58b717ac5e188be4edf4fcf975574fcd9b3555cd06794f4e57a
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.Attributes;
+using LagoVista.UserAdmin.Models.Resources;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Auth
 {
+    [EntityDescription(
+        Domains.AuthDomain,
+        UserAdminResources.Names.AuthLoginRequest_Name,
+        UserAdminResources.Names.AuthLoginRequest_Help,
+        UserAdminResources.Names.AuthLoginRequest_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class AuthLoginRequest
     {
         public string EndUserAppOrgId { get; set; }

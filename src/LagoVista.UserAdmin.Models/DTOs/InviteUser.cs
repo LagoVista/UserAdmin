@@ -2,7 +2,9 @@
 // ContentHash: 009438824a39e01fdd79ae01bb36d1825582d573f922755f1578d30c9ca32ad5
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
+using LagoVista.UserAdmin.Models.Resources;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,26 +12,33 @@ using System.Text;
 
 namespace LagoVista.UserAdmin.Models.DTOs
 {
+    [EntityDescription(
+        Domains.UserDomain,
+        UserAdminResources.Names.InviteUser_Name,
+        UserAdminResources.Names.InviteUser_Help,
+        UserAdminResources.Names.InviteUser_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class InviteUser
     {
         [JsonProperty("inviteFromuserId")]
-        public String InviteFromUserId { get; set; }
+        public string InviteFromUserId { get; set; }
 
         [JsonProperty("inviteToOrgId")]
-        public String InviteToOrgId { get; set; }
+        public string InviteToOrgId { get; set; }
 
         [JsonProperty("email")]
-        public String Email { get; set; }
+        public string Email { get; set; }
 
         [JsonProperty("name")]
-        public String Name { get; set; }
+        public string Name { get; set; }
 
         [JsonProperty("message")]
-        public String Message { get; set; }
+        public string Message { get; set; }
 
         [JsonProperty("endUserOrgApp")]
         public EntityHeader EndUserAppOrg { get; set; }
-        
+
         [JsonProperty("customer")]
         public EntityHeader Customer { get; set; }
 

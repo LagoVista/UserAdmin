@@ -1,4 +1,6 @@
-﻿using LagoVista.Core.Models;
+﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Models;
+using LagoVista.UserAdmin.Models.Resources;
 using System;
 using System.Collections.Generic;
 
@@ -9,6 +11,13 @@ namespace LagoVista.UserAdmin.Models.Testing
     /// V1: 1 plan => 1 run.
     /// The runner does not evaluate pre/post conditions; it only executes and reports observations.
     /// </summary>
+    [EntityDescription(
+        Domains.AuthTesting,
+        UserAdminResources.Names.AuthRunnerPlan_Name,
+        UserAdminResources.Names.AuthRunnerPlan_Help,
+        UserAdminResources.Names.AuthRunnerPlan_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class AuthRunnerPlan
     {
         /// <summary>Server-assigned run id (or correlation id) used for logging and reporting.</summary>
@@ -42,11 +51,17 @@ namespace LagoVista.UserAdmin.Models.Testing
 
         /// <summary>Execution options for debugging.</summary>
         public AuthRunnerOptions Options { get; set; } = new AuthRunnerOptions();
-    
+
         public TestUserCredentials UserCredentials { get; set; }
     }
 
-
+    [EntityDescription(
+        Domains.AuthTesting,
+        UserAdminResources.Names.TestUserCredentials_Name,
+        UserAdminResources.Names.TestUserCredentials_Help,
+        UserAdminResources.Names.TestUserCredentials_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class TestUserCredentials
     {
         public string InviteId { get; set; }
@@ -54,7 +69,7 @@ namespace LagoVista.UserAdmin.Models.Testing
 
         public string EmailAddress { get; set; }
         public string Password { get; set; }
-    
+
         public string PasskeyCredentialsId { get; set; }
     }
 
@@ -62,6 +77,13 @@ namespace LagoVista.UserAdmin.Models.Testing
     /// One input assignment: find an element and set its value.
     /// Finder should be a CSS selector compatible with Playwright (e.g. [data-testid="field:email"]).
     /// </summary>
+    [EntityDescription(
+        Domains.AuthTesting,
+        UserAdminResources.Names.AuthRunnerInput_Name,
+        UserAdminResources.Names.AuthRunnerInput_Help,
+        UserAdminResources.Names.AuthRunnerInput_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class AuthRunnerInput
     {
         public string Name { get; set; }   // "email", "password" (for logs)
@@ -79,6 +101,13 @@ namespace LagoVista.UserAdmin.Models.Testing
     /// Exactly one action to click/submit.
     /// Finder should be a CSS selector (e.g. [data-testid="action:next"]).
     /// </summary>
+    [EntityDescription(
+        Domains.AuthTesting,
+        UserAdminResources.Names.AuthRunnerAction_Name,
+        UserAdminResources.Names.AuthRunnerAction_Help,
+        UserAdminResources.Names.AuthRunnerAction_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class AuthRunnerAction
     {
         public string Name { get; set; }   // "next", "cancel", "oauth-google" (for logs)
@@ -89,6 +118,13 @@ namespace LagoVista.UserAdmin.Models.Testing
     /// What evidence the runner should capture and return to the server.
     /// These are hints; server determines pass/fail.
     /// </summary>
+    [EntityDescription(
+        Domains.AuthTesting,
+        UserAdminResources.Names.AuthRunnerObservations_Name,
+        UserAdminResources.Names.AuthRunnerObservations_Help,
+        UserAdminResources.Names.AuthRunnerObservations_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class AuthRunnerObservations
     {
         /// <summary>
@@ -123,6 +159,13 @@ namespace LagoVista.UserAdmin.Models.Testing
     /// <summary>
     /// Runner behavior controls (debugging, timing, evidence).
     /// </summary>
+    [EntityDescription(
+        Domains.AuthTesting,
+        UserAdminResources.Names.AuthRunnerOptions_Name,
+        UserAdminResources.Names.AuthRunnerOptions_Help,
+        UserAdminResources.Names.AuthRunnerOptions_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class AuthRunnerOptions
     {
         public bool Headless { get; set; } = true;
@@ -141,6 +184,13 @@ namespace LagoVista.UserAdmin.Models.Testing
     /// What the runner posts back after execution.
     /// Server uses this + its own snapshot/authlog checks to determine pass/fail.
     /// </summary>
+    [EntityDescription(
+        Domains.AuthTesting,
+        UserAdminResources.Names.AuthRunnerResult_Name,
+        UserAdminResources.Names.AuthRunnerResult_Help,
+        UserAdminResources.Names.AuthRunnerResult_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class AuthRunnerResult
     {
         public string RunId { get; set; }
@@ -170,6 +220,13 @@ namespace LagoVista.UserAdmin.Models.Testing
         FailedToExecute = 2
     }
 
+    [EntityDescription(
+        Domains.AuthTesting,
+        UserAdminResources.Names.AuthRunnerArtifact_Name,
+        UserAdminResources.Names.AuthRunnerArtifact_Help,
+        UserAdminResources.Names.AuthRunnerArtifact_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class AuthRunnerArtifact
     {
         public string Name { get; set; }  // "trace.zip"

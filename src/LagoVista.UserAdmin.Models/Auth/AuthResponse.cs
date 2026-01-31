@@ -2,13 +2,21 @@
 // ContentHash: b8acb550359808fc87cd719ec04dfbc0351db4568baba3de45e6a9b792cf7894
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
+using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Models.Users;
 using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.Models.Auth
 {
-
+    [EntityDescription(
+        Domains.AuthDomain,
+        UserAdminResources.Names.AuthResponse_Name,
+        UserAdminResources.Names.AuthResponse_Help,
+        UserAdminResources.Names.AuthResponse_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class AuthResponse
     {
         public AuthResponse()

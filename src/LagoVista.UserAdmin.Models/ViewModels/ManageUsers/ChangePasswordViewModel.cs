@@ -10,7 +10,7 @@ using LagoVista.UserAdmin.Resources;
 
 namespace LagoVista.UserAdmin.ViewModels.ManageUsers
 {
-    [EntityDescription(Domains.SecurityViewModels, UserAdminResources.Names.ChangePasswordVM_Title, UserAdminResources.Names.ChangePasswordVM_Help, UserAdminResources.Names.ChangePasswordVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.ChangePasswordVM_Title, UserAdminResources.Names.ChangePasswordVM_Help, UserAdminResources.Names.ChangePasswordVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
     public class ChangePasswordViewModel : IValidateable
     {
         [FormField(LabelResource: UserAdminResources.Names.AppUser_OldPassword, FieldType: FieldTypes.Password, IsRequired: true, ResourceType: typeof(UserAdminResources))]

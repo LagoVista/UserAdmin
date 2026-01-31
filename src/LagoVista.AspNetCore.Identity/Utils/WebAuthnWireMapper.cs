@@ -2,12 +2,13 @@
 using Fido2NetLib;
 using System;
 using LagoVista.UserAdmin.Models.Security.Passkeys;
+using LagoVista.UserAdmin.Models.Auth.Passkeys;
 
 namespace LagoVista.AspNetCore.Identity.Utils
 {
     internal static class WebAuthnWireMapper
     {
-        public static AuthenticatorAttestationRawResponse ToAttestationRawResponse(LagoVista.UserAdmin.Models.Security.Passkeys.WebAuthnAttestationWire wire)
+        public static AuthenticatorAttestationRawResponse ToAttestationRawResponse(WebAuthnAttestationWire wire)
         {
             if (wire == null) throw new ArgumentNullException(nameof(wire));
             if (wire.Response == null) throw new ArgumentNullException(nameof(wire.Response));

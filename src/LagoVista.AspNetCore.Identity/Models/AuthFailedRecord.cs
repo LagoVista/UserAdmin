@@ -2,17 +2,27 @@
 // ContentHash: 22e3b06a5d4cb4287e6ea2f5646f568cd40405bb0d65b1f79d773f571f7704d0
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.Attributes;
+using LagoVista.UserAdmin.Models.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
-using System.Security.Claims;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Linq;
+using System.Security.Claims;
+using LagoVista.UserAdmin.Models;
 
 namespace LagoVista.AspNetCore.Identity.Models
 {
+    [EntityDescription(
+        Domains.AuthDomain,
+        UserAdminResources.Names.AuthFailureRecord_Name,
+        UserAdminResources.Names.AuthFailureRecord_Help,
+        UserAdminResources.Names.AuthFailureRecord_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public sealed record AuthFailureRecord
     {
         public DateTimeOffset Timestamp { get; init; }

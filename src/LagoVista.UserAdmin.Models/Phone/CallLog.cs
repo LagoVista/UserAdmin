@@ -2,12 +2,21 @@
 // ContentHash: 84ac933501f357e36083ba4149c86c38881ffe89ce09e5a099852fddcdc7cbd9
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.Attributes;
+using LagoVista.UserAdmin.Models.Resources;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Phone
 {
+    [EntityDescription(
+        Domains.UserDomain,
+        UserAdminResources.Names.CallLog_Name,
+        UserAdminResources.Names.CallLog_Help,
+        UserAdminResources.Names.CallLog_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class CallLog
     {
         public string CallLogId { get; set; }

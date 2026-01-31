@@ -1,4 +1,6 @@
 using LagoVista.Core;
+using LagoVista.Core.Attributes;
+using LagoVista.UserAdmin.Models.Resources;
 using Newtonsoft.Json;
 using System;
 
@@ -10,6 +12,13 @@ namespace LagoVista.UserAdmin.Models.Security.Passkeys
         Authenticate,
     }
 
+    [EntityDescription(
+        Domains.AuthDomain,
+        UserAdminResources.Names.PasskeyChallenge_Name,
+        UserAdminResources.Names.PasskeyChallenge_Help,
+        UserAdminResources.Names.PasskeyChallenge_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class PasskeyChallenge
     {
         public string Id { get; set; } = Guid.NewGuid().ToId();
@@ -50,6 +59,13 @@ namespace LagoVista.UserAdmin.Models.Security.Passkeys
         }
     }
 
+    [EntityDescription(
+        Domains.OrganizationDomain,
+        UserAdminResources.Names.PasskeyChallengePacket_Name,
+        UserAdminResources.Names.PasskeyChallengePacket_Help,
+        UserAdminResources.Names.PasskeyChallengePacket_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class PasskeyChallengePacket
     {
         public PasskeyChallenge Challenge { get; set; }

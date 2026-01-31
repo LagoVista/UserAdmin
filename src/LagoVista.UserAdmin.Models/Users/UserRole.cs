@@ -2,14 +2,23 @@
 // ContentHash: ef5e14085db755d9e1b597abb9905cdac5cf996c7e83ab90685f7ff192d8ef39
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models.DTOs;
+using LagoVista.UserAdmin.Models.Resources;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Users
 {
+    [EntityDescription(
+        Domains.OrganizationDomain,
+        UserAdminResources.Names.UserRole_Name,
+        UserAdminResources.Names.UserRole_Help,
+        UserAdminResources.Names.UserRole_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
+        typeof(UserAdminResources))]
     public class UserRole
     {
         public string Id { get; set; }
