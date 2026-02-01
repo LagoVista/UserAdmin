@@ -13,12 +13,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Users
 {
     [EntityDescription(
-        Domains.OrganizationDomain,
-        UserAdminResources.Names.UserRole_Name,
-        UserAdminResources.Names.UserRole_Help,
-        UserAdminResources.Names.UserRole_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.OrganizationDomain, UserAdminResources.Names.UserRole_Name, UserAdminResources.Names.UserRole_Help,
+        UserAdminResources.Names.UserRole_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "access", ModelType: EntityDescriptionAttribute.ModelTypes.DomainEntity, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Secondary,
+        IndexPriority: 55, IndexTagsCsv: "organizationdomain,access,domainentity,user")]
     public class UserRole
     {
         public string Id { get; set; }

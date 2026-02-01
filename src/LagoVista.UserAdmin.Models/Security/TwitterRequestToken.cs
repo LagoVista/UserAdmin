@@ -11,12 +11,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Security
 {
     [EntityDescription(
-        Domains.OrganizationDomain,
-        UserAdminResources.Names.TwitterRequestToken_Name,
-        UserAdminResources.Names.TwitterRequestToken_Help,
-        UserAdminResources.Names.TwitterRequestToken_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.OrganizationDomain, UserAdminResources.Names.TwitterRequestToken_Name, UserAdminResources.Names.TwitterRequestToken_Help,
+        UserAdminResources.Names.TwitterRequestToken_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "integrations", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Restricted, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 5, IndexTagsCsv: "organizationdomain,integrations,runtimeartifact,token")]
     public class TwitterRequestToken
     {
         public string Token { get; set; }

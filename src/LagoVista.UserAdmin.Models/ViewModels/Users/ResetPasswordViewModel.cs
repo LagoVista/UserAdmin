@@ -10,8 +10,13 @@ using LagoVista.UserAdmin.Models.Resources;
 
 namespace LagoVista.UserAdmin.ViewModels.Users
 {
-    [EntityDescription(Domains.AuthDomain,
-       UserAdminResources.Names.ResetPassword_Title, UserAdminResources.Names.ResetPassword_Help, UserAdminResources.Names.ResetPassword_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(
+        Domains.AuthDomain, UserAdminResources.Names.ResetPassword_Title, UserAdminResources.Names.ResetPassword_Help,
+        UserAdminResources.Names.ResetPassword_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources),
+
+        ClusterKey: "login", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Restricted, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 5, IndexTagsCsv: "authdomain,login,runtimeartifact")]
     public class ResetPasswordViewModel : IValidateable
     {
         [FormField(LabelResource: UserAdminResources.Names.AppUser_Email, FieldType: FieldTypes.Email, IsRequired: true, ResourceType: typeof(UserAdminResources))]

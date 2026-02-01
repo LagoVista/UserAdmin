@@ -11,12 +11,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Security
 {
     [EntityDescription(
-        Domains.OrganizationDomain,
-        UserAdminResources.Names.TwitterErrorResponse_Name,
-        UserAdminResources.Names.TwitterErrorResponse_Help,
-        UserAdminResources.Names.TwitterErrorResponse_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.OrganizationDomain, UserAdminResources.Names.TwitterErrorResponse_Name, UserAdminResources.Names.TwitterErrorResponse_Help,
+        UserAdminResources.Names.TwitterErrorResponse_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "integrations", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Aux, IndexPriority: 25,
+        IndexTagsCsv: "organizationdomain,integrations,runtimeartifact,dto")]
     public sealed class TwitterErrorResponse
     {
         public List<TwitterError> Errors { get; set; }

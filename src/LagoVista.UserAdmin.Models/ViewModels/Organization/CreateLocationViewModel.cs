@@ -12,7 +12,13 @@ using LagoVista.UserAdmin.Models.Resources;
 
 namespace LagoVista.UserAdmin.ViewModels.Organization
 {
-    [EntityDescription(Domains.OrgLocations, UserAdminResources.Names.CreateLocationVM_Title, UserAdminResources.Names.CreateOrganizationVM_Help, UserAdminResources.Names.CreateOrganizationVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(
+        Domains.OrgLocations, UserAdminResources.Names.CreateLocationVM_Title, UserAdminResources.Names.CreateOrganizationVM_Help,
+        UserAdminResources.Names.CreateOrganizationVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources),
+
+        ClusterKey: "org", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Aux, IndexPriority: 30,
+        IndexTagsCsv: "organizationdomain,org,runtimeartifact,viewmodel")]
     public class CreateLocationViewModel : LocationViewModel
     {
         public String OrganizationId { get; set; }

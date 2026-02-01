@@ -13,10 +13,18 @@ using System.Text;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.HolidaySet_Title, UserAdminResources.Names.HolidaySet_Help,
-                          UserAdminResources.Names.HolidaySet_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources), Icon: "icon-ae-calendar",
-                          ListUIUrl: "/organization/holidaysets", CreateUIUrl: "/organization/holidayset/add", EditUIUrl: "/organization/holidayset/{id}",
-                          GetListUrl: "/api/holidaysets", GetUrl: "/api/holidayset/{id}", SaveUrl: "/api/holidayset", FactoryUrl: "/api/holidayset/factory", DeleteUrl: "/api/holidayset/{id}")]
+    [EntityDescription(
+        Domains.OrganizationDomain, UserAdminResources.Names.HolidaySet_Title, UserAdminResources.Names.HolidaySet_Help,
+        UserAdminResources.Names.HolidaySet_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        GetListUrl: "/api/holidaysets", GetUrl: "/api/holidayset/{id}", SaveUrl: "/api/holidayset", FactoryUrl: "/api/holidayset/factory",
+        DeleteUrl: "/api/holidayset/{id}",
+
+        ListUIUrl: "/organization/holidaysets", CreateUIUrl: "/organization/holidayset/add", EditUIUrl: "/organization/holidayset/{id}",
+
+        Icon: "icon-ae-calendar", ClusterKey: "calendars", ModelType: EntityDescriptionAttribute.ModelTypes.Configuration,
+        Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime, Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true,
+        IndexTier: EntityDescriptionAttribute.IndexTiers.Primary, IndexPriority: 80, IndexTagsCsv: "organizationdomain,calendars,configuration,holidayset")]
     public class HolidaySet : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity, IFormDescriptor, IFormDescriptorCol2, IIconEntity, ISummaryFactory, ICategorized
     {
         public HolidaySet()

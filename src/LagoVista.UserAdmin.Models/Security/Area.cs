@@ -22,8 +22,15 @@ using static LagoVista.Core.Models.AdaptiveCard.MSTeams;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
-    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.Area_Title, UserAdminResources.Names.Area_Help, UserAdminResources.Names.Area_Help, EntityDescriptionAttribute.EntityTypes.Dto, 
-        typeof(UserAdminResources), FactoryUrl: "/api/module/area/factory")]
+    [EntityDescription(
+        Domains.SecurityDomain, UserAdminResources.Names.Area_Title, UserAdminResources.Names.Area_Help, UserAdminResources.Names.Area_Help,
+        EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
+
+        FactoryUrl: "/api/module/area/factory",
+
+        ClusterKey: "ui", ModelType: EntityDescriptionAttribute.ModelTypes.Taxonomy, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Primary,
+        IndexPriority: 80, IndexTagsCsv: "securitydomain,ui,taxonomy,area")]
     public class Area : IFormDescriptor, IFormDescriptorCol2, IFormDescriptorBottom
     {
         public Area()

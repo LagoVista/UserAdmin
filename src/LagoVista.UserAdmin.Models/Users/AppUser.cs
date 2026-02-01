@@ -35,7 +35,13 @@ namespace LagoVista.UserAdmin.Models.Users
         Ready,
     }
 
-    [EntityDescription(Domains.UserDomain, UserAdminResources.Names.AppUser_Title, UserAdminResources.Names.AppUser_Help, UserAdminResources.Names.AppUser_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
+    [EntityDescription(
+        Domains.UserDomain, UserAdminResources.Names.AppUser_Title, UserAdminResources.Names.AppUser_Help, UserAdminResources.Names.AppUser_Description,
+        EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
+
+        ClusterKey: "users", ModelType: EntityDescriptionAttribute.ModelTypes.DomainEntity, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Primary,
+        IndexPriority: 95, IndexTagsCsv: "userdomain,users,domainentity")]
     public class AppUser : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, ISummaryFactory, IFormDescriptor, IFormDescriptorCol2, IAppUserAuthTenantState
     {
         public AppUser(String email, String createdBy) : this(email, email, createdBy)

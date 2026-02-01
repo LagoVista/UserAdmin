@@ -12,12 +12,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Users
 {
     [EntityDescription(
-        Domains.OrganizationDomain,
-        UserAdminResources.Names.SingleUseToken_Name,
-        UserAdminResources.Names.SingleUseToken_Help,
-        UserAdminResources.Names.SingleUseToken_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.OrganizationDomain, UserAdminResources.Names.SingleUseToken_Name, UserAdminResources.Names.SingleUseToken_Help,
+        UserAdminResources.Names.SingleUseToken_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "authassist", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Restricted, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 5, IndexTagsCsv: "organizationdomain,authassist,runtimeartifact,token")]
     public class SingleUseToken
     {
         public string UserId { get; set; }

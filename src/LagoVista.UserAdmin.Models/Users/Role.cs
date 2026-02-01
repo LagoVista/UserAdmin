@@ -12,7 +12,13 @@ using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.Models.Users
 {
-    [EntityDescription(Domains.UserDomain, UserAdminResources.Names.Role_Title, UserAdminResources.Names.Role_Help, UserAdminResources.Names.Role_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
+    [EntityDescription(
+        Domains.UserDomain, UserAdminResources.Names.Role_Title, UserAdminResources.Names.Role_Help, UserAdminResources.Names.Role_Description,
+        EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
+
+        ClusterKey: "access", ModelType: EntityDescriptionAttribute.ModelTypes.Configuration, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Primary,
+        IndexPriority: 80, IndexTagsCsv: "userdomain,access,configuration,role")]
     public class Role : UserAdminModelBase, IKeyedEntity, IOwnedEntity, IValidateable, INamedEntity
     {
 

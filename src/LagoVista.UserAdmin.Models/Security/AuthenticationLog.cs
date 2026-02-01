@@ -205,9 +205,17 @@ namespace LagoVista.UserAdmin.Models.Security
         TotpDisableMfaSuccess,
     }
 
-    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.AuthenticationLogs_Title, LoggingResources.Names.LogRecord_Description,
-       UserAdminResources.Names.AuthenticationLogs_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources),
-        GetListUrl: "/sys/auth/log", ListUIUrl: "/sysadmin/areas/logs", Icon: "icon-ae-coding-laptop")]
+    [EntityDescription(
+        Domains.SecurityDomain, UserAdminResources.Names.AuthenticationLogs_Title, LoggingResources.Names.LogRecord_Description,
+        UserAdminResources.Names.AuthenticationLogs_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources),
+
+        GetListUrl: "/sys/auth/log",
+
+        ListUIUrl: "/sysadmin/areas/logs",
+
+        Icon: "icon-ae-coding-laptop", ClusterKey: "audit", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact,
+        Lifecycle: EntityDescriptionAttribute.Lifecycles.Audit, Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: false,
+        IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude, IndexPriority: 10, IndexTagsCsv: "securitydomain,audit,runtimeartifact")]
     public class AuthenticationLog : TableStorageEntity
     {
         public AuthenticationLog(AuthLogTypes authType)

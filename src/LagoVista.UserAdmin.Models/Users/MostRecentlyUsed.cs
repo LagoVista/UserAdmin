@@ -14,12 +14,12 @@ using System.Collections.Generic;
 namespace LagoVista.UserAdmin.Models.Users
 {
     [EntityDescription(
-        Domains.UserDomain,
-        UserAdminResources.Names.MostRecentlyUsed_Name,
-        UserAdminResources.Names.MostRecentlyUsed_Help,
-        UserAdminResources.Names.MostRecentlyUsed_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.UserDomain, UserAdminResources.Names.MostRecentlyUsed_Name, UserAdminResources.Names.MostRecentlyUsed_Help,
+        UserAdminResources.Names.MostRecentlyUsed_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "mru", ModelType: EntityDescriptionAttribute.ModelTypes.Configuration, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Secondary,
+        IndexPriority: 60, IndexTagsCsv: "userdomain,mru,configuration")]
     public class MostRecentlyUsed : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity
     {
         public MostRecentlyUsed()

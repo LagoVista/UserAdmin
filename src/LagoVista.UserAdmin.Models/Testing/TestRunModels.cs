@@ -21,12 +21,12 @@ namespace LagoVista.UserAdmin.Models.Testing
     /// V1: 1 run = 1 ceremony.
     /// </summary>
     [EntityDescription(
-        Domains.AuthTesting,
-        UserAdminResources.Names.AppUserTestRun_Name,
-        UserAdminResources.Names.AppUserTestRun_Help,
-        UserAdminResources.Names.AppUserTestRun_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.AuthTesting, UserAdminResources.Names.AppUserTestRun_Name, UserAdminResources.Names.AppUserTestRun_Help,
+        UserAdminResources.Names.AppUserTestRun_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "runs", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.Audit,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 10, IndexTagsCsv: "authtesting,runs,runtimeartifact")]
     public class AppUserTestRun : EntityBase, ISummaryFactory
     {
         /// <summary>

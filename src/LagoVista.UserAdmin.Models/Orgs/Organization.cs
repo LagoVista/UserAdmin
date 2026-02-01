@@ -25,9 +25,17 @@ namespace LagoVista.UserAdmin.Models.Orgs
     }
 
 
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Organization_Title, UserAdminResources.Names.Organization_Help,
+    [EntityDescription(
+        Domains.OrganizationDomain, UserAdminResources.Names.Organization_Title, UserAdminResources.Names.Organization_Help,
         UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
-        EditUIUrl: "/organization/orgaccount", Icon: "icon-ae-building", SaveUrl: "/api/org", GetUrl: "/api/org/{id}")]
+
+        SaveUrl: "/api/org", GetUrl: "/api/org/{id}",
+
+        EditUIUrl: "/organization/orgaccount",
+
+        Icon: "icon-ae-building", ClusterKey: "org", ModelType: EntityDescriptionAttribute.ModelTypes.DomainEntity,
+        Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime, Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true,
+        IndexTier: EntityDescriptionAttribute.IndexTiers.Primary, IndexPriority: 95, IndexTagsCsv: "organizationdomain,org,domainentity,organization")]
     public class Organization : UserAdminModelBase, INamedEntity, IKeyedEntity, IValidateable, IOwnedEntity, IFormDescriptor, IFormDescriptorCol2, IIconEntity, ISummaryFactory
     {
         public const string Organization_OrgStatuses_Active = "active";

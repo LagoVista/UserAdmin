@@ -9,12 +9,12 @@ using LagoVista.UserAdmin.Models;
 namespace LagoVista.UserAdmin.ViewModels.Users
 {
     [EntityDescription(
-        Domains.AuthDomain,
-        UserAdminResources.Names.KioskLoginViewModel_Name,
-        UserAdminResources.Names.KioskLoginViewModel_Help,
-        UserAdminResources.Names.KioskLoginViewModel_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.AuthDomain, UserAdminResources.Names.KioskLoginViewModel_Name, UserAdminResources.Names.KioskLoginViewModel_Help,
+        UserAdminResources.Names.KioskLoginViewModel_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "login", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Restricted, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 5, IndexTagsCsv: "authdomain,login,runtimeartifact")]
     public class KioskLoginViewModel
     {
         public string ClientId { get; set; }

@@ -12,7 +12,13 @@ using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.ViewModels.Organization
 {
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.OrganizationDetailVM_Title, UserAdminResources.Names.OrganizationDetailVM_Help, UserAdminResources.Names.OrganizationDetailsVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(
+        Domains.OrganizationDomain, UserAdminResources.Names.OrganizationDetailVM_Title, UserAdminResources.Names.OrganizationDetailVM_Help,
+        UserAdminResources.Names.OrganizationDetailsVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources),
+
+        ClusterKey: "org", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Aux, IndexPriority: 30,
+        IndexTagsCsv: "organizationdomain,org,runtimeartifact,viewmodel")]
     public class OrganizationDetailsViewModel
     {
         public String OrganizationName { get; set; }

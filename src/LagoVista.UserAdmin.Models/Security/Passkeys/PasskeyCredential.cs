@@ -8,12 +8,12 @@ using System;
 namespace LagoVista.UserAdmin.Models.Security.Passkeys
 {
     [EntityDescription(
-         Domains.AuthDomain,
-        UserAdminResources.Names.PasskeyCredential_Name,
-        UserAdminResources.Names.PasskeyCredential_Help,
-        UserAdminResources.Names.PasskeyCredential_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.AuthDomain, UserAdminResources.Names.PasskeyCredential_Name, UserAdminResources.Names.PasskeyCredential_Help,
+        UserAdminResources.Names.PasskeyCredential_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "passkeys", ModelType: EntityDescriptionAttribute.ModelTypes.DomainEntity, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Restricted, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 5, IndexTagsCsv: "authdomain,passkeys,domainentity")]
     public class PasskeyCredential
     {
         public string Id { get; set; } = Guid.NewGuid().ToId();

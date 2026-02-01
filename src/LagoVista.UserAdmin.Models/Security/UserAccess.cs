@@ -11,12 +11,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Security
 {
     [EntityDescription(
-        Domains.OrganizationDomain,
-        UserAdminResources.Names.UserAccess_Name,
-        UserAdminResources.Names.UserAccess_Help,
-        UserAdminResources.Names.UserAccess_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.OrganizationDomain, UserAdminResources.Names.UserAccess_Name, UserAdminResources.Names.UserAccess_Help,
+        UserAdminResources.Names.UserAccess_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "access", ModelType: EntityDescriptionAttribute.ModelTypes.Configuration, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Aux, IndexPriority: 40,
+        IndexTagsCsv: "organizationdomain,access,configuration,valueobject")]
     public class UserAccess
     {
         public const int Revoke = -1;

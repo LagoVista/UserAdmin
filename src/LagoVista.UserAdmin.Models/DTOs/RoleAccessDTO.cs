@@ -13,12 +13,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.DTOs
 {
     [EntityDescription(
-        Domains.SecurityDomain,
-        UserAdminResources.Names.RoleAccessDTO_Name,
-        UserAdminResources.Names.RoleAccessDTO_Help,
-        UserAdminResources.Names.RoleAccessDTO_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.SecurityDomain, UserAdminResources.Names.RoleAccessDTO_Name, UserAdminResources.Names.RoleAccessDTO_Help,
+        UserAdminResources.Names.RoleAccessDTO_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "roles", ModelType: EntityDescriptionAttribute.ModelTypes.Configuration, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Aux, IndexPriority: 35,
+        IndexTagsCsv: "securitydomain,roles,dto")]
     public class RoleAccessDTO : TableStorageEntity
     {
         public string RoleId { get; set; }

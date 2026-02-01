@@ -47,10 +47,16 @@ namespace LagoVista.UserAdmin.Models.Orgs
         Bottom
     }
 
-    [EntityDescription(Domains.OrgLocations, UserAdminResources.Names.LocationDiagram_Title, UserAdminResources.Names.LocationDiagrams_Description, UserAdminResources.Names.LocationDiagrams_Description,
-        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "icon-pz-worldwide-1",
-        GetListUrl: "/api/org/location/diagrams", DeleteUrl: "/api/org/location/diagram/{id}", 
-        GetUrl: "/api/org/location/diagram/{id}", SaveUrl: "/api/org/location/diagram", FactoryUrl: "/api/org/location/diagram")]
+    [EntityDescription(
+        Domains.OrgLocations, UserAdminResources.Names.LocationDiagram_Title, UserAdminResources.Names.LocationDiagrams_Description,
+        UserAdminResources.Names.LocationDiagrams_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources),
+
+        GetListUrl: "/api/org/location/diagrams", DeleteUrl: "/api/org/location/diagram/{id}", GetUrl: "/api/org/location/diagram/{id}",
+        SaveUrl: "/api/org/location/diagram", FactoryUrl: "/api/org/location/diagram",
+
+        Icon: "icon-pz-worldwide-1", ClusterKey: "diagrams", ModelType: EntityDescriptionAttribute.ModelTypes.Configuration,
+        Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime, Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true,
+        IndexTier: EntityDescriptionAttribute.IndexTiers.Secondary, IndexPriority: 65, IndexTagsCsv: "organizationdomain,diagrams,configuration,diagram")]
     public class LocationDiagram : EntityBase, IValidateable, ISummaryFactory, IFormDescriptor
     {
         public const string DiagramUnits_Feet = "feet";

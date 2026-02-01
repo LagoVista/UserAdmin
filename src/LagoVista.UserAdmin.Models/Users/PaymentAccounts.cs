@@ -11,12 +11,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Users
 {
     [EntityDescription(
-        Domains.OrganizationDomain,
-        UserAdminResources.Names.PaymentAccounts_Name,
-        UserAdminResources.Names.PaymentAccounts_Help,
-        UserAdminResources.Names.PaymentAccounts_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.OrganizationDomain, UserAdminResources.Names.PaymentAccounts_Name, UserAdminResources.Names.PaymentAccounts_Help,
+        UserAdminResources.Names.PaymentAccounts_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "subscriptions", ModelType: EntityDescriptionAttribute.ModelTypes.Configuration, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Restricted, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 5, IndexTagsCsv: "organizationdomain,subscriptions,configuration,restricted")]
     public class PaymentAccounts
     {
         public string PaymentAccount1 { get; set; }

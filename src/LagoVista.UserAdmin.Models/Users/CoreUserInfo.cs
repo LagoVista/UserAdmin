@@ -13,12 +13,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Users
 {
     [EntityDescription(
-        Domains.UserDomain,
-        UserAdminResources.Names.CoreUserInfo_Name,
-        UserAdminResources.Names.CoreUserInfo_Help,
-        UserAdminResources.Names.CoreUserInfo_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.UserDomain, UserAdminResources.Names.CoreUserInfo_Name, UserAdminResources.Names.CoreUserInfo_Help,
+        UserAdminResources.Names.CoreUserInfo_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "users", ModelType: EntityDescriptionAttribute.ModelTypes.DomainEntity, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Secondary,
+        IndexPriority: 70, IndexTagsCsv: "userdomain,users,domainentity,profile")]
     public class CoreUserInfo : IValidateable
     {
         public string Id { get; set; }

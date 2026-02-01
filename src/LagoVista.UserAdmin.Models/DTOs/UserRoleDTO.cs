@@ -10,12 +10,12 @@ using LagoVista.UserAdmin.Models.Users;
 namespace LagoVista.UserAdmin.Models.DTOs
 {
     [EntityDescription(
-        Domains.SecurityDomain,
-        UserAdminResources.Names.UserRoleDTO_Name,
-        UserAdminResources.Names.UserRoleDTO_Help,
-        UserAdminResources.Names.UserRoleDTO_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.SecurityDomain, UserAdminResources.Names.UserRoleDTO_Name, UserAdminResources.Names.UserRoleDTO_Help,
+        UserAdminResources.Names.UserRoleDTO_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "roles", ModelType: EntityDescriptionAttribute.ModelTypes.Configuration, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Aux,
+        IndexPriority: 35, IndexTagsCsv: "securitydomain,roles,dto")]
     public class UserRoleDTO : TableStorageEntity
     {
         public string UserId { get; set; }

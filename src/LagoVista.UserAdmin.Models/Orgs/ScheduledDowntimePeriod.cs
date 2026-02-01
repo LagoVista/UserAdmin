@@ -12,9 +12,15 @@ using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.ScheduledDowntimePeriod_TItle, UserAdminResources.Names.ScheduledDowntimePeriod_Help,
-                       UserAdminResources.Names.ScheduledDowntimePeriod_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
-                       FactoryUrl: "/api/scheduleddowntime/period/factory")]
+    [EntityDescription(
+        Domains.OrganizationDomain, UserAdminResources.Names.ScheduledDowntimePeriod_TItle, UserAdminResources.Names.ScheduledDowntimePeriod_Help,
+        UserAdminResources.Names.ScheduledDowntimePeriod_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
+
+        FactoryUrl: "/api/scheduleddowntime/period/factory",
+
+        ClusterKey: "calendars", ModelType: EntityDescriptionAttribute.ModelTypes.Configuration, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Aux, IndexPriority: 40,
+        IndexTagsCsv: "organizationdomain,calendars,configuration,childobject")]
     public class ScheduledDowntimePeriod : IIDEntity, INamedEntity, IKeyedEntity, IFormDescriptor, IFormConditionalFields
     {
         public ScheduledDowntimePeriod()

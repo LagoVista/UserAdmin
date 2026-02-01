@@ -17,10 +17,18 @@ using LagoVista.Core.Interfaces;
 namespace LagoVista.UserAdmin.Models.Users
 {
 
-    [EntityDescription(Domains.UserDomain, UserAdminResources.Names.DeviceOwner_Title, UserAdminResources.Names.DeviceOwner_Description,
-        UserAdminResources.Names.DeviceOwner_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(UserAdminResources), Icon: "icon-ae-emoji",
+    [EntityDescription(
+        Domains.UserDomain, UserAdminResources.Names.DeviceOwner_Title, UserAdminResources.Names.DeviceOwner_Description,
+        UserAdminResources.Names.DeviceOwner_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(UserAdminResources),
+
+        GetListUrl: "/api/sysadmin/deviceownerusers", GetUrl: "/api/sysadmin/deviceowneruser/{orgid}/{id}",
+        DeleteUrl: "/api/sysadmin/deviceowneruser/{orgid}/{id}", SaveUrl: "/api/sysadmin/deviceowneruser", FactoryUrl: "/api/sysadmin/deviceowneruser/factory",
+
         ListUIUrl: "/sysadmin/deviceusers", EditUIUrl: "/sysadmin/deviceuser/{id}",
-        GetListUrl: "/api/sysadmin/deviceownerusers", GetUrl: "/api/sysadmin/deviceowneruser/{orgid}/{id}", DeleteUrl: "/api/sysadmin/deviceowneruser/{orgid}/{id}", SaveUrl: "/api/sysadmin/deviceowneruser", FactoryUrl: "/api/sysadmin/deviceowneruser/factory")]
+
+        Icon: "icon-ae-emoji", ClusterKey: "users", ModelType: EntityDescriptionAttribute.ModelTypes.DomainEntity,
+        Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime, Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: true,
+        IndexTier: EntityDescriptionAttribute.IndexTiers.Secondary, IndexPriority: 70, IndexTagsCsv: "userdomain,users,domainentity,deviceowner")]
     public class DeviceOwnerUser : UserAdminModelBase, IValidateable, ISummaryFactory
     {
         public DeviceOwnerUser()

@@ -11,12 +11,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Auth
 {
     [EntityDescription(
-        Domains.AuthDomain,
-        UserAdminResources.Names.AuthLoginRequest_Name,
-        UserAdminResources.Names.AuthLoginRequest_Help,
-        UserAdminResources.Names.AuthLoginRequest_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.AuthDomain, UserAdminResources.Names.AuthLoginRequest_Name, UserAdminResources.Names.AuthLoginRequest_Help,
+        UserAdminResources.Names.AuthLoginRequest_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "login", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Restricted, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 5, IndexTagsCsv: "authdomain,login,runtimeartifact")]
     public class AuthLoginRequest
     {
         public string EndUserAppOrgId { get; set; }

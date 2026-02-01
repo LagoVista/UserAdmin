@@ -10,7 +10,13 @@ using LagoVista.UserAdmin.Resources;
 
 namespace LagoVista.UserAdmin.ViewModels.Users
 {
-    [EntityDescription(Domains.AuthDomain, UserAdminResources.Names.VerifyCodeVM_Title, UserAdminResources.Names.VerifyCodeVM_Help, UserAdminResources.Names.VerifyCodeVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(
+        Domains.AuthDomain, UserAdminResources.Names.VerifyCodeVM_Title, UserAdminResources.Names.VerifyCodeVM_Help,
+        UserAdminResources.Names.VerifyCodeVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources),
+
+        ClusterKey: "mfa", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Aux,
+        IndexPriority: 30, IndexTagsCsv: "authdomain,mfa,runtimeartifact,viewmodel")]
     public class VerifyCodeViewModel : IValidateable
     {
         [FormField(LabelResource: UserAdminResources.Names.VerifyCodeViewModel_Provider, IsRequired: true, ResourceType: typeof(UserAdminResources))]

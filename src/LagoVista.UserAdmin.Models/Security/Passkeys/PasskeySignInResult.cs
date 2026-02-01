@@ -6,12 +6,12 @@ using System;
 namespace LagoVista.UserAdmin.Models.Security.Passkeys
 {
     [EntityDescription(
-          Domains.AuthDomain,
-        UserAdminResources.Names.PasskeySignInResult_Name,
-        UserAdminResources.Names.PasskeySignInResult_Help,
-        UserAdminResources.Names.PasskeySignInResult_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.AuthDomain, UserAdminResources.Names.PasskeySignInResult_Name, UserAdminResources.Names.PasskeySignInResult_Help,
+        UserAdminResources.Names.PasskeySignInResult_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "passkeys", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 10, IndexTagsCsv: "authdomain,passkeys,runtimeartifact")]
     public class PasskeySignInResult
     {
         public AppUser User { get; set; }

@@ -13,12 +13,12 @@ namespace LagoVista.UserAdmin.Models.Security.Passkeys
     }
 
     [EntityDescription(
-        Domains.AuthDomain,
-        UserAdminResources.Names.PasskeyChallenge_Name,
-        UserAdminResources.Names.PasskeyChallenge_Help,
-        UserAdminResources.Names.PasskeyChallenge_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.AuthDomain, UserAdminResources.Names.PasskeyChallenge_Name, UserAdminResources.Names.PasskeyChallenge_Help,
+        UserAdminResources.Names.PasskeyChallenge_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "passkeys", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Restricted, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 5, IndexTagsCsv: "authdomain,passkeys,runtimeartifact")]
     public class PasskeyChallenge
     {
         public string Id { get; set; } = Guid.NewGuid().ToId();
@@ -60,12 +60,12 @@ namespace LagoVista.UserAdmin.Models.Security.Passkeys
     }
 
     [EntityDescription(
-        Domains.OrganizationDomain,
-        UserAdminResources.Names.PasskeyChallengePacket_Name,
-        UserAdminResources.Names.PasskeyChallengePacket_Help,
-        UserAdminResources.Names.PasskeyChallengePacket_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.OrganizationDomain, UserAdminResources.Names.PasskeyChallengePacket_Name, UserAdminResources.Names.PasskeyChallengePacket_Help,
+        UserAdminResources.Names.PasskeyChallengePacket_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "authassist", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Restricted, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 5, IndexTagsCsv: "organizationdomain,authassist,runtimeartifact,passkeys")]
     public class PasskeyChallengePacket
     {
         public PasskeyChallenge Challenge { get; set; }

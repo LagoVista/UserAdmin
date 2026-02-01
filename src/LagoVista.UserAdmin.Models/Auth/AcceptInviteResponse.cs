@@ -14,12 +14,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Auth
 {
     [EntityDescription(
-        Domains.AuthDomain,
-        UserAdminResources.Names.AcceptInviteResponse_Name,
-        UserAdminResources.Names.AcceptInviteResponse_Help,
-        UserAdminResources.Names.AcceptInviteResponse_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.AuthDomain, UserAdminResources.Names.AcceptInviteResponse_Name, UserAdminResources.Names.AcceptInviteResponse_Help,
+        UserAdminResources.Names.AcceptInviteResponse_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "invites", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 10, IndexTagsCsv: "authdomain,invites,runtimeartifact")]
     public class AcceptInviteResponse
     {
         public string OriginalEmail { get; set; }

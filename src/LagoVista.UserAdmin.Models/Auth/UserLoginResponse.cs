@@ -12,12 +12,12 @@ using System.Diagnostics;
 namespace LagoVista.UserAdmin.Models.Auth
 {
     [EntityDescription(
-        Domains.AuthDomain,
-        UserAdminResources.Names.UserLoginResponse_Name,
-        UserAdminResources.Names.UserLoginResponse_Help,
-        UserAdminResources.Names.UserLoginResponse_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.AuthDomain, UserAdminResources.Names.UserLoginResponse_Name, UserAdminResources.Names.UserLoginResponse_Help,
+        UserAdminResources.Names.UserLoginResponse_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "login", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 10, IndexTagsCsv: "authdomain,login,runtimeartifact")]
     public class UserLoginResponse : EntityHeader
     {
         private Stopwatch _sw;

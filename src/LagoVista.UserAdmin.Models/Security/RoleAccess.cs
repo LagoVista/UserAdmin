@@ -18,12 +18,12 @@ namespace LagoVista.UserAdmin.Models.Security
     }
 
     [EntityDescription(
-        Domains.SecurityDomain,
-        UserAdminResources.Names.RoleAccess_Name,
-        UserAdminResources.Names.RoleAccess_Help,
-        UserAdminResources.Names.RoleAccess_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.SecurityDomain, UserAdminResources.Names.RoleAccess_Name, UserAdminResources.Names.RoleAccess_Help,
+        UserAdminResources.Names.RoleAccess_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "roles", ModelType: EntityDescriptionAttribute.ModelTypes.Configuration, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Primary,
+        IndexPriority: 85, IndexTagsCsv: "securitydomain,roles,configuration")]
     public class RoleAccess
     {
         public string Id { get; set; }

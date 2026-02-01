@@ -11,12 +11,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Phone
 {
     [EntityDescription(
-        Domains.UserDomain,
-        UserAdminResources.Names.CallLog_Name,
-        UserAdminResources.Names.CallLog_Help,
-        UserAdminResources.Names.CallLog_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.UserDomain, UserAdminResources.Names.CallLog_Name, UserAdminResources.Names.CallLog_Help, UserAdminResources.Names.CallLog_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "phone", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.Audit,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 10, IndexTagsCsv: "userdomain,phone,runtimeartifact,audit")]
     public class CallLog
     {
         public string CallLogId { get; set; }

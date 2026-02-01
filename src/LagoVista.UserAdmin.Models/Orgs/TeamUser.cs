@@ -14,12 +14,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Orgs
 {
     [EntityDescription(
-        Domains.UserDomain,
-        UserAdminResources.Names.TeamUser_Name,
-        UserAdminResources.Names.TeamUser_Help,
-        UserAdminResources.Names.TeamUser_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.UserDomain, UserAdminResources.Names.TeamUser_Name, UserAdminResources.Names.TeamUser_Help, UserAdminResources.Names.TeamUser_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "access", ModelType: EntityDescriptionAttribute.ModelTypes.DomainEntity, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 10, IndexTagsCsv: "userdomain,access,domainentity,membership")]
     public class TeamUser : TableStorageEntity, IValidateable, ITableStorageAuditableEntity
     {
         public TeamUser(EntityHeader team, EntityHeader user)
@@ -77,12 +77,12 @@ namespace LagoVista.UserAdmin.Models.Orgs
     }
 
     [EntityDescription(
-        Domains.OrganizationDomain,
-        UserAdminResources.Names.TeamUserSummary_Name,
-        UserAdminResources.Names.TeamUserSummary_Help,
-        UserAdminResources.Names.TeamUserSummary_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.OrganizationDomain, UserAdminResources.Names.TeamUserSummary_Name, UserAdminResources.Names.TeamUserSummary_Help,
+        UserAdminResources.Names.TeamUserSummary_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "access", ModelType: EntityDescriptionAttribute.ModelTypes.DomainEntity, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Aux,
+        IndexPriority: 35, IndexTagsCsv: "organizationdomain,access,summary,user")]
     public class TeamUserSummary : SummaryData
     {
         public string ProfileImageUrl { get; set; }

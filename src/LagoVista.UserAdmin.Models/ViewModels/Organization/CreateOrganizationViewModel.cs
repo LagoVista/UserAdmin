@@ -12,10 +12,17 @@ using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.ViewModels.Organization
 {
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.CreateOrganizationVM_Title, 
-        UserAdminResources.Names.CreateOrganizationVM_Help, UserAdminResources.Names.CreateOrganizationVM_Description, 
-        EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources),
-        Icon: "icon-ae-building", FactoryUrl: "/api/org/factory", SaveUrl: "/api/org", CreateUIUrl: "/organization/createorg")]
+    [EntityDescription(
+        Domains.OrganizationDomain, UserAdminResources.Names.CreateOrganizationVM_Title, UserAdminResources.Names.CreateOrganizationVM_Help,
+        UserAdminResources.Names.CreateOrganizationVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources),
+
+        FactoryUrl: "/api/org/factory", SaveUrl: "/api/org",
+
+        CreateUIUrl: "/organization/createorg",
+
+        Icon: "icon-ae-building", ClusterKey: "org", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact,
+        Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime, Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true,
+        IndexTier: EntityDescriptionAttribute.IndexTiers.Aux, IndexPriority: 30, IndexTagsCsv: "organizationdomain,org,runtimeartifact,viewmodel")]
     public class CreateOrganizationViewModel :  IValidateable, IFormDescriptor
     {
         [FormField(LabelResource: UserAdminResources.Names.Organization_Name, IsRequired: true, ResourceType: typeof(UserAdminResources))]

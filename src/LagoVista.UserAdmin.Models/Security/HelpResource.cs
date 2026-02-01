@@ -8,7 +8,13 @@ using LagoVista.UserAdmin.Models.Resources;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
-    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.HelpResource_Title, UserAdminResources.Names.HelpResource_Description, UserAdminResources.Names.HelpResource_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources))]
+    [EntityDescription(
+        Domains.SecurityDomain, UserAdminResources.Names.HelpResource_Title, UserAdminResources.Names.HelpResource_Description,
+        UserAdminResources.Names.HelpResource_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources),
+
+        ClusterKey: "help", ModelType: EntityDescriptionAttribute.ModelTypes.Document, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Primary,
+        IndexPriority: 80, IndexTagsCsv: "securitydomain,help,document")]
     public class HelpResource
     {
         [FormField(LabelResource: UserAdminResources.Names.Common_Name, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]

@@ -12,12 +12,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Security
 {
     [EntityDescription(
-        Domains.UserDomain,
-        UserAdminResources.Names.ManagedAsset_Name,
-        UserAdminResources.Names.ManagedAsset_Help,
-        UserAdminResources.Names.ManagedAsset_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.UserDomain, UserAdminResources.Names.ManagedAsset_Name, UserAdminResources.Names.ManagedAsset_Help,
+        UserAdminResources.Names.ManagedAsset_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "assets", ModelType: EntityDescriptionAttribute.ModelTypes.DomainEntity, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Aux, IndexPriority: 40,
+        IndexTagsCsv: "userdomain,assets,domainentity")]
     public class ManagedAsset : TableStorageEntity
     {
         public ManagedAsset(EntityHeader assetSet, EntityHeader asset, String assetType)
@@ -63,12 +63,12 @@ namespace LagoVista.UserAdmin.Models.Security
     }
 
     [EntityDescription(
-        Domains.OrganizationDomain,
-        UserAdminResources.Names.ManagedAssetSummary_Name,
-        UserAdminResources.Names.ManagedAssetSummary_Help,
-        UserAdminResources.Names.ManagedAssetSummary_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.OrganizationDomain, UserAdminResources.Names.ManagedAssetSummary_Name, UserAdminResources.Names.ManagedAssetSummary_Help,
+        UserAdminResources.Names.ManagedAssetSummary_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "access", ModelType: EntityDescriptionAttribute.ModelTypes.DomainEntity, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Aux, IndexPriority: 35,
+        IndexTagsCsv: "organizationdomain,access,summary,asset")]
     public class ManagedAssetSummary : SummaryData
     {
         public string AssetType { get; set; }

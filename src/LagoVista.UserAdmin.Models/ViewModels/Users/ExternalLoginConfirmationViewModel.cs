@@ -10,7 +10,13 @@ using LagoVista.UserAdmin.Resources;
 
 namespace LagoVista.UserAdmin.ViewModels.Users
 {
-    [EntityDescription(Domains.AuthDomain, UserAdminResources.Names.ExternalLoginConfirmVM_Title, UserAdminResources.Names.ExternalLoginConfirmVM_Help, UserAdminResources.Names.ExternalLoginConfirmVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(
+        Domains.AuthDomain, UserAdminResources.Names.ExternalLoginConfirmVM_Title, UserAdminResources.Names.ExternalLoginConfirmVM_Help,
+        UserAdminResources.Names.ExternalLoginConfirmVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources),
+
+        ClusterKey: "login", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Aux,
+        IndexPriority: 30, IndexTagsCsv: "authdomain,login,runtimeartifact,viewmodel")]
     public class ExternalLoginConfirmationViewModel : IValidateable
     {
         [FormField(LabelResource: UserAdminResources.Names.AppUser_Email, FieldType: FieldTypes.Email, IsRequired: true, ResourceType: typeof(UserAdminResources))]

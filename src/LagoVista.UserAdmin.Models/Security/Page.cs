@@ -17,8 +17,15 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
-    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.Page_Title, UserAdminResources.Names.Page_Help, UserAdminResources.Names.Page_Help, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
-        FactoryUrl: "/api/module/page/factory")]
+    [EntityDescription(
+        Domains.SecurityDomain, UserAdminResources.Names.Page_Title, UserAdminResources.Names.Page_Help, UserAdminResources.Names.Page_Help,
+        EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
+
+        FactoryUrl: "/api/module/page/factory",
+
+        ClusterKey: "ui", ModelType: EntityDescriptionAttribute.ModelTypes.Taxonomy, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Primary,
+        IndexPriority: 80, IndexTagsCsv: "securitydomain,ui,taxonomy,page")]
     public class Page : IFormDescriptor, IFormDescriptorCol2
     {
         public Page()

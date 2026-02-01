@@ -11,8 +11,15 @@ using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
-    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.UiCateogry_Title, UserAdminResources.Names.UiCategory_Description, UserAdminResources.Names.UiCategory_Description,
-        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), FactoryUrl: "/api/module/uicategory/factory")]
+    [EntityDescription(
+        Domains.SecurityDomain, UserAdminResources.Names.UiCateogry_Title, UserAdminResources.Names.UiCategory_Description,
+        UserAdminResources.Names.UiCategory_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources),
+
+        FactoryUrl: "/api/module/uicategory/factory",
+
+        ClusterKey: "ui", ModelType: EntityDescriptionAttribute.ModelTypes.Taxonomy, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Secondary,
+        IndexPriority: 65, IndexTagsCsv: "securitydomain,ui,taxonomy,category")]
     public class UiCategory : IFormDescriptor
     {
         public UiCategory()

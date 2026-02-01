@@ -67,12 +67,12 @@ namespace LagoVista.UserAdmin.Models.Users
     }
 
     [EntityDescription(
-        Domains.OrganizationDomain,
-        UserAdminResources.Names.NewAppUserInboxItemItem_Name,
-        UserAdminResources.Names.NewAppUserInboxItemItem_Help,
-        UserAdminResources.Names.NewAppUserInboxItemItem_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.OrganizationDomain, UserAdminResources.Names.NewAppUserInboxItemItem_Name, UserAdminResources.Names.NewAppUserInboxItemItem_Help,
+        UserAdminResources.Names.NewAppUserInboxItemItem_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "notifications", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Aux,
+        IndexPriority: 30, IndexTagsCsv: "organizationdomain,notifications,runtimeartifact,dto")]
     public class NewAppUserInboxItemItem
     {
         public EntityHeader Organiation { get; set; }

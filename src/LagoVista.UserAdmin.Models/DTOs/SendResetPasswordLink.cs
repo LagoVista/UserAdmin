@@ -12,12 +12,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.DTOs
 {
     [EntityDescription(
-        Domains.OrganizationDomain,
-        UserAdminResources.Names.SendResetPasswordLink_Name,
-        UserAdminResources.Names.SendResetPasswordLink_Help,
-        UserAdminResources.Names.SendResetPasswordLink_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.OrganizationDomain, UserAdminResources.Names.SendResetPasswordLink_Name, UserAdminResources.Names.SendResetPasswordLink_Help,
+        UserAdminResources.Names.SendResetPasswordLink_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "authassist", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Restricted, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 5, IndexTagsCsv: "organizationdomain,authassist,runtimeartifact,reset")]
     public class SendResetPasswordLink
     {
         [JsonProperty("email")]

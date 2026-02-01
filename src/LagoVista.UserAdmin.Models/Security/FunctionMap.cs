@@ -17,9 +17,16 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Security
 {
 
-    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.FunctionMap_Title, UserAdminResources.Names.FunctionMap_Description, UserAdminResources.Names.FunctionMap_Description,
-        EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources), Icon: "icon-ae-coding-metal",
-        GetListUrl: "/api/function/maps", GetUrl: "/api/function/map/{id}", SaveUrl: "/api/function/map", DeleteUrl: "/api/function/map/{id}", FactoryUrl: "/api/function/map/factory")]
+    [EntityDescription(
+        Domains.SecurityDomain, UserAdminResources.Names.FunctionMap_Title, UserAdminResources.Names.FunctionMap_Description,
+        UserAdminResources.Names.FunctionMap_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
+
+        GetListUrl: "/api/function/maps", GetUrl: "/api/function/map/{id}", SaveUrl: "/api/function/map", DeleteUrl: "/api/function/map/{id}",
+        FactoryUrl: "/api/function/map/factory",
+
+        Icon: "icon-ae-coding-metal", ClusterKey: "functions", ModelType: EntityDescriptionAttribute.ModelTypes.Configuration,
+        Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime, Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true,
+        IndexTier: EntityDescriptionAttribute.IndexTiers.Secondary, IndexPriority: 65, IndexTagsCsv: "securitydomain,functions,configuration")]
     public class FunctionMap : UserAdminModelBase, IFormDescriptor
     {
         public bool TopLevel { get; set; }

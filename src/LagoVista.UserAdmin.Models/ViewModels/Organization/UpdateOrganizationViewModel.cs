@@ -12,7 +12,13 @@ using System;
 
 namespace LagoVista.UserAdmin.ViewModels.Organization
 {
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.UpdateOrganizationVM_Title, UserAdminResources.Names.UpdateOrganizationVM_Help, UserAdminResources.Names.UpdateOrganizationVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(
+        Domains.OrganizationDomain, UserAdminResources.Names.UpdateOrganizationVM_Title, UserAdminResources.Names.UpdateOrganizationVM_Help,
+        UserAdminResources.Names.UpdateOrganizationVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources),
+
+        ClusterKey: "org", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Aux, IndexPriority: 30,
+        IndexTagsCsv: "organizationdomain,org,runtimeartifact,viewmodel")]
     public class UpdateOrganizationViewModel : OrganizationViewModel, IValidateable
     {
         public String OrganziationId { get; set; }

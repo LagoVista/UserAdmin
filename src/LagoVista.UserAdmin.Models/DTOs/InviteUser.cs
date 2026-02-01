@@ -13,12 +13,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.DTOs
 {
     [EntityDescription(
-        Domains.UserDomain,
-        UserAdminResources.Names.InviteUser_Name,
-        UserAdminResources.Names.InviteUser_Help,
-        UserAdminResources.Names.InviteUser_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.UserDomain, UserAdminResources.Names.InviteUser_Name, UserAdminResources.Names.InviteUser_Help, UserAdminResources.Names.InviteUser_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "invites", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 10, IndexTagsCsv: "userdomain,invites,runtimeartifact")]
     public class InviteUser
     {
         [JsonProperty("inviteFromuserId")]

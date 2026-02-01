@@ -15,10 +15,19 @@ namespace LagoVista.UserAdmin.Models.Testing
     /// Intended to be JSON serializable/deserializable.
     /// V1: 1 DSL spec => 1 ceremony => 1 run.
     /// </summary>
-    [EntityDescription(Domains.AuthTesting, UserAdminResources.Names.AuthDSL_Title, UserAdminResources.Names.AuthDSL_Help, UserAdminResources.Names.AuthDSL_Description,
-     EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources), Icon: "icon-fo-information-computer",
-     ListUIUrl: "/sysadmin/testing/scenarios", EditUIUrl: "/sysadmin/testing/scenarios/{id}", CreateUIUrl: "/sysadmin/testing/scenarios/add", PreviewUIUrl: "/sysadmin/testing/scenarios/{id}/preview",
-     SaveUrl: "/api/sys/testing/auth/scenario", GetListUrl: "/api/sys/testing/auth/scenarios", FactoryUrl: "/api/sys/testing/auth/scenario/factory", DeleteUrl: "/api/sys/testing/auth/scenario/{id}", GetUrl: "/api/sys/testing/auth/scenario/{id}")]
+    [EntityDescription(
+        Domains.AuthTesting, UserAdminResources.Names.AuthDSL_Title, UserAdminResources.Names.AuthDSL_Help, UserAdminResources.Names.AuthDSL_Description,
+        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources),
+
+        SaveUrl: "/api/sys/testing/auth/scenario", GetListUrl: "/api/sys/testing/auth/scenarios", FactoryUrl: "/api/sys/testing/auth/scenario/factory",
+        DeleteUrl: "/api/sys/testing/auth/scenario/{id}", GetUrl: "/api/sys/testing/auth/scenario/{id}",
+
+        ListUIUrl: "/sysadmin/testing/scenarios", EditUIUrl: "/sysadmin/testing/scenarios/{id}", CreateUIUrl: "/sysadmin/testing/scenarios/add",
+        PreviewUIUrl: "/sysadmin/testing/scenarios/{id}/preview",
+
+        Icon: "icon-fo-information-computer", ClusterKey: "scenarios", ModelType: EntityDescriptionAttribute.ModelTypes.Configuration,
+        Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime, Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true,
+        IndexTier: EntityDescriptionAttribute.IndexTiers.Primary, IndexPriority: 85, IndexTagsCsv: "authtesting,scenarios,configuration")]
     public class AppUserTestScenario : EntityBase, ISummaryFactory, IValidateable, IFormDescriptor, IFormConditionalFields, IFormDescriptorCol2
     {
         /// <summary>

@@ -11,12 +11,12 @@ using System.Collections.Generic;
 namespace LagoVista.UserAdmin.Models.Auth
 {
     [EntityDescription(
-        Domains.AuthDomain,
-        UserAdminResources.Names.AuthResponse_Name,
-        UserAdminResources.Names.AuthResponse_Help,
-        UserAdminResources.Names.AuthResponse_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.AuthDomain, UserAdminResources.Names.AuthResponse_Name, UserAdminResources.Names.AuthResponse_Help,
+        UserAdminResources.Names.AuthResponse_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "login", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Restricted, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 5, IndexTagsCsv: "authdomain,login,runtimeartifact")]
     public class AuthResponse
     {
         public AuthResponse()

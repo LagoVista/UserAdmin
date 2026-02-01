@@ -40,9 +40,15 @@ namespace LagoVista.UserAdmin.Models.Security
         Retired,
     }
 
-    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.Module_Title, UserAdminResources.Names.Module_Help, UserAdminResources.Names.Module_Help, 
-        EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources), Icon: "icon-ae-coding-metal",
-        GetListUrl: "/api/modules", GetUrl: "/api/module/{id}", SaveUrl: "/api/module", DeleteUrl: "/api/module/{id}", FactoryUrl: "/api/module/factory")]
+    [EntityDescription(
+        Domains.SecurityDomain, UserAdminResources.Names.Module_Title, UserAdminResources.Names.Module_Help, UserAdminResources.Names.Module_Help,
+        EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
+
+        GetListUrl: "/api/modules", GetUrl: "/api/module/{id}", SaveUrl: "/api/module", DeleteUrl: "/api/module/{id}", FactoryUrl: "/api/module/factory",
+
+        Icon: "icon-ae-coding-metal", ClusterKey: "ui", ModelType: EntityDescriptionAttribute.ModelTypes.Taxonomy,
+        Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime, Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true,
+        IndexTier: EntityDescriptionAttribute.IndexTiers.Primary, IndexPriority: 85, IndexTagsCsv: "securitydomain,ui,taxonomy,module")]
     public class Module : UserAdminModelBase, IKeyedEntity, INamedEntity, IOwnedEntity, IValidateable, IFormDescriptor, IFormDescriptorCol2, IFormDescriptorBottom, ISummaryFactory, IRagableEntity
     {
         public const string ModuleStatus_Development = "development";

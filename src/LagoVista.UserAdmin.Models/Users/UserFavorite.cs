@@ -14,12 +14,12 @@ using System.Collections.Generic;
 namespace LagoVista.UserAdmin.Models.Users
 {
     [EntityDescription(
-        Domains.OrganizationDomain,
-        UserAdminResources.Names.UserFavorites_Name,
-        UserAdminResources.Names.UserFavorites_Help,
-        UserAdminResources.Names.UserFavorites_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.OrganizationDomain, UserAdminResources.Names.UserFavorites_Name, UserAdminResources.Names.UserFavorites_Help,
+        UserAdminResources.Names.UserFavorites_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "favorites", ModelType: EntityDescriptionAttribute.ModelTypes.Configuration, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Secondary,
+        IndexPriority: 60, IndexTagsCsv: "organizationdomain,favorites,configuration")]
     public class UserFavorites : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity
     {
         public UserFavorites()

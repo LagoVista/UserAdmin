@@ -22,12 +22,12 @@ namespace LagoVista.UserAdmin.Models.DTOs
     }
 
     [EntityDescription(
-        Domains.UserDomain,
-        UserAdminResources.Names.RegisterUser_Name,
-        UserAdminResources.Names.RegisterUser_Help,
-        UserAdminResources.Names.RegisterUser_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.UserDomain, UserAdminResources.Names.RegisterUser_Name, UserAdminResources.Names.RegisterUser_Help,
+        UserAdminResources.Names.RegisterUser_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "registration", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 10, IndexTagsCsv: "userdomain,registration,runtimeartifact")]
     public class RegisterUser : IValidateable
     {
         [JsonProperty("source")]

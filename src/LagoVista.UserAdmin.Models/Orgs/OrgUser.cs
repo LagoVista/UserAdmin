@@ -11,7 +11,13 @@ using System;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.OrganizationUserRole_Title, UserAdminResources.Names.Organization_Help, UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
+    [EntityDescription(
+        Domains.OrganizationDomain, UserAdminResources.Names.OrganizationUserRole_Title, UserAdminResources.Names.Organization_Help,
+        UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
+
+        ClusterKey: "org", ModelType: EntityDescriptionAttribute.ModelTypes.DomainEntity, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Secondary,
+        IndexPriority: 55, IndexTagsCsv: "organizationdomain,org,domainentity,user")]
     public class OrgUser : TableStorageEntity, IValidateable, ITableStorageAuditableEntity
     {
         public OrgUser(string orgId, string userId)

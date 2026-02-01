@@ -11,12 +11,12 @@ using System;
 namespace LagoVista.UserAdmin.Models.Security
 {
     [EntityDescription(
-        Domains.SecurityDomain,
-        UserAdminResources.Names.AccessLog_Name,
-        UserAdminResources.Names.AccessLog_Help,
-        UserAdminResources.Names.AccessLog_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.SecurityDomain, UserAdminResources.Names.AccessLog_Name, UserAdminResources.Names.AccessLog_Help, UserAdminResources.Names.AccessLog_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "audit", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.Audit,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 10, IndexTagsCsv: "securitydomain,audit,runtimeartifact")]
     public class AccessLog : TableStorageEntity
     {
         public AccessLog(string resource, string resourceId)

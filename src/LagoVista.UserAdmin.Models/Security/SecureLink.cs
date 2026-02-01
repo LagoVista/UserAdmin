@@ -12,12 +12,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Security
 {
     [EntityDescription(
-        Domains.AuthDomain,
-        UserAdminResources.Names.SecureLink_Name,
-        UserAdminResources.Names.SecureLink_Help,
-        UserAdminResources.Names.SecureLink_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.AuthDomain, UserAdminResources.Names.SecureLink_Name, UserAdminResources.Names.SecureLink_Help, UserAdminResources.Names.SecureLink_Description,
+        EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "links", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.Audit,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Restricted, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 5, IndexTagsCsv: "authdomain,links,runtimeartifact")]
     public class SecureLink : TableStorageEntity
     {
         public string OrgId { get; set; }

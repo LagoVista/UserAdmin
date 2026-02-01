@@ -7,12 +7,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.Auth
 {
     [EntityDescription(
-        Domains.AuthDomain,
-        UserAdminResources.Names.MobileOAuthPendingAuth_Name,
-        UserAdminResources.Names.MobileOAuthPendingAuth_Help,
-        UserAdminResources.Names.MobileOAuthPendingAuth_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.AuthDomain, UserAdminResources.Names.MobileOAuthPendingAuth_Name, UserAdminResources.Names.MobileOAuthPendingAuth_Help,
+        UserAdminResources.Names.MobileOAuthPendingAuth_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "oauth", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Restricted, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 5, IndexTagsCsv: "authdomain,oauth,runtimeartifact")]
     public sealed class MobileOAuthPendingAuth
     {
         /// <summary>

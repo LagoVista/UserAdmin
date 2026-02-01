@@ -12,8 +12,13 @@ using System;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Invitation_Title, UserAdminResources.Names.Invitation_Help, UserAdminResources.Names.Invitation_Description, 
-            EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
+    [EntityDescription(
+        Domains.OrganizationDomain, UserAdminResources.Names.Invitation_Title, UserAdminResources.Names.Invitation_Help,
+        UserAdminResources.Names.Invitation_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
+
+        ClusterKey: "org", ModelType: EntityDescriptionAttribute.ModelTypes.DomainEntity, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Secondary,
+        IndexPriority: 55, IndexTagsCsv: "organizationdomain,org,domainentity,invitation")]
     public class Invitation : TableStorageEntity, IValidateable
     {
         public enum StatusTypes

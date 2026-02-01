@@ -99,11 +99,18 @@ namespace LagoVista.UserAdmin.Models.Orgs
         WeekEnd,
     }
 
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.ScheduledDowntime_Title, UserAdminResources.Names.ScheduledDowntime_Help,
-                            UserAdminResources.Names.ScheduledDowntime_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
-                            ListUIUrl: "/organization/downtimes", EditUIUrl: "/organization/downtime/{id}", CreateUIUrl: "/organization/downtime/add", Icon: "icon-ae-call-time",
-                            SaveUrl: "/api/scheduleddowntime", GetListUrl: "/api/scheduleddowntimes", GetUrl: "/api/scheduleddowntime/{id}",
-                            DeleteUrl: "/api/scheduleddowntime/{id}", FactoryUrl: "/api/scheduleddowntime/factory")]
+    [EntityDescription(
+        Domains.OrganizationDomain, UserAdminResources.Names.ScheduledDowntime_Title, UserAdminResources.Names.ScheduledDowntime_Help,
+        UserAdminResources.Names.ScheduledDowntime_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        SaveUrl: "/api/scheduleddowntime", GetListUrl: "/api/scheduleddowntimes", GetUrl: "/api/scheduleddowntime/{id}",
+        DeleteUrl: "/api/scheduleddowntime/{id}", FactoryUrl: "/api/scheduleddowntime/factory",
+
+        ListUIUrl: "/organization/downtimes", EditUIUrl: "/organization/downtime/{id}", CreateUIUrl: "/organization/downtime/add",
+
+        Icon: "icon-ae-call-time", ClusterKey: "calendars", ModelType: EntityDescriptionAttribute.ModelTypes.Configuration,
+        Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime, Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true,
+        IndexTier: EntityDescriptionAttribute.IndexTiers.Primary, IndexPriority: 80, IndexTagsCsv: "organizationdomain,calendars,configuration,downtime")]
     public class ScheduledDowntime : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, IDescriptionEntity, ICloneable,
                                     IFormDescriptor, IFormConditionalFields, ISummaryFactory, ICategorized
     {

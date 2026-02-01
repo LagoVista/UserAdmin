@@ -12,12 +12,12 @@ namespace LagoVista.UserAdmin.Models.Testing
     /// The runner does not evaluate pre/post conditions; it only executes and reports observations.
     /// </summary>
     [EntityDescription(
-        Domains.AuthTesting,
-        UserAdminResources.Names.AuthRunnerPlan_Name,
-        UserAdminResources.Names.AuthRunnerPlan_Help,
-        UserAdminResources.Names.AuthRunnerPlan_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.AuthTesting, UserAdminResources.Names.AuthRunnerPlan_Name, UserAdminResources.Names.AuthRunnerPlan_Help,
+        UserAdminResources.Names.AuthRunnerPlan_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "runner", ModelType: EntityDescriptionAttribute.ModelTypes.Configuration, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Primary,
+        IndexPriority: 85, IndexTagsCsv: "authtesting,runner,configuration")]
     public class AuthRunnerPlan
     {
         /// <summary>Server-assigned run id (or correlation id) used for logging and reporting.</summary>

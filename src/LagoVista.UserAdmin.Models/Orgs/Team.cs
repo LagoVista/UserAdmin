@@ -11,7 +11,13 @@ using LagoVista.UserAdmin.Resources;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
-    [EntityDescription(Domains.UserDomain, UserAdminResources.Names.Team_Title, UserAdminResources.Names.Team_Help, UserAdminResources.Names.Team_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
+    [EntityDescription(
+        Domains.UserDomain, UserAdminResources.Names.Team_Title, UserAdminResources.Names.Team_Help, UserAdminResources.Names.Team_Description,
+        EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
+
+        ClusterKey: "access", ModelType: EntityDescriptionAttribute.ModelTypes.Configuration, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Primary,
+        IndexPriority: 80, IndexTagsCsv: "userdomain,access,configuration,team")]
     public class Team : UserAdminModelBase, INamedEntity, IKeyedEntity, IValidateable, IOwnedEntity, IDescriptionEntity
     {
 

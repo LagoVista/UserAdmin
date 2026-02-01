@@ -9,7 +9,13 @@ using LagoVista.UserAdmin.Resources;
 
 namespace LagoVista.UserAdmin.ViewModels.ManageUsers
 {
-    [EntityDescription(Domains.UserDomain, UserAdminResources.Names.IndexVM_Title, UserAdminResources.Names.IndexVM_Help, UserAdminResources.Names.IndexVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(
+        Domains.UserDomain, UserAdminResources.Names.IndexVM_Title, UserAdminResources.Names.IndexVM_Help, UserAdminResources.Names.IndexVM_Description,
+        EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources),
+
+        ClusterKey: "users", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Aux,
+        IndexPriority: 30, IndexTagsCsv: "userdomain,users,runtimeartifact,viewmodel")]
     public class IndexViewModel
     {
         [FormField(LabelResource: UserAdminResources.Names.VerifyUser_PhoneConfirmed, FieldType: FieldTypes.Phone, ResourceType: typeof(UserAdminResources))]

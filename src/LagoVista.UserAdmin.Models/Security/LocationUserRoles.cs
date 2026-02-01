@@ -9,7 +9,13 @@ using LagoVista.UserAdmin.Resources;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
-    [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.LocationUserRole_Title, UserAdminResources.Names.LocationUserRole_Help, UserAdminResources.Names.LocationUserRole_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources))]
+    [EntityDescription(
+        Domains.SecurityDomain, UserAdminResources.Names.LocationUserRole_Title, UserAdminResources.Names.LocationUserRole_Help,
+        UserAdminResources.Names.LocationUserRole_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
+
+        ClusterKey: "roles", ModelType: EntityDescriptionAttribute.ModelTypes.DomainEntity, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Secondary,
+        IndexPriority: 55, IndexTagsCsv: "securitydomain,roles,domainentity")]
     public class LocationUserRole : TableStorageEntity
     {
         public LocationUserRole(EntityHeader location, EntityHeader user)

@@ -13,10 +13,17 @@ using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.Models.Orgs
 {
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Subscription_Title, UserAdminResources.Names.Subscription_Help, 
+    [EntityDescription(
+        Domains.OrganizationDomain, UserAdminResources.Names.Subscription_Title, UserAdminResources.Names.Subscription_Help,
         UserAdminResources.Names.Subscription_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
-        CreateUIUrl:"/organization/subscription/add", ListUIUrl:"/organization/subscriptions", EditUIUrl:"/organization/suscription/{id}", Icon: "icon-ae-bill-1",
-        GetListUrl: "/api/subscriptions", GetUrl: "/api/subscription/{id}", SaveUrl: "/api/subscription", FactoryUrl: "/api/subscription/factory")]
+
+        GetListUrl: "/api/subscriptions", GetUrl: "/api/subscription/{id}", SaveUrl: "/api/subscription", FactoryUrl: "/api/subscription/factory",
+
+        CreateUIUrl: "/organization/subscription/add", ListUIUrl: "/organization/subscriptions", EditUIUrl: "/organization/suscription/{id}",
+
+        Icon: "icon-ae-bill-1", ClusterKey: "subscriptions", ModelType: EntityDescriptionAttribute.ModelTypes.DomainEntity,
+        Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime, Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true,
+        IndexTier: EntityDescriptionAttribute.IndexTiers.Aux, IndexPriority: 35, IndexTagsCsv: "organizationdomain,subscriptions,domainentity,dto")]
     public class SubscriptionDTO : IValidateable, IKeyedEntity, INamedEntity, ISummaryFactory, IFormDescriptor, IFormDescriptorCol2
     {
         public const string Status_OK = "ok";

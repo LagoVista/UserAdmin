@@ -12,12 +12,12 @@ using System.Text;
 namespace LagoVista.UserAdmin.Models.DTOs
 {
     [EntityDescription(
-        Domains.UserDomain,
-        UserAdminResources.Names.VerfiyPhoneNumber_Name,
-        UserAdminResources.Names.VerfiyPhoneNumber_Help,
-        UserAdminResources.Names.VerfiyPhoneNumber_Description,
-        EntityDescriptionAttribute.EntityTypes.OrganizationModel,
-        typeof(UserAdminResources))]
+        Domains.UserDomain, UserAdminResources.Names.VerfiyPhoneNumber_Name, UserAdminResources.Names.VerfiyPhoneNumber_Help,
+        UserAdminResources.Names.VerfiyPhoneNumber_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        ClusterKey: "phone", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Restricted, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
+        IndexPriority: 5, IndexTagsCsv: "userdomain,phone,runtimeartifact,restricted")]
     public class VerfiyPhoneNumber
     {
         [JsonProperty("smsCode")]

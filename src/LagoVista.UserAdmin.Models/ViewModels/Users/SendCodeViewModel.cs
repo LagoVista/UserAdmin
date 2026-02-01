@@ -11,7 +11,13 @@ using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin.ViewModels.Users
 {
-    [EntityDescription(Domains.AuthDomain, UserAdminResources.Names.SendCodeVM_Title, UserAdminResources.Names.SendCodeVM_Help, UserAdminResources.Names.SendCodeVM_Description, EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources))]
+    [EntityDescription(
+        Domains.AuthDomain, UserAdminResources.Names.SendCodeVM_Title, UserAdminResources.Names.SendCodeVM_Help, UserAdminResources.Names.SendCodeVM_Description,
+        EntityDescriptionAttribute.EntityTypes.ViewModel, typeof(UserAdminResources),
+
+        ClusterKey: "mfa", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
+        Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Aux,
+        IndexPriority: 30, IndexTagsCsv: "authdomain,mfa,runtimeartifact,viewmodel")]
     public class SendCodeViewModel
     {
         public string SelectedProvider { get; set; }

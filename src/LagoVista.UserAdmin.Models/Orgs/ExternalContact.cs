@@ -15,9 +15,15 @@ using System.Collections.Generic;
 namespace LagoVista.UserAdmin.Models.Orgs
 {
 
-    [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.ExternalContact_Title, UserAdminResources.Names.ExternalContact_Description,
-    UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
-    FactoryUrl: "/api/distro/externalcontact/factory", Icon: "icon-pz-skill")]
+    [EntityDescription(
+        Domains.OrganizationDomain, UserAdminResources.Names.ExternalContact_Title, UserAdminResources.Names.ExternalContact_Description,
+        UserAdminResources.Names.Organization_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
+
+        FactoryUrl: "/api/distro/externalcontact/factory",
+
+        Icon: "icon-pz-skill", ClusterKey: "notifications", ModelType: EntityDescriptionAttribute.ModelTypes.DomainEntity,
+        Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime, Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: true,
+        IndexTier: EntityDescriptionAttribute.IndexTiers.Secondary, IndexPriority: 55, IndexTagsCsv: "organizationdomain,notifications,domainentity,contact")]
     public class ExternalContact : IIDEntity, IValidateable, IFormDescriptor, IFormConditionalFields
     {
         public ExternalContact()
