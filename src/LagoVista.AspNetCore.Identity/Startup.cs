@@ -44,6 +44,9 @@ namespace LagoVista.AspNetCore.Identity
             services.AddSingleton<IAppUserPasskeyManager, AppUserPasskeyManager>();
             services.AddTransient<IMagicLinkManager, MagicLinkManager>();
 
+            services.AddSingleton<IPendingIdentityManager, PendingIdentityManager>();
+
+
         }
     }
 }

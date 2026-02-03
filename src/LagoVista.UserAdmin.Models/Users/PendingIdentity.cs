@@ -3,6 +3,7 @@ using LagoVista.Core.Authentication.Models;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
 using LagoVista.UserAdmin.Models;
+using LagoVista.Core.Models;
 
 namespace Security.Models
 {
@@ -22,21 +23,12 @@ namespace Security.Models
         ClusterKey: "invites", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.RunTime,
         Sensitivity: EntityDescriptionAttribute.Sensitivities.Confidential, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
         IndexPriority: 10, IndexTagsCsv: "authdomain,invites,runtimeartifact")]
-    public class PendingIdentity
+    public class PendingIdentity : EntityBase
     {
-        // -----------------------------
-        // Core
-        // -----------------------------
-
-        public Guid Id { get; set; }
 
         public PendingIdentityFlowType FlowType { get; set; }
 
         public PendingIdentityStatus Status { get; set; }
-
-        public DateTime CreatedAtUtc { get; set; }
-
-        public DateTime ExpiresAtUtc { get; set; }
 
         /// <summary>
         /// Useful for tracing a single auth attempt across client/server logs.
@@ -46,7 +38,7 @@ namespace Security.Models
         /// <summary>
         /// The resolved durable user id this PendingIdentity should be linked to (when known).
         /// </summary>
-        public Guid? ResolutionTargetUserId { get; set; }
+        public string ResolutionTargetUserId { get; set; }
 
         /// <summary>
         /// Reason code for create/link decisions and/or terminal failures.
@@ -61,27 +53,34 @@ namespace Security.Models
         // Profile (untrusted until verified)
         // -----------------------------
 
-        public string ProposedFirstName { get; set; }
+        public string FirstName { get; set; }
 
-        public string ProposedLastName { get; set; }
+        public string LastName { get; set; }
+
+        public string OrgName { get; set; }
+        public string ProposedOrgNamespace { get; set; }
+
+        public string OrgWebSite { get; set; }
+
+        public string InvitedEmail { get; set; }
 
         /// <summary>
         /// Email provided by the user or prefilled from a provider. Not trusted until verified.
         /// </summary>
-        public string ProposedEmail { get; set; }
+        public string RegisteredEmail { get; set; }
 
         /// <summary>
         /// Verified email captured during the PendingIdentity flow (OTP/magic link).
         /// </summary>
         public string VerifiedEmail { get; set; }
 
-        public DateTime? VerifiedEmailAtUtc { get; set; }
+        public string VerifiedEmailTimestamp { get; set; }
 
         public int OtpSendCount { get; set; }
 
         public int OtpVerifyFailCount { get; set; }
 
-        public DateTime? LastOtpSentAtUtc { get; set; }
+        public string LastOtpSentTimestamp { get; set; }
 
         // -----------------------------
         // Auth bucket: Native Provider (Apple/Google)
@@ -167,9 +166,9 @@ namespace Security.Models
 
         public string InvitedEmail { get; set; }
 
-        public DateTime? InviteIssuedAtUtc { get; set; }
+        public string InviteIssuedTimestamp { get; set; }
 
-        public DateTime? InviteExpiresAtUtc { get; set; }
+        public string InviteExpiresTimestamp { get; set; }
 
         /// <summary>
         /// Hash/signature reference for validating the invite token without storing sensitive raw data.

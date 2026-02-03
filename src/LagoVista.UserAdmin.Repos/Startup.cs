@@ -78,6 +78,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddSingleton<IAppUserTestingDslRepo, AppUserTestingDslRepo>();
             services.AddSingleton<IAppUserTestRunRepo, AppUserTestRunRepo>();
             services.AddSingleton<IAuthViewRepo, AuthViewRepo>();
+            services.AddSingleton<IPendingIdentityRepo, PendingIdentityRepo>();
             services.AddSingleton<IAppUserPasskeyCredentialRepo, PasskeyCredentialRepo>();
             services.AddSingleton<IPasskeyCredentialIndexRepo, PasskeyCredentialIndexRepo>();
             services.AddTransient<ITestArtifactStorage, TestArtifactStorage>();
