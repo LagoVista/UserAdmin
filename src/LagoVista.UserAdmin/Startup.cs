@@ -46,7 +46,6 @@ namespace LagoVista.UserAdmin
             services.AddScoped<ISecureLinkManager, SecureLinkManager>();
             services.AddScoped<IUserRegistrationManager, UserRegistrationManager>();
             services.AddScoped<IFunctionMapManager, FunctionMapManager>();
-            services.AddTransient<IMagicLinkManager, MagicLinkManager>();
         }
     }
 }

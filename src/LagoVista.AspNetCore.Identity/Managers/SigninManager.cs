@@ -18,6 +18,7 @@ using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Resources;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.Data;
 using Prometheus;
 using System;
 using System.Collections.Generic;
@@ -87,9 +88,185 @@ namespace LagoVista.AspNetCore.Identity.Managers
             await _signinManager.SignInAsync(appUser, true);
         }
 
+        public async Task<InvokeResult<UserLoginResponse>> SignInAppUser(AppUser appUser, Stopwatch sw = null, string inviteId = "", string orgId = "")
+        {
+            var response = new UserLoginResponse();
+            var timings = new List<ResultTiming>();
+
+            if(sw == null) 
+                sw = Stopwatch.StartNew();
+
+            if (appUser.IsAccountDisabled)
+            {
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PaswwordAuthFailed, appUser.UserName, appUser.Id, extras: "Account Disabled");
+                await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed - Account Disabled", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
+                UserLoginFailures.Inc();
+                return InvokeResult<UserLoginResponse>.FromError($"Account [{appUser.UserName}] is disabled.");
+            }
+
+            if (!String.IsNullOrEmpty(inviteId))
+            {
+                var acceptInviteResult = await _orgManager.AcceptInvitationAsync(inviteId, appUser);
+                if (acceptInviteResult.Successful)
+                {
+                    response.RedirectPage = acceptInviteResult.Result.RedirectPage;
+                    response.ResponseMessage = acceptInviteResult.Result.ResponseMessage;
+
+                    // now much sure we sign in with the new org after accepting the invite.
+                    await SignInAsync(appUser);
+                }
+                else
+                {
+                    await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AcceptInviteFailed, appUser, errors: acceptInviteResult.ErrorMessage, inviteId: inviteId);
+                    return InvokeResult<UserLoginResponse>.FromErrors(acceptInviteResult.Errors.ToArray());
+                }
+            }
+
+            // if current org is null, make an attempt to load another org this person
+            // may already exist in, likely will fail...but we'll deal with that later on.
+            if (appUser.CurrentOrganization == null)
+            {
+                var firstExisitng = appUser.Organizations.FirstOrDefault();
+                if (firstExisitng != null)
+                {
+                    await _orgManager.ChangeOrgsAsync(firstExisitng.Id, firstExisitng, appUser);
+                }
+                else if (String.IsNullOrEmpty(response.RedirectPage))
+                {
+
+                }
+            }
+
+            if (appUser.CurrentOrganization != null)
+            {
+                var org = await _organizationRepo.GetOrganizationAsync(appUser.CurrentOrganization.Id);
+                response.AddAuthMetric("Loaded Organization");
+                timings.Add(new ResultTiming() { Key = $"Loaded organiation", Ms = sw.Elapsed.TotalMilliseconds });
+                sw.Restart();
+
+                if (!String.IsNullOrEmpty(orgId) && !String.IsNullOrEmpty(org.EndUserHomePage))
+                    response.RedirectPage = org.EndUserHomePage;
+
+                if (org.CreatedBy.Id == appUser.Id)
+                {
+                    _adminLogger.Trace("SignInManager__PasswordSignInAsync; User created organization, is an owner.");
+
+                    var ownerRoleId = _defaultRoleList.GetStandardRoles().Single(rl => rl.Key == DefaultRoleList.OWNER).Id;
+                    response.AddAuthMetric("Got Owner Role Id");
+
+                    var hasOwnerRole = await _userRoleManager.UserHasRoleAsync(ownerRoleId, appUser.Id, appUser.CurrentOrganization.Id);
+                    response.AddAuthMetric("Check User Has Owner Role");
+
+                    if (!hasOwnerRole)
+                    {
+                        _adminLogger.Trace("SignInManager__PasswordSignInAsync; User not owner, adding as role.");
+                        await _userRoleManager.GrantUserRoleAsync(appUser.Id, ownerRoleId, appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
+                        response.AddAuthMetric("Grant User Role");
+                    }
+                    else
+                    {
+                        response.AddAuthMetric("User was owner, don't need to add role");
+                        _adminLogger.Trace("SignInManager__PasswordSignInAsync; User already an owner, no need to add role.");
+
+                    }
+                }
+                else
+                {
+                    _adminLogger.Trace("SignInManager__PasswordSignInAsync; User did not create organization, thus is not an owner.");
+                }
+
+                sw.Restart();
+
+                var isOrgAdmin = await _orgManager.IsUserOrgAdminAsync(appUser.CurrentOrganization.Id, appUser.Id);
+                response.AddAuthMetric("Check if User is Admin");
+                if (isOrgAdmin != appUser.IsOrgAdmin)
+                {
+                    appUser.IsOrgAdmin = isOrgAdmin;
+                }
+
+                timings.Add(new ResultTiming() { Key = $"Org admin check", Ms = sw.Elapsed.TotalMilliseconds });
+                sw.Restart();
+
+
+                if (String.IsNullOrEmpty(response.RedirectPage))
+                {
+                    if (!String.IsNullOrEmpty(org.HomePage))
+                    {
+                        response.RedirectPage = org.HomePage;
+                    }
+                    else if (appUser.ShowWelcome)
+                    {
+                        response.RedirectPage = CommonLinks.HomeWelcome;
+                    }
+                    else
+                    {
+                        response.RedirectPage = CommonLinks.Home;
+                    }
+                }
+
+                appUser.CurrentOrganization = org.CreateSummary();
+            }
+            else
+            {
+                if (!appUser.EmailConfirmed)
+                    response.RedirectPage = $"/1/{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}";
+                else if (appUser.CurrentOrganization == null)
+                    response.RedirectPage = CommonLinks.CreateDefaultOrg;
+            }
+
+            if (String.IsNullOrEmpty(response.RedirectPage))
+            {
+                if (!appUser.EmailConfirmed)
+                    response.RedirectPage = $"/2/{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}";
+                else if (appUser.CurrentOrganization == null)
+                    response.RedirectPage = CommonLinks.CreateDefaultOrg;
+            }
+
+            appUser.LastLogin = DateTime.UtcNow.ToJSONString();
+            // we can bypass the manager here, we are updating the current user if they are logged in, should not require any security.
+
+            await _bgServiceQueue.QueueBackgroundWorkItemAsync(ct =>
+            {
+                return _appUserRepo.UpdateAsync(appUser);
+            });
+
+            timings.Add(new ResultTiming() { Key = $"User Updated", Ms = sw.Elapsed.TotalMilliseconds });
+            sw.Restart();
+
+            response.AddAuthMetric("Update user");
+
+            UserLoginSuccess.Inc();
+
+            if (appUser.CurrentOrganization != null)
+            {
+                await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
+
+                var favs = await _userFavoritesManager.GetUserFavoritesAsync(appUser.ToEntityHeader(), appUser.CurrentOrganization.ToEntityHeader());
+                response.AddAuthMetric("Add FAVs");
+
+                var mrus = await _mostRecentlyUsedManager.GetMostRecentlyUsedAsync(appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
+                timings.AddRange(mrus.Timings);
+                response.AddAuthMetric("Add MRUs");
+
+                response.Favorites = favs;
+                response.MostRecentlyUsed = mrus.Result;
+
+                timings.Add(new ResultTiming() { Key = $"Finalize user ", Ms = sw.Elapsed.TotalMilliseconds });
+                sw.Restart();
+            }
+
+            response.User = appUser;
+
+            await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthSuccess, appUser, inviteId: inviteId, redirectUri: response.RedirectPage);
+
+            var result = InvokeResult<UserLoginResponse>.Create(response);
+            result.Timings.AddRange(timings);
+            return result;
+        }
+
         public async Task<InvokeResult<UserLoginResponse>> PasswordSignInAsync(AuthLoginRequest loginRequest)
         {
-            var email = loginRequest.Email; 
+            var email = loginRequest.Email;
 
             var userName = String.IsNullOrEmpty(loginRequest.EndUserAppOrgId) ? loginRequest.Email : $"{email}@{loginRequest.EndUserAppOrgId}";
 
@@ -100,7 +277,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (string.IsNullOrEmpty(email)) return InvokeResult<UserLoginResponse>.FromError($"User name is a required field [{email}].");
             if (string.IsNullOrEmpty(loginRequest.Password)) return InvokeResult<UserLoginResponse>.FromError($"Password is a required field [{email}].");
             var sw = Stopwatch.StartNew();
-            await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthStart, userName: email, inviteId:loginRequest.InviteId);
+            await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthStart, userName: email, inviteId: loginRequest.InviteId);
             timings.Add(new ResultTiming() { Key = "Add password start, auth manager", Ms = sw.Elapsed.TotalMilliseconds });
             sw.Restart();
 
@@ -133,173 +310,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             if (signInResult.Succeeded)
             {
-                if (appUser.IsAccountDisabled)
+                var result = await SignInAppUser(appUser, sw, loginRequest.InviteId, loginRequest.EndUserAppOrgId);
+                if (!result.Successful)
                 {
-                    await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PaswwordAuthFailed, email, appUser.Id, extras:"Account Disabled");
-                    await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed - Account Disabled", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
-                    UserLoginFailures.Inc();
+                    result.Timings.AddRange(timings);
                     signIn.Dispose();
-                    return InvokeResult<UserLoginResponse>.FromError($"Account [{email}] is disabled.");
+                    return result;
                 }
-
-                if (!String.IsNullOrEmpty(loginRequest.InviteId))
-                {
-                    var acceptInviteResult = await _orgManager.AcceptInvitationAsync(loginRequest.InviteId, appUser);
-                    if (acceptInviteResult.Successful)
-                    {
-                        response.RedirectPage = acceptInviteResult.Result.RedirectPage;
-                        response.ResponseMessage = acceptInviteResult.Result.ResponseMessage;
-
-                        // now much sure we sign in with the new org after accepting the invite.
-                        await SignInAsync(appUser);
-                    }
-                    else
-                    {
-                        await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AcceptInviteFailed, appUser, errors: acceptInviteResult.ErrorMessage, inviteId: loginRequest.InviteId);
-                        return InvokeResult<UserLoginResponse>.FromErrors(acceptInviteResult.Errors.ToArray());
-                    }
-                }
-
-                // if current org is null, make an attempt to load another org this person
-                // may already exist in, likely will fail...but we'll deal with that later on.
-                if(appUser.CurrentOrganization == null)
-                {
-                    var firstExisitng = appUser.Organizations.FirstOrDefault();
-                    if(firstExisitng != null)
-                    {
-                        await _orgManager.ChangeOrgsAsync(firstExisitng.Id, firstExisitng, appUser);
-                    } 
-                    else if(String.IsNullOrEmpty(response.RedirectPage))
-                    {
-
-                    }
-                }
-
-                if (appUser.CurrentOrganization != null)
-                {
-                    var org = await _organizationRepo.GetOrganizationAsync(appUser.CurrentOrganization.Id);
-                    response.AddAuthMetric("Loaded Organization");
-                    timings.Add(new ResultTiming() { Key = $"Loaded organiation", Ms = sw.Elapsed.TotalMilliseconds });
-                    sw.Restart();
-
-                    if (!String.IsNullOrEmpty(loginRequest.EndUserAppOrgId) && !String.IsNullOrEmpty(org.EndUserHomePage))
-                        response.RedirectPage = org.EndUserHomePage;
-
-                    if (org.CreatedBy.Id == appUser.Id)
-                    {
-                        _adminLogger.Trace("SignInManager__PasswordSignInAsync; User created organization, is an owner.");
-
-                        var ownerRoleId = _defaultRoleList.GetStandardRoles().Single(rl => rl.Key == DefaultRoleList.OWNER).Id;
-                        response.AddAuthMetric("Got Owner Role Id");
-
-                        var hasOwnerRole = await _userRoleManager.UserHasRoleAsync(ownerRoleId, appUser.Id, appUser.CurrentOrganization.Id);
-                        response.AddAuthMetric("Check User Has Owner Role");
-
-                        if (!hasOwnerRole)
-                        {
-                            _adminLogger.Trace("SignInManager__PasswordSignInAsync; User not owner, adding as role.");
-                            await _userRoleManager.GrantUserRoleAsync(appUser.Id, ownerRoleId, appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
-                            response.AddAuthMetric("Grant User Role");
-                        }
-                        else
-                        {
-                            response.AddAuthMetric("User was owner, don't need to add role");
-                            _adminLogger.Trace("SignInManager__PasswordSignInAsync; User already an owner, no need to add role.");
-
-                        }
-                    }
-                    else
-                    {
-                        _adminLogger.Trace("SignInManager__PasswordSignInAsync; User did not create organization, thus is not an owner.");
-                    }
-
-                    sw.Restart();
-
-                    var isOrgAdmin = await _orgManager.IsUserOrgAdminAsync(appUser.CurrentOrganization.Id, appUser.Id);
-                    response.AddAuthMetric("Check if User is Admin");
-                    if (isOrgAdmin != appUser.IsOrgAdmin)
-                    {
-                        appUser.IsOrgAdmin = isOrgAdmin;
-                    }
-
-                    timings.Add(new ResultTiming() { Key = $"Org admin check", Ms = sw.Elapsed.TotalMilliseconds });
-                    sw.Restart();
-
-
-                    if (String.IsNullOrEmpty(response.RedirectPage))
-                    {
-                        if (!String.IsNullOrEmpty(org.HomePage))
-                        {
-                            response.RedirectPage = org.HomePage;
-                        }
-                        else if (appUser.ShowWelcome)
-                        {
-                            response.RedirectPage = CommonLinks.HomeWelcome;
-                        }
-                        else
-                        {
-                            response.RedirectPage = CommonLinks.Home;
-                        }
-                    }
-
-                    appUser.CurrentOrganization = org.CreateSummary();
-                }
-                else
-                {
-                    if (!appUser.EmailConfirmed)
-                        response.RedirectPage = $"/1/{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}";
-                    else if (appUser.CurrentOrganization == null)
-                        response.RedirectPage = CommonLinks.CreateDefaultOrg;
-                }
-
-                if (String.IsNullOrEmpty(response.RedirectPage)) {
-                    if (!appUser.EmailConfirmed)
-                        response.RedirectPage = $"/2/{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}";
-                    else if (appUser.CurrentOrganization == null)
-                        response.RedirectPage = CommonLinks.CreateDefaultOrg;
-                }
-
-                appUser.LastLogin = DateTime.UtcNow.ToJSONString();
-                // we can bypass the manager here, we are updating the current user if they are logged in, should not require any security.
-
-                await _bgServiceQueue.QueueBackgroundWorkItemAsync(ct =>
-                {
-                    return _appUserRepo.UpdateAsync(appUser);
-                });
-
-                timings.Add(new ResultTiming() { Key = $"User Updated", Ms = sw.Elapsed.TotalMilliseconds });
-                sw.Restart();
-
-                response.AddAuthMetric("Update user");
-                
-                signIn.Dispose();
-                UserLoginSuccess.Inc();
-
-                if (appUser.CurrentOrganization != null)
-                {
-                    await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
-
-                    var favs = await _userFavoritesManager.GetUserFavoritesAsync(appUser.ToEntityHeader(), appUser.CurrentOrganization.ToEntityHeader());
-                    response.AddAuthMetric("Add FAVs");
-
-                    var mrus = await _mostRecentlyUsedManager.GetMostRecentlyUsedAsync(appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
-                    timings.AddRange(mrus.Timings);
-                    response.AddAuthMetric("Add MRUs");
-
-                    response.Favorites = favs;
-                    response.MostRecentlyUsed = mrus.Result;
-
-                    timings.Add(new ResultTiming() { Key = $"Finalize user ", Ms = sw.Elapsed.TotalMilliseconds });
-                    sw.Restart();
-                }
-
-                response.User = appUser;
-
-                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthSuccess, appUser, inviteId:loginRequest.InviteId, redirectUri: response.RedirectPage);
-
-                var result = InvokeResult<UserLoginResponse>.Create(response);
-                result.Timings.AddRange(timings);
-                return result;
             }
 
             if (signInResult.IsLockedOut)
@@ -314,7 +331,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
             }
 
             await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
-
 
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "[AuthTokenManager_AccessTokenGrantAsync]", UserAdminErrorCodes.AuthInvalidCredentials.Message, new KeyValuePair<string, string>("email", email));
             signIn.Dispose();
