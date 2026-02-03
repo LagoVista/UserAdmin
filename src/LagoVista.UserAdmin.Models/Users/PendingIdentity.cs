@@ -62,8 +62,6 @@ namespace Security.Models
 
         public string OrgWebSite { get; set; }
 
-        public string InvitedEmail { get; set; }
-
         /// <summary>
         /// Email provided by the user or prefilled from a provider. Not trusted until verified.
         /// </summary>

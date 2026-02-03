@@ -7,6 +7,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Account
     {
         Task AddPendingIdentityAsync(PendingIdentity identity);
         Task<PendingIdentity> GetPendingIdentityAsync(string pendingIdentityId);
+        Task<PendingIdentity> GetPendingIdentityByEmailAsync(string email);
         Task UpdatePendingIndentiyAsync(PendingIdentity identity);
         Task DeletePendingIdentityAsync(string pendingIdentityId);
     }

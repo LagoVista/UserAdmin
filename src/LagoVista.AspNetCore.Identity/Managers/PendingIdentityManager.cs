@@ -4,6 +4,7 @@ using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Account;
+using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.ViewModels.Organization;
@@ -52,6 +53,19 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
 
             await _identityRepo.UpdatePendingIndentiyAsync(identity);
+        }
+
+        public async Task<UserLoginResponse> PasswordSignInAsync(AuthLoginRequest loginRequest)
+        {
+            var identity = await _identityRepo.GetPendingIdentityAsync(loginRequest.Email);
+
+
+            var result = _passwordHasher.VerifyHashedPassword(identity, identity.PasswordHash, loginRequest.Password);
+
+            return new UserLoginResponse()
+            {
+                 
+            };
         }
 
         public Task DeletePendingIdentityAsync(string id)

@@ -42,6 +42,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         private readonly IMostRecentlyUsedManager _mostRecentlyUsedManager;
         private readonly IAuthenticationLogManager _authLogManager;
         private readonly IBackgroundServiceTaskQueue _bgServiceQueue;
+        private readonly IAppConfig _appConfig;
 
         private static readonly Histogram UserSignInMetrics = Metrics.CreateHistogram("nuviot_user_sign_in", "Use Sign In Metrics.",
            new HistogramConfiguration
@@ -73,6 +74,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             _mostRecentlyUsedManager = mostRecentlyUsedManager;
             _authLogManager = authenticationLogManager;
             _bgServiceQueue = bgServiceQueue;
+            _appConfig = appConfig;
 
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[SignInManager__Constructor]", "Created Sign-in manager");
         }
@@ -149,7 +151,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
                 if (org.CreatedBy.Id == appUser.Id)
                 {
-                    _adminLogger.Trace("SignInManager__PasswordSignInAsync; User created organization, is an owner.");
+                    _adminLogger.Trace($"{this.Tag()}; User created organization, is an owner.");
 
                     var ownerRoleId = _defaultRoleList.GetStandardRoles().Single(rl => rl.Key == DefaultRoleList.OWNER).Id;
                     response.AddAuthMetric("Got Owner Role Id");
@@ -159,20 +161,20 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
                     if (!hasOwnerRole)
                     {
-                        _adminLogger.Trace("SignInManager__PasswordSignInAsync; User not owner, adding as role.");
+                        _adminLogger.Trace($"{this.Tag()}; User not owner, adding as role.");
                         await _userRoleManager.GrantUserRoleAsync(appUser.Id, ownerRoleId, appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
                         response.AddAuthMetric("Grant User Role");
                     }
                     else
                     {
                         response.AddAuthMetric("User was owner, don't need to add role");
-                        _adminLogger.Trace("SignInManager__PasswordSignInAsync; User already an owner, no need to add role.");
+                        _adminLogger.Trace($"{this.Tag()}; User already an owner, no need to add role.");
 
                     }
                 }
                 else
                 {
-                    _adminLogger.Trace("SignInManager__PasswordSignInAsync; User did not create organization, thus is not an owner.");
+                    _adminLogger.Trace($"{this.Tag} User did not create organization, thus is not an owner.");
                 }
 
                 sw.Restart();
@@ -209,7 +211,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             else
             {
                 if (!appUser.EmailConfirmed)
-                    response.RedirectPage = $"/1/{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}";
+                    response.RedirectPage = $"/{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}";
                 else if (appUser.CurrentOrganization == null)
                     response.RedirectPage = CommonLinks.CreateDefaultOrg;
             }
@@ -217,7 +219,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (String.IsNullOrEmpty(response.RedirectPage))
             {
                 if (!appUser.EmailConfirmed)
-                    response.RedirectPage = $"/2/{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}";
+                    response.RedirectPage = $"/{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}";
                 else if (appUser.CurrentOrganization == null)
                     response.RedirectPage = CommonLinks.CreateDefaultOrg;
             }
@@ -298,11 +300,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 return InvokeResult<UserLoginResponse>.FromError($"SignInManager__PasswordSignInAsync;  Could not find user [{email}].");
             }
 
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[SignInManager__PasswordSignInAsync]", "User Login", email.ToKVP("email"));
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), "User Login", email.ToKVP("email"));
             timings.Add(new ResultTiming() { Key = $"Log event", Ms = sw.Elapsed.TotalMilliseconds });
             sw.Restart();
 
             var signInResult = await _signinManager.PasswordSignInAsync(userName, loginRequest.Password, loginRequest.RememberMe, loginRequest.LockoutOnFailure);
+            _adminLogger.Trace($"{this.Tag()} - Sign in result: {signInResult.Succeeded}");
             timings.Add(new ResultTiming() { Key = $"Password sign in", Ms = sw.Elapsed.TotalMilliseconds });
             sw.Restart();
 
@@ -310,29 +313,31 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             if (signInResult.Succeeded)
             {
+                _adminLogger.Trace($"{this.Tag()} - finalize sign in");
                 var result = await SignInAppUser(appUser, sw, loginRequest.InviteId, loginRequest.EndUserAppOrgId);
-                if (!result.Successful)
-                {
-                    result.Timings.AddRange(timings);
-                    signIn.Dispose();
-                    return result;
-                }
+                result.Timings.AddRange(timings);
+                signIn.Dispose();
+
+                return result;
             }
+
+            _adminLogger.Trace($"{this.Tag()} - didn't sign in, handling error");
 
             if (signInResult.IsLockedOut)
             {
                 await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed - Locked Out", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
                 await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PaswwordAuthFailed, appUser, errors: "User is locked out.");
 
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthTokenManager_AccessTokenGrantAsync", UserAdminErrorCodes.AuthUserLockedOut.Message, new KeyValuePair<string, string>("email", email));
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.AuthUserLockedOut.Message, new KeyValuePair<string, string>("email", email));
                 signIn.Dispose();
                 UserLoginFailures.Inc();
                 return InvokeResult<UserLoginResponse>.FromErrors(UserAdminErrorCodes.AuthUserLockedOut.ToErrorMessage());
             }
 
-            await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed", appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
+            var orgEH = appUser.CurrentOrganization == null ? _appConfig.SystemOwnerOrg : appUser.CurrentOrganization.ToEntityHeader(); 
+            await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "UserLogin Failed", orgEH, appUser.ToEntityHeader());
 
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "[AuthTokenManager_AccessTokenGrantAsync]", UserAdminErrorCodes.AuthInvalidCredentials.Message, new KeyValuePair<string, string>("email", email));
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), UserAdminErrorCodes.AuthInvalidCredentials.Message, new KeyValuePair<string, string>("email", email));
             signIn.Dispose();
             UserLoginSuccess.Inc();
 

@@ -4,6 +4,7 @@ using LagoVista.UserAdmin.Interfaces.Repos.Account;
 using Security.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,6 +35,12 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
         public Task<PendingIdentity> GetPendingIdentityAsync(string pendingIdentityId)
         {
             return GetDocumentAsync(pendingIdentityId);
+        }
+
+        public async Task<PendingIdentity> GetPendingIdentityByEmailAsync(string email)
+        {
+            var identity = await QueryAsync(rec => rec.RegisteredEmail == email);
+            return identity.FirstOrDefault();
         }
 
         public Task UpdatePendingIndentiyAsync(PendingIdentity identity)

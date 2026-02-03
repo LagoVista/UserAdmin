@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Managers;
+using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.ViewModels.Organization;
@@ -10,6 +11,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 {
     public interface IPendingIdentityManager
     {
+        Task<UserLoginResponse> PasswordSignInAsync(AuthLoginRequest loginRequest);
         Task AddPendingIdentity(PendingIdentity identity);
         Task<PendingIdentity> GetPendingIdentityAsync(string pendingIdentityId);
         Task UpdatePendingIdentity(PendingIdentity identity);
