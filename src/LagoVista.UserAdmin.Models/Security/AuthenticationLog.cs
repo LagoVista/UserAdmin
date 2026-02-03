@@ -203,6 +203,14 @@ namespace LagoVista.UserAdmin.Models.Security
         TotpDisableMfaStart,
         TotpDisableMfaFailed,
         TotpDisableMfaSuccess,
+
+        MagicLinkRequested,
+        MagicLinkSent,
+        MagicLinkConsumed,
+        MagicLinkConsumeFailed,
+        MagicLinkExchangeIssued,
+        MagicLinkExchangeSucceeded,
+        MagicLinkExchangeFailed
     }
 
     [EntityDescription(

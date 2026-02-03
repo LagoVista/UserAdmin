@@ -1,4 +1,4 @@
-﻿/*1/31/2026 5:43:34 PM*/
+﻿/*2/3/2026 6:00:14 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1697,6 +1697,69 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:LoginVM_Title
 
 		public static string LoginVM_Title { get { return GetResourceString("LoginVM_Title"); } }
+//Resources:UserAdminResources:MagicLinkAttempt_Description
+
+		public static string MagicLinkAttempt_Description { get { return GetResourceString("MagicLinkAttempt_Description"); } }
+//Resources:UserAdminResources:MagicLinkAttempt_Help
+
+		public static string MagicLinkAttempt_Help { get { return GetResourceString("MagicLinkAttempt_Help"); } }
+//Resources:UserAdminResources:MagicLinkAttempt_Title
+
+		public static string MagicLinkAttempt_Title { get { return GetResourceString("MagicLinkAttempt_Title"); } }
+//Resources:UserAdminResources:MagicLinkConsumeContext_Description
+
+		public static string MagicLinkConsumeContext_Description { get { return GetResourceString("MagicLinkConsumeContext_Description"); } }
+//Resources:UserAdminResources:MagicLinkConsumeContext_Help
+
+		public static string MagicLinkConsumeContext_Help { get { return GetResourceString("MagicLinkConsumeContext_Help"); } }
+//Resources:UserAdminResources:MagicLinkConsumeContext_Title
+
+		public static string MagicLinkConsumeContext_Title { get { return GetResourceString("MagicLinkConsumeContext_Title"); } }
+//Resources:UserAdminResources:MagicLinkConsumeResponse_Description
+
+		public static string MagicLinkConsumeResponse_Description { get { return GetResourceString("MagicLinkConsumeResponse_Description"); } }
+//Resources:UserAdminResources:MagicLinkConsumeResponse_Help
+
+		public static string MagicLinkConsumeResponse_Help { get { return GetResourceString("MagicLinkConsumeResponse_Help"); } }
+//Resources:UserAdminResources:MagicLinkConsumeResponse_Title
+
+		public static string MagicLinkConsumeResponse_Title { get { return GetResourceString("MagicLinkConsumeResponse_Title"); } }
+//Resources:UserAdminResources:MagicLinkExchangeContext_Description
+
+		public static string MagicLinkExchangeContext_Description { get { return GetResourceString("MagicLinkExchangeContext_Description"); } }
+//Resources:UserAdminResources:MagicLinkExchangeContext_Help
+
+		public static string MagicLinkExchangeContext_Help { get { return GetResourceString("MagicLinkExchangeContext_Help"); } }
+//Resources:UserAdminResources:MagicLinkExchangeContext_Title
+
+		public static string MagicLinkExchangeContext_Title { get { return GetResourceString("MagicLinkExchangeContext_Title"); } }
+//Resources:UserAdminResources:MagicLinkExchangeResponse_Description
+
+		public static string MagicLinkExchangeResponse_Description { get { return GetResourceString("MagicLinkExchangeResponse_Description"); } }
+//Resources:UserAdminResources:MagicLinkExchangeResponse_Help
+
+		public static string MagicLinkExchangeResponse_Help { get { return GetResourceString("MagicLinkExchangeResponse_Help"); } }
+//Resources:UserAdminResources:MagicLinkExchangeResponse_Title
+
+		public static string MagicLinkExchangeResponse_Title { get { return GetResourceString("MagicLinkExchangeResponse_Title"); } }
+//Resources:UserAdminResources:MagicLinkRequest_Description
+
+		public static string MagicLinkRequest_Description { get { return GetResourceString("MagicLinkRequest_Description"); } }
+//Resources:UserAdminResources:MagicLinkRequest_Help
+
+		public static string MagicLinkRequest_Help { get { return GetResourceString("MagicLinkRequest_Help"); } }
+//Resources:UserAdminResources:MagicLinkRequest_Title
+
+		public static string MagicLinkRequest_Title { get { return GetResourceString("MagicLinkRequest_Title"); } }
+//Resources:UserAdminResources:MagicLinkRequestContext_Description
+
+		public static string MagicLinkRequestContext_Description { get { return GetResourceString("MagicLinkRequestContext_Description"); } }
+//Resources:UserAdminResources:MagicLinkRequestContext_Help
+
+		public static string MagicLinkRequestContext_Help { get { return GetResourceString("MagicLinkRequestContext_Help"); } }
+//Resources:UserAdminResources:MagicLinkRequestContext_Title
+
+		public static string MagicLinkRequestContext_Title { get { return GetResourceString("MagicLinkRequestContext_Title"); } }
 //Resources:UserAdminResources:ManagedAsset_Description
 
 		public static string ManagedAsset_Description { get { return GetResourceString("ManagedAsset_Description"); } }
@@ -3640,6 +3703,27 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string LoginVM_Description = "LoginVM_Description";
 			public const string LoginVM_Help = "LoginVM_Help";
 			public const string LoginVM_Title = "LoginVM_Title";
+			public const string MagicLinkAttempt_Description = "MagicLinkAttempt_Description";
+			public const string MagicLinkAttempt_Help = "MagicLinkAttempt_Help";
+			public const string MagicLinkAttempt_Title = "MagicLinkAttempt_Title";
+			public const string MagicLinkConsumeContext_Description = "MagicLinkConsumeContext_Description";
+			public const string MagicLinkConsumeContext_Help = "MagicLinkConsumeContext_Help";
+			public const string MagicLinkConsumeContext_Title = "MagicLinkConsumeContext_Title";
+			public const string MagicLinkConsumeResponse_Description = "MagicLinkConsumeResponse_Description";
+			public const string MagicLinkConsumeResponse_Help = "MagicLinkConsumeResponse_Help";
+			public const string MagicLinkConsumeResponse_Title = "MagicLinkConsumeResponse_Title";
+			public const string MagicLinkExchangeContext_Description = "MagicLinkExchangeContext_Description";
+			public const string MagicLinkExchangeContext_Help = "MagicLinkExchangeContext_Help";
+			public const string MagicLinkExchangeContext_Title = "MagicLinkExchangeContext_Title";
+			public const string MagicLinkExchangeResponse_Description = "MagicLinkExchangeResponse_Description";
+			public const string MagicLinkExchangeResponse_Help = "MagicLinkExchangeResponse_Help";
+			public const string MagicLinkExchangeResponse_Title = "MagicLinkExchangeResponse_Title";
+			public const string MagicLinkRequest_Description = "MagicLinkRequest_Description";
+			public const string MagicLinkRequest_Help = "MagicLinkRequest_Help";
+			public const string MagicLinkRequest_Title = "MagicLinkRequest_Title";
+			public const string MagicLinkRequestContext_Description = "MagicLinkRequestContext_Description";
+			public const string MagicLinkRequestContext_Help = "MagicLinkRequestContext_Help";
+			public const string MagicLinkRequestContext_Title = "MagicLinkRequestContext_Title";
 			public const string ManagedAsset_Description = "ManagedAsset_Description";
 			public const string ManagedAsset_Help = "ManagedAsset_Help";
 			public const string ManagedAsset_Name = "ManagedAsset_Name";

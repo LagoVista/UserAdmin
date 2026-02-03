@@ -1,32 +1,34 @@
+using LagoVista.Core.Interfaces;
+using LagoVista.IoT.Logging;
+using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Repos;
-using LagoVista.UserAdmin.Interfaces.Repos.Users;
+using LagoVista.UserAdmin.Interfaces.Repos.Account;
+using LagoVista.UserAdmin.Interfaces.Repos.Apps;
+using LagoVista.UserAdmin.Interfaces.Repos.Commo;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
-using LagoVista.UserAdmin.Repos.Users;
+using LagoVista.UserAdmin.Interfaces.Repos.Security.Passkeys;
+using LagoVista.UserAdmin.Interfaces.Repos.Testing;
+using LagoVista.UserAdmin.Interfaces.Repos.Users;
+using LagoVista.UserAdmin.Interfaces.REpos.Account;
+using LagoVista.UserAdmin.Managers;
+using LagoVista.UserAdmin.Models.Testing;
+using LagoVista.UserAdmin.Repos.Account;
 using LagoVista.UserAdmin.Repos.Orgs;
+using LagoVista.UserAdmin.Repos.Passkeys;
+using LagoVista.UserAdmin.Repos.Repos.Account;
+using LagoVista.UserAdmin.Repos.Repos.Apps;
+using LagoVista.UserAdmin.Repos.Repos.Calendar;
+using LagoVista.UserAdmin.Repos.Repos.Commo;
+using LagoVista.UserAdmin.Repos.Repos.Orgs;
+using LagoVista.UserAdmin.Repos.Repos.Security;
+using LagoVista.UserAdmin.Repos.Repos.Testing;
 using LagoVista.UserAdmin.Repos.Repos.Users;
 using LagoVista.UserAdmin.Repos.Security;
-using LagoVista.IoT.Logging;
-using LagoVista.UserAdmin.Resources;
-using LagoVista.UserAdmin.Repos.Repos.Apps;
-using LagoVista.UserAdmin.Interfaces.Repos.Apps;
-using LagoVista.UserAdmin.Repos.Repos.Security;
-using LagoVista.Core.Interfaces;
-using LagoVista.UserAdmin.Repos.Repos.Orgs;
-using LagoVista.UserAdmin.Interfaces;
-using LagoVista.UserAdmin.Managers;
-using LagoVista.UserAdmin.Repos.Repos.Calendar;
-using LagoVista.UserAdmin.Interfaces.Repos.Account;
-using LagoVista.UserAdmin.Repos.Repos.Account;
-using LagoVista.UserAdmin.Interfaces.Repos.Commo;
-using LagoVista.UserAdmin.Repos.Repos.Commo;
-using LagoVista.UserAdmin.Repos.Testing;
-using LagoVista.UserAdmin.Models.Testing;
-using LagoVista.UserAdmin.Interfaces.Repos.Security.Passkeys;
 using LagoVista.UserAdmin.Repos.TableStorage.Passkeys;
-using LagoVista.UserAdmin.Interfaces.Repos.Testing;
-using LagoVista.UserAdmin.Repos.Repos.Testing;
-using LagoVista.UserAdmin.Repos.Passkeys;
+using LagoVista.UserAdmin.Repos.Testing;
+using LagoVista.UserAdmin.Repos.Users;
+using LagoVista.UserAdmin.Resources;
 
 namespace LagoVista.UserAdmin.Repos
 {
@@ -80,6 +82,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddSingleton<IPasskeyCredentialIndexRepo, PasskeyCredentialIndexRepo>();
             services.AddTransient<ITestArtifactStorage, TestArtifactStorage>();
             services.AddTransient<IPasskeyChallengeStore, RedisPasskeyChallengeStore>();
+            services.AddTransient<IMagicLinkAttemptStore, MagicLinkAttemptCacheStore>();
 
             ErrorCodes.Register(typeof(UserAdminErrorCodes));
         }

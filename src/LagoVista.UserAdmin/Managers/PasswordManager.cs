@@ -87,19 +87,19 @@ namespace LagoVista.UserAdmin.Managers
                  appUser.Email.ToKVP("toEmailAddress"));
 #endif 
 
+
             var subject = UserAdminResources.Email_ResetPassword_Subject.Replace("[APP_NAME]", _appConfig.AppName);
             var body = UserAdminResources.Email_ResetPassword_Body.Replace("[CALLBACK_URL]", callbackUrl).Replace("[MOBILE_CALLBACK_URL]", mobileCallbackUrl);
 
-            var result = await _emailSender.SendAsync(sendResetPasswordLink.Email, subject, body, appUser.CurrentOrganization.ToEntityHeader(), appUser.ToEntityHeader());
+            var result = await _emailSender.SendAsync(sendResetPasswordLink.Email, subject, body, _appConfig.SystemOwnerOrg, appUser.ToEntityHeader());
             if (result.Successful)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_SendResetPasswordLinkAsync", "SentLink",
                      appUser.Id.ToKVP("appUserId"),
                      appUser.Email.ToKVP("toEmailAddress"));
 
-                var org = appUser.CurrentOrganization == null ? EntityHeader.Create(Guid.Empty.ToId(), "????") : appUser.CurrentOrganization.ToEntityHeader();
 
-                await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "SentResetPasswordLink", org, appUser.ToEntityHeader());
+                await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "SentResetPasswordLink", _appConfig.SystemOwnerOrg, appUser.ToEntityHeader());
             }
             else
             {

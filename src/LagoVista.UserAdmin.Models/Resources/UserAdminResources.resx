@@ -3310,8 +3310,78 @@
   <data name="KioskLoginViewModel_Description" xml:space="preserve">
   <value>View model containing kiosk authentication inputs including client id and API key.</value>
 </data>
-  <data name="KioskLoginViewModel_Help" xml:space="preserve">
+<data name="KioskLoginViewModel_Help" xml:space="preserve">
   <value>Use this model when submitting kiosk login credentials. ClientId identifies the kiosk client and ApiKey provides the shared secret for authentication.</value>
+</data>
+
+  <!-- Magic Link Attempt-->
+  <data name="MagicLinkAttempt_Title" xml:space="preserve">
+  <value>Magic Link Sign-In Attempt</value>
+</data>
+
+  <data name="MagicLinkAttempt_Help" xml:space="preserve">
+  <value>Represents a single, time-limited magic link sign-in attempt used to authenticate an existing user without a password.</value>
+</data>
+
+  <data name="MagicLinkAttempt_Description" xml:space="preserve">
+  <value>A Magic Link Attempt captures the lifecycle of a passwordless sign-in request, including issuance, expiration, and single-use consumption. It supports both portal-based cookie authentication and mobile exchange-code flows that mint JWTs, and always defers navigation decisions to the standard post-login routing logic.</value>
+</data>
+
+  <data name="MagicLinkRequest_Title" xml:space="preserve">
+  <value>Magic Link Sign-In Request</value>
+</data>
+  <data name="MagicLinkRequest_Help" xml:space="preserve">
+  <value>Represents a request to send a magic sign-in link to an email address.</value>
+</data>
+  <data name="MagicLinkRequest_Description" xml:space="preserve">
+  <value>Contains the information required to request a sign-in-only magic link, including the target email address, client channel, and optional return URL.</value>
+</data>
+
+  <data name="MagicLinkRequestContext_Title" xml:space="preserve">
+  <value>Magic Link Request Context</value>
+</data>
+  <data name="MagicLinkRequestContext_Help" xml:space="preserve">
+  <value>Provides request-level context for a magic link sign-in request.</value>
+</data>
+  <data name="MagicLinkRequestContext_Description" xml:space="preserve">
+  <value>Captures contextual metadata such as IP address, user agent, and correlation identifier used for auditing and abuse detection.</value>
+</data>
+  <data name="MagicLinkConsumeContext_Title" xml:space="preserve">
+  <value>Magic Link Consume Context</value>
+</data>
+  <data name="MagicLinkConsumeContext_Help" xml:space="preserve">
+  <value>Provides request context when consuming a magic sign-in link.</value>
+</data>
+  <data name="MagicLinkConsumeContext_Description" xml:space="preserve">
+  <value>Contains client channel and request metadata used when validating and consuming a magic sign-in link.</value>
+</data>
+
+  <data name="MagicLinkConsumeResponse_Title" xml:space="preserve">
+  <value>Magic Link Consume Result</value>
+</data>
+  <data name="MagicLinkConsumeResponse_Help" xml:space="preserve">
+  <value>Represents the result of consuming a magic sign-in link.</value>
+</data>
+  <data name="MagicLinkConsumeResponse_Description" xml:space="preserve">
+  <value>Contains the consumed magic link attempt and, for mobile clients, a short-lived exchange code used to obtain a JWT.</value>
+</data>
+  <data name="MagicLinkExchangeContext_Title" xml:space="preserve">
+  <value>Magic Link Exchange Context</value>
+</data>
+  <data name="MagicLinkExchangeContext_Help" xml:space="preserve">
+  <value>Provides request context for exchanging a magic link exchange code.</value>
+</data>
+  <data name="MagicLinkExchangeContext_Description" xml:space="preserve">
+  <value>Captures metadata used when validating and consuming a magic link exchange code prior to JWT issuance.</value>
+</data>
+  <data name="MagicLinkExchangeResponse_Title" xml:space="preserve">
+  <value>Magic Link Exchange Result</value>
+</data>
+  <data name="MagicLinkExchangeResponse_Help" xml:space="preserve">
+  <value>Represents the result of exchanging a magic link exchange code.</value>
+</data>
+  <data name="MagicLinkExchangeResponse_Description" xml:space="preserve">
+  <value>Contains the resolved user identity and associated magic link attempt after successful exchange, enabling JWT issuance by the authentication system.</value>
 </data>
 
 </root>
