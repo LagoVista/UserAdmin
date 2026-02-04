@@ -14,6 +14,7 @@ using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Interfaces.REpos.Account;
 using LagoVista.UserAdmin.Managers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
 
 namespace LagoVista.AspNetCore.Identity
 {
@@ -46,6 +47,7 @@ namespace LagoVista.AspNetCore.Identity
 
             services.AddSingleton<IPendingIdentityManager, PendingIdentityManager>();
 
+            IdentityModelEventSource.ShowPII = true;
 
         }
     }
