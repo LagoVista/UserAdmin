@@ -37,7 +37,7 @@ namespace LagoVista.UserAdmin.Repos.Testing
 
         public Task<ListResponse<AppUserTestScenarioSummary>> ListAsync(string orgId, ListRequest request)
         {
-             return QuerySummaryDescendingAsync<AppUserTestScenarioSummary, AppUserTestScenario>(qry => qry.OwnerOrganization.Id == orgId, qry=>qry.Name, request);
+             return QuerySummaryAsync<AppUserTestScenarioSummary, AppUserTestScenario>(qry => qry.OwnerOrganization.Id == orgId, qry=>qry.Name, request);
         }
 
         public Task UpdateTestScenarioAsync(AppUserTestScenario dsl)
