@@ -37,8 +37,8 @@ namespace LagoVista.UserAdmin.Repos.Users
         private readonly bool _shouldConsolidateCollections;
         private readonly IUserRoleRepo _userRoleRepo;
 
-        public AppUserLoadRepo(IUserAdminSettings settings, IUserRoleRepo userRoleRepo, IAdminLogger logger, IAppConfig appConfig, ICacheProvider cacheProvider) : 
-            base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, appConfig.Environment == Environments.Development ? null : cacheProvider)
+        public AppUserLoadRepo(IUserAdminSettings settings, IUserRoleRepo userRoleRepo, IAdminLogger logger, IAppConfig appConfig, ICacheProvider cacheProvider, IFkIndexTableWriterBatched fkWriter) : 
+            base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, appConfig.Environment == Environments.Development ? null : cacheProvider, fkWriter: fkWriter)
         {
             _userRoleRepo = userRoleRepo ?? throw new ArgumentNullException(nameof(userRoleRepo));
             _shouldConsolidateCollections = settings.ShouldConsolidateCollections;
@@ -73,8 +73,8 @@ namespace LagoVista.UserAdmin.Repos.Users
         private readonly IAuthenticationLogManager _authLogMgr;
         private readonly IAdminLogger _adminLogger;
 
-        public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserRoleRepo userRoleRepo, IUserAdminSettings userAdminSettings,  IAuthenticationLogManager authLogMgr, IAdminLogger logger, ICacheProvider cacheProvider) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider)
+        public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserRoleRepo userRoleRepo, IUserAdminSettings userAdminSettings,  IAuthenticationLogManager authLogMgr, IAdminLogger logger, ICacheProvider cacheProvider, IFkIndexTableWriterBatched fkWriter) :
+            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider, fkWriter: fkWriter)
         {
             _adminSettings = userAdminSettings;
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
