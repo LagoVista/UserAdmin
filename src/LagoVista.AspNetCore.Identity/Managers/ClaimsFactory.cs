@@ -29,6 +29,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string ExternalAccountName = "com.lagovista.iot.externalaccount.name";
         public const string CurrentUserId = "com.lagovista.iot.userid";
         public const string CurrentUserName = "com.lagovista.iot.username";
+        public const string CurrentOrgNamespace = "com.lagovista.iot.currentorgnamespace";
         public const string CurrentOrgName = "com.lagovista.iot.currentorgname";
         public const string CurrentOrgId = "com.lagovista.iot.currentorgid";
         public const string OAuthToken = "com.lagovista.iot.oauth.token";
@@ -85,7 +86,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(user.FirstName) ? user.FirstName : None),
                 new Claim(ClaimTypes.Surname, !string.IsNullOrWhiteSpace(user.LastName) ? user.LastName : None),
                 new Claim(ClaimTypes.Email, !string.IsNullOrEmpty(user.Email) ? user.Email : None),
-                new Claim(CurrentUserName, user.UserName),
+                new Claim(CurrentUserName, String.IsNullOrEmpty(user.UserName) ? user.Email : user.UserName),
                 new Claim(Avatar, user.ProfileImage.ImageUrl),
                 new Claim(CurrentUserId, user.Id),
                 new Claim(IsPreviewUser, user.IsPreviewUser.ToString().ToLower()),
@@ -98,6 +99,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(IsUserDevice, user.IsUserDevice.ToString()),
                 new Claim(IsCustomerAdmin, user.IsCustomerAdmin.ToString()),
                 new Claim(IsFinancceAdmin, (user.IsFinanceAdmin || isOwner).ToString()),
+                new Claim(CurrentOrgNamespace, user.CurrentOrganization == null ? None : user.CurrentOrganization.Namespace),
                 new Claim(CurrentOrgName, user.CurrentOrganization == null ? None : user.CurrentOrganization.Text),
                 new Claim(CurrentOrgId, user.CurrentOrganization == null ? None : user.CurrentOrganization.Id),
                 new Claim(CurrentUserProfilePictureurl, user.ProfileImage.ImageUrl),
@@ -164,7 +166,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(ClaimTypes.Email, !string.IsNullOrEmpty(user.Email) ? user.Email : None),
                 new Claim(Avatar, user.ProfileImage.ImageUrl),
                 new Claim(CurrentUserId, user.Id),
-                new Claim(CurrentUserName, user.UserName),
+                new Claim(CurrentUserName, String.IsNullOrEmpty(user.UserName) ? user.Email : user.UserName),
                 new Claim(ExternalAccountVerified, user.ExternalLogins.Any().ToString()),
                 new Claim(IsPreviewUser, user.IsPreviewUser.ToString().ToLower()),
                 new Claim(EmailVerified, user.EmailConfirmed.ToString()),
@@ -175,6 +177,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(IsUserDevice, user.IsUserDevice.ToString()),
                 new Claim(IsFinancceAdmin, (user.IsFinanceAdmin || isOwner).ToString()),
                 new Claim(IsCustomerAdmin, user.IsCustomerAdmin.ToString()),
+                new Claim(CurrentOrgNamespace, user.CurrentOrganization?.Namespace ?? None),
                 new Claim(CurrentOrgName, org == null ? None : org.Text),
                 new Claim(CurrentOrgId, org == null ? None : org.Id),
                 new Claim(CurrentUserProfilePictureurl, user.ProfileImage.ImageUrl),
@@ -237,11 +240,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(owner.FirstName) ? owner.FirstName : None),
                 new Claim(ClaimTypes.Surname, !string.IsNullOrWhiteSpace(owner.LastName) ? owner.LastName : None),
                 new Claim(ClaimTypes.Email, !string.IsNullOrEmpty(owner.Email) ? owner.Email : None),
-                new Claim(CurrentUserName, owner.UserName),
+                new Claim(CurrentUserName, String.IsNullOrEmpty(owner.UserName) ? owner.Email : owner.UserName),
                 new Claim(Logintype, "Customer"),
                 new Claim(Anonymous, owner.IsAnonymous.ToString()),
                 new Claim(EmailVerified, true.ToString()),
                 new Claim(PhoneVerfiied, true.ToString()),
+                new Claim(CurrentOrgNamespace, owner.CurrentOrganization?.Namespace ?? None),
                 new Claim(CurrentOrgName, owner.OwnerOrganization.Text),
                 new Claim(CurrentOrgId, owner.OwnerOrganization.Id),
                 new Claim(CurrentOrgName, owner.OwnerOrganization.Text),
@@ -271,7 +275,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var claims = new List<Claim>
             {
                 new Claim(CurrentUserId, owner.Id),
-                new Claim(CurrentUserName, owner.UserName),
+                new Claim(CurrentUserName, String.IsNullOrEmpty(owner.UserName) ? owner.Email : owner.UserName),
                 new Claim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(owner.FirstName) ? owner.FirstName : None),
                 new Claim(ClaimTypes.Surname, !string.IsNullOrWhiteSpace(owner.LastName) ? owner.LastName : None),
                 new Claim(ClaimTypes.Email, !string.IsNullOrEmpty(owner.Email) ? owner.Email : None),
@@ -280,6 +284,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(EmailVerified, true.ToString()),
                 new Claim(PhoneVerfiied, true.ToString()),
                 new Claim(IsCustomerAdmin, owner.IsCustomerAdmin.ToString()),
+                new Claim(CurrentOrgNamespace, owner.CurrentOrganization?.Namespace ?? None),
                 new Claim(CurrentOrgName, owner.OwnerOrganization.Text),
                 new Claim(CurrentOrgId, owner.OwnerOrganization.Id),
                 new Claim(DeviceId, owner.CurrentDeviceId),
