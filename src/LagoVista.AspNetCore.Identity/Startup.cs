@@ -13,8 +13,11 @@ using LagoVista.UserAdmin.Interfaces.Managers.Passkeys;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Interfaces.REpos.Account;
 using LagoVista.UserAdmin.Managers;
+using LagoVista.UserAdmin.Models.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
+using Security.Models;
 
 namespace LagoVista.AspNetCore.Identity
 {
@@ -46,6 +49,7 @@ namespace LagoVista.AspNetCore.Identity
             services.AddTransient<IMagicLinkManager, MagicLinkManager>();
 
             services.AddSingleton<IPendingIdentityManager, PendingIdentityManager>();
+            services.AddTransient<IPasswordHasher<PendingIdentity>, PasswordHasher<PendingIdentity>>();
 
             IdentityModelEventSource.ShowPII = true;
 
