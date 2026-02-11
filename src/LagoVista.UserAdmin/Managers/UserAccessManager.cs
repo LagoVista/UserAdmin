@@ -81,6 +81,7 @@ namespace LagoVista.UserAdmin.Managers
 #endif
             return userModules.OrderBy(mod => mod.SortOrder).ToList();
         }
+
         public async Task<Module> GetUserModuleAsync(string moduleKey, string userId, string orgId)
         {
             var module = await _moduleRepo.GetModuleByKeyAsync(moduleKey);
