@@ -8,6 +8,7 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Testing;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
+using LagoVista.UserAdmin.Interfaces.REpos.Account;
 using LagoVista.UserAdmin.Models.Security;
 using LagoVista.UserAdmin.Models.Testing;
 using LagoVista.UserAdmin.Models.Users;
@@ -29,6 +30,7 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IAppUserManager _appUserManager;
         private readonly IUserManager _userManager;
         private readonly ISignInManager _signInManager;
+        private readonly IMagicLinkManager _magicLinkManager;
         private readonly IAuthenticationLogManager _authLogMgr;
         private readonly IOrganizationManager _orgManager;
         private readonly IAppUserRepo _appUserRepo;
@@ -50,6 +52,7 @@ namespace LagoVista.UserAdmin.Managers
                                    IAuthViewRepo authViewRepo,
                                    IAuthenticationLogManager authLogMgr,
                                    IUserManager userManager,
+                                   IMagicLinkManager magicLinkManager,
                                    IUserRegistrationManager userRegistrationManager,
                                    ITestArtifactStorage testArtifactStorage,
                                    IAppConfig appConfig) : base(logger, appConfig, depManager, security)
@@ -66,6 +69,7 @@ namespace LagoVista.UserAdmin.Managers
             _authViewRepo = authViewRepo ?? throw new ArgumentNullException(nameof(authViewRepo));
             _testArtifactStorage = testArtifactStorage ?? throw new ArgumentNullException(nameof(testArtifactStorage));
             _userRegistrationManager = userRegistrationManager ?? throw new ArgumentNullException(nameof(userRegistrationManager));
+            _magicLinkManager = magicLinkManager ?? throw new ArgumentNullException(nameof(magicLinkManager));  
         }
 
         public async Task<InvokeResult> DeleteTestUserAsync(EntityHeader org, EntityHeader user)
@@ -73,21 +77,16 @@ namespace LagoVista.UserAdmin.Managers
             return await _appUserManager.DeleteUserAsync(TestUserSeed.User.Id, org, user);
         }
 
-        public async Task<InvokeResult<TestUserCredentials>> GetTestUserCredentials(EntityHeader user, EntityHeader pwd, string passKeyCredentialsId)
+        public async Task<InvokeResult> SetTestUserCredentials(EntityHeader user, EntityHeader pwd, TestUserCredentials credentials)
         {
             var testUser = await _appUserRepo.FindByIdAsync(TestUserSeed.User.Id);
             var newPwd = $"test!{Guid.NewGuid().ToId()}1234";
             var token = await _userManager.GeneratePasswordResetTokenAsync(testUser);
             await _userManager.ResetPasswordAsync(testUser, token, newPwd);
+            credentials.EmailAddress = testUser.Email;
+            credentials.Password = newPwd;
 
-            var credentials = new TestUserCredentials()
-            {
-                EmailAddress = testUser.Email,
-                Password = newPwd,
-                PasskeyCredentialsId = passKeyCredentialsId
-            };
-
-            return InvokeResult<TestUserCredentials>.Create(credentials);
+            return InvokeResult.Success;
         }
 
         public async Task<InvokeResult<TestUserCredentials>> ApplySetupAsync(string testSceanrioId, EntityHeader org, EntityHeader user)
@@ -110,8 +109,6 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             var testUser = await _appUserRepo.FindByIdAsync(TestUserSeed.User.Id);
-
-
             if (preconditions.EnsureUserExists.Value == SetCondition.NotSet)
             {
                 _adminLogger.Trace($"{this.Tag()} User Should Not Exist");
@@ -155,7 +152,7 @@ namespace LagoVista.UserAdmin.Managers
                     ClientType = "WEBAPP",
                     DeviceId = "WPF-AUTHTESTING",
                     LoginType = LoginTypes.AppUser,
-                    Email = preconditions.HasPassword.Value == SetCondition.Set ? TestUserSeed.Email : String.Empty,
+                    Email = preconditions.UserHasEmail.Value == SetCondition.Set ? TestUserSeed.Email : String.Empty,
                     FirstName = preconditions.UserHasFirstName.Value == SetCondition.Set ? TestUserSeed.FirstName : String.Empty,
                     LastName = preconditions.UserHasLastName.Value == SetCondition.Set ? TestUserSeed.LastName : String.Empty,
                     Password = preconditions.HasPassword.Value == SetCondition.Set ? generatedPassword : String.Empty
@@ -193,9 +190,9 @@ namespace LagoVista.UserAdmin.Managers
             if (preconditions.IsOrgAdmin.Value != SetCondition.DontCare) testUser.IsOrgAdmin = preconditions.IsOrgAdmin.Value == SetCondition.Set;
             if (preconditions.ShowWelcome.Value != SetCondition.DontCare) testUser.ShowWelcome = preconditions.ShowWelcome.Value == SetCondition.Set;
 
-            if (preconditions.UserHasEmail.Value != SetCondition.DontCare) testUser.Email = preconditions.ShowWelcome.Value == SetCondition.Set ? TestUserSeed.Email : null;
-            if (preconditions.UserHasFirstName.Value != SetCondition.DontCare) testUser.FirstName = preconditions.ShowWelcome.Value == SetCondition.Set ? TestUserSeed.FirstName : null;
-            if (preconditions.UserHasLastName.Value != SetCondition.DontCare) testUser.LastName = preconditions.ShowWelcome.Value == SetCondition.Set ? TestUserSeed.LastName : null;
+            if (preconditions.UserHasEmail.Value != SetCondition.DontCare) testUser.Email = preconditions.UserHasEmail.Value == SetCondition.Set ? TestUserSeed.Email : null;
+            if (preconditions.UserHasFirstName.Value != SetCondition.DontCare) testUser.FirstName = preconditions.UserHasFirstName.Value == SetCondition.Set ? TestUserSeed.FirstName : null;
+            if (preconditions.UserHasLastName.Value != SetCondition.DontCare) testUser.LastName = preconditions.UserHasLastName.Value == SetCondition.Set ? TestUserSeed.LastName : null;
 
 
             _adminLogger.Trace($"{this.Tag()} Set Pre Conditions on User");
@@ -225,7 +222,7 @@ namespace LagoVista.UserAdmin.Managers
 
                     _adminLogger.Trace($"{this.Tag()} Use Should belong to an Org - Created {TestUserSeed.TEST_ORG_NS1}");
 
-                    var addUserResult = await _orgManager.AddUserToOrgAsync(TestUserSeed.Org2.Id, TestUserSeed.User.Id, org, user);
+                    var addUserResult = await _orgManager.AddUserToOrgAsync(TestUserSeed.Org1.Id, TestUserSeed.User.Id, org, user);
                     if (!addUserResult.Successful)
                     {
                         _adminLogger.AddError(this.Tag(), addUserResult.ErrorMessage);
@@ -249,6 +246,13 @@ namespace LagoVista.UserAdmin.Managers
                         }
                     }
                 }
+
+                if(null == testUser.CurrentOrganization)
+                {
+                    var userOrg = await _orgManager.GetOrganizationAsync(TestUserSeed.Org1.Id, org, user);
+                    testUser.CurrentOrganization = userOrg.CreateSummary();
+                }
+
             }
             if (preconditions.BelongsToOrg.Value == SetCondition.NotSet)
             {
@@ -265,8 +269,6 @@ namespace LagoVista.UserAdmin.Managers
 
                 _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- Cleared");
             }
-
-
 
             await AuthorizeAsync(testUser, AuthorizeResult.AuthorizeActions.Update, user, org);
             await _appUserRepo.UpdateAsync(testUser);
@@ -294,21 +296,44 @@ namespace LagoVista.UserAdmin.Managers
                     _adminLogger.Trace($"{this.Tag()} Use should not belong to an org - did not exist, nothing to do.");
             }
 
-            var passKeyCredentialsId = String.Empty;
+
+            var userCredentials = new TestUserCredentials();
+
             if(preconditions.HasPassword.Value == SetCondition.Set)
             {
-                passKeyCredentialsId = "0Mzo4bIZX4GyggZOQGvRx3WWZrMXiLPsqPf625kAz44=";
+                userCredentials.PasskeyCredentialsId= "0Mzo4bIZX4GyggZOQGvRx3WWZrMXiLPsqPf625kAz44=";
+            }
+
+            if(preconditions.SendMagicLink.Value == SetCondition.Set)
+            {
+                var mlResponse = await _magicLinkManager.RequestSignInLinkAsyncForTesting(new MagicLinkRequest()
+                {
+                    Channel = "portal",
+                    Email = testUser.Email,
+                }, new MagicLinkRequestContext()
+                {
+                    IpAddress = "127.0.0.1",
+                    CorrelationId = Guid.NewGuid().ToString(),
+                    UserAgent = "UnitTest"
+                });
+
+                if(!mlResponse.Successful)
+                {
+                    _adminLogger.AddError(this.Tag(), $"Failed to send magic link: {mlResponse.ErrorMessage}");
+                    throw new Exception($"Failed to send magic link: {mlResponse.ErrorMessage}");    
+                }
+                
+                userCredentials.MagicLinkToken = mlResponse.Result;
+
+                _adminLogger.Trace($"{this.Tag()} Set MagicLinkToken {mlResponse.Result.Substring(0, 5)}*************** on userCredentials.");
             }
 
             if (preconditions.HasPassword.Value == SetCondition.Set)
             {
-                var credentials = await GetTestUserCredentials(org, user, passKeyCredentialsId);
-                return InvokeResult<TestUserCredentials>.Create(credentials.Result);
+                await SetTestUserCredentials(org, user, userCredentials);
             }
-            else
-            {
-                return InvokeResult<TestUserCredentials>.Create(new TestUserCredentials() { PasskeyCredentialsId = passKeyCredentialsId, EmailAddress = TestUserSeed.Email });
-            }
+
+            return InvokeResult<TestUserCredentials>.Create(userCredentials);
         }
 
         public async Task<AppUser> GetTestUserAsync(EntityHeader org, EntityHeader user)
@@ -431,7 +456,14 @@ namespace LagoVista.UserAdmin.Managers
 
             var scenario = await _testScenarioRepo.GetByIdAsync(run.TestScenario.Id);
             scenario.LastRun = run.Finished;
-            scenario.LastStatus = run.Status.ToString();
+
+            if (run.Status != TestRunStatus.Failed)
+            {
+                scenario.LastStatus = "Success";
+            }
+            else 
+                scenario.LastStatus = run.Status.ToString();
+
             scenario.LastUpdatedDate = now;
             scenario.LastUpdatedBy = user;
             scenario.LastError = run.ErrorMesage;

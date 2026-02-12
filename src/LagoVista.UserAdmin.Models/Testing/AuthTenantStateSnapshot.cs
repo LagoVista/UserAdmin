@@ -52,6 +52,10 @@ namespace LagoVista.UserAdmin.Models.Testing
         public EntityHeader<SetCondition> EmailConfirmed { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
 
 
+        [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_HasPendingIdentity, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader<SetCondition> EnsurePendingIdentity { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
+
+
         [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_UserHasOAuthGitHub, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
         public EntityHeader<SetCondition> UserHasOAuthGitHub { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
 
@@ -85,11 +89,21 @@ namespace LagoVista.UserAdmin.Models.Testing
         public EntityHeader<SetCondition> IsOrgAdmin { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
 
         [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_HasPassword, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
-        public EntityHeader<SetCondition> HasPassword { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.Set);
+        public EntityHeader<SetCondition> HasPassword { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
 
 
         [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_HasPasskey, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
-        public EntityHeader<SetCondition> HasPasskey { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.Set);
+        public EntityHeader<SetCondition> HasPasskey { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
+
+        [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_GenerateEmailConfirm, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader<SetCondition> GenerateConfirmEmail { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
+
+        [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_SendMagicLink, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader<SetCondition> SendMagicLink { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
+
+
+        [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_HasTotp, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader<SetCondition> HasTOTP { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
 
 
         [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_IsAnonymous, HelpResource: UserAdminResources.Names.AuthTenantStateSnapshot_IsAnonymous_Help, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
@@ -121,10 +135,16 @@ namespace LagoVista.UserAdmin.Models.Testing
                 nameof(IsUserLoggedIn),
                 nameof(EnsureUserExists),
                 nameof(EnsureUserDoesNotExist),
+                nameof(EnsurePendingIdentity),
                 nameof(BelongsToOrg),
                 nameof(EmailConfirmed),
+                nameof(GenerateConfirmEmail),
+                nameof(SendMagicLink),
                 nameof(PhoneNumberConfirmed),
                 nameof(TwoFactorEnabled),
+                nameof(HasPassword),
+                nameof(HasPasskey),
+                nameof(HasTOTP),
                 nameof(IsAccountDisabled),
                 nameof(IsAnonymous),
                 nameof(ShowWelcome),

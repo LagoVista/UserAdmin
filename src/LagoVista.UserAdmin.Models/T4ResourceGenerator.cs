@@ -1,4 +1,4 @@
-﻿/*2/3/2026 6:00:14 AM*/
+﻿/*2/12/2026 10:53:05 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -573,12 +573,21 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AuthTenantStateSnapshot_ExternalLoginProviders_Help
 
 		public static string AuthTenantStateSnapshot_ExternalLoginProviders_Help { get { return GetResourceString("AuthTenantStateSnapshot_ExternalLoginProviders_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_GenerateEmailConfirm
+
+		public static string AuthTenantStateSnapshot_GenerateEmailConfirm { get { return GetResourceString("AuthTenantStateSnapshot_GenerateEmailConfirm"); } }
 //Resources:UserAdminResources:AuthTenantStateSnapshot_HasPasskey
 
 		public static string AuthTenantStateSnapshot_HasPasskey { get { return GetResourceString("AuthTenantStateSnapshot_HasPasskey"); } }
 //Resources:UserAdminResources:AuthTenantStateSnapshot_HasPassword
 
 		public static string AuthTenantStateSnapshot_HasPassword { get { return GetResourceString("AuthTenantStateSnapshot_HasPassword"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_HasPendingIdentity
+
+		public static string AuthTenantStateSnapshot_HasPendingIdentity { get { return GetResourceString("AuthTenantStateSnapshot_HasPendingIdentity"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_HasTotp
+
+		public static string AuthTenantStateSnapshot_HasTotp { get { return GetResourceString("AuthTenantStateSnapshot_HasTotp"); } }
 //Resources:UserAdminResources:AuthTenantStateSnapshot_Help
 
 		public static string AuthTenantStateSnapshot_Help { get { return GetResourceString("AuthTenantStateSnapshot_Help"); } }
@@ -615,6 +624,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:AuthTenantStateSnapshot_PhoneNumberConfirmed_Help
 
 		public static string AuthTenantStateSnapshot_PhoneNumberConfirmed_Help { get { return GetResourceString("AuthTenantStateSnapshot_PhoneNumberConfirmed_Help"); } }
+//Resources:UserAdminResources:AuthTenantStateSnapshot_SendMagicLink
+
+		public static string AuthTenantStateSnapshot_SendMagicLink { get { return GetResourceString("AuthTenantStateSnapshot_SendMagicLink"); } }
 //Resources:UserAdminResources:AuthTenantStateSnapshot_ShouldInviteToOrg
 
 		public static string AuthTenantStateSnapshot_ShouldInviteToOrg { get { return GetResourceString("AuthTenantStateSnapshot_ShouldInviteToOrg"); } }
@@ -3331,8 +3343,11 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AuthTenantStateSnapshot_EnsureUserExists_Help = "AuthTenantStateSnapshot_EnsureUserExists_Help";
 			public const string AuthTenantStateSnapshot_ExternalLoginProviders = "AuthTenantStateSnapshot_ExternalLoginProviders";
 			public const string AuthTenantStateSnapshot_ExternalLoginProviders_Help = "AuthTenantStateSnapshot_ExternalLoginProviders_Help";
+			public const string AuthTenantStateSnapshot_GenerateEmailConfirm = "AuthTenantStateSnapshot_GenerateEmailConfirm";
 			public const string AuthTenantStateSnapshot_HasPasskey = "AuthTenantStateSnapshot_HasPasskey";
 			public const string AuthTenantStateSnapshot_HasPassword = "AuthTenantStateSnapshot_HasPassword";
+			public const string AuthTenantStateSnapshot_HasPendingIdentity = "AuthTenantStateSnapshot_HasPendingIdentity";
+			public const string AuthTenantStateSnapshot_HasTotp = "AuthTenantStateSnapshot_HasTotp";
 			public const string AuthTenantStateSnapshot_Help = "AuthTenantStateSnapshot_Help";
 			public const string AuthTenantStateSnapshot_IsAccountDisabled = "AuthTenantStateSnapshot_IsAccountDisabled";
 			public const string AuthTenantStateSnapshot_IsAccountDisabled_Help = "AuthTenantStateSnapshot_IsAccountDisabled_Help";
@@ -3345,6 +3360,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string AuthTenantStateSnapshot_LastMfaDateTimeUtc_Help = "AuthTenantStateSnapshot_LastMfaDateTimeUtc_Help";
 			public const string AuthTenantStateSnapshot_PhoneNumberConfirmed = "AuthTenantStateSnapshot_PhoneNumberConfirmed";
 			public const string AuthTenantStateSnapshot_PhoneNumberConfirmed_Help = "AuthTenantStateSnapshot_PhoneNumberConfirmed_Help";
+			public const string AuthTenantStateSnapshot_SendMagicLink = "AuthTenantStateSnapshot_SendMagicLink";
 			public const string AuthTenantStateSnapshot_ShouldInviteToOrg = "AuthTenantStateSnapshot_ShouldInviteToOrg";
 			public const string AuthTenantStateSnapshot_ShouldSendConfirmationEmail = "AuthTenantStateSnapshot_ShouldSendConfirmationEmail";
 			public const string AuthTenantStateSnapshot_ShowWelcome = "AuthTenantStateSnapshot_ShowWelcome";

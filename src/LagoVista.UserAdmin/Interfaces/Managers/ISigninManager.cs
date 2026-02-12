@@ -5,12 +5,15 @@
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.Users;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Interfaces.Managers
 {
     public interface ISignInManager
     {
+        Task<InvokeResult<UserLoginResponse>> CompleteSignInToAppAsync(AppUser appUser, Stopwatch sw = null, string inviteId = "", string orgId = "");
+
         Task<InvokeResult<UserLoginResponse>> PasswordSignInAsync(AuthLoginRequest loginRequest);
 
         Task SignInAsync(AppUser user, bool isPersistent = false);

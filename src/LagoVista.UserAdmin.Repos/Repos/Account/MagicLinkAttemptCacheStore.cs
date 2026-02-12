@@ -1,5 +1,8 @@
-﻿using LagoVista.Core.Interfaces;
+﻿using LagoVista.CloudStorage;
+using LagoVista.CloudStorage.Storage;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Validation;
+using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.REpos.Account;
 using LagoVista.UserAdmin.Models.Auth;
 using System;
@@ -16,6 +19,7 @@ namespace LagoVista.UserAdmin.Repos.Account
     {
         private readonly ICacheProvider _cache;
 
+
         // Key prefixes
         private const string AttemptPrefix = "magic:attempt:";
         private const string CodeIndexPrefix = "magic:code:";
@@ -25,9 +29,13 @@ namespace LagoVista.UserAdmin.Repos.Account
         // Keep modest so cache doesn't become a landfill.
         private static readonly TimeSpan ConsumedRetention = TimeSpan.FromHours(24);
 
-        public MagicLinkAttemptCacheStore(ICacheProvider cache)
+        public MagicLinkAttemptCacheStore(IAdminLogger logger, ICacheProvider cache, ICacheProviderSettings cacheProviderSettings)
         {
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            if (!cacheProviderSettings.UseCache)
+            {
+                _cache = new InmemoryCache(logger);
+            }
         }
 
         public async Task<InvokeResult> CreateAsync(MagicLinkAttempt attempt)

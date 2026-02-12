@@ -90,7 +90,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             await _signinManager.SignInAsync(appUser, true);
         }
 
-        public async Task<InvokeResult<UserLoginResponse>> SignInAppUser(AppUser appUser, Stopwatch sw = null, string inviteId = "", string orgId = "")
+        public async Task<InvokeResult<UserLoginResponse>> CompleteSignInToAppAsync(AppUser appUser, Stopwatch sw = null, string inviteId = "", string orgId = "")
         {
             var response = new UserLoginResponse();
             var timings = new List<ResultTiming>();
@@ -314,7 +314,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (signInResult.Succeeded)
             {
                 _adminLogger.Trace($"{this.Tag()} - finalize sign in");
-                var result = await SignInAppUser(appUser, sw, loginRequest.InviteId, loginRequest.EndUserAppOrgId);
+                var result = await CompleteSignInToAppAsync(appUser, sw, loginRequest.InviteId, loginRequest.EndUserAppOrgId);
                 result.Timings.AddRange(timings);
                 signIn.Dispose();
 

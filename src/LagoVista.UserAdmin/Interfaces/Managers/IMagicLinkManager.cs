@@ -17,11 +17,14 @@ namespace LagoVista.UserAdmin.Interfaces.REpos.Account
         /// </summary>
         Task<InvokeResult> RequestSignInLinkAsync(MagicLinkRequest request, MagicLinkRequestContext context);
 
+        Task<InvokeResult<string>> RequestSignInLinkAsyncForTesting(MagicLinkRequest request, MagicLinkRequestContext context);
+
+
         /// <summary>
         /// Consumes a magic link code. For portal, returns the user for cookie sign-in.
         /// For mobile, returns an exchange code that can be exchanged for a JWT.
         /// </summary>
-        Task<InvokeResult<MagicLinkConsumeResponse>> ConsumeAsync(string code, MagicLinkConsumeContext context);
+        Task<InvokeResult<UserLoginResponse>> ConsumeAsync(string code, MagicLinkConsumeContext context);
 
         /// <summary>
         /// Exchanges a short-lived exchange code (mobile) and returns the user for JWT issuance.
@@ -147,6 +150,8 @@ namespace LagoVista.UserAdmin.Interfaces.REpos.Account
         /// Consumed attempt (ConsumedAtUtc set).
         /// </summary>
         public MagicLinkAttempt Attempt { get; set; }
+
+        public string Redirect { get; set; }
 
         /// <summary>
         /// For mobile, the short-lived exchange code to be sent back to the app.

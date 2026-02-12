@@ -2471,917 +2471,772 @@
   <data name="AuthTenantStateSnapshot_HasPasskey" xml:space="preserve">
     <value>Has Passkey</value>
   </data>
-
-  <!-- PasskeyRegistrationCompleteRequestWire -->
   <data name="PasskeyRegistrationCompleteRequestWire_Name" xml:space="preserve">
-  <value>Passkey Registration Complete Request (Wire)</value>
-</data>
+    <value>Passkey Registration Complete Request (Wire)</value>
+  </data>
   <data name="PasskeyRegistrationCompleteRequestWire_Description" xml:space="preserve">
-  <value>Wire-format payload used to complete passkey registration, containing the challenge and attestation data.</value>
-</data>
+    <value>Wire-format payload used to complete passkey registration, containing the challenge and attestation data.</value>
+  </data>
   <data name="PasskeyRegistrationCompleteRequestWire_Help" xml:space="preserve">
-  <value>Use this model for client-to-server passkey registration completion where attestation fields are base64url strings.</value>
-</data>
-
-  <!-- PasskeyAuthenticationCompleteRequestWire -->
+    <value>Use this model for client-to-server passkey registration completion where attestation fields are base64url strings.</value>
+  </data>
   <data name="PasskeyAuthenticationCompleteRequestWire_Name" xml:space="preserve">
-  <value>Passkey Authentication Complete Request (Wire)</value>
-</data>
+    <value>Passkey Authentication Complete Request (Wire)</value>
+  </data>
   <data name="PasskeyAuthenticationCompleteRequestWire_Description" xml:space="preserve">
-  <value>Wire-format payload used to complete passkey authentication, containing the challenge and assertion data.</value>
-</data>
+    <value>Wire-format payload used to complete passkey authentication, containing the challenge and assertion data.</value>
+  </data>
   <data name="PasskeyAuthenticationCompleteRequestWire_Help" xml:space="preserve">
-  <value>Use this model for client-to-server passkey authentication completion where assertion fields are base64url strings.</value>
-</data>
-
-  <!-- WebAuthnAttestationWire -->
+    <value>Use this model for client-to-server passkey authentication completion where assertion fields are base64url strings.</value>
+  </data>
   <data name="WebAuthnAttestationWire_Name" xml:space="preserve">
-  <value>WebAuthn Attestation (Wire)</value>
-</data>
+    <value>WebAuthn Attestation (Wire)</value>
+  </data>
   <data name="WebAuthnAttestationWire_Description" xml:space="preserve">
-  <value>Wire-format WebAuthn attestation container, including identifiers and a structured response.</value>
-</data>
+    <value>Wire-format WebAuthn attestation container, including identifiers and a structured response.</value>
+  </data>
   <data name="WebAuthnAttestationWire_Help" xml:space="preserve">
-  <value>Represents the WebAuthn attestation object as received from the browser, using base64url strings for binary fields.</value>
-</data>
-
-  <!-- WebAuthnAttestationResponseWire -->
+    <value>Represents the WebAuthn attestation object as received from the browser, using base64url strings for binary fields.</value>
+  </data>
   <data name="WebAuthnAttestationResponseWire_Name" xml:space="preserve">
-  <value>WebAuthn Attestation Response (Wire)</value>
-</data>
+    <value>WebAuthn Attestation Response (Wire)</value>
+  </data>
   <data name="WebAuthnAttestationResponseWire_Description" xml:space="preserve">
-  <value>Wire-format attestation response containing client data JSON and the attestation object.</value>
-</data>
+    <value>Wire-format attestation response containing client data JSON and the attestation object.</value>
+  </data>
   <data name="WebAuthnAttestationResponseWire_Help" xml:space="preserve">
-  <value>Contains the base64url-encoded clientDataJSON and attestationObject returned by the authenticator.</value>
-</data>
-
-  <!-- WebAuthnAssertionWire -->
+    <value>Contains the base64url-encoded clientDataJSON and attestationObject returned by the authenticator.</value>
+  </data>
   <data name="WebAuthnAssertionWire_Name" xml:space="preserve">
-  <value>WebAuthn Assertion (Wire)</value>
-</data>
+    <value>WebAuthn Assertion (Wire)</value>
+  </data>
   <data name="WebAuthnAssertionWire_Description" xml:space="preserve">
-  <value>Wire-format WebAuthn assertion container, including identifiers and a structured response.</value>
-</data>
+    <value>Wire-format WebAuthn assertion container, including identifiers and a structured response.</value>
+  </data>
   <data name="WebAuthnAssertionWire_Help" xml:space="preserve">
-  <value>Represents the WebAuthn assertion object as received from the browser, using base64url strings for binary fields.</value>
-</data>
-
-  <!-- WebAuthnAssertionResponseWire -->
+    <value>Represents the WebAuthn assertion object as received from the browser, using base64url strings for binary fields.</value>
+  </data>
   <data name="WebAuthnAssertionResponseWire_Name" xml:space="preserve">
-  <value>WebAuthn Assertion Response (Wire)</value>
-</data>
+    <value>WebAuthn Assertion Response (Wire)</value>
+  </data>
   <data name="WebAuthnAssertionResponseWire_Description" xml:space="preserve">
-  <value>Wire-format assertion response containing authenticator data, signature, and client data JSON.</value>
-</data>
+    <value>Wire-format assertion response containing authenticator data, signature, and client data JSON.</value>
+  </data>
   <data name="WebAuthnAssertionResponseWire_Help" xml:space="preserve">
-  <value>Contains base64url-encoded authenticatorData, signature, and clientDataJSON, plus an optional userHandle.</value>
-</data>
-
-  <!-- PasskeyBeginOptionsResponse -->
+    <value>Contains base64url-encoded authenticatorData, signature, and clientDataJSON, plus an optional userHandle.</value>
+  </data>
   <data name="PasskeyBeginOptionsResponse_Name" xml:space="preserve">
-  <value>Passkey Begin Options Response</value>
-</data>
+    <value>Passkey Begin Options Response</value>
+  </data>
   <data name="PasskeyBeginOptionsResponse_Description" xml:space="preserve">
-  <value>Response returned from a passkey begin call, including the challenge id and WebAuthn options payload.</value>
-</data>
+    <value>Response returned from a passkey begin call, including the challenge id and WebAuthn options payload.</value>
+  </data>
   <data name="PasskeyBeginOptionsResponse_Help" xml:space="preserve">
-  <value>The options field is returned as JSON to be forwarded directly to WebAuthn APIs; rpId and origin may be included for diagnostics.</value>
-</data>
-
-  <!-- PasskeyRegistrationCompleteRequest -->
+    <value>The options field is returned as JSON to be forwarded directly to WebAuthn APIs; rpId and origin may be included for diagnostics.</value>
+  </data>
   <data name="PasskeyRegistrationCompleteRequest_Name" xml:space="preserve">
-  <value>Passkey Registration Complete Request</value>
-</data>
+    <value>Passkey Registration Complete Request</value>
+  </data>
   <data name="PasskeyRegistrationCompleteRequest_Description" xml:space="preserve">
-  <value>Server request model to complete passkey registration using the wire-format attestation payload.</value>
-</data>
+    <value>Server request model to complete passkey registration using the wire-format attestation payload.</value>
+  </data>
   <data name="PasskeyRegistrationCompleteRequest_Help" xml:space="preserve">
-  <value>Use this model when completing registration; attestation fields are base64url strings matching the browser wire shape.</value>
-</data>
-
-  <!-- PasskeyAuthenticationCompleteRequest -->
+    <value>Use this model when completing registration; attestation fields are base64url strings matching the browser wire shape.</value>
+  </data>
   <data name="PasskeyAuthenticationCompleteRequest_Name" xml:space="preserve">
-  <value>Passkey Authentication Complete Request</value>
-</data>
+    <value>Passkey Authentication Complete Request</value>
+  </data>
   <data name="PasskeyAuthenticationCompleteRequest_Description" xml:space="preserve">
-  <value>Server request model to complete passkey authentication using the wire-format assertion payload.</value>
-</data>
+    <value>Server request model to complete passkey authentication using the wire-format assertion payload.</value>
+  </data>
   <data name="PasskeyAuthenticationCompleteRequest_Help" xml:space="preserve">
-  <value>Use this model when completing authentication; assertion fields are base64url strings matching the browser wire shape.</value>
-</data>
-
-  <!-- RenamePasskeyRequest -->
+    <value>Use this model when completing authentication; assertion fields are base64url strings matching the browser wire shape.</value>
+  </data>
   <data name="RenamePasskeyRequest_Name" xml:space="preserve">
-  <value>Rename Passkey Request</value>
-</data>
+    <value>Rename Passkey Request</value>
+  </data>
   <data name="RenamePasskeyRequest_Description" xml:space="preserve">
-  <value>Request used to rename an existing registered passkey credential.</value>
-</data>
+    <value>Request used to rename an existing registered passkey credential.</value>
+  </data>
   <data name="RenamePasskeyRequest_Help" xml:space="preserve">
-  <value>Provide the new display name for the credential; only the name is updated.</value>
-</data>
-
-
-
-  <!-- AcceptInviteResponse -->
-<data name="AcceptInviteResponse_Name" xml:space="preserve">
-  <value>Accept Invite Response</value>
-</data>
+    <value>Provide the new display name for the credential; only the name is updated.</value>
+  </data>
+  <data name="AcceptInviteResponse_Name" xml:space="preserve">
+    <value>Accept Invite Response</value>
+  </data>
   <data name="AcceptInviteResponse_Description" xml:space="preserve">
-  <value>Response returned after an invitation is accepted, including redirect instructions and related entity references.</value>
-</data>
+    <value>Response returned after an invitation is accepted, including redirect instructions and related entity references.</value>
+  </data>
   <data name="AcceptInviteResponse_Help" xml:space="preserve">
-  <value>Use this model to return post-invite acceptance details such as the original email, next page to navigate to, and associated customer/contact context.</value>
-</data>
-
-  <!-- AuthLoginRequest -->
+    <value>Use this model to return post-invite acceptance details such as the original email, next page to navigate to, and associated customer/contact context.</value>
+  </data>
   <data name="AuthLoginRequest_Name" xml:space="preserve">
-  <value>Authentication Login Request</value>
-</data>
+    <value>Authentication Login Request</value>
+  </data>
   <data name="AuthLoginRequest_Description" xml:space="preserve">
-  <value>Request payload used to authenticate a user with email and password, optionally including invite and organization context.</value>
-</data>
+    <value>Request payload used to authenticate a user with email and password, optionally including invite and organization context.</value>
+  </data>
   <data name="AuthLoginRequest_Help" xml:space="preserve">
-  <value>Use this model when submitting credentials for login. Supports remembering the session, invite-based onboarding, and lockout behavior on failed attempts.</value>
-</data>
-
-  <!-- AuthResponse -->
+    <value>Use this model when submitting credentials for login. Supports remembering the session, invite-based onboarding, and lockout behavior on failed attempts.</value>
+  </data>
   <data name="AuthResponse_Name" xml:space="preserve">
-  <value>Authentication Response</value>
-</data>
+    <value>Authentication Response</value>
+  </data>
   <data name="AuthResponse_Description" xml:space="preserve">
-  <value>Response returned after authentication, including access/refresh tokens, user and organization context, and role assignments.</value>
-</data>
+    <value>Response returned after authentication, including access/refresh tokens, user and organization context, and role assignments.</value>
+  </data>
   <data name="AuthResponse_Help" xml:space="preserve">
-  <value>Use this model to return authentication results to clients, including token lifetimes, lockout state, resolved user/org headers, and any redirect URI.</value>
-</data>
-  <!-- TokenAuthOptions -->
+    <value>Use this model to return authentication results to clients, including token lifetimes, lockout state, resolved user/org headers, and any redirect URI.</value>
+  </data>
   <data name="TokenAuthOptions_Name" xml:space="preserve">
-  <value>Token Authentication Options</value>
-</data>
+    <value>Token Authentication Options</value>
+  </data>
   <data name="TokenAuthOptions_Description" xml:space="preserve">
-  <value>Configuration options for token-based authentication, including expiration settings, issuer/audience values, and signing credentials.</value>
-</data>
+    <value>Configuration options for token-based authentication, including expiration settings, issuer/audience values, and signing credentials.</value>
+  </data>
   <data name="TokenAuthOptions_Help" xml:space="preserve">
-  <value>Use this model to configure JWT/token authentication behavior such as access/refresh lifetimes and token signing configuration.</value>
-</data>
-
-  <!-- AuthFailureRecord -->
+    <value>Use this model to configure JWT/token authentication behavior such as access/refresh lifetimes and token signing configuration.</value>
+  </data>
   <data name="AuthFailureRecord_Name" xml:space="preserve">
-  <value>Authentication Failure Record</value>
-</data>
+    <value>Authentication Failure Record</value>
+  </data>
   <data name="AuthFailureRecord_Description" xml:space="preserve">
-  <value>Structured log record describing an authorization or authentication failure for an HTTP request, including endpoint requirements and request context.</value>
-</data>
+    <value>Structured log record describing an authorization or authentication failure for an HTTP request, including endpoint requirements and request context.</value>
+  </data>
   <data name="AuthFailureRecord_Help" xml:space="preserve">
-  <value>Use this model for diagnostics and telemetry when requests fail authorization. Captures required policies/roles/schemes along with request metadata to aid troubleshooting.</value>
-</data>
-
-
-  <!-- CreateUserResponse -->
+    <value>Use this model for diagnostics and telemetry when requests fail authorization. Captures required policies/roles/schemes along with request metadata to aid troubleshooting.</value>
+  </data>
   <data name="CreateUserResponse_Name" xml:space="preserve">
-  <value>Create User Response</value>
-</data>
+    <value>Create User Response</value>
+  </data>
   <data name="CreateUserResponse_Description" xml:space="preserve">
-  <value>Response returned after creating a user account, extending the authentication response with setup state and redirect messaging.</value>
-</data>
+    <value>Response returned after creating a user account, extending the authentication response with setup state and redirect messaging.</value>
+  </data>
   <data name="CreateUserResponse_Help" xml:space="preserve">
-  <value>Use this model when provisioning a new user. Includes tokens, resolved user/org context, and onboarding setup state with optional redirect instructions.</value>
-</data>
-
-  <!-- MobileOAuthPendingAuth -->
+    <value>Use this model when provisioning a new user. Includes tokens, resolved user/org context, and onboarding setup state with optional redirect instructions.</value>
+  </data>
   <data name="MobileOAuthPendingAuth_Name" xml:space="preserve">
-  <value>Mobile OAuth Pending Authentication</value>
-</data>
+    <value>Mobile OAuth Pending Authentication</value>
+  </data>
   <data name="MobileOAuthPendingAuth_Description" xml:space="preserve">
-  <value>Temporary cached record used during mobile OAuth sign-in to correlate the deep link callback with PKCE-style challenge verification.</value>
-</data>
+    <value>Temporary cached record used during mobile OAuth sign-in to correlate the deep link callback with PKCE-style challenge verification.</value>
+  </data>
   <data name="MobileOAuthPendingAuth_Help" xml:space="preserve">
-  <value>Use this model to store the one-time code, state, and challenge while the OAuth browser flow completes. Supports optional binding to app instance/device and replay protection via redemption tracking.</value>
-</data>
-
-  <!-- UserLoginResponse -->
+    <value>Use this model to store the one-time code, state, and challenge while the OAuth browser flow completes. Supports optional binding to app instance/device and replay protection via redemption tracking.</value>
+  </data>
   <data name="UserLoginResponse_Name" xml:space="preserve">
-  <value>User Login Response</value>
-</data>
+    <value>User Login Response</value>
+  </data>
   <data name="UserLoginResponse_Description" xml:space="preserve">
-  <value>Response returned after a user login, including the resolved user profile, favorites, recent items, redirect messaging, and authentication timing metrics.</value>
-</data>
+    <value>Response returned after a user login, including the resolved user profile, favorites, recent items, redirect messaging, and authentication timing metrics.</value>
+  </data>
   <data name="UserLoginResponse_Help" xml:space="preserve">
-  <value>Use this model to return the full post-login payload for the UI, including user context and diagnostic authentication metrics for performance and troubleshooting.</value>
-</data>
-
-
-  <!-- ChangePassword -->
+    <value>Use this model to return the full post-login payload for the UI, including user context and diagnostic authentication metrics for performance and troubleshooting.</value>
+  </data>
   <data name="ChangePassword_Name" xml:space="preserve">
-  <value>Change Password</value>
-</data>
+    <value>Change Password</value>
+  </data>
   <data name="ChangePassword_Description" xml:space="preserve">
-  <value>Request payload used to change a user’s password, including the current password and the new password.</value>
-</data>
+    <value>Request payload used to change a user’s password, including the current password and the new password.</value>
+  </data>
   <data name="ChangePassword_Help" xml:space="preserve">
-  <value>Use this model when a user is updating their password. The old password is validated before applying the new password.</value>
-</data>
-
-  <!-- ConfirmEmail -->
+    <value>Use this model when a user is updating their password. The old password is validated before applying the new password.</value>
+  </data>
   <data name="ConfirmEmail_Name" xml:space="preserve">
-  <value>Confirm Email</value>
-</data>
+    <value>Confirm Email</value>
+  </data>
   <data name="ConfirmEmail_Description" xml:space="preserve">
-  <value>Request payload used to confirm a user’s email address using the verification code received by the client.</value>
-</data>
+    <value>Request payload used to confirm a user’s email address using the verification code received by the client.</value>
+  </data>
   <data name="ConfirmEmail_Help" xml:space="preserve">
-  <value>Use this model when completing email verification. The received code is validated and the user’s email is marked as confirmed.</value>
-</data>
-
-  <!-- InviteUser -->
+    <value>Use this model when completing email verification. The received code is validated and the user’s email is marked as confirmed.</value>
+  </data>
   <data name="InviteUser_Description" xml:space="preserve">
-  <value>Request payload used to invite a user to an organization, including recipient details, optional message, and related customer context.</value>
-</data>
+    <value>Request payload used to invite a user to an organization, including recipient details, optional message, and related customer context.</value>
+  </data>
   <data name="InviteUser_Help" xml:space="preserve">
-  <value>Use this model when inviting users into an organization. Includes target org, recipient email/name, and optional end user app org and customer/customer contact references.</value>
-</data>
-
-  <!-- RegisterUser -->
+    <value>Use this model when inviting users into an organization. Includes target org, recipient email/name, and optional end user app org and customer/customer contact references.</value>
+  </data>
   <data name="RegisterUser_Name" xml:space="preserve">
-  <value>Register User</value>
-</data>
+    <value>Register User</value>
+  </data>
   <data name="RegisterUser_Description" xml:space="preserve">
-  <value>Request payload used to register a new user, including identity details, login type/source, optional app/org context, and customer information for end-user onboarding.</value>
-</data>
+    <value>Request payload used to register a new user, including identity details, login type/source, optional app/org context, and customer information for end-user onboarding.</value>
+  </data>
   <data name="RegisterUser_Help" xml:space="preserve">
-  <value>Use this model when creating new users via self-registration, OAuth, or passkey. Includes validation rules for end-user app logins requiring org/customer context and customer location fields.</value>
-</data>
-  <!-- ResetPassword -->
+    <value>Use this model when creating new users via self-registration, OAuth, or passkey. Includes validation rules for end-user app logins requiring org/customer context and customer location fields.</value>
+  </data>
   <data name="ResetPassword_Name" xml:space="preserve">
-  <value>Reset Password</value>
-</data>
-
-  <!-- RoleAccessDTO -->
+    <value>Reset Password</value>
+  </data>
   <data name="RoleAccessDTO_Name" xml:space="preserve">
-  <value>Role Access DTO</value>
-</data>
+    <value>Role Access DTO</value>
+  </data>
   <data name="RoleAccessDTO_Description" xml:space="preserve">
-  <value>Table-storage DTO representing role-based access permissions for a module area/page/feature and CRUD operations, with conversion to the domain RoleAccess model.</value>
-</data>
+    <value>Table-storage DTO representing role-based access permissions for a module area/page/feature and CRUD operations, with conversion to the domain RoleAccess model.</value>
+  </data>
   <data name="RoleAccessDTO_Help" xml:space="preserve">
-  <value>Use this model for persistence and transport of role access mappings. Convert to RoleAccess via ToRoleAccess() to get strongly-typed EntityHeader references and permission flags.</value>
-</data>
-
-  <!-- SendResetPasswordLink -->
+    <value>Use this model for persistence and transport of role access mappings. Convert to RoleAccess via ToRoleAccess() to get strongly-typed EntityHeader references and permission flags.</value>
+  </data>
   <data name="SendResetPasswordLink_Name" xml:space="preserve">
-  <value>Send Reset Password Link</value>
-</data>
+    <value>Send Reset Password Link</value>
+  </data>
   <data name="SendResetPasswordLink_Description" xml:space="preserve">
-  <value>Request payload used to send a password reset link to the specified email address.</value>
-</data>
+    <value>Request payload used to send a password reset link to the specified email address.</value>
+  </data>
   <data name="SendResetPasswordLink_Help" xml:space="preserve">
-  <value>Use this model to initiate a password reset flow. The server will generate a reset token and deliver a reset link to the user’s email.</value>
-</data>
-
-  <!-- UserRoleDTO -->
+    <value>Use this model to initiate a password reset flow. The server will generate a reset token and deliver a reset link to the user’s email.</value>
+  </data>
   <data name="UserRoleDTO_Name" xml:space="preserve">
-  <value>User Role DTO</value>
-</data>
+    <value>User Role DTO</value>
+  </data>
   <data name="UserRoleDTO_Description" xml:space="preserve">
-  <value>Table-storage DTO representing a user-to-role assignment within an organization, with conversion to the UserRole domain model.</value>
-</data>
+    <value>Table-storage DTO representing a user-to-role assignment within an organization, with conversion to the UserRole domain model.</value>
+  </data>
   <data name="UserRoleDTO_Help" xml:space="preserve">
-  <value>Use this model for persistence and transport of user role assignments. Convert to UserRole via ToUserRole() to get strongly-typed EntityHeader references.</value>
-</data>
-  <!-- VerfiyPhoneNumber -->
+    <value>Use this model for persistence and transport of user role assignments. Convert to UserRole via ToUserRole() to get strongly-typed EntityHeader references.</value>
+  </data>
   <data name="VerfiyPhoneNumber_Name" xml:space="preserve">
-  <value>Verify Phone Number</value>
-</data>
+    <value>Verify Phone Number</value>
+  </data>
   <data name="VerfiyPhoneNumber_Description" xml:space="preserve">
-  <value>Request payload used to verify a phone number using an SMS verification code, with an option to skip the step.</value>
-</data>
+    <value>Request payload used to verify a phone number using an SMS verification code, with an option to skip the step.</value>
+  </data>
   <data name="VerfiyPhoneNumber_Help" xml:space="preserve">
-  <value>Use this model when confirming a user’s phone number. Provide the SMS code and phone number, or set SkipStep to bypass verification when allowed.</value>
-</data>
-  <!-- LocationDevice -->
+    <value>Use this model when confirming a user’s phone number. Provide the SMS code and phone number, or set SkipStep to bypass verification when allowed.</value>
+  </data>
   <data name="LocationDevice_Name" xml:space="preserve">
-  <value>Location Device</value>
-</data>
+    <value>Location Device</value>
+  </data>
   <data name="LocationDevice_Description" xml:space="preserve">
-  <value>Associates a device repository and a specific device to a location context.</value>
-</data>
+    <value>Associates a device repository and a specific device to a location context.</value>
+  </data>
   <data name="LocationDevice_Help" xml:space="preserve">
-  <value>Use this model to select a device repository and device when configuring devices at a location. The device field is constrained via the repository selection.</value>
-</data>
-
-  <!-- TeamUser -->
+    <value>Use this model to select a device repository and device when configuring devices at a location. The device field is constrained via the repository selection.</value>
+  </data>
   <data name="TeamUser_Name" xml:space="preserve">
-  <value>Team User</value>
-</data>
+    <value>Team User</value>
+  </data>
   <data name="TeamUser_Description" xml:space="preserve">
-  <value>Table-storage entity representing membership of a user in a team, including audit fields and optional profile image information.</value>
-</data>
+    <value>Table-storage entity representing membership of a user in a team, including audit fields and optional profile image information.</value>
+  </data>
   <data name="TeamUser_Help" xml:space="preserve">
-  <value>Use this model to persist and manage team membership. RowKey is generated as "{teamId}.{userId}" and CreateSummary() can be used to produce a lightweight TeamUserSummary for UI lists.</value>
-</data>
-
-  <!-- TeamUserSummary -->
+    <value>Use this model to persist and manage team membership. RowKey is generated as "{teamId}.{userId}" and CreateSummary() can be used to produce a lightweight TeamUserSummary for UI lists.</value>
+  </data>
   <data name="TeamUserSummary_Name" xml:space="preserve">
-  <value>Team User Summary</value>
-</data>
+    <value>Team User Summary</value>
+  </data>
   <data name="TeamUserSummary_Description" xml:space="preserve">
-  <value>Lightweight summary view of a team user, including profile image information.</value>
-</data>
+    <value>Lightweight summary view of a team user, including profile image information.</value>
+  </data>
   <data name="TeamUserSummary_Help" xml:space="preserve">
-  <value>Use this model when returning a compact representation of a team user for list views or lookups.</value>
-</data>
-
-  <!-- BasicTheme -->
+    <value>Use this model when returning a compact representation of a team user for list views or lookups.</value>
+  </data>
   <data name="BasicTheme_Name" xml:space="preserve">
-  <value>Basic Theme</value>
-</data>
+    <value>Basic Theme</value>
+  </data>
   <data name="BasicTheme_Description" xml:space="preserve">
-  <value>Simple theme configuration defining primary background, primary text, and accent colors.</value>
-</data>
+    <value>Simple theme configuration defining primary background, primary text, and accent colors.</value>
+  </data>
   <data name="BasicTheme_Help" xml:space="preserve">
-  <value>Use this model to capture basic UI theme color settings for an organization or application experience.</value>
-</data>
-
-  <!-- CallLog -->
+    <value>Use this model to capture basic UI theme color settings for an organization or application experience.</value>
+  </data>
   <data name="CallLog_Name" xml:space="preserve">
-  <value>Call Log</value>
-</data>
+    <value>Call Log</value>
+  </data>
   <data name="CallLog_Description" xml:space="preserve">
-  <value>Represents a phone call log entry, including caller/callee details, timestamp, duration, and an optional recording URL.</value>
-</data>
+    <value>Represents a phone call log entry, including caller/callee details, timestamp, duration, and an optional recording URL.</value>
+  </data>
   <data name="CallLog_Help" xml:space="preserve">
-  <value>Use this model to store or return call history details for auditing and support, including who called whom, when, how long the call lasted, and any recording reference.</value>
-</data>
-
-  <!-- PasskeyChallenge -->
+    <value>Use this model to store or return call history details for auditing and support, including who called whom, when, how long the call lasted, and any recording reference.</value>
+  </data>
   <data name="PasskeyChallenge_Name" xml:space="preserve">
-  <value>Passkey Challenge</value>
-</data>
+    <value>Passkey Challenge</value>
+  </data>
   <data name="PasskeyChallenge_Description" xml:space="preserve">
-  <value>Represents a server-generated passkey (WebAuthn) challenge record, including RP/origin context, allowed credentials, options parameters, and expiration tracking.</value>
-</data>
+    <value>Represents a server-generated passkey (WebAuthn) challenge record, including RP/origin context, allowed credentials, options parameters, and expiration tracking.</value>
+  </data>
   <data name="PasskeyChallenge_Help" xml:space="preserve">
-  <value>Use this model to persist the active passkey registration/authentication challenge. It includes the challenge value, purpose, optional allow/exclude credential lists, and expiry logic used to validate completion requests.</value>
-</data>
-
-  <!-- PasskeyChallengePacket -->
+    <value>Use this model to persist the active passkey registration/authentication challenge. It includes the challenge value, purpose, optional allow/exclude credential lists, and expiry logic used to validate completion requests.</value>
+  </data>
   <data name="PasskeyChallengePacket_Name" xml:space="preserve">
-  <value>Passkey Challenge Packet</value>
-</data>
+    <value>Passkey Challenge Packet</value>
+  </data>
   <data name="PasskeyChallengePacket_Description" xml:space="preserve">
-  <value>Packet containing a PasskeyChallenge plus the serialized WebAuthn options JSON payload used for client initiation.</value>
-</data>
+    <value>Packet containing a PasskeyChallenge plus the serialized WebAuthn options JSON payload used for client initiation.</value>
+  </data>
   <data name="PasskeyChallengePacket_Help" xml:space="preserve">
-  <value>Use this model to return both the server challenge record and the raw WebAuthn options JSON to the client so it can call WebAuthn APIs while the server remains authoritative.</value>
-</data>
-  <!-- PasskeyCredential -->
+    <value>Use this model to return both the server challenge record and the raw WebAuthn options JSON to the client so it can call WebAuthn APIs while the server remains authoritative.</value>
+  </data>
   <data name="PasskeyCredential_Name" xml:space="preserve">
-  <value>Passkey Credential</value>
-</data>
+    <value>Passkey Credential</value>
+  </data>
   <data name="PasskeyCredential_Description" xml:space="preserve">
-  <value>Represents a registered passkey credential for a user, including credential id, public key material, sign count, display name, and usage timestamps.</value>
-</data>
+    <value>Represents a registered passkey credential for a user, including credential id, public key material, sign count, display name, and usage timestamps.</value>
+  </data>
   <data name="PasskeyCredential_Help" xml:space="preserve">
-  <value>Use this model to store and manage passkey credentials associated with a user and RP ID. CredentialId and PublicKey are stored as base64url strings and SignCount is used for WebAuthn replay protection.</value>
-</data>
-
-  <!-- PasskeyCredentialIndex -->
+    <value>Use this model to store and manage passkey credentials associated with a user and RP ID. CredentialId and PublicKey are stored as base64url strings and SignCount is used for WebAuthn replay protection.</value>
+  </data>
   <data name="PasskeyCredentialIndex_Name" xml:space="preserve">
-  <value>Passkey Credential Index</value>
-</data>
+    <value>Passkey Credential Index</value>
+  </data>
   <data name="PasskeyCredentialIndex_Description" xml:space="preserve">
-  <value>Index record used to lookup a passkey credential by user, RP ID, and credential id, including creation timestamp.</value>
-</data>
+    <value>Index record used to lookup a passkey credential by user, RP ID, and credential id, including creation timestamp.</value>
+  </data>
   <data name="PasskeyCredentialIndex_Help" xml:space="preserve">
-  <value>Use this model as a lightweight index for locating stored passkey credentials. It supports efficient queries by user, RP ID, and credential id without loading full credential details.</value>
-</data>
-
-  <!-- PasskeySignInResult -->
+    <value>Use this model as a lightweight index for locating stored passkey credentials. It supports efficient queries by user, RP ID, and credential id without loading full credential details.</value>
+  </data>
   <data name="PasskeySignInResult_Name" xml:space="preserve">
-  <value>Passkey Sign-In Result</value>
-</data>
+    <value>Passkey Sign-In Result</value>
+  </data>
   <data name="PasskeySignInResult_Description" xml:space="preserve">
-  <value>Result returned after passkey authentication, including the authenticated user context and optional onboarding/redirect instructions.</value>
-</data>
+    <value>Result returned after passkey authentication, including the authenticated user context and optional onboarding/redirect instructions.</value>
+  </data>
   <data name="PasskeySignInResult_Help" xml:space="preserve">
-  <value>Use this model to return the outcome of passkey sign-in. Indicates whether onboarding is still required and provides optional redirect URL and UI message for the client.</value>
-</data>
-  <!-- PasskeyCredentialSummary -->
+    <value>Use this model to return the outcome of passkey sign-in. Indicates whether onboarding is still required and provides optional redirect URL and UI message for the client.</value>
+  </data>
   <data name="PasskeyCredentialSummary_Name" xml:space="preserve">
-  <value>Passkey Credential Summary</value>
-</data>
+    <value>Passkey Credential Summary</value>
+  </data>
   <data name="PasskeyCredentialSummary_Description" xml:space="preserve">
-  <value>Lightweight summary of a registered passkey credential including identifier, display name, and key timestamps.</value>
-</data>
+    <value>Lightweight summary of a registered passkey credential including identifier, display name, and key timestamps.</value>
+  </data>
   <data name="PasskeyCredentialSummary_Help" xml:space="preserve">
-  <value>Use this model when returning a list of a user’s registered passkeys without exposing full credential details such as public key material.</value>
-</data>
-
-  <!-- AccessLog -->
+    <value>Use this model when returning a list of a user’s registered passkeys without exposing full credential details such as public key material.</value>
+  </data>
   <data name="AccessLog_Name" xml:space="preserve">
-  <value>Access Log</value>
-</data>
+    <value>Access Log</value>
+  </data>
   <data name="AccessLog_Description" xml:space="preserve">
-  <value>Table-storage entity used to record access activity for a resource, including organization/user context, action details, and authorization outcome.</value>
-</data>
+    <value>Table-storage entity used to record access activity for a resource, including organization/user context, action details, and authorization outcome.</value>
+  </data>
   <data name="AccessLog_Help" xml:space="preserve">
-  <value>Use this model to capture auditing and diagnostic information when users access protected resources. Includes action, details, whether access was authorized, and an optional reason when not authorized.</value>
-</data>
-
-
-  <!-- ManagedAsset -->
+    <value>Use this model to capture auditing and diagnostic information when users access protected resources. Includes action, details, whether access was authorized, and an optional reason when not authorized.</value>
+  </data>
   <data name="ManagedAsset_Name" xml:space="preserve">
-  <value>Managed Asset</value>
-</data>
+    <value>Managed Asset</value>
+  </data>
   <data name="ManagedAsset_Description" xml:space="preserve">
-  <value>Table-storage entity representing an asset managed within an asset set, including asset identifiers, type, and helper methods for row key generation.</value>
-</data>
+    <value>Table-storage entity representing an asset managed within an asset set, including asset identifiers, type, and helper methods for row key generation.</value>
+  </data>
   <data name="ManagedAsset_Help" xml:space="preserve">
-  <value>Use this model to persist managed assets associated with an asset set. RowKey is generated as "{assetSetId}.{assetId}" and CreateSummary() provides a lightweight ManagedAssetSummary for list views.</value>
-</data>
-
-  <!-- ManagedAssetSummary -->
+    <value>Use this model to persist managed assets associated with an asset set. RowKey is generated as "{assetSetId}.{assetId}" and CreateSummary() provides a lightweight ManagedAssetSummary for list views.</value>
+  </data>
   <data name="ManagedAssetSummary_Name" xml:space="preserve">
-  <value>Managed Asset Summary</value>
-</data>
+    <value>Managed Asset Summary</value>
+  </data>
   <data name="ManagedAssetSummary_Description" xml:space="preserve">
-  <value>Lightweight summary view of a managed asset, including id, name, and asset type.</value>
-</data>
+    <value>Lightweight summary view of a managed asset, including id, name, and asset type.</value>
+  </data>
   <data name="ManagedAssetSummary_Help" xml:space="preserve">
-  <value>Use this model when returning a compact representation of managed assets for UI list displays or lookups.</value>
-</data>
-
-  <!-- RoleAccess -->
+    <value>Use this model when returning a compact representation of managed assets for UI list displays or lookups.</value>
+  </data>
   <data name="RoleAccess_Name" xml:space="preserve">
-  <value>Role Access</value>
-</data>
+    <value>Role Access</value>
+  </data>
   <data name="RoleAccess_Description" xml:space="preserve">
-  <value>Defines role-based access permissions for modules/areas/pages/features, including CRUD levels and optional function map bindings.</value>
-</data>
+    <value>Defines role-based access permissions for modules/areas/pages/features, including CRUD levels and optional function map bindings.</value>
+  </data>
   <data name="RoleAccess_Help" xml:space="preserve">
-  <value>Use this model to represent and compute permissions granted by a role. Supports conversion to RoleAccessDTO for storage and merging into UserAccess for effective permission evaluation.</value>
-</data>
-  <!-- SecureLink -->
+    <value>Use this model to represent and compute permissions granted by a role. Supports conversion to RoleAccessDTO for storage and merging into UserAccess for effective permission evaluation.</value>
+  </data>
   <data name="SecureLink_Name" xml:space="preserve">
-  <value>Secure Link</value>
-</data>
+    <value>Secure Link</value>
+  </data>
   <data name="SecureLink_Description" xml:space="preserve">
-  <value>Table-storage entity representing a time-limited secure link for a user within an organization, including creator info, destination, expiration, and access tracking.</value>
-</data>
+    <value>Table-storage entity representing a time-limited secure link for a user within an organization, including creator info, destination, expiration, and access tracking.</value>
+  </data>
   <data name="SecureLink_Help" xml:space="preserve">
-  <value>Use this model to issue and track secure links (e.g., invite or action links). Captures org/user context, generator, expiration status, and access count/last access for auditing.</value>
-</data>
-
-  <!-- TwitterErrorResponse -->
+    <value>Use this model to issue and track secure links (e.g., invite or action links). Captures org/user context, generator, expiration status, and access count/last access for auditing.</value>
+  </data>
   <data name="TwitterErrorResponse_Name" xml:space="preserve">
-  <value>Twitter Error Response</value>
-</data>
+    <value>Twitter Error Response</value>
+  </data>
   <data name="TwitterErrorResponse_Description" xml:space="preserve">
-  <value>Represents an error response returned from Twitter APIs, containing one or more TwitterError entries.</value>
-</data>
+    <value>Represents an error response returned from Twitter APIs, containing one or more TwitterError entries.</value>
+  </data>
   <data name="TwitterErrorResponse_Help" xml:space="preserve">
-  <value>Use this model to deserialize and inspect error responses from Twitter API calls. The Errors collection contains the error code and message details.</value>
-</data>
-
-  <!-- TwitterError -->
+    <value>Use this model to deserialize and inspect error responses from Twitter API calls. The Errors collection contains the error code and message details.</value>
+  </data>
   <data name="TwitterError_Name" xml:space="preserve">
-  <value>Twitter Error</value>
-</data>
+    <value>Twitter Error</value>
+  </data>
   <data name="TwitterError_Description" xml:space="preserve">
-  <value>Represents a single Twitter API error including code and message.</value>
-</data>
+    <value>Represents a single Twitter API error including code and message.</value>
+  </data>
   <data name="TwitterError_Help" xml:space="preserve">
-  <value>Use this model to capture individual error details returned from Twitter APIs for diagnostics and user messaging.</value>
-</data>
-
-  <!-- TwitterRequestToken -->
+    <value>Use this model to capture individual error details returned from Twitter APIs for diagnostics and user messaging.</value>
+  </data>
   <data name="TwitterRequestToken_Name" xml:space="preserve">
-  <value>Twitter Request Token</value>
-</data>
+    <value>Twitter Request Token</value>
+  </data>
   <data name="TwitterRequestToken_Description" xml:space="preserve">
-  <value>Represents a Twitter OAuth request token response, including token secret and callback confirmation flag.</value>
-</data>
+    <value>Represents a Twitter OAuth request token response, including token secret and callback confirmation flag.</value>
+  </data>
   <data name="TwitterRequestToken_Help" xml:space="preserve">
-  <value>Use this model for Twitter OAuth flows when exchanging for a request token. Includes the token, token secret, and whether callback was confirmed.</value>
-</data>
-
-  <!-- TwitterAccessToken -->
+    <value>Use this model for Twitter OAuth flows when exchanging for a request token. Includes the token, token secret, and whether callback was confirmed.</value>
+  </data>
   <data name="TwitterAccessToken_Name" xml:space="preserve">
-  <value>Twitter Access Token</value>
-</data>
+    <value>Twitter Access Token</value>
+  </data>
   <data name="TwitterAccessToken_Description" xml:space="preserve">
-  <value>Represents a Twitter OAuth access token response, extending request token data with user identity fields.</value>
-</data>
+    <value>Represents a Twitter OAuth access token response, extending request token data with user identity fields.</value>
+  </data>
   <data name="TwitterAccessToken_Help" xml:space="preserve">
-  <value>Use this model when exchanging a Twitter request token for an access token. Includes token details plus the authenticated Twitter user id and screen name.</value>
-</data>
-  <!-- UserAccess -->
+    <value>Use this model when exchanging a Twitter request token for an access token. Includes token details plus the authenticated Twitter user id and screen name.</value>
+  </data>
   <data name="UserAccess_Name" xml:space="preserve">
-  <value>User Access</value>
-</data>
+    <value>User Access</value>
+  </data>
   <data name="UserAccess_Description" xml:space="preserve">
-  <value>Represents effective CRUD access levels for a user, using grant/revoke/not-specified values and helper methods for common access configurations.</value>
-</data>
+    <value>Represents effective CRUD access levels for a user, using grant/revoke/not-specified values and helper methods for common access configurations.</value>
+  </data>
   <data name="UserAccess_Help" xml:space="preserve">
-  <value>Use this model to compute and convey effective user permissions. Supports generating full access, none, or not-specified states and can revoke unset permissions via RevokeNotSet().</value>
-</data>
-  <!-- AppUserTestRun -->
+    <value>Use this model to compute and convey effective user permissions. Supports generating full access, none, or not-specified states and can revoke unset permissions via RevokeNotSet().</value>
+  </data>
   <data name="AppUserTestRun_Name" xml:space="preserve">
-  <value>App User Test Run</value>
-</data>
+    <value>App User Test Run</value>
+  </data>
   <data name="AppUserTestRun_Description" xml:space="preserve">
-  <value>Persisted record of a single test run execution, including environment details, lifecycle timestamps, status, verification results, events, and generated artifacts.</value>
-</data>
+    <value>Persisted record of a single test run execution, including environment details, lifecycle timestamps, status, verification results, events, and generated artifacts.</value>
+  </data>
   <data name="AppUserTestRun_Help" xml:space="preserve">
-  <value>Use this model to store and review a test run end-to-end. Includes a support-friendly RunCode, base URL and paths/views, status/error, final verification snapshot, append-only events, and output artifacts.</value>
-</data>
-
-  <!-- AppUserTestRunSummary -->
+    <value>Use this model to store and review a test run end-to-end. Includes a support-friendly RunCode, base URL and paths/views, status/error, final verification snapshot, append-only events, and output artifacts.</value>
+  </data>
   <data name="AppUserTestRunSummary_Name" xml:space="preserve">
-  <value>App User Test Run Summary</value>
-</data>
+    <value>App User Test Run Summary</value>
+  </data>
   <data name="AppUserTestRunSummary_Description" xml:space="preserve">
-  <value>Lightweight summary representation of an AppUserTestRun for list views and quick lookup.</value>
-</data>
+    <value>Lightweight summary representation of an AppUserTestRun for list views and quick lookup.</value>
+  </data>
   <data name="AppUserTestRunSummary_Help" xml:space="preserve">
-  <value>Use this model when returning compact test run data for grids, searches, or pickers where full run details are not required.</value>
-</data>
-
-  <!-- TestRunVerification -->
+    <value>Use this model when returning compact test run data for grids, searches, or pickers where full run details are not required.</value>
+  </data>
   <data name="TestRunVerification_Name" xml:space="preserve">
-  <value>Test Run Verification</value>
-</data>
+    <value>Test Run Verification</value>
+  </data>
   <data name="TestRunVerification_Description" xml:space="preserve">
-  <value>Final verification payloads for a test run, including the final tenant state snapshot, computed landing/configuration values, auth log review summary, and any errors or warnings.</value>
-</data>
+    <value>Final verification payloads for a test run, including the final tenant state snapshot, computed landing/configuration values, auth log review summary, and any errors or warnings.</value>
+  </data>
   <data name="TestRunVerification_Help" xml:space="preserve">
-  <value>Use this model to capture and return verification results after execution. Includes computed expectations, auth log review details, and categorized error/warning lists.</value>
-</data>
-
-  <!-- TestRunArtifact -->
+    <value>Use this model to capture and return verification results after execution. Includes computed expectations, auth log review details, and categorized error/warning lists.</value>
+  </data>
   <data name="TestRunArtifact_Name" xml:space="preserve">
-  <value>Test Run Artifact</value>
-</data>
+    <value>Test Run Artifact</value>
+  </data>
   <data name="TestRunArtifact_Description" xml:space="preserve">
-  <value>Represents an artifact produced by a test run, such as logs, screenshots, traces, or exported files, including file name and location information.</value>
-</data>
+    <value>Represents an artifact produced by a test run, such as logs, screenshots, traces, or exported files, including file name and location information.</value>
+  </data>
   <data name="TestRunArtifact_Help" xml:space="preserve">
-  <value>Use this model to link test output files to a run. Includes display name, file name, URL, and optional relative path for storage organization.</value>
-</data>
-
-  <!-- AuthLogReviewSummary -->
+    <value>Use this model to link test output files to a run. Includes display name, file name, URL, and optional relative path for storage organization.</value>
+  </data>
   <data name="AuthLogReviewSummary_Name" xml:space="preserve">
-  <value>Auth Log Review Summary</value>
-</data>
+    <value>Auth Log Review Summary</value>
+  </data>
   <data name="AuthLogReviewSummary_Description" xml:space="preserve">
-  <value>Summary of an authentication log review for a time window, including expected events that were missing and the observed events that occurred.</value>
-</data>
+    <value>Summary of an authentication log review for a time window, including expected events that were missing and the observed events that occurred.</value>
+  </data>
   <data name="AuthLogReviewSummary_Help" xml:space="preserve">
-  <value>Use this model to compare expected vs observed auth events during a test run, bounded by FromUtc and ToUtc.</value>
-</data>
-
-  <!-- AppUserTestRunEvent -->
+    <value>Use this model to compare expected vs observed auth events during a test run, bounded by FromUtc and ToUtc.</value>
+  </data>
   <data name="AppUserTestRunEvent_Name" xml:space="preserve">
-  <value>App User Test Run Event</value>
-</data>
+    <value>App User Test Run Event</value>
+  </data>
   <data name="AppUserTestRunEvent_Description" xml:space="preserve">
-  <value>Append-only structured event emitted during a test run, including sequence ordering, timestamp, severity level, event type, message, and structured key/value data.</value>
-</data>
+    <value>Append-only structured event emitted during a test run, including sequence ordering, timestamp, severity level, event type, message, and structured key/value data.</value>
+  </data>
   <data name="AppUserTestRunEvent_Help" xml:space="preserve">
-  <value>Use this model for time-ordered execution telemetry. Seq should be assigned by persistence to enforce ordering and Data should remain JSON-friendly primitives/strings.</value>
-</data>
-
-  <!-- AuthRunnerPlan -->
+    <value>Use this model for time-ordered execution telemetry. Seq should be assigned by persistence to enforce ordering and Data should remain JSON-friendly primitives/strings.</value>
+  </data>
   <data name="AuthRunnerPlan_Name" xml:space="preserve">
-  <value>Auth Runner Plan</value>
-</data>
+    <value>Auth Runner Plan</value>
+  </data>
   <data name="AuthRunnerPlan_Description" xml:space="preserve">
-  <value>Execution plan describing what the auth runner needs to perform a single ceremony run, including scenario, navigation start, inputs, one action, observation hints, and execution options.</value>
-</data>
+    <value>Execution plan describing what the auth runner needs to perform a single ceremony run, including scenario, navigation start, inputs, one action, observation hints, and execution options.</value>
+  </data>
   <data name="AuthRunnerPlan_Help" xml:space="preserve">
-  <value>Use this model to instruct the runner what to do for a single run. The runner executes and reports observations; server-side logic determines pass/fail using snapshots and logs.</value>
-</data>
-
-  <!-- TestUserCredentials -->
+    <value>Use this model to instruct the runner what to do for a single run. The runner executes and reports observations; server-side logic determines pass/fail using snapshots and logs.</value>
+  </data>
   <data name="TestUserCredentials_Name" xml:space="preserve">
-  <value>Test User Credentials</value>
-</data>
+    <value>Test User Credentials</value>
+  </data>
   <data name="TestUserCredentials_Description" xml:space="preserve">
-  <value>Credential and token inputs used by the auth runner for a test user, including invite and email confirmation tokens and optional passkey credentials reference.</value>
-</data>
+    <value>Credential and token inputs used by the auth runner for a test user, including invite and email confirmation tokens and optional passkey credentials reference.</value>
+  </data>
   <data name="TestUserCredentials_Help" xml:space="preserve">
-  <value>Use this model to provide the runner with the identity inputs needed for a scenario, such as email/password, invite id, confirm email token, and optional passkey credentials id.</value>
-</data>
-
-  <!-- AuthRunnerInput -->
+    <value>Use this model to provide the runner with the identity inputs needed for a scenario, such as email/password, invite id, confirm email token, and optional passkey credentials id.</value>
+  </data>
   <data name="AuthRunnerInput_Name" xml:space="preserve">
-  <value>Auth Runner Input</value>
-</data>
+    <value>Auth Runner Input</value>
+  </data>
   <data name="AuthRunnerInput_Description" xml:space="preserve">
-  <value>Single input assignment for the runner, describing a named field, CSS selector finder, value to set, and optional input kind.</value>
-</data>
+    <value>Single input assignment for the runner, describing a named field, CSS selector finder, value to set, and optional input kind.</value>
+  </data>
   <data name="AuthRunnerInput_Help" xml:space="preserve">
-  <value>Use this model to tell the runner how to populate a UI field before invoking an action. Finder should be a Playwright-compatible CSS selector and Kind can hint how to apply the value.</value>
-</data>
-
-  <!-- AuthRunnerAction -->
+    <value>Use this model to tell the runner how to populate a UI field before invoking an action. Finder should be a Playwright-compatible CSS selector and Kind can hint how to apply the value.</value>
+  </data>
   <data name="AuthRunnerAction_Name" xml:space="preserve">
-  <value>Auth Runner Action</value>
-</data>
+    <value>Auth Runner Action</value>
+  </data>
   <data name="AuthRunnerAction_Description" xml:space="preserve">
-  <value>Single action for the runner to invoke, describing a named action and the CSS selector to click or submit.</value>
-</data>
+    <value>Single action for the runner to invoke, describing a named action and the CSS selector to click or submit.</value>
+  </data>
   <data name="AuthRunnerAction_Help" xml:space="preserve">
-  <value>Use this model to specify exactly one UI action (click/submit) the runner should perform. Finder should be a Playwright-compatible CSS selector.</value>
-</data>
-
-  <!-- AuthRunnerObservations -->
+    <value>Use this model to specify exactly one UI action (click/submit) the runner should perform. Finder should be a Playwright-compatible CSS selector.</value>
+  </data>
   <data name="AuthRunnerObservations_Name" xml:space="preserve">
-  <value>Auth Runner Observations</value>
-</data>
+    <value>Auth Runner Observations</value>
+  </data>
   <data name="AuthRunnerObservations_Description" xml:space="preserve">
-  <value>Hints for what evidence the runner should capture and report, including screen root selector, screen id attribute, expected end view/route, and optional busy-state selector.</value>
-</data>
+    <value>Hints for what evidence the runner should capture and report, including screen root selector, screen id attribute, expected end view/route, and optional busy-state selector.</value>
+  </data>
   <data name="AuthRunnerObservations_Help" xml:space="preserve">
-  <value>Use this model to guide runner evidence capture. These values are observation hints only; mismatches are logged as notes and server logic decides pass/fail.</value>
-</data>
-
-  <!-- AuthRunnerOptions -->
+    <value>Use this model to guide runner evidence capture. These values are observation hints only; mismatches are logged as notes and server logic decides pass/fail.</value>
+  </data>
   <data name="AuthRunnerOptions_Name" xml:space="preserve">
-  <value>Auth Runner Options</value>
-</data>
+    <value>Auth Runner Options</value>
+  </data>
   <data name="AuthRunnerOptions_Description" xml:space="preserve">
-  <value>Execution options controlling runner behavior such as headless mode, slow motion timing, default timeouts, and optional tracing.</value>
-</data>
+    <value>Execution options controlling runner behavior such as headless mode, slow motion timing, default timeouts, and optional tracing.</value>
+  </data>
   <data name="AuthRunnerOptions_Help" xml:space="preserve">
-  <value>Use this model to tune runner execution for debugging and reliability. EnableTracing can be used to collect Playwright traces and upload them as artifacts.</value>
-</data>
-
-  <!-- AuthRunnerResult -->
+    <value>Use this model to tune runner execution for debugging and reliability. EnableTracing can be used to collect Playwright traces and upload them as artifacts.</value>
+  </data>
   <data name="AuthRunnerResult_Name" xml:space="preserve">
-  <value>Auth Runner Result</value>
-</data>
+    <value>Auth Runner Result</value>
+  </data>
   <data name="AuthRunnerResult_Description" xml:space="preserve">
-  <value>Result posted back by the runner after execution, including run timing, status, final URL/view, notes, and artifact references.</value>
-</data>
+    <value>Result posted back by the runner after execution, including run timing, status, final URL/view, notes, and artifact references.</value>
+  </data>
   <data name="AuthRunnerResult_Help" xml:space="preserve">
-  <value>Use this model to return runner observations to the server. The server combines these with snapshots and auth log checks to determine pass/fail.</value>
-</data>
-
-  <!-- AuthRunnerArtifact -->
+    <value>Use this model to return runner observations to the server. The server combines these with snapshots and auth log checks to determine pass/fail.</value>
+  </data>
   <data name="AuthRunnerArtifact_Name" xml:space="preserve">
-  <value>Auth Runner Artifact</value>
-</data>
+    <value>Auth Runner Artifact</value>
+  </data>
   <data name="AuthRunnerArtifact_Description" xml:space="preserve">
-  <value>Reference to an artifact produced by the runner, such as traces, screenshots, or video, including name, kind, and reference location.</value>
-</data>
+    <value>Reference to an artifact produced by the runner, such as traces, screenshots, or video, including name, kind, and reference location.</value>
+  </data>
   <data name="AuthRunnerArtifact_Help" xml:space="preserve">
-  <value>Use this model to attach runner-produced evidence to a run result. Ref can be a URL or server-side id pointing to stored artifacts.</value>
-</data>
-  <!-- AppUserInboxItem -->
+    <value>Use this model to attach runner-produced evidence to a run result. Ref can be a URL or server-side id pointing to stored artifacts.</value>
+  </data>
   <data name="AppUserInboxItem_Name" xml:space="preserve">
-  <value>App User Inbox Item</value>
-</data>
+    <value>App User Inbox Item</value>
+  </data>
   <data name="AppUserInboxItem_Description" xml:space="preserve">
-  <value>Table-storage entity representing a user-scoped inbox item/notification, including display metadata, link target, viewed state, and audit fields.</value>
-</data>
+    <value>Table-storage entity representing a user-scoped inbox item/notification, including display metadata, link target, viewed state, and audit fields.</value>
+  </data>
   <data name="AppUserInboxItem_Help" xml:space="preserve">
-  <value>Use this model to persist and deliver inbox items to users. Includes title/summary/icon/link, type, viewed tracking, and conversion to an InboxItem via ToInboxItem().</value>
-</data>
-
-  <!-- NewAppUserInboxItemItem -->
+    <value>Use this model to persist and deliver inbox items to users. Includes title/summary/icon/link, type, viewed tracking, and conversion to an InboxItem via ToInboxItem().</value>
+  </data>
   <data name="NewAppUserInboxItemItem_Name" xml:space="preserve">
-  <value>New App User Inbox Item</value>
-</data>
+    <value>New App User Inbox Item</value>
+  </data>
   <data name="NewAppUserInboxItemItem_Description" xml:space="preserve">
-  <value>Input model used to create a new AppUserInboxItem for a user in an organization, including creator context and the display/link metadata.</value>
-</data>
+    <value>Input model used to create a new AppUserInboxItem for a user in an organization, including creator context and the display/link metadata.</value>
+  </data>
   <data name="NewAppUserInboxItemItem_Help" xml:space="preserve">
-  <value>Use this model when composing a new user inbox item. CreateInboxItem() generates a properly keyed AppUserInboxItem with audit fields and timestamps set.</value>
-</data>
-  <!-- CoreUserInfo -->
+    <value>Use this model when composing a new user inbox item. CreateInboxItem() generates a properly keyed AppUserInboxItem with audit fields and timestamps set.</value>
+  </data>
   <data name="CoreUserInfo_Name" xml:space="preserve">
-  <value>Core User Info</value>
-</data>
+    <value>Core User Info</value>
+  </data>
   <data name="CoreUserInfo_Description" xml:space="preserve">
-  <value>Core profile information for a user, including identity fields, contact details, address, timezone, and optional signature and secure SSN field linkage.</value>
-</data>
+    <value>Core profile information for a user, including identity fields, contact details, address, timezone, and optional signature and secure SSN field linkage.</value>
+  </data>
   <data name="CoreUserInfo_Help" xml:space="preserve">
-  <value>Use this model to capture and edit the essential user profile fields used across the system. Includes FormField metadata for UI rendering and supports secure SSN storage via SsnSecretId.</value>
-</data>
-
-  <!-- MostRecentlyUsed -->
-<data name="MostRecentlyUsed_Name" xml:space="preserve">
-  <value>Most Recently Used</value>
-</data>
-<data name="MostRecentlyUsed_Description" xml:space="preserve">
-  <value>Represents a user’s most recently used items across the application, including an overall list and module-scoped groupings.</value>
-</data>
-<data name="MostRecentlyUsed_Help" xml:space="preserve">
-  <value>Use this model to store and return MRU navigation and entity references for a user. Includes both a global list and per-module collections and provides stable id generation by org/user.</value>
-</data>
-
-<!-- MostRecentlyUsedModule -->
-<data name="MostRecentlyUsedModule_Name" xml:space="preserve">
-  <value>Most Recently Used Module</value>
-</data>
-<data name="MostRecentlyUsedModule_Description" xml:space="preserve">
-  <value>Module-scoped grouping of most recently used items, keyed by module and containing an ordered item list.</value>
-</data>
-<data name="MostRecentlyUsedModule_Help" xml:space="preserve">
-  <value>Use this model to group MRU items by module for faster UI rendering and navigation. Items are represented as MostRecentlyUsedItem entries.</value>
-</data>
-
-<!-- MostRecentlyUsedItem -->
-<data name="MostRecentlyUsedItem_Name" xml:space="preserve">
-  <value>Most Recently Used Item</value>
-</data>
-<data name="MostRecentlyUsedItem_Description" xml:space="preserve">
-  <value>Single most recently used entry including identity, module key, timestamps, route, display metadata, and navigation link.</value>
-</data>
-<data name="MostRecentlyUsedItem_Help" xml:space="preserve">
-  <value>Use this model to represent an MRU entry shown in recent lists. Includes routing/navigation info plus optional name, summary, icon, and link for UI display.</value>
-</data>
-
-  <!-- NotificationContact -->
+    <value>Use this model to capture and edit the essential user profile fields used across the system. Includes FormField metadata for UI rendering and supports secure SSN storage via SsnSecretId.</value>
+  </data>
+  <data name="MostRecentlyUsed_Name" xml:space="preserve">
+    <value>Most Recently Used</value>
+  </data>
+  <data name="MostRecentlyUsed_Description" xml:space="preserve">
+    <value>Represents a user’s most recently used items across the application, including an overall list and module-scoped groupings.</value>
+  </data>
+  <data name="MostRecentlyUsed_Help" xml:space="preserve">
+    <value>Use this model to store and return MRU navigation and entity references for a user. Includes both a global list and per-module collections and provides stable id generation by org/user.</value>
+  </data>
+  <data name="MostRecentlyUsedModule_Name" xml:space="preserve">
+    <value>Most Recently Used Module</value>
+  </data>
+  <data name="MostRecentlyUsedModule_Description" xml:space="preserve">
+    <value>Module-scoped grouping of most recently used items, keyed by module and containing an ordered item list.</value>
+  </data>
+  <data name="MostRecentlyUsedModule_Help" xml:space="preserve">
+    <value>Use this model to group MRU items by module for faster UI rendering and navigation. Items are represented as MostRecentlyUsedItem entries.</value>
+  </data>
+  <data name="MostRecentlyUsedItem_Name" xml:space="preserve">
+    <value>Most Recently Used Item</value>
+  </data>
+  <data name="MostRecentlyUsedItem_Description" xml:space="preserve">
+    <value>Single most recently used entry including identity, module key, timestamps, route, display metadata, and navigation link.</value>
+  </data>
+  <data name="MostRecentlyUsedItem_Help" xml:space="preserve">
+    <value>Use this model to represent an MRU entry shown in recent lists. Includes routing/navigation info plus optional name, summary, icon, and link for UI display.</value>
+  </data>
   <data name="NotificationContact_Name" xml:space="preserve">
-  <value>Notification Contact</value>
-</data>
+    <value>Notification Contact</value>
+  </data>
   <data name="NotificationContact_Description" xml:space="preserve">
-  <value>Notification contact details for an app user, including email, phone, and configured push notification channels.</value>
-</data>
+    <value>Notification contact details for an app user, including email, phone, and configured push notification channels.</value>
+  </data>
   <data name="NotificationContact_Help" xml:space="preserve">
-  <value>Use this model to represent who notifications should be delivered to for a user. Includes basic contact fields and the list of enabled push notification channels.</value>
-</data>
-  <!-- PaymentAccounts -->
+    <value>Use this model to represent who notifications should be delivered to for a user. Includes basic contact fields and the list of enabled push notification channels.</value>
+  </data>
   <data name="PaymentAccounts_Name" xml:space="preserve">
-  <value>Payment Accounts</value>
-</data>
+    <value>Payment Accounts</value>
+  </data>
   <data name="PaymentAccounts_Description" xml:space="preserve">
-  <value>Represents one or more payment and routing account pairs used for payment processing configuration.</value>
-</data>
+    <value>Represents one or more payment and routing account pairs used for payment processing configuration.</value>
+  </data>
   <data name="PaymentAccounts_Help" xml:space="preserve">
-  <value>Use this model to store configured payment account numbers and routing numbers (up to two sets) for billing or payment disbursement scenarios.</value>
-</data>
-
-
-
-  <!-- PendingIdentity -->
+    <value>Use this model to store configured payment account numbers and routing numbers (up to two sets) for billing or payment disbursement scenarios.</value>
+  </data>
   <data name="PendingIdentity_Name" xml:space="preserve">
-  <value>Pending Identity</value>
-</data>
+    <value>Pending Identity</value>
+  </data>
   <data name="PendingIdentity_Description" xml:space="preserve">
-  <value>Provisional authentication container used to resolve an identity and complete create/link flows before a durable user account exists, including untrusted profile data, verification state, and exactly one populated auth bucket.</value>
-</data>
+    <value>Provisional authentication container used to resolve an identity and complete create/link flows before a durable user account exists, including untrusted profile data, verification state, and exactly one populated auth bucket.</value>
+  </data>
   <data name="PendingIdentity_Help" xml:space="preserve">
-  <value>Use this model as an “airlock” for sign-up and external login flows. It is authenticated for finalize/link operations only (no app authorization). Exactly one auth bucket should be populated based on FlowType and invite context can be attached when applicable.</value>
-</data>
-  <!-- PushNotificationChannel -->
+    <value>Use this model as an “airlock” for sign-up and external login flows. It is authenticated for finalize/link operations only (no app authorization). Exactly one auth bucket should be populated based on FlowType and invite context can be attached when applicable.</value>
+  </data>
   <data name="PushNotificationChannel_Name" xml:space="preserve">
-  <value>Push Notification Channel</value>
-</data>
+    <value>Push Notification Channel</value>
+  </data>
   <data name="PushNotificationChannel_Description" xml:space="preserve">
-  <value>Represents a push notification channel registration for a device/user, including token, platform, and creation timestamp.</value>
-</data>
+    <value>Represents a push notification channel registration for a device/user, including token, platform, and creation timestamp.</value>
+  </data>
   <data name="PushNotificationChannel_Help" xml:space="preserve">
-  <value>Use this model to store device push notification registrations. The Token is the platform push token and Platform indicates the originating device platform.</value>
-</data>
-
-  <!-- SingleUseToken -->
+    <value>Use this model to store device push notification registrations. The Token is the platform push token and Platform indicates the originating device platform.</value>
+  </data>
   <data name="SingleUseToken_Name" xml:space="preserve">
-  <value>Single Use Token</value>
-</data>
+    <value>Single Use Token</value>
+  </data>
   <data name="SingleUseToken_Description" xml:space="preserve">
-  <value>Represents a short-lived single-use token issued for a user, including the token value and expiration timestamp.</value>
-</data>
+    <value>Represents a short-lived single-use token issued for a user, including the token value and expiration timestamp.</value>
+  </data>
   <data name="SingleUseToken_Help" xml:space="preserve">
-  <value>Use this model to store or transmit one-time tokens for user actions such as secure links or verification steps. Tokens should be validated once and rejected after expiry.</value>
-</data>
-  <!-- UserRole -->
+    <value>Use this model to store or transmit one-time tokens for user actions such as secure links or verification steps. Tokens should be validated once and rejected after expiry.</value>
+  </data>
   <data name="UserRole_Name" xml:space="preserve">
-  <value>User Role</value>
-</data>
+    <value>User Role</value>
+  </data>
   <data name="UserRole_Description" xml:space="preserve">
-  <value>Represents an assignment of a role to a user within an organization, including creation metadata and conversion to a storage DTO.</value>
-</data>
+    <value>Represents an assignment of a role to a user within an organization, including creation metadata and conversion to a storage DTO.</value>
+  </data>
   <data name="UserRole_Help" xml:space="preserve">
-  <value>Use this model to represent user-to-role membership. Supports conversion to UserRoleDTO for persistence and exposes the Role as an EntityHeader for UI selection and security checks.</value>
-</data>
-
-  <!-- UserFavorites -->
+    <value>Use this model to represent user-to-role membership. Supports conversion to UserRoleDTO for persistence and exposes the Role as an EntityHeader for UI selection and security checks.</value>
+  </data>
   <data name="UserFavorites_Name" xml:space="preserve">
-  <value>User Favorites</value>
-</data>
+    <value>User Favorites</value>
+  </data>
   <data name="UserFavorites_Description" xml:space="preserve">
-  <value>Represents a user’s favorite items across the application, including a global favorites list and favorites grouped by module.</value>
-</data>
+    <value>Represents a user’s favorite items across the application, including a global favorites list and favorites grouped by module.</value>
+  </data>
   <data name="UserFavorites_Help" xml:space="preserve">
-  <value>Use this model to store and return favorite navigation/entity references for a user. Includes both a global list and per-module collections and provides stable id generation by org/user.</value>
-</data>
-
-  <!-- FavoritesByModule -->
+    <value>Use this model to store and return favorite navigation/entity references for a user. Includes both a global list and per-module collections and provides stable id generation by org/user.</value>
+  </data>
   <data name="FavoritesByModule_Name" xml:space="preserve">
-  <value>Favorites By Module</value>
-</data>
+    <value>Favorites By Module</value>
+  </data>
   <data name="FavoritesByModule_Description" xml:space="preserve">
-  <value>Module-scoped grouping of user favorites, keyed by module and containing an item list of UserFavorite entries.</value>
-</data>
+    <value>Module-scoped grouping of user favorites, keyed by module and containing an item list of UserFavorite entries.</value>
+  </data>
   <data name="FavoritesByModule_Help" xml:space="preserve">
-  <value>Use this model to group favorites by module for UI navigation and rendering. Items are represented as UserFavorite entries.</value>
-</data>
-
-  <!-- UserFavorite -->
+    <value>Use this model to group favorites by module for UI navigation and rendering. Items are represented as UserFavorite entries.</value>
+  </data>
   <data name="UserFavorite_Name" xml:space="preserve">
-  <value>User Favorite</value>
-</data>
+    <value>User Favorite</value>
+  </data>
   <data name="UserFavorite_Description" xml:space="preserve">
-  <value>Represents a single favorite entry including identity, module key, timestamps, route, and UI display/navigation metadata.</value>
-</data>
+    <value>Represents a single favorite entry including identity, module key, timestamps, route, and UI display/navigation metadata.</value>
+  </data>
   <data name="UserFavorite_Help" xml:space="preserve">
-  <value>Use this model to represent a favorite item shown in favorites lists. Includes routing/navigation info plus optional name, summary, icon, and link for UI display.</value>
-</data>
-
-  <!-- KioskLoginViewModel -->
+    <value>Use this model to represent a favorite item shown in favorites lists. Includes routing/navigation info plus optional name, summary, icon, and link for UI display.</value>
+  </data>
   <data name="KioskLoginViewModel_Name" xml:space="preserve">
-  <value>Kiosk Login</value>
-</data>
+    <value>Kiosk Login</value>
+  </data>
   <data name="KioskLoginViewModel_Description" xml:space="preserve">
-  <value>View model containing kiosk authentication inputs including client id and API key.</value>
-</data>
-<data name="KioskLoginViewModel_Help" xml:space="preserve">
-  <value>Use this model when submitting kiosk login credentials. ClientId identifies the kiosk client and ApiKey provides the shared secret for authentication.</value>
-</data>
-
-  <!-- Magic Link Attempt-->
+    <value>View model containing kiosk authentication inputs including client id and API key.</value>
+  </data>
+  <data name="KioskLoginViewModel_Help" xml:space="preserve">
+    <value>Use this model when submitting kiosk login credentials. ClientId identifies the kiosk client and ApiKey provides the shared secret for authentication.</value>
+  </data>
   <data name="MagicLinkAttempt_Title" xml:space="preserve">
-  <value>Magic Link Sign-In Attempt</value>
-</data>
-
+    <value>Magic Link Sign-In Attempt</value>
+  </data>
   <data name="MagicLinkAttempt_Help" xml:space="preserve">
-  <value>Represents a single, time-limited magic link sign-in attempt used to authenticate an existing user without a password.</value>
-</data>
-
+    <value>Represents a single, time-limited magic link sign-in attempt used to authenticate an existing user without a password.</value>
+  </data>
   <data name="MagicLinkAttempt_Description" xml:space="preserve">
-  <value>A Magic Link Attempt captures the lifecycle of a passwordless sign-in request, including issuance, expiration, and single-use consumption. It supports both portal-based cookie authentication and mobile exchange-code flows that mint JWTs, and always defers navigation decisions to the standard post-login routing logic.</value>
-</data>
-
+    <value>A Magic Link Attempt captures the lifecycle of a passwordless sign-in request, including issuance, expiration, and single-use consumption. It supports both portal-based cookie authentication and mobile exchange-code flows that mint JWTs, and always defers navigation decisions to the standard post-login routing logic.</value>
+  </data>
   <data name="MagicLinkRequest_Title" xml:space="preserve">
-  <value>Magic Link Sign-In Request</value>
-</data>
+    <value>Magic Link Sign-In Request</value>
+  </data>
   <data name="MagicLinkRequest_Help" xml:space="preserve">
-  <value>Represents a request to send a magic sign-in link to an email address.</value>
-</data>
+    <value>Represents a request to send a magic sign-in link to an email address.</value>
+  </data>
   <data name="MagicLinkRequest_Description" xml:space="preserve">
-  <value>Contains the information required to request a sign-in-only magic link, including the target email address, client channel, and optional return URL.</value>
-</data>
-
+    <value>Contains the information required to request a sign-in-only magic link, including the target email address, client channel, and optional return URL.</value>
+  </data>
   <data name="MagicLinkRequestContext_Title" xml:space="preserve">
-  <value>Magic Link Request Context</value>
-</data>
+    <value>Magic Link Request Context</value>
+  </data>
   <data name="MagicLinkRequestContext_Help" xml:space="preserve">
-  <value>Provides request-level context for a magic link sign-in request.</value>
-</data>
+    <value>Provides request-level context for a magic link sign-in request.</value>
+  </data>
   <data name="MagicLinkRequestContext_Description" xml:space="preserve">
-  <value>Captures contextual metadata such as IP address, user agent, and correlation identifier used for auditing and abuse detection.</value>
-</data>
+    <value>Captures contextual metadata such as IP address, user agent, and correlation identifier used for auditing and abuse detection.</value>
+  </data>
   <data name="MagicLinkConsumeContext_Title" xml:space="preserve">
-  <value>Magic Link Consume Context</value>
-</data>
+    <value>Magic Link Consume Context</value>
+  </data>
   <data name="MagicLinkConsumeContext_Help" xml:space="preserve">
-  <value>Provides request context when consuming a magic sign-in link.</value>
-</data>
+    <value>Provides request context when consuming a magic sign-in link.</value>
+  </data>
   <data name="MagicLinkConsumeContext_Description" xml:space="preserve">
-  <value>Contains client channel and request metadata used when validating and consuming a magic sign-in link.</value>
-</data>
-
+    <value>Contains client channel and request metadata used when validating and consuming a magic sign-in link.</value>
+  </data>
   <data name="MagicLinkConsumeResponse_Title" xml:space="preserve">
-  <value>Magic Link Consume Result</value>
-</data>
+    <value>Magic Link Consume Result</value>
+  </data>
   <data name="MagicLinkConsumeResponse_Help" xml:space="preserve">
-  <value>Represents the result of consuming a magic sign-in link.</value>
-</data>
+    <value>Represents the result of consuming a magic sign-in link.</value>
+  </data>
   <data name="MagicLinkConsumeResponse_Description" xml:space="preserve">
-  <value>Contains the consumed magic link attempt and, for mobile clients, a short-lived exchange code used to obtain a JWT.</value>
-</data>
+    <value>Contains the consumed magic link attempt and, for mobile clients, a short-lived exchange code used to obtain a JWT.</value>
+  </data>
   <data name="MagicLinkExchangeContext_Title" xml:space="preserve">
-  <value>Magic Link Exchange Context</value>
-</data>
+    <value>Magic Link Exchange Context</value>
+  </data>
   <data name="MagicLinkExchangeContext_Help" xml:space="preserve">
-  <value>Provides request context for exchanging a magic link exchange code.</value>
-</data>
+    <value>Provides request context for exchanging a magic link exchange code.</value>
+  </data>
   <data name="MagicLinkExchangeContext_Description" xml:space="preserve">
-  <value>Captures metadata used when validating and consuming a magic link exchange code prior to JWT issuance.</value>
-</data>
+    <value>Captures metadata used when validating and consuming a magic link exchange code prior to JWT issuance.</value>
+  </data>
   <data name="MagicLinkExchangeResponse_Title" xml:space="preserve">
-  <value>Magic Link Exchange Result</value>
-</data>
+    <value>Magic Link Exchange Result</value>
+  </data>
   <data name="MagicLinkExchangeResponse_Help" xml:space="preserve">
-  <value>Represents the result of exchanging a magic link exchange code.</value>
-</data>
+    <value>Represents the result of exchanging a magic link exchange code.</value>
+  </data>
   <data name="MagicLinkExchangeResponse_Description" xml:space="preserve">
-  <value>Contains the resolved user identity and associated magic link attempt after successful exchange, enabling JWT issuance by the authentication system.</value>
-</data>
-
+    <value>Contains the resolved user identity and associated magic link attempt after successful exchange, enabling JWT issuance by the authentication system.</value>
+  </data>
+  <data name="AuthTenantStateSnapshot_HasPendingIdentity" xml:space="preserve">
+    <value>Has Pending Identity</value>
+  </data>
+  <data name="AuthTenantStateSnapshot_HasTotp" xml:space="preserve">
+    <value>Has TOTP</value>
+  </data>
+  <data name="AuthTenantStateSnapshot_GenerateEmailConfirm" xml:space="preserve">
+    <value>Generate Email Confirm</value>
+  </data>
+  <data name="AuthTenantStateSnapshot_SendMagicLink" xml:space="preserve">
+    <value>Send Magic Link</value>
+  </data>
 </root>

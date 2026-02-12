@@ -23,30 +23,38 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IAuthenticationLogManager _authLogMgr;
         private readonly IMagicLinkAttemptStore _store;
         private readonly IAppConfig _appConfig;
-     
+        private readonly ISignInManager _signinManager;
         public MagicLinkManager(
             IUserManager userManager,
             IEmailSender emailSender,
             IAuthenticationLogManager authLogMgr,
             IMagicLinkAttemptStore store,
+            ISignInManager signinManager,
             IAppConfig appConfig)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
             _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(authLogMgr));
             _store = store ?? throw new ArgumentNullException(nameof(store));
+            _signinManager = signinManager ?? throw new ArgumentNullException(nameof(signinManager));
             _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
         }
 
         public async Task<InvokeResult> RequestSignInLinkAsync(MagicLinkRequest request, MagicLinkRequestContext context)
         {
-            if (request == null) return InvokeResult.FromError("missing_request");
+            var result = await RequestSignInLinkAsyncForTesting(request, context);
+            return result.ToInvokeResult();
+        }
+
+        public async Task<InvokeResult<string>> RequestSignInLinkAsyncForTesting(MagicLinkRequest request, MagicLinkRequestContext context)
+        {
+            if (request == null) return InvokeResult<string>.FromError("missing_request");
 
             var email = NormalizeEmail(request.Email);
-            if (string.IsNullOrWhiteSpace(email)) return InvokeResult.FromError("missing_email");
+            if (string.IsNullOrWhiteSpace(email)) return InvokeResult<string>.FromError("missing_email");
 
             var channel = NormalizeChannel(request.Channel);
-            if (channel == null) return InvokeResult.FromError("invalid_channel");
+            if (channel == null) return InvokeResult<string>.FromError("invalid_channel");
 
             // Always log the request (non-enumeration compatible).
             await _authLogMgr.AddAsync(
@@ -63,7 +71,7 @@ namespace LagoVista.UserAdmin.Managers
             // Non-enumerating: return success even if not found.
             if (appUser == null)
             {
-                return InvokeResult.Success;
+                return InvokeResult<string>.Create(String.Empty);
             }
 
             var nowUtc = DateTime.UtcNow;
@@ -89,7 +97,7 @@ namespace LagoVista.UserAdmin.Managers
             var create = await _store.CreateAsync(attempt);
             if (!create.Successful)
             {
-                return create;
+                return create.ToInvokeResult<string>();
             }
 
             var subject = "Your sign-in link";
@@ -111,7 +119,7 @@ namespace LagoVista.UserAdmin.Managers
                     challengeId: attempt.Id);
 
                 // Still return success to remain non-enumerating and avoid leaking mail delivery.
-                return InvokeResult.Success;
+                return InvokeResult<string>.Create(String.Empty);
             }
 
             await _authLogMgr.AddAsync(
@@ -123,17 +131,17 @@ namespace LagoVista.UserAdmin.Managers
                 redirectUri: request.ReturnUrl ?? "",
                 challengeId: attempt.Id);
 
-            return InvokeResult.Success;
+            return InvokeResult<string>.Create(rawCode);
         }
 
-        public async Task<InvokeResult<MagicLinkConsumeResponse>> ConsumeAsync(string code, MagicLinkConsumeContext context)
+        public async Task<InvokeResult<UserLoginResponse>> ConsumeAsync(string code, MagicLinkConsumeContext context)
         {
             if (string.IsNullOrWhiteSpace(code))
-                return InvokeResult<MagicLinkConsumeResponse>.FromError("missing_code");
+                return InvokeResult<UserLoginResponse>.FromError("missing_code");
 
             var channel = NormalizeChannel(context?.Channel);
             if (channel == null)
-                return InvokeResult<MagicLinkConsumeResponse>.FromError("invalid_channel");
+                return InvokeResult<UserLoginResponse>.FromError("invalid_channel");
 
             var nowUtc = DateTime.UtcNow;
             var codeHash = Hash(code);
@@ -148,7 +156,7 @@ namespace LagoVista.UserAdmin.Managers
                     extras: $"channel={channel}",
                     redirectUri: context?.ReturnUrl ?? "");
 
-                return InvokeResult<MagicLinkConsumeResponse>.FromErrors(consume.Errors.ToArray());
+                return InvokeResult<UserLoginResponse>.FromErrors(consume.Errors.ToArray());
             }
 
             var attempt = consume.Result?.Attempt;
@@ -161,7 +169,7 @@ namespace LagoVista.UserAdmin.Managers
                     extras: $"channel={channel}",
                     redirectUri: context?.ReturnUrl ?? "");
 
-                return InvokeResult<MagicLinkConsumeResponse>.FromError("not_found");
+                return InvokeResult<UserLoginResponse>.FromError("not_found");
             }
 
             if (!string.Equals(attempt.Channel, channel, StringComparison.Ordinal))
@@ -174,7 +182,7 @@ namespace LagoVista.UserAdmin.Managers
                     redirectUri: context?.ReturnUrl ?? "",
                     challengeId: attempt.Id);
 
-                return InvokeResult<MagicLinkConsumeResponse>.FromError("channel_mismatch");
+                return InvokeResult<UserLoginResponse>.FromError("channel_mismatch");
             }
 
             var appUser = await _userManager.FindByIdAsync(attempt.UserId);
@@ -187,7 +195,7 @@ namespace LagoVista.UserAdmin.Managers
                     extras: $"channel={channel}",
                     challengeId: attempt.Id);
 
-                return InvokeResult<MagicLinkConsumeResponse>.FromError("user_not_found");
+                return InvokeResult<UserLoginResponse>.FromError("user_not_found");
             }
 
             var userEh = ToEntityHeader(appUser);
@@ -225,7 +233,7 @@ namespace LagoVista.UserAdmin.Managers
                         extras: $"channel={channel}",
                         challengeId: attempt.Id);
 
-                    return InvokeResult<MagicLinkConsumeResponse>.FromErrors(set.Errors.ToArray());
+                    return InvokeResult<UserLoginResponse>.FromErrors(set.Errors.ToArray());
                 }
 
                 await _authLogMgr.AddAsync(
@@ -239,7 +247,12 @@ namespace LagoVista.UserAdmin.Managers
                 response.ExchangeCode = exchangeCode;
             }
 
-            return InvokeResult<MagicLinkConsumeResponse>.Create(response);
+            // Sign in for .NET
+            await _signinManager.SignInAsync(appUser, true);
+
+            // Sign in for app.
+            var signInResponse = await _signinManager.CompleteSignInToAppAsync(appUser);
+            return signInResponse;
         }
 
         public async Task<InvokeResult<AppUser>> ExchangeAsync(string exchangeCode, MagicLinkExchangeContext context)
@@ -306,17 +319,21 @@ namespace LagoVista.UserAdmin.Managers
         private string BuildEmailBody(MagicLinkAttempt attempt, string rawCode)
         {
             var webBase = GetWebURI().TrimEnd('/');
-            var webLink = $"{webBase}/auth/link/consume?code={Uri.EscapeDataString(rawCode)}";
-            var mobileLink = $"nuviot:/auth/link/consume?code={Uri.EscapeDataString(rawCode)}";
+            var webLink = $"{webBase}/auth/magiclink/handle?code={Uri.EscapeDataString(rawCode)}";
+            var mobileLink = $"nuviot:/auth/securelink/consume?code={Uri.EscapeDataString(rawCode)}";
 
             var ttlMinutes = (int)MagicLinkTtl.TotalMinutes;
 
             var sb = new StringBuilder();
-            sb.AppendLine("Use this link to sign in:");
-            sb.AppendLine(webLink);
+            sb.AppendLine("<div>");
+            sb.AppendLine("<p>Use this link to sign in:</p>");
+            sb.AppendLine($"<a href='{webLink}'>Sign In in your browser</a>");
+            sb.AppendLine("</div>"); 
             sb.AppendLine();
-            sb.AppendLine("If you're signing in on a mobile device, you can also use this app link:");
-            sb.AppendLine(mobileLink);
+            sb.AppendLine("<div>");
+            sb.AppendLine("<p>If you're signing in on a mobile device, you can also use this app link:</p>");
+            sb.AppendLine($"<a href='{mobileLink}'>Sign In in your app</a>");
+            sb.AppendLine("</div>");
             sb.AppendLine();
             sb.AppendLine($"This link expires in {ttlMinutes} minutes and can only be used once.");
             return sb.ToString();
@@ -335,6 +352,11 @@ namespace LagoVista.UserAdmin.Managers
                     case Environments.Staging: environment = "https://stage.nuviot.com"; break;
                     case Environments.Production: environment = "https://www.nuviot.com"; break;
                 }
+            }
+
+            if(environment.Contains("localhost"))
+            {
+                environment = "http://localhost:4200";
             }
 
             return environment;

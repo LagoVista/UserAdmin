@@ -70,7 +70,7 @@ namespace LagoVista.UserAdmin.Managers
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"{type}",
                 userId.ToKVP("userId"), userName.ToKVP("username"), orgId.ToKVP("orgId"), orgName.ToKVP("orgName"), errors.ToKVP("errors"),
                 extras.ToKVP("extras"), oauthProvider.ToKVP("oauthProvider"), type.ToString().ToKVP("authType"), challengeId.ToKVP("challengeId"),
-                credentialId.ToKVP("credentialId"), assertionId.ToKVP("assertionId"), "true".ToKVP("authlog")); 
+                credentialId.ToKVP("credentialId"), assertionId.ToKVP("assertionId"), redirectUri.ToKVP("redirect"), "true".ToKVP("authlog")); 
 
             return AddAsync(auth);
         }
