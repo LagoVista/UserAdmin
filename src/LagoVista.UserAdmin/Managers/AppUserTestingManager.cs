@@ -293,7 +293,7 @@ namespace LagoVista.UserAdmin.Managers
 
             var userCredentials = new TestUserCredentials();
 
-            if(preconditions.HasPassword.Value == SetCondition.Set)
+            if(preconditions.HasPasskey.Value == SetCondition.Set)
             {
                 userCredentials.PasskeyCredentialsId= "0Mzo4bIZX4GyggZOQGvRx3WWZrMXiLPsqPf625kAz44=";
             }
