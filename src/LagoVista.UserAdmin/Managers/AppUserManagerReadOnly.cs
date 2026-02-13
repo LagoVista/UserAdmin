@@ -61,7 +61,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<AppUser> GetUserByUserNameAsync(string userName, EntityHeader org, EntityHeader requestedByUser)
         {
-            var appUser = await _appUserRepo.FindByNameAsync(userName);
+            var appUser = await _appUserRepo.FindByEmailAsync(userName);
             
             if(appUser == null)
             {

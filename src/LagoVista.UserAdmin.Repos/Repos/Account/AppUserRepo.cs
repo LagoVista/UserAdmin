@@ -168,28 +168,28 @@ namespace LagoVista.UserAdmin.Repos.Users
             var accountId = await _cacheProvider.GetAsync(UserNameCacheKey(userName));
             if (!String.IsNullOrEmpty(accountId))
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - resolved {userName} for {accountId} in cache - {sw.Elapsed.TotalMilliseconds} ms");
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"resolved {userName} for {accountId} in cache - {sw.Elapsed.TotalMilliseconds} ms");
             }
             else
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - did not {userName} in cache - {sw.Elapsed.TotalMilliseconds} ms");
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"did not find {userName} in cache - {sw.Elapsed.TotalMilliseconds} ms");
                 sw.Restart();
                 var user = (await QueryAsync(usr => usr.UserName == userName.ToUpper())).FirstOrDefault();
                 if (user == null)
                 {
-                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Warning, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - Could not find user by username {userName} - {sw.Elapsed.TotalMilliseconds} ms");
+                    _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Warning, this.Tag(), $"Could not find user by username {userName} - {sw.Elapsed.TotalMilliseconds} ms");
                     return null;
                 }
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - Found user {userName} in storage by user name - {sw.Elapsed.TotalMilliseconds} ms");
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"Found user {userName} in storage by user name - {sw.Elapsed.TotalMilliseconds} ms");
                 accountId = user.Id;
                 sw.Restart();
                 await _cacheProvider.AddAsync(UserNameCacheKey(userName), accountId);
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - Added user {userName} to cache for account id {accountId} - {sw.Elapsed.TotalMilliseconds} ms");
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"Added user {userName} to cache for account id {accountId} - {sw.Elapsed.TotalMilliseconds} ms");
             }
             sw.Restart();
 
             var appUser = await FindByIdAsync(accountId);
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[AppUserRepo__FindByNameAsync]", $"[AppUserRepo__FindByNameAsync] - Get user by id {accountId}, {userName} from storage by id - {sw.Elapsed.TotalMilliseconds} ms");
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"Get user by id {accountId}, {userName} from storage by id - {sw.Elapsed.TotalMilliseconds} ms");
             return appUser;
         }
 

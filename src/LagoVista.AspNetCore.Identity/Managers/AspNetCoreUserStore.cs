@@ -58,7 +58,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public Task<AppUser> FindByNameAsync(string userName, CancellationToken token)
         {
-            return _userRepo.FindByNameAsync(userName);
+            return _userRepo.FindByEmailAsync(userName);
         }
 
         public Task<String> GetUserIdAsync(AppUser user, CancellationToken token)

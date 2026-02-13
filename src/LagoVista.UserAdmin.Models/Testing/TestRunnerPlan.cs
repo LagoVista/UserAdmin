@@ -70,6 +70,7 @@ namespace LagoVista.UserAdmin.Models.Testing
         public string EmailAddress { get; set; }
         public string Password { get; set; }
 
+        public string PreloginLink { get; set; }
         public string MagicLinkToken { get; set; }
         public string PasskeyCredentialsId { get; set; }
     }

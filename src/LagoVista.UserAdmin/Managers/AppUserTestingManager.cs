@@ -254,46 +254,40 @@ namespace LagoVista.UserAdmin.Managers
                 }
 
             }
-            if (preconditions.BelongsToOrg.Value == SetCondition.NotSet)
-            {
-                _adminLogger.Trace($"{this.Tag()} Use should not belong to an org");
-
-                if (testUser.Organizations.Any())
-                {
-                    testUser.Organizations.Clear();
-                    testUser.CurrentOrganizationRoles.Clear();
-                    testUser.CurrentOrganization = null;
-                    testUser.IsOrgAdmin = false;
-                    testUser.OwnerOrganization = null;
-                }
-
-                _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- Cleared");
-            }
 
             await AuthorizeAsync(testUser, AuthorizeResult.AuthorizeActions.Update, user, org);
             await _appUserRepo.UpdateAsync(testUser);
 
             if (preconditions.BelongsToOrg.Value == SetCondition.NotSet)
             {
-                _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- Should we remove org?");
+                _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- Should we remove user from org?");
 
                 testUser.OwnerOrganization = null;
-                var existingOrg = await _orgManager.QueryOrgNamespaceInUseAsync(TestUserSeed.TEST_ORG_NS1);
-                if (existingOrg)
-                {
-                    _adminLogger.Trace($"{this.Tag()} Use should not belong to an org - exists deleteing");
 
-                    var deleteOrgresult = await _orgManager.DeleteOrgAsync(TestUserSeed.Org1.Id, org, user);
-                    if (!deleteOrgresult.Successful)
+                if (testUser.Organizations.Any())
+                {
+                    testUser.Organizations.Clear();
+                    testUser.CurrentOrganizationRoles.Clear();
+                    testUser.IsOrgAdmin = false;
+                    testUser.OwnerOrganization = null;
+                }
+
+                _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- Cleared");
+
+                var hasAccess = await _orgManager.QueryOrganizationHasUserAsync(TestUserSeed.Org1.Id, TestUserSeed.User.Id, org, user);   
+                if(hasAccess)
+                {
+                    var removeUserResult = await _orgManager.RemoveUserFromOrganizationAsync(TestUserSeed.Org1.Id, TestUserSeed.User.Id, org, user);
+                    if (!removeUserResult.Successful)
                     {
-                        _adminLogger.AddError(this.Tag(), $"Could not delete org: {deleteOrgresult.ErrorMessage}");
-                        return deleteOrgresult.ToInvokeResult<TestUserCredentials>();
+                        _adminLogger.AddError(this.Tag(), $"Could not remove user from org: {removeUserResult.ErrorMessage}");
+                        return removeUserResult.ToInvokeResult<TestUserCredentials>();
                     }
 
-                    _adminLogger.Trace($"{this.Tag()} Use should not belong to an org - deleted");
+                    _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- they did, now they don't.");
                 }
                 else
-                    _adminLogger.Trace($"{this.Tag()} Use should not belong to an org - did not exist, nothing to do.");
+                    _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- they didn't have access, nothing to do?");
             }
 
 
@@ -303,6 +297,31 @@ namespace LagoVista.UserAdmin.Managers
             {
                 userCredentials.PasskeyCredentialsId= "0Mzo4bIZX4GyggZOQGvRx3WWZrMXiLPsqPf625kAz44=";
             }
+
+            if (preconditions.IsUserLoggedIn.Value == SetCondition.Set)
+            {
+                var mlResponse = await _magicLinkManager.RequestSignInLinkAsyncForTesting(new MagicLinkRequest()
+                {
+                    Channel = "portal",
+                    Email = testUser.Email,
+                }, new MagicLinkRequestContext()
+                {
+                    IpAddress = "127.0.0.1",
+                    CorrelationId = Guid.NewGuid().ToString(),
+                    UserAgent = "UnitTest"
+                });
+
+                if (!mlResponse.Successful)
+                {
+                    _adminLogger.AddError(this.Tag(), $"Failed to send magic link: {mlResponse.ErrorMessage}");
+                    throw new Exception($"Failed to send magic link: {mlResponse.ErrorMessage}");
+                }
+
+                userCredentials.PreloginLink = mlResponse.Result;
+
+                _adminLogger.Trace($"{this.Tag()} Set PreloginLink {mlResponse.Result.Substring(0, 5)}*************** on userCredentials.");
+            }
+
 
             if(preconditions.SendMagicLink.Value == SetCondition.Set)
             {

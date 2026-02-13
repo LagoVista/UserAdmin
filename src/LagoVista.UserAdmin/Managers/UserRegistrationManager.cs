@@ -19,10 +19,8 @@ using LagoVista.UserAdmin.Models.Testing;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Resources;
 using LagoVista.UserAdmin.Utils;
-using RingCentral;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -40,11 +38,12 @@ namespace LagoVista.UserAdmin.Managers
         private readonly ISignInManager _signInManager;
         private readonly IUserVerficationManager _userVerificationmanager;
         private readonly IAuthTokenManager _authTokenManager;
+        private readonly IPendingIdentityManager _pendingIdentityManager;
         private readonly IOrganizationRepo _orgRepo;
 
         public UserRegistrationManager(ILogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security, IAuthenticationLogManager authLogMgr, 
             IAdminLogger adminLogger, IAppUserRepo appUserRepo, ISecureStorage secureStorage, IOrganizationManager orgManager, IUserManager userManager, ISignInManager signInManager,
-            IUserVerficationManager userVerificationManager, IAuthTokenManager authTokenManager, IOrganizationRepo orgRepo) : base(logger, appConfig, dependencyManager, security)
+            IUserVerficationManager userVerificationManager, IAuthTokenManager authTokenManager, IOrganizationRepo orgRepo, IPendingIdentityManager pendingIdentityManager) : base(logger, appConfig, dependencyManager, security)
         {
             _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(authLogMgr));
             _adminLogger = adminLogger ?? throw new ArgumentNullException(nameof(adminLogger));
@@ -57,6 +56,7 @@ namespace LagoVista.UserAdmin.Managers
             _authTokenManager = authTokenManager ?? throw new ArgumentNullException(nameof(authTokenManager));
             _orgRepo = orgRepo ?? throw new ArgumentNullException(nameof(orgRepo));
             _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
+            _pendingIdentityManager = pendingIdentityManager ?? throw new ArgumentNullException(nameof(pendingIdentityManager));
         }
 
 
@@ -286,7 +286,7 @@ namespace LagoVista.UserAdmin.Managers
             // --- BEGIN: CreateUserAsync helper methods (block 5) ---
             private async Task<InvokeResult> CreateIdentityUserAsync(AppUser appUser, RegisterUser newUser, ExternalLogin externalLogin)
             {
-                _adminLogger.Trace($"{this.Tag()} - Before User Manager - User Type {appUser.LoginType} {appUser.LoginTypeName} Creating User Email: {appUser.Email} and User Name: {appUser.UserName}");
+                _adminLogger.Trace($"{this.Tag()} - Before User Manager - User Type {appUser.LoginType} {appUser.LoginTypeName} Creating User Email: {appUser.Email} and User Name: {appUser.UserName}, Login Type: {appUser.LoginType}");
 
                 InvokeResult identityResult;
                 if (newUser.Source == UserCreationSource.UserSelfRegistration)
@@ -454,7 +454,7 @@ namespace LagoVista.UserAdmin.Managers
                 // If email is present (either flow), check for existing user by username
                 if (!String.IsNullOrEmpty(userName))
                 {
-                    var existing = await _appUserRepo.FindByNameAsync(userName);
+                    var existing = await _appUserRepo.FindByEmailAsync(userName);
                     if (existing != null)
                     {
                         await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.CreateUserError, userName: newUser.Email, extras: "User already exists");
