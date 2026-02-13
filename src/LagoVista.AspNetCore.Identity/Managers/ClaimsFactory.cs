@@ -3,7 +3,9 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.AspNetCore.Identity.Interfaces;
+using LagoVista.Core;
 using LagoVista.Core.Models;
+using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Models.Users;
 using RingCentral;
 using System;
@@ -15,6 +17,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
 {
     public class ClaimsFactory : IClaimsFactory
     {
+        private readonly IAdminLogger _logger;
+
+        public ClaimsFactory(IAdminLogger logger)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger)); 
+        }
+
         public const string None = "-";
 
         public const string Logintype = "com.lagovista.iot.logintype";
@@ -73,6 +82,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string OrgRequireMfa = "com.lagovista.iot.org.requiremfa";
         public const string OrgMfaFreshWindowMinutes = "com.lagovista.iot.org.mfafreshwindowminutes";
 
+        private void LogClaims(AppUser user, List<Claim> claims)
+        {
+            var args = claims.Select(c => $"={c.Value}".ToKVP(c.Type));
+
+            _logger.Trace($"{this.Tag()} - Adding/updating Claims for User {user.UserName} {user.Email}", args.ToArray());
+        }
+
         public List<Claim> GetClaims(AppUser user)
         {
             if (user.LoginType == LoginTypes.DeviceOwner) return GetClaimsForDeviceOwner(user);
@@ -111,6 +127,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(OrgMfaFreshWindowMinutes, (user.CurrentOrganization != null ? user.CurrentOrganization.MfaFreshWindowMinutes : 15).ToString()),
             };
 
+            if(!String.IsNullOrWhiteSpace(user.VerifyEmailSentTimeStamp))
+                claims.Add(new Claim(VerifyEmailSentTimeStamp, user.VerifyEmailSentTimeStamp));
+
             if (user.CurrentOrganizationRoles != null)
             {
                 foreach (var role in user.CurrentOrganizationRoles)
@@ -147,6 +166,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 claims.Add(new Claim(InstanceId, user.CurrentInstance.Id));
                 claims.Add(new Claim(InstanceName, user.CurrentInstance.Text));
             }
+
+            LogClaims(user, claims);
 
             return claims;
         }
@@ -189,6 +210,10 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(OrgMfaFreshWindowMinutes, (user.CurrentOrganization != null ? user.CurrentOrganization.MfaFreshWindowMinutes : 15).ToString()),
             };
 
+
+            if (!String.IsNullOrWhiteSpace(user.VerifyEmailSentTimeStamp))
+                claims.Add(new Claim(VerifyEmailSentTimeStamp, user.VerifyEmailSentTimeStamp));
+
             if (user.Customer != null)
             {
                 claims.Add(new Claim(CustomerId, user.Customer.Id));
@@ -220,6 +245,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
                     claims.Add(new Claim(ClaimTypes.Role, role.Key));
                 }
             }
+
+            LogClaims(user, claims);
 
             return claims;
         }
@@ -260,6 +287,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(CustomerContactName, owner.CustomerContact.Text),
             };
 
+
+            if (!String.IsNullOrWhiteSpace(owner.VerifyEmailSentTimeStamp))
+                claims.Add(new Claim(VerifyEmailSentTimeStamp, owner.VerifyEmailSentTimeStamp));
+
+            LogClaims(owner, claims);
+
             return claims;
         }
 
@@ -295,6 +328,11 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(DeviceConfigId, owner.CurrentDeviceConfig.Id),
                 new Claim(DeviceConfigName, owner.CurrentDeviceConfig.Text),
             };
+
+            if (!String.IsNullOrWhiteSpace(owner.VerifyEmailSentTimeStamp))
+                claims.Add(new Claim(VerifyEmailSentTimeStamp, owner.VerifyEmailSentTimeStamp));
+
+            LogClaims(owner, claims);
 
             return claims;
         }

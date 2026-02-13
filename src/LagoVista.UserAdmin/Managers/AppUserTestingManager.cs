@@ -69,7 +69,7 @@ namespace LagoVista.UserAdmin.Managers
             _authViewRepo = authViewRepo ?? throw new ArgumentNullException(nameof(authViewRepo));
             _testArtifactStorage = testArtifactStorage ?? throw new ArgumentNullException(nameof(testArtifactStorage));
             _userRegistrationManager = userRegistrationManager ?? throw new ArgumentNullException(nameof(userRegistrationManager));
-            _magicLinkManager = magicLinkManager ?? throw new ArgumentNullException(nameof(magicLinkManager));  
+            _magicLinkManager = magicLinkManager ?? throw new ArgumentNullException(nameof(magicLinkManager));
         }
 
         public async Task<InvokeResult> DeleteTestUserAsync(EntityHeader org, EntityHeader user)
@@ -101,7 +101,7 @@ namespace LagoVista.UserAdmin.Managers
             var timeStamp = DateTime.UtcNow.ToJSONString();
 
             var devTestUser = await _appUserRepo.FindByEmailAsync(TestUserSeed.Email);
-            if(devTestUser != null && devTestUser.Id != TestUserSeed.User.Id)
+            if (devTestUser != null && devTestUser.Id != TestUserSeed.User.Id)
             {
                 _adminLogger.Trace($"{this.Tag()} Test user already exists but has a different ID, likely created by OAuth deleting before applying setup.");
                 await _appUserManager.DeleteUserAsync(devTestUser.Id, org, user, false);
@@ -160,13 +160,13 @@ namespace LagoVista.UserAdmin.Managers
 
                 ExternalLogin externalLogin = null;
 
-                if(preconditions.UserHasOAuthGitHub.Value == SetCondition.Set)
+                if (preconditions.UserHasOAuthGitHub.Value == SetCondition.Set)
                 {
                     externalLogin = new ExternalLogin()
                     {
-                         Id = "25768510",
-                         UserName = "sloauth",
-                         Provider = EntityHeader<ExternalLoginTypes>.Create(ExternalLoginTypes.GitHub)
+                        Id = "25768510",
+                        UserName = "sloauth",
+                        Provider = EntityHeader<ExternalLoginTypes>.Create(ExternalLoginTypes.GitHub)
                     };
                 }
 
@@ -194,7 +194,6 @@ namespace LagoVista.UserAdmin.Managers
             if (preconditions.UserHasFirstName.Value != SetCondition.DontCare) testUser.FirstName = preconditions.UserHasFirstName.Value == SetCondition.Set ? TestUserSeed.FirstName : null;
             if (preconditions.UserHasLastName.Value != SetCondition.DontCare) testUser.LastName = preconditions.UserHasLastName.Value == SetCondition.Set ? TestUserSeed.LastName : null;
 
-
             _adminLogger.Trace($"{this.Tag()} Set Pre Conditions on User");
 
             if (preconditions.BelongsToOrg.Value == SetCondition.Set)
@@ -221,48 +220,57 @@ namespace LagoVista.UserAdmin.Managers
                     }
 
                     _adminLogger.Trace($"{this.Tag()} Use Should belong to an Org - Created {TestUserSeed.TEST_ORG_NS1}");
-
-                    var addUserResult = await _orgManager.AddUserToOrgAsync(TestUserSeed.Org1.Id, TestUserSeed.User.Id, org, user);
-                    if (!addUserResult.Successful)
-                    {
-                        _adminLogger.AddError(this.Tag(), addUserResult.ErrorMessage);
-                        return addUserResult.ToInvokeResult<TestUserCredentials>();
-                    }
-
-                    _adminLogger.Trace($"{this.Tag()} Use Should belong to an Org - Added to Org {TestUserSeed.TEST_ORG_NS1}");
                 }
                 else
                 {
                     _adminLogger.Trace($"{this.Tag()} Use Should belong to an Org - Already Exists {TestUserSeed.TEST_ORG_NS1}");
-
-                    var result = await _orgManager.QueryOrganizationHasUserAsync(TestUserSeed.Org1.Id, TestUserSeed.User.Id, org, user);
-                    if (!result)
-                    {
-                        var addUserToOrgresult = await _orgManager.AddUserToOrgAsync(TestUserSeed.Org1.Id, TestUserSeed.User.Id, org, user);
-                        if (!addUserToOrgresult.Successful)
-                        {
-                            _adminLogger.AddError(this.Tag(), $"Could not add to org: {addUserToOrgresult.ErrorMessage}");
-                            return addUserToOrgresult.ToInvokeResult<TestUserCredentials>();
-                        }
-                    }
                 }
 
-                if(null == testUser.CurrentOrganization)
+                var result = await _orgManager.QueryOrganizationHasUserAsync(TestUserSeed.Org1.Id, TestUserSeed.User.Id, TestUserSeed.Org1, user);
+                if (!result)
+                {
+                    var addUserToOrgresult = await _orgManager.AddUserToOrgAsync(testUser, TestUserSeed.Org1, user);
+                    if (!addUserToOrgresult.Successful)
+                    {
+                        _adminLogger.AddError(this.Tag(), $"Could not add to org: {addUserToOrgresult.ErrorMessage}");
+                        return addUserToOrgresult.ToInvokeResult<TestUserCredentials>();
+                    }
+
+                    _adminLogger.Trace($"{this.Tag()} Use Should belong to an Org - Added to Org {TestUserSeed.TEST_ORG_NS1}");
+                }
+
+                if (null == testUser.CurrentOrganization)
                 {
                     var userOrg = await _orgManager.GetOrganizationAsync(TestUserSeed.Org1.Id, org, user);
                     testUser.CurrentOrganization = userOrg.CreateSummary();
                 }
 
+                if (!testUser.Organizations.Any(arg => org.Id == TestUserSeed.Org1.Id))
+                    testUser.Organizations.Add(EntityHeader.Create(TestUserSeed.Org1.Id, TestUserSeed.Org1.Text));
             }
-
-            await AuthorizeAsync(testUser, AuthorizeResult.AuthorizeActions.Update, user, org);
-            await _appUserRepo.UpdateAsync(testUser);
-
+            
             if (preconditions.BelongsToOrg.Value == SetCondition.NotSet)
             {
                 _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- Should we remove user from org?");
 
-                testUser.OwnerOrganization = null;
+
+                _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- Cleared");
+
+                var hasAccess = await _orgManager.QueryOrganizationHasUserAsync(TestUserSeed.Org1.Id, TestUserSeed.User.Id, org, user);
+                if (hasAccess)
+                {
+                    var removeUserResult = await _orgManager.RemoveUserFromOrganizationAsync(TestUserSeed.Org1.Id, TestUserSeed.User.Id, TestUserSeed.Org1, user);
+                    if (!removeUserResult.Successful)
+                    {
+                        _adminLogger.AddError(this.Tag(), $"Could not remove user from org: {removeUserResult.ErrorMessage}");
+                        return removeUserResult.ToInvokeResult<TestUserCredentials>();
+                    }
+                    _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- they did, now they don't.");
+                }
+                else
+                    _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- they didn't have access, nothing to do?");
+
+                testUser.CurrentOrganization = null;
 
                 if (testUser.Organizations.Any())
                 {
@@ -271,31 +279,14 @@ namespace LagoVista.UserAdmin.Managers
                     testUser.IsOrgAdmin = false;
                     testUser.OwnerOrganization = null;
                 }
-
-                _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- Cleared");
-
-                var hasAccess = await _orgManager.QueryOrganizationHasUserAsync(TestUserSeed.Org1.Id, TestUserSeed.User.Id, org, user);   
-                if(hasAccess)
-                {
-                    var removeUserResult = await _orgManager.RemoveUserFromOrganizationAsync(TestUserSeed.Org1.Id, TestUserSeed.User.Id, org, user);
-                    if (!removeUserResult.Successful)
-                    {
-                        _adminLogger.AddError(this.Tag(), $"Could not remove user from org: {removeUserResult.ErrorMessage}");
-                        return removeUserResult.ToInvokeResult<TestUserCredentials>();
-                    }
-
-                    _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- they did, now they don't.");
-                }
-                else
-                    _adminLogger.Trace($"{this.Tag()} Use should not belong to an org -- they didn't have access, nothing to do?");
             }
 
 
             var userCredentials = new TestUserCredentials();
 
-            if(preconditions.HasPasskey.Value == SetCondition.Set)
+            if (preconditions.HasPasskey.Value == SetCondition.Set)
             {
-                userCredentials.PasskeyCredentialsId= "0Mzo4bIZX4GyggZOQGvRx3WWZrMXiLPsqPf625kAz44=";
+                userCredentials.PasskeyCredentialsId = "0Mzo4bIZX4GyggZOQGvRx3WWZrMXiLPsqPf625kAz44=";
             }
 
             if (preconditions.IsUserLoggedIn.Value == SetCondition.Set)
@@ -322,8 +313,20 @@ namespace LagoVista.UserAdmin.Managers
                 _adminLogger.Trace($"{this.Tag()} Set PreloginLink {mlResponse.Result.Substring(0, 5)}*************** on userCredentials.");
             }
 
+            if (preconditions.GenerateConfirmEmail.Value == SetCondition.Set)
+            {
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(testUser);
+                userCredentials.UserId = testUser.Id;
+                userCredentials.EmailConfirmationToken = token;
+                testUser.VerifyEmailSentTimeStamp = timeStamp;
+                _adminLogger.Trace($"{this.Tag()} Set EmailConfirmationToken {token.Substring(0, 5)}*************** on userCredentials.");
+            }
+            else
+            {
+                testUser.VerifyEmailSentTimeStamp = null;
+            }
 
-            if(preconditions.SendMagicLink.Value == SetCondition.Set)
+            if (preconditions.SendMagicLink.Value == SetCondition.Set)
             {
                 var mlResponse = await _magicLinkManager.RequestSignInLinkAsyncForTesting(new MagicLinkRequest()
                 {
@@ -336,12 +339,12 @@ namespace LagoVista.UserAdmin.Managers
                     UserAgent = "UnitTest"
                 });
 
-                if(!mlResponse.Successful)
+                if (!mlResponse.Successful)
                 {
                     _adminLogger.AddError(this.Tag(), $"Failed to send magic link: {mlResponse.ErrorMessage}");
-                    throw new Exception($"Failed to send magic link: {mlResponse.ErrorMessage}");    
+                    throw new Exception($"Failed to send magic link: {mlResponse.ErrorMessage}");
                 }
-                
+
                 userCredentials.MagicLinkToken = mlResponse.Result;
 
                 _adminLogger.Trace($"{this.Tag()} Set MagicLinkToken {mlResponse.Result.Substring(0, 5)}*************** on userCredentials.");
@@ -351,6 +354,10 @@ namespace LagoVista.UserAdmin.Managers
             {
                 await SetTestUserCredentials(org, user, userCredentials);
             }
+
+            _adminLogger.Trace($"{this.Tag()} Updated user with preconditions.");   
+            await AuthorizeAsync(testUser, AuthorizeResult.AuthorizeActions.Update, user, org);
+            await _appUserRepo.UpdateAsync(testUser);
 
             return InvokeResult<TestUserCredentials>.Create(userCredentials);
         }
@@ -480,7 +487,7 @@ namespace LagoVista.UserAdmin.Managers
             {
                 scenario.LastStatus = "Success";
             }
-            else 
+            else
                 scenario.LastStatus = run.Status.ToString();
 
             scenario.LastUpdatedDate = now;

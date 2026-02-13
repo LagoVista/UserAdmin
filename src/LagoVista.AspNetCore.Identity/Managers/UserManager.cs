@@ -53,10 +53,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public async Task<InvokeResult> UpdateAsync(AppUser appUser)
         {
-            var org = appUser.CurrentOrganization == null ? EntityHeader.Create(Guid.Empty.ToId(), "????") : appUser.CurrentOrganization.ToEntityHeader();
-
-            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, org, appUser.ToEntityHeader());
-
             return (await _userManager.UpdateAsync(appUser)).ToInvokeResult();
         }
 

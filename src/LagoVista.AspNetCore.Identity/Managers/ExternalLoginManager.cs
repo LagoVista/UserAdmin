@@ -267,8 +267,8 @@ namespace LagoVista.UserAdmin.Managers
             else if (!appUser.EmailConfirmed)
             {
                 _adminLogger.Trace($"{this.Tag} - Web - Email Not Confirmed");
-                await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, oauthProvider: provider, extras: $"Web - Email Not Confirmed", redirectUri: $"{CommonLinks.ConfirmEmail}?email={appUser.Email}");
-                return InvokeResult<string>.Create(NormalizeReturnUrl($"{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}"));
+                await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, oauthProvider: provider, extras: $"Web - Email Not Confirmed", redirectUri: $"{CommonLinks.ConfirmEmailSent}?email={appUser.Email}");
+                return InvokeResult<string>.Create(NormalizeReturnUrl($"{CommonLinks.ConfirmEmailSent}?email={appUser.Email.ToLower()}"));
             }
             else if (appUser.CurrentOrganization == null)
             {
@@ -347,7 +347,7 @@ namespace LagoVista.UserAdmin.Managers
                 await _authLogManager.AddAsync(AuthLogTypes.OAuthAppendUserLogin, appUser.Id, appUser.Name, inviteId: inviteId, oauthProvier: externalLoginInfo.Provider.Text, extras: $"found by email, associating oauth account with email {externalLoginInfo.Email} and logging in.");
 
                 if (!appUser.EmailConfirmed)
-                    returnUrl = $"{CommonLinks.ConfirmEmail}?email={externalLoginInfo.Email.ToLower()}";
+                    returnUrl = $"{CommonLinks.ConfirmEmailSent}?email={externalLoginInfo.Email.ToLower()}";
                 else if (appUser.CurrentOrganization == null)
                     returnUrl = CommonLinks.CreateDefaultOrg;
                 else if (!String.IsNullOrEmpty(appUser.CurrentOrganization.HomePage) && appUser.EmailConfirmed)

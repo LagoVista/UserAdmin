@@ -45,6 +45,8 @@ namespace LagoVista.UserAdmin.Managers
 
         Task<ListResponse<UserInfoSummary>> GetDeviceUsersAsync(string deviceRepoId, EntityHeader org, EntityHeader user, ListRequest listRequest);
 
+        Task<InvokeResult<AppUser>> UpdateBasicInformationAsync(BasicUserInfo basicInfo, EntityHeader user, EntityHeader org);
+
         Task<AppUser> AssociateExternalLoginAsync(string userId, ExternalLogin external, EntityHeader user);
         Task<InvokeResult<AppUser>> RemoveExternalLoginAsync(string userId, string externalLoginId, EntityHeader user);
         Task<AppUser> GetUserByExternalLoginAsync(ExternalLoginTypes loginType, string id);
@@ -71,9 +73,10 @@ namespace LagoVista.UserAdmin.Managers
         Task<InvokeResult<string>> GetUserSvgInitialsAsB64PngAsync(EntityHeader user);
         Task<InvokeResult> ClearUserSvgInitialsAsync(EntityHeader user);
 
+        Task<InvokeResult<AppUser>> ValidateEmailTokenAsync(string userId, string token);
+
         Task<InvokeResult> ClearEndUserContactAsCustomerAdminAsync(string contactAppUserId, EntityHeader customer, EntityHeader org, EntityHeader user);
         Task<InvokeResult> SetEndUserContactAsCustomerAdminAsync(string contactAppUserId, EntityHeader customer, EntityHeader org, EntityHeader user);
-
         Task<ListResponse<UserInfoSummary>> SearchUsersAsync(string eamil, string firstName, string lastName, EntityHeader org, EntityHeader user, ListRequest listRequest);
     }
 }

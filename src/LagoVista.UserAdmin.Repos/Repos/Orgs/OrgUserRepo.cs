@@ -50,14 +50,12 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             return GetByFilterAsync(FilterOptions.Create(nameof(OrgUser.UserId), FilterOptions.Operators.Equals, userId));
         }
 
-
-
         public async Task<IEnumerable<OrgUser>> GetUsersForOrgAsync(string orgId)
         {
             var json = await _cacheProvider.GetAsync(GetCacheKey(orgId));
             if(String.IsNullOrEmpty(json))
             {
-                var users = await GetByParitionIdAsync(orgId);
+                var users = await GetByPartitionIdAsync(orgId);
                 await _cacheProvider.AddAsync(GetCacheKey(orgId), JsonConvert.SerializeObject(users));
                 return users;
             }
@@ -85,7 +83,13 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 
         public async Task<bool> IsUserOrgAdminAsync(string orgId, string userId)
         {
+            if(string.IsNullOrEmpty(orgId)) throw new ArgumentNullException(nameof(orgId));
+            if(string.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
+
             var orgUser = await GetOrgUserAsync(orgId, userId);
+            if(orgUser == null)
+                throw new ArgumentNullException(nameof(orgUser), $"OrgUser not found for OrgId: {orgId}, UserId: {userId}");
+
             return orgUser.IsOrgAdmin;
         }
 

@@ -62,7 +62,5 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> DeleteEmailListSendAsync(string listId, EntityHeader org, EntityHeader user);
         Task<InvokeResult<EmailImportStatus>> GetImportJobStatusAsync(string jobId, EntityHeader org, EntityHeader user);
         List<string> GetRequiredImportFields();
-
-        bool IsValidEmail(string email);
     }
 }

@@ -2,22 +2,25 @@
 // ContentHash: 1bbddc28712320979b2f0c638f45c696c6bbd9deff3ad8eaf79e7ebe9060ec54
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.ML;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.DTOs;
+using LagoVista.UserAdmin.Models.Resources;
+using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Resources;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LagoVista.Core;
-using LagoVista.UserAdmin.Models.Resources;
-using LagoVista.UserAdmin.Interfaces.Repos.Users;
-using LagoVista.Core.Models.ML;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -86,7 +89,7 @@ namespace LagoVista.UserAdmin.Managers
             return environment;
         }
 
-        public async Task<InvokeResult<string>> SendConfirmationEmailAsync(string userId, string confirmSubject = "", string confirmBody = "", string appName = "", string logoFile= "")
+        public async Task<InvokeResult<string>> SendConfirmationEmailAsync(string userId, string confirmSubject = "", string confirmBody = "", string appName = "", string logoFile = "")
         {
             var appUser = await _userManager.FindByIdAsync(userId);
             if (appUser == null)
@@ -95,7 +98,14 @@ namespace LagoVista.UserAdmin.Managers
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), "Could not get current user.");
                 return InvokeResult<string>.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
+                  
+            await _userManager.UpdateAsync(appUser);
 
+            return await SendConfirmationEmailAsync(appUser, confirmSubject, confirmBody, appName, logoFile);
+        }
+
+        public async Task<InvokeResult<string>> SendConfirmationEmailAsync(AppUser appUser, string confirmSubject = "", string confirmBody = "", string appName = "", string logoFile= "")
+        {
             var userHeader = appUser.ToEntityHeader();
 
             try
@@ -125,18 +135,21 @@ namespace LagoVista.UserAdmin.Managers
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendEmailConfirmSuccess, userId: userHeader.Id, userName: userHeader.Text);
                 if (result.Successful)
                 {
+                    appUser.VerifyEmailSentTimeStamp = DateTime.UtcNow.ToJSONString();
                     _adminLogger.Trace($"{this.Tag()} Success Sending Verification Email",
                         new KeyValuePair<string, string>("callbackLink", callbackUrl),
-                        new KeyValuePair<string, string>("token", token),
+                        new KeyValuePair<string, string>("token", token.Substring(5) + "************"),
                         new KeyValuePair<string, string>("toUserId", appUser.Id),
                         new KeyValuePair<string, string>("toEmail", appUser.Email));
 
+                    await _signInManager.RefreshUserLoginAsync(appUser);
                     return InvokeResult<string>.Create(_appConfig.Environment == Environments.Development ||
                         _appConfig.Environment == Environments.Local ||
                         _appConfig.Environment == Environments.LocalDevelopment ? encodedToken : String.Empty);
                 }
                 else
                     return InvokeResult<string>.FromInvokeResult(result);
+
             }
             catch (Exception ex)
             {

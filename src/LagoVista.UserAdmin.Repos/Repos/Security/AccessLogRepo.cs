@@ -84,7 +84,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
 
         public Task<IEnumerable<AccessLog>> GetForResourceAsync(string resourceId)
         {
-            return GetByParitionIdAsync(resourceId);
+            return GetByPartitionIdAsync(resourceId);
         }
 
         public Task<IEnumerable<AccessLog>> GetForResourceAsync(string resourceId, string startTimeStamp, string endTimeStamp)

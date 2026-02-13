@@ -38,10 +38,11 @@ namespace LagoVista.AspNetCore.Identity.Managers
         private readonly SignInManager<AppUser> _signinManager;
         private readonly IDefaultRoleList _defaultRoleList;
         private readonly IOrganizationRepo _organizationRepo;
+        private readonly IOrgUserRepo _orgUserRepo;
         private readonly IUserFavoritesManager _userFavoritesManager;
         private readonly IMostRecentlyUsedManager _mostRecentlyUsedManager;
         private readonly IAuthenticationLogManager _authLogManager;
-        private readonly IBackgroundServiceTaskQueue _bgServiceQueue;
+        private readonly IUserRedirectServices _userRedirectService;
         private readonly IAppConfig _appConfig;
 
         private static readonly Histogram UserSignInMetrics = Metrics.CreateHistogram("nuviot_user_sign_in", "Use Sign In Metrics.",
@@ -56,8 +57,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public static readonly Counter UserLoginSuccess = Metrics.CreateCounter("nuviot_login_success", "Number of user login successes");
         public static readonly Counter UserLoginFailures = Metrics.CreateCounter("nuviot_login_failures", "Number of user login failures");
 
-        public SignInManager(IAdminLogger adminLogger, IDefaultRoleList defaultRoleList, IUserRoleManager roleManager, IDependencyManager depManager,
-                            IUserFavoritesManager userFavoritesManager, IMostRecentlyUsedManager mostRecentlyUsedManager, IAppUserRepo appUserRepo, IBackgroundServiceTaskQueue bgServiceQueue,
+        public SignInManager(IAdminLogger adminLogger, IDefaultRoleList defaultRoleList, IUserRoleManager roleManager, IDependencyManager depManager, IOrgUserRepo orgUserRepo,
+                            IUserFavoritesManager userFavoritesManager, IMostRecentlyUsedManager mostRecentlyUsedManager, IAppUserRepo appUserRepo, IUserRedirectServices userRedirectService,
                             IAuthenticationLogManager authenticationLogManager, ISecurity security, IAppConfig appConfig, IUserManager userManager, IOrganizationManager orgManager, IOrganizationRepo orgRepo,
                              SignInManager<AppUser> signInManager)
             : base(adminLogger, appConfig, depManager, security)
@@ -73,9 +74,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
             _userFavoritesManager = userFavoritesManager;
             _mostRecentlyUsedManager = mostRecentlyUsedManager;
             _authLogManager = authenticationLogManager;
-            _bgServiceQueue = bgServiceQueue;
+            _userRedirectService = userRedirectService;
             _appConfig = appConfig;
-
+            _orgUserRepo = orgUserRepo;
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[SignInManager__Constructor]", "Created Sign-in manager");
         }
 
@@ -86,12 +87,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public async Task RefreshUserLoginAsync(AppUser user)
         {
-            var appUser = await _userManager.FindByIdAsync(user.Id);
-            await _signinManager.SignInAsync(appUser, true);
+            await _signinManager.SignInAsync(user, true);
         }
 
         public async Task<InvokeResult<UserLoginResponse>> CompleteSignInToAppAsync(AppUser appUser, Stopwatch sw = null, string inviteId = "", string orgId = "")
         {
+            _adminLogger.Trace($"{this.Tag()} - CompleteSignInToAppAsync for user {appUser.UserName} with inviteId {inviteId ?? "-"} and orgId {orgId ?? "-"}");
+
             var response = new UserLoginResponse();
             var timings = new List<ResultTiming>();
 
@@ -128,19 +130,33 @@ namespace LagoVista.AspNetCore.Identity.Managers
             // may already exist in, likely will fail...but we'll deal with that later on.
             if (appUser.CurrentOrganization == null)
             {
+                _adminLogger.Trace($"{this.Tag()} - App does not have a current user.");
+
                 var firstExisitng = appUser.Organizations.FirstOrDefault();
                 if (firstExisitng != null)
                 {
-                    await _orgManager.ChangeOrgsAsync(firstExisitng.Id, firstExisitng, appUser);
-                }
-                else if (String.IsNullOrEmpty(response.RedirectPage))
-                {
-
+                    _adminLogger.Trace($"{this.Tag()} - does have access to {firstExisitng.Text} - attempt to switch to that org.");
+                    var switchOrgResult = await _orgManager.ChangeOrgsAsync(firstExisitng.Id, appUser);
+                    if(switchOrgResult.Successful)
+                        _adminLogger.Trace($"{this.Tag()} - set access for user {firstExisitng.Text} - switched to that org.");
+                    else
+                    {
+                        appUser.Organizations.Clear();
+                        appUser.CurrentOrganizationRoles.Clear();
+                        _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, this.Tag(), "Failed to switch to first existing org", new KeyValuePair<string, string>("orgId", firstExisitng.Id), 
+                            new KeyValuePair<string, string>("userId", appUser.Id), new KeyValuePair<string, string>("error", switchOrgResult.ErrorMessage));
+                    }
                 }
             }
-
-            if (appUser.CurrentOrganization != null)
+            else
             {
+                var userHasOg = await _orgUserRepo.QueryOrgHasUserAsync(appUser.CurrentOrganization.Id, appUser.Id);
+                if (!userHasOg)
+                {
+                    _adminLogger.AddError(this.Tag(),$"User had a current organization set, but they do not have access to that organization Org: {appUser.CurrentOrganization.Text} - {appUser.Email}/{appUser.UserName}");
+                    return InvokeResult<UserLoginResponse>.FromError($"User does have org attempting to log in to that organization, please contact a system administrator and provide them with the following id: cid={appUser.CurrentOrganization.Id}, uid={appUser.Id}.");
+                }
+
                 var org = await _organizationRepo.GetOrganizationAsync(appUser.CurrentOrganization.Id);
                 response.AddAuthMetric("Loaded Organization");
                 timings.Add(new ResultTiming() { Key = $"Loaded organiation", Ms = sw.Elapsed.TotalMilliseconds });
@@ -179,6 +195,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
                 sw.Restart();
 
+      
                 var isOrgAdmin = await _orgManager.IsUserOrgAdminAsync(appUser.CurrentOrganization.Id, appUser.Id);
                 response.AddAuthMetric("Check if User is Admin");
                 if (isOrgAdmin != appUser.IsOrgAdmin)
@@ -188,49 +205,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
                 timings.Add(new ResultTiming() { Key = $"Org admin check", Ms = sw.Elapsed.TotalMilliseconds });
                 sw.Restart();
-
-
-                if (String.IsNullOrEmpty(response.RedirectPage))
-                {
-                    if (!String.IsNullOrEmpty(org.HomePage))
-                    {
-                        response.RedirectPage = org.HomePage;
-                    }
-                    else if (appUser.ShowWelcome)
-                    {
-                        response.RedirectPage = CommonLinks.HomeWelcome;
-                    }
-                    else
-                    {
-                        response.RedirectPage = CommonLinks.Home;
-                    }
-                }
-
+             
                 appUser.CurrentOrganization = org.CreateSummary();
-            }
-            else
-            {
-                if (!appUser.EmailConfirmed)
-                    response.RedirectPage = $"/{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}";
-                else if (appUser.CurrentOrganization == null)
-                    response.RedirectPage = CommonLinks.CreateDefaultOrg;
-            }
-
-            if (String.IsNullOrEmpty(response.RedirectPage))
-            {
-                if (!appUser.EmailConfirmed)
-                    response.RedirectPage = $"/{CommonLinks.ConfirmEmail}?email={appUser.Email.ToLower()}";
-                else if (appUser.CurrentOrganization == null)
-                    response.RedirectPage = CommonLinks.CreateDefaultOrg;
             }
 
             appUser.LastLogin = DateTime.UtcNow.ToJSONString();
+            await _appUserRepo.UpdateAsync(appUser);
             // we can bypass the manager here, we are updating the current user if they are logged in, should not require any security.
-
-            await _bgServiceQueue.QueueBackgroundWorkItemAsync(ct =>
-            {
-                return _appUserRepo.UpdateAsync(appUser);
-            });
 
             timings.Add(new ResultTiming() { Key = $"User Updated", Ms = sw.Elapsed.TotalMilliseconds });
             sw.Restart();
@@ -260,6 +241,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
             response.User = appUser;
 
             await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthSuccess, appUser, inviteId: inviteId, redirectUri: response.RedirectPage);
+
+            var redirectResult = await _userRedirectService.IdentityDefaultRedirectAsync(appUser); 
+            if(!redirectResult.Successful)
+            {
+                response.RedirectPage = redirectResult.RedirectURL;
+            }
 
             var result = InvokeResult<UserLoginResponse>.Create(response);
             result.Timings.AddRange(timings);

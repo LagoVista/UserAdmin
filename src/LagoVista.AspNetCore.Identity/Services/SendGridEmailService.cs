@@ -68,7 +68,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             _organizationRepo = organizationRepo;
         }
 
-        public bool IsValidEmail(string email)
+        public static bool IsValidEmail(string email)
         {
             var trimmedEmail = email.Trim();
 

@@ -312,6 +312,8 @@ namespace LagoVista.UserAdmin.Models.Users
         public string PaymentAccount2Secureid { get; set; }
         public string RoutingAccount2SecureId { get; set; }
 
+        public string VerifyEmailSentTimeStamp { get; set; }
+
         public string[] PendingInviteIds {get; set;} = new string[] { };
 
         public override String Name
@@ -347,6 +349,9 @@ namespace LagoVista.UserAdmin.Models.Users
         public int ViewedSystemNotificationIndex { get; set; }
 
         public bool IsPreviewUser { get; set; }
+
+        public string PendingRedirect { get; set; }
+        public EntityHeader RedirectOrg { get; set; }
 
         public int AccessFailedCount { get; set; }
         public string LockoutDate { get; set; }

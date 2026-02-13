@@ -35,7 +35,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Users
 
         public async Task<IEnumerable<ManagedAssetSummary>> GetManagedAssetsAsync(string assetSetId)
         {
-            var managedAssets = await GetByParitionIdAsync(assetSetId);
+            var managedAssets = await GetByPartitionIdAsync(assetSetId);
             return from managedAsset in managedAssets
                    select managedAsset.CreateSummary();
         }

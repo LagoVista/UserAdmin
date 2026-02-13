@@ -33,7 +33,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Apps
 
         public Task<IEnumerable<AppInstance>> GetForUserAsync(string userId)
         {
-            return GetByParitionIdAsync(userId);
+            return GetByPartitionIdAsync(userId);
         }
 
         public Task UpdateAppInstanceAsync(AppInstance appInstance)

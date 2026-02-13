@@ -28,12 +28,8 @@ using System.Text.RegularExpressions;
 using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Models.Auth;
-using RingCentral;
-using System.Security.Cryptography;
 using Newtonsoft.Json;
 using LagoVista.Core.Models.Geo;
-using LagoVista.Core.Authentication.Models;
-using NLog.Targets.Wrappers;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -262,6 +258,41 @@ namespace LagoVista.UserAdmin.Managers
             await _authLogMgr.AddAsync(AuthLogTypes.ChangeOrg, user.Id, user.Text, newOrg.Id, newOrg.Name, extras: $"old orgid: {org.Id}, new orgid: {org.Text}");
 
             return InvokeResult<AppUser>.Create(appUser);
+        }
+
+        public async Task<InvokeResult> ChangeOrgsAsync(string newOrgId, AppUser appUser)
+        {
+            var previousOrg = appUser.CurrentOrganization?.Id ?? "-none-";
+
+            if (newOrgId == appUser.CurrentOrganization?.Id)
+            {
+                return InvokeResult.FromErrors(UserAdminErrorCodes.AuthAlreadyInOrg.ToErrorMessage());
+            }
+
+            var hasAccess = await _orgUserRepo.QueryOrgHasUserAsync(newOrgId, appUser.Id);
+            if (!hasAccess)
+            {
+                return InvokeResult.FromErrors(UserAdminErrorCodes.AuthOrgNotAuthorized.ToErrorMessage());
+            }
+
+            var newOrg = await _organizationRepo.GetOrganizationAsync(newOrgId);
+            appUser.CurrentOrganization = newOrg.CreateSummary();
+            appUser.IsOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(newOrgId, appUser.Id);
+            appUser.IsAppBuilder = await _orgUserRepo.IsAppBuilderAsync(newOrgId, appUser.Id);
+            appUser.CurrentOrganizationRoles = new List<EntityHeader>();
+
+            var orgRoles = await _userRoleRepo.GetRolesForUserAsync(appUser.Id, newOrgId);
+            appUser.CurrentOrganizationRoles = new List<EntityHeader>();
+            foreach (var orgRole in orgRoles)
+            {
+                appUser.CurrentOrganizationRoles.Add(orgRole.ToEntityHeader());
+            }
+
+            await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, appUser.ToEntityHeader(), newOrg.ToEntityHeader(), "switchOrgs");
+            await _appUserRepo.UpdateAsync(appUser);
+            await _authLogMgr.AddAsync(AuthLogTypes.ChangeOrg, appUser.Id, appUser.Name, newOrg.Id, newOrg.Name, extras: $"old orgid: {previousOrg}, new orgid: {newOrg.Name}");
+
+            return InvokeResult.Success;
         }
 
         /// <summary>
@@ -692,23 +723,19 @@ namespace LagoVista.UserAdmin.Managers
         #endregion
 
         #region Organization User Methods
-        public async Task<InvokeResult> AddUserToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy, bool isOrgAdmin = false, bool isAppBuilder = false)
+        public async Task<InvokeResult> AddUserToOrgAsync(AppUser appUser, EntityHeader org, EntityHeader addedBy, bool isOrgAdmin = false, bool isAppBuilder = false)
         {
             var timeStamp = DateTime.UtcNow.ToJSONString();
+            await AuthorizeOrgAccessAsync(addedBy, org, typeof(OrgUser), Actions.Create, new SecurityHelper() { OrgId = org.Id, UserId = appUser.Id });
 
-            await AuthorizeOrgAccessAsync(addedBy, org, typeof(OrgUser), Actions.Create, new SecurityHelper() { OrgId = org.Id, UserId = userToAdd.Id });
-
-            var result = InvokeResult.Success;
-            var appUser = await _appUserRepo.FindByIdAsync(userToAdd.Id);
-
-            if (await _orgUserRepo.QueryOrgHasUserAsync(org.Id, userToAdd.Id))
+            if (await _orgUserRepo.QueryOrgHasUserAsync(org.Id, appUser.Id))
             {
                 var couldntAddResult = new InvokeResult();
                 couldntAddResult.Errors.Add(new ErrorMessage(UserAdminResources.OrganizationUser_UserExists.Replace(Tokens.USERS_FULL_NAME, appUser.Name).Replace(Tokens.ORG_NAME, org.Text)));
                 return couldntAddResult;
             }
 
-            var user = new OrgUser(org.Id, userToAdd.Id)
+            var user = new OrgUser(org.Id, appUser.Id)
             {
                 Email = appUser.Email,
                 OrganizationName = org.Text,
@@ -725,10 +752,9 @@ namespace LagoVista.UserAdmin.Managers
             user.LastUpdatedById = appUser.Id;
             user.LastUpdatedDate = timeStamp;
 
-            await AuthorizeOrgAccessAsync(addedBy, org, typeof(OrgUser), Actions.Create, user);
             await _orgUserRepo.AddOrgUserAsync(user);
 
-            await _authLogMgr.AddAsync(AuthLogTypes.AddUserToOrg, userToAdd.Id, userToAdd.Text, org.Id, org.Text, extras: $"added by id: {addedBy.Id}, name: {addedBy.Text}");
+            await _authLogMgr.AddAsync(AuthLogTypes.AddUserToOrg, appUser.Id, appUser.Name, org.Id, org.Text, extras: $"added by id: {addedBy.Id}, name: {addedBy.Text}");
 
             if (null == appUser.CurrentOrganization)
             {
@@ -737,8 +763,20 @@ namespace LagoVista.UserAdmin.Managers
                 appUser.LastUpdatedBy = addedBy;
                 appUser.LastUpdatedDate = timeStamp;
                 appUser.AddChange(nameof(AppUser.CurrentOrganization), "none", appUser.CurrentOrganization.Text);
-                await _appUserRepo.UpdateAsync(appUser);
             }
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> AddUserToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy, bool isOrgAdmin = false, bool isAppBuilder = false)
+        {
+            var timeStamp = DateTime.UtcNow.ToJSONString();
+            await AuthorizeOrgAccessAsync(addedBy, org, typeof(OrgUser), Actions.Create, new SecurityHelper() { OrgId = org.Id, UserId = userToAdd.Id });
+
+            var appUser = await _appUserRepo.FindByIdAsync(userToAdd.Id);
+            var result = await AddUserToOrgAsync(appUser, org, addedBy, isOrgAdmin, isAppBuilder);
+            if(result.Successful)
+                await _appUserRepo.UpdateAsync(appUser);
 
             return result;
         }
@@ -1027,22 +1065,35 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> RemoveUserFromOrganizationAsync(string orgId, string userId, EntityHeader org, EntityHeader user)
         {
+            var appUser = await _appUserRepo.FindByIdAsync(userId);
+            var result = await RemoveUserFromOrganizationAsync(orgId, appUser, org, user);
+            if(result.Successful) 
+                await _appUserRepo.UpdateAsync(appUser);
+       
+            return result;
+        }
+
+        public async Task<InvokeResult> RemoveUserFromOrganizationAsync(string orgId, AppUser appUser, EntityHeader org, EntityHeader user)
+        {
             if (org.Id != orgId)
                 return InvokeResult.FromError("Org Mismatch, can only remove users from current organization.");
 
-            await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Delete, new SecurityHelper { OrgId = orgId, UserId = userId });
-
-            var appUser = await _appUserRepo.FindByIdAsync(userId);
+            await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Delete, new SecurityHelper { OrgId = orgId, UserId = appUser.Id });
             var existingOrg = appUser.Organizations.FirstOrDefault(org => org.Id == orgId);
-            if(existingOrg != null)
+            if (existingOrg != null)
             {
                 appUser.Organizations.Remove(existingOrg);
-                await _appUserRepo.UpdateAsync(appUser);
             }
-            
-            await _orgUserRepo.RemoveUserFromOrgAsync(orgId, userId, user);
-            await _authLogMgr.AddAsync(AuthLogTypes.RemoveUserFromOrg, appUser.ToEntityHeader(), org, $"Remove user [{appUser.Name}] from the [{org.Text}] by user [{user.Text}]");
 
+            if(appUser.CurrentOrganization != null && appUser.CurrentOrganization.Id == orgId)
+            {
+                appUser.CurrentOrganization = null;
+                appUser.CurrentOrganizationRoles.Clear();
+                appUser.IsOrgAdmin = false;
+            }
+
+            await _orgUserRepo.RemoveUserFromOrgAsync(orgId, appUser.Id, user);
+            await _authLogMgr.AddAsync(AuthLogTypes.RemoveUserFromOrg, appUser.ToEntityHeader(), org, $"Remove user [{appUser.Name}] from the [{org.Text}] by user [{user.Text}]");
             return InvokeResult.Success;
 
         }

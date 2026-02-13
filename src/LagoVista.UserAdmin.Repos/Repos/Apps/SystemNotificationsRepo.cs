@@ -38,8 +38,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Apps
         public async Task<IEnumerable<SystemNotification>> GetSystemAndPublicNotifications(string orgId)
         {
             var filteredItems = new List<FilterOptions>();
-            var publicResults = await GetByParitionIdAsync("public");
-            var orgReults = await GetByParitionIdAsync(orgId);
+            var publicResults = await GetByPartitionIdAsync("public");
+            var orgReults = await GetByPartitionIdAsync(orgId);
 
             var results = new List<SystemNotification>();
             results.AddRange(publicResults);

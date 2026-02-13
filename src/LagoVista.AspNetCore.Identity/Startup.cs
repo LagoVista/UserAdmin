@@ -51,6 +51,8 @@ namespace LagoVista.AspNetCore.Identity
             services.AddSingleton<IPendingIdentityManager, PendingIdentityManager>();
             services.AddTransient<IPasswordHasher<PendingIdentity>, PasswordHasher<PendingIdentity>>();
 
+            services.AddSingleton<IUserRedirectServices, UserRedirectServices>();
+
             IdentityModelEventSource.ShowPII = true;
 
         }

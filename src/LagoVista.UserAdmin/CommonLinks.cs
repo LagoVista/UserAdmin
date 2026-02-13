@@ -20,7 +20,8 @@ namespace LagoVista.UserAdmin
         public const string CompleteUserRegistration = "/auth/user/register";
         public const string CreateDefaultOrg = "/auth/org/create";
 
-        public const string ConfirmEmail = "/auth/user/email/confirm/sent";
+        public const string ConfirmEmail = "/auth/user/email/confirm";
+        public const string ConfirmEmailSent = "/auth/user/email/confirm/sent";
         public const string EmailConfirmed = "/auth/user/email/confirmed";
         public const string CouldNotConfirmEmail = "/auth/user/email/couldnotconfirm";
 
@@ -28,6 +29,7 @@ namespace LagoVista.UserAdmin
 
         public const string ForgotPasswordSent = "/auth/password/forgot/sent";
 
+        public const string Invitations = "/auth/invitations";
         public const string AcceptInviteId = "/auth/invite/accept/{inviteid}";
         public const string InviteAccepted = "/auth/invite/accepted";
         public const string InviteAcceptedFailed = "/auth/invite/failed";

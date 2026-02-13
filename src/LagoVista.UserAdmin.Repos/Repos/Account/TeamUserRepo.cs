@@ -35,7 +35,7 @@ namespace LagoVista.UserAdmin.Repos.Users
 
         public async Task<IEnumerable<TeamUserSummary>> GetTeamMembersAsync(string teamId)
         {
-            var members = await GetByParitionIdAsync(teamId);
+            var members = await GetByPartitionIdAsync(teamId);
             return from member in members
                    select member.CreateSummary();
         }

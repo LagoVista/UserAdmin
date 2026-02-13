@@ -24,6 +24,7 @@ using System.IO;
 using Svg;
 using System.Drawing.Imaging;
 using RingCentral;
+using LagoVista.UserAdmin.Interfaces;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -43,9 +44,10 @@ namespace LagoVista.UserAdmin.Managers
         private readonly ISecureStorage _secureStorage;
         private readonly IAuthenticationLogManager _authLogMgr;
         private readonly IBackgroundServiceTaskQueue _backgroundTaskService;
+        private readonly IUserRedirectServices _userRedirectServices;
 
         public AppUserManager(IAppUserRepo appUserRepo, IUserRoleRepo userRoleRepo, IDependencyManager depManager, ISecurity security, IAdminLogger logger, IOrganizationManager orgManager, IOrgUserRepo orgUserRepo, IAppConfig appConfig, IUserVerficationManager userVerificationmanager,
-           IOrganizationRepo orgRepo, IAuthTokenManager authTokenManager, ISubscriptionManager subscriptionManager, IUserManager userManager, ISecureStorage secureStorage, IBackgroundServiceTaskQueue backgroundTaskService,
+           IOrganizationRepo orgRepo, IAuthTokenManager authTokenManager, ISubscriptionManager subscriptionManager, IUserManager userManager, ISecureStorage secureStorage, IBackgroundServiceTaskQueue backgroundTaskService, IUserRedirectServices userRedirectServices,
            IAuthenticationLogManager authLogMgr, ISignInManager signInManager, IAdminLogger adminLogger) : base(appUserRepo, userRoleRepo, depManager, security, logger, appConfig)
         {
             _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(authLogMgr));
@@ -61,6 +63,7 @@ namespace LagoVista.UserAdmin.Managers
             _userVerificationmanager = userVerificationmanager ?? throw new ArgumentNullException(nameof(userVerificationmanager));
             _subscriptionManager = subscriptionManager ?? throw new ArgumentNullException(nameof(subscriptionManager));
             _secureStorage = secureStorage ?? throw new ArgumentNullException(nameof(secureStorage));
+            _userRedirectServices = userRedirectServices ?? throw new ArgumentNullException(nameof(userRedirectServices));
             _backgroundTaskService = backgroundTaskService ?? throw new ArgumentNullException(nameof(backgroundTaskService));
         }
 
@@ -445,6 +448,94 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
+        public static bool IsValidEmail(string email)
+        {
+            var trimmedEmail = email.Trim();
+
+            if (trimmedEmail.EndsWith("."))
+            {
+                return false; // suggested by @TK-421
+            }
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == trimmedEmail;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<InvokeResult<AppUser>> UpdateBasicInformationAsync(BasicUserInfo basicInfo, EntityHeader org, EntityHeader user)
+        {
+            if(basicInfo == null) throw new ArgumentNullException(nameof(basicInfo));
+
+            var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+            if(appUser == null) return InvokeResult<AppUser>.FromError($"Could not find user with id: {user.Id}.");
+
+            if (!String.IsNullOrEmpty(basicInfo.Email) && appUser.Email.ToUpperInvariant() != basicInfo.Email.ToUpperInvariant())
+            {
+                var existinguser = await _appUserRepo.FindByEmailAsync(basicInfo.Email);
+                if(existinguser != null)
+                {
+                    return InvokeResult<AppUser>.FromError($"Email {basicInfo.Email} is already in use by another user.");
+                }
+                appUser.Email = basicInfo.Email.ToUpperInvariant();
+            }
+
+            if (!String.IsNullOrEmpty(basicInfo.FirstName)) appUser.FirstName = basicInfo.FirstName;
+            if (!String.IsNullOrEmpty(basicInfo.LastName)) appUser.LastName = basicInfo.LastName;
+            if(!string.IsNullOrEmpty(basicInfo.PhoneNumber)) appUser.PhoneNumber = basicInfo.PhoneNumber;
+
+            var errs = new List<ErrorMessage>();
+            if (String.IsNullOrEmpty(appUser.Email)) errs.Add(new ErrorMessage(nameof(appUser.Email), "Email is required."));
+            if (String.IsNullOrEmpty(appUser.FirstName)) errs.Add(new ErrorMessage(nameof(appUser.FirstName), "First Name is required."));
+            if (String.IsNullOrEmpty(appUser.LastName)) errs.Add(new ErrorMessage(nameof(appUser.LastName), "Last Name is required."));
+
+            if(!String.IsNullOrEmpty(appUser.Email) && !IsValidEmail(appUser.Email)) errs.Add(new ErrorMessage(nameof(appUser.Email), "Email must be in a valid format."));
+
+            var getLinkResult = await _userRedirectServices.IdentityDefaultRedirectAsync(appUser);
+            if(!getLinkResult.Successful)
+            {
+                return InvokeResult<AppUser>.FromInvokeResult(getLinkResult.ToInvokeResult());
+            }
+
+            _adminLogger.Trace($"{this.Tag()} - Updating basic information", basicInfo.FirstName.ToKVP("first"), basicInfo.LastName.ToKVP("last"), basicInfo.Email.ToKVP("email"), basicInfo.PhoneNumber.ToKVP("phone"));
+
+            await _appUserRepo.UpdateAsync(appUser);
+            await _signInManager.RefreshUserLoginAsync(appUser);
+            // Make sure we update after getting the link, as the link generation relies on the email being set correctly.
+
+            return InvokeResult<AppUser>.Create(appUser, getLinkResult.Result);
+        }
+
+        public async Task<InvokeResult<AppUser>> ValidateEmailTokenAsync(string userId, string token)
+        {
+            var appUser = await _appUserRepo.FindByIdAsync(userId);
+            if (appUser == null) return InvokeResult<AppUser>.FromError($"Could not find user with id: {userId}.");
+
+            var result = await _userManager.ConfirmEmailAsync(appUser, token);
+            if(!result.Successful)
+            { 
+                return InvokeResult<AppUser>.FromInvokeResult(result.ToInvokeResult());
+            }
+
+            appUser.EmailConfirmed = true;
+            appUser.VerifyEmailSentTimeStamp = null;
+            await _appUserRepo.UpdateAsync(appUser);
+
+            var getLinkResult = await _userRedirectServices.IdentityDefaultRedirectAsync(appUser);  
+            if(!getLinkResult.Successful)
+            {
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.EmailConfirmFailed, appUser, errors: $"Failed to get redirect link after confirming email for user with id: {userId}.");
+                return InvokeResult<AppUser>.FromInvokeResult(getLinkResult.ToInvokeResult());
+            }
+
+            await _signInManager.RefreshUserLoginAsync(appUser);
+            return InvokeResult<AppUser>.Create(appUser, getLinkResult.Result);
+        }
+
         public async Task<InvokeResult> UpdateUserAsync(UserInfo user, EntityHeader org, EntityHeader updatedByUser)
         {
             var appUser = await _appUserRepo.FindByIdAsync(user.Id);
@@ -475,7 +566,6 @@ namespace LagoVista.UserAdmin.Managers
 
                 appUser.SsnSecretId = result.Result;
             }
-
 
             appUser.ShowWelcome = user.ShowWelcome;
             appUser.Notes = user.Notes;
@@ -993,6 +1083,5 @@ namespace LagoVista.UserAdmin.Managers
                 throw new NotAuthorizedException("Must be a system admin to do a global search of users.");
 
             return await _appUserRepo.SearchUsersAsync(firstName,lastName, eamil, listRequest); 
-        }
-    }
+        }    }
 }

@@ -5,6 +5,7 @@
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.DTOs;
+using LagoVista.UserAdmin.Models.Users;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Interfaces.Managers
@@ -13,6 +14,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
     {
         Task<InvokeResult> CheckConfirmedAsync(EntityHeader userHeader);
         Task<InvokeResult<string>> SendConfirmationEmailAsync(string userId, string confirmSubject = "", string confirmBody = "", string appName = "", string logoFile = "");
+        Task<InvokeResult<string>> SendConfirmationEmailAsync(AppUser appUser, string confirmSubject = "", string confirmBody = "", string appName = "", string logoFile = "");
         Task<InvokeResult<string>> SendSMSCodeAsync(VerfiyPhoneNumber sendSMSCode, EntityHeader userHeader);
         Task<InvokeResult> ValidateSMSAsync(VerfiyPhoneNumber verifyRequest, EntityHeader userHeader);
         Task<InvokeResult> ValidateEmailAsync(ConfirmEmail confirmemaildto, EntityHeader userHeader);

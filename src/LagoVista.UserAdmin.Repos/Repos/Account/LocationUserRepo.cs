@@ -28,7 +28,7 @@ namespace LagoVista.UserAdmin.Repos.Users
        
         public Task<IEnumerable<LocationUser>> GetUsersForLocationAsync(string locationId)
         {
-            return GetByParitionIdAsync(locationId);
+            return GetByPartitionIdAsync(locationId);
         }
 
         public Task<IEnumerable<LocationUser>> GetLocationsForUserAsync(string userId)

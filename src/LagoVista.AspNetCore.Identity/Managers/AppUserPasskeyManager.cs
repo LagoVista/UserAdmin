@@ -657,7 +657,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                     redirect = CommonLinks.CompleteUserRegistration;
                     break;
                 case UserSetupStates.RequiresEmailConfirmation:
-                    redirect = CommonLinks.ConfirmEmail;
+                    redirect = CommonLinks.ConfirmEmailSent;
                     break;
                 case UserSetupStates.RequiresOrgAssingment:
                      redirect = CommonLinks.CreateDefaultOrg;
