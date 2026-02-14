@@ -2,19 +2,23 @@
 // ContentHash: 8d9658695d0a4a987f8fd6c5a77478101b8f377b53f7e1e63de96fa7ba1e2c84
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using Fido2NetLib.Objects;
+using LagoVista.Core;
+using LagoVista.Core.Interfaces;
+using LagoVista.Core.Managers;
+using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
+using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Models.Users;
-using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
-using LagoVista.Core;
-using System;
-using LagoVista.Core.Models;
-using LagoVista.Core.Managers;
-using LagoVista.Core.Interfaces;
 using LagoVista.UserAdmin.Resources;
-using LagoVista.IoT.Logging.Loggers;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
+using System;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Twilio.Jwt.AccessToken;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -22,12 +26,14 @@ namespace LagoVista.AspNetCore.Identity.Managers
     public class UserManager : ManagerBase, IUserManager
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly IAdminLogger _logger;
         private readonly IAuthenticationLogManager _authLogManager;
        
         public UserManager(UserManager<AppUser> userManager, IAuthenticationLogManager authlogManager, IAdminLogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security) :
             base(logger, appConfig, dependencyManager, security)
         {
             _userManager = userManager;
+            _logger = logger;
             _authLogManager = authlogManager;
         }
 
@@ -72,9 +78,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return InvokeResult.Success;
         }
 
-        public Task<string> GenerateEmailConfirmationTokenAsync(AppUser user)
+        public async Task<string> GenerateEmailConfirmationTokenAsync(AppUser user)
         {
-            return _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            _logger.Trace($"[EMAILTOKEN] {token}");
+            var tokenBytes = Encoding.UTF8.GetBytes(token);
+            var code = WebEncoders.Base64UrlEncode(tokenBytes);
+            return code;
         }
 
         public Task<string> GenerateChangePhoneNumberTokenAsync(AppUser user, string phone)
@@ -99,8 +109,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return result.ToInvokeResult();
         }
 
-        public async Task<InvokeResult> ConfirmEmailAsync(AppUser user, string token)
+        public async Task<InvokeResult> ConfirmEmailAsync(AppUser user, string code)
         {
+            var tokenBytes = WebEncoders.Base64UrlDecode(code);
+            var token = Encoding.UTF8.GetString(tokenBytes);
+             _logger.Trace($"[EMAILTOKEN] {token}");
+
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
@@ -109,8 +123,10 @@ namespace LagoVista.AspNetCore.Identity.Managers
             }
             else
             {
+                var errors = string.Join("; ", result.Errors.Select(e => $"{e.Code}:{e.Description}"));
+
                 await LogEntityActionAsync(user.Id, typeof(AppUser).Name, "FailedConfirmingEmail", user.CurrentOrganization?.ToEntityHeader(), user.ToEntityHeader());
-                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ConfirmEmailFailed, user, extras: $"{result.Errors.First().Description};token={token}");
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.ConfirmEmailFailed, user, extras: errors);
             }            
 
             return result.ToInvokeResult();

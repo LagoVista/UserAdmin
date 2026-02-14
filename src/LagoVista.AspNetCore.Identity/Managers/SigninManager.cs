@@ -245,8 +245,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var redirectResult = await _userRedirectService.IdentityDefaultRedirectAsync(appUser); 
             if(!redirectResult.Successful)
             {
-                response.RedirectPage = redirectResult.RedirectURL;
+                return redirectResult.ToInvokeResult<UserLoginResponse>();
             }
+
+            response.RedirectPage = redirectResult.Result;
+            response.User.PasswordHash = null;
+            response.User.SecurityStamp = null;
 
             var result = InvokeResult<UserLoginResponse>.Create(response);
             result.Timings.AddRange(timings);

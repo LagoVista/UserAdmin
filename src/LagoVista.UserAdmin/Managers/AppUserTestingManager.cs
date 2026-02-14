@@ -77,13 +77,12 @@ namespace LagoVista.UserAdmin.Managers
             return await _appUserManager.DeleteUserAsync(TestUserSeed.User.Id, org, user);
         }
 
-        public async Task<InvokeResult> SetTestUserCredentials(EntityHeader user, EntityHeader pwd, TestUserCredentials credentials)
+        public async Task<InvokeResult> SetTestUserCredentials(AppUser user, TestUserCredentials credentials)
         {
-            var testUser = await _appUserRepo.FindByIdAsync(TestUserSeed.User.Id);
             var newPwd = $"test!{Guid.NewGuid().ToId()}1234";
-            var token = await _userManager.GeneratePasswordResetTokenAsync(testUser);
-            await _userManager.ResetPasswordAsync(testUser, token, newPwd);
-            credentials.EmailAddress = testUser.Email;
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            await _userManager.ResetPasswordAsync(user, token, newPwd);
+            credentials.EmailAddress = user.Email;
             credentials.Password = newPwd;
 
             return InvokeResult.Success;
@@ -182,6 +181,8 @@ namespace LagoVista.UserAdmin.Managers
 
                 testUser = result.Result.AppUser;
             }
+
+            testUser.VerifyEmailSentTimeStamp = null;
 
             if (preconditions.EmailConfirmed.Value != SetCondition.DontCare) testUser.EmailConfirmed = preconditions.EmailConfirmed.Value == SetCondition.Set;
             if (preconditions.PhoneNumberConfirmed.Value != SetCondition.DontCare) testUser.PhoneNumberConfirmed = preconditions.PhoneNumberConfirmed.Value == SetCondition.Set;
@@ -319,7 +320,7 @@ namespace LagoVista.UserAdmin.Managers
                 userCredentials.UserId = testUser.Id;
                 userCredentials.EmailConfirmationToken = token;
                 testUser.VerifyEmailSentTimeStamp = timeStamp;
-                _adminLogger.Trace($"{this.Tag()} Set EmailConfirmationToken {token.Substring(0, 5)}*************** on userCredentials.");
+                _adminLogger.Trace($"{this.Tag()} Set EmailConfirmationToken {token} on userCredentials.");
             }
             else
             {
@@ -352,7 +353,7 @@ namespace LagoVista.UserAdmin.Managers
 
             if (preconditions.HasPassword.Value == SetCondition.Set)
             {
-                await SetTestUserCredentials(org, user, userCredentials);
+                await SetTestUserCredentials(testUser, userCredentials);
             }
 
             _adminLogger.Trace($"{this.Tag()} Updated user with preconditions.");   
