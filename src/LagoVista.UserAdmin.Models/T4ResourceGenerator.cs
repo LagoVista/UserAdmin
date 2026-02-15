@@ -1,4 +1,4 @@
-﻿/*2/12/2026 10:53:05 AM*/
+﻿/*2/15/2026 3:23:21 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -2003,6 +2003,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_AccentColor
 
 		public static string Organization_AccentColor { get { return GetResourceString("Organization_AccentColor"); } }
+//Resources:UserAdminResources:Organization_AccountingContact
+
+		public static string Organization_AccountingContact { get { return GetResourceString("Organization_AccountingContact"); } }
 //Resources:UserAdminResources:Organization_ApEmailAddress
 
 		public static string Organization_ApEmailAddress { get { return GetResourceString("Organization_ApEmailAddress"); } }
@@ -3817,6 +3820,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string NotificationContact_Name = "NotificationContact_Name";
 			public const string Organization = "Organization";
 			public const string Organization_AccentColor = "Organization_AccentColor";
+			public const string Organization_AccountingContact = "Organization_AccountingContact";
 			public const string Organization_ApEmailAddress = "Organization_ApEmailAddress";
 			public const string Organization_ApEmailAddress_Help = "Organization_ApEmailAddress_Help";
 			public const string Organization_AppUrl = "Organization_AppUrl";

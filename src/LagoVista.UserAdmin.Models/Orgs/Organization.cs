@@ -118,6 +118,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
         public EntityHeader AdminContact { get; set; }
 
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_AccountingContact, FieldType: FieldTypes.UserPicker, IsRequired: false,
+            WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader AccountingContact { get; set; }
+
         [FormField(LabelResource: UserAdminResources.Names.Organization_SalesContact, FieldType: FieldTypes.UserPicker, IsRequired: false,
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
         public EntityHeader SalesContact { get; set; }
@@ -268,6 +273,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(Icon),
                 nameof(Owner),
                 nameof(AdminContact),
+                nameof(AccountingContact),
                 nameof(SalesContact),
                 nameof(BillingContact),
                 nameof(TechnicalContact),

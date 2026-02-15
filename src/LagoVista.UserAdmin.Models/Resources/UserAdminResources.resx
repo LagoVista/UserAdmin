@@ -3239,4 +3239,7 @@
   <data name="AuthTenantStateSnapshot_SendMagicLink" xml:space="preserve">
     <value>Send Magic Link</value>
   </data>
+  <data name="Organization_AccountingContact" xml:space="preserve">
+    <value>Accounting Contact</value>
+  </data>
 </root>
