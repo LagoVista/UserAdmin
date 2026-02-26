@@ -2,6 +2,7 @@
 // ContentHash: 90428e94dbc182769c650c73781c7c5054eb181cdaca4650a6fd84ee4d1d9f76
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Models;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Repos.RDBMS.Models;
 using Microsoft.EntityFrameworkCore;
@@ -18,8 +19,8 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
 
         }
 
-        public DbSet<RDBMSOrg> Org { get; set; }
-        public DbSet<RDBMSAppUser> AppUser { get; set; }
+        public DbSet<OrganizationDTO> Org { get; set; }
+        public DbSet<AppUserDTO> AppUser { get; set; }
         public DbSet<SubscriptionDTO> Subscription { get; set; }
         public DbSet<RDBMSDeviceOwnerUser> DeviceOwnerUser { get; set; }
         public DbSet<OwnedDevice> DeviceOwnerUserDevices { get; set; }

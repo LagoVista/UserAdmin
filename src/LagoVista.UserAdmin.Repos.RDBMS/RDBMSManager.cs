@@ -22,6 +22,7 @@ using RingCentral;
 using LagoVista.UserAdmin.Repos.RDBMS.Models;
 using Npgsql;
 using System.Security.Cryptography;
+using LagoVista.Models;
 
 namespace LagoVista.UserAdmin.Repos.RDBMS
 {
@@ -61,7 +62,7 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
 
         public async Task<InvokeResult> AddAppUserToOrgAsyncAsync(string orgId, AppUser user)
         {
-            var dbUser = new Models.RDBMSAppUser()
+            var dbUser = new AppUserDTO()
             {
                 AppUserId = user.Id,
                 CreationDate = user.CreationDate.ToDateTime(),
@@ -83,7 +84,7 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
 
         public async Task<InvokeResult> AddOrgAsync(Organization org)
         {
-            var dbOrg = new Models.RDBMSOrg()
+            var dbOrg = new OrganizationDTO()
             {
                 CreationDate = org.CreationDate.ToDateTime(),
                 LastUpdatedDate = org.LastUpdatedDate.ToDateTime(),

@@ -86,8 +86,6 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<IMagicLinkAttemptStore, MagicLinkAttemptCacheStore>();
 
             ErrorCodes.Register(typeof(UserAdminErrorCodes));
-
-            services.AddScoped<IOrgIdentityData, OrgIdentityData>();
         }
     }
 }
