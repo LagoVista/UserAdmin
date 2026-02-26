@@ -2,6 +2,7 @@
 // ContentHash: c72f9505f3fc8b5c0b9e2d106e8b08cceafcf839234f128e5232ca4b76292a3d
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
@@ -13,13 +14,8 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Interfaces.Managers
 {
-    public interface IEmailSender
+    public interface IEmailSender : ICoreEmailServices
     {
-        Task<InvokeResult> SendToAppUserAsync(string appuUserId, string subject, string body);
-        Task<InvokeResult> SendAsync(string email, string subject, string body, bool hasFullEmail = false, string appName = "", string appLogo = "");
-
-        Task<InvokeResult<string>> SendAsync(Email email, EntityHeader org, EntityHeader user);
-
         Task<InvokeResult> SendInBackgroundAsync(Email email, EntityHeader org, EntityHeader user);
 
         Task<InvokeResult> SendAsync(string email, string subject, string message, EntityHeader org, EntityHeader user, string appName = "", string appLogo = "");

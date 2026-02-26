@@ -8,6 +8,7 @@ using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.REpos.Account;
 using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Apps;
+using LagoVista.UserAdmin.Repos;
 
 namespace LagoVista.UserAdmin
 {
@@ -46,6 +47,9 @@ namespace LagoVista.UserAdmin
             services.AddScoped<ISecureLinkManager, SecureLinkManager>();
             services.AddScoped<IUserRegistrationManager, UserRegistrationManager>();
             services.AddScoped<IFunctionMapManager, FunctionMapManager>();
+
+
+            services.AddScoped<IOrgIdentityData, OrgIdentityData>();
         }
     }
 }

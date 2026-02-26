@@ -6,6 +6,7 @@ using LagoVista.AspNetCore.Identity.Interfaces;
 using LagoVista.AspNetCore.Identity.Managers;
 using LagoVista.AspNetCore.Identity.Services;
 using LagoVista.AspNetCore.Identity.Utils;
+using LagoVista.Core.Interfaces;
 using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
@@ -23,12 +24,15 @@ namespace LagoVista.AspNetCore.Identity
 {
     public class Startup
     {
-        public static void ConfigureServices(IServiceCollection services)
+        public static void ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection services)
         {
             services.AddSingleton<IUserManager, UserManager>();
             services.AddSingleton<ISignInManager, SignInManager>();
 
+
             //TODO: These don't belong here.
+
+            services.AddSingleton<ICoreEmailServices, SendGridEmailService>();
             services.AddSingleton<IEmailSender, SendGridEmailService>();
             services.AddSingleton<ISmsSender, TwilioSMSSender>();
 
