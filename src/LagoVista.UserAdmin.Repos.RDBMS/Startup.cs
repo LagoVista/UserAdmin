@@ -3,14 +3,15 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.Core.Models;
 using LagoVista.Core.PlatformSupport;
+using LagoVista.Core.Repos;
+using LagoVista.IoT.Logging.Exceptions;
+using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using LagoVista.IoT.Logging.Exceptions;
-using LagoVista.Core.Models;
-using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 
 namespace LagoVista.UserAdmin.Repos.RDBMS
 {
@@ -59,12 +60,11 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
 
             var connectionString = $"Server=tcp:{connectionSettings.Uri},1433;Initial Catalog={connectionSettings.ResourceName};Persist Security Info=False;User ID={connectionSettings.UserName};Password={connectionSettings.Password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
+            services.AddScoped<IAppUserRelationalRepo, AppUserRelationalRepo>();
+            services.AddScoped<IOrganizationRelationalRepo, OrganizationRelationalRepo>();
 
             services.AddSingleton<IRDBMSConnectionSettings>(new RDBMSConnectionSettings(connectionSettings));
-            services.AddTransient<ISubscriptionRepo, SubscriptionRepo>();
-            services.AddTransient<IRDBMSManager, RDBMSManager>();
-            services.AddDbContext<UserAdminDataContext>(options => 
-                options.UseSqlServer(connectionString, moreOptions => moreOptions.EnableRetryOnFailure()));
+
         }
     }
 }
