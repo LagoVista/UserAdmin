@@ -16,11 +16,11 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.RDBMS
 {
-    public class OrganizationRelationalRepo : RelationalBase<UserAdminDataContext>, IOrganizationRelationalRepo
+    public class OrganizationRelationalRepo : RelationalBase<BillingDataContext>, IOrganizationRelationalRepo
     {
         ILagoVistaAutoMapper _autoMapper;
      
-        public OrganizationRelationalRepo(UserAdminDataContext context, IAdminLogger adminLogger, ILagoVistaAutoMapper autoMapper, ISecureStorage secureStorage) :
+        public OrganizationRelationalRepo(BillingDataContext context, IAdminLogger adminLogger, ILagoVistaAutoMapper autoMapper, ISecureStorage secureStorage) :
             base(context, adminLogger, secureStorage)
         {
             _autoMapper = autoMapper ?? throw new ArgumentNullException(nameof(autoMapper));
@@ -54,6 +54,7 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
             {
                 return await ctx.Org
                 .ReadonlyQuery()
+                .Include(org => org.BillingContact)
                 .Where(org => org.OrgId == id)
                 .SingleOrDefaultAsync();
             });

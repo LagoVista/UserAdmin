@@ -24,7 +24,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         Icon: "icon-ae-bill-1", ClusterKey: "subscriptions", ModelType: EntityDescriptionAttribute.ModelTypes.DomainEntity,
         Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime, Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true,
         IndexTier: EntityDescriptionAttribute.IndexTiers.Aux, IndexPriority: 35, IndexTagsCsv: "organizationdomain,subscriptions,domainentity,dto")]
-    public class SubscriptionDTO : IValidateable, IKeyedEntity, INamedEntity, ISummaryFactory, IFormDescriptor, IFormDescriptorCol2
+    public class Subscription : RelationalEntityBase, IValidateable, IKeyedEntity, INamedEntity, ISummaryFactory, IFormDescriptor, IFormDescriptorCol2
     {
         public const string Status_OK = "ok";
         public const string Status_FreeAccount = "freeaccount";
@@ -38,25 +38,15 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public const string SubscriptionKey_Trial = "trial";
 
-        public SubscriptionDTO()
+        public Subscription()
         {
             Icon = "icon-ae-bill-1";
-            Id = Guid.NewGuid();
         }
 
-        public Guid Id { get; set; }
+        [MapTo("CustomerId")]
+        public EntityHeader Customer { get; set; }
 
-        public String OrgId { get; set; }
-
-        public string CreatedById { get; set; }
-
-        public string LastUpdatedById { get; set; }
-
-        public DateTime CreationDate { get; set; }
-
-        public DateTime LastUpdatedDate { get; set; }
-        public string CustomerId { get; set; }
-
+        [EncryptedField("PaymentToken")]
         [FormField(LabelResource: UserAdminResources.Names.Subscription_PaymentMethod, HelpResource:UserAdminResources.Names.Subscription_PaymentMethod_Help, IsUserEditable:false, FieldType: FieldTypes.PaymentMethod, ResourceType: typeof(UserAdminResources), IsRequired: true)]
         public string PaymentToken { get; set; }
 
@@ -64,12 +54,40 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Icon { get; set; }
 
+        public string PaymentAccountType { get; set; }
+        public string PaymentAccountId { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Subscription_IsTrial, FieldType: FieldTypes.Bool, IsUserEditable: false, ResourceType: typeof(UserAdminResources))]
+        public bool IsTrial { get; set; }
+
+
+        [FormField(LabelResource: UserAdminResources.Names.Subscription_IsActive, FieldType: FieldTypes.Bool, IsUserEditable: false, ResourceType: typeof(UserAdminResources))]
+        public bool IsActive { get; set; }
+
+
+        [FormField(LabelResource: UserAdminResources.Names.Subscription_ActiveDate, FieldType: FieldTypes.Date, IsUserEditable: false, ResourceType: typeof(UserAdminResources))]
+        public CalendarDate? ActiveDate { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Subscription_InActiveDate, FieldType: FieldTypes.Date, IsUserEditable: false, ResourceType: typeof(UserAdminResources))]
+        public CalendarDate? InActiveDate { get; set; }
+        [FormField(LabelResource: UserAdminResources.Names.Subscription_TrialStartDate, FieldType: FieldTypes.Date, IsUserEditable: false, ResourceType: typeof(UserAdminResources))]
+        public CalendarDate? TrialStartDate { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Subscription_TrialEndDate, FieldType: FieldTypes.Date, IsUserEditable: false, ResourceType: typeof(UserAdminResources))]
+        public CalendarDate? TrialExpirationDate { get; set; }
+
 
         [FormField(LabelResource: UserAdminResources.Names.Subscription_PaymentMethod_Date, FieldType: FieldTypes.Date, IsUserEditable:false, ResourceType: typeof(UserAdminResources))]
-        public DateTime? PaymentTokenDate { get; set; }
+        public CalendarDate? PaymentTokenDate { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Subscription_PaymentMethod_Expires, FieldType: FieldTypes.Date, ResourceType: typeof(UserAdminResources), IsUserEditable: false)]
-        public DateTime? PaymentTokenExpires { get; set; }
+        public CalendarDate? PaymentTokenExpires { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Subscription_StartDate, FieldType: FieldTypes.Date, ResourceType: typeof(UserAdminResources), IsRequired:true, IsUserEditable: true)]
+        public CalendarDate Start { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Subscription_EndDate, FieldType: FieldTypes.Date, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
+        public CalendarDate? End { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Subscription_PaymentMethod_Status, FieldType: FieldTypes.ReadonlyLabel, IsUserEditable:false, ResourceType: typeof(UserAdminResources), IsRequired: false)]
         public string PaymentTokenStatus { get; set; }
@@ -122,6 +140,14 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(Name),
                 nameof(Key),
                 nameof(Icon),
+                nameof(Start),
+                nameof(End),
+                nameof(ActiveDate),
+                nameof(InActiveDate),
+                nameof(End),
+                nameof(IsTrial),
+                nameof(TrialStartDate),
+                nameof(TrialExpirationDate),
                 nameof(Description),
             };
         }
@@ -150,7 +176,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
         GetListUrl: "/api/subscriptions", GetUrl: "/api/subscription/{id}", SaveUrl: "/api/subscription", FactoryUrl: "/api/subscription/factory")]
     public class SubscriptionSummary : SummaryData
     {
-        public new Guid Id { get; set; }
         public string Status { get; set; }
         public string PaymentTokenStatus { get; set; }
     }

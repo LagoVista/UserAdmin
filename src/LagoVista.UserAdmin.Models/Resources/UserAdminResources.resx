@@ -3242,4 +3242,28 @@
   <data name="Organization_AccountingContact" xml:space="preserve">
     <value>Accounting Contact</value>
   </data>
+  <data name="Subscription_StartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="Subscription_EndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="Subscription_IsTrial" xml:space="preserve">
+    <value>Is Trial</value>
+  </data>
+  <data name="Subscription_ActiveDate" xml:space="preserve">
+    <value>Subscription Active Date</value>
+  </data>
+  <data name="Subscription_InActiveDate" xml:space="preserve">
+    <value>Subscription Inactive Date</value>
+  </data>
+  <data name="Subscription_TrialStartDate" xml:space="preserve">
+    <value>Trial Start Date</value>
+  </data>
+  <data name="Subscription_TrialEndDate" xml:space="preserve">
+    <value>Trial End Date</value>
+  </data>
+  <data name="Subscription_IsActive" xml:space="preserve">
+    <value>Is Active</value>
+  </data>
 </root>

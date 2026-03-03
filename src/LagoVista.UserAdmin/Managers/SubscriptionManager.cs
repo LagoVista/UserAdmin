@@ -17,6 +17,7 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Core.Exceptions;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
+using LagoVista.Core;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -38,50 +39,49 @@ namespace LagoVista.UserAdmin.Managers
             _organizationRepo = organizationRepo ?? throw new ArgumentNullException(nameof(organizationRepo));
         }
 
-        public async Task<InvokeResult> AddSubscriptionAsync(SubscriptionDTO subscription, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> AddSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user)
         {
-            if (subscription.Key == SubscriptionDTO.SubscriptionKey_Trial)
+            if (subscription.Key == Subscription.SubscriptionKey_Trial)
             {
-                var subscriptions = await GetSubscriptionsForOrgAsync(org.Id, user);
-                if (subscriptions.Where(sub => sub.Key == SubscriptionDTO.SubscriptionKey_Trial).Any())
+                var subscriptions = await GetTrialSubscriptionAsync(org, user);
+                if (subscriptions != null)
                 {
                     throw new ValidationException("Invalid Data", new List<ErrorMessage>(){new ErrorMessage("Organization already has one trial subscription.")});
                 }
                 else
                 {
-                    subscription.Status = SubscriptionDTO.Status_OK;
-                    subscription.PaymentTokenStatus = SubscriptionDTO.PaymentTokenStatus_Waived;
+                    subscription.Status = Subscription.Status_OK;
+                    subscription.PaymentTokenStatus = Subscription.PaymentTokenStatus_Waived;
                 }
             }
             else
             {
                 if (String.IsNullOrEmpty(subscription.PaymentToken))
                 {
-                    subscription.PaymentTokenStatus = SubscriptionDTO.PaymentTokenStatus_Empty;
-                    subscription.Status = SubscriptionDTO.Status_NoPaymentDetails;
+                    subscription.PaymentTokenStatus = Subscription.PaymentTokenStatus_Empty;
+                    subscription.Status = Subscription.Status_NoPaymentDetails;
                 }
                 else
                 {
-                    var result = await _paymentCustomers.CreateCustomerAsync(subscription.Id.ToString(), subscription.PaymentToken);
+                    var result = await _paymentCustomers.CreateCustomerAsync(subscription.PaymentAccountId, subscription.PaymentToken);
                     if (!result.Successful) return result.ToInvokeResult();
 
-                    subscription.CustomerId = result.Result;
-                    subscription.PaymentTokenStatus = SubscriptionDTO.PaymentTokenStatus_OK;
-                    subscription.Status = SubscriptionDTO.Status_OK;
-                    subscription.PaymentTokenDate = DateTime.UtcNow;
+                    subscription.PaymentAccountType = "stripe";
+                    subscription.PaymentAccountId = result.Result;
+                    subscription.PaymentTokenStatus = Subscription.PaymentTokenStatus_OK;
+                    subscription.Status = Subscription.Status_OK;
+                    subscription.PaymentTokenDate = CalendarDate.Today();
                 }
             }
 
-            await _subscriptionRepo.AddSubscriptionAsync(subscription);
+            await _subscriptionRepo.AddSubscriptionAsync(subscription, org, user);
 
             return new InvokeResult();
         }
 
-       
-
-        public async Task<SubscriptionDTO> GetTrialSubscriptionAsync(EntityHeader org, EntityHeader user)
+        public async Task<Subscription> GetTrialSubscriptionAsync(EntityHeader org, EntityHeader user)
         {
-            var subscription = await _subscriptionRepo.GetTrialSubscriptionAsync(org.Id);
+            var subscription = await _subscriptionRepo.GetTrialSubscriptionAsync(org.Id, org, user);
             if (subscription != null)
             {
                 await AuthorizeAsync(user, org, "getTrialSubscription", subscription);
@@ -90,9 +90,9 @@ namespace LagoVista.UserAdmin.Managers
             return subscription;
         }
 
-        public async Task<SubscriptionDTO> GetSubscriptionAsync(Guid id, EntityHeader org, EntityHeader user)
+        public async Task<Subscription> GetSubscriptionAsync(Guid id, EntityHeader org, EntityHeader user)
         {
-            var subscription = await _subscriptionRepo.GetSubscriptionAsync(org.Id, id);
+            var subscription = await _subscriptionRepo.GetSubscriptionAsync(id, org, user);
             await AuthorizeAsync(user, org, "getSubscription", subscription);
             return subscription;
         }
@@ -105,23 +105,25 @@ namespace LagoVista.UserAdmin.Managers
             return await _subscriptionResourceRepo.GetResourcesForSubscriptionAsync(subscriptionId, listRequest, org.Id);
         }
 
-        public async Task<IEnumerable<SubscriptionSummary>> GetSubscriptionsForOrgAsync(string orgId, EntityHeader user)
+        public async Task<ListResponse<SubscriptionSummary>> GetSubscriptionsForOrgAsync(ListRequest listRequest, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeOrgAccessAsync(user, orgId, typeof(SubscriptionSummary));
+            await AuthorizeOrgAccessAsync(user, org, typeof(SubscriptionSummary));
 
-            return await _subscriptionRepo.GetSubscriptionsForOrgAsync(orgId);
+            return await _subscriptionRepo.GetSubscriptionsForOrgAsync(org, user, listRequest);
         }
 
-        public Task<bool> QueryKeyInUseAsync(string key, EntityHeader org)
+        public async Task<ListResponse<SubscriptionSummary>> GetSubscriptionsForCustomerAsync(Guid customerId, ListRequest listRequest, EntityHeader org, EntityHeader user)
         {
-            return _subscriptionRepo.QueryKeyInUse(key, org.Id);
+            await AuthorizeOrgAccessAsync(user, org, typeof(SubscriptionSummary));
+
+            return await _subscriptionRepo.GetSubscriptionsForCustomerAsync(customerId, org, user, listRequest);
         }
 
-        public async Task<InvokeResult> UpdateSubscriptionAsync(SubscriptionDTO subscription, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> UpdateSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user)
         {
             await AuthorizeAsync(user, org, "updateSubscription", subscription);
 
-            var oldSubscription = await _subscriptionRepo.GetSubscriptionAsync(org.Id, subscription.Id, true);
+            var oldSubscription = await _subscriptionRepo.GetSubscriptionAsync(new Guid(subscription.Id), org, user);
 
             ValidationCheck(subscription, Actions.Update);
 
@@ -131,20 +133,20 @@ namespace LagoVista.UserAdmin.Managers
                 {
                     var result = await _paymentCustomers.CreateCustomerAsync(subscription.Id.ToString(), subscription.PaymentToken);
                     if (!result.Successful) return result.ToInvokeResult();
-                    subscription.CustomerId = result.Result;
+                    subscription.PaymentAccountId = result.Result;
                 }
                 else
                 {
-                    var result = await _paymentCustomers.AddPaymentSource(subscription.CustomerId, subscription.PaymentToken);
+                    var result = await _paymentCustomers.AddPaymentSource(subscription.PaymentAccountId, subscription.PaymentToken);
                     if (!result.Successful) return result.ToInvokeResult();
                 }
 
-                subscription.PaymentTokenStatus = SubscriptionDTO.PaymentTokenStatus_OK;
-                subscription.Status = SubscriptionDTO.Status_OK;
-                subscription.PaymentTokenDate = DateTime.UtcNow;
+                subscription.PaymentTokenStatus = Subscription.PaymentTokenStatus_OK;
+                subscription.Status = Subscription.Status_OK;
+                subscription.PaymentTokenDate = CalendarDate.Today();
             }
 
-            await _subscriptionRepo.UpdateSubscriptionAsync(subscription);
+            await _subscriptionRepo.UpdateSubscriptionAsync(subscription, org, user);
 
             return new InvokeResult();
         }
@@ -162,7 +164,7 @@ namespace LagoVista.UserAdmin.Managers
 
             await AuthorizeAsync(user, org, "DeleteAllSubscriptions", fullOrg);
 
-            await _subscriptionRepo.DeleteSubscriptionsForOrgAsync(orgId);
+            await _subscriptionRepo.DeleteSubscriptionsForOrgAsync(org, user);
 
             return InvokeResult.Success;
         }

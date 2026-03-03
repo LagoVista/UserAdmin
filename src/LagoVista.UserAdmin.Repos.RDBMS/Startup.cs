@@ -62,6 +62,7 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
 
             services.AddScoped<IAppUserRelationalRepo, AppUserRelationalRepo>();
             services.AddScoped<IOrganizationRelationalRepo, OrganizationRelationalRepo>();
+            services.AddScoped<ISubscriptionRepo, SubscriptionRepo>();
 
             services.AddSingleton<IRDBMSConnectionSettings>(new RDBMSConnectionSettings(connectionSettings));
 

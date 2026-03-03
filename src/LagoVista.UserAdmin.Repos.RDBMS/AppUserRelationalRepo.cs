@@ -14,12 +14,11 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.RDBMS
 {
-    public class AppUserRelationalRepo : RelationalBase<UserAdminDataContext>, IAppUserRelationalRepo
+    public class AppUserRelationalRepo : RelationalBase<BillingDataContext>, IAppUserRelationalRepo
     {
         ILagoVistaAutoMapper _autoMapper;
 
-
-        public AppUserRelationalRepo(UserAdminDataContext context, IAdminLogger adminLogger, ILagoVistaAutoMapper autoMapper, ISecureStorage secureStorage) :
+        public AppUserRelationalRepo(BillingDataContext context, IAdminLogger adminLogger, ILagoVistaAutoMapper autoMapper, ISecureStorage secureStorage) :
            base(context, adminLogger, secureStorage)
         {
             _autoMapper = autoMapper ?? throw new ArgumentNullException(nameof(autoMapper));

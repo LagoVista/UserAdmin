@@ -2,7 +2,8 @@
 // ContentHash: a954f2e8388b0dacfc837f273c209f0408a7b6e4e5d93201d2e28f721e3c8c8b
 // IndexVersion: 2
 // --- END CODE INDEX META ---
-using LagoVista.Core.Validation;
+using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.UserAdmin.Models.Orgs;
 using System;
 using System.Collections.Generic;
@@ -12,16 +13,14 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
 {
     public interface ISubscriptionRepo
     {
-        Task AddSubscriptionAsync(SubscriptionDTO subscription);
-        Task UpdateSubscriptionAsync(SubscriptionDTO subscription);
-        Task DeleteSubscriptionAsync(string orgId, Guid id);
-        Task DeleteSubscriptionsForOrgAsync(string orgId);
-        Task<SubscriptionDTO> GetTrialSubscriptionAsync(string orgId);
+        Task AddSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user);
+        Task UpdateSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user);
+        Task DeleteSubscriptionAsync(Guid id, EntityHeader org, EntityHeader user);
+        Task DeleteSubscriptionsForOrgAsync(EntityHeader org, EntityHeader user);
+        Task<Subscription> GetTrialSubscriptionAsync(string orgId, EntityHeader org, EntityHeader user);
 
-        Task<SubscriptionDTO> GetSubscriptionAsync(string orgId, Guid id, bool disableTracking = false);
-
-        Task<IEnumerable<SubscriptionSummary>> GetSubscriptionsForOrgAsync(string orgId);
-
-        Task<bool> QueryKeyInUse(string key, string orgId);
+        Task<Subscription> GetSubscriptionAsync(Guid id, EntityHeader org, EntityHeader user);
+        Task<ListResponse<SubscriptionSummary>> GetSubscriptionsForOrgAsync(EntityHeader org, EntityHeader user, ListRequest request);
+        Task<ListResponse<SubscriptionSummary>> GetSubscriptionsForCustomerAsync(Guid customerId, EntityHeader org, EntityHeader user, ListRequest request);
     }
 }

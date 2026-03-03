@@ -1,4 +1,4 @@
-﻿/*2/15/2026 3:23:21 PM*/
+﻿/*3/2/2026 4:42:59 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -2855,12 +2855,27 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:SMS_Verification_Body
 
 		public static string SMS_Verification_Body { get { return GetResourceString("SMS_Verification_Body"); } }
+//Resources:UserAdminResources:Subscription_ActiveDate
+
+		public static string Subscription_ActiveDate { get { return GetResourceString("Subscription_ActiveDate"); } }
 //Resources:UserAdminResources:Subscription_Description
 
 		public static string Subscription_Description { get { return GetResourceString("Subscription_Description"); } }
+//Resources:UserAdminResources:Subscription_EndDate
+
+		public static string Subscription_EndDate { get { return GetResourceString("Subscription_EndDate"); } }
 //Resources:UserAdminResources:Subscription_Help
 
 		public static string Subscription_Help { get { return GetResourceString("Subscription_Help"); } }
+//Resources:UserAdminResources:Subscription_InActiveDate
+
+		public static string Subscription_InActiveDate { get { return GetResourceString("Subscription_InActiveDate"); } }
+//Resources:UserAdminResources:Subscription_IsActive
+
+		public static string Subscription_IsActive { get { return GetResourceString("Subscription_IsActive"); } }
+//Resources:UserAdminResources:Subscription_IsTrial
+
+		public static string Subscription_IsTrial { get { return GetResourceString("Subscription_IsTrial"); } }
 //Resources:UserAdminResources:Subscription_PaymentMethod
 
 		public static string Subscription_PaymentMethod { get { return GetResourceString("Subscription_PaymentMethod"); } }
@@ -2876,12 +2891,21 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Subscription_PaymentMethod_Status
 
 		public static string Subscription_PaymentMethod_Status { get { return GetResourceString("Subscription_PaymentMethod_Status"); } }
+//Resources:UserAdminResources:Subscription_StartDate
+
+		public static string Subscription_StartDate { get { return GetResourceString("Subscription_StartDate"); } }
 //Resources:UserAdminResources:Subscription_Status
 
 		public static string Subscription_Status { get { return GetResourceString("Subscription_Status"); } }
 //Resources:UserAdminResources:Subscription_Title
 
 		public static string Subscription_Title { get { return GetResourceString("Subscription_Title"); } }
+//Resources:UserAdminResources:Subscription_TrialEndDate
+
+		public static string Subscription_TrialEndDate { get { return GetResourceString("Subscription_TrialEndDate"); } }
+//Resources:UserAdminResources:Subscription_TrialStartDate
+
+		public static string Subscription_TrialStartDate { get { return GetResourceString("Subscription_TrialStartDate"); } }
 //Resources:UserAdminResources:Subscriptions_Title
 
 		public static string Subscriptions_Title { get { return GetResourceString("Subscriptions_Title"); } }
@@ -4104,15 +4128,23 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string SingleUseToken_Name = "SingleUseToken_Name";
 			public const string SMS_CouldNotVerify = "SMS_CouldNotVerify";
 			public const string SMS_Verification_Body = "SMS_Verification_Body";
+			public const string Subscription_ActiveDate = "Subscription_ActiveDate";
 			public const string Subscription_Description = "Subscription_Description";
+			public const string Subscription_EndDate = "Subscription_EndDate";
 			public const string Subscription_Help = "Subscription_Help";
+			public const string Subscription_InActiveDate = "Subscription_InActiveDate";
+			public const string Subscription_IsActive = "Subscription_IsActive";
+			public const string Subscription_IsTrial = "Subscription_IsTrial";
 			public const string Subscription_PaymentMethod = "Subscription_PaymentMethod";
 			public const string Subscription_PaymentMethod_Date = "Subscription_PaymentMethod_Date";
 			public const string Subscription_PaymentMethod_Expires = "Subscription_PaymentMethod_Expires";
 			public const string Subscription_PaymentMethod_Help = "Subscription_PaymentMethod_Help";
 			public const string Subscription_PaymentMethod_Status = "Subscription_PaymentMethod_Status";
+			public const string Subscription_StartDate = "Subscription_StartDate";
 			public const string Subscription_Status = "Subscription_Status";
 			public const string Subscription_Title = "Subscription_Title";
+			public const string Subscription_TrialEndDate = "Subscription_TrialEndDate";
+			public const string Subscription_TrialStartDate = "Subscription_TrialStartDate";
 			public const string Subscriptions_Title = "Subscriptions_Title";
 			public const string Team_Description = "Team_Description";
 			public const string Team_Help = "Team_Help";
