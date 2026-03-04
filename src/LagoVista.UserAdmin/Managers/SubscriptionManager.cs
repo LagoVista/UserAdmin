@@ -90,14 +90,14 @@ namespace LagoVista.UserAdmin.Managers
             return subscription;
         }
 
-        public async Task<Subscription> GetSubscriptionAsync(Guid id, EntityHeader org, EntityHeader user)
+        public async Task<Subscription> GetSubscriptionAsync(GuidString36 id, EntityHeader org, EntityHeader user)
         {
             var subscription = await _subscriptionRepo.GetSubscriptionAsync(id, org, user);
             await AuthorizeAsync(user, org, "getSubscription", subscription);
             return subscription;
         }
 
-        public async Task<ListResponse<SubscriptionResource>> GetResourcesForSubscriptionAsync(Guid subscriptionId, ListRequest listRequest, EntityHeader org, EntityHeader user)
+        public async Task<ListResponse<SubscriptionResource>> GetResourcesForSubscriptionAsync(GuidString36 subscriptionId, ListRequest listRequest, EntityHeader org, EntityHeader user)
         {
             var subscription = await GetSubscriptionAsync(subscriptionId, org, user);
             await AuthorizeAsync(user, org, "getResourcesForSubscription", subscription);
@@ -112,7 +112,7 @@ namespace LagoVista.UserAdmin.Managers
             return await _subscriptionRepo.GetSubscriptionsForOrgAsync(org, user, listRequest);
         }
 
-        public async Task<ListResponse<SubscriptionSummary>> GetSubscriptionsForCustomerAsync(Guid customerId, ListRequest listRequest, EntityHeader org, EntityHeader user)
+        public async Task<ListResponse<SubscriptionSummary>> GetSubscriptionsForCustomerAsync(GuidString36 customerId, ListRequest listRequest, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(SubscriptionSummary));
 
@@ -123,7 +123,7 @@ namespace LagoVista.UserAdmin.Managers
         {
             await AuthorizeAsync(user, org, "updateSubscription", subscription);
 
-            var oldSubscription = await _subscriptionRepo.GetSubscriptionAsync(new Guid(subscription.Id), org, user);
+            var oldSubscription = await _subscriptionRepo.GetSubscriptionAsync(subscription.Id, org, user);
 
             ValidationCheck(subscription, Actions.Update);
 

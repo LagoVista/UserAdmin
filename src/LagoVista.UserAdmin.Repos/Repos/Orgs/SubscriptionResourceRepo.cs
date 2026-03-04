@@ -33,9 +33,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
             get { return _shouldConsolidateCollections; }
         }
 
-        public async Task<ListResponse<SubscriptionResource>> GetResourcesForSubscriptionAsync(Guid subscriptionId, ListRequest listRequest, string orgId)
+        public async Task<ListResponse<SubscriptionResource>> GetResourcesForSubscriptionAsync(GuidString36 subscriptionId, ListRequest listRequest, string orgId)
         {
-            return await QueryAsync(sub => sub.Id == subscriptionId.ToString(), listRequest);
+            return await QueryAsync(sub => sub.Id == subscriptionId, listRequest);
         }
     }
 }

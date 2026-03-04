@@ -37,13 +37,13 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
             });
         }
 
-        public Task DeleteSubscriptionAsync(Guid id, EntityHeader org, EntityHeader user)
+        public Task DeleteSubscriptionAsync(GuidString36 id, EntityHeader org, EntityHeader user)
         {
             return DeleteWithContextAsync(org, user, async ctx =>
             {
                 await ctx.Subscription
                 .ReadonlyQuery()
-                .Where(usr => usr.Id == id)
+                .Where(usr => usr.Id == id.DbId)
                 .ExecuteDeleteAsync();
                 await CommitAsync();
                 ctx.ChangeTracker.Clear();
@@ -63,7 +63,7 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
             });
         }
 
-        public Task<Subscription> GetSubscriptionAsync(Guid id, EntityHeader org, EntityHeader user)
+        public Task<Subscription> GetSubscriptionAsync(GuidString36 id, EntityHeader org, EntityHeader user)
         {
             return WithContextAsync(org, user, ctx =>
             {
@@ -73,7 +73,7 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
                 .Include(usr => usr.CreatedByUser)
                 .Include(usr => usr.LastUpdatedByUser)
                 .Include(usr => usr.Customer)
-                .Where(usr => usr.Id == id)
+                .Where(usr => usr.Id == id.DbId)
                 .SingleMapAsync(async dto => await _autoMapper.CreateAsync<SubscriptionDTO, Subscription>(dto,org, user));
             });
         }
@@ -93,14 +93,14 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
             });
         }
 
-        public Task<ListResponse<SubscriptionSummary>> GetSubscriptionsForCustomerAsync(Guid customerId, EntityHeader org, EntityHeader user, ListRequest listRequest)
+        public Task<ListResponse<SubscriptionSummary>> GetSubscriptionsForCustomerAsync(GuidString36 customerId, EntityHeader org, EntityHeader user, ListRequest listRequest)
         {
 
             return WithContextAsync(org, user, ctx =>
             {
                 return ctx.Subscription
                     .ReadonlyQuery()
-                    .Where(inv => inv.OrganizationId == org.Id && inv.CustomerId == customerId)
+                    .Where(inv => inv.OrganizationId == org.Id && inv.CustomerId == customerId.DbId)
                     .Include(inv => inv.Customer)
                     .Include(inv => inv.Organization)
                     .ApplyKeysetPaging(listRequest, inv => inv.Name, inv => inv.Id)

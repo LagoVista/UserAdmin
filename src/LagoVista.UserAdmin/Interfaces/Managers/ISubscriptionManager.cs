@@ -18,10 +18,10 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> UpdateSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user);
         Task<InvokeResult> DeleteSubscriptionsForOrgAsync(string id, EntityHeader org, EntityHeader user);
         Task<Subscription> GetTrialSubscriptionAsync(EntityHeader org, EntityHeader user);
-        Task<Subscription> GetSubscriptionAsync(Guid id, EntityHeader org, EntityHeader user);
-        Task<ListResponse<SubscriptionResource>> GetResourcesForSubscriptionAsync(Guid subscriptionId, ListRequest listRequest, EntityHeader org, EntityHeader user);
+        Task<Subscription> GetSubscriptionAsync(GuidString36 id, EntityHeader org, EntityHeader user);
+        Task<ListResponse<SubscriptionResource>> GetResourcesForSubscriptionAsync(GuidString36 subscriptionId, ListRequest listRequest, EntityHeader org, EntityHeader user);
         Task<ListResponse<SubscriptionSummary>> GetSubscriptionsForOrgAsync(ListRequest listRequest, EntityHeader org, EntityHeader user);
-        Task<ListResponse<SubscriptionSummary>> GetSubscriptionsForCustomerAsync(Guid customerId, ListRequest listRequest, EntityHeader org, EntityHeader user);
+        Task<ListResponse<SubscriptionSummary>> GetSubscriptionsForCustomerAsync(GuidString36 customerId, ListRequest listRequest, EntityHeader org, EntityHeader user);
         bool IsForInitialization { get; set; }
     }
 }
