@@ -368,7 +368,7 @@ namespace LagoVista.UserAdmin.Managers
                     DeviceId = "N/A",
                     InviteId = inviteId,
                     AppInstanceId = "N/A",
-                    Password = $"External123-{Guid.NewGuid().ToId().ToLower()}", // For an external account just generate a guid.  The user can change at a later time if they want.
+                    Password = $"External123-{Guid.NewGuid().ToId().Value.ToLower()}", // For an external account just generate a guid.  The user can change at a later time if they want.
                     AppId = "1844A92CDDDF4B59A3BB294A1524D93A", // The one, the only app id for NuvIoT.
                     ClientType = "WEBAPP",
                     Source = Models.DTOs.UserCreationSource.OAuth,

@@ -42,11 +42,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Organization, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public EntityHeader Organization { get; set; }
 
-
-        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
-        public string Icon { get; set; }
-
-
         /// <summary>
         /// NickName space to be used for any devices at this location.  It will build upon the accounts name space.
         /// </summary>

@@ -35,10 +35,6 @@ namespace LagoVista.UserAdmin.Models.Security
         public bool IsForProductLine { get; set; }
 
 
-        [FormField(LabelResource: UserAdminResources.Names.Common_Icon, IsRequired: true, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources))]
-        public string Icon { get; set; }
-
-
         [FormField(LabelResource: UserAdminResources.Names.Module_RestrictByDefault, HelpResource: UserAdminResources.Names.Module_RestrictByDefault_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]
         public bool RestrictByDefault { get; set; }
 

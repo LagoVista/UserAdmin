@@ -31,9 +31,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
         }
 
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
-        public string Icon { get; set; }
-
         [FormField(LabelResource: UserAdminResources.Names.Common_Customer, IsRequired: false, FieldType: FieldTypes.CustomerPicker, ResourceType: typeof(UserAdminResources))]
         public EntityHeader Customer { get; set; }
 

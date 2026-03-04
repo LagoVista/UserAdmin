@@ -52,7 +52,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public AppUser(String email, string userName, String createdBy)
         {
             Id = Guid.NewGuid().ToId();
-            Key = Guid.NewGuid().ToId().ToLower(); 
+            Key = Guid.NewGuid().ToId().Value.ToLower(); 
             Email = email;
             UserName = userName;
             CreatedBy = new EntityHeader()
@@ -120,12 +120,12 @@ namespace LagoVista.UserAdmin.Models.Users
             ExternalLogins = new List<ExternalLogin>();
         }
 
-        private string _key = Guid.NewGuid().ToId().ToLower();
-        public override string Key {
+        private string _key = Guid.NewGuid().ToId().Value.ToLower();
+        public override LagoVistaKey Key {
             get
             {
                 if( _key == null )
-                    _key = Guid.NewGuid().ToId().ToLower();
+                    _key = Guid.NewGuid().ToId().Value.ToLower();
 
                 return _key.ToLower();
 
@@ -445,7 +445,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 LoginType = LoginType.ToString(),
                 TeamsAccountName = TeamsAccountName,
                 CurrentOrganization = CurrentOrganization?.ToEntityHeader(),
-                Key = Id,
+                Key = Key,
                 LastLogin = LastLogin,
                 TimeZone = TimeZone,
             };

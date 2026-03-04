@@ -63,7 +63,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public Task<String> GetUserIdAsync(AppUser user, CancellationToken token)
         {
-            return Task.FromResult(user.Id);
+            return Task.FromResult(user.Id.Value);
         }
 
         public Task<String> GetUserNameAsync(AppUser user, CancellationToken token)

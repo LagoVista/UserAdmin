@@ -158,10 +158,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
         }
 
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
-        public string Icon { get; set; }
-
-
         [FormField(LabelResource: UserAdminResources.Names.ScheduledDowntime_ScheduleType, SortEnums:true, EnumType: (typeof(ScheduleTypes)), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources),
                 WaterMark: UserAdminResources.Names.ScheduledDowntime_ScheduleType_Select, IsRequired: true, IsUserEditable: true)]
         public EntityHeader<ScheduleTypes> ScheduleType { get; set; }

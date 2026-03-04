@@ -24,7 +24,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         Icon: "icon-ae-bill-1", ClusterKey: "subscriptions", ModelType: EntityDescriptionAttribute.ModelTypes.DomainEntity,
         Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime, Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true,
         IndexTier: EntityDescriptionAttribute.IndexTiers.Aux, IndexPriority: 35, IndexTagsCsv: "organizationdomain,subscriptions,domainentity,dto")]
-    public class Subscription : RelationalEntityBase, IValidateable, IKeyedEntity, INamedEntity, ISummaryFactory, IFormDescriptor, IFormDescriptorCol2
+    public class Subscription : RelationalEntityBase, IValidateable, IKeyedEntity, INamedEntity, IFormDescriptor, IFormDescriptorCol2
     {
         public const string Status_OK = "ok";
         public const string Status_FreeAccount = "freeaccount";
@@ -96,7 +96,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public String Status { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Key, HelpResource: UserAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key, RegExValidationMessageResource: UserAdminResources.Names.Common_Key_Validation, ResourceType: typeof(UserAdminResources), IsRequired: true)]
-        public string Key { get; set; }
+        public LagoVistaKey Key { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Name, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsRequired: true)]
         public string Name { get; set; }
@@ -126,11 +126,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 IsPublic = false
                 
             };
-        }
-
-        ISummaryData ISummaryFactory.CreateSummary()
-        {
-            return CreateSummary();
         }
 
         public List<string> GetFormFields()
@@ -174,8 +169,15 @@ namespace LagoVista.UserAdmin.Models.Orgs
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.Subscriptions_Title, UserAdminResources.Names.Subscription_Help,
         UserAdminResources.Names.Subscription_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(UserAdminResources), Icon: "icon-ae-bill-1",
         GetListUrl: "/api/subscriptions", GetUrl: "/api/subscription/{id}", SaveUrl: "/api/subscription", FactoryUrl: "/api/subscription/factory")]
-    public class SubscriptionSummary : SummaryData
+    public class SubscriptionSummary 
     {
+        public GuidString36 Id { get; set; }
+        public LagoVistaKey Icon { get; set; }
+        public string Description { get; set; } 
+
+        public bool IsPublic { get; set; }  
+        public string Name { get; set; }
+        public string Key { get; set; }
         public string Status { get; set; }
         public string PaymentTokenStatus { get; set; }
     }

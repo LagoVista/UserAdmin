@@ -45,7 +45,7 @@ namespace LagoVista.UserAdmin.Models.Calendar
         public CalendarEvent()
         {
             Id = Guid.NewGuid().ToId();
-            Key = Guid.NewGuid().ToId().ToLower();
+            Key = Guid.NewGuid().ToId().Value.ToLower();
         }
 
         [FormField(LabelResource: UserAdminResources.Names.Calendar_Date, FieldType: FieldTypes.Date, ResourceType: typeof(UserAdminResources), IsRequired: true, IsUserEditable: true)]

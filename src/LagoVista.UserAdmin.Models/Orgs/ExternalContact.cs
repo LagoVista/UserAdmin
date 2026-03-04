@@ -31,7 +31,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
             Id = Guid.NewGuid().ToId();
         }
 
-        public string Id { get; set; }
+        public NormalizedId32 Id { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.AppUser_FirstName, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string FirstName { get; set; }

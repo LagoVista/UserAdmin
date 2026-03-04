@@ -82,9 +82,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
             Units = EntityHeader<DiagramUnits>.Create(DiagramUnits.Feet);
         }
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
-        public string Icon { get; set; }
-
         [FormField(LabelResource: UserAdminResources.Names.Common_Notes, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(UserAdminResources))]
         public string Notes { get; set; }
 

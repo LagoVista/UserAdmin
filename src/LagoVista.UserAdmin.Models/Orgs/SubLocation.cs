@@ -2,6 +2,7 @@
 // ContentHash: a4bfd4e0c0a54eb0f328ef27b5acbb1f4110b05f71ca3d7fdeac92c229104563
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core;
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Resources;
@@ -25,7 +26,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         IndexTier: EntityDescriptionAttribute.IndexTiers.Aux, IndexPriority: 40, IndexTagsCsv: "organizationdomain,locations,domainentity,childobject")]
     public class SubLocation : IIDEntity, IKeyedEntity, INamedEntity, IValidateable, IIconEntity, IFormDescriptor
     {
-        public string Id { get; set; }
+        public NormalizedId32 Id { get; set; } = Guid.NewGuid().ToId();
 
 
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Name, FieldType: FieldTypes.Text, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true, IsUserEditable: true)]
@@ -33,10 +34,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Key, HelpResource: LagoVistaCommonStrings.Names.Common_Key_Help, FieldType: FieldTypes.Key,
             RegExValidationMessageResource: LagoVistaCommonStrings.Names.Common_Key_Validation, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true)]
-        public string Key { get; set; }
+        public LagoVistaKey Key { get; set; }
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
-        public string Icon { get; set; } = "icon-fo-internet-2";
+        public LagoVistaIcon Icon { get; set; } = "icon-fo-internet-2";
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public string Description { get; set; }

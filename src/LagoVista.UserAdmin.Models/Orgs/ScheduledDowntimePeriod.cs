@@ -30,14 +30,14 @@ namespace LagoVista.UserAdmin.Models.Orgs
             EndOfDay = true;
         }
 
-        public string Id { get; set; }
+        public NormalizedId32 Id { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Name, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources), IsRequired: true)]
         public string Name { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Key, HelpResource: UserAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key,
          RegExValidationMessageResource: UserAdminResources.Names.Common_Key_Validation, ResourceType: typeof(UserAdminResources), IsRequired: true)]
-        public string Key { get; set; }
+        public LagoVistaKey Key { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public string Description { get; set; }

@@ -46,7 +46,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         {
             Locations = new List<EntityHeader>();
             OrgStatus = EntityHeader<OrgStatuses>.Create(OrgStatuses.Active);
-            Key = Guid.NewGuid().ToId().ToLower();
+            Key = Guid.NewGuid().ToId().Value.ToLower();
             DefaultTheme = "default";
             Icon = "icon-ae-building";
             TimeZone = new EntityHeader()
@@ -58,7 +58,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Namespace, NamespaceType: NamespaceTypes.Organization, NamespaceUniqueMessageResource: UserAdminResources.Names.Organization_NamespaceInUse,
             FieldType: FieldTypes.NameSpace, IsRequired: true, IsUserEditable: false, ResourceType: typeof(UserAdminResources))]
-        public string Namespace { get; set; }
+        public OrgNamespace Namespace { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_WebSite, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public String WebSite { get; set; }
@@ -83,9 +83,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultTheme, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string DefaultTheme { get; set; }
-
-        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
-        public string Icon { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_HeroBackground, GeneratedImageSize: "1792x1024", DisplayImageSize:"1350x900", FieldType: FieldTypes.FileUpload, UploadUrl: "/api/media/resource/public/upload", ResourceType: typeof(UserAdminResources))]
         public string HeroBackgroundImage { get; set; }
@@ -402,7 +399,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
     public class OrganizationSummary : SummaryData, IOrganizationSummary
     {
         public string Text { get; set; }
-        public string Namespace { get; set; }
+        public OrgNamespace Namespace { get; set; }
         public EntityHeader DarkLogo { get; set; }
         public EntityHeader LightLogo { get; set; }
         public string TagLine { get; set; }

@@ -55,7 +55,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public Task<string> GetRoleIdAsync(Role role, CancellationToken cancellationToken)
         {
-            return Task.FromResult(role.Id);
+            return Task.FromResult(role.Id.Value);
         }
 
         public Task<string> GetRoleNameAsync(Role role, CancellationToken cancellationToken)

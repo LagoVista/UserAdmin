@@ -25,7 +25,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public MostRecentlyUsed()
         {
             Id = Guid.NewGuid().ToId();
-            Key = Guid.NewGuid().ToId().ToLower();
+            Key = Guid.NewGuid().ToId().Value.ToLower();
             All = new List<MostRecentlyUsedItem>();
             Modules = new List<MostRecentlyUsedModule>();
         }

@@ -137,7 +137,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             var org = await GetDocumentAsync(id);
             if(!String.IsNullOrEmpty(org.Key))
             {
-                org.Key = org.Key.ToLower();
+                org.Key = org.Key.Value.ToLower();
             }
             return org;
         }

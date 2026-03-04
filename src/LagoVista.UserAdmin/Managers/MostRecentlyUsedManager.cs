@@ -38,7 +38,7 @@ namespace LagoVista.UserAdmin.Managers
             var sw = Stopwatch.StartNew();
 
             if (String.IsNullOrEmpty(mru.Result.Key))
-                mru.Result.Key = Guid.NewGuid().ToId().ToLower();
+                mru.Result.Key = Guid.NewGuid().ToId().Value.ToLower();
 
             var existing = mru.Result.All.SingleOrDefault(itm => itm.Link == mostRecentlyUsedItem.Link);
             if (existing != null)

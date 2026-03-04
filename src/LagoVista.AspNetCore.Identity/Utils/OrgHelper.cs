@@ -55,7 +55,7 @@ namespace LagoVista.AspNetCore.Identity.Utils
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthOrgNotAuthorized.ToErrorMessage());
             }
 
-            var oldOrgId = null == appUser.CurrentOrganization ? "none" : appUser.CurrentOrganization.Id;
+            var oldOrgId = null == appUser.CurrentOrganization ? Guid.Empty.ToId() : appUser.CurrentOrganization.Id;
             var oldOrgName = null == appUser.CurrentOrganization ? "none" : appUser.CurrentOrganization.Text;
 
             var fullOrg = await _orgManager.GetOrganizationAsync(authRequest.OrgId, org, user);

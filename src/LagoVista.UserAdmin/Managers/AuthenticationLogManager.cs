@@ -90,10 +90,10 @@ namespace LagoVista.UserAdmin.Managers
         public Task AddAsync(AuthLogTypes type, AppUser user, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none",
               string credentialId = "none", string challengeId = "none",  string assertionId = "none")
         {
-            var orgId = user.CurrentOrganization == null ? "?" : user.CurrentOrganization.Id;
+            var orgId = user.CurrentOrganization == null ? Guid.Empty.ToId() : user.CurrentOrganization.Id;
             var orgName = user.CurrentOrganization == null ? "?" : user.CurrentOrganization.Text;
 
-            var userId = user == null ? "?" : user.Id;
+            var userId = user == null ? Guid.Empty.ToId() : user.Id;
             var userName = user == null ? "?" : user.UserName;
 
 

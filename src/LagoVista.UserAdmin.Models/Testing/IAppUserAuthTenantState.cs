@@ -10,7 +10,7 @@ namespace LagoVista.UserAdmin.Models.Testing
     /// </summary>
     public interface IAppUserAuthTenantState
     {
-        string Id { get; }
+        NormalizedId32 Id { get; }
         string UserName { get; }
         string Email { get; }
         bool EmailConfirmed { get; }

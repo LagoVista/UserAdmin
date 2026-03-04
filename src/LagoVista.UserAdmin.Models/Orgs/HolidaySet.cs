@@ -36,9 +36,6 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.HolidaySet_Culture_Or_Country, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string CultureOrCountry { get; set; }
 
-        [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
-        public string Icon { get; set; }
-
         [FormField(LabelResource: UserAdminResources.Names.HolidaySet_Holidays, FieldType: FieldTypes.ChildListInline, IsReferenceField:false, FactoryUrl: "/api/scheduleddowntime/factory", ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
         public List<ScheduledDowntime> Holidays { get; set; }
 

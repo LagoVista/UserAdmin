@@ -20,7 +20,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         IndexPriority: 55, IndexTagsCsv: "organizationdomain,org,domainentity,user")]
     public class OrgUser : TableStorageEntity, IValidateable, ITableStorageAuditableEntity
     {
-        public OrgUser(string orgId, string userId)
+        public OrgUser(NormalizedId32 orgId, NormalizedId32 userId)
         {
             RowKey = CreateRowKey(orgId, userId);
             PartitionKey = $"{orgId}";
@@ -28,9 +28,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
             OrgId = orgId;
         }
 
-        public String UserId { get; set; }
+        public NormalizedId32 UserId { get; set; }
         public String UserName { get; set; }
-        public String OrgId { get; set; }
+        public NormalizedId32 OrgId { get; set; }
         public String OrganizationName { get; set; }
         public String ProfileImageUrl { get; set; }
         public String Email { get; set; }
