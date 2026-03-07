@@ -1,4 +1,4 @@
-﻿/*3/2/2026 4:42:59 PM*/
+﻿/*3/7/2026 5:16:41 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -2858,6 +2858,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Subscription_ActiveDate
 
 		public static string Subscription_ActiveDate { get { return GetResourceString("Subscription_ActiveDate"); } }
+//Resources:UserAdminResources:Subscription_Customer
+
+		public static string Subscription_Customer { get { return GetResourceString("Subscription_Customer"); } }
 //Resources:UserAdminResources:Subscription_Description
 
 		public static string Subscription_Description { get { return GetResourceString("Subscription_Description"); } }
@@ -4129,6 +4132,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string SMS_CouldNotVerify = "SMS_CouldNotVerify";
 			public const string SMS_Verification_Body = "SMS_Verification_Body";
 			public const string Subscription_ActiveDate = "Subscription_ActiveDate";
+			public const string Subscription_Customer = "Subscription_Customer";
 			public const string Subscription_Description = "Subscription_Description";
 			public const string Subscription_EndDate = "Subscription_EndDate";
 			public const string Subscription_Help = "Subscription_Help";

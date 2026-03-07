@@ -44,17 +44,21 @@ namespace LagoVista.UserAdmin.Models.Orgs
         }
 
         [MapTo("CustomerId")]
+        [FormField(LabelResource: UserAdminResources.Names.Subscription_Customer,  IsUserEditable: true, FieldType: FieldTypes.CustomerPicker, ResourceType: typeof(UserAdminResources), IsRequired: false)]
         public EntityHeader Customer { get; set; }
 
-        [EncryptedField("PaymentToken")]
-        [FormField(LabelResource: UserAdminResources.Names.Subscription_PaymentMethod, HelpResource:UserAdminResources.Names.Subscription_PaymentMethod_Help, IsUserEditable:false, FieldType: FieldTypes.PaymentMethod, ResourceType: typeof(UserAdminResources), IsRequired: true)]
+        public string PaymentTokenSecretId { get; set; }
+
+        [IgnoreOnMapTo()]
+        [FormField(LabelResource: UserAdminResources.Names.Subscription_PaymentMethod, HelpResource:UserAdminResources.Names.Subscription_PaymentMethod_Help,  SecureIdFieldName: "PaymentTokenSecretId", IsUserEditable:false, FieldType: FieldTypes.Secret, ResourceType: typeof(UserAdminResources), IsRequired: true)]
         public string PaymentToken { get; set; }
 
 
         [FormField(LabelResource: Resources.UserAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(UserAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Icon { get; set; }
 
-        public string PaymentAccountType { get; set; }
+        public string PaymentTokenCustomerId { get; set; }
+        public string PaymentAccountType { get; set; } = "stripe";
         public string PaymentAccountId { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Subscription_IsTrial, FieldType: FieldTypes.Bool, IsUserEditable: false, ResourceType: typeof(UserAdminResources))]
@@ -152,6 +156,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
             return new List<string>()
             {
+                nameof(Customer),
                 nameof(Status),
                 nameof(PaymentToken),
                 nameof(PaymentTokenStatus),

@@ -28,8 +28,9 @@ namespace LagoVista.UserAdmin.Managers
         readonly ISubscriptionResourceRepo _subscriptionResourceRepo;
         readonly IAppUserRepo _appUserRepo;
         readonly IOrganizationRepo _organizationRepo;
+        readonly ISecureStorage _secureStorage;
 
-        public SubscriptionManager(ISubscriptionRepo subscriptionRepo, IDependencyManager depManager, IPaymentCustomers paymentCustomers, IAppUserRepo appUserRepo, IOrganizationRepo organizationRepo,
+        public SubscriptionManager(ISubscriptionRepo subscriptionRepo, ISecureStorage secureStorage, IDependencyManager depManager, IPaymentCustomers paymentCustomers, IAppUserRepo appUserRepo, IOrganizationRepo organizationRepo,
             ISubscriptionResourceRepo subscriptionResourceRepo, ISecurity security, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
             _subscriptionRepo = subscriptionRepo ?? throw new ArgumentNullException(nameof(subscriptionRepo));
@@ -37,6 +38,7 @@ namespace LagoVista.UserAdmin.Managers
             _subscriptionResourceRepo = subscriptionResourceRepo ?? throw new ArgumentNullException(nameof(subscriptionResourceRepo));
             _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
             _organizationRepo = organizationRepo ?? throw new ArgumentNullException(nameof(organizationRepo));
+            _secureStorage = secureStorage ?? throw new ArgumentNullException(nameof(secureStorage));
         }
 
         public async Task<InvokeResult> AddSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user)
@@ -71,6 +73,11 @@ namespace LagoVista.UserAdmin.Managers
                     subscription.PaymentTokenStatus = Subscription.PaymentTokenStatus_OK;
                     subscription.Status = Subscription.Status_OK;
                     subscription.PaymentTokenDate = CalendarDate.Today();
+                
+                    var secretId = await _secureStorage.AddSecretAsync(org, subscription.PaymentToken);
+                    if(!secretId.Successful)  return secretId.ToInvokeResult();
+                    subscription.PaymentTokenSecretId = secretId.Result;
+                    subscription.PaymentToken = null;
                 }
             }
 
@@ -94,6 +101,15 @@ namespace LagoVista.UserAdmin.Managers
         {
             var subscription = await _subscriptionRepo.GetSubscriptionAsync(id, org, user);
             await AuthorizeAsync(user, org, "getSubscription", subscription);
+            if(subscription.PaymentTokenSecretId != null && subscription.PaymentTokenSecretId.StartsWith("src_"))
+            {
+                var secretId = await _secureStorage.AddSecretAsync(org, subscription.PaymentToken);
+                if (!secretId.Successful)  throw new Exception("Unable to add payment token.");
+                subscription.PaymentTokenSecretId = secretId.Result;
+                subscription.PaymentToken = null;
+                await UpdateSubscriptionAsync(subscription, org, user);
+            }
+
             return subscription;
         }
 
@@ -140,6 +156,17 @@ namespace LagoVista.UserAdmin.Managers
                     var result = await _paymentCustomers.AddPaymentSource(subscription.PaymentAccountId, subscription.PaymentToken);
                     if (!result.Successful) return result.ToInvokeResult();
                 }
+
+                if(!String.IsNullOrEmpty(subscription.PaymentTokenSecretId))
+                {
+                    var deleteResult = await _secureStorage.RemoveSecretAsync(org, subscription.PaymentTokenSecretId);
+                    if (!deleteResult.Successful) return deleteResult.ToInvokeResult();
+                }
+
+                var secretId = await _secureStorage.AddSecretAsync(org, subscription.PaymentToken);
+                if(!secretId.Successful)  return secretId.ToInvokeResult();
+                subscription.PaymentTokenSecretId = secretId.Result;
+                subscription.PaymentToken = null;
 
                 subscription.PaymentTokenStatus = Subscription.PaymentTokenStatus_OK;
                 subscription.Status = Subscription.Status_OK;

@@ -3266,4 +3266,7 @@
   <data name="Subscription_IsActive" xml:space="preserve">
     <value>Is Active</value>
   </data>
+  <data name="Subscription_Customer" xml:space="preserve">
+    <value>Customer</value>
+  </data>
 </root>
