@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.RDBMS
 {
+    [CriticalCoverage]
     public class SubscriptionRepo : RelationalBase<BillingDataContext>, ISubscriptionRepo
     {
         ILagoVistaAutoMapper _autoMapper;
