@@ -34,6 +34,7 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
             {
                 ctx.Org.Add(organization);
                 await CommitAsync();
+                ctx.ChangeTracker.Clear();
             });
         }
 
@@ -67,6 +68,7 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
             {
                 ctx.Org.Update(organization);
                 await CommitAsync();
+                ctx.ChangeTracker.Clear();
             });
         }
     }

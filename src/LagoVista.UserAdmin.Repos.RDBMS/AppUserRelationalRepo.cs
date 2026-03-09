@@ -32,6 +32,7 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
             {
                 ctx.AppUser.Add(user);
                 await CommitAsync();
+                ctx.ChangeTracker.Clear();
             });
         }
 
@@ -63,6 +64,7 @@ namespace LagoVista.UserAdmin.Repos.RDBMS
             {
                 ctx.AppUser.Update(user);
                 await CommitAsync();
+                ctx.ChangeTracker.Clear();
             });
         }
     }
