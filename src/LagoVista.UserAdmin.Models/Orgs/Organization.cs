@@ -46,7 +46,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
         {
             Locations = new List<EntityHeader>();
             OrgStatus = EntityHeader<OrgStatuses>.Create(OrgStatuses.Active);
-            Key = Guid.NewGuid().ToId().Value.ToLower();
+            var orgKey = $"org{Guid.NewGuid().ToId().Value.ToLower().Substring(3)}";
+            Key = orgKey;
             DefaultTheme = "default";
             Icon = "icon-ae-building";
             TimeZone = new EntityHeader()
