@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.2.11415.280 d18.0
+VisualStudioVersion = 18.2.11415.280
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{68AF24F5-D5E7-40F5-AE0A-594167F89A44}"
 EndProject
@@ -29,6 +29,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.UserAdmin.Models", "src\LagoVista.UserAdmin.Models\LagoVista.UserAdmin.Models.csproj", "{90D2B8E5-55D1-4CE3-B951-5F9EBC04E2BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingCentralIntegrationTests", "Tests\RingCentralIntegrationTests\RingCentralIntegrationTests.csproj", "{C112D810-FE25-4A48-B564-A1F7496356EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserAdmin.RepoTest", "tests\UserAdmin.RepoTests\UserAdmin.RepoTest.csproj", "{D438312C-0A1B-4ED9-48CF-B331A19D92FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +66,10 @@ Global
 		{C112D810-FE25-4A48-B564-A1F7496356EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C112D810-FE25-4A48-B564-A1F7496356EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C112D810-FE25-4A48-B564-A1F7496356EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D438312C-0A1B-4ED9-48CF-B331A19D92FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D438312C-0A1B-4ED9-48CF-B331A19D92FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D438312C-0A1B-4ED9-48CF-B331A19D92FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D438312C-0A1B-4ED9-48CF-B331A19D92FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +82,7 @@ Global
 		{00AC9BA5-03B5-4CB8-BFD9-9607F58EDCB6} = {68AF24F5-D5E7-40F5-AE0A-594167F89A44}
 		{90D2B8E5-55D1-4CE3-B951-5F9EBC04E2BF} = {68AF24F5-D5E7-40F5-AE0A-594167F89A44}
 		{C112D810-FE25-4A48-B564-A1F7496356EF} = {0D569608-298B-46AE-82D3-8481FE044E10}
+		{D438312C-0A1B-4ED9-48CF-B331A19D92FF} = {0D569608-298B-46AE-82D3-8481FE044E10}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4D5218A2-6C29-4E31-9F29-C471835EF463}

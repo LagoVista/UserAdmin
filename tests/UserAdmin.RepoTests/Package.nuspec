@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>UserAdmin.RepoTest</id>
+    <version>3.0.3223.1850</version>
+    <authors>Software Logistics, LLC</authors>
+    <owners>Software Logistics, LLC</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://www.nuviot.com</projectUrl>
+    <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
+    <description>Provides an abstact mechanism to store object graphs to cloud storage.</description>
+    <copyright>Copyright Software Logistics - 2026</copyright>
+    <tags>HomeAutomation IoT LagoVista</tags>
+    <icon>LagoVistaIcon.png</icon>
+    <releaseNotes>Build Date: 3/14/2026 10:50:38 PM UTC</releaseNotes>
+    <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
+    <dependencies>
+      <group targetFramework="net9.0">
+        <dependency id="LagoVista.Core.TestBase" version="3.0.3223.1850" />
+        <dependency id="LagoVista.Relational.Tests.Core" version="3.0.3223.1850" />
+        <dependency id="LagoVista.UserAdmin.Repos.RDBMS" version="3.0.3223.1850" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
+    <file src="bin\release\net9.0\UserAdmin.RepoTest.dll" target="lib\net9.0\UserAdmin.RepoTest.dll" />
+    <file src="bin\release\net9.0\UserAdmin.RepoTest.pdb" target="lib\net9.0\UserAdmin.RepoTest.pdb" />
+  </files>
+</package>

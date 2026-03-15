@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LagoVista.Core.TestBase" Version="3.0.3223.1850" />
+    <PackageReference Include="LagoVista.Relational.Tests.Core" Version="3.0.3223.1850" />
+  </ItemGroup>
+
+    <ItemGroup>
+    <ProjectReference Include="..\..\src\LagoVista.UserAdmin.Repos.RDBMS\LagoVista.UserAdmin.Repos.RDBMS.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);TEST_PROVIDER_SQLITE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="NUnit.Framework" />
+  </ItemGroup>
+
+</Project>
