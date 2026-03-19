@@ -1,4 +1,5 @@
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.PlatformSupport;
 using LagoVista.IoT.Logging;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Repos;
@@ -12,6 +13,7 @@ using LagoVista.UserAdmin.Interfaces.Repos.Testing;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Interfaces.REpos.Account;
 using LagoVista.UserAdmin.Managers;
+using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Testing;
 using LagoVista.UserAdmin.Repos.Account;
 using LagoVista.UserAdmin.Repos.Orgs;
@@ -29,6 +31,8 @@ using LagoVista.UserAdmin.Repos.TableStorage.Passkeys;
 using LagoVista.UserAdmin.Repos.Testing;
 using LagoVista.UserAdmin.Repos.Users;
 using LagoVista.UserAdmin.Resources;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LagoVista.UserAdmin.Repos
 {
@@ -86,6 +90,20 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<IMagicLinkAttemptStore, MagicLinkAttemptCacheStore>();
 
             ErrorCodes.Register(typeof(UserAdminErrorCodes));
+        }
+    }
+}
+
+namespace LagoVista.DependencyInjection
+{
+    public static class UserAdminModule
+    {
+        public static void AddUserAdminModule(this IServiceCollection services, IConfigurationRoot configurationRoot, ILogger logger)
+        {
+            LagoVista.UserAdmin.Startup.ConfigureServices(services);
+            LagoVista.UserAdmin.Repos.Startup.ConfigureServices(services);
+            services.AddMetaDataHelper<DistroList>();
+
         }
     }
 }

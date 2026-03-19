@@ -56,7 +56,7 @@ namespace LagoVista.UserAdmin.Managers
 
             userFavorites.Favorites.Add(favorite);
             userFavorites.LastUpdatedBy = user;
-            userFavorites.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            userFavorites.LastUpdatedDate = UtcTimestamp.Now;
             await _userFavoritesRepo.UpdateUserFavoritesAsync(userFavorites);
             return userFavorites;
         }
@@ -72,7 +72,7 @@ namespace LagoVista.UserAdmin.Managers
                 return result;
             }
 
-            var timeStamp = DateTime.UtcNow.ToJSONString();
+            var timeStamp = UtcTimestamp.Now;
             var userFavorites = new UserFavorites()
             {
                 CreatedBy = user,

@@ -462,7 +462,7 @@ namespace LagoVista.UserAdmin.Managers
         {
             await AuthorizeAsync(user, org, typeof(AppUserTestRun), Actions.Create);
 
-            var now = DateTime.UtcNow.ToJSONString();
+            var now = UtcTimestamp.Now;
             run.OwnerOrganization = org;
             run.CreatedBy = user;
             run.LastUpdatedBy = user;

@@ -402,7 +402,7 @@ namespace LagoVista.UserAdmin.Repos.Users
             appUser.ExternalLogins.Remove(existing);
 
             appUser.LastUpdatedBy = appUser.ToEntityHeader();
-            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            appUser.LastUpdatedDate = UtcTimestamp.Now;
 
             await UpdateAsync(appUser);
             return appUser;
@@ -485,7 +485,7 @@ namespace LagoVista.UserAdmin.Repos.Users
             }
 
             appUser.LastUpdatedBy = appUser.ToEntityHeader();
-            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            appUser.LastUpdatedDate = UtcTimestamp.Now;
 
             await UpdateAsync(appUser);
             return appUser;

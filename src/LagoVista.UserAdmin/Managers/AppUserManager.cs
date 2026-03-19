@@ -299,7 +299,7 @@ namespace LagoVista.UserAdmin.Managers
                 return result.ToInvokeResult();
 
             appUser.LastUpdatedBy = user;
-            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            appUser.LastUpdatedDate = UtcTimestamp.Now;
 
             AddAuditHistory(appUser, nameof(appUser.SignatureSvgSecretId), appUser.SignatureSvgSecretId, result.Result);
 
@@ -322,7 +322,7 @@ namespace LagoVista.UserAdmin.Managers
                 return result.ToInvokeResult();
 
             appUser.LastUpdatedBy = user;
-            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            appUser.LastUpdatedDate = UtcTimestamp.Now;
 
             AddAuditHistory(appUser, nameof(appUser.InitialsImageSvgSecretId),  appUser.InitialsImageSvgSecretId, result.Result);
 
@@ -415,7 +415,7 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult.FromError($"Could not find user with id: {user.Id}.");
 
             appUser.LastUpdatedBy = user;
-            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            appUser.LastUpdatedDate = UtcTimestamp.Now;
 
             if (!String.IsNullOrEmpty(appUser.SignatureSvgSecretId))
             {
@@ -436,7 +436,7 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult.FromError($"Could not find user with id: {user.Id}.");
 
             appUser.LastUpdatedBy = user;
-            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            appUser.LastUpdatedDate = UtcTimestamp.Now;
 
             if (!String.IsNullOrEmpty(appUser.InitialsImageSvgSecretId))
             {
@@ -570,7 +570,7 @@ namespace LagoVista.UserAdmin.Managers
             appUser.ShowWelcome = user.ShowWelcome;
             appUser.Notes = user.Notes;
             appUser.LastUpdatedBy = updatedByUser;
-            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            appUser.LastUpdatedDate = UtcTimestamp.Now;
 
             if (!String.IsNullOrEmpty(user.TeamsAccountName))
             {
@@ -802,7 +802,7 @@ namespace LagoVista.UserAdmin.Managers
 
             appUser.IsCustomerAdmin = true;
             appUser.LastUpdatedBy = user;
-            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            appUser.LastUpdatedDate = UtcTimestamp.Now;
             appUser.AuditHistory.Add(new EntityChangeSet()
             {
                 ChangeDate = appUser.LastUpdatedDate,
@@ -843,7 +843,7 @@ namespace LagoVista.UserAdmin.Managers
 
             appUser.IsCustomerAdmin = false;
             appUser.LastUpdatedBy = user;
-            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            appUser.LastUpdatedDate = UtcTimestamp.Now;
             appUser.AuditHistory.Add(new EntityChangeSet()
             {
                 ChangeDate = appUser.LastUpdatedDate,
@@ -873,7 +873,7 @@ namespace LagoVista.UserAdmin.Managers
             appUser.Customer = customer;
             appUser.CustomerContact = contact;
             appUser.LastUpdatedBy = user;
-            appUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            appUser.LastUpdatedDate = UtcTimestamp.Now;
             appUser.AuditHistory.Add(new EntityChangeSet()
             {
                 ChangeDate = appUser.LastUpdatedDate,
@@ -1015,7 +1015,7 @@ namespace LagoVista.UserAdmin.Managers
             var user = await _appUserRepo.FindByIdAsync(userEH.Id);
             await AuthorizeAsync(user, AuthorizeResult.AuthorizeActions.Update, userEH, org, nameof(AppUserManager.AcceptTermsAndConditionsAsync));
             user.TermsAndConditionsAccepted = true;
-            user.TermsAndConditionsAcceptedDateTime = DateTime.UtcNow.ToJSONString();
+            user.TermsAndConditionsAcceptedDateTime = UtcTimestamp.Now;
             user.TermsAndConditionsAcceptedIPAddress = ipAddress;
             await _appUserRepo.UpdateAsync(user);
 

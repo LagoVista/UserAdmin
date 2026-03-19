@@ -7,6 +7,7 @@ using LagoVista.AspNetCore.Identity.Managers;
 using LagoVista.AspNetCore.Identity.Services;
 using LagoVista.AspNetCore.Identity.Utils;
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.PlatformSupport;
 using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
@@ -16,6 +17,7 @@ using LagoVista.UserAdmin.Interfaces.REpos.Account;
 using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Users;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Security.Models;
@@ -24,7 +26,7 @@ namespace LagoVista.AspNetCore.Identity
 {
     public class Startup
     {
-        public static void ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection services)
+        public static void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IUserManager, UserManager>();
             services.AddSingleton<ISignInManager, SignInManager>();
@@ -59,6 +61,18 @@ namespace LagoVista.AspNetCore.Identity
 
             IdentityModelEventSource.ShowPII = true;
 
+        }
+    }
+}
+
+
+namespace LagoVista.DependencyInjection
+{
+    public static class LagoVistaIdentityModule
+    {
+        public static void AddLagoVistaIdentityModule(this IServiceCollection services, IConfigurationRoot configurationRoot, ILogger logger)
+        {
+            LagoVista.AspNetCore.Identity.Startup.ConfigureServices(services);
         }
     }
 }

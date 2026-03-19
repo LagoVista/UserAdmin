@@ -54,7 +54,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> CopyToOrgAsync(string holidaySetId, string destOrgId, EntityHeader org, EntityHeader user)
         {
-            var timeStamp = DateTime.UtcNow.ToJSONString();
+            var timeStamp = UtcTimestamp.Now;
 
             if(destOrgId != org.Id)
             {

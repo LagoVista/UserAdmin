@@ -51,6 +51,7 @@ namespace LagoVista.UserAdmin.Models.Users
             
         public AppUser(String email, string userName, String createdBy)
         {
+            var ts = UtcTimestamp.Now;
             Id = Guid.NewGuid().ToId();
             Key = Guid.NewGuid().ToId().Value.ToLower(); 
             Email = email;
@@ -60,7 +61,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 Id = Id,
                 Text = createdBy
             };
-            CreationDate = DateTime.UtcNow.ToJSONString();
+            CreationDate = ts;
 
             IsPreviewUser = false;
 
@@ -70,7 +71,7 @@ namespace LagoVista.UserAdmin.Models.Users
                 Text = createdBy
             };
 
-            LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            LastUpdatedDate = ts;
 
             ProfileImage = new ImageDetails()
             {

@@ -191,7 +191,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             updatedUser.IsSystemAdmin = true;
             updateByUser.IsAccountDisabled = false;
             updatedUser.LastUpdatedBy = user;
-            updatedUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            updatedUser.LastUpdatedDate = UtcTimestamp.Now;
 
             await _userManager.UpdateAsync(updateByUser);
 
@@ -212,7 +212,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var updatedUser = await _userManager.FindByIdAsync(userId);
             updatedUser.IsSystemAdmin = false;
             updatedUser.LastUpdatedBy = user;
-            updatedUser.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            updatedUser.LastUpdatedDate = UtcTimestamp.Now;
 
             await _userManager.UpdateAsync(updateByUser);
 

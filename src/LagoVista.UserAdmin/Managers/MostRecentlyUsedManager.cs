@@ -98,7 +98,7 @@ namespace LagoVista.UserAdmin.Managers
             {
                 result.Timings.Add(new ResultTiming() { Key = "Dit not get MRU from storage", Ms = sw.Elapsed.TotalMilliseconds });
                 sw.Restart();
-                var timeStamp = DateTime.UtcNow.ToJSONString();
+                var timeStamp = UtcTimestamp.Now;
                 mru = new MostRecentlyUsed()
                 {
                     OwnerOrganization = org,

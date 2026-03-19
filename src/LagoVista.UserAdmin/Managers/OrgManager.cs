@@ -725,7 +725,7 @@ namespace LagoVista.UserAdmin.Managers
         #region Organization User Methods
         public async Task<InvokeResult> AddUserToOrgAsync(AppUser appUser, EntityHeader org, EntityHeader addedBy, bool isOrgAdmin = false, bool isAppBuilder = false)
         {
-            var timeStamp = DateTime.UtcNow.ToJSONString();
+            var timeStamp = UtcTimestamp.Now;
             await AuthorizeOrgAccessAsync(addedBy, org, typeof(OrgUser), Actions.Create, new SecurityHelper() { OrgId = org.Id, UserId = appUser.Id });
 
             if (await _orgUserRepo.QueryOrgHasUserAsync(org.Id, appUser.Id))
@@ -830,7 +830,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> AddUserToOrgAsync(string orgId, string userId, EntityHeader userOrg, EntityHeader addedBy)
         {
-            var timeStamp = DateTime.UtcNow.ToJSONString();
+            var timeStamp = UtcTimestamp.Now;
 
             await AuthorizeOrgAccessAsync(addedBy, userOrg, typeof(OrgUser), Actions.Create, new SecurityHelper() { OrgId = orgId, UserId = userId });
 

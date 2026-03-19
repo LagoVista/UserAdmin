@@ -4,7 +4,7 @@
     <OutputType>library</OutputType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Relational" Version="3.0.3210.0451" />
+    <PackageReference Include="LagoVista.Relational" Version="3.0.3228.1851" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.13">
