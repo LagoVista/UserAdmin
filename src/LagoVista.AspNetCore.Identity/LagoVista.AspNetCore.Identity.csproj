@@ -12,6 +12,7 @@
     <PackageReference Include="Twilio" Version="7.13.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="9.0.13" />
     <PackageReference Include="LagoVista.Core.Authentication" Version="3.0.3230.1347" />
+    <PackageReference Include="LagoVista.Core.Configuration" Version="3.0.3230.1347" />
     <PackageReference Include="prometheus-net" Version="8.2.1" />
 
   </ItemGroup>
