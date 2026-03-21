@@ -17,21 +17,11 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
 {
     public class SubscriptionResourceRepo : DocumentDBRepoBase<SubscriptionResource>, ISubscriptionResourceRepo
     {
-        bool _shouldConsolidateCollections;
-        private readonly IAdminLogger _logger;
-
         public SubscriptionResourceRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
                 base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
-            _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
-            _logger = services.AdminLogger;
         }
 
-
-        protected override bool ShouldConsolidateCollections
-        {
-            get { return _shouldConsolidateCollections; }
-        }
 
         public async Task<ListResponse<SubscriptionResource>> GetResourcesForSubscriptionAsync(GuidString36 subscriptionId, ListRequest listRequest, string orgId)
         {

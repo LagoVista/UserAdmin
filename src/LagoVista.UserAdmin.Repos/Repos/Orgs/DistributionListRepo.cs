@@ -3,14 +3,11 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.CloudStorage.DocumentDB;
-using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Models.Orgs;
 using System.Linq;
 using System.Threading.Tasks;
 using LagoVista.Core.Models.UIMetaData;
-using LagoVista.Core.Interfaces;
-using LagoVista.Core;
 using LagoVista.Core.Models;
 using LagoVista.CloudStorage.Interfaces;
 
@@ -18,17 +15,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
 {
     public class DistributionListRepo : DocumentDBRepoBase<DistroList>, IDistributionListRepo
     {
-        private readonly bool _shouldConsolidateCollections;
-
         public DistributionListRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
-            _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
-        }
-
-        protected override bool ShouldConsolidateCollections
-        {
-            get { return _shouldConsolidateCollections; }
         }
 
         public Task AddDistroListAsync(DistroList team)

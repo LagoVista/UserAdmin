@@ -96,7 +96,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<IOrganizationRelationalRepo, OrganizationRelationalRepo>();
             services.AddScoped<ISubscriptionRepo, SubscriptionRepo>();
             services.AddScoped<IDeviceOwnerRelationalRepo, DeviceOwnerRelationalRepo>();
-
+            services.AddScoped<IUserAdminSettings, UserAdminSettings>();
             ErrorCodes.Register(typeof(UserAdminErrorCodes));
         }
     }

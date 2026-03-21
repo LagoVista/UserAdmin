@@ -26,17 +26,12 @@ namespace LagoVista.UserAdmin.Repos.Security
        
         private readonly ICacheProvider _cacheProvider;
 
-        private bool _condolidateCollections;
-
         public RoleRepo(IUserAdminSettings settings, IDefaultRoleList defaultRoleList, IDocumentCloudCachedServices services) : 
             base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, services)
         {
-            _condolidateCollections = settings.ShouldConsolidateCollections;
             _defaultRoleList = defaultRoleList;
             _cacheProvider = services.CacheProvider;
         }
-
-        protected override bool ShouldConsolidateCollections => _condolidateCollections;
 
         public async Task<Role> GetRoleAsync(string id)
         {

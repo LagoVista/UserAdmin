@@ -13,14 +13,10 @@ namespace LagoVista.UserAdmin.Repos.Repos.Testing
 {
     internal class AuthViewRepo : DocumentDBRepoBase<AuthView>, IAuthViewRepo
     {
-        bool _shouldConsolidateCollections;
         public AuthViewRepo(IUserAdminSettings userAdminSettings, IAdminLogger adminLogger) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, adminLogger)
         {
-            _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }
-
-        protected override bool ShouldConsolidateCollections => _shouldConsolidateCollections;
 
         public async Task AddAuthViewAsync(AuthView dsl)
         {

@@ -13,15 +13,10 @@ namespace LagoVista.UserAdmin.Repos.Testing
 {
     public class AppUserTestRunRepo : DocumentDBRepoBase<AppUserTestRun>, IAppUserTestRunRepo
     {
-        bool _shouldConsolidateCollections;
         public AppUserTestRunRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger) : 
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
         {
-            _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }
-
-        protected override bool ShouldConsolidateCollections => _shouldConsolidateCollections;
-
 
         public Task CreateRunAsync(AppUserTestRun run)
         {

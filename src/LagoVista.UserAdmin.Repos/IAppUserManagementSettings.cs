@@ -17,8 +17,6 @@ namespace LagoVista.UserAdmin.Repos
         
         TimeSpan AccessTokenExpiresTimeSpan { get; }
         TimeSpan RefreshTokenExpiresTimeSpan { get; }
-
-        bool ShouldConsolidateCollections { get; }
     }
 }
                                                                                                                                                                                                                                

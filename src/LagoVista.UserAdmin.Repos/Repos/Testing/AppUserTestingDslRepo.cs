@@ -1,8 +1,5 @@
-
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using LagoVista.CloudStorage.DocumentDB;
-using LagoVista.CloudStorage.Interfaces;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Models.Testing;
@@ -11,14 +8,10 @@ namespace LagoVista.UserAdmin.Repos.Testing
 {
     public class AppUserTestingDslRepo : DocumentDBRepoBase<AppUserTestScenario>, IAppUserTestingDslRepo
     {
-        bool _shouldConsolidateCollections;
         public AppUserTestingDslRepo(IUserAdminSettings userAdminSettings, IAdminLogger adminLogger) : 
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, adminLogger)
         {
-            _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }
-
-        protected override bool ShouldConsolidateCollections => _shouldConsolidateCollections;
 
         public async Task AddDSLAsync(AppUserTestScenario dsl)
         {

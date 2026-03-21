@@ -23,23 +23,14 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
         public const string ALL_MODULES_CACHE_KEY = "NUVIOT_ALL_MODULES";
         public const string MODULE_CACHE_KEY = "NUVIOT_MODULE_";
 
-
-        private readonly bool _shouldConsolidateCollections;
-
         private ICacheProvider _cacheProvider;
         private IAdminLogger _adminLogger;
 
         public ModuleRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName,services)
         {
-            _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
             this._cacheProvider = services.CacheProvider;
             this._adminLogger = services.AdminLogger;
-        }
-
-        protected override bool ShouldConsolidateCollections
-        {
-            get { return _shouldConsolidateCollections; }
         }
 
         public async Task AddModuleAsync(Module module)

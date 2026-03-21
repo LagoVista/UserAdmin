@@ -19,15 +19,10 @@ namespace LagoVista.UserAdmin.Repos.Repos.Calendar
 {
     public class CalendarRepo : DocumentDBRepoBase<CalendarEvent>, ICalendarRepo
     {
-        private readonly bool _shouldConsolidateCollections;
-
         public CalendarRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
-            _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }
-
-        protected override bool ShouldConsolidateCollections => _shouldConsolidateCollections;
 
         public Task AddCalendarEventAsync(CalendarEvent calendarEvent)
         {

@@ -5,10 +5,8 @@
 using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.CloudStorage.Interfaces;
 using LagoVista.Core.Models.UIMetaData;
-using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Models.Orgs;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,16 +14,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
 {
     public class ScheduledDowntimeRepo : DocumentDBRepoBase<ScheduledDowntime>, IScheduledDowntimeRepo
     {
-        private readonly bool _shouldConsolidateCollections;
-
         public ScheduledDowntimeRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
-            _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
-        }
-        protected override bool ShouldConsolidateCollections
-        {
-            get { return _shouldConsolidateCollections; }
         }
 
         public Task AddScheduledDowntimeAsync(ScheduledDowntime scheduledDowntime)

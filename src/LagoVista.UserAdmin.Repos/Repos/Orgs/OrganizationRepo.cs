@@ -26,16 +26,10 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 {
     public class OrganizationLoaderRepo : DocumentDBRepoBase<Organization>, IOrganizationLoaderRepo
     {
-        private readonly bool _shouldConsolidateCollections;
-
         public OrganizationLoaderRepo(IUserAdminSettings settings, IAdminLogger logger, ICacheProvider cacheProvider) : 
             base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, cacheProvider)
         {
-            _shouldConsolidateCollections = settings.ShouldConsolidateCollections;
         }
-
-        protected override bool ShouldConsolidateCollections => _shouldConsolidateCollections;
-
         public Task<Organization> GetOrganizationAsync(string id)
         {
             return GetDocumentAsync(id);
@@ -44,7 +38,6 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 
     public class OrganizationRepo : DocumentDBRepoBase<Organization>, IOrganizationRepo
     {
-        private readonly bool _shouldConsolidateCollections;
         private readonly ICacheProvider _cacheProvider;
         private readonly IOrganizationRelationalRepo _relationalRepo;
         private readonly ILagoVistaAutoMapper _autoMapper;
@@ -54,7 +47,6 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         public OrganizationRepo(IUserAdminSettings userAdminSettings, IOrganizationRelationalRepo relationalRepo, IAppUserRelationalRepo appUserRelationalRepo, IDocumentCloudCachedServices services, ISystemUsers systemUsers, ILagoVistaAutoMapper autoMapper) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
-            _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
             _relationalRepo = relationalRepo ?? throw new ArgumentNullException(nameof(relationalRepo));
             _cacheProvider = services.CacheProvider;
             _autoMapper = autoMapper ?? throw new ArgumentNullException(nameof(autoMapper));
@@ -67,11 +59,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             return $"OrgForLandingPage_{orgId}";
         }
 
-        protected override bool ShouldConsolidateCollections
-        {
-            get { return _shouldConsolidateCollections; }
-        }
-
+   
         public async Task AddOrganizationAsync(Organization org)
         {
             var dto = await _autoMapper.CreateAsync<Organization, OrganizationDTO>(org, _systemUsers.SystemOrg, _systemUsers.HostUser);

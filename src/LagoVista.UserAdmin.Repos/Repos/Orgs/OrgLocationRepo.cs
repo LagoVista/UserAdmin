@@ -8,27 +8,17 @@ using System.Threading.Tasks;
 using System.Linq;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
-using LagoVista.IoT.Logging.Loggers;
 using Microsoft.Azure.Cosmos;
 using LagoVista.Core.Models.UIMetaData;
-using LagoVista.Core.Interfaces;
 using LagoVista.CloudStorage.Interfaces;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
     public class OrgLocationRepo : DocumentDBRepoBase<OrgLocation>, IOrgLocationRepo
     {
-        bool _shouldConsolidateCollections;
-
         public OrgLocationRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
-            _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
-        }
-
-        protected override bool ShouldConsolidateCollections
-        {
-            get { return _shouldConsolidateCollections; }
         }
 
         public Task AddLocationAsync(OrgLocation orgLocation)

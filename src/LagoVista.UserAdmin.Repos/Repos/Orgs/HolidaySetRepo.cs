@@ -15,18 +15,11 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
 {
     public class HolidaySetRepo : DocumentDBRepoBase<HolidaySet>, IHolidaySetRepo
     {
-        private readonly bool _shouldConsolidateCollections;
-
         public HolidaySetRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
-            _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }
 
-        protected override bool ShouldConsolidateCollections
-        {
-            get { return _shouldConsolidateCollections; }
-        }
 
         public Task AddHolidaySetAsync(HolidaySet holidaySet)
         {

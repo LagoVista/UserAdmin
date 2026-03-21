@@ -20,8 +20,6 @@ using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Users;
-using LagoVista.UserAdmin.Repos.Repos.Security;
-using Microsoft.Azure.Documents;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -36,18 +34,13 @@ namespace LagoVista.UserAdmin.Repos.Users
 {
     public class AppUserLoadRepo : DocumentDBRepoBase<AppUser>, IAppUserLoaderRepo
     {
-        private readonly bool _shouldConsolidateCollections;
         private readonly IUserRoleRepo _userRoleRepo;
 
         public AppUserLoadRepo(IUserAdminSettings settings, IUserRoleRepo userRoleRepo, IAdminLogger logger, IAppConfig appConfig, ICacheProvider cacheProvider, IFkIndexTableWriterBatched fkWriter) : 
             base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, appConfig.Environment == Environments.Development ? null : cacheProvider, fkWriter: fkWriter)
         {
             _userRoleRepo = userRoleRepo ?? throw new ArgumentNullException(nameof(userRoleRepo));
-            _shouldConsolidateCollections = settings.ShouldConsolidateCollections;
         }
-
-        protected override bool ShouldConsolidateCollections => _shouldConsolidateCollections;
-
         public async Task<AppUser> FindByIdAsync(string userId)
         {
             var appUser = await GetDocumentAsync(userId, false);
@@ -81,18 +74,12 @@ namespace LagoVista.UserAdmin.Repos.Users
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider, fkWriter: fkWriter)
         {
             _adminSettings = userAdminSettings;
-            _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
             _userRelationalRepo = userRelationalRepo;
             _userRoleRepo = userRoleRepo;
             _adminLogger = logger;
             _cacheProvider = cacheProvider;
             _systemUsers = systemUers ?? throw new ArgumentNullException(nameof(systemUers));
             _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(authLogMgr));
-        }
-
-        protected override bool ShouldConsolidateCollections
-        {
-            get { return _shouldConsolidateCollections; }
         }
 
         public async Task CreateAsync(AppUser user)

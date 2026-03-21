@@ -18,7 +18,6 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
         public MostRecentUsedRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider)
         {
-            _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
         }
 
         protected override bool ShouldConsolidateCollections => _shouldConsolidateCollections;
