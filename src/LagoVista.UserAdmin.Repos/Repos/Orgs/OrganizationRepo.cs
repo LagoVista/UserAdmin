@@ -2,25 +2,24 @@
 // ContentHash: 1f2b77f8fead09f7850878b617fe625e3b4bc958f279aac00813c7f484c9af76
 // IndexVersion: 2
 // --- END CODE INDEX META ---
-using System.Threading.Tasks;
 using LagoVista.CloudStorage.DocumentDB;
-using System.Linq;
-using Microsoft.Azure.Documents;
-using LagoVista.UserAdmin.Models.Orgs;
-using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
-using LagoVista.IoT.Logging.Loggers;
-using LagoVista.UserAdmin.Interfaces.Managers;
-using System;
-using LagoVista.Core.Models.UIMetaData;
-using System.Collections.Generic;
-using LagoVista.Core.Models;
-using Microsoft.Azure.Cosmos;
-using LagoVista.CloudStorage;
-using LagoVista.Core.Interfaces;
-using LagoVista.Core.Exceptions;
-using Newtonsoft.Json;
-using MongoDB.Bson.Serialization.IdGenerators;
 using LagoVista.CloudStorage.Interfaces;
+using LagoVista.Core.Exceptions;
+using LagoVista.Core.Interfaces;
+using LagoVista.Core.Interfaces.AutoMapper;
+using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
+using LagoVista.Core.Repos;
+using LagoVista.IoT.Logging.Loggers;
+using LagoVista.Models;
+using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
+using LagoVista.UserAdmin.Models.Orgs;
+using Microsoft.Azure.Cosmos;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 
 namespace LagoVista.UserAdmin.Repos.Orgs
@@ -33,7 +32,6 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, cacheProvider)
         {
             _shouldConsolidateCollections = settings.ShouldConsolidateCollections;
-
         }
 
         protected override bool ShouldConsolidateCollections => _shouldConsolidateCollections;
@@ -47,15 +45,21 @@ namespace LagoVista.UserAdmin.Repos.Orgs
     public class OrganizationRepo : DocumentDBRepoBase<Organization>, IOrganizationRepo
     {
         private readonly bool _shouldConsolidateCollections;
-        private readonly IRDBMSManager _rdbmsUserManager;
         private readonly ICacheProvider _cacheProvider;
+        private readonly IOrganizationRelationalRepo _relationalRepo;
+        private readonly ILagoVistaAutoMapper _autoMapper;
+        private readonly ISystemUsers _systemUsers;
+        private readonly IAppUserRelationalRepo _appUserRelationalRepo;
 
-        public OrganizationRepo(IRDBMSManager rdbmsUserManager, IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
+        public OrganizationRepo(IUserAdminSettings userAdminSettings, IOrganizationRelationalRepo relationalRepo, IAppUserRelationalRepo appUserRelationalRepo, IDocumentCloudCachedServices services, ISystemUsers systemUsers, ILagoVistaAutoMapper autoMapper) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
-            _rdbmsUserManager = rdbmsUserManager ?? throw new ArgumentNullException(nameof(rdbmsUserManager));
+            _relationalRepo = relationalRepo ?? throw new ArgumentNullException(nameof(relationalRepo));
             _cacheProvider = services.CacheProvider;
+            _autoMapper = autoMapper ?? throw new ArgumentNullException(nameof(autoMapper));
+            _systemUsers = systemUsers ?? throw new ArgumentNullException(nameof(systemUsers));
+            _appUserRelationalRepo = appUserRelationalRepo ?? throw new ArgumentNullException(nameof(appUserRelationalRepo));
         }
 
         private string GetCacheKey(String orgId)
@@ -70,13 +74,14 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 
         public async Task AddOrganizationAsync(Organization org)
         {
-            await _rdbmsUserManager.AddOrgAsync(org);
+            var dto = await _autoMapper.CreateAsync<Organization, OrganizationDTO>(org, _systemUsers.SystemOrg, _systemUsers.HostUser);
+            await _relationalRepo.AddOrganizationAsync(dto, _systemUsers.SystemOrg, _systemUsers.HostUser);
             await CreateDocumentAsync(org);
         }
 
         public async Task DeleteOrgAsync(string orgId)
         {
-            await _rdbmsUserManager.DeleteOrgAsync(orgId);
+            await _relationalRepo.DeleteOrganizationAsync(orgId, _systemUsers.SystemOrg, _systemUsers.HostUser);
             await DeleteDocumentAsync(orgId);
         }
 
@@ -87,7 +92,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 
         public Task<List<EntityHeader>> GetBillingContactOrgsForUserAsync(string orgId, string userId)
         {
-            return _rdbmsUserManager.GetBillingContactOrgsForUserAsync(orgId, userId);
+            return _appUserRelationalRepo.GetBillingContactOrgsForUserAsync(userId, _systemUsers.SystemOrg, _systemUsers.HostUser);
         }
 
         public async Task<string> GetHomePageForOrgAsync(string orgId)
@@ -144,7 +149,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 
         public Task<bool> HasBillingRecords(string orgId)
         {
-            return _rdbmsUserManager.HasBillingRecords(orgId);
+            return _relationalRepo.DoesOrgHaveBillingRecords(orgId, _systemUsers.SystemOrg, _systemUsers.HostUser);
         }
 
         public async Task<bool> QueryNamespaceInUseAsync(string namespaceText)
@@ -169,7 +174,8 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 
         public async Task UpdateOrganizationAsync(Organization org)
         {
-            await _rdbmsUserManager.UpdateOrgAsync(org);
+            var dto = await _autoMapper.CreateAsync<Organization, OrganizationDTO>(org, _systemUsers.SystemOrg, _systemUsers.HostUser);
+            await _relationalRepo.UpdateOrganizationAsync(dto, org.ToEntityHeader(), _systemUsers.HostUser);
             await UpsertDocumentAsync(org);
             await _cacheProvider.RemoveAsync(GetCacheKey(org.Id));
             await _cacheProvider.RemoveAsync(ORGS_WITH_NAMESPACE);

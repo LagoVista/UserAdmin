@@ -229,7 +229,7 @@ namespace LagoVista.UserAdmin.Models.Security
         public AuthenticationLog(AuthLogTypes authType)
         {
             AuthType = authType.ToString();
-            PartitionKey = (500000 - (Convert.ToInt32(DateTime.UtcNow.ToDateOnly().Replace("/","")) - 200000000)).ToString();
+            PartitionKey = (500000 - (Convert.ToInt32(DateTime.UtcNow.ToDateOnly().Replace("-", String.Empty).Replace("/",String.Empty)) - 200000000)).ToString();
          
             RowKey = DateTime.Now.ToInverseTicksRowKey();
             TimeStamp = DateTime.UtcNow.ToJSONString();

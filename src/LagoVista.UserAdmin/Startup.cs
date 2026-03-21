@@ -43,7 +43,7 @@ namespace LagoVista.UserAdmin
             services.AddScoped<IUserRegistrationManager, UserRegistrationManager>();
             services.AddScoped<IFunctionMapManager, FunctionMapManager>();
 
-
+            services.AddScoped<IOrgInformationSource, OrgInformationSource>();
             services.AddScoped<IOrgIdentityData, OrgIdentityData>();
         }
     }

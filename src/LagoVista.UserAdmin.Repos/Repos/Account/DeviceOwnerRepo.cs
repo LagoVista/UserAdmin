@@ -1,14 +1,8 @@
-// --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: 53e77235cb8476ca38202d64b7552866103fc22a7e6f5c3bfcfa7c9a55d3361a
-// IndexVersion: 2
-// --- END CODE INDEX META ---
 using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.CloudStorage.Interfaces;
-using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
-using LagoVista.IoT.Logging.Loggers;
-using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Interfaces.Repos;
 using LagoVista.UserAdmin.Interfaces.Repos.Account;
 using LagoVista.UserAdmin.Models.Users;
 using System;
@@ -19,12 +13,12 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
 {
     public class DeviceOwnerRepo : DocumentDBRepoBase<DeviceOwnerUser>, IDeviceOwnerRepo
     {
-        private IRDBMSManager _rdbmsUserManager;
+        private IDeviceOwnerRelationalRepo _relationalRepo;
 
-        public DeviceOwnerRepo(IRDBMSManager rdbmsUserManager, IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services)
+        public DeviceOwnerRepo(IDeviceOwnerRelationalRepo relationalRepo, IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services)
             : base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
         {
-            _rdbmsUserManager = rdbmsUserManager ?? throw new ArgumentNullException(nameof(rdbmsUserManager));
+            _relationalRepo = relationalRepo ?? throw new ArgumentNullException(nameof(relationalRepo));    
         }
 
         protected override bool ShouldConsolidateCollections => true;
@@ -34,7 +28,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
             var owner = await FindByIdAsync(ownerId);
             owner.Devices.Add(device);
             await UpsertDocumentAsync(owner);
-            await _rdbmsUserManager.AddOwnedDeviceAsync(ownerId, orgId, device);
+            await _relationalRepo.AddOwnedDeviceAsync(orgId, ownerId, device);
 
             return owner;
         }
@@ -43,13 +37,15 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
         {
             user.IsAnonymous = false;
             await CreateDocumentAsync(user);
-            return await _rdbmsUserManager.AddDeviceOwnerAsync(user);
+            await _relationalRepo.AddUserAsync(user);
+            return InvokeResult.Success;
         }
 
         public async Task<InvokeResult> DeleteUserAsync(string orgId,string id)
         {
             await DeleteDocumentAsync(id);
-            return await _rdbmsUserManager.DeleteDeviceOwnerAsync(orgId, id);
+            await _relationalRepo.DeleteUserAsync(id);
+            return InvokeResult.Success;
         }
 
         public async Task<DeviceOwnerUser> FindByEmailAsync(string email)
@@ -93,8 +89,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
             var existing = owner.Devices.SingleOrDefault(dev => dev.Id == id);
             owner.Devices.Remove(existing);
             await UpdateUserAsync(owner);
-
-            await _rdbmsUserManager.RemoveOwnedDeviceAsync(orgId, id);
+            await _relationalRepo.RemoveOwnedDeviceAsync(orgId, id);
 
             return owner;      
         }
@@ -104,16 +99,16 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
             var owner = await FindByIdAsync(ownerId);
             var existing = owner.Devices.SingleOrDefault(dev => dev.Id == device.Id);
 
-            await _rdbmsUserManager.UpdateOwnedDeviceAsync(orgId, device);
-            // not much to update now, will likely do when we figure out the billing component.
-
+            await _relationalRepo.UpdateOwnedDeviceAsync(orgId,  device);
             return owner;
         }
 
         public async Task<InvokeResult> UpdateUserAsync(DeviceOwnerUser user)
         {
             await UpsertDocumentAsync(user);
-            return await _rdbmsUserManager.UpdateDeviceOwnerAsync(user);
+            await _relationalRepo.UpdateUserAsync(user);
+
+            return InvokeResult.Success;
         }
     }
 

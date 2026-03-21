@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Interfaces.Managers
 {
-    public interface  IRDBMSManager
+   /* public interface  IRDBMSManager
     {
         Task<InvokeResult> AddAppUserToOrgAsyncAsync(string orgId, AppUser user);
         Task<InvokeResult> RemoveAppUserFromOrgAsync(string orgId, string userId);
@@ -30,5 +30,5 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> AddOwnedDeviceAsync(string orgId, string ownerId, DeviceOwnerDevices device);
         Task<InvokeResult> UpdateOwnedDeviceAsync(string orgId, DeviceOwnerDevices device);
         Task<InvokeResult> RemoveOwnedDeviceAsync(string orgId,string id);
-    }
+    }*/
 }

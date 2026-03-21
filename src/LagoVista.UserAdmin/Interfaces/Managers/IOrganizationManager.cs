@@ -18,7 +18,8 @@ using LagoVista.Core.Models.Geo;
 
 namespace LagoVista.UserAdmin.Interfaces.Managers
 {
-    public interface IOrganizationManager
+
+    public interface IOrganizationManager : IOrgInformationSource
     {
         Task<InvokeResult> AddUserToOrgAsync(String orgId, String userId, EntityHeader userOrg, EntityHeader addedBy);
         Task<InvokeResult> AddUserToOrgAsync(AppUser appUser, EntityHeader org, EntityHeader addedBy, bool isOrgAdmin = false, bool isAppBuilder = false);
@@ -27,6 +28,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> CreateOrganizationAsync(Organization newOrg, EntityHeader userOrg, EntityHeader user);
         Task<InvokeResult> UpdateOrganizationAsync(Organization org, EntityHeader userOrg, EntityHeader user);
 
+        Task<Organization> GetOrganizationAsync(string ogId, EntityHeader org, EntityHeader user);
 
 
         Task<InvokeResult<AcceptInviteResponse>> AcceptInvitationAsync(string inviteId, AppUser appoUser);
@@ -50,7 +52,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
         Task<ListResponse<OwnedObject>> GetOwnedObjectsForOrgAsync(string orgId, ListRequest request, EntityHeader org, EntityHeader user);
 
-        Task<PublicOrgInformation> GetPublicOrginfoAsync(string orgns);
+        
 
         Task<bool> IsUserOrgAdminAsync(string orgId, string userId);
 
@@ -69,7 +71,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
         Task<ListResponse<Invitation>> GetInvitationsAsync(ListRequest request, EntityHeader org, EntityHeader user, Invitation.StatusTypes? byStatus = null);
         Task<ListResponse<Invitation>> GetActiveInvitationsForOrgAsync(ListRequest request, EntityHeader org, EntityHeader user);
-        Task<bool> GetIsInvigationActiveAsync(string inviteId);
+        Task<bool> GetIsInvitationActiveAsync(string inviteId);
 
         Task<ListResponse<OrganizationSummary>> GetAllOrgsAsync(EntityHeader org, EntityHeader user, ListRequest listRequest);
         Task<ListResponse<OrganizationSummary>> SearchAllOrgsAsync(string searchOrgName, EntityHeader user, ListRequest listRequest);
@@ -80,10 +82,10 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
         Task<ListResponse<OrgLocationSummary>> GetLocationsForOrganizationsAsync(ListRequest listRequest, EntityHeader org, EntityHeader user);
         Task<ListResponse<OrgLocationSummary>> GetLocationsForCustomerAsync(ListRequest listRequest, string customerId, EntityHeader org, EntityHeader user);
-        Task<OrgLocation> GetOrgLocationAsync(string id, EntityHeader org, EntityHeader user);
         Task<InvokeResult> DeleteOrgLocationAsync(string id, EntityHeader org, EntityHeader user);
+        Task<OrgLocation> GetOrgLocationAsync(string id, EntityHeader org, EntityHeader user);
         Task<IEnumerable<LocationUser>> GetLocationsForUserAsync(string userId, EntityHeader org, EntityHeader user);
-        Task<Organization> GetOrganizationAsync(string ogId, EntityHeader org, EntityHeader user);
+        
         Task<IEnumerable<OrgUser>> GetOrganizationsForUserAsync(string userId, EntityHeader org, EntityHeader user);
 
         Task SetDefaultOrguserRoleAsync(string orgId, string userId, string roleId, EntityHeader userOrg, EntityHeader setByUser);
@@ -93,29 +95,17 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<UpdateOrganizationViewModel> GetUpdateOrganizationViewModel(string orgId, EntityHeader org, EntityHeader user);
         Task<InvokeResult<Invitation>> InviteUserAsync(InviteUser inviteViewModel, EntityHeader orgEntityHeader, EntityHeader userEntityHeader);
 
-        Task<bool> QueryLocationNamespaceInUseAsync(string orgId, string namespaceText);
-        Task<bool> QueryOrganizationHasUserAsync(string orgId, string userId, EntityHeader org, EntityHeader user);
-        Task<bool> QueryOrgNamespaceInUseAsync(string namespaceText);
-
+       
         Task<InvokeResult> RemoveUserFromLocationAsync(String locationId, String userId, EntityHeader org, EntityHeader removedBy);
         Task<InvokeResult> RemoveUserFromOrganizationAsync(string orgId, AppUser user, EntityHeader org, EntityHeader removedBy);
         Task<InvokeResult> RemoveUserFromOrganizationAsync(string orgId, string userId, EntityHeader org, EntityHeader removedBy);
 
         Task<InvokeResult> RevokeInvitationAsync(string inviteId, EntityHeader org, EntityHeader user);
 
-        Task<InvokeResult<string>> GetLandingPageForOrgAsync(string orgid);
 
         Task<InvokeResult<Organization>> SysAdminGetOrgAsync(string orgId, EntityHeader user);
         Task<InvokeResult> SysAdminUpdateOrgAsync(Organization org, EntityHeader user);
 
         Task<InvokeResult> SetIsProductLineOrgAsync(bool isProductLineOrg, EntityHeader org, EntityHeader user);
-
-        Task<string> GetOrgNameAsync(string orgId);
-        Task<string> GetOrgNameSpaceAsync(string orgId);
-        Task<string> GetOrgIdForNameSpaceAsync(string orgNameSpace);
-
-        Task<EntityHeader> GetOrgEntityHeaderForNameSpaceAsync(string orgNameSpace);
-
-        Task<InvokeResult<BasicTheme>> GetBasicThemeForOrgAsync(string orgid);
     }
 }

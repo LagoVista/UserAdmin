@@ -399,6 +399,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
      SaveUrl: "/api/org", GetUrl: "/api/org/{id}")]
     public class OrganizationSummary : SummaryData, IOrganizationSummary
     {
+        public new LagoVistaKey? Key { get; set; }
+
         public string Text { get; set; }
         public OrgNamespace Namespace { get; set; }
         public EntityHeader DarkLogo { get; set; }

@@ -121,17 +121,27 @@ namespace LagoVista.UserAdmin.Models.Users
             ExternalLogins = new List<ExternalLogin>();
         }
 
-        private string _key = Guid.NewGuid().ToId().Value.ToLower();
-        public override LagoVistaKey Key {
+        private string _key = GenerateValidKey();
+
+        public override LagoVistaKey Key
+        {
             get
             {
-                if( _key == null )
-                    _key = Guid.NewGuid().ToId().Value.ToLower();
+                if (String.IsNullOrWhiteSpace(_key))
+                   _key = GenerateValidKey();
 
-                return _key.ToLower();
-
+                return new LagoVistaKey(_key);
             }
-            set { _key = value; }
+            set
+            {
+                _key = value.Value;
+            }
+        }
+
+        private static string GenerateValidKey()
+        {
+            // Must guarantee LagoVistaKey rules.
+            return "user" + Guid.NewGuid().ToString("N").Substring(0, 12);
         }
 
         public string SendGridSenderId { get; set; }

@@ -38,7 +38,7 @@ namespace LagoVista.UserAdmin.Managers
         public const string FSL_ADMIN = "fsladmin";
         public const string FSL_MANAGER = "fslmanager";
         public const string FSL_TKT_HANDLER = "fslhandler";
-        public const string MARKETING_MANAGER = "marketing_manager";
+        public const string MARKETING_MANAGER = "marketingmanager";
         public const string MARKETING = "marketing";
         public const string ACCOUNT_EXEC = "accountexec";
         public const string SALES_ENGINEER = "salesengineer";
@@ -94,7 +94,7 @@ namespace LagoVista.UserAdmin.Managers
 
                 new Role() { Id=  "ACDC1BADF00D1CAFEF12CE0FF55F2B2A", IsPublic = true, IsSystemRole = true, Name = "Account Executive",AuthorizedGranterRoles = new List<string> {DefaultRoleList.HUMAN_RESOURCES, DefaultRoleList.ORG_ADMIN, DefaultRoleList.USER_ADMIN}, Key=DefaultRoleList.ACCOUNT_EXEC, Description="Sales person responsible for maintaining sales accounts." },
                 new Role() { Id=  "ACDC1BADF00D1CAFEF12CE0FF55F2B2B", IsPublic = true, IsSystemRole = true, Name = "Sales Engineer",AuthorizedGranterRoles = new List<string> {DefaultRoleList.HUMAN_RESOURCES, DefaultRoleList.ORG_ADMIN, DefaultRoleList.USER_ADMIN}, Key=DefaultRoleList.SALES_ENGINEER, Description="Sales person responsible for identifying and creating customer solutions." },
-                new Role() { Id=  "ACDC1BADF00D1CAFEF12CE0FF55F2B2c", IsPublic = true, IsSystemRole = true, Name = "Business Development Representative",AuthorizedGranterRoles = new List<string> {DefaultRoleList.HUMAN_RESOURCES, DefaultRoleList.ORG_ADMIN, DefaultRoleList.USER_ADMIN}, Key=DefaultRoleList.BIZ_DEV_REP, Description="Responsible for identifying new business." },
+                new Role() { Id=  "ACDC1BADF00D1CAFEF12CE0FF55F2B2C", IsPublic = true, IsSystemRole = true, Name = "Business Development Representative",AuthorizedGranterRoles = new List<string> {DefaultRoleList.HUMAN_RESOURCES, DefaultRoleList.ORG_ADMIN, DefaultRoleList.USER_ADMIN}, Key=DefaultRoleList.BIZ_DEV_REP, Description="Responsible for identifying new business." },
 
               };
 

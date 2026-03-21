@@ -1,5 +1,6 @@
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.PlatformSupport;
+using LagoVista.Core.Repos;
 using LagoVista.IoT.Logging;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Repos;
@@ -18,11 +19,13 @@ using LagoVista.UserAdmin.Models.Testing;
 using LagoVista.UserAdmin.Repos.Account;
 using LagoVista.UserAdmin.Repos.Orgs;
 using LagoVista.UserAdmin.Repos.Passkeys;
+using LagoVista.UserAdmin.Repos.Relational;
 using LagoVista.UserAdmin.Repos.Repos.Account;
 using LagoVista.UserAdmin.Repos.Repos.Apps;
 using LagoVista.UserAdmin.Repos.Repos.Calendar;
 using LagoVista.UserAdmin.Repos.Repos.Commo;
 using LagoVista.UserAdmin.Repos.Repos.Orgs;
+using LagoVista.UserAdmin.Repos.Repos.Relational;
 using LagoVista.UserAdmin.Repos.Repos.Security;
 using LagoVista.UserAdmin.Repos.Repos.Testing;
 using LagoVista.UserAdmin.Repos.Repos.Users;
@@ -88,6 +91,11 @@ namespace LagoVista.UserAdmin.Repos
             services.AddTransient<ITestArtifactStorage, TestArtifactStorage>();
             services.AddTransient<IPasskeyChallengeStore, RedisPasskeyChallengeStore>();
             services.AddTransient<IMagicLinkAttemptStore, MagicLinkAttemptCacheStore>();
+
+            services.AddScoped<IAppUserRelationalRepo, AppUserRelationalRepo>();
+            services.AddScoped<IOrganizationRelationalRepo, OrganizationRelationalRepo>();
+            services.AddScoped<ISubscriptionRepo, SubscriptionRepo>();
+            services.AddScoped<IDeviceOwnerRelationalRepo, DeviceOwnerRelationalRepo>();
 
             ErrorCodes.Register(typeof(UserAdminErrorCodes));
         }

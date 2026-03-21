@@ -11,8 +11,10 @@ using LagoVista.Core.Exceptions;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.Core.Repos;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.Models;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
@@ -66,22 +68,25 @@ namespace LagoVista.UserAdmin.Repos.Users
     public class AppUserRepo : DocumentDBRepoBase<AppUser>, IAppUserRepo
     {
         private readonly bool _shouldConsolidateCollections;
-        private readonly IRDBMSManager _rdbmsUserManager;
         private readonly IUserAdminSettings _adminSettings;
         private readonly IUserRoleRepo _userRoleRepo;
         private readonly ICacheProvider _cacheProvider;
         private readonly IAuthenticationLogManager _authLogMgr;
         private readonly IAdminLogger _adminLogger;
+        private readonly IAppUserRelationalRepo _userRelationalRepo;
+        private readonly ISystemUsers _systemUsers;
 
-        public AppUserRepo(IRDBMSManager rdbmsUserManager, IUserRoleRepo userRoleRepo, IUserAdminSettings userAdminSettings,  IAuthenticationLogManager authLogMgr, IAdminLogger logger, ICacheProvider cacheProvider, IFkIndexTableWriterBatched fkWriter) :
+
+        public AppUserRepo(IUserRoleRepo userRoleRepo, IAppUserRelationalRepo userRelationalRepo, IUserAdminSettings userAdminSettings, ISystemUsers systemUers,  IAuthenticationLogManager authLogMgr, IAdminLogger logger, ICacheProvider cacheProvider, IFkIndexTableWriterBatched fkWriter) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider, fkWriter: fkWriter)
         {
             _adminSettings = userAdminSettings;
             _shouldConsolidateCollections = userAdminSettings.ShouldConsolidateCollections;
-            _rdbmsUserManager = rdbmsUserManager;
+            _userRelationalRepo = userRelationalRepo;
             _userRoleRepo = userRoleRepo;
             _adminLogger = logger;
             _cacheProvider = cacheProvider;
+            _systemUsers = systemUers ?? throw new ArgumentNullException(nameof(systemUers));
             _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(authLogMgr));
         }
 
@@ -100,11 +105,7 @@ namespace LagoVista.UserAdmin.Repos.Users
             try
             {
                 await DeleteDocumentAsync(user.Id, softDelete);
-                if (user.Organizations != null)
-                {
-                    foreach (var org in user.Organizations)
-                        await _rdbmsUserManager.RemoveAppUserFromOrgAsync(org.Id, user.Id);
-                }
+                await _userRelationalRepo.DeleteAppUserAsync(user.Id, _systemUsers.SystemOrg, _systemUsers.HostUser);
 
                 if (_cacheProvider != null)
                 {
@@ -242,8 +243,16 @@ namespace LagoVista.UserAdmin.Repos.Users
 
             if (existingUser.Name != user.Name || existingUser.Email != user.Email)
             {
-                foreach(var org in user.Organizations)
-                    await _rdbmsUserManager.UpdateAppUserAsync(org.Id, user);
+
+                var dto = new AppUserDTO()
+                {
+                    AppUserId = user.Id,
+                    FullName = user.Name,
+                    Email = user.Email,
+                    LastUpdatedDate = DateTime.UtcNow,
+
+                };
+                await _userRelationalRepo.UpdateAppUserAsync(dto, _systemUsers.SystemOrg, _systemUsers.HostUser);
             }
         }
 
@@ -355,8 +364,7 @@ namespace LagoVista.UserAdmin.Repos.Users
         {
             await this.DeleteDocumentAsync(userId);
             var user = await GetDocumentAsync(userId);
-            foreach(var org in user.Organizations)
-                await this._rdbmsUserManager.RemoveAppUserFromOrgAsync(org.Id, userId);
+            await _userRelationalRepo.DeleteAppUserAsync(userId, _systemUsers.SystemOrg, _systemUsers.HostUser);
         }
 
         public async Task<ListResponse<UserInfoSummary>> GetUsersWithoutOrgsAsync(ListRequest listRequest)

@@ -33,6 +33,8 @@ using LagoVista.Core.Models.Geo;
 
 namespace LagoVista.UserAdmin.Managers
 {
+
+
     public class OrgManager : ManagerBase, IOrganizationManager
     {
         #region Fields
@@ -40,23 +42,21 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IOrgLocationRepo _locationRepo;
         private readonly IOrgUserRepo _orgUserRepo;
         private readonly ILocationUserRepo _locationUserRepo;
-        private readonly ISmsSender _smsSender;
         private readonly IUserRoleManager _userRoleManager;
         private readonly IUserRoleRepo _userRoleRepo;
         private readonly IEmailSender _emailSender;
         private readonly IInviteUserRepo _inviteUserRepo;
         private readonly ILocationRoleRepo _locationRoleRepo;
         private readonly IAppUserRepo _appUserRepo;
-        private readonly IAdminLogger _adminLogger;
+        private readonly ILogger _adminLogger;
         private readonly IOrgInitializer _orgInitializer;
         private readonly IOwnedObjectRepo _ownedObjectRepo;
         private readonly ISubscriptionManager _subscriptionManager;
         private readonly IDefaultRoleList _defaultRoleList;
         private readonly IAuthenticationLogManager _authLogMgr;
-        private readonly ICacheProvider _cacheProvider;
-        private readonly IBackgroundServiceTaskQueue _taskQueue;
         private readonly ILocationDiagramRepo _diagramRepo;
         private readonly IRoleRepo _roleRepo;
+        private readonly IOrgInformationSource _orgInfoSource;
         #endregion
 
         #region Ctor
@@ -67,12 +67,7 @@ namespace LagoVista.UserAdmin.Managers
             IInviteUserRepo inviteUserRepo,
             ILocationUserRepo locationUserRepo,
             ILocationRoleRepo locationRoleRepo,
-            ISmsSender smsSender,
             IEmailSender emailSender,
-            IAppConfig appConfig,
-            IDependencyManager depManager,
-            ISecurity security,
-            IBackgroundServiceTaskQueue taskQueue,
             IOrgInitializer orgInitializer,
             IDefaultRoleList defaultRoleList,            
             IOwnedObjectRepo ownedObjectRepo,
@@ -81,9 +76,9 @@ namespace LagoVista.UserAdmin.Managers
             IAuthenticationLogManager authLogMgr,
             ISubscriptionManager subscriptionManager,
             ILocationDiagramRepo diagramRepo,
-            ICacheProvider cacheProvider,
             IRoleRepo roleRepo,
-            IAdminLogger logger) : base(logger, appConfig, depManager, security)
+            ICoreAppServices coreAppServices,
+            IOrgInformationSource orgInfoSource ) : base(coreAppServices)
         {
 
             _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(authLogMgr));
@@ -95,26 +90,23 @@ namespace LagoVista.UserAdmin.Managers
             _subscriptionManager = subscriptionManager;
             _userRoleManager = useRoleManager;
             _locationRoleRepo = locationRoleRepo;
-            _smsSender = smsSender;
             _emailSender = emailSender;
             _inviteUserRepo = inviteUserRepo;
             _defaultRoleList = defaultRoleList;
             _userRoleRepo = userRoleRepo;
-            _adminLogger = logger;
+            _adminLogger = coreAppServices.Logger;
             _orgInitializer = orgInitializer;
             _ownedObjectRepo = ownedObjectRepo;
-            _cacheProvider = cacheProvider;
             _diagramRepo = diagramRepo;
-            _taskQueue = taskQueue ?? throw new ArgumentNullException(nameof(taskQueue));
             _roleRepo = roleRepo ?? throw new ArgumentNullException(nameof(roleRepo));
-            
+            _orgInfoSource = orgInfoSource;
         }
         #endregion
 
         #region Organizations
-        public async Task<bool> QueryOrgNamespaceInUseAsync(string namespaceText)
+        public Task<bool> QueryOrgNamespaceInUseAsync(string namespaceText)
         {
-            return await _organizationRepo.QueryNamespaceInUseAsync(namespaceText);
+            return _orgInfoSource.QueryOrgNamespaceInUseAsync(namespaceText);
         }
 
         public async Task<InvokeResult<Organization>> CreateNewOrganizationAsync(CreateOrganizationViewModel organizationViewModel, EntityHeader user, string orgId = null)
@@ -572,7 +564,7 @@ namespace LagoVista.UserAdmin.Managers
             return AcceptInviteViewModel.CreateFromInvite(invite);
         }
 
-        public async Task<bool> GetIsInvigationActiveAsync(string inviteId)
+        public async Task<bool> GetIsInvitationActiveAsync(string inviteId)
         {
             var invite = await _inviteUserRepo.GetInvitationAsync(inviteId);
             if (invite == null)
@@ -664,7 +656,7 @@ namespace LagoVista.UserAdmin.Managers
                 }
                 else
                 {
-                    _adminLogger.AddError("OrgManager_InviteUserAsync", "User Found in Org Unit XRef Table Storage, but not in User, bad data", new KeyValuePair<string, string>("OrgId", org.Id), new KeyValuePair<string, string>("Email", inviteViewModel.Email));
+                    _adminLogger.AddCustomEvent(LogLevel.Error, "[OrgManager_InviteUserAsync]", "User Found in Org Unit XRef Table Storage, but not in User, bad data", new KeyValuePair<string, string>("OrgId", org.Id), new KeyValuePair<string, string>("Email", inviteViewModel.Email));
                 }
             }
 
@@ -954,10 +946,9 @@ namespace LagoVista.UserAdmin.Managers
             }
         }
 
-        public async Task<InvokeResult<string>> GetLandingPageForOrgAsync(string orgId)
+        public Task<InvokeResult<string>> GetLandingPageForOrgAsync(string orgId)
         {
-            var landingPage = await _organizationRepo.GetHomePageForOrgAsync(orgId);
-            return InvokeResult<string>.Create(landingPage);
+            return _orgInfoSource.GetLandingPageForOrgAsync(orgId);
         }
 
         public async Task<InvokeResult> SetAppBuilderAsync(string userId, EntityHeader org, EntityHeader user)
@@ -1101,20 +1092,20 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<bool> QueryOrganizationHasUserAsync(string orgId, string userId, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(OrgUser), Actions.Read, new SecurityHelper { OrgId = orgId, UserId = userId });
-            return await _orgUserRepo.QueryOrgHasUserAsync(orgId, userId);
+            return await _orgInfoSource.QueryOrganizationHasUserAsync(orgId, userId, org, user);
         }
         #endregion
 
         #region Organization Location
-        public async Task<bool> QueryLocationNamespaceInUseAsync(string orgId, string namespaceText)
+        public Task<bool> QueryLocationNamespaceInUseAsync(string orgId, string namespaceText)
         {
-            return await _locationRepo.QueryNamespaceInUseAsync(orgId, namespaceText);
+            return _orgInfoSource.QueryLocationNamespaceInUseAsync(orgId, namespaceText);
         }
 
         public async Task<ListResponse<OrgLocationSummary>> GetLocationsForOrganizationsAsync(ListRequest listRequest, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(OrgLocation), Actions.Read, new SecurityHelper { OrgId = org.Id });
-            return await _locationRepo.GetOrganizationLocationAsync(org.Id, listRequest);
+            return await _orgInfoSource.GetLocationsForOrganizationsAsync(listRequest, org, user);
         }
 
         public async Task<ListResponse<OrgLocationSummary>> GetLocationsForCustomerAsync(ListRequest listRequest, string customerId, EntityHeader org, EntityHeader user)
@@ -1126,8 +1117,7 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<OrgLocation> GetOrgLocationAsync(string id, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(OrgLocation), Actions.Read, new SecurityHelper { OrgId = org.Id });
-
-            return await _locationRepo.GetLocationAsync(id);
+            return await _orgInfoSource.GetOrgLocationAsync(id, org, user);
         }
 
         public async Task<InvokeResult> DeleteOrgLocationAsync(string id, EntityHeader org, EntityHeader user)
@@ -1414,61 +1404,34 @@ namespace LagoVista.UserAdmin.Managers
         }
         #endregion
 
-        public async Task<string> GetOrgNameAsync(string orgId)
+        public Task<string> GetOrgNameAsync(string orgId)
         {
-            var org = await _organizationRepo.GetOrganizationAsync(orgId);
-            return org.Name;
+            return _orgInfoSource.GetOrgNameAsync(orgId);
         }
 
-        public async Task<string> GetOrgNameSpaceAsync(string orgId)
+        public  Task<string> GetOrgNameSpaceAsync(string orgId)
         {
-            var org = await _organizationRepo.GetOrganizationAsync(orgId);
-            return org.Namespace;
+            return _orgInfoSource.GetOrgNameSpaceAsync(orgId);
         }
 
         public Task<string> GetOrgIdForNameSpaceAsync(string orgNameSpace)
         {
-            return _organizationRepo.GetOrganizationIdForNamespaceAsync(orgNameSpace);
+            return _orgInfoSource.GetOrgIdForNameSpaceAsync(orgNameSpace);
         }
 
-        public async Task<PublicOrgInformation> GetPublicOrginfoAsync(string orgns)
+        public Task<PublicOrgInformation> GetPublicOrginfoAsync(string orgns)
         {
-            _adminLogger.Trace($"[OrgManager__GetPublicOrginfoAsync] GetPublicOrginfoAsync - Org Namespace {orgns}");
-            var id = await _organizationRepo.GetOrganizationIdForNamespaceAsync(orgns);
-            var org = await _organizationRepo.GetOrganizationAsync(id);
-            return org.ToPublicOrgInfo();
+            return _orgInfoSource.GetPublicOrginfoAsync(orgns);
         }
 
-        public async Task<EntityHeader> GetOrgEntityHeaderForNameSpaceAsync(string orgNameSpace)
+        public Task<EntityHeader> GetOrgEntityHeaderForNameSpaceAsync(string orgNameSpace)
         {
-            var orgId = await _organizationRepo.GetOrganizationIdForNamespaceAsync(orgNameSpace);
-            var org = await _organizationRepo.GetOrganizationAsync(orgId);
-            return org.ToEntityHeader();
+            return _orgInfoSource.GetOrgEntityHeaderForNameSpaceAsync(orgNameSpace);
         }
 
-
-        public async Task<InvokeResult<BasicTheme>> GetBasicThemeForOrgAsync(string orgid)
+        public  Task<InvokeResult<BasicTheme>> GetBasicThemeForOrgAsync(string orgid)
         {
-            var json = await _cacheProvider.GetAsync($"basic_theme_org_{orgid}");
-            if (string.IsNullOrEmpty(json))
-            {
-                var org = await _organizationRepo.GetOrganizationAsync(orgid);
-                var basicTheme = new BasicTheme()
-                {
-                    PrimaryTextColor = org.PrimaryTextColor,
-                    PrimryBGColor = org.PrimaryBgColor,
-                    AccentColor = org.AccentColor
-                };
-
-                await _cacheProvider.AddAsync($"basic_theme_org_{orgid}", JsonConvert.SerializeObject(basicTheme));
-                return InvokeResult<BasicTheme>.Create(basicTheme);
-            }
-            else
-            {
-                var theme = JsonConvert.DeserializeObject<BasicTheme>(json);
-                return InvokeResult<BasicTheme>.Create(theme);
-
-            }           
+            return _orgInfoSource.GetBasicThemeForOrgAsync(orgid);
         }
     }
 

@@ -2,6 +2,7 @@
 // ContentHash: 032ceab06d473874ec70b6943327bd40729a5918979486789c2ec9436c5bdee7
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.UserAdmin.Interfaces.Repos;
 using LagoVista.UserAdmin.Interfaces.Repos.Account;
 using LagoVista.UserAdmin.Models.Users;
 using Microsoft.AspNetCore.Identity;
@@ -13,9 +14,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
 {
     public class DeviceOwnerUserStore : IUserStore<DeviceOwnerUser>
     {
-        IDeviceOwnerRepo _ownerRepo;
+        IDeviceOwnerRelationalRepo  _ownerRepo;
 
-        public DeviceOwnerUserStore(IDeviceOwnerRepo ownerRepo)
+        public DeviceOwnerUserStore(IDeviceOwnerRelationalRepo ownerRepo)
         {
             _ownerRepo = ownerRepo;
         }
@@ -29,8 +30,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public async Task<IdentityResult> DeleteAsync(DeviceOwnerUser user, CancellationToken cancellationToken)
         {
-            await _ownerRepo.DeleteUserAsync(user.OwnerOrganization.Id, user.Id);
-
+            await _ownerRepo.DeleteUserAsync(user.Id);
             return IdentityResult.Success;
         }
 

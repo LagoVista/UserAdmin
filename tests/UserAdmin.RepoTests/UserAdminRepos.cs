@@ -3,19 +3,15 @@ using LagoVista.Core.Interfaces.AutoMapper;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Relational.DataContexts;
 using LagoVista.Relational.Tests.Core.Utils;
-using LagoVista.UserAdmin.Repos.RDBMS;
+using LagoVista.UserAdmin.Repos.Relational;
 using Relational.Tests.Core.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UserAdmin.RepoTest
 {
     public class UserAdminRepos
     {
-        private readonly BillingDataContext _billing; private readonly MetricsDataContext _metricsDataContext;
+        private readonly BillingDataContext _billing; 
+        private readonly MetricsDataContext _metricsDataContext;
 
         private readonly IAdminLogger _logger;
         private readonly ILagoVistaAutoMapper _autoMapper;
