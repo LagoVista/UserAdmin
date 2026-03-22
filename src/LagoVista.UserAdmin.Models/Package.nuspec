@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.UserAdmin.Models</id>
-    <version>3.0.3230.1347</version>
+    <version>3.0.3231.0647</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <title>LagoVista User Models</title>
@@ -14,12 +14,12 @@
     <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT Devices NuvIoT LagoVista</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 3/21/2026 5:47:27 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 3/22/2026 10:47:31 AM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1">
-        <dependency id="LagoVista.IoT.Logging" version="3.0.3230.1347" />
-        <dependency id="LagoVista.Core.Authentication" version="3.0.3230.1347" />
+        <dependency id="LagoVista.IoT.Logging" version="3.0.3231.0647" />
+        <dependency id="LagoVista.Core.Authentication" version="3.0.3231.0647" />
       </group>
     </dependencies>
   </metadata>
