@@ -29,8 +29,8 @@ namespace LagoVista.UserAdmin.Repos
             foreach (var child in new[] { "GitHub", "Google", "LinkedIn", "Microsoft", "Twitter", "FaceBook" /*, "Amazon" */})
             {
                 var childSection = section.GetSection(child);
-                var clientId = section.Require("ClientId");
-                var secret = section.Require("Secret");
+                var clientId = childSection.Require("ClientId");
+                var secret = childSection.Require("Secret");
                 switch(child)
                 {
                     case "GitHub":
@@ -44,7 +44,7 @@ namespace LagoVista.UserAdmin.Repos
                         break;
                     case "Microsoft":
                         MicrosoftOAuth = new OAuthConfig(clientId, secret);
-                        var secretId = section.Require("SecretId");
+                        var secretId = childSection.Require("SecretId");
 
                         //settings.Settings = new System.Collections.Generic.Dictionary<string, string>
                         //{

@@ -8,6 +8,7 @@ namespace LagoVista.AspNetCore.Identity
     {
         public string SmtpFrom { get; }
 
+        public string SmtpFromName { get;  }
         public string FromPhoneNumber { get; }
 
         public IConnectionSettings SmsServer { get; }
@@ -18,6 +19,7 @@ namespace LagoVista.AspNetCore.Identity
         {
             var smtpSection = configuration.GetRequiredSection("Smtp");
             SmtpFrom = smtpSection.Require("FromAddress");
+            SmtpFromName = smtpSection.Require("FromName");
             SmtpServer = new ConnectionSettings
             {
                 Uri = smtpSection.Require("Server"),
@@ -27,12 +29,11 @@ namespace LagoVista.AspNetCore.Identity
 
 
             var smsSection = configuration.GetRequiredSection("Sms");
-            FromPhoneNumber = configuration.Require("OutgoingNumber");
+            FromPhoneNumber = smsSection.Require("OutgoingNumber");
             SmsServer = new ConnectionSettings
             {
                 AccountId = smsSection.Require("AccountId"),
                 AccessKey = smsSection.Require("AuthToken"),
-                Password = smsSection.Require("Password")
             };
         }
 
