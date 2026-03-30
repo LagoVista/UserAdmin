@@ -37,7 +37,7 @@ namespace LagoVista.UserAdmin.Repos.Users
         private readonly IUserRoleRepo _userRoleRepo;
 
         public AppUserLoadRepo(IUserAdminSettings settings, IUserRoleRepo userRoleRepo, IAdminLogger logger, IAppConfig appConfig, ICacheProvider cacheProvider, IFkIndexTableWriterBatched fkWriter) : 
-            base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, appConfig.Environment == Environments.Development ? null : cacheProvider, fkWriter: fkWriter)
+            base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, cacheProvider, fkWriter: fkWriter)
         {
             _userRoleRepo = userRoleRepo ?? throw new ArgumentNullException(nameof(userRoleRepo));
         }
@@ -60,7 +60,6 @@ namespace LagoVista.UserAdmin.Repos.Users
 
     public class AppUserRepo : DocumentDBRepoBase<AppUser>, IAppUserRepo
     {
-        private readonly bool _shouldConsolidateCollections;
         private readonly IUserAdminSettings _adminSettings;
         private readonly IUserRoleRepo _userRoleRepo;
         private readonly ICacheProvider _cacheProvider;

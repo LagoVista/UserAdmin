@@ -17,7 +17,7 @@ namespace LagoVista.AspNetCore.Identity
 
         public LagoVistaAspNetCoreIdentityProviderSettings(IConfiguration configuration)
         {
-            var smtpSection = configuration.GetRequiredSection("Smtp");
+            var smtpSection = configuration.GetSection("Smtp");
             SmtpFrom = smtpSection.Require("FromAddress");
             SmtpFromName = smtpSection.Require("FromName");
             SmtpServer = new ConnectionSettings
@@ -28,7 +28,7 @@ namespace LagoVista.AspNetCore.Identity
             };
 
 
-            var smsSection = configuration.GetRequiredSection("Sms");
+            var smsSection = configuration.GetSection("Sms");
             FromPhoneNumber = smsSection.Require("OutgoingNumber");
             SmsServer = new ConnectionSettings
             {

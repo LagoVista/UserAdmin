@@ -28,37 +28,37 @@ namespace LagoVista.AspNetCore.Identity
     {
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IUserManager, UserManager>();
-            services.AddSingleton<ISignInManager, SignInManager>();
+            services.AddScoped<IUserManager, UserManager>();
+            services.AddScoped<ISignInManager, SignInManager>();
 
 
             //TODO: These don't belong here.
 
-            services.AddSingleton<ICoreEmailServices, SendGridEmailService>();
-            services.AddSingleton<IEmailSender, SendGridEmailService>();
-            services.AddSingleton<ISmsSender, TwilioSMSSender>();
+            services.AddScoped<ICoreEmailServices, SendGridEmailService>();
+            services.AddScoped<IEmailSender, SendGridEmailService>();
+            services.AddScoped<ISmsSender, TwilioSMSSender>();
 
-            services.AddSingleton<IClaimsFactory, ClaimsFactory>();
+            services.AddScoped<IClaimsFactory, ClaimsFactory>();
 
-            services.AddSingleton<ITokenHelper, TokenHelper>();
-            services.AddSingleton<IOrgHelper, OrgHelper>();
-            services.AddSingleton<IAuthRequestValidators, AuthRequestValidators>();
+            services.AddScoped<ITokenHelper, TokenHelper>();
+            services.AddScoped<IOrgHelper, OrgHelper>();
+            services.AddScoped<IAuthRequestValidators, AuthRequestValidators>();
 
             services.AddScoped<ITwitterAuthService, TwitterAuthServices>();
 
-            services.AddSingleton<IAuthTokenManager, AuthTokenManager>();
-            services.AddSingleton<IRefreshTokenManager, RefreshTokenManager>();
+            services.AddScoped<IAuthTokenManager, AuthTokenManager>();
+            services.AddScoped<IRefreshTokenManager, RefreshTokenManager>();
             services.AddScoped<IExternalLoginManager, ExternalLoginManager>();
 
-            services.AddSingleton<IAppUserMfaManager, AppUserMfaManager>();
-            services.AddSingleton<IAppUserPasskeyManager, AppUserPasskeyManager>();
+            services.AddScoped<IAppUserMfaManager, AppUserMfaManager>();
+            services.AddScoped<IAppUserPasskeyManager, AppUserPasskeyManager>();
             services.AddTransient<IMagicLinkManager, MagicLinkManager>();
 
-            services.AddSingleton<IPendingIdentityManager, PendingIdentityManager>();
+            services.AddScoped<IPendingIdentityManager, PendingIdentityManager>();
             services.AddTransient<IPasswordHasher<PendingIdentity>, PasswordHasher<PendingIdentity>>();
 
-            services.AddSingleton<IUserRedirectServices, UserRedirectServices>();
-            services.AddSingleton<ILagoVistaAspNetCoreIdentityProviderSettings, LagoVistaAspNetCoreIdentityProviderSettings>();
+            services.AddScoped<IUserRedirectServices, UserRedirectServices>();
+            services.AddScoped<ILagoVistaAspNetCoreIdentityProviderSettings, LagoVistaAspNetCoreIdentityProviderSettings>();
 
             IdentityModelEventSource.ShowPII = true;
 
