@@ -19,7 +19,7 @@ namespace LagoVista.UserAdmin.Repos
 
         public RingCentralCredentials(IConfiguration configuration)
         {
-            var section = configuration.GetRequiredSection("RingCentral");
+            var section = configuration.GetSection("RingCentral");
             RingCentralClientId = section.Require("ClientId");
             RingCentralClientSecret = section.Require("ClientSecret");
             RingCentralJWT = section.Require("JWT");
