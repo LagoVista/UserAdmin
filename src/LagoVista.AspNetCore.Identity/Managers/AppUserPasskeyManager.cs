@@ -1,5 +1,6 @@
 using Fido2NetLib;
 using Fido2NetLib.Objects;
+using LagoVista.AspNetCore.Identity.Interfaces;
 using LagoVista.AspNetCore.Identity.Utils;
 using LagoVista.Core;
 using LagoVista.Core.Interfaces;
@@ -8,11 +9,9 @@ using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces.Managers;
-using LagoVista.UserAdmin.Interfaces.Managers.Passkeys;
 using LagoVista.UserAdmin.Interfaces.Repos.Security.Passkeys;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Managers;
-using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.Auth.Passkeys;
 using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Models.Security.Passkeys;

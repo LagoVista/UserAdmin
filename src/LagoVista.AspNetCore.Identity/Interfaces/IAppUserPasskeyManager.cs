@@ -4,7 +4,7 @@ using LagoVista.UserAdmin.Models.Auth.Passkeys;
 using LagoVista.UserAdmin.Models.Security.Passkeys;
 using System.Threading.Tasks;
 
-namespace LagoVista.UserAdmin.Interfaces.Managers.Passkeys
+namespace LagoVista.AspNetCore.Identity.Interfaces
 {
     public interface IAppUserPasskeyManager
     {

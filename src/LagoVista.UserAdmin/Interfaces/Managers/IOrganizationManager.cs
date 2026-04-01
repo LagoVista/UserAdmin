@@ -80,10 +80,8 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
        
         Task<InvokeResult> ResendInvitationAsync(string inviteId, EntityHeader org, EntityHeader user);
 
-        Task<ListResponse<OrgLocationSummary>> GetLocationsForOrganizationsAsync(ListRequest listRequest, EntityHeader org, EntityHeader user);
         Task<ListResponse<OrgLocationSummary>> GetLocationsForCustomerAsync(ListRequest listRequest, string customerId, EntityHeader org, EntityHeader user);
         Task<InvokeResult> DeleteOrgLocationAsync(string id, EntityHeader org, EntityHeader user);
-        Task<OrgLocation> GetOrgLocationAsync(string id, EntityHeader org, EntityHeader user);
         Task<IEnumerable<LocationUser>> GetLocationsForUserAsync(string userId, EntityHeader org, EntityHeader user);
         
         Task<IEnumerable<OrgUser>> GetOrganizationsForUserAsync(string userId, EntityHeader org, EntityHeader user);

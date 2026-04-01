@@ -53,12 +53,6 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
             _appInstanceManager = new Mock<IAppInstanceManager>();
             _authRequestValidators = new Mock<IAuthRequestValidators>();
 
-            var tokenOptions = new TokenAuthOptions()
-            {
-                AccessExpiration = TimeSpan.FromMinutes(90),
-                RefreshExpiration = TimeSpan.FromDays(90),
-            };
-          
             _authTokenManager = new AuthTokenManager(new Mock<IAppInstanceRepo>().Object, new Mock<IAuthenticationLogManager>().Object, new Mock<ISingleUseTokenManager>().Object, _orgManager.Object, _refreshTokenManager.Object,
                 _authRequestValidators.Object, new Mock<IOrganizationRepo>().Object, _tokenHelper.Object, _appInstanceManager.Object,
                 new Mock<IAdminLogger>().Object, _signInManager.Object, _userManager.Object);

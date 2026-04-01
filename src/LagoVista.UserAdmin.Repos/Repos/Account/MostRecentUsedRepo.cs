@@ -1,27 +1,18 @@
-// --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: ba405edc7d40eb849efc7f55707a4b89e83eb2e806fbd8fdfca8863375231b7b
-// IndexVersion: 2
-// --- END CODE INDEX META ---
 using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.Core.Interfaces;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Account;
 using LagoVista.UserAdmin.Models.Users;
-using System;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Account
 {
     public class MostRecentUsedRepo : DocumentDBRepoBase<MostRecentlyUsed>, IMostRecentlyUsedRepo
     {
-        bool _shouldConsolidateCollections;
         public MostRecentUsedRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider) :
             base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider)
         {
         }
-
-        protected override bool ShouldConsolidateCollections => _shouldConsolidateCollections;
-
 
         public Task AddMostRecentlyUsedAsync(MostRecentlyUsed mostRecentlyUsed)
         {

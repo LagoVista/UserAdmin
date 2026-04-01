@@ -4,6 +4,7 @@
 // --- END CODE INDEX META ---
 using LagoVista.AspNetCore.Identity.Interfaces;
 using LagoVista.AspNetCore.Identity.Managers;
+using LagoVista.AspNetCore.Identity.Models;
 using LagoVista.AspNetCore.Identity.Services;
 using LagoVista.AspNetCore.Identity.Utils;
 using LagoVista.Core.Interfaces;
@@ -11,11 +12,9 @@ using LagoVista.Core.PlatformSupport;
 using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
-using LagoVista.UserAdmin.Interfaces.Managers.Passkeys;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Interfaces.REpos.Account;
 using LagoVista.UserAdmin.Managers;
-using LagoVista.UserAdmin.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -58,6 +57,9 @@ namespace LagoVista.AspNetCore.Identity
             services.AddTransient<IPasswordHasher<PendingIdentity>, PasswordHasher<PendingIdentity>>();
 
             services.AddScoped<IUserRedirectServices, UserRedirectServices>();
+
+            services.AddSingleton<IDataProtectionSettings, DataProtectionSettings>();
+            services.AddSingleton<ITokenAuthOptions, TokenAuthOptions>();
             services.AddScoped<ILagoVistaAspNetCoreIdentityProviderSettings, LagoVistaAspNetCoreIdentityProviderSettings>();
 
             IdentityModelEventSource.ShowPII = true;
