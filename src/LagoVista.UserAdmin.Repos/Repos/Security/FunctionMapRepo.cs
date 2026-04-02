@@ -27,11 +27,6 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             _cacheProvider =  services.CacheProvider;
         }
 
-        protected override bool ShouldConsolidateCollections
-        {
-            get => true;
-        }
-
         private string GetCacheKey(FunctionMap map)
         {
             if(map.IsPublic)

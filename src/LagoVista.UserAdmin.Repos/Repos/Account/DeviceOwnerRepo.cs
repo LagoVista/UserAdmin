@@ -21,8 +21,6 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
             _relationalRepo = relationalRepo ?? throw new ArgumentNullException(nameof(relationalRepo));    
         }
 
-        protected override bool ShouldConsolidateCollections => true;
-
         public async Task<DeviceOwnerUser> AddOwnedDeviceAsync(string orgId,string ownerId, DeviceOwnerDevices device)
         {
             var owner = await FindByIdAsync(ownerId);

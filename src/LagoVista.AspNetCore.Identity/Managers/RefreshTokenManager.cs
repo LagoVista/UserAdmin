@@ -17,6 +17,7 @@ using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Models.Apps;
 using RingCentral;
+using LagoVista.AspNetCore.Identity.Interfaces;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
@@ -24,11 +25,11 @@ namespace LagoVista.AspNetCore.Identity.Managers
     {
         IRefreshTokenRepo _refreshTokenRepo;
         IAdminLogger _adminLogger;
-        TokenAuthOptions _tokenOptions;
+        ITokenAuthOptions _tokenOptions;
         IAuthRequestValidators _authRequestValidators;
         IAuthenticationLogManager _authLogManager;
 
-        public RefreshTokenManager(TokenAuthOptions tokenOptions, IAuthenticationLogManager authLogManager, IAuthRequestValidators authRequestValidators, IRefreshTokenRepo refreshTokenRepo, IAdminLogger adminLogger)
+        public RefreshTokenManager(ITokenAuthOptions tokenOptions, IAuthenticationLogManager authLogManager, IAuthRequestValidators authRequestValidators, IRefreshTokenRepo refreshTokenRepo, IAdminLogger adminLogger)
         {
             _refreshTokenRepo = refreshTokenRepo;
             _adminLogger = adminLogger;
