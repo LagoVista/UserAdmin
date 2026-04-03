@@ -3,13 +3,14 @@ using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Apps;
 using LagoVista.UserAdmin.Repos;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LagoVista.UserAdmin
 {
     public class Startup
     {
-        public static void ConfigureServices(IServiceCollection services)
+        public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IAppUserManager, AppUserManager>();
             services.AddScoped<IAppUserManagerReadOnly, AppUserManagerReadOnly>();
@@ -32,7 +33,6 @@ namespace LagoVista.UserAdmin
             services.AddScoped<ISingleUseTokenManager, SingleUseTokenManager>();
             services.AddScoped<ICalendarManager, CalendarManager>();
             services.AddScoped<IMostRecentlyUsedManager, MostRecentlyUsedManager>();
-            services.AddScoped<IAppUserTestingManager, AppUserTestingManager>();
             services.AddScoped<IUserFavoritesManager, UserFavoritesManager>();            
             services.AddScoped<ISystemNotificationManager, SystemNotificationManager>();
             services.AddScoped<IAppUserInboxManager, AppUserInboxManager>();
@@ -45,6 +45,11 @@ namespace LagoVista.UserAdmin
 
             services.AddScoped<IOrgInformationSource, OrgInformationSource>();
             services.AddScoped<IOrgIdentityData, OrgIdentityData>();
+
+            if (configuration["AppKey"] == "web")
+            {
+                services.AddScoped<IAppUserTestingManager, AppUserTestingManager>();
+            }
         }
     }
 }

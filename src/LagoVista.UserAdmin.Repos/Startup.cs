@@ -112,7 +112,7 @@ namespace LagoVista.DependencyInjection
     {
         public static void AddUserAdminModule(this IServiceCollection services, IConfigurationRoot configurationRoot, ILogger logger)
         {
-            LagoVista.UserAdmin.Startup.ConfigureServices(services);
+            LagoVista.UserAdmin.Startup.ConfigureServices(services, configurationRoot);
             LagoVista.UserAdmin.Repos.Startup.ConfigureServices(services);
             services.AddMetaDataHelper<DistroList>();
 

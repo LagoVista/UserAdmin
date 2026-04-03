@@ -25,13 +25,10 @@ namespace LagoVista.AspNetCore.Identity
 {
     public class Startup
     {
-        public static void ConfigureServices(IServiceCollection services)
+        public static void ConfigureServices(IServiceCollection services, IConfigurationRoot configuration)
         {
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<ISignInManager, SignInManager>();
-
-
-            //TODO: These don't belong here.
 
             services.AddScoped<ICoreEmailServices, SendGridEmailService>();
             services.AddScoped<IEmailSender, SendGridEmailService>();
@@ -47,13 +44,16 @@ namespace LagoVista.AspNetCore.Identity
 
             services.AddScoped<IAuthTokenManager, AuthTokenManager>();
             services.AddScoped<IRefreshTokenManager, RefreshTokenManager>();
-            services.AddScoped<IExternalLoginManager, ExternalLoginManager>();
-
-            services.AddScoped<IAppUserMfaManager, AppUserMfaManager>();
-            services.AddScoped<IAppUserPasskeyManager, AppUserPasskeyManager>();
-            services.AddTransient<IMagicLinkManager, MagicLinkManager>();
-
             services.AddScoped<IPendingIdentityManager, PendingIdentityManager>();
+
+            if (configuration["AppKey"] == "web")
+            {
+                services.AddScoped<IExternalLoginManager, ExternalLoginManager>();
+                services.AddScoped<IAppUserMfaManager, AppUserMfaManager>();
+                services.AddScoped<IAppUserPasskeyManager, AppUserPasskeyManager>();
+                services.AddTransient<IMagicLinkManager, MagicLinkManager>();
+            }
+
             services.AddTransient<IPasswordHasher<PendingIdentity>, PasswordHasher<PendingIdentity>>();
 
             services.AddScoped<IUserRedirectServices, UserRedirectServices>();
@@ -75,7 +75,7 @@ namespace LagoVista.DependencyInjection
     {
         public static void AddLagoVistaIdentityModule(this IServiceCollection services, IConfigurationRoot configurationRoot, ILogger logger)
         {
-            LagoVista.AspNetCore.Identity.Startup.ConfigureServices(services);
+            LagoVista.AspNetCore.Identity.Startup.ConfigureServices(services, configurationRoot);
         }
     }
 }
