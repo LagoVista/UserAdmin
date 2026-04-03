@@ -46,14 +46,11 @@ namespace LagoVista.AspNetCore.Identity
             services.AddScoped<IRefreshTokenManager, RefreshTokenManager>();
             services.AddScoped<IPendingIdentityManager, PendingIdentityManager>();
 
-            if (configuration["AppKey"] == "web")
-            {
-                services.AddScoped<IExternalLoginManager, ExternalLoginManager>();
-                services.AddScoped<IAppUserMfaManager, AppUserMfaManager>();
-                services.AddScoped<IAppUserPasskeyManager, AppUserPasskeyManager>();
-                services.AddTransient<IMagicLinkManager, MagicLinkManager>();
-            }
-
+            services.AddScoped<IExternalLoginManager, ExternalLoginManager>();
+            services.AddScoped<IAppUserMfaManager, AppUserMfaManager>();
+            services.AddScoped<IAppUserPasskeyManager, AppUserPasskeyManager>();
+            services.AddTransient<IMagicLinkManager, MagicLinkManager>();
+           
             services.AddTransient<IPasswordHasher<PendingIdentity>, PasswordHasher<PendingIdentity>>();
 
             services.AddScoped<IUserRedirectServices, UserRedirectServices>();

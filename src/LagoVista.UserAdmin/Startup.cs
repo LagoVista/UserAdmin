@@ -46,10 +46,7 @@ namespace LagoVista.UserAdmin
             services.AddScoped<IOrgInformationSource, OrgInformationSource>();
             services.AddScoped<IOrgIdentityData, OrgIdentityData>();
 
-            if (configuration["AppKey"] == "web")
-            {
-                services.AddScoped<IAppUserTestingManager, AppUserTestingManager>();
-            }
+            services.AddScoped<IAppUserTestingManager, AppUserTestingManager>();
         }
     }
 }
