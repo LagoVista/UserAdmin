@@ -402,7 +402,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public new LagoVistaKey? Key { get; set; }
 
         public string Text { get; set; }
-        public OrgNamespace Namespace { get; set; }
+        public OrgNamespace? Namespace { get; set; }
         public EntityHeader DarkLogo { get; set; }
         public EntityHeader LightLogo { get; set; }
         public string TagLine { get; set; }
@@ -429,9 +429,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
             {
                 char[] arr = Text.ToCharArray();
 
-                arr = Array.FindAll<char>(arr, (c => (char.IsLetter(c)
-                                                  || char.IsWhiteSpace(c)
-                                                  || c == '-')));
+                arr = Array.FindAll<char>(arr, (c => (char.IsLetter(c))));
                 Namespace = new string(arr).ToLower();
             }
 
