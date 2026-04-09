@@ -186,6 +186,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
         Circle,
         [EnumLabel(LocationDiagramShape.ShapeType_Polygon, UserAdminResources.Names.ShapeType_Polygon, typeof(UserAdminResources))]
         Polygon,
+        [EnumLabel(LocationDiagramShape.ShapeType_Polyline, UserAdminResources.Names.ShapeType_Polyline, typeof(UserAdminResources))]
+        Polyline,
     }
 
 
@@ -201,6 +203,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public const string ShapeType_Closet = "closet";
         public const string ShapeType_Circle = "circle";
         public const string ShapeType_Polygon = "polygon";
+        public const string ShapeType_Polyline = "polyline";
 
         public LocationDiagramShape()
         {
@@ -378,6 +381,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
             Id = Guid.NewGuid().ToId();
             Icon = "icon-fo-layer-3";
         }
+
+        public List<List<ShapePoint>> Polylines { get; set; } = new List<List<ShapePoint>>();
 
         public string Id { get; set; }
 

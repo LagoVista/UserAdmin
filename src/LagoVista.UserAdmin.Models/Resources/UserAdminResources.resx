@@ -3269,4 +3269,7 @@
   <data name="Subscription_Customer" xml:space="preserve">
     <value>Customer</value>
   </data>
+  <data name="ShapeType_Polyline" xml:space="preserve">
+    <value>Polyline</value>
+  </data>
 </root>

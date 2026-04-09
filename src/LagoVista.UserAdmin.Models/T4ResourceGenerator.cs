@@ -1,4 +1,4 @@
-﻿/*3/7/2026 5:16:41 AM*/
+﻿/*4/9/2026 9:22:15 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -2831,6 +2831,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:ShapeType_Polygon
 
 		public static string ShapeType_Polygon { get { return GetResourceString("ShapeType_Polygon"); } }
+//Resources:UserAdminResources:ShapeType_Polyline
+
+		public static string ShapeType_Polyline { get { return GetResourceString("ShapeType_Polyline"); } }
 //Resources:UserAdminResources:ShapeType_Room
 
 		public static string ShapeType_Room { get { return GetResourceString("ShapeType_Room"); } }
@@ -4123,6 +4126,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string ShapeType_ExternalEntrance = "ShapeType_ExternalEntrance";
 			public const string ShapeType_ParkingLot = "ShapeType_ParkingLot";
 			public const string ShapeType_Polygon = "ShapeType_Polygon";
+			public const string ShapeType_Polyline = "ShapeType_Polyline";
 			public const string ShapeType_Room = "ShapeType_Room";
 			public const string ShapeType_Select = "ShapeType_Select";
 			public const string ShapeType_Window = "ShapeType_Window";

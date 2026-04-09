@@ -5,8 +5,8 @@
     <AssemblyOriginatorKeyFile>LagoVista.Core.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.IoT.Logging" Version="3.0.3231.0647" />
-    <PackageReference Include="LagoVista.Core.Authentication" Version="3.0.3231.0647" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="3.0.3249.0539" />
+    <PackageReference Include="LagoVista.Core.Authentication" Version="3.0.3249.0539" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="T4ResourceGenerator.cs">
