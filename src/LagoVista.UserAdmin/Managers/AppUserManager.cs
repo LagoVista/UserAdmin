@@ -523,7 +523,6 @@ namespace LagoVista.UserAdmin.Managers
 
             appUser.EmailConfirmed = true;
             appUser.VerifyEmailSentTimeStamp = null;
-            await _appUserRepo.UpdateAsync(appUser);
 
             var getLinkResult = await _userRedirectServices.IdentityDefaultRedirectAsync(appUser);  
             if(!getLinkResult.Successful)
@@ -531,6 +530,8 @@ namespace LagoVista.UserAdmin.Managers
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.EmailConfirmFailed, appUser, errors: $"Failed to get redirect link after confirming email for user with id: {userId}.");
                 return InvokeResult<AppUser>.FromInvokeResult(getLinkResult.ToInvokeResult());
             }
+
+            await _appUserRepo.UpdateAsync(appUser);
 
             await _signInManager.RefreshUserLoginAsync(appUser);
             return InvokeResult<AppUser>.Create(appUser, getLinkResult.Result);

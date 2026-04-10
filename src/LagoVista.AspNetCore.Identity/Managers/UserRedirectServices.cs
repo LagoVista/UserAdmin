@@ -5,6 +5,7 @@ using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Resources;
@@ -28,10 +29,11 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IAdminLogger _adminLogger;
         private readonly IAuthenticationLogManager _authLogMgr;
         private readonly IEmailSender _emailSender;
+        private readonly IInviteUserRepo _inviteRepo;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _aspNetUserManager;
 
-        public UserRedirectServices(UserManager<AppUser> userManager, IAppConfig appConfig, IEmailSender emailSender,
+        public UserRedirectServices(UserManager<AppUser> userManager, IAppConfig appConfig, IEmailSender emailSender, IInviteUserRepo inviteRepo,
                                     SignInManager<AppUser> signinManager, IAdminLogger adminLogger,IAuthenticationLogManager authLogMgr)
         {
             _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
@@ -40,6 +42,7 @@ namespace LagoVista.UserAdmin.Managers
             _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(authLogMgr));
             _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
             _signInManager = signinManager ?? throw new ArgumentNullException(nameof(signinManager));   
+            _inviteRepo = inviteRepo ?? throw new ArgumentNullException(nameof(inviteRepo));
         }
 
         private String GetWebURI()
@@ -118,6 +121,7 @@ namespace LagoVista.UserAdmin.Managers
 
             if (String.IsNullOrEmpty(user.Email) || String.IsNullOrEmpty(user.FirstName) || String.IsNullOrEmpty(user.LastName))
                 return InvokeResult<string>.Create(CommonLinks.CompleteUserRegistration);
+
             if (!user.EmailConfirmed)
             {
                 var sendConfirmResult = await SendConfirmationEmailAsync(user);
@@ -126,9 +130,26 @@ namespace LagoVista.UserAdmin.Managers
                 else
                     return sendConfirmResult.ToInvokeResult<string>();
             }
-            if (user.CurrentOrganization == null) return InvokeResult<string>.Create(CommonLinks.CreateDefaultOrg);
+
+            var invites = user.PendingInviteIds.ToList();
+            var remainingInviteIds = new List<string>();
+
+            foreach (var pendingInviteId in invites)
+            {
+                var pendingInvite = await _inviteRepo.GetInvitationAsync(pendingInviteId);
+                var shouldRemove = (pendingInvite == null || pendingInvite.Accepted || pendingInvite.Declined ||
+                   pendingInvite.Status == Models.Orgs.Invitation.StatusTypes.Replaced || pendingInvite.Status == Models.Orgs.Invitation.StatusTypes.Revoked);
+
+                if(!shouldRemove)
+                    remainingInviteIds.Add(pendingInviteId);
+            }
+
+            user.PendingInviteIds = remainingInviteIds.ToArray();
+
             if (user.PendingInviteIds.Length == 1) return InvokeResult<string>.Create(CommonLinks.AcceptInviteId.Replace("{inviteid}", user.PendingInviteIds.First()));
             else if (user.PendingInviteIds.Any()) return InvokeResult<string>.Create(CommonLinks.Invitations);
+
+            if (user.CurrentOrganization == null) return InvokeResult<string>.Create(CommonLinks.CreateDefaultOrg);
 
             if (!String.IsNullOrEmpty(user.PendingRedirect)) return InvokeResult<string>.Create(user.PendingRedirect);
             if (!String.IsNullOrEmpty(user.CurrentOrganization?.HomePage)) return InvokeResult<string>.Create(user.CurrentOrganization?.HomePage);

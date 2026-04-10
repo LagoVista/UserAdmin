@@ -91,7 +91,8 @@ namespace LagoVista.UserAdmin.Repos.Security
 
         public async Task<Role> GetRoleByKeyAsync(string key, string orgId)
         {
-            var role = _defaultRoleList.GetStandardRoles().SingleOrDefault(rol => rol.Key == key);
+            var defaultRoles = _defaultRoleList.GetStandardRoles();
+            var role = defaultRoles.SingleOrDefault(rol => rol.Key == key);
             if (role == null)
             {
                 var json = await _cacheProvider.GetAsync($"ROLEB_KEY_{key}_{orgId}");

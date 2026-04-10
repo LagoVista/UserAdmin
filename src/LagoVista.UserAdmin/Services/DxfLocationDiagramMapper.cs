@@ -432,6 +432,9 @@ namespace LagoVista.UserAdmin.Services
 
         private static void NormalizeArtifacts(List<LayerArtifacts> layerArtifacts, LocationDiagram diagram, DxfImportOptions options)
         {
+            const double FinalInsetX = -2800d;
+            const double FinalInsetY = -700d;
+
             var allPoints = new List<DxfPoint>();
             foreach (var artifact in layerArtifacts)
             {
@@ -473,8 +476,10 @@ namespace LagoVista.UserAdmin.Services
                 {
                     var transformed = worldPolyline.Select(point => new ShapePoint
                     {
-                        X = point.X - cropMinX,
-                        Y = options.FlipY ? (cropMaxY - point.Y) : (point.Y - cropMinY)
+                        X = (point.X - cropMinX) + FinalInsetX,
+                        Y = options.FlipY
+                            ? (cropMaxY - point.Y) + FinalInsetY
+                            : (point.Y - cropMinY) + FinalInsetY
                     }).ToList();
 
                     if (transformed.Count >= 2)
@@ -486,6 +491,9 @@ namespace LagoVista.UserAdmin.Services
                 foreach (var rawShape in artifact.Shapes)
                 {
                     NormalizeShape(rawShape, cropMinX, cropMinY, cropMaxY, options);
+
+                    rawShape.Shape.X += FinalInsetX;
+                    rawShape.Shape.Y += FinalInsetY;
                 }
             }
 
@@ -526,8 +534,8 @@ namespace LagoVista.UserAdmin.Services
 
             diagram.ViewPortX = diagramMinX;
             diagram.ViewPortY = diagramMinY;
-            diagram.Width = Math.Max(0, diagramMaxX - diagramMinX);
-            diagram.Height = Math.Max(0, diagramMaxY - diagramMinY);
+            diagram.Width = Math.Max(0, diagramMaxX - diagramMinX + FinalInsetX);
+            diagram.Height = Math.Max(0, diagramMaxY - diagramMinY + FinalInsetY);
             diagram.Scale = 1;
             diagram.Rotation = 0;
             diagram.DefaultShapeZoomLevel = 1;
