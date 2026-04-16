@@ -20,7 +20,7 @@ namespace LagoVista.UserAdmin.Repos.Relational
     {
         ILagoVistaAutoMapper _autoMapper;
 
-        public AppUserRelationalRepo(BillingDataContext context, IAdminLogger adminLogger, ILagoVistaAutoMapper autoMapper, ISecureStorage secureStorage) :
+        public AppUserRelationalRepo(IDbContextFactory<BillingDataContext> context, IAdminLogger adminLogger, ILagoVistaAutoMapper autoMapper, ISecureStorage secureStorage) :
            base(context, adminLogger, secureStorage)
         {
             _autoMapper = autoMapper ?? throw new ArgumentNullException(nameof(autoMapper));
@@ -32,7 +32,7 @@ namespace LagoVista.UserAdmin.Repos.Relational
             return AddWithContextAsync(org, addedByUser, async ctx =>
             {
                 ctx.AppUser.Add(user);
-                await CommitAsync();
+                await ctx.SaveChangesAsync();
                 ctx.ChangeTracker.Clear();
             });
         }
@@ -45,7 +45,7 @@ namespace LagoVista.UserAdmin.Repos.Relational
                 .ReadonlyQuery()
                 .Where(usr => usr.AppUserId == id)
                 .ExecuteDeleteAsync();
-                await CommitAsync();
+                await ctx.SaveChangesAsync();
             });
         }
 
@@ -64,7 +64,7 @@ namespace LagoVista.UserAdmin.Repos.Relational
             return AddWithContextAsync(org, updatedByUser, async ctx =>
             {
                 ctx.AppUser.Update(user);
-                await CommitAsync();
+                await ctx.SaveChangesAsync();
                 ctx.ChangeTracker.Clear();
             });
         }

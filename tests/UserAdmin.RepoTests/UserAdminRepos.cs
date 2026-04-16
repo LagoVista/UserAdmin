@@ -4,6 +4,9 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Relational.DataContexts;
 using LagoVista.Relational.Tests.Core.Utils;
 using LagoVista.UserAdmin.Repos.Relational;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Moq;
 using Relational.Tests.Core.Utils;
 
 namespace UserAdmin.RepoTest
@@ -18,6 +21,8 @@ namespace UserAdmin.RepoTest
         private readonly ISecureStorage _secureStorage;
         private readonly ISystemUsers _systemUsers;
         private readonly IAppConfig _appConfig;
+
+        private Mock<IDbContextFactory<BillingDataContext>> _billingFactory = new Mock<IDbContextFactory<BillingDataContext>>();
 
         public UserAdminRepos(
             BillingDataContext billing,
@@ -34,18 +39,19 @@ namespace UserAdmin.RepoTest
             _secureStorage = secureStorage;
             _systemUsers = new RelationalTestSystemUsers();
             _appConfig = new TestAppConfig();
+
+            _billingFactory.Setup(f => f.CreateDbContext()).Returns(billing);
         }
 
 
         private AppUserRelationalRepo _appUsers;
-        public AppUserRelationalRepo AppUsers => _appUsers ??= new AppUserRelationalRepo(_billing, _logger, _autoMapper, _secureStorage);
+        public AppUserRelationalRepo AppUsers => _appUsers ??= new AppUserRelationalRepo(_billingFactory.Object, _logger, _autoMapper, _secureStorage);
 
         private OrganizationRelationalRepo _org;
-        public OrganizationRelationalRepo Organizations => _org ??= new OrganizationRelationalRepo(_billing, _logger, _autoMapper, _secureStorage);
-
+        public OrganizationRelationalRepo Organizations => _org ??= new OrganizationRelationalRepo(_billingFactory.Object, _logger, _autoMapper, _secureStorage);
 
         private SubscriptionRepo _subscriptionRepo;
-        public SubscriptionRepo Subscriptions => _subscriptionRepo ??= new SubscriptionRepo(_billing, _logger, _autoMapper, _secureStorage);
+        public SubscriptionRepo Subscriptions => _subscriptionRepo ??= new SubscriptionRepo(_billingFactory.Object, _logger, _autoMapper, _secureStorage);
 
 
         public ISystemUsers SystemUsers => _systemUsers;

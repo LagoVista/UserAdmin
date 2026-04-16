@@ -21,7 +21,7 @@ namespace LagoVista.UserAdmin.Repos.Relational
     {
         ILagoVistaAutoMapper _autoMapper;
 
-        public SubscriptionRepo(BillingDataContext context, IAdminLogger adminLogger, ILagoVistaAutoMapper autoMapper, ISecureStorage secureStorage) :
+        public SubscriptionRepo(IDbContextFactory<BillingDataContext> context, IAdminLogger adminLogger, ILagoVistaAutoMapper autoMapper, ISecureStorage secureStorage) :
            base(context, adminLogger, secureStorage)
         {
             _autoMapper = autoMapper ?? throw new ArgumentNullException(nameof(autoMapper));
@@ -33,7 +33,7 @@ namespace LagoVista.UserAdmin.Repos.Relational
             {
                 var dto = await _autoMapper.CreateAsync<Subscription, SubscriptionDTO>(subscription, org, user);
                 ctx.Subscription.Add(dto);
-                await CommitAsync();
+                await ctx.SaveChangesAsync();
                 ctx.ChangeTracker.Clear();
             });
         }
@@ -46,7 +46,7 @@ namespace LagoVista.UserAdmin.Repos.Relational
                 .ReadonlyQuery()
                 .Where(usr => usr.Id == id.DbId)
                 .ExecuteDeleteAsync();
-                await CommitAsync();
+                await ctx.SaveChangesAsync();
                 ctx.ChangeTracker.Clear();
             }); 
         }
@@ -59,7 +59,7 @@ namespace LagoVista.UserAdmin.Repos.Relational
                 .ReadonlyQuery()
                 .Where(usr => usr.OrganizationId == org.Id)
                 .ExecuteDeleteAsync();
-                await CommitAsync();
+                await ctx.SaveChangesAsync();
                 ctx.ChangeTracker.Clear();
             });
         }
@@ -132,7 +132,7 @@ namespace LagoVista.UserAdmin.Repos.Relational
             {
                 var dto = await _autoMapper.CreateAsync<Subscription, SubscriptionDTO>(subscription, org, user);
                 ctx.Subscription.Update(dto);
-                await CommitAsync();
+                await ctx.SaveChangesAsync();
                 ctx.ChangeTracker.Clear();
             });
         }
