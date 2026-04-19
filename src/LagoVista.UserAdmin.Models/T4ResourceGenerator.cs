@@ -1,4 +1,4 @@
-﻿/*4/9/2026 9:22:15 AM*/
+﻿/*4/18/2026 5:03:29 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -2039,6 +2039,9 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_CreateGettingStartedData_Help
 
 		public static string Organization_CreateGettingStartedData_Help { get { return GetResourceString("Organization_CreateGettingStartedData_Help"); } }
+//Resources:UserAdminResources:Organization_Default_VectorCollectionName
+
+		public static string Organization_Default_VectorCollectionName { get { return GetResourceString("Organization_Default_VectorCollectionName"); } }
 //Resources:UserAdminResources:Organization_DefaultAgentContext
 
 		public static string Organization_DefaultAgentContext { get { return GetResourceString("Organization_DefaultAgentContext"); } }
@@ -3862,6 +3865,7 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_CantCreate = "Organization_CantCreate";
 			public const string Organization_CreateGettingStartedData = "Organization_CreateGettingStartedData";
 			public const string Organization_CreateGettingStartedData_Help = "Organization_CreateGettingStartedData_Help";
+			public const string Organization_Default_VectorCollectionName = "Organization_Default_VectorCollectionName";
 			public const string Organization_DefaultAgentContext = "Organization_DefaultAgentContext";
 			public const string Organization_DefaultAgentContext_Help = "Organization_DefaultAgentContext_Help";
 			public const string Organization_DefaultAgentContext_Select = "Organization_DefaultAgentContext_Select";

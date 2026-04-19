@@ -133,6 +133,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
         public EntityHeader TechnicalContact { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Organization_Default_VectorCollectionName, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        public string DefaultVectorCollectionName { get; set; }
+
         [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultRepo, FieldType: FieldTypes.EntityHeaderPicker, IsRequired: false, EntityHeaderPickerUrl: "/api/devicerepos",
             WaterMark: UserAdminResources.Names.Organization_DefaultRepo_Select, ResourceType: typeof(UserAdminResources))]
         public EntityHeader DefaultDeviceRepository { get; set; }
@@ -316,6 +319,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(TestingIndustry),
                 nameof(TestingIndustryNiche),
                 nameof(DefaultLandingPage),
+                nameof(DefaultVectorCollectionName),
                 nameof(LandingPageHostName),
                 nameof(HeroTitle),
                 nameof(HeroBackgroundImage),
@@ -347,6 +351,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 Name = Name,
                 DefaultIndustry = DefaultIndustry,
                 Namespace = Namespace,
+                VectorCollectionName = DefaultVectorCollectionName,
                 PrimaryBgColor = PrimaryBgColor,
                 PrimaryTextColor = PrimaryTextColor,
                 TagLine = TagLine,
@@ -458,6 +463,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         public EntityHeader DefaultLandingPage { get; set; }
         public EntityHeader DefaultIndustry { get; set; }
+        public string VectorCollectionName { get; set; }
 
         public string TagLine { get; set; }
         public string Icon { get; set; }

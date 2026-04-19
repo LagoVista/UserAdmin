@@ -3272,4 +3272,7 @@
   <data name="ShapeType_Polyline" xml:space="preserve">
     <value>Polyline</value>
   </data>
+  <data name="Organization_Default_VectorCollectionName" xml:space="preserve">
+    <value>Default Vector Database Collection Name</value>
+  </data>
 </root>

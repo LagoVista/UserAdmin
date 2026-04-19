@@ -128,10 +128,8 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         public async Task<Organization> GetOrganizationAsync(string id)
         {
             var org = await GetDocumentAsync(id);
-            if(!String.IsNullOrEmpty(org.Key))
-            {
-                org.Key = org.Key.Value.ToLower();
-            }
+            if(!String.IsNullOrEmpty(org.Key)) org.Key = org.Key.Value.ToLower();
+            if(string.IsNullOrEmpty(org.DefaultVectorCollectionName)) org.DefaultVectorCollectionName = $"{org.Namespace}-vectors";
             return org;
         }
 
