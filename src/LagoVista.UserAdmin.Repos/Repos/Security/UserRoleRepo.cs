@@ -52,7 +52,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             var json = await _cacheProvider.GetAsync(RolesCacheKey(userId, organizationId));
             if(!String.IsNullOrEmpty(json))
             {
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[UserRoleRepo__GetRolesForuser]", $"[UserRoleRepo__GetRolesForuser] - cache hit userid {userId} orgid {organizationId} - {sw.Elapsed.TotalMilliseconds}ms");
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"Cache hit userid {userId} orgid {organizationId} - {sw.Elapsed.TotalMilliseconds}ms");
                 return JsonConvert.DeserializeObject<List<UserRole>>(json);
             }
             sw.Restart();
@@ -60,19 +60,20 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             var results = await this.GetByFilterAsync(FilterOptions.Create(nameof(UserRoleDTO.UserId), FilterOptions.Operators.Equals, userId), 
                                                                                   FilterOptions.Create(nameof(UserRoleDTO.PartitionKey), FilterOptions.Operators.Equals, organizationId));
 
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[UserRoleRepo__GetRolesForuser]", $"[UserRoleRepo__GetRolesForuser] - cache miss userid {userId} orgid {organizationId} loaded from storage in - {sw.Elapsed.TotalMilliseconds}ms");
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"Cache miss userid {userId} orgid {organizationId} loaded from storage in - {sw.Elapsed.TotalMilliseconds}ms");
             var roles = results.Select(usr => usr.ToUserRole()).OrderBy(usr => usr.Role.Text).ToList();
             sw.Restart();
 
             await _cacheProvider.AddAsync(RolesCacheKey(userId, organizationId), JsonConvert.SerializeObject(roles));
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[UserRoleRepo__GetRolesForuser]", $"[UserRoleRepo__GetRolesForuser] - userid {userId} orgid {organizationId} added to cache in - {sw.Elapsed.TotalMilliseconds}ms");
+            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"Userid {userId} orgid {organizationId} added to cache in - {sw.Elapsed.TotalMilliseconds}ms");
 
             return roles;
         }
 
         public async Task RemoveUserRole(string userRoleId, string organizationId)
         {
-            await _cacheProvider.RemoveAsync(RolesCacheKey(userRoleId, organizationId));
+            var userRole = await GetAsync(organizationId, userRoleId);
+            await _cacheProvider.RemoveAsync(RolesCacheKey(userRole.UserId, organizationId));
             await RemoveAsync(organizationId, userRoleId);
         }
     }
