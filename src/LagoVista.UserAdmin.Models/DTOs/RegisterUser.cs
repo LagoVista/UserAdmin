@@ -18,7 +18,8 @@ namespace LagoVista.UserAdmin.Models.DTOs
         NotSet,
         UserSelfRegistration,
         OAuth,
-        Passkey
+        Passkey,
+        AdminRegister
     }
 
     [EntityDescription(

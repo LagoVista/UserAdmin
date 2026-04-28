@@ -109,6 +109,30 @@ namespace LagoVista.UserAdmin.Managers
             return result;
         }
 
+
+        public async Task<InvokeResult> SetUserPasswordAsync(ChangePassword changeRequest, EntityHeader org, EntityHeader user)
+        {
+            AssertRole(CoreSecurityRoles.OrgAdmin);
+
+            var appUser = await _userManager.FindByIdAsync(changeRequest.UserId);
+            if (appUser == null)
+            {
+                _adminLogger.AddError(this.Tag(), "CouldNotFindUser", new System.Collections.Generic.KeyValuePair<string, string>("id", changeRequest.UserId));
+                return InvokeResult.FromErrors(new ErrorMessage(UserAdminResources.Err_PwdChange_CouldNotFindUser));
+            }
+
+            var tokenCode = await _userManager.GeneratePasswordResetTokenAsync(appUser);
+            var resetStatus = await _userManager.ResetPasswordAsync(appUser, tokenCode, changeRequest.NewPassword);
+            if (resetStatus.Successful)
+                await _authLogMgr.AddAsync(AuthLogTypes.PasswordSetByAdminSuccss, appUser.Id, appUser.UserName, org.Id, org.Text, extras: $"Set By Admin: {user.Id}");
+            else
+                await _authLogMgr.AddAsync(AuthLogTypes.PasswordSetByAminFailed, appUser.Id, appUser.UserName,  org.Id, errors: resetStatus.ErrorMessage,extras: $"Set By Admin: {user.Id}");
+
+            return resetStatus;
+
+        }
+
+
         public async Task<InvokeResult> ChangePasswordAsync(ChangePassword changePassword, EntityHeader orgEntityHeader, EntityHeader userEntityHeader)
         {
             var validationResult = _authRequestValidators.ValidatePasswordChangeRequest(changePassword, userEntityHeader.Id);
@@ -117,7 +141,7 @@ namespace LagoVista.UserAdmin.Managers
             var appUser = await _userManager.FindByIdAsync(userEntityHeader.Id);
             if (appUser == null)
             {
-                _adminLogger.AddError("PasswordManager_ChangePasswordAsync", "CouldNotFindUser", new System.Collections.Generic.KeyValuePair<string, string>("id", userEntityHeader.Id));
+                _adminLogger.AddError(this.Tag(), "CouldNotFindUser", new System.Collections.Generic.KeyValuePair<string, string>("id", userEntityHeader.Id));
                 return InvokeResult.FromErrors(new ErrorMessage(UserAdminResources.Err_PwdChange_CouldNotFindUser));
             }
 

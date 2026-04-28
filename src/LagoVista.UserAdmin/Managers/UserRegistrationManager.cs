@@ -289,7 +289,8 @@ namespace LagoVista.UserAdmin.Managers
                 _adminLogger.Trace($"{this.Tag()} - Before User Manager - User Type {appUser.LoginType} {appUser.LoginTypeName} Creating User Email: {appUser.Email} and User Name: {appUser.UserName}, Login Type: {appUser.LoginType}");
 
                 InvokeResult identityResult;
-                if (newUser.Source == UserCreationSource.UserSelfRegistration)
+                if (newUser.Source == UserCreationSource.UserSelfRegistration || 
+                    newUser.Source == UserCreationSource.AdminRegister)
                 {
                     identityResult = await _userManager.CreateAsync(appUser, newUser.Password);
                 }

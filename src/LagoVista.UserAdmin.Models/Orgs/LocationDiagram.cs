@@ -381,8 +381,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
             Id = Guid.NewGuid().ToId();
             Icon = "icon-fo-layer-3";
         }
-
+        
         public List<List<ShapePoint>> Polylines { get; set; } = new List<List<ShapePoint>>();
+
+        public List<List<GeoLocation>> PolylineGeoPoints { get; set; } = new List<List<GeoLocation>>();
 
         public string Id { get; set; }
 
@@ -434,6 +436,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
             };
         }
     }
+
 
 
     [EntityDescription(Domains.OrganizationDomain, UserAdminResources.Names.LocationDiagramShapeGroup_Title, UserAdminResources.Names.LocationDiagramShapeGroup_Help, 

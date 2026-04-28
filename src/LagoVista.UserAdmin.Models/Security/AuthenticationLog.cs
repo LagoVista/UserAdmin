@@ -56,6 +56,8 @@ namespace LagoVista.UserAdmin.Models.Security
         AddUserToOrg,
         SetAsOrgAdmin,
         ClearOrgAdmin,
+        PasswordSetByAdminSuccss,
+        PasswordSetByAminFailed,
         ChangePasswordSuccess,
         ChangePasswordFailed,
         InviteUser,
