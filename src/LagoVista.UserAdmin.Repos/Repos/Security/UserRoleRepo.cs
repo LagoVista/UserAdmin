@@ -43,7 +43,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
 
         private string RolesCacheKey(string userid, string orgId)
         {
-            return $"user_role_cache_{userid}_{orgId}";
+            return $"user_role_cache_{userid}_{orgId}_v2";
         }
 
         public async Task<List<UserRole>> GetRolesForUserAsync(string userId, string organizationId)
