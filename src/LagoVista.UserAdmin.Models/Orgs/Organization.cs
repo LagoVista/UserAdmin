@@ -125,7 +125,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
         public EntityHeader SalesContact { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Billing_Contact, FieldType: FieldTypes.UserPicker, IsRequired: false,
+        [FormField(LabelResource: UserAdminResources.Names.Billing_Contact, FieldType: FieldTypes.UserPicker, IsRequired: true,
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
         public EntityHeader BillingContact { get; set; }
 

@@ -123,6 +123,7 @@ namespace LagoVista.UserAdmin.Models.Users
 
         private string _key = GenerateValidKey();
 
+        [JsonIgnore]
         public override LagoVistaKey Key
         {
             get

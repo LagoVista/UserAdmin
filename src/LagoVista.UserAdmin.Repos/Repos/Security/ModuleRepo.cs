@@ -101,7 +101,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             var json = await _cacheProvider.GetAsync($"{MODULE_CACHE_KEY}_{key}");
             if(string.IsNullOrEmpty(json))
             {
-                var module = (await QueryAsync(mod => mod.Key == key)).FirstOrDefault();
+                var module = (await QueryAsync(mod => mod.Key == key && mod.IsDeleted == false)).FirstOrDefault();
                 if (module == null)
                     return null;
 

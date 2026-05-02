@@ -307,7 +307,7 @@ namespace LagoVista.UserAdmin.Repos.Users
                                         select appUser.CreateSummary(orgUser.IsOrgAdmin, orgUser.IsAppBuilder);
 
                     json = JsonConvert.SerializeObject(userSummaries);
-                    await _cacheProvider.AddAsync(key, json);
+                    await _cacheProvider.AddAsync(key, json, TimeSpan.FromDays(1));
                     _adminLogger.Trace($"[AppUserRepo__GetUserSummaryForListAsync] - Cache Miss, get and process all users in {sw.Elapsed.TotalMilliseconds}ms");
                     return userSummaries;
                 }
