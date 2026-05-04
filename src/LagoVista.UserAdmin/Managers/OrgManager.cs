@@ -234,6 +234,10 @@ namespace LagoVista.UserAdmin.Managers
 
             var newOrg = await _organizationRepo.GetOrganizationAsync(newOrgId);
             var appUser = await _appUserRepo.FindByIdAsync(user.Id);
+
+            appUser.OrgPreferences[appUser.CurrentOrganization.Id] = appUser.CurrentOrgPreferences;
+            appUser.CurrentOrgPreferences = appUser.OrgPreferences.ContainsKey(newOrgId) ? appUser.OrgPreferences[newOrgId] : new TenantUserPreferences();
+
             appUser.CurrentOrganization = newOrg.CreateSummary();
             appUser.IsOrgAdmin = await _orgUserRepo.IsUserOrgAdminAsync(newOrgId, user.Id);
             appUser.IsAppBuilder = await _orgUserRepo.IsAppBuilderAsync(newOrgId, user.Id);
@@ -279,6 +283,7 @@ namespace LagoVista.UserAdmin.Managers
             {
                 appUser.CurrentOrganizationRoles.Add(orgRole.ToEntityHeader());
             }
+
 
             await AuthorizeAsync(appUser, AuthorizeResult.AuthorizeActions.Update, appUser.ToEntityHeader(), newOrg.ToEntityHeader(), "switchOrgs");
             await _appUserRepo.UpdateAsync(appUser);

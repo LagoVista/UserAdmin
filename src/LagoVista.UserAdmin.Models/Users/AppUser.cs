@@ -378,6 +378,9 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public IList<ThirdPartyLoginInfo> Logins { get; set; }
 
+        public TenantUserPreferences CurrentOrgPreferences { get; set; } = new TenantUserPreferences();
+        public Dictionary<string, TenantUserPreferences> OrgPreferences { get; set; } = new Dictionary<string, TenantUserPreferences>();
+
         public UserInfo ToUserInfo()
         {
             return new UserInfo()
@@ -504,4 +507,10 @@ namespace LagoVista.UserAdmin.Models.Users
         public string Secret { get; set; }
         public string OtpAuthUri { get; set; }
     }
+
+    public class TenantUserPreferences
+    {
+        public EntityHeader ExecutiveAssistantSession { get; set; }
+    }
 }
+
