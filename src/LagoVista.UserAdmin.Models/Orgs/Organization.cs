@@ -100,6 +100,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Common_TimeZome, IsRequired: true, WaterMark: UserAdminResources.Names.Common_TimeZome_Picker, FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources), IsUserEditable: true)]
         public EntityHeader TimeZone { get; set; }
 
+
+        
+
         [FormField(LabelResource: UserAdminResources.Names.Organization_Owner, FieldType: FieldTypes.UserPicker, IsRequired: true, IsUserEditable: true,
             WaterMark: UserAdminResources.Names.Organization_DefaultResource_Watermark, ResourceType: typeof(UserAdminResources))]
         public EntityHeader Owner { get; set; }
@@ -169,6 +172,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
             WaterMark: UserAdminResources.Names.Organization_DefaultInstance_Select, ResourceType: typeof(UserAdminResources))]
         public EntityHeader DefaultDemoInstance { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultSubscription, WaterMark:UserAdminResources.Names.Organization_DefaultSubscription_Select, FieldType: FieldTypes.EntityHeaderPicker, IsRequired: false, EntityHeaderPickerUrl: "/api/subscriptions", ResourceType: typeof(UserAdminResources))]
+        public EntityHeader DefaultSubscription { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_DefaultTestInstance, FieldType: FieldTypes.EntityHeaderPicker, IsRequired: false, EntityHeaderPickerUrl: "/api/deployment/instances",
             WaterMark: UserAdminResources.Names.Organization_DefaultInstance_Select, ResourceType: typeof(UserAdminResources))]
@@ -308,6 +313,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(WebSite),
                 nameof(HomePage),
                 nameof(EndUserHomePage),
+                nameof(DefaultSubscription),
                 nameof(DefaultInstance),
                 nameof(DefaultIndustry),
                 nameof(DefaultDemoInstance),

@@ -1,4 +1,4 @@
-﻿/*4/18/2026 5:03:29 PM*/
+﻿/*5/18/2026 11:58:18 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -2117,6 +2117,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_DefaultResource_Watermark
 
 		public static string Organization_DefaultResource_Watermark { get { return GetResourceString("Organization_DefaultResource_Watermark"); } }
+//Resources:UserAdminResources:Organization_DefaultSubscription
+
+		public static string Organization_DefaultSubscription { get { return GetResourceString("Organization_DefaultSubscription"); } }
+//Resources:UserAdminResources:Organization_DefaultSubscription_Select
+
+		public static string Organization_DefaultSubscription_Select { get { return GetResourceString("Organization_DefaultSubscription_Select"); } }
 //Resources:UserAdminResources:Organization_DefaultTeamsWebHook
 
 		public static string Organization_DefaultTeamsWebHook { get { return GetResourceString("Organization_DefaultTeamsWebHook"); } }
@@ -3891,6 +3897,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_DefaultRepo = "Organization_DefaultRepo";
 			public const string Organization_DefaultRepo_Select = "Organization_DefaultRepo_Select";
 			public const string Organization_DefaultResource_Watermark = "Organization_DefaultResource_Watermark";
+			public const string Organization_DefaultSubscription = "Organization_DefaultSubscription";
+			public const string Organization_DefaultSubscription_Select = "Organization_DefaultSubscription_Select";
 			public const string Organization_DefaultTeamsWebHook = "Organization_DefaultTeamsWebHook";
 			public const string Organization_DefaultTeamsWebHook_Help = "Organization_DefaultTeamsWebHook_Help";
 			public const string Organization_DefaultTestInstance = "Organization_DefaultTestInstance";

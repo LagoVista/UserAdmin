@@ -3275,4 +3275,10 @@
   <data name="Organization_Default_VectorCollectionName" xml:space="preserve">
     <value>Default Vector Database Collection Name</value>
   </data>
+  <data name="Organization_DefaultSubscription" xml:space="preserve">
+    <value>Default Billing Subscription</value>
+  </data>
+  <data name="Organization_DefaultSubscription_Select" xml:space="preserve">
+    <value>-select default subscription-</value>
+  </data>
 </root>
