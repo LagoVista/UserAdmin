@@ -177,7 +177,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
     public class SubscriptionSummary 
     {
         public GuidString36 Id { get; set; }
-        public LagoVistaKey Icon { get; set; }
+        public LagoVistaIcon Icon { get; set; }
         public string Description { get; set; } 
 
         public bool IsPublic { get; set; }  
