@@ -29,9 +29,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             base(settings.AccessLogTableStorage.AccountId, settings.AccessLogTableStorage.AccessKey, logger)
         {
             _adminLogger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _tableName = GetTableName();
             _connectionString = $"DefaultEndpointsProtocol=https;AccountName={settings.AccessLogTableStorage.AccountId};AccountKey={settings.AccessLogTableStorage.AccessKey}";
-            _tableClient = new TableClient(_connectionString, _tableName);
             _bgServiceQueue = bgServiceQueue;
         }
 
