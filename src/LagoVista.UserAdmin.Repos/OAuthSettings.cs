@@ -43,8 +43,9 @@ namespace LagoVista.UserAdmin.Repos
                         LinkedInOAuth = new OAuthConfig(clientId, secret);
                         break;
                     case "Microsoft":
-                        MicrosoftOAuth = new OAuthConfig(clientId, secret);
                         var secretId = childSection.Require("SecretId");
+
+                        MicrosoftOAuth = new OAuthConfig(clientId, secretId, secret);
 
                         //settings.Settings = new System.Collections.Generic.Dictionary<string, string>
                         //{
