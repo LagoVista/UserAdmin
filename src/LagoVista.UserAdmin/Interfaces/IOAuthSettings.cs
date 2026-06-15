@@ -23,7 +23,15 @@ namespace LagoVista.UserAdmin
             Secret = secret;
         }
 
+        public OAuthConfig(string clientId, string secretId, string secret)
+        {
+            ClientId = clientId;
+            ClientSecretId = secretId;
+            Secret = secret;
+        }
+
         public string ClientId { get;  }
+        public string ClientSecretId { get; }
         public string Secret { get; }   
     }
 }
