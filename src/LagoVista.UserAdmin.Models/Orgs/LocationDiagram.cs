@@ -188,6 +188,8 @@ namespace LagoVista.UserAdmin.Models.Orgs
         Polygon,
         [EnumLabel(LocationDiagramShape.ShapeType_Polyline, UserAdminResources.Names.ShapeType_Polyline, typeof(UserAdminResources))]
         Polyline,
+        [EnumLabel(LocationDiagramShape.ShapeType_Text, UserAdminResources.Names.ShapeType_Text, typeof(UserAdminResources))]
+        Text,
     }
 
 
@@ -204,6 +206,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public const string ShapeType_Circle = "circle";
         public const string ShapeType_Polygon = "polygon";
         public const string ShapeType_Polyline = "polyline";
+        public const string ShapeType_Text = "text";
 
         public LocationDiagramShape()
         {

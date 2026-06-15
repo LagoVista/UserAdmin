@@ -3281,4 +3281,7 @@
   <data name="Organization_DefaultSubscription_Select" xml:space="preserve">
     <value>-select default subscription-</value>
   </data>
+  <data name="ShapeType_Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
 </root>
