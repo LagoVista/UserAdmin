@@ -30,6 +30,19 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, cacheProvider)
         {
         }
+
+        public async Task<EntityHeader> GetDefaultDescriptionForForAsync(string orgId)
+        {
+            var org = await GetOrganizationAsync(orgId);
+            if (org == null)
+                throw new RecordNotFoundException(nameof(Organization), orgId);
+
+            if (org.DefaultSubscription == null)
+                throw new InvalidOperationException($"Organization: {org.Name} does not have a valid default subscription");
+
+            return org.DefaultSubscription;
+        }
+
         public Task<Organization> GetOrganizationAsync(string id)
         {
             return GetDocumentAsync(id);

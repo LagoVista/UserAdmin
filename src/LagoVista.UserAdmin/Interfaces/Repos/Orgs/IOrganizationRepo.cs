@@ -18,6 +18,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
     public interface IOrganizationLoaderRepo
     {
         Task<Organization> GetOrganizationAsync(string id);
+        Task<EntityHeader> GetDefaultDescriptionForForAsync(string orgId);
     }
 
     public interface IOrganizationRepo
