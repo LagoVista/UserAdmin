@@ -134,8 +134,8 @@ namespace LagoVista.UserAdmin.Models.Security
             {
                 Payload = areaPayload,
                 EmbeddingContent = embeddingsBuilder.ToString(),
-                ModelDescription = descriptionBuilder.ToString(),
-                HumanDescription = descriptionBuilder.ToString()
+                ModelContent = descriptionBuilder.ToString(),
+                HumanContent = descriptionBuilder.ToString()
             };
 
             return Task.FromResult(pageContent);

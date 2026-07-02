@@ -283,8 +283,8 @@ namespace LagoVista.UserAdmin.Models.Security
             var content = new EntityRagContent()
             {
                 Payload = RagVectorPayload.FromEntity(this),
-                HumanDescription = descriptionBuilder.ToString(),
-                ModelDescription = descriptionBuilder.ToString(),
+                HumanContent = descriptionBuilder.ToString(),
+                ModelContent = descriptionBuilder.ToString(),
                 EmbeddingContent = embeddingsBuilder.ToString(),
             };
 
