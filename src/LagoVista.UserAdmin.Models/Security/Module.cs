@@ -4,6 +4,7 @@
 // --- END CODE INDEX META ---
 using LagoVista.Core.AI.Interfaces;
 using LagoVista.Core.AI.Models;
+using LagoVista.Core.AI.Models.Rag;
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Exceptions;
 using LagoVista.Core.Interfaces;
