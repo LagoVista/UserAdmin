@@ -104,14 +104,14 @@ namespace LagoVista.UserAdmin.Models.Security
 
         public UserAccess UserAccess { get; set; }
 
-        public Task<EntityRagContent> GetRagContentAsync(Module parentModule, Area parentArea, RagVectorPayload areaPayload)
+        public Task<EntityRagContent<RagEntityVectorPayload>> GetRagContentAsync(Module parentModule, Area parentArea, RagEntityVectorPayload areaPayload)
         {
-            var areaContent = new EntityRagContent();
-            var contentItems = new List<EntityRagContent>();
+            var areaContent = new EntityRagContent<RagEntityVectorPayload>();
+            var contentItems = new List<EntityRagContent<RagEntityVectorPayload>>();
             var descriptionBuilder = new StringBuilder();
             var embeddingsBuilder = new StringBuilder();
 
-            var pagePayload = JsonConvert.DeserializeObject<RagVectorPayload>(JsonConvert.SerializeObject(areaPayload));
+            var pagePayload = JsonConvert.DeserializeObject<RagEntityVectorPayload>(JsonConvert.SerializeObject(areaPayload));
             pagePayload.Meta.DocId = this.Id;
             pagePayload.Meta.Title = this.Name;
             pagePayload.Meta.SemanticId = $"{areaPayload.Meta.SemanticId}:{nameof(Page)}:{Id}";
@@ -131,7 +131,7 @@ namespace LagoVista.UserAdmin.Models.Security
             descriptionBuilder.AppendLine($"Launcher Card Summary: {CardSummary}");
             descriptionBuilder.AppendLine();
 
-            var pageContent = new EntityRagContent()
+            var pageContent = new EntityRagContent<RagEntityVectorPayload>()
             {
                 Payload = areaPayload,
                 EmbeddingContent = embeddingsBuilder.ToString(),

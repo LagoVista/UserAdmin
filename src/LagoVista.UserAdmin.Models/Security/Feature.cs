@@ -4,6 +4,7 @@
 // --- END CODE INDEX META ---
 using LagoVista.Core;
 using LagoVista.Core.AI.Models;
+using LagoVista.Core.AI.Models.Rag;
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
@@ -66,10 +67,7 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Module_HelpResources, FieldType: FieldTypes.ChildList, ResourceType: typeof(UserAdminResources))]
         public List<HelpResource> HelplResources { get; set; }
 
-        public Task<List<EntityRagContent>> GetRagContentAsync()
-        {
-            throw new System.NotImplementedException();
-        }
+       
 
         public int SortOrder { get; set; }
 

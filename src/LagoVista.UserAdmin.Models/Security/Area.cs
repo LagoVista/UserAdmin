@@ -116,12 +116,12 @@ namespace LagoVista.UserAdmin.Models.Security
 
         public UserAccess UserAccess { get; set; }
 
-        public async Task<List<EntityRagContent>> GetRagContentAsync(Module parentModule, RagVectorPayload modulePayload)
+        public async Task<List<EntityRagContent<RagEntityVectorPayload>>> GetRagContentAsync(Module parentModule, RagEntityVectorPayload modulePayload)
         {
-            var areaContent = new EntityRagContent();
-            var contentItems = new List<EntityRagContent>();
+            var areaContent = new EntityRagContent<RagEntityVectorPayload>();
+            var contentItems = new List<EntityRagContent<RagEntityVectorPayload>>();
 
-            var areaPayload = JsonConvert.DeserializeObject<RagVectorPayload>(JsonConvert.SerializeObject(modulePayload));
+            var areaPayload = JsonConvert.DeserializeObject<RagEntityVectorPayload>(JsonConvert.SerializeObject(modulePayload));
             areaPayload.Meta.DocId = this.Id;
             areaPayload.Meta.Title = this.Name;
             areaPayload.Meta.SemanticId = $"{modulePayload.Meta.SemanticId}:{nameof(Area)}:{Id}";
@@ -161,7 +161,7 @@ namespace LagoVista.UserAdmin.Models.Security
                 descriptionBuilder.AppendLine();
             }
 
-            var pageContent = new EntityRagContent()
+            var pageContent = new EntityRagContent<RagEntityVectorPayload>()
             {
                 Payload = areaPayload,
                 EmbeddingContent = embeddingsBuilder.ToString(),

@@ -210,9 +210,9 @@ namespace LagoVista.UserAdmin.Models.Security
             return CreateSummary();
         }
 
-        public async Task<List<EntityRagContent>> GetRagContentAsync()
+        public async Task<List<EntityRagContent<RagEntityVectorPayload>>> GetRagContentAsync()
         {
-            var contentItems = new List<EntityRagContent>();
+            var contentItems = new List<EntityRagContent<RagEntityVectorPayload>>();
 
             var embeddingsBuilder = new StringBuilder();
             embeddingsBuilder.AppendLine($"User Interface Module Map: {Name}");
@@ -281,9 +281,9 @@ namespace LagoVista.UserAdmin.Models.Security
                 }
             }
 
-            var content = new EntityRagContent()
+            var content = new EntityRagContent<RagEntityVectorPayload>()
             {
-                Payload = RagVectorPayload.FromEntity(this),
+                Payload = RagEntityVectorPayload.FromEntity(this),
                 HumanContent = descriptionBuilder.ToString(),
                 ModelContent = descriptionBuilder.ToString(),
                 EmbeddingContent = embeddingsBuilder.ToString(),
