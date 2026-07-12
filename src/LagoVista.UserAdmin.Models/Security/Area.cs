@@ -26,9 +26,10 @@ namespace LagoVista.UserAdmin.Models.Security
     [EntityDescription(
         Domains.SecurityDomain, UserAdminResources.Names.Area_Title, UserAdminResources.Names.Area_Help, UserAdminResources.Names.Area_Help,
         EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
-
+        AiIconGuidance: "Represent an Area as a grouping of related pages within a larger module. Use a contained section, grouped panel, or nested navigation metaphor that feels one level below a module. The icon should suggest a focused subsection or category of application pages, not the whole application and not a single page. Avoid generic folders, site maps with many branches, dashboard screens, documents, charts, or standalone page icons. Use one dominant grouped shape with subtle internal division to show organization.",
+        AiIconGuidanceEntityField: "cardSummary",
         FactoryUrl: "/api/module/area/factory",
-
+        Icon: "lago-icon://system/nuvos-semantic-icon/area-default",
         ClusterKey: "ui", ModelType: EntityDescriptionAttribute.ModelTypes.Taxonomy, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
         Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Primary,
         IndexPriority: 80, IndexTagsCsv: "securitydomain,ui,taxonomy,area")]
@@ -43,6 +44,7 @@ namespace LagoVista.UserAdmin.Models.Security
             HelplResources = new List<HelpResource>();
             DesktopSupport = true;
             PhoneSupport = true;
+            CardIcon = "lago-icon://system/nuvos-semantic-icon/area-default";
             TabletSupport = true;
             PageCategories = new List<UiCategory>();
         }
@@ -68,7 +70,9 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Module_CardTitle, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string CardTitle { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Module_CardSummary, IsRequired: true, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Module_CardSummary, IsRequired: true, FieldType: FieldTypes.MultiLineText, 
+            AiChatPrompt: @"Generate a concise user-facing summary, 6 to 12 words, that explains what this navigation entity represents in the application. Prefer clear product language over technical implementation language. Use the entity name and existing summary when available. Do not repeat the name verbatim unless needed for clarity. Do not mention code, routing, repositories, controllers, permissions implementation, or database structure. Return only the summary text.
+Summarize this Area as a focused grouping within a larger module. The summary should explain the related pages or user tasks contained in this section. Keep it 6 to 12 words, suitable for a UI title or compact menu description. Avoid describing the whole module, a single page, implementation details, route names, or security mechanics. Return only the summary text.", ResourceType: typeof(UserAdminResources))]
         public string CardSummary { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Status, IsRequired: true, FieldType: FieldTypes.Picker, EnumType: typeof(ModuleStatus), WaterMark: UserAdminResources.Names.ModuleStatus_Select, ResourceType: typeof(UserAdminResources))]

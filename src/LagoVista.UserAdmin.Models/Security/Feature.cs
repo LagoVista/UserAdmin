@@ -3,22 +3,21 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core;
-using LagoVista.Core.AI.Models;
-using LagoVista.Core.AI.Models.Rag;
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
     [EntityDescription(
         Domains.SecurityDomain, UserAdminResources.Names.Feature_TItle, UserAdminResources.Names.Feature_Help, UserAdminResources.Names.Feature_Help,
         EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
-
+        AiIconGuidance: "Represent a Feature as a specific capability or secured function available within a page. Use a focused capability metaphor such as a small control, enabled function block, permission marker, or feature toggle, while keeping it abstract and product-like. The icon should feel smaller and more specific than a page, area, or module. Avoid lock-only icons, shield-only security symbols, gears-only settings icons, generic app windows, dashboards, charts, documents, or workflow arrows. Use one compact dominant symbol that suggests an actionable capability.",
+        AiIconGuidanceEntityField:"summary",
+        Icon: "lago-icon://system/nuvos-semantic-icon/feature-default",
         ClusterKey: "ui", ModelType: EntityDescriptionAttribute.ModelTypes.Taxonomy, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
         Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Primary,
         IndexPriority: 80, IndexTagsCsv: "securitydomain,ui,taxonomy,feature")]
@@ -55,7 +54,9 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Feature_MenuTitle, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string MenuTitle { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Feature_Summary, IsRequired: true, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Feature_Summary, IsRequired: true, FieldType: FieldTypes.MultiLineText,
+            AiChatPrompt: "Generate a concise user-facing summary, 6 to 12 words, that explains what this navigation entity represents in the application. Prefer clear product language over technical implementation language. Use the entity name and existing summary when available. Do not repeat the name verbatim unless needed for clarity. Do not mention code, routing, repositories, controllers, permissions implementation, or database structure. Return only the summary text. Summarize this Feature as a specific capability or secured action available in the application. The summary should explain the user-facing function controlled by this feature. Keep it 6 to 12 words, suitable for a UI title or compact menu description. Avoid lock-only language, permission implementation details, route names, role mechanics, or database/security plumbing. Return only the summary text.",
+            ResourceType: typeof(UserAdminResources))]
         public string Summary { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Menu_DoNotDisplay, HelpResource: UserAdminResources.Names.Menu_DoNotDisplay_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(UserAdminResources))]

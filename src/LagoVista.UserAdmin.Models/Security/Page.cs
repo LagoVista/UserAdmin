@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using static LagoVista.Core.Networking.Models.uPnPDevice;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
@@ -23,7 +24,9 @@ namespace LagoVista.UserAdmin.Models.Security
         EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
 
         FactoryUrl: "/api/module/page/factory",
-
+        Icon:"lago-icon://system/nuvos-semantic-icon/page-default",
+        AiIconGuidance: "Represent a Page as a single navigable screen or destination in an application menu. Use a clean page, screen, or content-panel metaphor with one clear primary surface. The icon should feel like one specific place the user can open, not a module, area, document artifact, or dashboard report. Avoid multi-page stacks, folders, charts, browser chrome, complex layouts, or generic document icons with excessive lines. Use a simple rectangular page or screen shape with minimal interior structure.",
+        AiIconGuidanceEntityField: "cardSummary",
         ClusterKey: "ui", ModelType: EntityDescriptionAttribute.ModelTypes.Taxonomy, Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime,
         Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true, IndexTier: EntityDescriptionAttribute.IndexTiers.Primary,
         IndexPriority: 80, IndexTagsCsv: "securitydomain,ui,taxonomy,page")]
@@ -35,6 +38,7 @@ namespace LagoVista.UserAdmin.Models.Security
             Status = EntityHeader<ModuleStatus>.Create(ModuleStatus.Development);
             Id = Guid.NewGuid().ToId();
             DesktopSupport = true;
+            CardIcon = "lago-icon://system/nuvos-semantic-icon/page-default";
             PhoneSupport = true;
             TabletSupport = true;
             HelplResources = new List<HelpResource>();
@@ -61,7 +65,10 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Module_CardTitle, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string CardTitle { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Module_CardSummary, IsRequired: true, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Module_CardSummary, 
+            AiChatPrompt: @"Generate a concise user-facing summary, 6 to 12 words, that explains what this navigation entity represents in the application. Prefer clear product language over technical implementation language. Use the entity name and existing summary when available. Do not repeat the name verbatim unless needed for clarity. Do not mention code, routing, repositories, controllers, permissions implementation, or database structure. Return only the summary text.
+            Summarize this Page as a single navigable screen or destination in the application. The summary should explain what the user can view, manage, or accomplish on the page. Keep it 6 to 12 words, suitable for a UI title or compact menu description. Avoid module-level summaries, area-level grouping language, implementation details, route names, or security mechanics. Return only the summary text.",
+            IsRequired: true, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
         public string CardSummary { get; set; }
 
 
