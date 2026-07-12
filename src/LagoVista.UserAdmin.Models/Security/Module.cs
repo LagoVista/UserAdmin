@@ -46,8 +46,9 @@ namespace LagoVista.UserAdmin.Models.Security
         EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources),
 
         GetListUrl: "/api/modules", GetUrl: "/api/module/{id}", SaveUrl: "/api/module", DeleteUrl: "/api/module/{id}", FactoryUrl: "/api/module/factory",
-
-        Icon: "icon-ae-coding-metal", ClusterKey: "ui", ModelType: EntityDescriptionAttribute.ModelTypes.Taxonomy,
+        AiIconGuidance: "Represent a Module as a top-level functional section of an application. Use a strong, simple navigation or app-section metaphor such as a large primary tile, grouped application block, or modular panel. The icon should feel like a major destination in the product, broader than a single page or feature. Avoid browser windows, dashboards, charts, documents, folders, generic grids with too many cells, or tiny nested details. Keep one dominant object with a clear top-level structure and strong silhouette.",
+        AiIconGuidanceEntityField:"cardSummary",
+        Icon: "lago-icon://system/nuvos-semantic-icon/module-default", ClusterKey: "ui", ModelType: EntityDescriptionAttribute.ModelTypes.Taxonomy,
         Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime, Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true,
         IndexTier: EntityDescriptionAttribute.IndexTiers.Primary, IndexPriority: 85, IndexTagsCsv: "securitydomain,ui,taxonomy,module")]
     public class Module : UserAdminModelBase, IKeyedEntity, INamedEntity, IOwnedEntity, IValidateable, IFormDescriptor, IFormDescriptorCol2, IFormDescriptorBottom, ISummaryFactory, IRagableEntity
@@ -68,6 +69,7 @@ namespace LagoVista.UserAdmin.Models.Security
             DesktopSupport = true;
             PhoneSupport = true;
             TabletSupport = true;
+            CardIcon = "lago-icon://system/nuvos-semantic-icon/module-default";
             AreaCategories = new List<UiCategory>();
             UiCategory = new EntityHeader() { Id = "48C14BE40FDA4E9587EFA66502F05F82", Key = "other", Text = "Other" }; 
         }
@@ -79,7 +81,10 @@ namespace LagoVista.UserAdmin.Models.Security
         [FormField(LabelResource: UserAdminResources.Names.Module_CardTitle, IsRequired: true, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public string CardTitle { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.Module_CardSummary, IsRequired: true, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.Module_CardSummary, IsRequired: true, FieldType: FieldTypes.MultiLineText,
+            AiChatPrompt: @"Generate a concise user-facing summary, 6 to 12 words, that explains what this navigation entity represents in the application. Prefer clear product language over technical implementation language. Use the entity name and existing summary when available. Do not repeat the name verbatim unless needed for clarity. Do not mention code, routing, repositories, controllers, permissions implementation, or database structure. Return only the summary text." +
+            "Summarize this Module as a top-level functional section of the application. The summary should explain the broad product capability or work area the module represents. Keep it 6 to 12 words, suitable for a UI title or compact menu description. Avoid page-level details, feature-level actions, implementation terms, route names, or security mechanics. Return only the summary text.",
+            ResourceType: typeof(UserAdminResources))]
         public string CardSummary { get; set; }
 
         [FormField(LabelResource: UserAdminResources.Names.Common_Status, IsRequired: true, FieldType: FieldTypes.Picker, EnumType: typeof(ModuleStatus), WaterMark: UserAdminResources.Names.ModuleStatus_Select, ResourceType: typeof(UserAdminResources))]
@@ -304,7 +309,7 @@ namespace LagoVista.UserAdmin.Models.Security
     }
 
     [EntityDescription(Domains.SecurityDomain, UserAdminResources.Names.Modules_Title, UserAdminResources.Names.Module_Help, UserAdminResources.Names.Module_Help,
-        EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources), Icon: "icon-ae-coding-metal",
+        EntityDescriptionAttribute.EntityTypes.Dto, typeof(UserAdminResources), Icon: "lago-icon://system/nuvos-semantic-icon/module-default",
         GetListUrl: "/api/modules", GetUrl: "/api/module/{id}", SaveUrl: "/api/module", DeleteUrl: "/api/module/{id}", FactoryUrl: "/api/module/factory")]
     public class ModuleSummary : SummaryData
     {
