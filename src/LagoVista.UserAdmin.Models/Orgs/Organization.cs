@@ -61,6 +61,12 @@ namespace LagoVista.UserAdmin.Models.Orgs
             FieldType: FieldTypes.NameSpace, IsRequired: true, IsUserEditable: false, ResourceType: typeof(UserAdminResources))]
         public OrgNamespace Namespace { get; set; }
 
+
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_IconNamespace, HelpResource: UserAdminResources.Names.Organization_IconNamespace_Help, NamespaceType: NamespaceTypes.Organization, NamespaceUniqueMessageResource: UserAdminResources.Names.Organization_NamespaceInUse,
+            FieldType: FieldTypes.NameSpace, IsRequired: false, IsUserEditable: true, ResourceType: typeof(UserAdminResources))]
+        public OrgNamespace IconNamespace { get; set; }
+
         [FormField(LabelResource: UserAdminResources.Names.Organization_WebSite, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public String WebSite { get; set; }
 
@@ -326,6 +332,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(TestingIndustryNiche),
                 nameof(DefaultLandingPage),
                 nameof(DefaultVectorCollectionName),
+                nameof(IconNamespace),
                 nameof(LandingPageHostName),
                 nameof(HeroTitle),
                 nameof(HeroBackgroundImage),

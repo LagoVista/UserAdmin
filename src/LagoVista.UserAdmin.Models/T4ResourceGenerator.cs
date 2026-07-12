@@ -1,4 +1,4 @@
-﻿/*6/11/2026 6:36:04 AM*/
+﻿/*7/12/2026 1:10:42 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -2183,6 +2183,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_HrEmailAddress_Help
 
 		public static string Organization_HrEmailAddress_Help { get { return GetResourceString("Organization_HrEmailAddress_Help"); } }
+//Resources:UserAdminResources:Organization_IconNamespace
+
+		public static string Organization_IconNamespace { get { return GetResourceString("Organization_IconNamespace"); } }
+//Resources:UserAdminResources:Organization_IconNamespace_Help
+
+		public static string Organization_IconNamespace_Help { get { return GetResourceString("Organization_IconNamespace_Help"); } }
 //Resources:UserAdminResources:Organization_IsForProductLine
 
 		public static string Organization_IsForProductLine { get { return GetResourceString("Organization_IsForProductLine"); } }
@@ -3922,6 +3928,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_HomePage_Help = "Organization_HomePage_Help";
 			public const string Organization_HrEmailAddress = "Organization_HrEmailAddress";
 			public const string Organization_HrEmailAddress_Help = "Organization_HrEmailAddress_Help";
+			public const string Organization_IconNamespace = "Organization_IconNamespace";
+			public const string Organization_IconNamespace_Help = "Organization_IconNamespace_Help";
 			public const string Organization_IsForProductLine = "Organization_IsForProductLine";
 			public const string Organization_LandingPageHostName = "Organization_LandingPageHostName";
 			public const string Organization_LandingPageHostName_Help = "Organization_LandingPageHostName_Help";

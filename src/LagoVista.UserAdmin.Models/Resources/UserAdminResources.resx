@@ -3284,4 +3284,10 @@
   <data name="ShapeType_Text" xml:space="preserve">
     <value>Text</value>
   </data>
+  <data name="Organization_IconNamespace" xml:space="preserve">
+    <value>Icon Namespace</value>
+  </data>
+  <data name="Organization_IconNamespace_Help" xml:space="preserve">
+    <value>The icon namespace is used to develop a namespace that will be used to generate stable icon paths, this is helpful when the same organization is used across environments.</value>
+  </data>
 </root>
