@@ -57,6 +57,7 @@ namespace LagoVista.UserAdmin.Managers
         private readonly ILocationDiagramRepo _diagramRepo;
         private readonly IRoleRepo _roleRepo;
         private readonly IOrgInformationSource _orgInfoSource;
+        private readonly ISecureStorage _securestorage; 
         #endregion
 
         #region Ctor
@@ -77,6 +78,7 @@ namespace LagoVista.UserAdmin.Managers
             ISubscriptionManager subscriptionManager,
             ILocationDiagramRepo diagramRepo,
             IRoleRepo roleRepo,
+            ISecureStorage secureStorage,
             ICoreAppServices coreAppServices,
             IOrgInformationSource orgInfoSource ) : base(coreAppServices)
         {
@@ -100,6 +102,7 @@ namespace LagoVista.UserAdmin.Managers
             _diagramRepo = diagramRepo;
             _roleRepo = roleRepo ?? throw new ArgumentNullException(nameof(roleRepo));
             _orgInfoSource = orgInfoSource;
+            _securestorage = secureStorage;
         }
         #endregion
 
@@ -352,6 +355,20 @@ namespace LagoVista.UserAdmin.Managers
             if (existingOrg.IsForProductLine != org.IsForProductLine)
                 throw new UnauthorizedAccessException("Attempt to set IsForProductLine in update method, should do in SetIsForProductLine method.");
 
+            if(!String.IsNullOrEmpty(org.VimeoAccessTokenSecret))
+            {
+                if(!String.IsNullOrEmpty(org.VimeoAccessTokenSecretId))
+                {
+                    var result = await _securestorage.RemoveSecretAsync(userOrg, org.VimeoAccessTokenSecretId);
+                    if (!result.Successful) return result;
+                }
+
+                var addResult = await _securestorage.AddSecretAsync(userOrg, org.VimeoAccessTokenSecret);
+                if (!addResult.Successful) return addResult.ToInvokeResult();
+
+                org.VimeoAccessTokenSecretId = addResult.Result;
+                org.VimeoAccessTokenSecret = null;
+            }
 
             await AuthorizeAsync(org, AuthorizeResult.AuthorizeActions.Update, user, userOrg);
             await _organizationRepo.UpdateOrganizationAsync(org);

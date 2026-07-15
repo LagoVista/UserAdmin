@@ -24,6 +24,24 @@ namespace LagoVista.UserAdmin.Models.Orgs
         Spam,
     }
 
+    public enum VimeoPrivacy
+    {
+        [EnumLabel(Organization.Organization_VimeoPublic, UserAdminResources.Names.Organization_VimeoPublic, typeof(UserAdminResources))]
+        Public,
+
+        [EnumLabel(Organization.Organization_VimeoPrivate, UserAdminResources.Names.Organization_VimeoPrivate, typeof(UserAdminResources))]
+        Private,
+
+        [EnumLabel(Organization.Organization_VimeoUnlisted, UserAdminResources.Names.Organization_VimeoUnlisted, typeof(UserAdminResources))]
+        Unlisted,
+
+        [EnumLabel(Organization.Organization_VimeoPassword, UserAdminResources.Names.Organization_VimeoPassword, typeof(UserAdminResources))]
+        Password,
+
+        [EnumLabel(Organization.Organization_VimeoHideFromVimeo, UserAdminResources.Names.Organization_VimeoHideFromVimeo, typeof(UserAdminResources))]
+        HideFromVimeo,
+    }
+
 
     [EntityDescription(
         Domains.OrganizationDomain, UserAdminResources.Names.Organization_Title, UserAdminResources.Names.Organization_Help,
@@ -41,6 +59,12 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public const string Organization_OrgStatuses_Active = "active";
         public const string Organization_OrgStatuses_Deactivated = "deactivated";
         public const string Organization_OrgStatuses_Spam = "spam";
+
+        public const string Organization_VimeoPublic = "anybody";
+        public const string Organization_VimeoPrivate = "nobody";
+        public const string Organization_VimeoUnlisted = "unlisted";
+        public const string Organization_VimeoPassword = "password";
+        public const string Organization_VimeoHideFromVimeo = "disable";
 
         public Organization()
         {
@@ -276,6 +300,21 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Organization_ApEmailAddress, HelpResource: UserAdminResources.Names.Organization_ApEmailAddress_Help, FieldType: FieldTypes.Email, IsRequired: false, ResourceType: typeof(UserAdminResources))]
         public string ApEmailAddress { get; set; }
 
+        [FormField(LabelResource: UserAdminResources.Names.Organization_VimeoEnabled, HelpResource: UserAdminResources.Names.Organization_VimeoEnabled_Help, FieldType: FieldTypes.CheckBox, IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        public bool VimeoEnabled { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_VimeoAccessTokenSecretId, HelpResource: UserAdminResources.Names.Organization_VimeoAccessTokenSecretId_Help, FieldType: FieldTypes.Secret, SecureIdFieldName: "VimeoAccessTokenSecretId", IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        public string VimeoAccessTokenSecret { get; set; }
+
+        public string VimeoAccessTokenSecretId { get; set; }
+
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_VimeoDefaultFolderUri, HelpResource: UserAdminResources.Names.Organization_VimeoDefaultFolderUri_Help, FieldType: FieldTypes.Text, IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        public string VimeoDefaultFolderUri { get; set; }
+
+        [FormField(LabelResource: UserAdminResources.Names.Organization_VimeoDefaultPrivacy, HelpResource: UserAdminResources.Names.Organization_VimeoDefaultPrivacy_Help, EnumType:typeof(VimeoPrivacy), FieldType: FieldTypes.Picker, IsRequired: false, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader<VimeoPrivacy> VimeoDefaultPrivacy { get; set; } = EntityHeader<VimeoPrivacy>.Create(VimeoPrivacy.Unlisted);
+
         public List<string> GetFormFields()
         {
             return new List<string>()
@@ -343,6 +382,10 @@ namespace LagoVista.UserAdmin.Models.Orgs
                 nameof(PrimaryTextColor),
                 nameof(PrimaryBgColor),
                 nameof(AccentColor),
+                nameof(VimeoEnabled),
+                nameof(VimeoAccessTokenSecret),
+                nameof(VimeoDefaultFolderUri),
+                nameof(VimeoDefaultPrivacy),
             };
         }
 

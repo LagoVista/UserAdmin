@@ -1,4 +1,4 @@
-﻿/*7/12/2026 1:10:42 PM*/
+﻿/*7/14/2026 12:52:18 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -2309,6 +2309,45 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:Organization_User_Title
 
 		public static string Organization_User_Title { get { return GetResourceString("Organization_User_Title"); } }
+//Resources:UserAdminResources:Organization_VimeoAccessTokenSecretId
+
+		public static string Organization_VimeoAccessTokenSecretId { get { return GetResourceString("Organization_VimeoAccessTokenSecretId"); } }
+//Resources:UserAdminResources:Organization_VimeoAccessTokenSecretId_Help
+
+		public static string Organization_VimeoAccessTokenSecretId_Help { get { return GetResourceString("Organization_VimeoAccessTokenSecretId_Help"); } }
+//Resources:UserAdminResources:Organization_VimeoDefaultFolderUri
+
+		public static string Organization_VimeoDefaultFolderUri { get { return GetResourceString("Organization_VimeoDefaultFolderUri"); } }
+//Resources:UserAdminResources:Organization_VimeoDefaultFolderUri_Help
+
+		public static string Organization_VimeoDefaultFolderUri_Help { get { return GetResourceString("Organization_VimeoDefaultFolderUri_Help"); } }
+//Resources:UserAdminResources:Organization_VimeoDefaultPrivacy
+
+		public static string Organization_VimeoDefaultPrivacy { get { return GetResourceString("Organization_VimeoDefaultPrivacy"); } }
+//Resources:UserAdminResources:Organization_VimeoDefaultPrivacy_Help
+
+		public static string Organization_VimeoDefaultPrivacy_Help { get { return GetResourceString("Organization_VimeoDefaultPrivacy_Help"); } }
+//Resources:UserAdminResources:Organization_VimeoEnabled
+
+		public static string Organization_VimeoEnabled { get { return GetResourceString("Organization_VimeoEnabled"); } }
+//Resources:UserAdminResources:Organization_VimeoEnabled_Help
+
+		public static string Organization_VimeoEnabled_Help { get { return GetResourceString("Organization_VimeoEnabled_Help"); } }
+//Resources:UserAdminResources:Organization_VimeoHideFromVimeo
+
+		public static string Organization_VimeoHideFromVimeo { get { return GetResourceString("Organization_VimeoHideFromVimeo"); } }
+//Resources:UserAdminResources:Organization_VimeoPassword
+
+		public static string Organization_VimeoPassword { get { return GetResourceString("Organization_VimeoPassword"); } }
+//Resources:UserAdminResources:Organization_VimeoPrivate
+
+		public static string Organization_VimeoPrivate { get { return GetResourceString("Organization_VimeoPrivate"); } }
+//Resources:UserAdminResources:Organization_VimeoPublic
+
+		public static string Organization_VimeoPublic { get { return GetResourceString("Organization_VimeoPublic"); } }
+//Resources:UserAdminResources:Organization_VimeoUnlisted
+
+		public static string Organization_VimeoUnlisted { get { return GetResourceString("Organization_VimeoUnlisted"); } }
 //Resources:UserAdminResources:Organization_VimeoUrl
 
 		public static string Organization_VimeoUrl { get { return GetResourceString("Organization_VimeoUrl"); } }
@@ -3970,6 +4009,19 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string Organization_User_Description = "Organization_User_Description";
 			public const string Organization_User_Help = "Organization_User_Help";
 			public const string Organization_User_Title = "Organization_User_Title";
+			public const string Organization_VimeoAccessTokenSecretId = "Organization_VimeoAccessTokenSecretId";
+			public const string Organization_VimeoAccessTokenSecretId_Help = "Organization_VimeoAccessTokenSecretId_Help";
+			public const string Organization_VimeoDefaultFolderUri = "Organization_VimeoDefaultFolderUri";
+			public const string Organization_VimeoDefaultFolderUri_Help = "Organization_VimeoDefaultFolderUri_Help";
+			public const string Organization_VimeoDefaultPrivacy = "Organization_VimeoDefaultPrivacy";
+			public const string Organization_VimeoDefaultPrivacy_Help = "Organization_VimeoDefaultPrivacy_Help";
+			public const string Organization_VimeoEnabled = "Organization_VimeoEnabled";
+			public const string Organization_VimeoEnabled_Help = "Organization_VimeoEnabled_Help";
+			public const string Organization_VimeoHideFromVimeo = "Organization_VimeoHideFromVimeo";
+			public const string Organization_VimeoPassword = "Organization_VimeoPassword";
+			public const string Organization_VimeoPrivate = "Organization_VimeoPrivate";
+			public const string Organization_VimeoPublic = "Organization_VimeoPublic";
+			public const string Organization_VimeoUnlisted = "Organization_VimeoUnlisted";
 			public const string Organization_VimeoUrl = "Organization_VimeoUrl";
 			public const string Organization_WebSite = "Organization_WebSite";
 			public const string Organization_XUrl = "Organization_XUrl";
