@@ -66,19 +66,19 @@ namespace LagoVista.UserAdmin.Models.Testing
         [FormField(LabelResource: UserAdminResources.Names.AppUserTestingDSL_Expected, HelpResource: UserAdminResources.Names.AppUserTestingDSL_Expected_Help, FieldType: FieldTypes.ChildItem, ResourceType: typeof(UserAdminResources))]
         public AuthTenantStateSnapshot PostConditions { get; set; } = new AuthTenantStateSnapshot();
 
-        public string LastStatus { get; set; }
+        public AppUserTestPlatformStatus WebStatus { get; set; } = AppUserTestPlatformStatus.Create(AppUserTestPlatform.Web);
 
-        public string LastRun { get; set; }
+        public AppUserTestPlatformStatus AndroidStatus { get; set; } = AppUserTestPlatformStatus.Create(AppUserTestPlatform.Android);
 
-        public string LastError { get; set; }
+        public AppUserTestPlatformStatus IOSStatus { get; set; } = AppUserTestPlatformStatus.Create(AppUserTestPlatform.IOS);
 
         public AppUserTestScenarioSummary CreateSummary()
         {
             var summary = new AppUserTestScenarioSummary();
             summary.Populate(this);
-            summary.LastError = LastError;
-            summary.LastRun = LastRun;
-            summary.LastStatus = LastStatus;
+            summary.WebStatus = WebStatus;
+            summary.AndroidStatus = AndroidStatus;
+            summary.IOSStatus = IOSStatus;
             return summary;
         }
 
@@ -140,9 +140,34 @@ namespace LagoVista.UserAdmin.Models.Testing
      SaveUrl: "/api/sys/testing/auth/scenario", GetListUrl: "/api/sys/testing/auth/scenarios", FactoryUrl: "/api/sys/testing/auth/scenario/factory", DeleteUrl: "/api/sys/testing/auth/scenario/{id}", GetUrl: "/api/sys/testing/auth/scenario/{id}")]
     public class AppUserTestScenarioSummary : SummaryData
     {
-        public string LastError { get; set; }
-        public string LastStatus { get; set; }
+        public AppUserTestPlatformStatus WebStatus { get; set; } = AppUserTestPlatformStatus.Create(AppUserTestPlatform.Web);
+
+        public AppUserTestPlatformStatus AndroidStatus { get; set; } = AppUserTestPlatformStatus.Create(AppUserTestPlatform.Android);
+
+        public AppUserTestPlatformStatus IOSStatus { get; set; } = AppUserTestPlatformStatus.Create(AppUserTestPlatform.IOS);
+    }
+
+    public class AppUserTestPlatformStatus
+    {
+        public AppUserTestPlatform Platform { get; set; }
+
+        public TestRunStatus Status { get; set; } = TestRunStatus.Created;
+
         public string LastRun { get; set; }
+
+        public string LastRunId { get; set; }
+
+        public string FinalViewId { get; set; }
+
+        public string ErrorMessage { get; set; }
+
+        public static AppUserTestPlatformStatus Create(AppUserTestPlatform platform)
+        {
+            return new AppUserTestPlatformStatus
+            {
+                Platform = platform
+            };
+        }
     }
 
     public static class TestUserSeed

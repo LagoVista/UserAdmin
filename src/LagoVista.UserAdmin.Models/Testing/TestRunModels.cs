@@ -16,6 +16,13 @@ namespace LagoVista.UserAdmin.Models.Testing
         Aborted,
     }
 
+    public enum AppUserTestPlatform
+    {
+        Web,
+        Android,
+        IOS,
+    }
+
     /// <summary>
     /// Persisted record of a single ceremony execution.
     /// V1: 1 run = 1 ceremony.
@@ -38,8 +45,20 @@ namespace LagoVista.UserAdmin.Models.Testing
         public EntityHeader TestScenario { get; set; }
 
         /// <summary>
-        /// Environment metadata.
+        /// Execution platform and environment metadata.
         /// </summary>
+        public AppUserTestPlatform Platform { get; set; } = AppUserTestPlatform.Web;
+
+        public string DeviceId { get; set; }
+
+        public string DeviceName { get; set; }
+
+        public string PlatformVersion { get; set; }
+
+        public int? AutomationVersion { get; set; }
+
+        public string AppVersion { get; set; }
+
         public string BaseUrl { get; set; }
 
         public string StartPath { get; set; }
@@ -54,7 +73,7 @@ namespace LagoVista.UserAdmin.Models.Testing
 
         public TestRunStatus Status { get; set; } = TestRunStatus.Created;
 
-        public string ErrorMesage { get; set; }
+        public string ErrorMessage { get; set; }
 
         /// <summary>
         /// Final verification payloads.
@@ -92,7 +111,28 @@ namespace LagoVista.UserAdmin.Models.Testing
         typeof(UserAdminResources))]
     public class AppUserTestRunSummary : SummaryData
     {
+        public EntityHeader TestScenario { get; set; }
 
+        public AppUserTestPlatform Platform { get; set; } = AppUserTestPlatform.Web;
+
+        public string DeviceId { get; set; }
+
+        public string DeviceName { get; set; }
+
+        public string PlatformVersion { get; set; }
+
+        public string AppVersion { get; set; }
+
+        public int? AutomationVersion { get; set; }
+        public string Started { get; set; }
+
+        public string Finished { get; set; }
+
+        public TestRunStatus Status { get; set; } = TestRunStatus.Created;
+
+        public string FinalViewId { get; set; }
+
+        public string ErrorMessage { get; set; }
     }
 
     [EntityDescription(

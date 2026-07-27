@@ -482,20 +482,36 @@ namespace LagoVista.UserAdmin.Managers
             await _testRunStore.CreateRunAsync(run);
 
             var scenario = await _testScenarioRepo.GetByIdAsync(run.TestScenario.Id);
-            scenario.LastRun = run.Finished;
+            var platformStatus = GetPlatformStatus(scenario, run.Platform);
 
-            if (run.Status != TestRunStatus.Failed)
-            {
-                scenario.LastStatus = "Success";
-            }
-            else
-                scenario.LastStatus = run.Status.ToString();
+            platformStatus.Status = run.Status;
+            platformStatus.LastRun = run.Finished;
+            platformStatus.LastRunId = run.Id;
+            platformStatus.FinalViewId = run.FinalViewId;
+            platformStatus.ErrorMessage = run.ErrorMessage;
 
             scenario.LastUpdatedDate = now;
             scenario.LastUpdatedBy = user;
-            scenario.LastError = run.ErrorMesage;
             await _testScenarioRepo.UpdateTestScenarioAsync(scenario);
             return InvokeResult.Success;
+        }
+
+        private static AppUserTestPlatformStatus GetPlatformStatus(AppUserTestScenario scenario, AppUserTestPlatform platform)
+        {
+            switch (platform)
+            {
+                case AppUserTestPlatform.Web:
+                    return scenario.WebStatus ??= AppUserTestPlatformStatus.Create(AppUserTestPlatform.Web);
+
+                case AppUserTestPlatform.Android:
+                    return scenario.AndroidStatus ??= AppUserTestPlatformStatus.Create(AppUserTestPlatform.Android);
+
+                case AppUserTestPlatform.IOS:
+                    return scenario.IOSStatus ??= AppUserTestPlatformStatus.Create(AppUserTestPlatform.IOS);
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(platform), platform, "Unsupported app user test platform.");
+            }
         }
 
         public async Task<AppUserTestRun> GetTestRunAsync(string runId, EntityHeader org, EntityHeader user)
