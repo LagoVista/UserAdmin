@@ -1,0 +1,16 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.home-workspace.flag-conflict",
+  "name": "Flag Home Workspace Conflict",
+  "summary": "Marks an unresolved home-workspace invariant violation when workspace count or ownership cannot be reconciled safely.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [{ "key": "conflict-reason", "valueType": "string", "required": true, "description": "Stable reason code describing the workspace invariant violation." }],
+  "guards": [{ "expression": "durable-identity == resolved and (existing-home-workspace-count > 1 or home-owner-membership-invalid == true)", "failureCode": "home-workspace-conflict-not-present" }],
+  "permittedMutations": ["auth.dimension.home-workspace", "auth.dimension.workspace-membership", "auth.dimension.current-workspace", "auth.dimension.session-capability"],
+  "requiredEffects": ["record-home-workspace-conflict", "block-registration-completion"],
+  "forbiddenEffects": ["choose-arbitrary-home-workspace", "delete-workspace-automatically", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.home-workspace.exactly-one", "auth.invariant.home-workspace.owner-member", "auth.invariant.current-workspace.requires-access", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.9" }]
+}
