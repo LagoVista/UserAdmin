@@ -1,0 +1,36 @@
+{
+  "$schema": "../schemas/conversation-type.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.conversation.user-registration",
+  "name": "User Registration",
+  "summary": "Guides a new person through registration, identity verification, profile completion, durable identity creation, and optional claim of guest-created value while keeping secrets outside the conversation.",
+  "version": 1,
+  "maturity": "proposed",
+  "goals": [{ "key": "register-user", "summary": "Guide a new person through registration and completion of required onboarding information." }],
+  "supportedJourneyKeys": ["auth.journey.pending-identity.lifecycle"],
+  "entryPredicate": { "expression": "A guest or PendingIdentity has chosen to register and no durable identity has yet completed the requested registration outcome." },
+  "completionPredicate": { "expression": "A durable identity and authenticated session are established, any approved guest-value claim is complete, or the registration is abandoned or escalated safely." },
+  "informationRequirements": [
+    { "key": "registration-intent", "summary": "The reason registration was initiated, including any claimable guest value or invitation context.", "sensitivity": "sensitive", "collection": "existing-state", "requiredForGoalKeys": ["register-user"] },
+    { "key": "profile-details", "summary": "Non-secret profile information required by the canonical registration journey.", "sensitivity": "profile", "collection": "conversation", "requiredForGoalKeys": ["register-user"] },
+    { "key": "authentication-secrets", "summary": "Passwords, one-time codes, passkeys, provider tokens, and recovery codes.", "sensitivity": "secret", "collection": "secure-component", "requiredForGoalKeys": ["register-user"] }
+  ],
+  "allowedActionKeys": [],
+  "prohibitedActionKeys": [],
+  "decisionPoints": [
+    { "key": "resolve-registration-path", "summary": "Select new registration, existing-user resolution, or another permitted identity path.", "basis": ["guest state", "PendingIdentity state", "verified identifiers", "existing durable identity matches"] },
+    { "key": "select-verification-ceremony", "summary": "Select the required standard verification component.", "basis": ["registration method", "organization policy", "platform capability", "current proof state"] }
+  ],
+  "confirmationRequirements": [{ "key": "create-durable-identity", "summary": "Require explicit user intent before completing durable account creation and claiming guest-created value.", "requiredBeforeActionKeys": [] }],
+  "secureInteractions": [{ "key": "registration-verification", "summary": "Collect credentials and identity-verification proofs outside conversational context.", "componentType": "standard-authentication-ui", "conversationMayProvide": ["PendingIdentity reference", "display-safe email or phone context", "policy explanation", "return location"], "componentCollects": ["passwords", "one-time codes", "passkey material", "provider tokens", "recovery codes"], "sanitizedOutcomes": ["completed", "canceled", "failed", "additional-verification-required", "expired"], "resumeBehavior": "Refresh registration and identity state, then continue from the next permitted action using only the sanitized result." }],
+  "escalationConditions": [
+    { "key": "duplicate-identity-risk", "condition": "Registration may create or link a duplicate durable identity.", "outcome": "Pause account creation and route to deterministic identity resolution." },
+    { "key": "verification-risk", "condition": "Verification or fraud controls require lockout, cooldown, step-up, or human review.", "outcome": "Stop conversational orchestration and use the prescribed security path." }
+  ],
+  "lifecycle": { "pause": "Persist registration progress, collected non-secret data, claimable-value references, and secure handoff state outside the transcript.", "resume": "Reload authoritative identity and registration state before recommending the next action.", "abandonment": "Stop without partially creating or claiming a durable identity; retain only data allowed by policy.", "expiration": "Expire stale PendingIdentity and secure-handoff state according to their independent policies." },
+  "supportedChannels": ["web", "android", "ios", "vtm", "voice"],
+  "presentationExpectations": ["Present registration as guided HR onboarding.", "Explain that passwords and verification codes are entered only in secure controls.", "Preserve and visibly reconnect any guest-created value after successful registration.", "Provide an equivalent traditional registration wizard."],
+  "scenarioKeys": [],
+  "openQuestions": ["Should guest-value registration become a specialized child conversation once its canonical journey is authored?", "Which registration action keys are safe to expose through the conversation?"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.6 and 4.11", "note": "Split from the original HR Onboarding goal set on 2026-07-28." }]
+}
