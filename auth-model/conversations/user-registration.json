@@ -3,35 +3,102 @@
   "schemaVersion": "1.0",
   "key": "auth.conversation.user-registration",
   "name": "User Registration",
-  "summary": "Guides a new person through registration, identity verification, profile completion, durable identity creation, and optional claim of guest-created value while keeping secrets outside the conversation.",
-  "version": 1,
+  "summary": "Guides a new person through registration, identity verification, profile completion, durable identity creation, home-workspace establishment, and optional claim of guest-created value while keeping secrets outside the conversation.",
+  "version": 2,
   "maturity": "proposed",
   "goals": [{ "key": "register-user", "summary": "Guide a new person through registration and completion of required onboarding information." }],
-  "supportedJourneyKeys": ["auth.journey.pending-identity.lifecycle"],
+  "supportedJourneyKeys": [
+    "auth.journey.pending-identity.lifecycle",
+    "auth.journey.password.registration",
+    "auth.journey.native-provider.new-user-registration",
+    "auth.journey.passkey.new-user-registration",
+    "auth.journey.home-workspace.establishment"
+  ],
   "routedConversationKeys": [],
   "entryPredicate": { "expression": "A guest or PendingIdentity has chosen to register and no durable identity has yet completed the requested registration outcome." },
-  "completionPredicate": { "expression": "A durable identity and authenticated session are established, any approved guest-value claim is complete, or the registration is abandoned or escalated safely." },
+  "completionPredicate": { "expression": "A durable identity, home workspace, and permitted authenticated session are established; any approved guest-value claim is complete; or registration is abandoned or escalated safely." },
   "informationRequirements": [
     { "key": "registration-intent", "summary": "The reason registration was initiated, including any claimable guest value or invitation context.", "sensitivity": "sensitive", "collection": "existing-state", "requiredForGoalKeys": ["register-user"] },
+    { "key": "registration-method", "summary": "The supported credential or provider path selected by the person.", "sensitivity": "public", "collection": "conversation", "requiredForGoalKeys": ["register-user"] },
     { "key": "profile-details", "summary": "Non-secret profile information required by the canonical registration journey.", "sensitivity": "profile", "collection": "conversation", "requiredForGoalKeys": ["register-user"] },
+    { "key": "authoritative-registration-state", "summary": "Current PendingIdentity, proof, profile, durable-user, and home-workspace state used to determine the next permitted action.", "sensitivity": "sensitive", "collection": "existing-state", "requiredForGoalKeys": ["register-user"] },
     { "key": "authentication-secrets", "summary": "Passwords, one-time codes, passkeys, provider tokens, and recovery codes.", "sensitivity": "secret", "collection": "secure-component", "requiredForGoalKeys": ["register-user"] }
   ],
-  "allowedActionKeys": [],
+  "allowedActionKeys": [
+    "auth.action.pending-identity.begin",
+    "auth.action.password.assert-email",
+    "auth.action.password.verify-email",
+    "auth.action.password.complete-profile",
+    "auth.action.password.establish-credential",
+    "auth.action.password.create-durable-user",
+    "auth.action.home-workspace.begin-establishment",
+    "auth.action.home-workspace.complete-establishment",
+    "auth.action.home-workspace.reconcile-existing"
+  ],
   "prohibitedActionKeys": [],
   "decisionPoints": [
     { "key": "resolve-registration-path", "summary": "Select new registration, existing-user resolution, or another permitted identity path.", "basis": ["guest state", "PendingIdentity state", "verified identifiers", "existing durable identity matches"] },
-    { "key": "select-verification-ceremony", "summary": "Select the required standard verification component.", "basis": ["registration method", "organization policy", "platform capability", "current proof state"] }
+    { "key": "select-verification-ceremony", "summary": "Select the required standard verification component.", "basis": ["registration method", "organization policy", "platform capability", "current proof state"] },
+    { "key": "determine-next-registration-action", "summary": "Recommend only the next canonical action permitted by refreshed authoritative state.", "basis": ["PendingIdentity status", "credential proof", "email ownership", "profile completeness", "durable identity", "home workspace"] }
   ],
-  "confirmationRequirements": [{ "key": "create-durable-identity", "summary": "Require explicit user intent before completing durable account creation and claiming guest-created value.", "requiredBeforeActionKeys": [] }],
-  "secureInteractions": [{ "key": "registration-verification", "summary": "Collect credentials and identity-verification proofs outside conversational context.", "componentType": "standard-authentication-ui", "conversationMayProvide": ["PendingIdentity reference", "display-safe email or phone context", "policy explanation", "return location"], "componentCollects": ["passwords", "one-time codes", "passkey material", "provider tokens", "recovery codes"], "sanitizedOutcomes": ["completed", "canceled", "failed", "additional-verification-required", "expired"], "resumeBehavior": "Refresh registration and identity state, then continue from the next permitted action using only the sanitized result." }],
+  "confirmationRequirements": [{
+    "key": "create-durable-identity",
+    "summary": "Require explicit user intent immediately before durable account creation and any guest-value claim.",
+    "requiredBeforeActionKeys": ["auth.action.password.create-durable-user"]
+  }],
+  "secureInteractions": [{
+    "key": "registration-verification",
+    "summary": "Collect credentials and identity-verification proofs outside conversational context.",
+    "componentType": "standard-authentication-ui",
+    "conversationMayProvide": ["PendingIdentity reference", "display-safe email or phone context", "selected registration method", "policy explanation", "return location"],
+    "componentCollects": ["passwords", "one-time codes", "passkey material", "provider tokens", "recovery codes"],
+    "sanitizedOutcomes": ["completed", "canceled", "failed", "additional-verification-required", "expired"],
+    "resumeBehavior": "Discard conversational assumptions, reload authoritative registration state, and continue from the next permitted canonical action using only the sanitized result."
+  }],
   "escalationConditions": [
     { "key": "duplicate-identity-risk", "condition": "Registration may create or link a duplicate durable identity.", "outcome": "Pause account creation and route to deterministic identity resolution." },
-    { "key": "verification-risk", "condition": "Verification or fraud controls require lockout, cooldown, step-up, or human review.", "outcome": "Stop conversational orchestration and use the prescribed security path." }
+    { "key": "verification-risk", "condition": "Verification or fraud controls require lockout, cooldown, step-up, or human review.", "outcome": "Stop conversational orchestration and use the prescribed security path." },
+    { "key": "state-changed-during-pause", "condition": "Authoritative registration state no longer matches the state from which the prior recommendation was produced.", "outcome": "Explain the refreshed state and calculate a new next action without replaying the prior action." }
   ],
-  "lifecycle": { "pause": "Persist registration progress, collected non-secret data, claimable-value references, and secure handoff state outside the transcript.", "resume": "Reload authoritative identity and registration state before recommending the next action.", "abandonment": "Stop without partially creating or claiming a durable identity; retain only data allowed by policy.", "expiration": "Expire stale PendingIdentity and secure-handoff state according to their independent policies." },
+  "lifecycle": {
+    "pause": "Persist registration progress, collected non-secret data, claimable-value references, confirmation state, and secure handoff state outside the transcript.",
+    "resume": "Reload authoritative identity and registration state before recommending the next action; a previous recommendation or confirmation is not authorization against changed state.",
+    "abandonment": "Stop without partially creating or claiming a durable identity; retain only data allowed by policy.",
+    "expiration": "Expire stale PendingIdentity and secure-handoff state according to their independent policies and explain the available restart path."
+  },
   "supportedChannels": ["web", "android", "ios", "vtm", "voice"],
-  "presentationExpectations": ["Present registration as guided HR onboarding.", "Explain that passwords and verification codes are entered only in secure controls.", "Preserve and visibly reconnect any guest-created value after successful registration.", "Provide an equivalent traditional registration wizard."],
-  "scenarioKeys": [],
-  "openQuestions": ["Should guest-value registration become a specialized child conversation once its canonical journey is authored?", "Which registration action keys are safe to expose through the conversation?"],
-  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.6 and 4.11", "note": "Split from the original HR Onboarding goal set on 2026-07-28." }]
+  "presentationExpectations": [
+    "Present registration as guided HR onboarding.",
+    "Explain that passwords and verification codes are entered only in secure controls.",
+    "Explain canonical validation failures in human language without weakening or bypassing the failed guard.",
+    "Preserve and visibly reconnect any guest-created value after successful registration.",
+    "Show the home workspace as the person's permanent personal landing context.",
+    "Provide an equivalent traditional registration wizard invoking the same logical actions."
+  ],
+  "scenarioKeys": [
+    "auth.scenario.password.begin-registration",
+    "auth.scenario.password.assert-email",
+    "auth.scenario.password.verify-email",
+    "auth.scenario.password.complete-profile",
+    "auth.scenario.password.establish-credential",
+    "auth.scenario.password.create-durable-user",
+    "auth.scenario.password.create-home-workspace",
+    "auth.scenario.password.establish-session",
+    "auth.scenario.password.reused-email-proof-rejected",
+    "auth.scenario.native-provider.email-mismatch-preserved",
+    "auth.scenario.native-provider.create-new-user",
+    "auth.scenario.native-provider.create-home-workspace",
+    "auth.scenario.native-provider.establish-session",
+    "auth.scenario.passkey.begin-new-user-registration",
+    "auth.scenario.passkey.complete-new-user-attestation",
+    "auth.scenario.passkey.create-and-bind-user"
+  ],
+  "openQuestions": [
+    "Should guest-value registration become a specialized child conversation once its canonical journey is authored?",
+    "Should native-provider and passkey registration receive specialized child conversations or remain secure interaction variants of this conversation?"
+  ],
+  "sourceReferences": [
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.6 through 4.11", "note": "Bound guided registration to existing canonical journeys, actions, scenarios, secure handoffs, and pause/resume semantics." },
+    { "sourceType": "decision", "reference": "auth-model/SECTION-4.9-HANDOFF.md", "note": "Registration-independent home-workspace establishment." }
+  ]
 }
