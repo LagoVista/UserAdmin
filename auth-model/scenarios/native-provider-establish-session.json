@@ -1,0 +1,25 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.native-provider.establish-session",
+  "name": "Establish Native Provider Session",
+  "summary": "Issues a normal authenticated session only after durable identity and workspace requirements are satisfied.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.native-provider.existing-user", "auth.journey.native-provider.new-user-registration"],
+  "transitionKey": "auth.transition.native-provider.establish-session",
+  "preconditions": { "expression": "durable-identity == resolved and account-status == active and home-workspace == established and current-workspace == home" },
+  "setup": ["Resolve an active durable identity with an established selected home workspace."],
+  "inputs": [
+    { "key": "durable-identity-reference", "valueType": "reference", "required": true }
+  ],
+  "actionKey": "auth.action.native-provider.establish-session",
+  "postconditions": { "expression": "session-capability == authenticated-normal" },
+  "requiredEffects": ["issue-normal-authenticated-session", "record-native-provider-session-established"],
+  "forbiddenEffects": ["create-durable-user", "create-home-workspace", "change-provider-link"],
+  "invariantKeys": ["auth.invariant.home-workspace.exactly-one", "auth.invariant.current-workspace.requires-access"],
+  "expectedAuthLogEvents": ["native-provider-session-established"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
