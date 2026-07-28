@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.native-provider.link-to-user",
+  "name": "Link Native Provider to Existing User",
+  "summary": "Links the validated provider subject to the explicitly selected existing durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 70,
+  "sourceState": { "expression": "pending-identity-status == resolution-required and pending-identity-flow == native-provider and credential-proof == native-provider-proved and durable-identity == existing" },
+  "actionKey": "auth.action.native-provider.link-to-user",
+  "guards": [{ "expression": "input.durable-identity-reference matches selected link target", "failureCode": "provider-link-target-mismatch" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.durable-identity", "operation": "set", "valueExpression": "resolved" },
+    { "dimensionKey": "auth.dimension.pending-identity-status", "operation": "set", "valueExpression": "resolved" }
+  ],
+  "requiredEffects": ["atomically-create-provider-link", "record-idempotency-result", "record-provider-link"],
+  "forbiddenEffects": ["create-durable-user", "link-subject-to-multiple-users", "change-canonical-email-from-provider-email"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.email-identities.not-conflated", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
