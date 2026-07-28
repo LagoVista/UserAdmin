@@ -1,0 +1,220 @@
+{
+  "$schema": "../schemas/conversation-type.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.conversation.hr-onboarding",
+  "name": "HR Onboarding",
+  "summary": "Guides a person through account access, registration, invitation resolution, organization creation, user invitation, and organization switching while delegating authentication secrets and security ceremonies to deterministic secure UI components.",
+  "version": 1,
+  "maturity": "proposed",
+  "goals": [
+    {
+      "key": "establish-account-access",
+      "summary": "Help the person reach the appropriate standard login or recovery experience."
+    },
+    {
+      "key": "register-user",
+      "summary": "Guide a new person through registration and completion of required onboarding information."
+    },
+    {
+      "key": "resolve-invitation",
+      "summary": "Help a person understand, accept, or resolve an organization invitation."
+    },
+    {
+      "key": "invite-user",
+      "summary": "Help an authorized member prepare and send an invitation to another person."
+    },
+    {
+      "key": "create-organization",
+      "summary": "Guide an eligible person through creation of a new organization tenant."
+    },
+    {
+      "key": "switch-organization",
+      "summary": "Help a member explicitly change the active organization context."
+    }
+  ],
+  "supportedJourneyKeys": [
+    "auth.journey.pending-identity.lifecycle"
+  ],
+  "entryPredicate": {
+    "expression": "A guest, pending identity, or durable identity requests help with account access, registration, invitation, organization creation, user invitation, or organization switching."
+  },
+  "completionPredicate": {
+    "expression": "The selected goal is completed, explicitly abandoned, or escalated, and no secure interaction remains pending."
+  },
+  "informationRequirements": [
+    {
+      "key": "entry-intent",
+      "summary": "The outcome the person is trying to accomplish.",
+      "sensitivity": "public",
+      "collection": "conversation",
+      "requiredForGoalKeys": [
+        "establish-account-access",
+        "register-user",
+        "resolve-invitation",
+        "invite-user",
+        "create-organization",
+        "switch-organization"
+      ]
+    },
+    {
+      "key": "identity-and-membership-state",
+      "summary": "The sanitized current authentication, invitation, and organization membership state.",
+      "sensitivity": "sensitive",
+      "collection": "existing-state",
+      "requiredForGoalKeys": [
+        "establish-account-access",
+        "register-user",
+        "resolve-invitation",
+        "switch-organization"
+      ]
+    },
+    {
+      "key": "profile-and-organization-details",
+      "summary": "Non-secret profile, invitation, and organization information required by the selected journey.",
+      "sensitivity": "profile",
+      "collection": "conversation",
+      "requiredForGoalKeys": [
+        "register-user",
+        "resolve-invitation",
+        "invite-user",
+        "create-organization"
+      ]
+    },
+    {
+      "key": "authentication-secrets",
+      "summary": "Passwords, one-time codes, passkeys, provider tokens, recovery codes, and equivalent secrets.",
+      "sensitivity": "secret",
+      "collection": "secure-component",
+      "requiredForGoalKeys": [
+        "establish-account-access",
+        "register-user",
+        "resolve-invitation"
+      ]
+    }
+  ],
+  "allowedActionKeys": [],
+  "prohibitedActionKeys": [],
+  "decisionPoints": [
+    {
+      "key": "select-goal",
+      "summary": "Determine the person's immediate onboarding or membership goal.",
+      "basis": [
+        "entry intent",
+        "current composite state",
+        "available memberships",
+        "pending invitations"
+      ]
+    },
+    {
+      "key": "select-journey",
+      "summary": "Select an applicable canonical journey without inventing new authentication behavior.",
+      "basis": [
+        "selected goal",
+        "entry predicates",
+        "required actions",
+        "organization policy"
+      ]
+    },
+    {
+      "key": "select-secure-handoff",
+      "summary": "Choose the standard secure component required for a credential or verification ceremony.",
+      "basis": [
+        "authentication method",
+        "current state",
+        "platform capability",
+        "organization policy"
+      ]
+    }
+  ],
+  "confirmationRequirements": [
+    {
+      "key": "membership-or-tenant-change",
+      "summary": "Require explicit confirmation before accepting an invitation, sending an invitation, creating an organization, or switching the active organization.",
+      "requiredBeforeActionKeys": []
+    }
+  ],
+  "secureInteractions": [
+    {
+      "key": "credential-and-verification-ceremony",
+      "summary": "Collect passwords, TOTP values, passkey operations, provider authentication, recovery codes, and equivalent secrets outside the conversational context.",
+      "componentType": "standard-authentication-ui",
+      "conversationMayProvide": [
+        "pending identity reference",
+        "display-safe email or provider context",
+        "policy explanation",
+        "return location"
+      ],
+      "componentCollects": [
+        "passwords",
+        "one-time codes",
+        "passkey material",
+        "provider tokens",
+        "recovery codes"
+      ],
+      "sanitizedOutcomes": [
+        "completed",
+        "canceled",
+        "failed",
+        "additional-verification-required",
+        "expired"
+      ],
+      "resumeBehavior": "Resume from durable conversation state using only the sanitized outcome and refreshed composite authentication state."
+    }
+  ],
+  "escalationConditions": [
+    {
+      "key": "identity-ambiguity",
+      "condition": "The system cannot safely determine which durable identity, invitation, or organization membership the person intends to use.",
+      "outcome": "Pause state-changing actions and route to deterministic account resolution or human support."
+    },
+    {
+      "key": "policy-or-authority-block",
+      "condition": "The requested action is forbidden by organization policy or the current principal lacks authority.",
+      "outcome": "Explain the limitation without exposing sensitive policy details and offer valid alternatives."
+    },
+    {
+      "key": "security-risk",
+      "condition": "Risk controls require lockout, step-up, fraud review, or other security intervention.",
+      "outcome": "Stop conversational orchestration and hand off to the prescribed security or support process."
+    }
+  ],
+  "lifecycle": {
+    "pause": "Persist the selected goal, collected non-secret information, pending decision, and secure handoff reference outside the transcript.",
+    "resume": "Reload authoritative authentication and membership state, discard stale recommendations, and continue with the next currently permitted action.",
+    "abandonment": "Allow the person to stop without partially applying a state-changing action; preserve only data permitted by retention policy.",
+    "expiration": "Expire stale conversation instances and secure handoff references independently from durable identity, invitation, and membership records."
+  },
+  "supportedChannels": [
+    "web",
+    "android",
+    "ios",
+    "vtm",
+    "voice"
+  ],
+  "presentationExpectations": [
+    "Present the assistant as an HR-style onboarding guide, not as the authentication authority.",
+    "Answer the person's immediate question before returning to the recommended next step.",
+    "Make organization context and organization switching explicit and highly visible.",
+    "Explain why secure controls are opening and state that secrets are not shared with the conversation.",
+    "Provide a traditional form or wizard presentation that invokes the same logical actions and transitions."
+  ],
+  "scenarioKeys": [],
+  "openQuestions": [
+    "Which canonical journeys will represent organization creation, user invitation, invitation resolution, and organization switching?",
+    "Which existing action keys are safe to expose through the HR onboarding conversation?",
+    "Should conversation instances be modeled in this repository or only in runtime persistence contracts?"
+  ],
+  "sourceReferences": [
+    {
+      "sourceType": "discussion",
+      "reference": "AUTH-MODEL-GUIDE.md",
+      "section": "4.11",
+      "note": "Guided VTM onboarding and traditional form equivalence."
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation",
+      "note": "HR VTM onboarding conversation architecture discussed on 2026-07-28."
+    }
+  ]
+}
