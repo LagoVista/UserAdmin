@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.passkey.enrollment.start",
+  "name": "Start Passkey Enrollment",
+  "description": "Introduces passkey enrollment and starts the platform authenticator ceremony.",
+  "category": "passkey",
+  "routeId": "auth.route.passkey.enrollment.start",
+  "status": "active",
+  "controls": [],
+  "actions": [
+    { "id": "start-enrollment", "name": "Start Enrollment", "actionType": "native-capability", "finder": "action:start-enrollment" },
+    { "id": "cancel", "name": "Cancel", "actionType": "button", "finder": "action:cancel" }
+  ],
+  "platforms": {
+    "web": { "status": "implemented" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "runtimeEntityId": "AA894DA9B4A249848CEDD228E803B26A",
+    "runtimeSha256Hex": "5af7f8bec778b5de56f6faff5ea0970687345adc1d968f6ea04fb8ba77fcaa4a"
+  }
+}
