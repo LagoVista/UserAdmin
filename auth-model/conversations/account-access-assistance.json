@@ -4,28 +4,42 @@
   "key": "auth.conversation.account-access-assistance",
   "name": "Account Access Assistance",
   "summary": "Helps a person identify and launch the correct standard login or recovery experience without collecting authentication secrets in conversation.",
-  "version": 1,
+  "version": 2,
   "maturity": "proposed",
   "goals": [{ "key": "establish-account-access", "summary": "Help the person reach the appropriate standard login or recovery experience." }],
-  "supportedJourneyKeys": ["auth.journey.pending-identity.lifecycle"],
+  "supportedJourneyKeys": ["auth.journey.pending-identity.lifecycle", "auth.journey.account-recovery"],
   "routedConversationKeys": [],
   "entryPredicate": { "expression": "A guest or unresolved person requests help signing in, recovering access, or selecting an authentication method." },
-  "completionPredicate": { "expression": "The person reaches a standard authentication or recovery surface, abandons the request, or is escalated safely." },
+  "completionPredicate": { "expression": "The person reaches a standard authentication or recovery surface, completes a supported recovery journey, abandons the request, or is escalated safely." },
   "informationRequirements": [
     { "key": "access-intent", "summary": "The account-access outcome the person is attempting.", "sensitivity": "public", "collection": "conversation", "requiredForGoalKeys": ["establish-account-access"] },
     { "key": "sanitized-authentication-state", "summary": "Display-safe information about available providers, account state, and permitted recovery options.", "sensitivity": "sensitive", "collection": "existing-state", "requiredForGoalKeys": ["establish-account-access"] },
     { "key": "authentication-secrets", "summary": "Passwords, one-time codes, passkeys, provider tokens, and recovery codes.", "sensitivity": "secret", "collection": "secure-component", "requiredForGoalKeys": ["establish-account-access"] }
   ],
-  "allowedActionKeys": [],
+  "allowedActionKeys": [
+    "auth.action.recovery.request",
+    "auth.action.recovery.issue-challenge",
+    "auth.action.recovery.verify-proof",
+    "auth.action.recovery.establish-replacement-credential",
+    "auth.action.recovery.complete"
+  ],
   "prohibitedActionKeys": [],
   "decisionPoints": [{ "key": "select-access-path", "summary": "Select the valid login or recovery path from authoritative state and policy.", "basis": ["account state", "available authentication methods", "recovery eligibility", "organization policy"] }],
-  "confirmationRequirements": [],
-  "secureInteractions": [{ "key": "account-access-ceremony", "summary": "Perform login, step-up, or recovery outside conversational context.", "componentType": "standard-authentication-ui", "conversationMayProvide": ["display-safe account context", "selected authentication method", "return location"], "componentCollects": ["passwords", "one-time codes", "passkey material", "provider tokens", "recovery codes"], "sanitizedOutcomes": ["completed", "canceled", "failed", "additional-verification-required", "expired"], "resumeBehavior": "Refresh authoritative authentication state and continue using only the sanitized result." }],
+  "confirmationRequirements": [{ "key": "complete-recovery", "summary": "Require explicit confirmation before replacing credentials and revoking existing sessions.", "requiredBeforeActionKeys": ["auth.action.recovery.establish-replacement-credential", "auth.action.recovery.complete"] }],
+  "secureInteractions": [{ "key": "account-access-ceremony", "summary": "Perform login, step-up, or recovery outside conversational context.", "componentType": "standard-authentication-ui", "conversationMayProvide": ["display-safe account context", "selected authentication method", "recovery reference", "return location"], "componentCollects": ["passwords", "one-time codes", "passkey material", "provider tokens", "recovery codes"], "sanitizedOutcomes": ["completed", "canceled", "failed", "additional-verification-required", "expired"], "resumeBehavior": "Refresh authoritative authentication and recovery state and continue using only the sanitized result." }],
   "escalationConditions": [{ "key": "identity-ambiguity", "condition": "The system cannot safely determine the intended durable identity or recovery path.", "outcome": "Stop automated access actions and route to deterministic account resolution or human support." }],
-  "lifecycle": { "pause": "Persist the selected access intent and secure handoff reference outside the transcript.", "resume": "Refresh authentication state and discard stale recommendations before continuing.", "abandonment": "Allow exit without changing authentication state.", "expiration": "Expire stale handoff references independently from durable identity state." },
+  "lifecycle": { "pause": "Persist the selected access intent, recovery reference, and secure handoff reference outside the transcript.", "resume": "Refresh authentication and recovery state and discard stale recommendations before continuing.", "abandonment": "Allow exit without changing authentication state beyond explicitly requested recovery records.", "expiration": "Expire stale recovery and handoff references independently from durable identity state." },
   "supportedChannels": ["web", "android", "ios", "vtm", "voice"],
-  "presentationExpectations": ["Explain available access paths without revealing whether an unverified identifier belongs to an account.", "Open standard secure controls for every credential or verification ceremony.", "Provide equivalent traditional navigation and recovery flows."],
-  "scenarioKeys": [],
-  "openQuestions": ["Which canonical login and recovery journeys should this conversation reference?"],
-  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.11", "note": "Split from the original HR Onboarding goal set on 2026-07-28." }]
+  "presentationExpectations": ["Explain available access paths without revealing whether an unverified identifier belongs to an account.", "Open standard secure controls for every credential or verification ceremony.", "Explain that successful recovery revokes prior sessions and requires fresh sign-in.", "Provide equivalent traditional navigation and recovery flows."],
+  "scenarioKeys": [
+    "auth.scenario.recovery.request",
+    "auth.scenario.recovery.issue-challenge",
+    "auth.scenario.recovery.verify-proof",
+    "auth.scenario.recovery.establish-replacement-credential",
+    "auth.scenario.recovery.complete"
+  ],
+  "openQuestions": ["Which canonical normal-login journeys should this conversation reference once authored?"],
+  "sourceReferences": [
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.11 and 4.14", "note": "Account access assistance bound to the canonical recovery journey on 2026-07-28." }
+  ]
 }
