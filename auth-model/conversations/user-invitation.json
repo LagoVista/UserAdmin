@@ -4,11 +4,33 @@
   "key": "auth.conversation.user-invitation",
   "name": "User Invitation",
   "summary": "Helps an authorized member prepare, review, and send an invitation to another person without bypassing role-assignment or organization policy.",
-  "version": 1,
+  "version": 2,
   "maturity": "proposed",
   "goals": [{ "key": "invite-user", "summary": "Help an authorized member prepare and send an invitation to another person." }],
   "supportedJourneyKeys": [],
   "routedConversationKeys": [],
+  "distinctiveCharacteristics": [
+    "The chapter remains a durable invitation-history stream rather than ending when an invitation is sent.",
+    "User-relevant invitation and membership events may be appended by the system while the chapter is inactive.",
+    "System-authored entries remain linked to authoritative invitation and membership records.",
+    "When the chapter is reopened, prior invitations, outcomes, unresolved issues, and relevant organization context are immediately available in the stream."
+  ],
+  "exampleInteractions": [
+    {
+      "key": "invite-and-later-acceptance",
+      "name": "Invite and Later Acceptance",
+      "summary": "Shows a conversational invitation followed by system-authored lifecycle events that become durable chapter history.",
+      "entries": [
+        { "sequence": 1, "entryType": "user-message", "actor": "user", "text": "I'd like to invite Fred to Acme." },
+        { "sequence": 2, "entryType": "agent-message", "actor": "agent", "text": "I can help with that. What role should Fred have?" },
+        { "sequence": 3, "entryType": "user-message", "actor": "user", "text": "Administrator." },
+        { "sequence": 4, "entryType": "agent-message", "actor": "agent", "text": "Fred will be invited to Acme as an Administrator. Would you like me to send the invitation?" },
+        { "sequence": 5, "entryType": "user-message", "actor": "user", "text": "Yes." },
+        { "sequence": 6, "entryType": "system-event", "actor": "system", "text": "You invited Fred to Acme as an Administrator on July 28.", "authoritativeReferenceType": "organization-invitation", "notes": "Appended after the deterministic invitation action succeeds." },
+        { "sequence": 7, "entryType": "system-event", "actor": "system", "text": "Fred accepted the invitation and joined Acme on July 29.", "relativeTime": "one day later", "mayOccurWhileInactive": true, "authoritativeReferenceType": "organization-membership", "notes": "Appended from the invitation-acceptance or membership-created business event while another chapter may be active." }
+      ]
+    }
+  ],
   "entryPredicate": { "expression": "An authenticated member requests to invite another person and has a potentially valid target organization context." },
   "completionPredicate": { "expression": "The invitation is sent, explicitly canceled, blocked by policy, or escalated without unauthorized membership creation." },
   "informationRequirements": [
@@ -26,5 +48,8 @@
   "presentationExpectations": ["Present a clear invitation summary before sending.", "Never imply that an invitation creates membership before acceptance.", "Expose only roles the current principal may assign.", "Provide an equivalent traditional invitation form."],
   "scenarioKeys": [],
   "openQuestions": ["Which canonical invitation-creation journey and actions should this conversation reference?"],
-  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.11", "note": "Split from the original HR Onboarding goal set on 2026-07-28." }]
+  "sourceReferences": [
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.11", "note": "Split from the original HR Onboarding goal set on 2026-07-28." },
+    { "sourceType": "discussion", "reference": "ChatGPT conversation", "note": "Added durable stream examples and system-authored invitation lifecycle entries on 2026-07-28." }
+  ]
 }
