@@ -16,7 +16,8 @@ This directory contains the Git-authoritative authentication model described by 
 - `transitions/` deterministic transition rules
 - `journeys/` ordered human-recognizable journeys
 - `scenarios/` concrete `AppUserTestScenario`-aligned requirements
-- `presentation/` platform and channel bindings, including AuthView mappings
+- `conversations/` guided interaction definitions that select and orchestrate canonical journeys without directly mutating authentication state
+- `presentation/` platform and channel bindings, including AuthView mappings and guided-conversation presentation bindings
 - `schemas/` JSON Schema 2020-12 contracts
 - `decisions/` reconciliation decisions and durable rationale
 - `unresolved/` explicit open questions and conflicts
@@ -29,6 +30,8 @@ This directory contains the Git-authoritative authentication model described by 
 4. Definitions reference other definitions by stable key, never by display name.
 5. Runtime evidence records the exact definition hash it evaluated.
 6. A changed definition makes older evidence stale until reverified.
-7. Uncertainty must be recorded as proposed material or an unresolved item, never silently promoted to approved truth.
+7. Conversation definitions may select and orchestrate journeys, but cannot redefine authentication guards, transitions, or postconditions.
+8. Secrets and credential proofs are collected only through deterministic secure components, never through the conversational context.
+9. Uncertainty must be recorded as proposed material or an unresolved item, never silently promoted to approved truth.
 
 See `CONVENTIONS.md` for canonical key, versioning, normalization, hashing, reference, and validation rules.
