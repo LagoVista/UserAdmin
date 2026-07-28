@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/journey.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.journey.home-workspace.establishment",
+  "name": "Home Workspace Establishment",
+  "summary": "Establishes exactly one durable home workspace, owner membership, and deterministic home selection after identity resolution.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioKeys": [
+    "auth.scenario.home-workspace.begin-creation",
+    "auth.scenario.home-workspace.complete-creation",
+    "auth.scenario.home-workspace.reconcile-existing",
+    "auth.scenario.home-workspace.flag-conflict"
+  ],
+  "entryPredicate": { "expression": "durable-identity == resolved and home-workspace == required" },
+  "completionPredicate": { "expression": "home-workspace == established and workspace-membership in [home-only,multiple] and current-workspace == home" },
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.9" }]
+}
