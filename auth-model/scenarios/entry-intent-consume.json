@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.entry-intent.consume",
+  "name": "Consume Entry Intent Explicitly",
+  "summary": "Consumes a validated entry intent through a dedicated mutation rather than as a side effect of reading the authentication session projection.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": [],
+  "transitionKey": "auth.transition.entry-intent.consume",
+  "preconditions": { "expression": "entry-intent-status == stashed" },
+  "setup": ["Stash one valid entry intent with an unexpired correlation reference."],
+  "inputs": [{ "key": "entry-intent-reference", "valueType": "reference", "required": true, "example": "entry-intent:{cid}" }],
+  "actionKey": "auth.action.entry-intent.consume",
+  "postconditions": { "expression": "entry-intent-status == consumed and canonical-identity-state == unchanged and session-capability == unchanged" },
+  "requiredEffects": ["consume-entry-intent-once", "record-entry-intent-consumed"],
+  "forbiddenEffects": ["authenticate-user", "change-session-capability", "change-current-workspace", "select-client-route"],
+  "invariantKeys": ["auth.invariant.transition.deterministic-post-state"],
+  "expectedAuthLogEvents": ["entry-intent-consumed"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Interfaces/IEntryIntentService.cs" },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.13" }
+  ]
+}
