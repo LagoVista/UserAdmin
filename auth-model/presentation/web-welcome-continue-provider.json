@@ -1,0 +1,32 @@
+{
+  "$schema": "../schemas/presentation-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.presentation.web.welcome-continue-provider",
+  "name": "Web Welcome Continue with Provider",
+  "summary": "Models the UI-only navigation from the authentication welcome view to provider selection without changing authentication state.",
+  "version": 1,
+  "maturity": "proposed",
+  "bindingKind": "ui-navigation",
+  "channel": "web-ui",
+  "platform": "web",
+  "scenarioKeys": [],
+  "actionKey": null,
+  "navigationKey": "auth.navigation.welcome.continue-provider",
+  "authViewKey": "auth.welcome",
+  "route": "/auth/welcome",
+  "viewId": "auth.welcome",
+  "fieldBindings": [],
+  "actionBinding": {
+    "authFieldActionId": null,
+    "finder": "action:continue-provider",
+    "bindingType": "navigation",
+    "operationReference": "AuthWelcomeComponent.continueProvider"
+  },
+  "expectedViewId": "auth.continue.provider",
+  "expectedRoute": "/auth/continue/provider",
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared/user/auth-welcome/auth-welcome.component.html", "note": "Source view and stable semantic finder." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared/user/auth-welcome/auth-welcome.component.ts", "note": "Navigation target." },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.15" }
+  ]
+}
