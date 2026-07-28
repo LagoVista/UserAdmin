@@ -1,0 +1,17 @@
+{
+  "$schema": "../schemas/journey.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.journey.passkey.new-user-registration",
+  "name": "Passkey New User Registration",
+  "summary": "Registers a new passkey identity through PendingIdentity, creates one durable user, and binds the credential without premature application authorization.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioKeys": [
+    "auth.scenario.passkey.pending-registration",
+    "auth.scenario.passkey.create-durable-user",
+    "auth.scenario.passkey.bind-pending-credential"
+  ],
+  "entryPredicate": { "expression": "pending-identity-status == pending and pending-identity-flow == passkey and durable-identity == absent" },
+  "completionPredicate": { "expression": "pending-identity-status == resolved and credential-proof == passkey-proved and durable-identity == resolved and home-workspace == required" },
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
