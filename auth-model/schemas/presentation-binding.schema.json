@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lagovista.com/schemas/auth-model/presentation-binding.schema.json",
+  "title": "Authentication Presentation Binding",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "key", "name", "summary", "version", "maturity", "channel", "platform", "actionKey", "fieldBindings", "actionBinding", "sourceReferences"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "1.0" },
+    "key": { "type": "string", "pattern": "^auth\\.presentation\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$" },
+    "name": { "type": "string", "minLength": 1 },
+    "summary": { "type": "string", "minLength": 1 },
+    "version": { "type": "integer", "minimum": 1 },
+    "maturity": { "$ref": "#/$defs/maturity" },
+    "channel": { "enum": ["traditional-form", "guided-vtm", "native-ui", "web-ui", "api"] },
+    "platform": { "enum": ["server", "web", "android", "ios", "vtm"] },
+    "scenarioKeys": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^auth\\.scenario\\." } },
+    "actionKey": { "type": "string", "pattern": "^auth\\.action\\." },
+    "authViewKey": { "type": ["string", "null"] },
+    "route": { "type": ["string", "null"] },
+    "viewId": { "type": ["string", "null"] },
+    "fieldBindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["inputKey", "bindingType"],
+        "properties": {
+          "inputKey": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$" },
+          "authViewFieldId": { "type": ["string", "null"] },
+          "finder": { "type": ["string", "null"] },
+          "bindingType": { "enum": ["field", "conversation-slot", "request-property", "generated"] },
+          "valueSource": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "actionBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bindingType"],
+      "properties": {
+        "authFieldActionId": { "type": ["string", "null"] },
+        "finder": { "type": ["string", "null"] },
+        "bindingType": { "enum": ["click", "submit", "conversation-intent", "api-call", "navigation"] },
+        "operationReference": { "type": ["string", "null"] }
+      }
+    },
+    "expectedViewId": { "type": ["string", "null"] },
+    "expectedRoute": { "type": ["string", "null"] },
+    "sourceReferences": { "type": "array", "items": { "$ref": "#/$defs/sourceReference" } },
+    "definitionHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  },
+  "$defs": {
+    "maturity": { "enum": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"] },
+    "sourceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "reference"],
+      "properties": {
+        "sourceType": { "enum": ["ddr", "code", "test", "discussion", "decision", "external"] },
+        "reference": { "type": "string", "minLength": 1 },
+        "section": { "type": "string" },
+        "commit": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}
