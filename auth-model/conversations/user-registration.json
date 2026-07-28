@@ -8,6 +8,7 @@
   "maturity": "proposed",
   "goals": [{ "key": "register-user", "summary": "Guide a new person through registration and completion of required onboarding information." }],
   "supportedJourneyKeys": ["auth.journey.pending-identity.lifecycle"],
+  "routedConversationKeys": [],
   "entryPredicate": { "expression": "A guest or PendingIdentity has chosen to register and no durable identity has yet completed the requested registration outcome." },
   "completionPredicate": { "expression": "A durable identity and authenticated session are established, any approved guest-value claim is complete, or the registration is abandoned or escalated safely." },
   "informationRequirements": [
