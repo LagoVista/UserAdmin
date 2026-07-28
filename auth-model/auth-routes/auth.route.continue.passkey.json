@@ -1,0 +1,17 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.continue.passkey",
+  "name": "Continue with Passkey",
+  "path": "/auth/continue/passkey",
+  "routeType": "view",
+  "viewId": "auth.continue.passkey",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "ContinuePasskeyComponent" },
+    "mobile": { "status": "implemented", "implementation": "app/auth/continue/passkey.tsx" }
+  },
+  "source": { "commonLinksMember": "AuthContinuePasskey", "angularComponent": "ContinuePasskeyComponent", "mobileRoute": "/auth/continue/passkey" },
+  "notes": ["CommonLinks member must be added during route projection reconciliation."]
+}
