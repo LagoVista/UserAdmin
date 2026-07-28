@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.pending-identity.resolve",
+  "name": "Resolve Pending Identity",
+  "summary": "Closes the airlock by binding the ceremony to one canonical durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 60,
+  "sourceState": { "expression": "pending-identity-status == resolution-required and pending-identity-flow != none" },
+  "actionKey": "auth.action.pending-identity.resolve",
+  "guards": [
+    { "expression": "credential-proof in [primary,multi-factor,recovery]", "failureCode": "credential-proof-insufficient" },
+    { "expression": "input.durable-identity-reference resolves to exactly one canonical identity", "failureCode": "durable-identity-resolution-ambiguous" }
+  ],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.pending-identity-status", "operation": "set", "valueExpression": "resolved" },
+    { "dimensionKey": "auth.dimension.pending-identity-flow", "operation": "set", "valueExpression": "none" },
+    { "dimensionKey": "auth.dimension.durable-identity", "operation": "set", "valueExpression": "resolved" },
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "derive", "valueExpression": "from resolved account, profile, workspace, MFA, and recovery state" }
+  ],
+  "requiredEffects": ["bind-pending-identity-to-durable-identity", "record-pending-identity-resolved"],
+  "forbiddenEffects": ["create-duplicate-durable-user", "retain-active-flow-bucket", "grant-capability-beyond-resolved-account-state"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.5" }]
+}
