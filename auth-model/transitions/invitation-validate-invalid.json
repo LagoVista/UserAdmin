@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.invitation.validate-invalid",
+  "name": "Validate Invitation as Invalid",
+  "summary": "Terminates an attached invitation when its proof, target, or consumption state is invalid.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 105,
+  "sourceState": { "expression": "invitation-status == attached" },
+  "actionKey": "auth.action.invitation.validate",
+  "guards": [{ "expression": "invitation-expired == false and (invitation-proof-valid == false or target-workspace-valid == false or invitation-consumed == true)", "failureCode": "invitation-not-invalid" }],
+  "destinationTransform": [{ "dimensionKey": "auth.dimension.invitation-status", "operation": "set", "valueExpression": "invalid" }],
+  "requiredEffects": ["record-invitation-invalid"],
+  "forbiddenEffects": ["resolve-durable-identity", "create-membership", "change-home-workspace"],
+  "invariantKeys": ["auth.invariant.invitation.not-identity-proof", "auth.invariant.invitation.consumed-once", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10" }]
+}
