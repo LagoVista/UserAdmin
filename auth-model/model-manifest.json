@@ -54,25 +54,25 @@
     "stateDimensions": 17,
     "compositeStateCatalogs": 1,
     "invariants": 20,
-    "actions": 11,
-    "transitions": 11,
-    "journeys": 2,
-    "scenarios": 9,
+    "actions": 17,
+    "transitions": 17,
+    "journeys": 3,
+    "scenarios": 18,
     "presentationBindings": 0,
     "decisions": 0,
     "unresolved": 0
   },
   "currentWork": {
-    "guideSection": "4.5",
+    "guideSection": "4.6",
     "status": "complete",
-    "summary": "The shared PendingIdentity airlock is modeled from creation through verification, resolution, expiration, cancellation, and failure, with explicit flow-bucket and authorization security scenarios. Next major area: Section 4.6, Password registration."
+    "summary": "Password registration is modeled as separate deterministic actions for email assertion and proof, profile completion, password credential establishment, durable-user creation, home-workspace creation, and authenticated session establishment. Next major area: Section 4.7, Native-provider registration."
   },
   "sourceReferences": [
     {
       "sourceType": "discussion",
       "reference": "AUTH-MODEL-GUIDE.md",
-      "section": "4.5",
-      "note": "PendingIdentity lifecycle"
+      "section": "4.6",
+      "note": "Password registration"
     },
     {
       "sourceType": "decision",
@@ -98,6 +98,11 @@
       "sourceType": "decision",
       "reference": "auth-model/SECTION-4.5-HANDOFF.md",
       "note": "PendingIdentity lifecycle handoff"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.6-HANDOFF.md",
+      "note": "Password registration handoff"
     }
   ]
 }
