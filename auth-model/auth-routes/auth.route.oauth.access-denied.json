@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.oauth.access-denied",
+  "name": "OAuth Access Denied",
+  "description": "Presents the access-denied outcome from an external authentication provider.",
+  "path": "/auth/oauth/access-denied",
+  "routeType": "view",
+  "viewId": "auth.oauth.access-denied",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "OauthAccessDeniedComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "commonLinksMember": "OAuthAccessDenied",
+    "angularComponent": "OauthAccessDeniedComponent"
+  },
+  "notes": [
+    "Normalizes accessdenied to access-denied."
+  ]
+}
