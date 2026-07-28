@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/state-dimension.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.dimension.invitation-status",
+  "name": "Invitation Status",
+  "summary": "Describes the lifecycle of a workspace invitation independently from identity proof and membership.",
+  "version": 1,
+  "maturity": "proposed",
+  "authority": "canonical",
+  "valueType": "enumeration",
+  "requiredForCanonicalSnapshot": true,
+  "values": [
+    { "key": "none", "name": "None", "summary": "No invitation is attached to the current journey." },
+    { "key": "attached", "name": "Attached", "summary": "Invitation context is attached but not yet validated." },
+    { "key": "valid", "name": "Valid", "summary": "The invitation is valid and may be reviewed." },
+    { "key": "acceptance-pending", "name": "Acceptance Pending", "summary": "A durable identity has been selected and acceptance awaits confirmation or execution." },
+    { "key": "accepted", "name": "Accepted", "summary": "Membership was added and the invitation consumed.", "terminal": true },
+    { "key": "declined", "name": "Declined", "summary": "The invitation was declined.", "terminal": true },
+    { "key": "expired", "name": "Expired", "summary": "The invitation can no longer be accepted.", "terminal": true },
+    { "key": "invalid", "name": "Invalid", "summary": "The invitation proof or target is invalid.", "terminal": true }
+  ],
+  "sourceReferences": [
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10" },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Users/PendingIdentity.cs", "note": "Optional invite attachment" }
+  ]
+}
