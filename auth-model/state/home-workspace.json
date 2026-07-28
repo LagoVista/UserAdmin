@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/state-dimension.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.dimension.home-workspace",
+  "name": "Home Workspace",
+  "summary": "Describes whether the durable user has the required personal home workspace.",
+  "version": 1,
+  "maturity": "proposed",
+  "authority": "canonical",
+  "valueType": "enumeration",
+  "requiredForCanonicalSnapshot": true,
+  "values": [
+    { "key": "not-applicable", "name": "Not Applicable", "summary": "No durable identity exists yet." },
+    { "key": "required", "name": "Required", "summary": "A durable identity exists but its home workspace has not been established." },
+    { "key": "creating", "name": "Creating", "summary": "Home-workspace creation is in progress." },
+    { "key": "established", "name": "Established", "summary": "Exactly one home workspace exists and the user is its owner and member." },
+    { "key": "conflict", "name": "Conflict", "summary": "The home-workspace invariant is violated." }
+  ],
+  "sourceReferences": [
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.9" }
+  ]
+}
