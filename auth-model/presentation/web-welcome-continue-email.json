@@ -1,0 +1,32 @@
+{
+  "$schema": "../schemas/presentation-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.presentation.web.welcome-continue-email",
+  "name": "Web Welcome Continue with Email",
+  "summary": "Models the UI-only navigation from the authentication welcome view to the email continuation view without changing authentication state.",
+  "version": 1,
+  "maturity": "proposed",
+  "bindingKind": "ui-navigation",
+  "channel": "web-ui",
+  "platform": "web",
+  "scenarioKeys": [],
+  "actionKey": null,
+  "navigationKey": "auth.navigation.welcome.continue-email",
+  "authViewKey": "auth.welcome",
+  "route": "/auth/welcome",
+  "viewId": "auth.welcome",
+  "fieldBindings": [],
+  "actionBinding": {
+    "authFieldActionId": null,
+    "finder": "action:continue-email",
+    "bindingType": "navigation",
+    "operationReference": "AuthWelcomeComponent.continueEmail"
+  },
+  "expectedViewId": "auth.continue.email",
+  "expectedRoute": "/auth/continue/email",
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared/user/auth-welcome/auth-welcome.component.html", "note": "Source view and stable semantic finder." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared/user/auth-welcome/auth-welcome.component.ts", "note": "Navigation target." },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.15" }
+  ]
+}
