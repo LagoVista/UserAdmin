@@ -1,0 +1,47 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.welcome",
+  "name": "Welcome",
+  "description": "Presents the supported authentication entry methods before the user selects an email, provider, or passkey continuation path.",
+  "category": "entry",
+  "routeId": "auth.route.welcome",
+  "status": "active",
+  "controls": [],
+  "actions": [
+    {
+      "id": "continue-email",
+      "name": "Continue with Email",
+      "actionType": "button",
+      "finder": "action:continue-email"
+    },
+    {
+      "id": "continue-provider",
+      "name": "Continue with Provider",
+      "actionType": "button",
+      "finder": "action:continue-provider"
+    },
+    {
+      "id": "continue-passkey",
+      "name": "Continue with Passkey",
+      "actionType": "button",
+      "finder": "action:continue-passkey"
+    }
+  ],
+  "platforms": {
+    "web": {
+      "status": "implemented",
+      "implementation": "AuthWelcomeComponent"
+    },
+    "mobile": {
+      "status": "implemented",
+      "implementation": "app/auth/welcome.tsx"
+    }
+  },
+  "source": {
+    "runtimeEntityId": "A54A8575CBA94F9DA531747E4F371C03",
+    "runtimeSha256Hex": "c6ba864a48df1eb7816f72fdefffdab1dec39d3fbd44355debfd2d2e6220fc49",
+    "webComponent": "AuthWelcomeComponent",
+    "mobileComponent": "app/auth/welcome.tsx"
+  }
+}
