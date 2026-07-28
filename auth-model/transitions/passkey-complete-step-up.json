@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.passkey.complete-step-up",
+  "name": "Complete Passkey Step Up",
+  "summary": "Validates a user-verifying passkey assertion and grants fresh elevated session capability without changing durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 65,
+  "sourceState": { "expression": "durable-identity == resolved and credential-proof == challenge-issued and session-capability in [authenticated-limited,authenticated-normal]" },
+  "actionKey": "auth.action.passkey.complete-step-up",
+  "guards": [{ "expression": "assertion belongs to current durable identity and satisfies required user verification", "failureCode": "invalid-step-up-assertion" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.credential-proof", "operation": "set", "valueExpression": "passkey-proved" },
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "set", "valueExpression": "step-up" }
+  ],
+  "requiredEffects": ["consume-passkey-challenge", "validate-user-verifying-assertion", "advance-sign-counter", "record-fresh-mfa-time"],
+  "forbiddenEffects": ["change-durable-identity", "create-durable-user", "grant-step-up-on-preferred-only-user-verification"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
