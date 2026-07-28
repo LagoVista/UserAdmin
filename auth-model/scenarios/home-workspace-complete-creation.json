@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.home-workspace.complete-creation",
+  "name": "Complete Home Workspace Creation",
+  "summary": "Commits exactly one home workspace, owner membership, and home selection after creation succeeds.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.home-workspace.establishment"],
+  "transitionKey": "auth.transition.home-workspace.complete-creation",
+  "preconditions": { "expression": "durable-identity == resolved and home-workspace == creating and created-home-workspace-count == 1" },
+  "setup": ["Provision one candidate home workspace under the idempotent creation operation."],
+  "inputs": [
+    { "key": "durable-identity-reference", "valueType": "reference", "required": true, "description": "Resolved durable identity." },
+    { "key": "home-workspace-reference", "valueType": "reference", "required": true, "description": "Created home workspace." }
+  ],
+  "actionKey": "auth.action.home-workspace.complete-creation",
+  "postconditions": { "expression": "home-workspace == established and workspace-membership == home-only and current-workspace == home" },
+  "requiredEffects": ["commit-exactly-one-home-workspace", "create-home-owner-membership", "select-home-workspace", "record-home-workspace-created"],
+  "forbiddenEffects": ["create-second-home-workspace", "omit-owner-membership", "select-external-workspace"],
+  "invariantKeys": ["auth.invariant.home-workspace.exactly-one", "auth.invariant.home-workspace.owner-member", "auth.invariant.registration.completes-in-home-workspace", "auth.invariant.current-workspace.requires-access"],
+  "expectedAuthLogEvents": ["home-workspace-created"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.9" }]
+}
