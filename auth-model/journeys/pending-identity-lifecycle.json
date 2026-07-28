@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/journey.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.journey.pending-identity.lifecycle",
+  "name": "Pending Identity Lifecycle",
+  "summary": "Covers the shared identity-resolution airlock from creation through verification, resolution, expiration, cancellation, or failure.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioKeys": [
+    "auth.scenario.pending-identity.begin-password",
+    "auth.scenario.pending-identity.complete-verification",
+    "auth.scenario.pending-identity.resolve-existing-user",
+    "auth.scenario.pending-identity.reject-multiple-flows",
+    "auth.scenario.pending-identity.reject-normal-authorization"
+  ],
+  "entryPredicate": { "expression": "pending-identity-status == none and pending-identity-flow == none" },
+  "completionPredicate": { "expression": "pending-identity-status in [resolved,expired,canceled,failed] and pending-identity-flow == none" },
+  "alternateJourneyKeys": [],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.5" }]
+}
