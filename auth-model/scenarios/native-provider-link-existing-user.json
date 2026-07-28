@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.native-provider.link-existing-user",
+  "name": "Link Native Provider to Existing User",
+  "summary": "Atomically links a validated unlinked provider subject to the explicitly selected existing durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.native-provider.existing-user"],
+  "transitionKey": "auth.transition.native-provider.link-to-user",
+  "preconditions": { "expression": "pending-identity-status == resolution-required and durable-identity == existing and provider-subject-link-count == 0" },
+  "setup": ["Select and confirm one eligible existing durable identity as the provider link target."],
+  "inputs": [
+    { "key": "provider-subject", "valueType": "string", "required": true },
+    { "key": "durable-identity-reference", "valueType": "reference", "required": true },
+    { "key": "idempotency-key", "valueType": "string", "required": true }
+  ],
+  "actionKey": "auth.action.native-provider.link-to-user",
+  "postconditions": { "expression": "durable-identity == resolved and pending-identity-status == resolved and provider subject links exactly once to selected durable identity" },
+  "requiredEffects": ["atomically-create-provider-link", "record-idempotency-result", "record-provider-link"],
+  "forbiddenEffects": ["create-durable-user", "link-subject-to-multiple-users", "change-canonical-email-from-provider-email"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.email-identities.not-conflated"],
+  "expectedAuthLogEvents": ["native-provider-linked-to-existing-user"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
