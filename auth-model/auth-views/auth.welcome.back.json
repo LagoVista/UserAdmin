@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.welcome.back",
+  "name": "Welcome Back",
+  "description": "Allows a returning user to continue with a remembered identity, choose a different email, clear remembered sign-ins, or restart authentication.",
+  "category": "entry",
+  "routeId": "auth.route.welcome.back",
+  "status": "active",
+  "controls": [],
+  "actions": [
+    { "id": "continue", "name": "Continue", "actionType": "button", "finder": "action:continue" },
+    { "id": "use-different-email", "name": "Use a Different Email", "actionType": "button", "finder": "action:use-different-email" },
+    { "id": "clear-remembered", "name": "Clear Remembered Sign-ins", "actionType": "button", "finder": "action:clear-remembered" },
+    { "id": "start-over", "name": "Start Over", "actionType": "link", "finder": "action:start-over" }
+  ],
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "AuthWelcomeBackComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "runtimeEntityId": "D9A21F131E3F4EE8BD2B4CD2117E1851",
+    "runtimeSha256Hex": "0f3e747334882187321fb11eb9583953c66b19eaf303bbb03305246587b14871",
+    "webComponent": "AuthWelcomeBackComponent"
+  }
+}
