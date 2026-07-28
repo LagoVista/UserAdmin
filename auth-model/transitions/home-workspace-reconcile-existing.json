@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.home-workspace.reconcile-existing",
+  "name": "Reconcile Existing Home Workspace",
+  "summary": "Resolves a required home-workspace state by adopting one valid existing workspace and ensuring owner membership and home selection.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 80,
+  "sourceState": { "expression": "durable-identity == resolved and home-workspace == required" },
+  "actionKey": "auth.action.home-workspace.reconcile-existing",
+  "guards": [{ "expression": "existing-home-workspace-count == 1", "failureCode": "single-existing-home-workspace-required" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.home-workspace", "operation": "set", "valueExpression": "established" },
+    { "dimensionKey": "auth.dimension.workspace-membership", "operation": "derive", "valueExpression": "home-only if no external memberships else multiple" },
+    { "dimensionKey": "auth.dimension.current-workspace", "operation": "set", "valueExpression": "home" }
+  ],
+  "requiredEffects": ["preserve-existing-home-workspace", "ensure-home-owner-membership", "select-home-workspace", "record-home-workspace-reconciled"],
+  "forbiddenEffects": ["create-new-home-workspace", "replace-valid-home-workspace", "consume-workspace-invitation"],
+  "invariantKeys": ["auth.invariant.home-workspace.exactly-one", "auth.invariant.home-workspace.owner-member", "auth.invariant.registration.completes-in-home-workspace", "auth.invariant.current-workspace.requires-access"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.9" }]
+}
