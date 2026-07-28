@@ -1,0 +1,29 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.continue.email",
+  "name": "Continue with Email",
+  "description": "Collects the email address used to continue the authentication journey.",
+  "category": "entry",
+  "routeId": "auth.route.continue.email",
+  "status": "active",
+  "controls": [
+    { "id": "email", "name": "Email", "controlType": "email-input", "finder": "field:email", "required": true, "sensitivity": "personal" }
+  ],
+  "actions": [
+    { "id": "continue", "name": "Continue", "actionType": "button", "finder": "action:continue" },
+    { "id": "back", "name": "Back", "actionType": "button", "finder": "action:back" },
+    { "id": "start-over", "name": "Start Over", "actionType": "link", "finder": "action:start-over" }
+  ],
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "ContinueEmailComponent" },
+    "mobile": { "status": "implemented", "implementation": "app/auth/continue/email.tsx" }
+  },
+  "source": {
+    "runtimeEntityId": "F1C70E673FC3405E8217F1D615A580AA",
+    "runtimeSha256Hex": "d56c28933d5ee05954639e32faf2f10d4abead3e05698d96e9652d889a02d17a",
+    "webComponent": "ContinueEmailComponent",
+    "mobileComponent": "app/auth/continue/email.tsx"
+  },
+  "notes": ["The legacy next action is normalized to continue.", "The web implementation must replace input#email with the semantic finder field:email."]
+}
