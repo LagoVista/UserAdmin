@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.passkey.complete-pending-registration",
+  "name": "Complete Pending Passkey Registration",
+  "summary": "Consumes and validates the PendingIdentity passkey attestation and moves the ceremony to durable-identity resolution.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 95,
+  "sourceState": { "expression": "pending-identity-status == pending and pending-identity-flow == passkey and credential-proof == challenge-issued and durable-identity == absent" },
+  "actionKey": "auth.action.passkey.complete-pending-registration",
+  "guards": [{ "expression": "attestation challenge is valid and single-use", "failureCode": "invalid-passkey-attestation" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.credential-proof", "operation": "set", "valueExpression": "passkey-proved" },
+    { "dimensionKey": "auth.dimension.pending-identity-status", "operation": "set", "valueExpression": "resolution-required" }
+  ],
+  "requiredEffects": ["consume-passkey-challenge", "validate-attestation", "persist-pending-passkey-credential"],
+  "forbiddenEffects": ["create-durable-user", "bind-credential-to-unresolved-durable-user", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
