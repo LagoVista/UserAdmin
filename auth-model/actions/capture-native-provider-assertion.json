@@ -1,0 +1,28 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.native-provider.capture-assertion",
+  "name": "Capture Native Provider Assertion",
+  "summary": "Validates and records an Apple or Google assertion using the stable provider subject as the primary provider identity key.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "provider", "valueType": "string", "required": true },
+    { "key": "provider-subject", "valueType": "string", "required": true },
+    { "key": "claims-hash", "valueType": "string", "required": true },
+    { "key": "provider-email", "valueType": "string", "required": false },
+    { "key": "provider-email-verified", "valueType": "boolean", "required": false }
+  ],
+  "guards": [
+    { "expression": "provider in [apple,google]", "failureCode": "unsupported-native-provider" },
+    { "expression": "provider-subject is non-empty", "failureCode": "provider-subject-required" }
+  ],
+  "permittedMutations": ["auth.dimension.credential-proof", "auth.dimension.email-ownership", "auth.dimension.pending-identity-status"],
+  "requiredEffects": ["persist-provider-subject", "persist-provider-claims-hash", "preserve-provider-email-as-distinct-evidence"],
+  "forbiddenEffects": ["resolve-user-by-email-alone", "create-durable-user", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.email-identities.not-conflated", "auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.pending-identity.exactly-one-flow"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Users/PendingIdentity.cs", "section": "Native Provider bucket" },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }
+  ]
+}
