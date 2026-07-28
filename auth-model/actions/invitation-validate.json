@@ -1,0 +1,16 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.invitation.validate",
+  "name": "Validate Invitation",
+  "summary": "Validates invitation proof, target workspace, expiration, and consumption state without treating the invitation as identity proof.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [{ "key": "invitation-reference", "valueType": "reference", "required": true, "description": "Attached invitation and proof reference." }],
+  "guards": [{ "expression": "invitation-status == attached", "failureCode": "invitation-not-attached" }],
+  "permittedMutations": ["auth.dimension.invitation-status"],
+  "requiredEffects": ["validate-invitation-proof", "validate-target-workspace", "check-expiration", "check-not-consumed", "record-invitation-validation"],
+  "forbiddenEffects": ["authenticate-user", "resolve-durable-identity", "create-membership", "change-home-workspace"],
+  "invariantKeys": ["auth.invariant.invitation.not-identity-proof", "auth.invariant.invitation.consumed-once"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10" }]
+}
