@@ -89,7 +89,7 @@ The resulting lowercase hexadecimal digest is stored as `definitionHash` in gene
 - Circular references are permitted only where the schema explicitly allows them.
 - Journeys may reference scenarios in ordered sequence.
 - Scenarios reference one action and may reference one transition.
-- Conversation types may reference journeys, scenarios, and actions, but cannot redefine their guards, mutations, effects, or postconditions.
+- Conversation types may reference journeys, scenarios, actions, and routed conversation types, but cannot redefine their guards, mutations, effects, or postconditions.
 - Presentation bindings reference logical actions, scenarios, conversations, views, and platforms without redefining behavioral truth.
 
 ## Conversation definitions
@@ -101,6 +101,17 @@ The resulting lowercase hexadecimal digest is stored as `definitionHash` in gene
 - Passwords, TOTP values, passkey material, provider tokens, recovery codes, and equivalent secrets are collected only by secure components outside the conversational context.
 - Conversation state must be durable enough to support pause and resume without making the transcript authoritative.
 - Guided and traditional presentations must invoke the same logical actions and produce the same post-state for equivalent valid inputs.
+
+### Distinctive characteristics and example interactions
+
+- `distinctiveCharacteristics` describes the qualities that make a conversation materially different from other conversation types.
+- `exampleInteractions` provides illustrative stream sequences for human review, visualization, design, and future test planning.
+- Example interactions do not define executable actions, transition guards, validation rules, or postconditions.
+- Example entries may represent user messages, agent messages, secure interactions, controls, and user-relevant system events.
+- A system event may be appended while the chapter is inactive when an authoritative business event changes something the user would reasonably expect to see later.
+- System-authored stream entries must remain projections of authoritative records and should identify the authoritative reference type when known.
+- Examples should demonstrate the characteristic behavior of the conversation rather than attempt to enumerate every branch.
+- Internal retries, transport events, queue activity, and other implementation noise should not appear as user-facing example stream entries.
 
 ## Validation levels
 
