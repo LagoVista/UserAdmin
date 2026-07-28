@@ -1,0 +1,31 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.continue.provider",
+  "name": "Continue with Provider",
+  "description": "Lets the user select an available external authentication provider or return to email authentication.",
+  "category": "provider",
+  "routeId": "auth.route.continue.provider",
+  "status": "active",
+  "controls": [],
+  "actions": [
+    { "id": "continue-github", "name": "Continue with GitHub", "actionType": "button", "finder": "action:continue-github" },
+    { "id": "continue-microsoft", "name": "Continue with Microsoft", "actionType": "button", "finder": "action:continue-microsoft" },
+    { "id": "continue-google", "name": "Continue with Google", "actionType": "button", "finder": "action:continue-google" },
+    { "id": "continue-linkedin", "name": "Continue with LinkedIn", "actionType": "button", "finder": "action:continue-linkedin" },
+    { "id": "continue-twitter", "name": "Continue with Twitter", "actionType": "button", "finder": "action:continue-twitter" },
+    { "id": "continue-email", "name": "Continue with Email", "actionType": "link", "finder": "action:continue-email" },
+    { "id": "cancel", "name": "Cancel", "actionType": "button", "finder": "action:cancel" }
+  ],
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "ContinueProviderComponent" },
+    "mobile": { "status": "implemented", "implementation": "app/auth/continue/provider.tsx" }
+  },
+  "source": {
+    "runtimeEntityId": "205AD1E713CD494F987E0884767F7A4B",
+    "runtimeSha256Hex": "b598cf22154f554701b1d17f4637b8f692bf23b635d06405dfa76c4bb2f87227",
+    "webComponent": "ContinueProviderComponent",
+    "mobileComponent": "app/auth/continue/provider.tsx"
+  },
+  "notes": ["Provider actions use continue-{provider} rather than oauth-{provider}; OAuth is an implementation mechanism, not the user action."]
+}
