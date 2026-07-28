@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.oauth.fault",
+  "name": "OAuth Fault",
+  "description": "Explains that an external provider sign-in failed and lets the user return to authentication choices.",
+  "category": "provider",
+  "routeId": "auth.route.oauth.fault",
+  "status": "active",
+  "controls": [],
+  "actions": [
+    { "id": "back", "name": "Back", "actionType": "link", "finder": "action:back" }
+  ],
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "OauthFaultComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "runtimeEntityId": "99C4991BDDCE421FB568EE6844880EB3",
+    "runtimeSha256Hex": "8d951e542902eefd5561ff47506afe27bb910306048a7d735a2a17dd108e1455",
+    "webComponent": "OauthFaultComponent"
+  }
+}
