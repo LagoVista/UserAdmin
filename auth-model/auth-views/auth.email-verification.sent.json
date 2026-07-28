@@ -1,0 +1,45 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.email-verification.sent",
+  "name": "Email Verification Sent",
+  "description": "Confirms that an email verification message has been sent and provides recovery actions.",
+  "category": "email-verification",
+  "routeId": "auth.route.email-verification.sent",
+  "status": "active",
+  "controls": [],
+  "actions": [
+    {
+      "id": "resend-email",
+      "name": "Resend Email",
+      "actionType": "button",
+      "finder": "action:resend-email"
+    },
+    {
+      "id": "back-to-sign-in",
+      "name": "Back to Sign In",
+      "actionType": "link",
+      "finder": "action:back-to-sign-in"
+    },
+    {
+      "id": "sign-out",
+      "name": "Sign Out",
+      "actionType": "button",
+      "finder": "action:sign-out"
+    }
+  ],
+  "platforms": {
+    "web": {
+      "status": "implemented",
+      "implementation": "ConfirmEmailSentComponent"
+    },
+    "mobile": {
+      "status": "planned"
+    }
+  },
+  "source": {
+    "runtimeEntityId": "F9BC44B18B1D4510BB09CC37163BA7A5",
+    "runtimeSha256Hex": "4f73a88d912002f3116b45448814a93885181b9e58d22ea804aaef6972559a64",
+    "webComponent": "ConfirmEmailSentComponent"
+  }
+}
