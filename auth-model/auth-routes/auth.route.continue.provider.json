@@ -1,0 +1,17 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.continue.provider",
+  "name": "Continue with Provider",
+  "path": "/auth/continue/provider",
+  "routeType": "view",
+  "viewId": "auth.continue.provider",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "ContinueProviderComponent" },
+    "mobile": { "status": "implemented", "implementation": "app/auth/continue/provider.tsx" }
+  },
+  "source": { "commonLinksMember": "AuthContinueProvider", "angularComponent": "ContinueProviderComponent", "mobileRoute": "/auth/continue/provider" },
+  "notes": ["CommonLinks member must be added during route projection reconciliation."]
+}
