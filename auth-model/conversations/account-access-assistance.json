@@ -1,0 +1,30 @@
+{
+  "$schema": "../schemas/conversation-type.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.conversation.account-access-assistance",
+  "name": "Account Access Assistance",
+  "summary": "Helps a person identify and launch the correct standard login or recovery experience without collecting authentication secrets in conversation.",
+  "version": 1,
+  "maturity": "proposed",
+  "goals": [{ "key": "establish-account-access", "summary": "Help the person reach the appropriate standard login or recovery experience." }],
+  "supportedJourneyKeys": ["auth.journey.pending-identity.lifecycle"],
+  "entryPredicate": { "expression": "A guest or unresolved person requests help signing in, recovering access, or selecting an authentication method." },
+  "completionPredicate": { "expression": "The person reaches a standard authentication or recovery surface, abandons the request, or is escalated safely." },
+  "informationRequirements": [
+    { "key": "access-intent", "summary": "The account-access outcome the person is attempting.", "sensitivity": "public", "collection": "conversation", "requiredForGoalKeys": ["establish-account-access"] },
+    { "key": "sanitized-authentication-state", "summary": "Display-safe information about available providers, account state, and permitted recovery options.", "sensitivity": "sensitive", "collection": "existing-state", "requiredForGoalKeys": ["establish-account-access"] },
+    { "key": "authentication-secrets", "summary": "Passwords, one-time codes, passkeys, provider tokens, and recovery codes.", "sensitivity": "secret", "collection": "secure-component", "requiredForGoalKeys": ["establish-account-access"] }
+  ],
+  "allowedActionKeys": [],
+  "prohibitedActionKeys": [],
+  "decisionPoints": [{ "key": "select-access-path", "summary": "Select the valid login or recovery path from authoritative state and policy.", "basis": ["account state", "available authentication methods", "recovery eligibility", "organization policy"] }],
+  "confirmationRequirements": [],
+  "secureInteractions": [{ "key": "account-access-ceremony", "summary": "Perform login, step-up, or recovery outside conversational context.", "componentType": "standard-authentication-ui", "conversationMayProvide": ["display-safe account context", "selected authentication method", "return location"], "componentCollects": ["passwords", "one-time codes", "passkey material", "provider tokens", "recovery codes"], "sanitizedOutcomes": ["completed", "canceled", "failed", "additional-verification-required", "expired"], "resumeBehavior": "Refresh authoritative authentication state and continue using only the sanitized result." }],
+  "escalationConditions": [{ "key": "identity-ambiguity", "condition": "The system cannot safely determine the intended durable identity or recovery path.", "outcome": "Stop automated access actions and route to deterministic account resolution or human support." }],
+  "lifecycle": { "pause": "Persist the selected access intent and secure handoff reference outside the transcript.", "resume": "Refresh authentication state and discard stale recommendations before continuing.", "abandonment": "Allow exit without changing authentication state.", "expiration": "Expire stale handoff references independently from durable identity state." },
+  "supportedChannels": ["web", "android", "ios", "vtm", "voice"],
+  "presentationExpectations": ["Explain available access paths without revealing whether an unverified identifier belongs to an account.", "Open standard secure controls for every credential or verification ceremony.", "Provide equivalent traditional navigation and recovery flows."],
+  "scenarioKeys": [],
+  "openQuestions": ["Which canonical login and recovery journeys should this conversation reference?"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.11", "note": "Split from the original HR Onboarding goal set on 2026-07-28." }]
+}
