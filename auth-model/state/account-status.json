@@ -1,0 +1,24 @@
+{
+  "$schema": "../schemas/state-dimension.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.dimension.account-status",
+  "name": "Account Status",
+  "summary": "Describes the durable account's operational status independently from identity proof and session state.",
+  "version": 1,
+  "maturity": "proposed",
+  "authority": "canonical",
+  "valueType": "enumeration",
+  "requiredForCanonicalSnapshot": true,
+  "values": [
+    { "key": "absent", "name": "Absent", "summary": "No durable account exists." },
+    { "key": "active", "name": "Active", "summary": "The durable account may receive normal authorization when other requirements are met." },
+    { "key": "disabled", "name": "Disabled", "summary": "The account is administratively disabled." },
+    { "key": "locked", "name": "Locked", "summary": "The account is temporarily locked." },
+    { "key": "recovery-restricted", "name": "Recovery Restricted", "summary": "The account is limited while a recovery ceremony is active." },
+    { "key": "closed", "name": "Closed", "summary": "The account is permanently closed.", "terminal": true }
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Testing/AuthTenantStateSnapshot.cs", "note": "IsAccountDisabled and user-existence test state" },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "3" }
+  ]
+}
