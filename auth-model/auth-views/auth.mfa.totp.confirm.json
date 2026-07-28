@@ -1,0 +1,69 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.mfa.totp.confirm",
+  "name": "Confirm TOTP Enrollment",
+  "description": "Collects the authenticator verification code and enables TOTP after successful validation.",
+  "category": "totp",
+  "routeId": "auth.route.mfa.totp.confirm",
+  "status": "active",
+  "controls": [
+    {
+      "id": "verification-code",
+      "name": "Verification Code",
+      "controlType": "code-input",
+      "finder": "field:verification-code",
+      "required": true,
+      "sensitivity": "credential"
+    },
+    {
+      "id": "validation-error",
+      "name": "Validation Error",
+      "controlType": "status",
+      "finder": "status:validation-error",
+      "sensitivity": "public",
+      "visibilityCondition": "A verification code validation error is present."
+    }
+  ],
+  "actions": [
+    {
+      "id": "confirm",
+      "name": "Enable TOTP",
+      "actionType": "button",
+      "finder": "action:confirm"
+    },
+    {
+      "id": "back",
+      "name": "Back",
+      "actionType": "button",
+      "finder": "action:back"
+    },
+    {
+      "id": "cancel",
+      "name": "Cancel",
+      "actionType": "button",
+      "finder": "action:cancel"
+    }
+  ],
+  "platforms": {
+    "web": {
+      "status": "implemented",
+      "implementation": "TotpEnrollConfirmComponent"
+    },
+    "mobile": {
+      "status": "implemented",
+      "implementation": "app/auth/mfa/totp/confirm.tsx"
+    }
+  },
+  "source": {
+    "runtimeEntityId": "AFC380B39AE842588952EE0276D0A574",
+    "runtimeSha256Hex": "e8f9719aa8c27fd12f1a8301cb469c27e8e52788ac12b4cd787059559a24feca",
+    "webComponent": "TotpEnrollConfirmComponent",
+    "mobileComponent": "app/auth/mfa/totp/confirm.tsx"
+  },
+  "notes": [
+    "The runtime route typo '/auth/mfa/top/confirm' is corrected by the canonical route contract.",
+    "The runtime key typo 'totpenrolconfirm' is intentionally not carried into canonical truth.",
+    "Validation copy is not used as the semantic control name."
+  ]
+}
