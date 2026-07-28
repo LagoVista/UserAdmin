@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.native-provider.create-home-workspace",
+  "name": "Create Native Provider Home Workspace",
+  "summary": "Creates and selects exactly one home workspace for a newly created native-provider user.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.native-provider.new-user-registration"],
+  "transitionKey": "auth.transition.native-provider.create-home-workspace",
+  "preconditions": { "expression": "durable-identity == resolved and account-status == active and home-workspace == required" },
+  "setup": ["Create a new native-provider durable user without a home workspace."],
+  "inputs": [
+    { "key": "durable-identity-reference", "valueType": "reference", "required": true },
+    { "key": "idempotency-key", "valueType": "string", "required": true }
+  ],
+  "actionKey": "auth.action.native-provider.create-home-workspace",
+  "postconditions": { "expression": "home-workspace == established and workspace-membership == home-only and current-workspace == home" },
+  "requiredEffects": ["create-exactly-one-home-workspace", "create-owner-membership", "select-home-workspace", "record-idempotency-result"],
+  "forbiddenEffects": ["create-second-home-workspace", "accept-invitation", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.home-workspace.exactly-one", "auth.invariant.home-workspace.owner-member", "auth.invariant.registration.completes-in-home-workspace"],
+  "expectedAuthLogEvents": ["native-provider-home-workspace-created"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
