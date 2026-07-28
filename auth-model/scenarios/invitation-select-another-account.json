@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.invitation.select-another-account",
+  "name": "Select Another Account for Invitation",
+  "summary": "Signs out or switches identity, authenticates another durable identity, then explicitly selects it for invitation acceptance.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "composite",
+  "journeyKeys": ["auth.journey.invitation.resolve"],
+  "transitionKey": "auth.transition.invitation.select-identity",
+  "preconditions": { "expression": "invitation-status == valid and current-durable-identity is not intended identity" },
+  "setup": ["Preserve the validated invitation reference while completing standard authentication for another account."],
+  "inputs": [{ "key": "selected-durable-identity-reference", "valueType": "reference", "required": true, "description": "Alternate authenticated identity selected by the person." }],
+  "actionKey": "auth.action.invitation.select-identity",
+  "postconditions": { "expression": "invitation-status == acceptance-pending and selected-durable-identity == newly-authenticated-durable-identity" },
+  "requiredEffects": ["preserve-invitation-context-across-authentication", "present-acceptance-summary"],
+  "forbiddenEffects": ["accept-with-previous-account", "create-membership", "change-home-workspace"],
+  "invariantKeys": ["auth.invariant.invitation.requires-selected-identity", "auth.invariant.email-identities.not-conflated"],
+  "expectedAuthLogEvents": ["invitation-identity-selected"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10" }]
+}
