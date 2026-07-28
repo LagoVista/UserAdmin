@@ -4,11 +4,41 @@
   "key": "auth.conversation.organization-switching",
   "name": "Organization Switching",
   "summary": "Helps an authenticated member explicitly change the active organization context while making the authorization and data-scope change highly visible.",
-  "version": 1,
+  "version": 2,
   "maturity": "proposed",
   "goals": [{ "key": "switch-organization", "summary": "Help a member explicitly change the active organization context." }],
   "supportedJourneyKeys": [],
   "routedConversationKeys": [],
+  "distinctiveCharacteristics": [
+    "The conversation treats organization context as an explicit user choice rather than something inferred silently from conversational intent.",
+    "It shows the source organization, destination organization, membership status, and expected scope change before switching.",
+    "Organization-switch events remain in the durable chapter stream so later account-service conversations can explain when and why context changed.",
+    "Membership changes that occur while the chapter is inactive are reflected as system-authored events before another switch is offered."
+  ],
+  "exampleInteractions": [
+    {
+      "key": "switch-active-organization",
+      "name": "Switch the Active Organization",
+      "summary": "Shows natural organization selection followed by explicit confirmation and a durable context-change event.",
+      "entries": [
+        { "sequence": 1, "entryType": "user-message", "actor": "user", "text": "Switch me to Wolf Labs." },
+        { "sequence": 2, "entryType": "control", "actor": "system", "text": "Wolf Labs resolved to an active organization membership.", "authoritativeReferenceType": "organization-membership" },
+        { "sequence": 3, "entryType": "agent-message", "actor": "agent", "text": "You are currently working in Acme. Switching to Wolf Labs may change the tools and data you can access. Would you like to continue?" },
+        { "sequence": 4, "entryType": "user-message", "actor": "user", "text": "Yes." },
+        { "sequence": 5, "entryType": "system-event", "actor": "system", "text": "Your active organization changed from Acme to Wolf Labs.", "authoritativeReferenceType": "active-organization-context" }
+      ]
+    },
+    {
+      "key": "membership-change-before-switch",
+      "name": "Refresh Membership Before Switching",
+      "summary": "Shows that a membership update appended while inactive replaces stale assumptions when the chapter resumes.",
+      "entries": [
+        { "sequence": 1, "entryType": "system-event", "actor": "system", "text": "Your membership in Acme was disabled.", "mayOccurWhileInactive": true, "authoritativeReferenceType": "organization-membership" },
+        { "sequence": 2, "entryType": "user-message", "actor": "user", "text": "Switch me back to Acme." },
+        { "sequence": 3, "entryType": "agent-message", "actor": "agent", "text": "Your Acme membership is no longer active, so I cannot switch you there. I can help you review your membership or request access." }
+      ]
+    }
+  ],
   "entryPredicate": { "expression": "An authenticated durable identity belongs to one or more organizations and requests to inspect or change the active organization." },
   "completionPredicate": { "expression": "The active organization is explicitly changed to an accessible membership, left unchanged by cancellation, or the request is blocked or escalated safely." },
   "informationRequirements": [
@@ -29,5 +59,8 @@
   "presentationExpectations": ["Always show the current organization before and after a switch.", "Explain that roles, tools, and visible data may change with organization context.", "Never switch implicitly from conversational inference alone.", "Provide an equivalent traditional organization selector."],
   "scenarioKeys": [],
   "openQuestions": ["Which canonical organization-switching journey and action should this conversation reference?"],
-  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.11", "note": "Split from the original HR Onboarding goal set on 2026-07-28." }]
+  "sourceReferences": [
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.11", "note": "Split from the original HR Onboarding goal set on 2026-07-28." },
+    { "sourceType": "discussion", "reference": "ChatGPT conversation", "note": "Added explicit organization-selection and durable context-history examples on 2026-07-28." }
+  ]
 }
