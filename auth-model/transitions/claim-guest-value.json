@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.guest.claim-value",
+  "name": "Claim Guest Value",
+  "summary": "Atomically binds claimable guest-created value to the resolved durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 70,
+  "sourceState": { "expression": "guest-identity == active and claimable-value == claimable and durable-identity == resolved" },
+  "actionKey": "auth.action.guest.claim-value",
+  "guards": [{ "expression": "input.durable-identity-reference matches resolved durable identity", "failureCode": "durable-identity-reference-mismatch" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.guest-identity", "operation": "set", "valueExpression": "claimed" },
+    { "dimensionKey": "auth.dimension.claimable-value", "operation": "set", "valueExpression": "claimed" }
+  ],
+  "requiredEffects": ["atomically-attach-guest-resources", "record-idempotency-result", "record-guest-value-claim"],
+  "forbiddenEffects": ["create-second-durable-user", "partially-attach-guest-resources", "attach-value-to-unselected-identity"],
+  "invariantKeys": ["auth.invariant.guest-claim.atomic-idempotent", "auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.4" }]
+}
