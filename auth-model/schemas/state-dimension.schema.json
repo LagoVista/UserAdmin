@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lagovista.com/schemas/auth-model/state-dimension.schema.json",
+  "title": "Authentication State Dimension",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "key", "name", "summary", "version", "maturity", "authority", "values", "sourceReferences"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "1.0" },
+    "key": { "$ref": "#/$defs/key" },
+    "name": { "type": "string", "minLength": 1 },
+    "summary": { "type": "string", "minLength": 1 },
+    "version": { "type": "integer", "minimum": 1 },
+    "maturity": { "$ref": "#/$defs/maturity" },
+    "authority": { "enum": ["canonical", "session-projection", "presentation-context"] },
+    "valueType": { "enum": ["enumeration", "boolean", "string", "integer", "timestamp", "reference", "set"] },
+    "requiredForCanonicalSnapshot": { "type": "boolean", "default": false },
+    "values": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["key", "name", "summary"],
+        "properties": {
+          "key": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$" },
+          "name": { "type": "string", "minLength": 1 },
+          "summary": { "type": "string", "minLength": 1 },
+          "terminal": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    "sourceReferences": { "type": "array", "items": { "$ref": "#/$defs/sourceReference" } },
+    "definitionHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  },
+  "$defs": {
+    "key": { "type": "string", "pattern": "^auth\\.dimension\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$" },
+    "maturity": { "enum": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"] },
+    "sourceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "reference"],
+      "properties": {
+        "sourceType": { "enum": ["ddr", "code", "test", "discussion", "decision", "external"] },
+        "reference": { "type": "string", "minLength": 1 },
+        "section": { "type": "string" },
+        "commit": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}
