@@ -30,6 +30,7 @@ namespace LagoVista.UserAdmin
         public const string OAuthAccessDenied = "/auth/oauth/access-denied";
         public const string OAuthFault = "/auth/oauth/fault";
 
+        public const string EmailVerificationRequest = "/auth/email-verification/request";
         public const string EmailVerificationConfirm = "/auth/email-verification/confirm";
         public const string EmailVerificationSent = "/auth/email-verification/sent";
         public const string EmailVerificationConfirmed = "/auth/email-verification/confirmed";
@@ -58,5 +59,26 @@ namespace LagoVista.UserAdmin
 
         public const string Home = "/home";
         public const string HomeWelcome = "/home/welcome";
+
+        // Temporary member aliases keep existing server call sites compiling while
+        // their references are migrated. All aliases resolve to canonical routes.
+        public const string Login = AuthEntry;
+        public const string LoginOut = Logout;
+        public const string Register = RegistrationCreateAccount;
+        public const string CompleteUserRegistration = RegistrationCompleteProfile;
+        public const string CreateDefaultOrg = OrganizationCreate;
+        public const string ConfirmEmail = EmailVerificationConfirm;
+        public const string ConfirmEmailSent = EmailVerificationSent;
+        public const string EmailConfirmed = EmailVerificationConfirmed;
+        public const string CouldNotConfirmEmail = EmailVerificationFailed;
+        public const string CreatingOrganization = OrganizationCreating;
+        public const string ForgotPasswordSent = PasswordResetSent;
+        public const string AcceptInviteId = InvitationReview;
+        public const string InviteAccepted = InvitationAccepted;
+        public const string InviteAcceptedFailed = InvitationFailed;
+        public const string TOTPEnrollStart = TotpEnrollmentStart;
+        public const string TOTPEnrollConfirm = TotpEnrollmentConfirm;
+        public const string PasskeyEnrollStart = PasskeyEnrollmentStart;
+        public const string PasskeyEnrollConfirm = PasskeyEnrollmentConfirm;
     }
 }
