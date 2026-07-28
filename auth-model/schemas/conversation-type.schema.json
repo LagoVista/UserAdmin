@@ -4,45 +4,15 @@
   "title": "Authentication Conversation Type",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "$schema",
-    "schemaVersion",
-    "key",
-    "name",
-    "summary",
-    "version",
-    "maturity",
-    "goals",
-    "supportedJourneyKeys",
-    "routedConversationKeys",
-    "entryPredicate",
-    "completionPredicate",
-    "informationRequirements",
-    "allowedActionKeys",
-    "prohibitedActionKeys",
-    "decisionPoints",
-    "confirmationRequirements",
-    "secureInteractions",
-    "escalationConditions",
-    "lifecycle",
-    "supportedChannels",
-    "presentationExpectations",
-    "scenarioKeys",
-    "sourceReferences"
-  ],
+  "required": ["$schema", "schemaVersion", "key", "name", "summary", "version", "maturity", "goals", "supportedJourneyKeys", "routedConversationKeys", "entryPredicate", "completionPredicate", "informationRequirements", "allowedActionKeys", "prohibitedActionKeys", "decisionPoints", "confirmationRequirements", "secureInteractions", "escalationConditions", "lifecycle", "supportedChannels", "presentationExpectations", "scenarioKeys", "sourceReferences"],
   "properties": {
     "$schema": { "type": "string" },
     "schemaVersion": { "const": "1.0" },
-    "key": {
-      "type": "string",
-      "pattern": "^auth\\.conversation\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$"
-    },
+    "key": { "type": "string", "pattern": "^auth\\.conversation\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$" },
     "name": { "type": "string", "minLength": 1 },
     "summary": { "type": "string", "minLength": 1 },
     "version": { "type": "integer", "minimum": 1 },
-    "maturity": {
-      "enum": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"]
-    },
+    "maturity": { "enum": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"] },
     "goals": {
       "type": "array",
       "minItems": 1,
@@ -56,15 +26,40 @@
         }
       }
     },
-    "supportedJourneyKeys": {
+    "supportedJourneyKeys": { "type": "array", "items": { "type": "string", "pattern": "^auth\\.journey\\." }, "uniqueItems": true },
+    "routedConversationKeys": { "type": "array", "items": { "type": "string", "pattern": "^auth\\.conversation\\." }, "uniqueItems": true },
+    "distinctiveCharacteristics": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+    "exampleInteractions": {
       "type": "array",
-      "items": { "type": "string", "pattern": "^auth\\.journey\\." },
-      "uniqueItems": true
-    },
-    "routedConversationKeys": {
-      "type": "array",
-      "items": { "type": "string", "pattern": "^auth\\.conversation\\." },
-      "uniqueItems": true
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["key", "name", "summary", "entries"],
+        "properties": {
+          "key": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$" },
+          "name": { "type": "string", "minLength": 1 },
+          "summary": { "type": "string", "minLength": 1 },
+          "entries": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["sequence", "entryType", "actor", "text"],
+              "properties": {
+                "sequence": { "type": "integer", "minimum": 1 },
+                "entryType": { "enum": ["user-message", "agent-message", "system-event", "secure-interaction", "control"] },
+                "actor": { "enum": ["user", "agent", "system", "secure-component"] },
+                "text": { "type": "string", "minLength": 1 },
+                "relativeTime": { "type": "string" },
+                "mayOccurWhileInactive": { "type": "boolean" },
+                "authoritativeReferenceType": { "type": "string" },
+                "notes": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
     },
     "entryPredicate": { "$ref": "#/$defs/predicate" },
     "completionPredicate": { "$ref": "#/$defs/predicate" },
@@ -83,16 +78,8 @@
         }
       }
     },
-    "allowedActionKeys": {
-      "type": "array",
-      "items": { "type": "string", "pattern": "^auth\\.action\\." },
-      "uniqueItems": true
-    },
-    "prohibitedActionKeys": {
-      "type": "array",
-      "items": { "type": "string", "pattern": "^auth\\.action\\." },
-      "uniqueItems": true
-    },
+    "allowedActionKeys": { "type": "array", "items": { "type": "string", "pattern": "^auth\\.action\\." }, "uniqueItems": true },
+    "prohibitedActionKeys": { "type": "array", "items": { "type": "string", "pattern": "^auth\\.action\\." }, "uniqueItems": true },
     "decisionPoints": {
       "type": "array",
       "items": {
@@ -115,10 +102,7 @@
         "properties": {
           "key": { "type": "string" },
           "summary": { "type": "string" },
-          "requiredBeforeActionKeys": {
-            "type": "array",
-            "items": { "type": "string", "pattern": "^auth\\.action\\." }
-          }
+          "requiredBeforeActionKeys": { "type": "array", "items": { "type": "string", "pattern": "^auth\\.action\\." } }
         }
       }
     },
@@ -127,15 +111,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "key",
-          "summary",
-          "componentType",
-          "conversationMayProvide",
-          "componentCollects",
-          "sanitizedOutcomes",
-          "resumeBehavior"
-        ],
+        "required": ["key", "summary", "componentType", "conversationMayProvide", "componentCollects", "sanitizedOutcomes", "resumeBehavior"],
         "properties": {
           "key": { "type": "string" },
           "summary": { "type": "string" },
@@ -171,24 +147,11 @@
         "expiration": { "type": "string" }
       }
     },
-    "supportedChannels": {
-      "type": "array",
-      "minItems": 1,
-      "items": { "enum": ["web", "android", "ios", "vtm", "voice"] },
-      "uniqueItems": true
-    },
+    "supportedChannels": { "type": "array", "minItems": 1, "items": { "enum": ["web", "android", "ios", "vtm", "voice"] }, "uniqueItems": true },
     "presentationExpectations": { "type": "array", "items": { "type": "string" } },
-    "scenarioKeys": {
-      "type": "array",
-      "items": { "type": "string", "pattern": "^auth\\.scenario\\." },
-      "uniqueItems": true
-    },
+    "scenarioKeys": { "type": "array", "items": { "type": "string", "pattern": "^auth\\.scenario\\." }, "uniqueItems": true },
     "openQuestions": { "type": "array", "items": { "type": "string" } },
-    "sourceReferences": {
-      "type": "array",
-      "minItems": 1,
-      "items": { "$ref": "#/$defs/sourceReference" }
-    }
+    "sourceReferences": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/sourceReference" } }
   },
   "$defs": {
     "predicate": {
