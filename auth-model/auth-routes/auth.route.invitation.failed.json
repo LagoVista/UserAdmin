@@ -1,0 +1,16 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.invitation.failed",
+  "name": "Invitation Failed",
+  "path": "/auth/invitation/failed",
+  "routeType": "view",
+  "viewId": "auth.invitation.failed",
+  "status": "active",
+  "platforms": {
+    "web": { "status": "implemented" },
+    "mobile": { "status": "planned" }
+  },
+  "source": { "commonLinksMember": "InvitationFailed" },
+  "notes": ["Replaces /auth/invite/failed."]
+}
