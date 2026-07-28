@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.native-provider.select-link-target",
+  "name": "Select Native Provider Link Target",
+  "summary": "Records the explicitly confirmed existing durable identity selected for provider linking.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 80,
+  "sourceState": { "expression": "pending-identity-status == resolution-required and pending-identity-flow == native-provider and credential-proof == native-provider-proved and durable-identity == absent" },
+  "actionKey": "auth.action.native-provider.select-link-target",
+  "guards": [{ "expression": "input.selection-confirmed == true", "failureCode": "provider-link-target-confirmation-required" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.durable-identity", "operation": "set", "valueExpression": "existing" }
+  ],
+  "requiredEffects": ["record-explicit-link-target-selection"],
+  "forbiddenEffects": ["link-provider-subject", "create-durable-user", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.email-identities.not-conflated", "auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
