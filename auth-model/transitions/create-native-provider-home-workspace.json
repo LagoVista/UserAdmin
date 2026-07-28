@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.native-provider.create-home-workspace",
+  "name": "Create Native Provider Home Workspace",
+  "summary": "Establishes exactly one home workspace and selects it for the new native-provider user.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 50,
+  "sourceState": { "expression": "durable-identity == resolved and account-status == active and home-workspace == required" },
+  "actionKey": "auth.action.native-provider.create-home-workspace",
+  "guards": [],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.home-workspace", "operation": "set", "valueExpression": "established" },
+    { "dimensionKey": "auth.dimension.workspace-membership", "operation": "set", "valueExpression": "home-only" },
+    { "dimensionKey": "auth.dimension.current-workspace", "operation": "set", "valueExpression": "home" }
+  ],
+  "requiredEffects": ["create-exactly-one-home-workspace", "create-owner-membership", "select-home-workspace", "record-idempotency-result"],
+  "forbiddenEffects": ["create-second-home-workspace", "accept-invitation", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.home-workspace.exactly-one", "auth.invariant.home-workspace.owner-member", "auth.invariant.registration.completes-in-home-workspace", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
