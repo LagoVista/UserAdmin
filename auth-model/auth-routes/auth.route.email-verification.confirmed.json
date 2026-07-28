@@ -1,0 +1,25 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.email-verification.confirmed",
+  "name": "Email Verification Confirmed",
+  "description": "Displays the successful email verification outcome.",
+  "path": "/auth/email-verification/confirmed",
+  "routeType": "view",
+  "viewId": "auth.email-verification.confirmed",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": {
+      "status": "implemented",
+      "implementation": "EmailConfirmedComponent"
+    },
+    "mobile": {
+      "status": "planned"
+    }
+  },
+  "source": {
+    "commonLinksMember": "EmailVerificationConfirmed",
+    "angularComponent": "EmailConfirmedComponent"
+  }
+}
