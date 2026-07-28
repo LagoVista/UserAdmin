@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.recovery.issue-challenge",
+  "name": "Issue Recovery Challenge",
+  "summary": "Moves a requested recovery into challenge-issued for the bound existing durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 100,
+  "sourceState": { "expression": "recovery-state == requested and durable-identity == resolved" },
+  "actionKey": "auth.action.recovery.issue-challenge",
+  "guards": [{ "expression": "challenge-method permitted by recovery policy", "failureCode": "recovery-method-not-permitted" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.recovery-state", "operation": "set", "valueExpression": "challenge-issued" },
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "set", "valueExpression": "identity-ceremony" }
+  ],
+  "requiredEffects": ["issue-single-use-expiring-challenge", "bind-challenge-to-recovery-and-identity", "record-recovery-challenge-issued"],
+  "forbiddenEffects": ["create-durable-user", "grant-normal-application-authorization", "change-home-workspace", "accept-invitation"],
+  "invariantKeys": ["auth.invariant.recovery.existing-identity-only", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.14" }]
+}
