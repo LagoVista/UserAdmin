@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.guest.claim-value",
+  "name": "Claim Guest Value",
+  "summary": "Atomically attaches claimable guest-created value to the explicitly resolved durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "security-invariant",
+  "journeyKeys": ["auth.journey.guest.claimable-value"],
+  "transitionKey": "auth.transition.guest.claim-value",
+  "preconditions": { "expression": "guest-identity == active and claimable-value == claimable and durable-identity == resolved" },
+  "setup": ["Resolve the durable identity through an independent authentication or registration journey.", "Retain the originating guest-session and claimable-value bindings."],
+  "inputs": [
+    { "key": "durable-identity-reference", "valueType": "reference", "required": true, "description": "Explicit reference to the resolved durable identity receiving the guest value." },
+    { "key": "idempotency-key", "valueType": "string", "required": true, "description": "Stable operation key used to guarantee replay-safe claim behavior." }
+  ],
+  "actionKey": "auth.action.guest.claim-value",
+  "postconditions": { "expression": "guest-identity == claimed and claimable-value == claimed and durable-identity == resolved" },
+  "requiredEffects": ["atomically-attach-guest-resources", "record-idempotency-result", "record-guest-value-claim"],
+  "forbiddenEffects": ["create-second-durable-user", "partially-attach-guest-resources", "attach-value-to-unselected-identity"],
+  "invariantKeys": ["auth.invariant.guest-claim.atomic-idempotent", "auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "expectedAuthLogEvents": ["guest-value-claim-started", "guest-value-claim-completed"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.4" }]
+}
