@@ -4,11 +4,27 @@
   "key": "auth.conversation.account-access-assistance",
   "name": "Account Access Assistance",
   "summary": "Helps a person identify and launch the correct standard login or recovery experience without collecting authentication secrets in conversation.",
-  "version": 2,
+  "version": 3,
   "maturity": "proposed",
   "goals": [{ "key": "establish-account-access", "summary": "Help the person reach the appropriate standard login or recovery experience." }],
   "supportedJourneyKeys": ["auth.journey.pending-identity.lifecycle", "auth.journey.account-recovery"],
   "routedConversationKeys": [],
+  "distinctiveCharacteristics": [
+    "The conversation explains and coordinates account access without accepting credentials or verification secrets in the conversational stream.",
+    "It preserves a durable, user-readable history of meaningful recovery and security outcomes while authoritative authentication records remain the source of truth.",
+    "It can answer questions and survive conversational detours while a secure login or recovery interaction remains pending."
+  ],
+  "exampleInteractions": [{
+    "key": "recover-account-access",
+    "name": "Recover Account Access",
+    "summary": "A person requests help signing in, completes recovery through a secure component, and later sees the resulting security event in the chapter history.",
+    "entries": [
+      { "sequence": 1, "entryType": "user-message", "actor": "user", "text": "I can't sign in and I think I need to reset my password." },
+      { "sequence": 2, "entryType": "agent-message", "actor": "agent", "text": "I can help you choose the correct recovery path. Your password and verification codes will only be entered in the secure recovery window." },
+      { "sequence": 3, "entryType": "secure-interaction", "actor": "secure-component", "text": "Secure account recovery opened.", "authoritativeReferenceType": "account-recovery" },
+      { "sequence": 4, "entryType": "system-event", "actor": "system", "text": "Your password was changed and existing sessions were revoked.", "mayOccurWhileInactive": true, "authoritativeReferenceType": "credential-security-event" }
+    ]
+  }],
   "entryPredicate": { "expression": "A guest or unresolved person requests help signing in, recovering access, or selecting an authentication method." },
   "completionPredicate": { "expression": "The person reaches a standard authentication or recovery surface, completes a supported recovery journey, abandons the request, or is escalated safely." },
   "informationRequirements": [
@@ -16,13 +32,7 @@
     { "key": "sanitized-authentication-state", "summary": "Display-safe information about available providers, account state, and permitted recovery options.", "sensitivity": "sensitive", "collection": "existing-state", "requiredForGoalKeys": ["establish-account-access"] },
     { "key": "authentication-secrets", "summary": "Passwords, one-time codes, passkeys, provider tokens, and recovery codes.", "sensitivity": "secret", "collection": "secure-component", "requiredForGoalKeys": ["establish-account-access"] }
   ],
-  "allowedActionKeys": [
-    "auth.action.recovery.request",
-    "auth.action.recovery.issue-challenge",
-    "auth.action.recovery.verify-proof",
-    "auth.action.recovery.establish-replacement-credential",
-    "auth.action.recovery.complete"
-  ],
+  "allowedActionKeys": ["auth.action.recovery.request", "auth.action.recovery.issue-challenge", "auth.action.recovery.verify-proof", "auth.action.recovery.establish-replacement-credential", "auth.action.recovery.complete"],
   "prohibitedActionKeys": [],
   "decisionPoints": [{ "key": "select-access-path", "summary": "Select the valid login or recovery path from authoritative state and policy.", "basis": ["account state", "available authentication methods", "recovery eligibility", "organization policy"] }],
   "confirmationRequirements": [{ "key": "complete-recovery", "summary": "Require explicit confirmation before replacing credentials and revoking existing sessions.", "requiredBeforeActionKeys": ["auth.action.recovery.establish-replacement-credential", "auth.action.recovery.complete"] }],
@@ -31,15 +41,7 @@
   "lifecycle": { "pause": "Persist the selected access intent, recovery reference, and secure handoff reference outside the transcript.", "resume": "Refresh authentication and recovery state and discard stale recommendations before continuing.", "abandonment": "Allow exit without changing authentication state beyond explicitly requested recovery records.", "expiration": "Expire stale recovery and handoff references independently from durable identity state." },
   "supportedChannels": ["web", "android", "ios", "vtm", "voice"],
   "presentationExpectations": ["Explain available access paths without revealing whether an unverified identifier belongs to an account.", "Open standard secure controls for every credential or verification ceremony.", "Explain that successful recovery revokes prior sessions and requires fresh sign-in.", "Provide equivalent traditional navigation and recovery flows."],
-  "scenarioKeys": [
-    "auth.scenario.recovery.request",
-    "auth.scenario.recovery.issue-challenge",
-    "auth.scenario.recovery.verify-proof",
-    "auth.scenario.recovery.establish-replacement-credential",
-    "auth.scenario.recovery.complete"
-  ],
+  "scenarioKeys": ["auth.scenario.recovery.request", "auth.scenario.recovery.issue-challenge", "auth.scenario.recovery.verify-proof", "auth.scenario.recovery.establish-replacement-credential", "auth.scenario.recovery.complete"],
   "openQuestions": ["Which canonical normal-login journeys should this conversation reference once authored?"],
-  "sourceReferences": [
-    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.11 and 4.14", "note": "Account access assistance bound to the canonical recovery journey on 2026-07-28." }
-  ]
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.11 and 4.14", "note": "Account access assistance bound to the canonical recovery journey on 2026-07-28." }]
 }
