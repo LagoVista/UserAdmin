@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.guest.activate",
+  "name": "Activate Guest Identity",
+  "summary": "Moves an anonymous interaction into an active resumable guest identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 100,
+  "sourceState": { "expression": "guest-identity == none and durable-identity == absent" },
+  "actionKey": "auth.action.guest.activate",
+  "guards": [],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.guest-identity", "operation": "set", "valueExpression": "active" }
+  ],
+  "requiredEffects": ["create-resumable-guest-session"],
+  "forbiddenEffects": ["create-durable-user", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.4" }]
+}
