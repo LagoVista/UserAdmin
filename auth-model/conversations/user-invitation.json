@@ -8,6 +8,7 @@
   "maturity": "proposed",
   "goals": [{ "key": "invite-user", "summary": "Help an authorized member prepare and send an invitation to another person." }],
   "supportedJourneyKeys": [],
+  "routedConversationKeys": [],
   "entryPredicate": { "expression": "An authenticated member requests to invite another person and has a potentially valid target organization context." },
   "completionPredicate": { "expression": "The invitation is sent, explicitly canceled, blocked by policy, or escalated without unauthorized membership creation." },
   "informationRequirements": [
