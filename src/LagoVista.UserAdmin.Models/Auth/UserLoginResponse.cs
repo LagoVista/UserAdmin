@@ -40,6 +40,20 @@ namespace LagoVista.UserAdmin.Models.Auth
             _sw = Stopwatch.StartNew();
         }
 
+        public AuthenticationResponseState AuthenticationState { get; set; }
+
+        public string AuthenticationReasonCode { get; set; }
+
+        public string PendingIdentityId { get; set; }
+
+        public string MaskedEmail { get; set; }
+
+        public string Provider { get; set; }
+
+        public string InviteId { get; set; }
+
+        public bool CanEnterApplication => AuthenticationState == AuthenticationResponseState.Authenticated;
+
         public string ResponseMessage { get; set; }
 
         public string RedirectPage { get; set; }
