@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.passkey.begin-authentication",
+  "name": "Begin Passkey Authentication",
+  "summary": "Issues an assertion challenge for normal passkey authentication.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 80,
+  "sourceState": { "expression": "credential-proof == none and session-capability in [anonymous,identity-ceremony,authenticated-limited]" },
+  "actionKey": "auth.action.passkey.begin-authentication",
+  "guards": [{ "expression": "account-status not-in [disabled,closed]", "failureCode": "account-not-eligible" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.credential-proof", "operation": "set", "valueExpression": "challenge-issued" }
+  ],
+  "requiredEffects": ["create-short-lived-passkey-authentication-challenge"],
+  "forbiddenEffects": ["authenticate-before-assertion", "grant-step-up", "expose-credential-material"],
+  "invariantKeys": ["auth.invariant.disabled-user.no-normal-session", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
