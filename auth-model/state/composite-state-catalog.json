@@ -63,9 +63,10 @@
     {
       "key": "derived-projections",
       "name": "Derived Projections",
-      "summary": "Contains non-canonical session and presentation projections derived from or applied to canonical state.",
+      "summary": "Contains non-canonical session, entry-intent, and presentation projections derived from or applied to canonical state.",
       "dimensionKeys": [
         "auth.dimension.session-capability",
+        "auth.dimension.entry-intent-status",
         "auth.dimension.presentation-context"
       ]
     }
@@ -120,6 +121,12 @@
       "summary": "Recovery state may restrict session capabilities until sufficient proof is restored."
     },
     {
+      "fromDimensionKey": "auth.dimension.entry-intent-status",
+      "toDimensionKey": "auth.dimension.presentation-context",
+      "relationship": "informs",
+      "summary": "A validated entry intent may inform presentation routing only after explicit consumption; it does not alter identity authorization."
+    },
+    {
       "fromDimensionKey": "auth.dimension.presentation-context",
       "toDimensionKey": "auth.dimension.session-capability",
       "relationship": "selects",
@@ -130,8 +137,8 @@
     {
       "sourceType": "discussion",
       "reference": "AUTH-MODEL-GUIDE.md",
-      "section": "2.1, 2.4, 4.2, 4.3",
-      "note": "Composite state organization and relationship model"
+      "section": "2.1, 2.4, 4.2, 4.3, 4.13",
+      "note": "Composite state organization, projections, entry intent, and relationship model"
     },
     {
       "sourceType": "decision",
