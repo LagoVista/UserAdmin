@@ -8,6 +8,7 @@
   "maturity": "proposed",
   "goals": [{ "key": "establish-account-access", "summary": "Help the person reach the appropriate standard login or recovery experience." }],
   "supportedJourneyKeys": ["auth.journey.pending-identity.lifecycle"],
+  "routedConversationKeys": [],
   "entryPredicate": { "expression": "A guest or unresolved person requests help signing in, recovering access, or selecting an authentication method." },
   "completionPredicate": { "expression": "The person reaches a standard authentication or recovery surface, abandons the request, or is escalated safely." },
   "informationRequirements": [
