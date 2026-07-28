@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.pending-identity.cancel",
+  "name": "Cancel Pending Identity",
+  "summary": "Terminates an active PendingIdentity after an explicit cancellation request.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 40,
+  "sourceState": { "expression": "pending-identity-status in [pending,verification-required,verifying,resolution-required]" },
+  "actionKey": "auth.action.pending-identity.cancel",
+  "guards": [],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.pending-identity-status", "operation": "set", "valueExpression": "canceled" },
+    { "dimensionKey": "auth.dimension.pending-identity-flow", "operation": "set", "valueExpression": "none" },
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "derive", "valueExpression": "anonymous or blocked according to remaining state" }
+  ],
+  "requiredEffects": ["invalidate-pending-identity-secrets", "record-pending-identity-canceled"],
+  "forbiddenEffects": ["resolve-durable-identity", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.5" }]
+}
