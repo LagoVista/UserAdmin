@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.invitation.register-then-select",
+  "name": "Register Then Select Invitation Identity",
+  "summary": "Preserves a valid invitation while a logged-out person completes normal registration, receives a home workspace, and explicitly selects the new durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "composite",
+  "journeyKeys": ["auth.journey.invitation.resolve"],
+  "transitionKey": "auth.transition.invitation.select-identity",
+  "preconditions": { "expression": "invitation-status == valid and durable-identity == absent" },
+  "setup": ["Preserve only the invitation reference while a canonical registration journey completes."],
+  "inputs": [{ "key": "selected-durable-identity-reference", "valueType": "reference", "required": true, "description": "Newly registered durable identity with established home workspace." }],
+  "actionKey": "auth.action.invitation.select-identity",
+  "postconditions": { "expression": "invitation-status == acceptance-pending and durable-identity == resolved and home-workspace == established" },
+  "requiredEffects": ["preserve-invitation-context-across-registration", "present-acceptance-summary"],
+  "forbiddenEffects": ["skip-home-workspace-creation", "auto-accept-invitation", "replace-home-workspace-with-invited-workspace"],
+  "invariantKeys": ["auth.invariant.home-workspace.exactly-one", "auth.invariant.invitation.not-identity-proof", "auth.invariant.invitation.requires-selected-identity"],
+  "expectedAuthLogEvents": ["invitation-identity-selected"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10" }]
+}
