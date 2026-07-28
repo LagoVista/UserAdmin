@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/state-dimension.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.dimension.current-workspace",
+  "name": "Current Workspace",
+  "summary": "Describes the workspace context currently selected for the session.",
+  "version": 1,
+  "maturity": "proposed",
+  "authority": "canonical",
+  "valueType": "enumeration",
+  "requiredForCanonicalSnapshot": true,
+  "values": [
+    { "key": "none", "name": "None", "summary": "No workspace context is selected." },
+    { "key": "home", "name": "Home", "summary": "The user's home workspace is selected." },
+    { "key": "external", "name": "External", "summary": "A non-home workspace for which the user has access is selected." },
+    { "key": "invalid", "name": "Invalid", "summary": "The selected workspace is not accessible to the user." }
+  ],
+  "sourceReferences": [
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.9" },
+    { "sourceType": "code", "reference": "AuthStateService.GetAuthSession", "note": "CurrentOrg claim projection" }
+  ]
+}
