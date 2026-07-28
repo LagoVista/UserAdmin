@@ -54,17 +54,17 @@
     "journeys": 11,
     "scenarios": 44,
     "conversationTypes": 7,
-    "presentationBindings": 0,
+    "presentationBindings": 3,
     "decisions": 0,
     "unresolved": 0
   },
   "currentWork": {
-    "guideSection": "4.11",
+    "guideSection": "4.12",
     "status": "complete",
-    "summary": "Guided VTM onboarding is modeled as a bounded orchestration layer over canonical actions and transitions. Conversational collection excludes secrets, secure components return sanitized outcomes, pause and resume require authoritative state refresh, stale confirmations cannot authorize changed state, and guided registration and invitation resolution are bound to existing journeys and scenarios. Next major area: Section 4.12, Traditional form onboarding and presentation bindings."
+    "summary": "Traditional web onboarding is modeled as presentation bindings over canonical actions and scenarios. The first evidence-backed bindings cover password registration, email verification, and invitation review with concrete routes, view IDs, fields, semantic finders, operations, and expected views. Composite registration behavior and legacy invitation navigation are recorded as implementation seams rather than alternate authentication rules. Next major area: Section 4.13, Session projection and routing."
   },
   "sourceReferences": [
-    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.11", "note": "Guided VTM onboarding and secure orchestration boundaries" },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.12", "note": "Traditional form onboarding and presentation bindings" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.1-HANDOFF.md", "note": "Repository model foundation" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.2-HANDOFF.md", "note": "Composite identity state decisions" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.3-HANDOFF.md", "note": "Composite relationships and foundational invariants" },
@@ -76,6 +76,7 @@
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.9-HANDOFF.md", "note": "Home workspace establishment handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.10-HANDOFF.md", "note": "Invitation resolution handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.11-HANDOFF.md", "note": "Guided VTM onboarding handoff" },
+    { "sourceType": "decision", "reference": "auth-model/SECTION-4.12-HANDOFF.md", "note": "Traditional form onboarding and presentation binding handoff" },
     { "sourceType": "discussion", "reference": "auth-model/conversations/hr-onboarding.json", "note": "HR onboarding router and six bounded proposed workflow conversations" }
   ]
 }
