@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.recovery.request",
+  "name": "Request Account Recovery",
+  "summary": "Begins an enumeration-resistant recovery ceremony without granting authentication or disclosing account existence.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.account-recovery"],
+  "transitionKey": "auth.transition.recovery.request",
+  "preconditions": { "expression": "recovery-state in [none,expired,failed,completed] and recovery-cooldown-active == false" },
+  "setup": ["Ensure no active recovery ceremony exists for the request context."],
+  "inputs": [
+    { "key": "recovery-locator", "valueType": "string", "required": true, "example": "user@example.com" },
+    { "key": "recovery-reason", "valueType": "string", "required": true, "example": "password-lost" }
+  ],
+  "actionKey": "auth.action.recovery.request",
+  "postconditions": { "expression": "recovery-state == requested and session-capability == identity-ceremony" },
+  "requiredEffects": ["create-single-use-recovery-record", "apply-enumeration-resistant-response", "record-recovery-request", "apply-rate-limit-and-cooldown-policy"],
+  "forbiddenEffects": ["create-durable-user", "confirm-account-existence", "authenticate-user", "accept-invitation", "switch-current-workspace"],
+  "invariantKeys": ["auth.invariant.recovery.existing-identity-only", "auth.invariant.transition.deterministic-post-state"],
+  "expectedAuthLogEvents": ["recovery-requested"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.14" }]
+}
