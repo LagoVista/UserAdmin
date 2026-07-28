@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.pending-identity.complete-verification",
+  "name": "Complete Pending Identity Verification",
+  "summary": "Persists successful proof and advances the airlock to identity resolution.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 70,
+  "sourceState": { "expression": "pending-identity-status == verifying and pending-identity-flow != none" },
+  "actionKey": "auth.action.pending-identity.complete-verification",
+  "guards": [{ "expression": "input.proof-result is valid for pending-identity-flow", "failureCode": "verification-proof-invalid" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.pending-identity-status", "operation": "set", "valueExpression": "resolution-required" },
+    { "dimensionKey": "auth.dimension.credential-proof", "operation": "derive", "valueExpression": "proof level from validated result" },
+    { "dimensionKey": "auth.dimension.email-ownership", "operation": "derive", "valueExpression": "verified when proof establishes email ownership, otherwise preserve" }
+  ],
+  "requiredEffects": ["persist-verification-evidence", "record-verification-completed"],
+  "forbiddenEffects": ["create-duplicate-durable-user", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.pending-identity.exactly-one-flow", "auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.5" }]
+}
