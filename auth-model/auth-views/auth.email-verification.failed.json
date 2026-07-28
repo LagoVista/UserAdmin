@@ -1,0 +1,45 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.email-verification.failed",
+  "name": "Email Verification Failed",
+  "description": "Explains that the email verification link could not be accepted and offers recovery actions.",
+  "category": "email-verification",
+  "routeId": "auth.route.email-verification.failed",
+  "status": "active",
+  "controls": [],
+  "actions": [
+    {
+      "id": "resend-email",
+      "name": "Resend Email",
+      "actionType": "button",
+      "finder": "action:resend-email"
+    },
+    {
+      "id": "back",
+      "name": "Back",
+      "actionType": "button",
+      "finder": "action:back"
+    },
+    {
+      "id": "sign-out",
+      "name": "Sign Out",
+      "actionType": "button",
+      "finder": "action:sign-out"
+    }
+  ],
+  "platforms": {
+    "web": {
+      "status": "implemented",
+      "implementation": "EmailCouldNotConfirmComponent"
+    },
+    "mobile": {
+      "status": "planned"
+    }
+  },
+  "source": {
+    "runtimeEntityId": "DE6AEE0F1ECE4A4B8C607275AA90CE01",
+    "runtimeSha256Hex": "60d7ca33265198936d491bae8506974b57a24744a15b668f29cea621a016aacc",
+    "webComponent": "EmailCouldNotConfirmComponent"
+  }
+}
