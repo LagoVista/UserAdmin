@@ -1,0 +1,17 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.continue.email",
+  "name": "Continue with Email",
+  "path": "/auth/continue/email",
+  "routeType": "view",
+  "viewId": "auth.continue.email",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "ContinueEmailComponent" },
+    "mobile": { "status": "implemented", "implementation": "app/auth/continue/email.tsx" }
+  },
+  "source": { "commonLinksMember": "AuthContinueEmail", "angularComponent": "ContinueEmailComponent", "mobileRoute": "/auth/continue/email" },
+  "notes": ["CommonLinks member must be added during route projection reconciliation."]
+}
