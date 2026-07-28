@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.pending-identity.begin",
+  "name": "Begin Pending Identity",
+  "summary": "Creates an active PendingIdentity with exactly one selected flow and ceremony-only session capability.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 100,
+  "sourceState": { "expression": "pending-identity-status == none and pending-identity-flow == none" },
+  "actionKey": "auth.action.pending-identity.begin",
+  "guards": [{ "expression": "input.flow in [password,native-provider,oauth-external,passkey]", "failureCode": "invalid-pending-identity-flow" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.pending-identity-status", "operation": "set", "valueExpression": "pending" },
+    { "dimensionKey": "auth.dimension.pending-identity-flow", "operation": "set", "valueExpression": "input.flow" },
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "derive", "valueExpression": "identity-ceremony" }
+  ],
+  "requiredEffects": ["persist-single-flow-bucket", "record-pending-identity-begun"],
+  "forbiddenEffects": ["create-durable-user", "grant-normal-application-authorization", "populate-multiple-flow-buckets"],
+  "invariantKeys": ["auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.pending-identity.exactly-one-flow", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.5" }]
+}
