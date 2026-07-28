@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.home-workspace.begin-creation",
+  "name": "Begin Home Workspace Creation",
+  "summary": "Starts idempotent creation when a resolved durable identity has no existing home workspace.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.home-workspace.establishment"],
+  "transitionKey": "auth.transition.home-workspace.begin-creation",
+  "preconditions": { "expression": "durable-identity == resolved and home-workspace == required and existing-home-workspace-count == 0" },
+  "setup": ["Ensure no home workspace exists for the durable identity."],
+  "inputs": [{ "key": "durable-identity-reference", "valueType": "reference", "required": true, "description": "Resolved durable identity." }],
+  "actionKey": "auth.action.home-workspace.begin-creation",
+  "postconditions": { "expression": "home-workspace == creating" },
+  "requiredEffects": ["acquire-idempotent-home-workspace-operation", "record-home-workspace-creation-started"],
+  "forbiddenEffects": ["create-second-home-workspace", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.home-workspace.exactly-one", "auth.invariant.transition.one-state-changing-action"],
+  "expectedAuthLogEvents": ["home-workspace-creation-started"],
+  "evidenceRequirements": ["server"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.9" }]
+}
