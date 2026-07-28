@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.pending-identity.complete-verification",
+  "name": "Complete Pending Identity Verification",
+  "summary": "Records successful proof and advances the pending identity to durable-identity resolution.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "verification-reference", "valueType": "reference", "required": true },
+    { "key": "proof-result", "valueType": "object", "required": true }
+  ],
+  "guards": [
+    { "expression": "pending-identity-status == verifying", "failureCode": "verification-not-active" },
+    { "expression": "input.proof-result is valid for pending-identity-flow", "failureCode": "verification-proof-invalid" }
+  ],
+  "permittedMutations": ["auth.dimension.pending-identity-status", "auth.dimension.credential-proof", "auth.dimension.email-ownership"],
+  "requiredEffects": ["persist-verification-evidence", "record-verification-completed"],
+  "forbiddenEffects": ["create-duplicate-durable-user", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.pending-identity.exactly-one-flow", "auth.invariant.identity-resolution.no-duplicate-user"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.5" }]
+}
