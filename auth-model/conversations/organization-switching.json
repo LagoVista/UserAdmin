@@ -8,6 +8,7 @@
   "maturity": "proposed",
   "goals": [{ "key": "switch-organization", "summary": "Help a member explicitly change the active organization context." }],
   "supportedJourneyKeys": [],
+  "routedConversationKeys": [],
   "entryPredicate": { "expression": "An authenticated durable identity belongs to one or more organizations and requests to inspect or change the active organization." },
   "completionPredicate": { "expression": "The active organization is explicitly changed to an accessible membership, left unchanged by cancellation, or the request is blocked or escalated safely." },
   "informationRequirements": [
