@@ -1,0 +1,24 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.recovery.complete",
+  "name": "Complete Account Recovery",
+  "summary": "Completes recovery only after replacement credentials and required security cleanup are complete.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 100,
+  "sourceState": { "expression": "recovery-state == credential-reset-required and durable-identity == resolved" },
+  "actionKey": "auth.action.recovery.complete",
+  "guards": [
+    { "expression": "replacement-credential-established == true", "failureCode": "replacement-credential-not-established" },
+    { "expression": "required-security-cleanup-complete == true", "failureCode": "recovery-security-cleanup-incomplete" }
+  ],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.recovery-state", "operation": "set", "valueExpression": "completed" },
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "set", "valueExpression": "anonymous" }
+  ],
+  "requiredEffects": ["revoke-existing-sessions-and-refresh-tokens", "invalidate-unused-recovery-challenges", "rotate-security-stamps-or-equivalent", "notify-user-of-recovery", "record-recovery-completed"],
+  "forbiddenEffects": ["create-durable-user", "accept-invitation", "change-home-workspace", "silently-grant-step-up"],
+  "invariantKeys": ["auth.invariant.recovery.existing-identity-only", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.14" }]
+}
