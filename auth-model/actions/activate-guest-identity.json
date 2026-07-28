@@ -1,0 +1,19 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.guest.activate",
+  "name": "Activate Guest Identity",
+  "summary": "Establishes an anonymous guest identity before any durable identity is resolved.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [],
+  "guards": [
+    { "expression": "guest-identity == none", "failureCode": "guest-already-active" },
+    { "expression": "durable-identity == absent", "failureCode": "durable-identity-already-present" }
+  ],
+  "permittedMutations": ["auth.dimension.guest-identity"],
+  "requiredEffects": ["create-resumable-guest-session"],
+  "forbiddenEffects": ["create-durable-user", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.4" }]
+}
