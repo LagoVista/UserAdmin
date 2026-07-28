@@ -1,0 +1,34 @@
+{
+  "$schema": "../schemas/presentation-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.presentation.web.welcome-continue-passkey",
+  "name": "Web Welcome Continue with Passkey",
+  "summary": "Models the capability-gated UI-only navigation from the authentication welcome view to passkey continuation without changing authentication state.",
+  "version": 1,
+  "maturity": "proposed",
+  "bindingKind": "ui-navigation",
+  "channel": "web-ui",
+  "platform": "web",
+  "scenarioKeys": [],
+  "actionKey": null,
+  "navigationKey": "auth.navigation.welcome.continue-passkey",
+  "authViewKey": "auth.welcome",
+  "route": "/auth/welcome",
+  "viewId": "auth.welcome",
+  "fieldBindings": [
+    { "inputKey": "passkey-capability", "authViewFieldId": null, "finder": "action:continue-passkey", "bindingType": "generated", "valueSource": "window.PublicKeyCredential availability" }
+  ],
+  "actionBinding": {
+    "authFieldActionId": null,
+    "finder": "action:continue-passkey",
+    "bindingType": "navigation",
+    "operationReference": "AuthWelcomeComponent.continuePasskey"
+  },
+  "expectedViewId": "auth.continue.passkey",
+  "expectedRoute": "/auth/continue/passkey",
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared/user/auth-welcome/auth-welcome.component.html", "note": "Capability-gated source control and stable semantic finder." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared/user/auth-welcome/auth-welcome.component.ts", "note": "Passkey capability condition and navigation target." },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.15" }
+  ]
+}
