@@ -59,12 +59,12 @@
     "unresolved": 0
   },
   "currentWork": {
-    "guideSection": "4.10",
+    "guideSection": "4.11",
     "status": "complete",
-    "summary": "Invitation resolution is modeled as one shared core: validate the invitation, resolve and explicitly select one durable identity through any supported logged-in or logged-out route, confirm acceptance, grant one additional workspace membership, and consume the invitation without changing the home or current workspace. Next major area: Section 4.11, Guided onboarding and presentation equivalence."
+    "summary": "Guided VTM onboarding is modeled as a bounded orchestration layer over canonical actions and transitions. Conversational collection excludes secrets, secure components return sanitized outcomes, pause and resume require authoritative state refresh, stale confirmations cannot authorize changed state, and guided registration and invitation resolution are bound to existing journeys and scenarios. Next major area: Section 4.12, Traditional form onboarding and presentation bindings."
   },
   "sourceReferences": [
-    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10", "note": "Invitation resolution and membership acceptance" },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.11", "note": "Guided VTM onboarding and secure orchestration boundaries" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.1-HANDOFF.md", "note": "Repository model foundation" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.2-HANDOFF.md", "note": "Composite identity state decisions" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.3-HANDOFF.md", "note": "Composite relationships and foundational invariants" },
@@ -75,6 +75,7 @@
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.8-HANDOFF.md", "note": "Passkey registration, authentication, and step-up handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.9-HANDOFF.md", "note": "Home workspace establishment handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.10-HANDOFF.md", "note": "Invitation resolution handoff" },
+    { "sourceType": "decision", "reference": "auth-model/SECTION-4.11-HANDOFF.md", "note": "Guided VTM onboarding handoff" },
     { "sourceType": "discussion", "reference": "auth-model/conversations/hr-onboarding.json", "note": "HR onboarding router and six bounded proposed workflow conversations" }
   ]
 }
