@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lagovista.com/auth/auth-route.schema.json",
+  "title": "Canonical AuthRoute",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "routeId",
+    "name",
+    "path",
+    "routeType",
+    "status",
+    "platforms"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "1.0" },
+    "routeId": { "$ref": "#/$defs/authKey" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "description": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "path": {
+      "type": "string",
+      "pattern": "^/auth(?:/[a-z][a-z0-9]*(?:-[a-z0-9]+)*|/\\{[a-z][a-z0-9]*(?:-[a-z0-9]+)*\\})*$"
+    },
+    "routeType": {
+      "type": "string",
+      "enum": ["view", "handler", "redirect", "entry", "logout"]
+    },
+    "viewId": {
+      "anyOf": [
+        { "$ref": "#/$defs/authKey" },
+        { "type": "null" }
+      ]
+    },
+    "parameters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "required"],
+        "properties": {
+          "id": { "$ref": "#/$defs/identifier" },
+          "required": { "type": "boolean" },
+          "sensitivity": {
+            "type": "string",
+            "enum": ["public", "personal", "credential", "secret"]
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "active", "deprecated", "retired"]
+    },
+    "platforms": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["web", "mobile"],
+      "properties": {
+        "web": { "$ref": "#/$defs/platformRoute" },
+        "mobile": { "$ref": "#/$defs/platformRoute" }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "commonLinksMember": { "type": "string", "minLength": 1 },
+        "angularComponent": { "type": "string", "minLength": 1 },
+        "mobileRoute": { "type": "string", "minLength": 1 }
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "$defs": {
+    "authKey": {
+      "type": "string",
+      "pattern": "^auth\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})+$"
+    },
+    "identifier": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "minLength": 2,
+      "maxLength": 96
+    },
+    "platformRoute": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["implemented", "partial", "planned", "unsupported", "not-applicable"]
+        },
+        "implementation": { "type": "string", "minLength": 1 },
+        "notes": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
