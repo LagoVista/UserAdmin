@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/state-dimension.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.dimension.claimable-value",
+  "name": "Claimable Value",
+  "summary": "Describes whether a guest interaction has produced value that may be preserved by a durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "authority": "canonical",
+  "valueType": "enumeration",
+  "requiredForCanonicalSnapshot": true,
+  "values": [
+    { "key": "none", "name": "None", "summary": "No durable or claim-worthy value has been identified." },
+    { "key": "detected", "name": "Detected", "summary": "A value signal has been detected and account creation may be recommended." },
+    { "key": "claimable", "name": "Claimable", "summary": "Conversation or produced artifacts are ready to be claimed." },
+    { "key": "claiming", "name": "Claiming", "summary": "An atomic claim operation is in progress." },
+    { "key": "claimed", "name": "Claimed", "summary": "The value is owned by a durable identity.", "terminal": true },
+    { "key": "expired", "name": "Expired", "summary": "The value can no longer be claimed.", "terminal": true }
+  ],
+  "sourceReferences": [
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.4" }
+  ]
+}
