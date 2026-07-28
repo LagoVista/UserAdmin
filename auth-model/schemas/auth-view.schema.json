@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lagovista.com/auth/auth-view.schema.json",
+  "title": "Canonical AuthView",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "viewId",
+    "name",
+    "category",
+    "status",
+    "controls",
+    "actions",
+    "platforms"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "1.0" },
+    "viewId": { "$ref": "#/$defs/authKey" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "description": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "category": {
+      "type": "string",
+      "enum": [
+        "entry",
+        "password",
+        "provider",
+        "passkey",
+        "totp",
+        "recovery",
+        "registration",
+        "invitation",
+        "email-verification",
+        "organization",
+        "session"
+      ]
+    },
+    "routeId": {
+      "anyOf": [
+        { "$ref": "#/$defs/authKey" },
+        { "type": "null" }
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "active", "deprecated", "retired"]
+    },
+    "controls": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/control" }
+    },
+    "actions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/action" }
+    },
+    "platforms": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["web", "mobile"],
+      "properties": {
+        "web": { "$ref": "#/$defs/platformSupport" },
+        "mobile": { "$ref": "#/$defs/platformSupport" }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "runtimeEntityId": { "type": "string", "minLength": 1 },
+        "runtimeSha256Hex": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "webComponent": { "type": "string", "minLength": 1 },
+        "mobileComponent": { "type": "string", "minLength": 1 }
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "$defs": {
+    "authKey": {
+      "type": "string",
+      "pattern": "^auth\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})+$"
+    },
+    "identifier": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "minLength": 2,
+      "maxLength": 96
+    },
+    "finder": {
+      "type": "string",
+      "pattern": "^(screen|field|label|status|display|action):[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "controlType", "finder"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "controlType": {
+          "type": "string",
+          "enum": [
+            "text-input",
+            "email-input",
+            "password-input",
+            "code-input",
+            "checkbox",
+            "select",
+            "label",
+            "status",
+            "display",
+            "qr-code",
+            "secret-display",
+            "copyable-value"
+          ]
+        },
+        "finder": { "$ref": "#/$defs/finder" },
+        "required": { "type": "boolean" },
+        "sensitivity": {
+          "type": "string",
+          "enum": ["public", "personal", "credential", "secret"]
+        },
+        "visibilityCondition": { "type": "string", "minLength": 1 }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "actionType", "finder"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "actionType": {
+          "type": "string",
+          "enum": ["button", "link", "native-capability"]
+        },
+        "finder": { "$ref": "#/$defs/finder" },
+        "visibilityCondition": { "type": "string", "minLength": 1 }
+      }
+    },
+    "platformSupport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["implemented", "partial", "planned", "unsupported", "not-applicable"]
+        },
+        "implementation": { "type": "string", "minLength": 1 },
+        "notes": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
