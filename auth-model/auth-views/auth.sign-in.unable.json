@@ -1,0 +1,28 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.sign-in.unable",
+  "name": "Sign-In Unable",
+  "description": "Explains that the attempted email sign-in could not continue and offers alternate recovery or authentication paths.",
+  "category": "recovery",
+  "routeId": "auth.route.sign-in.unable",
+  "status": "active",
+  "controls": [],
+  "actions": [
+    { "id": "try-again", "name": "Try Again", "actionType": "button", "finder": "action:try-again" },
+    { "id": "create-account", "name": "Create Account", "actionType": "link", "finder": "action:create-account" },
+    { "id": "forgot-password", "name": "Forgot Password", "actionType": "link", "finder": "action:forgot-password" },
+    { "id": "change-email", "name": "Change Email", "actionType": "link", "finder": "action:change-email" },
+    { "id": "continue-provider", "name": "Continue with Provider", "actionType": "link", "finder": "action:continue-provider" },
+    { "id": "continue-passkey", "name": "Continue with Passkey", "actionType": "link", "finder": "action:continue-passkey" }
+  ],
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "SigninUnableComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "runtimeEntityId": "C66E49DCCA3541398D418136AFA1D324",
+    "runtimeSha256Hex": "ff14153aee6dafde6e46eba5558e064d1eecaabe0d80bfd4ca63a83f8c750063",
+    "webComponent": "SigninUnableComponent"
+  }
+}
