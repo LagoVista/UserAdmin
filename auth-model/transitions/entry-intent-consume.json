@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.entry-intent.consume",
+  "name": "Consume Entry Intent",
+  "summary": "Moves one validated stashed entry intent to consumed without changing identity, session capability, or client route.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 100,
+  "sourceState": { "expression": "entry-intent-status == stashed" },
+  "actionKey": "auth.action.entry-intent.consume",
+  "guards": [{ "expression": "entry-intent-reference-valid == true", "failureCode": "entry-intent-invalid" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.entry-intent-status", "operation": "set", "valueExpression": "consumed" }
+  ],
+  "requiredEffects": ["consume-entry-intent-once", "record-entry-intent-consumed"],
+  "forbiddenEffects": ["change-session-capability", "change-durable-identity", "change-current-workspace", "select-client-route"],
+  "invariantKeys": ["auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Interfaces/IEntryIntentService.cs", "note": "Explicit model for destructive ConsumeAsync behavior." },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.13" }
+  ]
+}
