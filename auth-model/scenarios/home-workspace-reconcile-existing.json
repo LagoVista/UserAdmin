@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.home-workspace.reconcile-existing",
+  "name": "Reconcile Existing Home Workspace",
+  "summary": "Adopts one valid existing home workspace without creating another workspace.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.home-workspace.establishment"],
+  "transitionKey": "auth.transition.home-workspace.reconcile-existing",
+  "preconditions": { "expression": "durable-identity == resolved and home-workspace == required and existing-home-workspace-count == 1" },
+  "setup": ["Create one valid pre-existing home workspace, optionally with incomplete owner membership."],
+  "inputs": [
+    { "key": "durable-identity-reference", "valueType": "reference", "required": true, "description": "Resolved durable identity." },
+    { "key": "home-workspace-reference", "valueType": "reference", "required": true, "description": "Single existing home workspace." }
+  ],
+  "actionKey": "auth.action.home-workspace.reconcile-existing",
+  "postconditions": { "expression": "home-workspace == established and current-workspace == home and workspace-membership in [home-only,multiple]" },
+  "requiredEffects": ["preserve-existing-home-workspace", "ensure-home-owner-membership", "select-home-workspace", "record-home-workspace-reconciled"],
+  "forbiddenEffects": ["create-new-home-workspace", "replace-valid-home-workspace", "consume-workspace-invitation"],
+  "invariantKeys": ["auth.invariant.home-workspace.exactly-one", "auth.invariant.home-workspace.owner-member", "auth.invariant.registration.completes-in-home-workspace", "auth.invariant.current-workspace.requires-access"],
+  "expectedAuthLogEvents": ["home-workspace-reconciled"],
+  "evidenceRequirements": ["server"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.9" }]
+}
