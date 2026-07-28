@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.invitation.select-identity",
+  "name": "Select Invitation Identity",
+  "summary": "Moves a valid invitation to acceptance-pending after explicit durable-identity selection.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 100,
+  "sourceState": { "expression": "invitation-status == valid and durable-identity == resolved" },
+  "actionKey": "auth.action.invitation.select-identity",
+  "guards": [{ "expression": "selected-durable-identity-confirmed == true", "failureCode": "selected-identity-not-confirmed" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.invitation-status", "operation": "set", "valueExpression": "acceptance-pending" },
+    { "dimensionKey": "auth.dimension.presentation-context", "operation": "derive", "valueExpression": "invitation-review" }
+  ],
+  "requiredEffects": ["bind-selected-durable-identity", "present-acceptance-summary"],
+  "forbiddenEffects": ["create-membership", "change-home-workspace", "switch-current-workspace"],
+  "invariantKeys": ["auth.invariant.invitation.requires-selected-identity", "auth.invariant.email-identities.not-conflated", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10" }]
+}
