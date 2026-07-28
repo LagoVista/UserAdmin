@@ -46,25 +46,25 @@
   },
   "maturityValues": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"],
   "inventory": {
-    "stateDimensions": 17,
+    "stateDimensions": 18,
     "compositeStateCatalogs": 1,
     "invariants": 20,
-    "actions": 42,
-    "transitions": 44,
+    "actions": 43,
+    "transitions": 45,
     "journeys": 11,
-    "scenarios": 44,
+    "scenarios": 45,
     "conversationTypes": 7,
     "presentationBindings": 3,
     "decisions": 0,
     "unresolved": 0
   },
   "currentWork": {
-    "guideSection": "4.12",
+    "guideSection": "4.13",
     "status": "complete",
-    "summary": "Traditional web onboarding is modeled as presentation bindings over canonical actions and scenarios. The first evidence-backed bindings cover password registration, email verification, and invitation review with concrete routes, view IDs, fields, semantic finders, operations, and expected views. Composite registration behavior and legacy invitation navigation are recorded as implementation seams rather than alternate authentication rules. Next major area: Section 4.13, Session projection and routing."
+    "summary": "Session retrieval is modeled as a pure projection over authoritative authentication state. Session capability, required/recommended/allowed logical actions, entry intent, presentation context, and platform navigation are separate concerns. Destructive entry-intent consumption is now an explicit action, transition, and scenario rather than a hidden side effect of reading the session. Next major area: Section 4.14, Account recovery."
   },
   "sourceReferences": [
-    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.12", "note": "Traditional form onboarding and presentation bindings" },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.13", "note": "Session projection, logical actions, entry intent, and client routing" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.1-HANDOFF.md", "note": "Repository model foundation" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.2-HANDOFF.md", "note": "Composite identity state decisions" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.3-HANDOFF.md", "note": "Composite relationships and foundational invariants" },
@@ -77,6 +77,7 @@
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.10-HANDOFF.md", "note": "Invitation resolution handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.11-HANDOFF.md", "note": "Guided VTM onboarding handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.12-HANDOFF.md", "note": "Traditional form onboarding and presentation binding handoff" },
+    { "sourceType": "decision", "reference": "auth-model/SECTION-4.13-HANDOFF.md", "note": "Session projection and routing handoff" },
     { "sourceType": "discussion", "reference": "auth-model/conversations/hr-onboarding.json", "note": "HR onboarding router and six bounded proposed workflow conversations" }
   ]
 }
