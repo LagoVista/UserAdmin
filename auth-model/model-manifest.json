@@ -54,25 +54,25 @@
     "stateDimensions": 17,
     "compositeStateCatalogs": 1,
     "invariants": 20,
-    "actions": 4,
-    "transitions": 4,
-    "journeys": 1,
-    "scenarios": 4,
+    "actions": 11,
+    "transitions": 11,
+    "journeys": 2,
+    "scenarios": 9,
     "presentationBindings": 0,
     "decisions": 0,
     "unresolved": 0
   },
   "currentWork": {
-    "guideSection": "4.4",
+    "guideSection": "4.5",
     "status": "complete",
-    "summary": "Guest identity activation, value detection, claimable-value promotion, and atomic durable-identity claim are authored as actions, transitions, scenarios, and one journey. Next major area: Section 4.5, PendingIdentity lifecycle."
+    "summary": "The shared PendingIdentity airlock is modeled from creation through verification, resolution, expiration, cancellation, and failure, with explicit flow-bucket and authorization security scenarios. Next major area: Section 4.6, Password registration."
   },
   "sourceReferences": [
     {
       "sourceType": "discussion",
       "reference": "AUTH-MODEL-GUIDE.md",
-      "section": "4.4",
-      "note": "Guest and claimable-value flow"
+      "section": "4.5",
+      "note": "PendingIdentity lifecycle"
     },
     {
       "sourceType": "decision",
@@ -93,6 +93,11 @@
       "sourceType": "decision",
       "reference": "auth-model/SECTION-4.4-HANDOFF.md",
       "note": "Guest and claimable-value journey handoff"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.5-HANDOFF.md",
+      "note": "PendingIdentity lifecycle handoff"
     }
   ]
 }
