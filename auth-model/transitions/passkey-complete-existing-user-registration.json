@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.passkey.complete-existing-user-registration",
+  "name": "Complete Existing User Passkey Registration",
+  "summary": "Validates and persists a new passkey credential for the same resolved durable user.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 55,
+  "sourceState": { "expression": "durable-identity == resolved and credential-proof == challenge-issued and session-capability in [authenticated-limited,authenticated-normal,step-up]" },
+  "actionKey": "auth.action.passkey.complete-existing-user-registration",
+  "guards": [{ "expression": "challenge user, options user, and current durable identity all match", "failureCode": "passkey-registration-user-mismatch" }],
+  "destinationTransform": [{ "dimensionKey": "auth.dimension.credential-proof", "operation": "set", "valueExpression": "passkey-proved" }],
+  "requiredEffects": ["consume-passkey-challenge", "validate-attestation", "persist-passkey-credential-for-current-user"],
+  "forbiddenEffects": ["create-durable-user", "bind-credential-to-different-user", "change-session-identity"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
