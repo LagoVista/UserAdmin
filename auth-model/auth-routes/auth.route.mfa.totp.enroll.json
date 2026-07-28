@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.mfa.totp.enroll",
+  "name": "TOTP Enrollment",
+  "description": "Navigates to the screen that presents authenticator enrollment material.",
+  "path": "/auth/mfa/totp/enroll",
+  "routeType": "view",
+  "viewId": "auth.mfa.totp.enroll",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": {
+      "status": "implemented",
+      "implementation": "provideAuthRoutes -> TotpEnrollStartComponent"
+    },
+    "mobile": {
+      "status": "implemented",
+      "implementation": "app/auth/mfa/totp/enroll.tsx"
+    }
+  },
+  "source": {
+    "commonLinksMember": "TOTPEnrollStart",
+    "angularComponent": "TotpEnrollStartComponent",
+    "mobileRoute": "/auth/mfa/totp/enroll"
+  }
+}
