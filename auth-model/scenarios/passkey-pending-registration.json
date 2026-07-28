@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.passkey.pending-registration",
+  "name": "Pending Passkey Registration",
+  "summary": "Begins and completes passkey attestation while the identity remains inside PendingIdentity.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.passkey.new-user-registration"],
+  "transitionKey": "auth.transition.passkey.complete-pending-registration",
+  "preconditions": { "expression": "pending-identity-status == pending and pending-identity-flow == passkey and credential-proof == challenge-issued and durable-identity == absent" },
+  "setup": ["Begin a passkey PendingIdentity and issue a single-use registration challenge."],
+  "inputs": [{ "key": "attestation", "valueType": "object", "required": true, "description": "Valid WebAuthn attestation from the secure component." }],
+  "actionKey": "auth.action.passkey.complete-pending-registration",
+  "postconditions": { "expression": "credential-proof == passkey-proved and pending-identity-status == resolution-required and durable-identity == absent" },
+  "requiredEffects": ["consume-passkey-challenge", "validate-attestation", "persist-pending-passkey-credential"],
+  "forbiddenEffects": ["create-durable-user", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.identity-resolution.no-duplicate-user"],
+  "expectedAuthLogEvents": ["passkey-registration-challenge-issued", "passkey-attestation-validated"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
