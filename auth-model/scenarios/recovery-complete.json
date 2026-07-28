@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.recovery.complete",
+  "name": "Complete Account Recovery",
+  "summary": "Completes recovery, revokes prior sessions and recovery material, then requires a fresh sign-in with the replacement credential.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.account-recovery"],
+  "transitionKey": "auth.transition.recovery.complete",
+  "preconditions": { "expression": "recovery-state == credential-reset-required and durable-identity == resolved and replacement-credential-established == true" },
+  "setup": ["Establish a replacement credential and complete all policy-required cleanup steps."],
+  "inputs": [{ "key": "recovery-reference", "valueType": "reference", "required": true, "example": "recovery-record" }],
+  "actionKey": "auth.action.recovery.complete",
+  "postconditions": { "expression": "recovery-state == completed and session-capability == anonymous and previous sessions are revoked" },
+  "requiredEffects": ["revoke-existing-sessions-and-refresh-tokens", "invalidate-unused-recovery-challenges", "rotate-security-stamps-or-equivalent", "notify-user-of-recovery", "record-recovery-completed"],
+  "forbiddenEffects": ["create-durable-user", "accept-invitation", "change-home-workspace", "silently-grant-step-up"],
+  "invariantKeys": ["auth.invariant.recovery.existing-identity-only", "auth.invariant.transition.deterministic-post-state"],
+  "expectedAuthLogEvents": ["recovery-completed", "sessions-revoked"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.14" }]
+}
