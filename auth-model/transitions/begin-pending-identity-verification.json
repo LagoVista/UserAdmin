@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.pending-identity.begin-verification",
+  "name": "Begin Pending Identity Verification",
+  "summary": "Starts the proof operation while preserving ceremony-only authorization.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 80,
+  "sourceState": { "expression": "pending-identity-status == verification-required and pending-identity-flow != none" },
+  "actionKey": "auth.action.pending-identity.begin-verification",
+  "guards": [],
+  "destinationTransform": [{ "dimensionKey": "auth.dimension.pending-identity-status", "operation": "set", "valueExpression": "verifying" }],
+  "requiredEffects": ["start-verification-operation", "record-verification-started"],
+  "forbiddenEffects": ["resolve-durable-identity", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.pending-identity.exactly-one-flow", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.5" }]
+}
