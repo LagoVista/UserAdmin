@@ -1,0 +1,29 @@
+{
+  "$schema": "../schemas/journey.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.journey.invitation.resolve",
+  "name": "Invitation Resolution",
+  "summary": "Validates an invitation, resolves or selects one durable identity through any supported presentation route, explicitly confirms acceptance, grants one additional workspace membership, and consumes the invitation without changing the home or current workspace.",
+  "version": 1,
+  "maturity": "proposed",
+  "entryPredicate": { "expression": "invitation-status == attached" },
+  "completionPredicate": { "expression": "invitation-status in [accepted,declined,expired,invalid]" },
+  "scenarioKeys": [
+    "auth.scenario.invitation.validate-valid",
+    "auth.scenario.invitation.select-current-account",
+    "auth.scenario.invitation.select-another-account",
+    "auth.scenario.invitation.sign-in-then-select",
+    "auth.scenario.invitation.register-then-select",
+    "auth.scenario.invitation.accept-membership",
+    "auth.scenario.invitation.reject-consumed"
+  ],
+  "invariantKeys": [
+    "auth.invariant.invitation.not-identity-proof",
+    "auth.invariant.invitation.requires-selected-identity",
+    "auth.invariant.invitation.accept-does-not-change-home",
+    "auth.invariant.invitation.consumed-once",
+    "auth.invariant.email-identities.not-conflated"
+  ],
+  "supportedPlatforms": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10" }]
+}
