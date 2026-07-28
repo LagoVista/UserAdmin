@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.invitation.validate-expired",
+  "name": "Validate Invitation as Expired",
+  "summary": "Terminates an attached invitation when its validity window has elapsed.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 110,
+  "sourceState": { "expression": "invitation-status == attached" },
+  "actionKey": "auth.action.invitation.validate",
+  "guards": [{ "expression": "invitation-expired == true", "failureCode": "invitation-not-expired" }],
+  "destinationTransform": [{ "dimensionKey": "auth.dimension.invitation-status", "operation": "set", "valueExpression": "expired" }],
+  "requiredEffects": ["record-invitation-expired"],
+  "forbiddenEffects": ["resolve-durable-identity", "create-membership", "change-home-workspace"],
+  "invariantKeys": ["auth.invariant.invitation.not-identity-proof", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10" }]
+}
