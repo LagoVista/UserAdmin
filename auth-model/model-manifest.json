@@ -49,22 +49,22 @@
     "stateDimensions": 17,
     "compositeStateCatalogs": 1,
     "invariants": 20,
-    "actions": 38,
-    "transitions": 38,
-    "journeys": 10,
-    "scenarios": 37,
+    "actions": 42,
+    "transitions": 44,
+    "journeys": 11,
+    "scenarios": 44,
     "conversationTypes": 7,
     "presentationBindings": 0,
     "decisions": 0,
     "unresolved": 0
   },
   "currentWork": {
-    "guideSection": "4.9",
+    "guideSection": "4.10",
     "status": "complete",
-    "summary": "Home-workspace establishment is modeled as a canonical registration-independent lifecycle with idempotent creation, reconciliation of one valid existing workspace, owner membership, deterministic home selection, and an explicit blocked conflict state. Next major area: Section 4.10, Invitation resolution."
+    "summary": "Invitation resolution is modeled as one shared core: validate the invitation, resolve and explicitly select one durable identity through any supported logged-in or logged-out route, confirm acceptance, grant one additional workspace membership, and consume the invitation without changing the home or current workspace. Next major area: Section 4.11, Guided onboarding and presentation equivalence."
   },
   "sourceReferences": [
-    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.9", "note": "Home workspace establishment" },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10", "note": "Invitation resolution and membership acceptance" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.1-HANDOFF.md", "note": "Repository model foundation" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.2-HANDOFF.md", "note": "Composite identity state decisions" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.3-HANDOFF.md", "note": "Composite relationships and foundational invariants" },
@@ -74,6 +74,7 @@
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.7-HANDOFF.md", "note": "Native-provider registration and linking handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.8-HANDOFF.md", "note": "Passkey registration, authentication, and step-up handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.9-HANDOFF.md", "note": "Home workspace establishment handoff" },
+    { "sourceType": "decision", "reference": "auth-model/SECTION-4.10-HANDOFF.md", "note": "Invitation resolution handoff" },
     { "sourceType": "discussion", "reference": "auth-model/conversations/hr-onboarding.json", "note": "HR onboarding router and six bounded proposed workflow conversations" }
   ]
 }
