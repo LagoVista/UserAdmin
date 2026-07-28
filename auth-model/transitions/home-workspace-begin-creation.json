@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.home-workspace.begin-creation",
+  "name": "Begin Home Workspace Creation",
+  "summary": "Moves a resolved durable identity from requiring a home workspace into active idempotent creation.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 100,
+  "sourceState": { "expression": "durable-identity == resolved and home-workspace == required" },
+  "actionKey": "auth.action.home-workspace.begin-creation",
+  "guards": [{ "expression": "existing-home-workspace-count == 0", "failureCode": "existing-home-workspace-requires-reconciliation" }],
+  "destinationTransform": [{ "dimensionKey": "auth.dimension.home-workspace", "operation": "set", "valueExpression": "creating" }],
+  "requiredEffects": ["acquire-idempotent-home-workspace-operation", "record-home-workspace-creation-started"],
+  "forbiddenEffects": ["create-second-home-workspace", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.home-workspace.exactly-one", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.9" }]
+}
