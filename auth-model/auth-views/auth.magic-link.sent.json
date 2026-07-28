@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.magic-link.sent",
+  "name": "Magic Link Sent",
+  "description": "Confirms that a magic sign-in link was sent and offers a return to the sign-in flow.",
+  "category": "recovery",
+  "routeId": "auth.route.magic-link.sent",
+  "status": "active",
+  "controls": [],
+  "actions": [
+    { "id": "back-to-sign-in", "name": "Back to Sign-In", "actionType": "link", "finder": "action:back-to-sign-in" }
+  ],
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "MagicLinkSentComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "runtimeEntityId": "FD4F7B6BE0D04835BB3389F441B95E69",
+    "runtimeSha256Hex": "8ebc3551bdd824b0899686aaf6643c044de7897cd9a39710fdc032ccc9820210",
+    "webComponent": "MagicLinkSentComponent"
+  },
+  "notes": [
+    "Corrects the duplicated runtime ViewId namespace and removes the API path from the view contract."
+  ]
+}
