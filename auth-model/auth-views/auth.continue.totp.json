@@ -1,0 +1,31 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.continue.totp",
+  "name": "Continue with TOTP",
+  "description": "Collects a one-time authenticator code for a known email identity and offers password fallback navigation.",
+  "category": "totp",
+  "routeId": "auth.route.continue.totp",
+  "status": "active",
+  "controls": [
+    { "id": "email", "name": "Email", "controlType": "email-input", "finder": "field:email", "required": true, "sensitivity": "personal" },
+    { "id": "verification-code", "name": "Verification Code", "controlType": "code-input", "finder": "field:verification-code", "required": true, "sensitivity": "credential" },
+    { "id": "validation-error", "name": "Validation Error", "controlType": "status", "finder": "status:validation-error" }
+  ],
+  "actions": [
+    { "id": "verify", "name": "Verify", "actionType": "button", "finder": "action:verify" },
+    { "id": "cancel", "name": "Cancel", "actionType": "button", "finder": "action:cancel" },
+    { "id": "use-password", "name": "Use Password Instead", "actionType": "link", "finder": "action:use-password" },
+    { "id": "start-over", "name": "Start Over", "actionType": "link", "finder": "action:start-over" }
+  ],
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "ContinueTotpComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "runtimeEntityId": "B06EB750EA5B4142AD1F017896E1F474",
+    "runtimeSha256Hex": "ac3c8a86afda0ed1b962984cd1277aaf1cd1b6935400bbe90d07ca23d8230977",
+    "webComponent": "ContinueTotpComponent"
+  },
+  "notes": ["The implementation field id totp is normalized to verification-code.", "Validation copy is not used as a stable identifier."]
+}
