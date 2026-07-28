@@ -4,7 +4,7 @@
   "key": "auth.conversation.user-registration",
   "name": "User Registration",
   "summary": "Guides a new person through registration, identity verification, profile completion, durable identity creation, home-workspace establishment, and optional claim of guest-created value while keeping secrets outside the conversation.",
-  "version": 2,
+  "version": 3,
   "maturity": "proposed",
   "goals": [{ "key": "register-user", "summary": "Guide a new person through registration and completion of required onboarding information." }],
   "supportedJourneyKeys": [
@@ -15,6 +15,49 @@
     "auth.journey.home-workspace.establishment"
   ],
   "routedConversationKeys": [],
+  "distinctiveCharacteristics": [
+    "The conversation gathers ordinary profile information naturally in the stream while the control plane keeps the exact expected field and validation contract explicit.",
+    "A conversational answer may be phrased freely, but registration advances only after the expected information item is captured, validated, and stored by deterministic orchestration.",
+    "Questions and conversational detours do not discard the pending information request; the chapter can answer the question and then resume collection.",
+    "Passwords, verification codes, passkeys, provider tokens, and equivalent secrets are never captured from the conversational stream.",
+    "The chapter preserves registration progress, guest-value context, secure-interaction outcomes, and durable account-creation events as a continuous history."
+  ],
+  "exampleInteractions": [
+    {
+      "key": "capture-profile-name",
+      "name": "Capture a Profile Name Conversationally",
+      "summary": "Shows bounded free-form collection where the user may answer naturally while the control plane remains responsible for extraction, validation, persistence, and workflow advancement.",
+      "entries": [
+        { "sequence": 1, "entryType": "agent-message", "actor": "agent", "text": "Welcome. Let's get your account set up. What is your first name?" },
+        { "sequence": 2, "entryType": "user-message", "actor": "user", "text": "My first name is Fred." },
+        { "sequence": 3, "entryType": "control", "actor": "system", "text": "First name captured as Fred.", "authoritativeReferenceType": "pending-identity-profile", "notes": "The control plane evaluates the reply against the explicitly pending first-name information requirement and advances only after deterministic validation succeeds." },
+        { "sequence": 4, "entryType": "agent-message", "actor": "agent", "text": "Thanks, Fred. What is your last name?" }
+      ]
+    },
+    {
+      "key": "preserve-pending-input-through-detour",
+      "name": "Preserve Pending Input Through a Detour",
+      "summary": "Shows that a user may ask why information is needed without losing the active collection state.",
+      "entries": [
+        { "sequence": 1, "entryType": "agent-message", "actor": "agent", "text": "What name would you like us to use?" },
+        { "sequence": 2, "entryType": "user-message", "actor": "user", "text": "Why do you need my name?" },
+        { "sequence": 3, "entryType": "agent-message", "actor": "agent", "text": "We use it to personalize your account and identify you in invitations and organization membership. You can provide the name you want displayed." },
+        { "sequence": 4, "entryType": "user-message", "actor": "user", "text": "Name: Tracey" },
+        { "sequence": 5, "entryType": "control", "actor": "system", "text": "Display name captured as Tracey.", "authoritativeReferenceType": "pending-identity-profile", "notes": "The original pending information request remains active through the explanatory detour." }
+      ]
+    },
+    {
+      "key": "complete-registration-securely",
+      "name": "Complete Registration Securely",
+      "summary": "Shows conversational profile collection followed by a secure verification ceremony and durable system events.",
+      "entries": [
+        { "sequence": 1, "entryType": "agent-message", "actor": "agent", "text": "Your profile is ready. I will open a secure window for your password and verification code." },
+        { "sequence": 2, "entryType": "secure-interaction", "actor": "secure-component", "text": "Secure registration verification opened.", "authoritativeReferenceType": "registration-verification" },
+        { "sequence": 3, "entryType": "system-event", "actor": "system", "text": "Your account was created and your home workspace is ready.", "authoritativeReferenceType": "durable-user-and-home-workspace" },
+        { "sequence": 4, "entryType": "system-event", "actor": "system", "text": "Your guest-created work was attached to your new account.", "mayOccurWhileInactive": true, "authoritativeReferenceType": "guest-value-claim" }
+      ]
+    }
+  ],
   "entryPredicate": { "expression": "A guest or PendingIdentity has chosen to register and no durable identity has yet completed the requested registration outcome." },
   "completionPredicate": { "expression": "A durable identity, home workspace, and permitted authenticated session are established; any approved guest-value claim is complete; or registration is abandoned or escalated safely." },
   "informationRequirements": [
@@ -99,6 +142,7 @@
   ],
   "sourceReferences": [
     { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.6 through 4.11", "note": "Bound guided registration to existing canonical journeys, actions, scenarios, secure handoffs, and pause/resume semantics." },
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.9-HANDOFF.md", "note": "Registration-independent home-workspace establishment." }
+    { "sourceType": "decision", "reference": "auth-model/SECTION-4.9-HANDOFF.md", "note": "Registration-independent home-workspace establishment." },
+    { "sourceType": "discussion", "reference": "ChatGPT conversation", "note": "Added bounded conversational information-capture and durable registration-stream examples on 2026-07-28." }
   ]
 }
