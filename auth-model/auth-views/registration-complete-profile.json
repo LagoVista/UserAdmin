@@ -11,6 +11,7 @@
     { "id": "email", "name": "Email", "controlType": "email-input", "finder": "field:email", "required": true, "sensitivity": "personal" },
     { "id": "first-name", "name": "First name", "controlType": "text-input", "finder": "field:first-name", "required": true, "sensitivity": "personal" },
     { "id": "last-name", "name": "Last name", "controlType": "text-input", "finder": "field:last-name", "required": true, "sensitivity": "personal" },
+    { "id": "phone", "name": "Phone", "controlType": "text-input", "finder": "field:phone", "required": false, "sensitivity": "personal" },
     { "id": "validation-error", "name": "Validation error", "controlType": "status", "finder": "status:validation-error" }
   ],
   "actions": [
