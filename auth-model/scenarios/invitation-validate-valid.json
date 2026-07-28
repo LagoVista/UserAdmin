@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.invitation.validate-valid",
+  "name": "Validate Available Invitation",
+  "summary": "Validates an attached, unexpired, unconsumed invitation without resolving identity or granting membership.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "transition",
+  "journeyKeys": ["auth.journey.invitation.resolve"],
+  "transitionKey": "auth.transition.invitation.validate-valid",
+  "preconditions": { "expression": "invitation-status == attached" },
+  "setup": ["Attach a valid unexpired invitation proof."],
+  "inputs": [{ "key": "invitation-reference", "valueType": "reference", "required": true, "description": "Invitation under review." }],
+  "actionKey": "auth.action.invitation.validate",
+  "postconditions": { "expression": "invitation-status == valid and durable-identity unchanged and workspace-membership unchanged" },
+  "requiredEffects": ["record-invitation-validation"],
+  "forbiddenEffects": ["resolve-durable-identity", "create-membership", "change-home-workspace"],
+  "invariantKeys": ["auth.invariant.invitation.not-identity-proof"],
+  "expectedAuthLogEvents": ["invitation-validation-succeeded"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10" }]
+}
