@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.pending-identity.begin",
+  "name": "Begin Pending Identity",
+  "summary": "Creates the shared identity-resolution airlock with exactly one selected authentication flow.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "flow", "valueType": "string", "required": true, "description": "One of password, native-provider, oauth-external, or passkey." },
+    { "key": "ceremony-reference", "valueType": "reference", "required": true, "description": "Stable reference for the identity ceremony." }
+  ],
+  "guards": [
+    { "expression": "pending-identity-status == none", "failureCode": "pending-identity-already-active" },
+    { "expression": "input.flow in [password,native-provider,oauth-external,passkey]", "failureCode": "invalid-pending-identity-flow" }
+  ],
+  "permittedMutations": ["auth.dimension.pending-identity-status", "auth.dimension.pending-identity-flow", "auth.dimension.session-capability"],
+  "requiredEffects": ["persist-single-flow-bucket", "record-pending-identity-begun"],
+  "forbiddenEffects": ["create-durable-user", "grant-normal-application-authorization", "populate-multiple-flow-buckets"],
+  "invariantKeys": ["auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.pending-identity.exactly-one-flow"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.5" }]
+}
