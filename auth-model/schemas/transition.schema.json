@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lagovista.com/schemas/auth-model/transition.schema.json",
+  "title": "Authentication Transition",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "key", "name", "summary", "version", "maturity", "sourceState", "actionKey", "guards", "destinationTransform", "requiredEffects", "forbiddenEffects", "invariantKeys", "sourceReferences"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "1.0" },
+    "key": { "type": "string", "pattern": "^auth\\.transition\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$" },
+    "name": { "type": "string", "minLength": 1 },
+    "summary": { "type": "string", "minLength": 1 },
+    "version": { "type": "integer", "minimum": 1 },
+    "maturity": { "$ref": "#/$defs/maturity" },
+    "priority": { "type": "integer", "minimum": 0, "default": 0 },
+    "sourceState": { "$ref": "#/$defs/predicate" },
+    "actionKey": { "type": "string", "pattern": "^auth\\.action\\." },
+    "guards": { "type": "array", "items": { "$ref": "#/$defs/predicate" } },
+    "destinationTransform": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["dimensionKey", "operation", "valueExpression"],
+        "properties": {
+          "dimensionKey": { "type": "string", "pattern": "^auth\\.dimension\\." },
+          "operation": { "enum": ["set", "clear", "add", "remove", "derive"] },
+          "valueExpression": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "requiredEffects": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "forbiddenEffects": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "invariantKeys": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^auth\\.invariant\\." } },
+    "sourceReferences": { "type": "array", "items": { "$ref": "#/$defs/sourceReference" } },
+    "definitionHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  },
+  "$defs": {
+    "maturity": { "enum": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"] },
+    "predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expression"],
+      "properties": {
+        "expression": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "failureCode": { "type": "string" }
+      }
+    },
+    "sourceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "reference"],
+      "properties": {
+        "sourceType": { "enum": ["ddr", "code", "test", "discussion", "decision", "external"] },
+        "reference": { "type": "string", "minLength": 1 },
+        "section": { "type": "string" },
+        "commit": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}
