@@ -1,0 +1,142 @@
+{
+  "$schema": "../schemas/composite-state-catalog.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.state.composite-catalog",
+  "name": "Authentication Composite State Catalog",
+  "summary": "Organizes authentication dimensions into logical regions and records explicit cross-dimension dependencies without flattening the composite state into a giant enumeration.",
+  "version": 1,
+  "maturity": "proposed",
+  "regions": [
+    {
+      "key": "identity-lifecycle",
+      "name": "Identity Lifecycle",
+      "summary": "Tracks anonymous, pending, and durable identity resolution.",
+      "dimensionKeys": [
+        "auth.dimension.guest-identity",
+        "auth.dimension.pending-identity-status",
+        "auth.dimension.pending-identity-flow",
+        "auth.dimension.durable-identity"
+      ]
+    },
+    {
+      "key": "value-ownership",
+      "name": "Value Ownership",
+      "summary": "Tracks whether guest-created value exists and whether it has been claimed.",
+      "dimensionKeys": ["auth.dimension.claimable-value"]
+    },
+    {
+      "key": "credential-and-proof",
+      "name": "Credential and Proof",
+      "summary": "Tracks identity proof, verified email ownership, and profile completion.",
+      "dimensionKeys": [
+        "auth.dimension.credential-proof",
+        "auth.dimension.email-ownership",
+        "auth.dimension.profile-completeness"
+      ]
+    },
+    {
+      "key": "account-lifecycle",
+      "name": "Account Lifecycle",
+      "summary": "Tracks whether the durable account may participate normally.",
+      "dimensionKeys": ["auth.dimension.account-status"]
+    },
+    {
+      "key": "workspace-access",
+      "name": "Workspace Access",
+      "summary": "Tracks home workspace, current workspace, memberships, and invitations.",
+      "dimensionKeys": [
+        "auth.dimension.home-workspace",
+        "auth.dimension.current-workspace",
+        "auth.dimension.workspace-membership",
+        "auth.dimension.invitation-status"
+      ]
+    },
+    {
+      "key": "assurance-and-recovery",
+      "name": "Assurance and Recovery",
+      "summary": "Tracks MFA assurance and account recovery restrictions.",
+      "dimensionKeys": [
+        "auth.dimension.mfa-state",
+        "auth.dimension.recovery-state"
+      ]
+    },
+    {
+      "key": "derived-projections",
+      "name": "Derived Projections",
+      "summary": "Contains non-canonical session and presentation projections derived from or applied to canonical state.",
+      "dimensionKeys": [
+        "auth.dimension.session-capability",
+        "auth.dimension.presentation-context"
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "fromDimensionKey": "auth.dimension.pending-identity-status",
+      "toDimensionKey": "auth.dimension.pending-identity-flow",
+      "relationship": "requires",
+      "summary": "An active PendingIdentity requires exactly one non-none flow bucket."
+    },
+    {
+      "fromDimensionKey": "auth.dimension.durable-identity",
+      "toDimensionKey": "auth.dimension.home-workspace",
+      "relationship": "requires",
+      "summary": "A resolved durable identity must receive exactly one home workspace during registration completion."
+    },
+    {
+      "fromDimensionKey": "auth.dimension.current-workspace",
+      "toDimensionKey": "auth.dimension.workspace-membership",
+      "relationship": "authorizes",
+      "summary": "The current workspace must be one the durable identity may access."
+    },
+    {
+      "fromDimensionKey": "auth.dimension.invitation-status",
+      "toDimensionKey": "auth.dimension.durable-identity",
+      "relationship": "requires",
+      "summary": "Invitation acceptance requires an explicitly selected durable identity."
+    },
+    {
+      "fromDimensionKey": "auth.dimension.claimable-value",
+      "toDimensionKey": "auth.dimension.guest-identity",
+      "relationship": "claims",
+      "summary": "Claimed guest value must be securely bound to the originating guest identity."
+    },
+    {
+      "fromDimensionKey": "auth.dimension.account-status",
+      "toDimensionKey": "auth.dimension.session-capability",
+      "relationship": "constrains",
+      "summary": "Disabled or locked account state constrains normal authenticated session capability."
+    },
+    {
+      "fromDimensionKey": "auth.dimension.mfa-state",
+      "toDimensionKey": "auth.dimension.session-capability",
+      "relationship": "derives",
+      "summary": "MFA assurance contributes to the capabilities projected into a session."
+    },
+    {
+      "fromDimensionKey": "auth.dimension.recovery-state",
+      "toDimensionKey": "auth.dimension.session-capability",
+      "relationship": "constrains",
+      "summary": "Recovery state may restrict session capabilities until sufficient proof is restored."
+    },
+    {
+      "fromDimensionKey": "auth.dimension.presentation-context",
+      "toDimensionKey": "auth.dimension.session-capability",
+      "relationship": "selects",
+      "summary": "Presentation context selects an adapter but may not redefine behavioral authorization."
+    }
+  ],
+  "sourceReferences": [
+    {
+      "sourceType": "discussion",
+      "reference": "AUTH-MODEL-GUIDE.md",
+      "section": "2.1, 2.4, 4.2, 4.3",
+      "note": "Composite state organization and relationship model"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.2-HANDOFF.md",
+      "note": "Canonical versus projected state boundary"
+    }
+  ]
+}
