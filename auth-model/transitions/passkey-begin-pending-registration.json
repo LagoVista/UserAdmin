@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.passkey.begin-pending-registration",
+  "name": "Begin Pending Passkey Registration",
+  "summary": "Moves a passkey PendingIdentity into a challenge-issued proof state without creating a durable user.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 100,
+  "sourceState": { "expression": "pending-identity-status == pending and pending-identity-flow == passkey and credential-proof == none and durable-identity == absent" },
+  "actionKey": "auth.action.passkey.begin-pending-registration",
+  "guards": [],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.credential-proof", "operation": "set", "valueExpression": "challenge-issued" },
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "derive", "valueExpression": "identity-ceremony" }
+  ],
+  "requiredEffects": ["create-short-lived-passkey-challenge", "bind-challenge-to-pending-identity"],
+  "forbiddenEffects": ["create-durable-user", "persist-passkey-credential", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.pending-identity.exactly-one-flow", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
