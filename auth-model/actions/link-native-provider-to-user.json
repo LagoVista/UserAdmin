@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.native-provider.link-to-user",
+  "name": "Link Native Provider to Existing User",
+  "summary": "Atomically links a validated provider subject to the explicitly selected existing durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "provider-subject", "valueType": "string", "required": true },
+    { "key": "durable-identity-reference", "valueType": "reference", "required": true },
+    { "key": "idempotency-key", "valueType": "string", "required": true }
+  ],
+  "guards": [
+    { "expression": "provider subject is validated and currently unlinked", "failureCode": "provider-subject-not-linkable" },
+    { "expression": "durable identity matches explicitly selected link target", "failureCode": "provider-link-target-mismatch" }
+  ],
+  "permittedMutations": ["auth.dimension.durable-identity", "auth.dimension.pending-identity-status"],
+  "requiredEffects": ["atomically-create-provider-link", "record-idempotency-result", "record-provider-link"],
+  "forbiddenEffects": ["create-durable-user", "link-subject-to-multiple-users", "change-canonical-email-from-provider-email"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.email-identities.not-conflated"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
