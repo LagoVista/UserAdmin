@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.home-workspace.flag-conflict",
+  "name": "Flag Home Workspace Conflict",
+  "summary": "Blocks registration completion when duplicate home workspaces or invalid owner membership cannot be reconciled safely.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.home-workspace.establishment"],
+  "transitionKey": "auth.transition.home-workspace.flag-conflict",
+  "preconditions": { "expression": "durable-identity == resolved and home-workspace in [required,creating] and (existing-home-workspace-count > 1 or home-owner-membership-invalid == true)" },
+  "setup": ["Create duplicate home-workspace candidates or an ownership relationship that violates the home-workspace invariant."],
+  "inputs": [{ "key": "conflict-reason", "valueType": "string", "required": true, "description": "Stable conflict reason code." }],
+  "actionKey": "auth.action.home-workspace.flag-conflict",
+  "postconditions": { "expression": "home-workspace == conflict and workspace-membership == conflict and current-workspace == invalid and session-capability == blocked" },
+  "requiredEffects": ["record-home-workspace-conflict", "block-registration-completion"],
+  "forbiddenEffects": ["choose-arbitrary-home-workspace", "delete-workspace-automatically", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.home-workspace.exactly-one", "auth.invariant.home-workspace.owner-member", "auth.invariant.current-workspace.requires-access"],
+  "expectedAuthLogEvents": ["home-workspace-conflict-detected"],
+  "evidenceRequirements": ["server"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.9" }]
+}
