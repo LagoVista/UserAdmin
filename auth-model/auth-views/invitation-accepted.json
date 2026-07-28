@@ -1,0 +1,24 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.invitation.accepted",
+  "name": "Invitation Accepted",
+  "description": "Confirms that an organization invitation was accepted and allows the user to continue.",
+  "category": "invitation",
+  "routeId": "auth.route.invitation.accepted",
+  "status": "active",
+  "controls": [],
+  "actions": [
+    { "id": "continue", "name": "Continue", "actionType": "button", "finder": "action:continue" },
+    { "id": "back-to-sign-in", "name": "Back to sign-in", "actionType": "link", "finder": "action:back-to-sign-in" }
+  ],
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "InviteAcceptedComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "runtimeEntityId": "F0B311B262F145E3AEDD3F9CE8EB02B6",
+    "runtimeSha256Hex": "5a40b2b49fafc0853462a4d5dad4b7b7f6fe2b239e4291dc6198cc1e88a65dc5",
+    "webComponent": "InviteAcceptedComponent"
+  }
+}
