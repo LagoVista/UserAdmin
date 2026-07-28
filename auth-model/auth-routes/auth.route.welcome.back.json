@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.welcome.back",
+  "name": "Welcome Back",
+  "path": "/auth/welcome/back",
+  "routeType": "view",
+  "viewId": "auth.welcome.back",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "AuthWelcomeBackComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "commonLinksMember": "AuthWelcomeBack",
+    "angularComponent": "AuthWelcomeBackComponent",
+    "mobileRoute": "/auth/welcome/back"
+  }
+}
