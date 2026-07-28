@@ -49,7 +49,7 @@
     "deprecated"
   ],
   "inventory": {
-    "stateDimensions": 0,
+    "stateDimensions": 17,
     "invariants": 0,
     "actions": 0,
     "transitions": 0,
@@ -60,21 +60,26 @@
     "unresolved": 0
   },
   "currentWork": {
-    "guideSection": "4.1",
+    "guideSection": "4.2",
     "status": "complete",
-    "summary": "Repository model foundation complete. Next major area: Section 4.2, Composite identity state dimensions."
+    "summary": "Composite identity state dimensions complete. Next major area: Section 4.3, Invariant catalog."
   },
   "sourceReferences": [
     {
       "sourceType": "discussion",
       "reference": "AUTH-MODEL-GUIDE.md",
-      "section": "4.1",
-      "note": "Repository model foundation plan"
+      "section": "4.2",
+      "note": "Composite identity state dimension plan"
     },
     {
       "sourceType": "decision",
       "reference": "auth-model/SECTION-4.1-HANDOFF.md",
-      "note": "Completed foundation decisions and handoff"
+      "note": "Repository model foundation"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.2-HANDOFF.md",
+      "note": "Composite identity state decisions and handoff"
     }
   ]
 }
