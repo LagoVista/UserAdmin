@@ -17,6 +17,7 @@
     "transitions": "transitions",
     "journeys": "journeys",
     "scenarios": "scenarios",
+    "conversationTypes": "conversations",
     "presentationBindings": "presentation",
     "decisions": "decisions",
     "unresolved": "unresolved"
@@ -31,6 +32,7 @@
     "transition": "schemas/transition.schema.json",
     "journey": "schemas/journey.schema.json",
     "scenario": "schemas/scenario.schema.json",
+    "conversationType": "schemas/conversation-type.schema.json",
     "presentationBinding": "schemas/presentation-binding.schema.json"
   },
   "validation": {
@@ -58,6 +60,7 @@
     "transitions": 17,
     "journeys": 3,
     "scenarios": 18,
+    "conversationTypes": 1,
     "presentationBindings": 0,
     "decisions": 0,
     "unresolved": 0
@@ -103,6 +106,11 @@
       "sourceType": "decision",
       "reference": "auth-model/SECTION-4.6-HANDOFF.md",
       "note": "Password registration handoff"
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "auth-model/conversations/hr-onboarding.json",
+      "note": "Initial proposed agent-assisted HR onboarding conversation definition"
     }
   ]
 }
