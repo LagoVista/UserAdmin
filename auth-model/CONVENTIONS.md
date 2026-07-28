@@ -24,6 +24,7 @@ Recommended prefixes:
 - `auth.transition.*`
 - `auth.journey.*`
 - `auth.scenario.*`
+- `auth.conversation.*`
 - `auth.presentation.*`
 - `auth.decision.*`
 - `auth.unresolved.*`
@@ -88,7 +89,18 @@ The resulting lowercase hexadecimal digest is stored as `definitionHash` in gene
 - Circular references are permitted only where the schema explicitly allows them.
 - Journeys may reference scenarios in ordered sequence.
 - Scenarios reference one action and may reference one transition.
-- Presentation bindings reference logical actions, scenarios, views, and platforms without redefining behavioral truth.
+- Conversation types may reference journeys, scenarios, and actions, but cannot redefine their guards, mutations, effects, or postconditions.
+- Presentation bindings reference logical actions, scenarios, conversations, views, and platforms without redefining behavioral truth.
+
+## Conversation definitions
+
+- A conversation type is a guided orchestration contract, not a source of authentication truth.
+- Conversation turns that collect, clarify, explain, or route information are not authentication transitions.
+- A conversation may select or coordinate canonical journeys based on authoritative state and declared predicates.
+- State-changing behavior occurs only through referenced logical actions and deterministic transitions.
+- Passwords, TOTP values, passkey material, provider tokens, recovery codes, and equivalent secrets are collected only by secure components outside the conversational context.
+- Conversation state must be durable enough to support pause and resume without making the transcript authoritative.
+- Guided and traditional presentations must invoke the same logical actions and produce the same post-state for equivalent valid inputs.
 
 ## Validation levels
 
@@ -112,6 +124,8 @@ At minimum:
 - a scenario references exactly one action
 - a scenario changes at least one state variable or produces at least one required effect
 - a journey contains at least one scenario
+- a conversation type does not directly define state mutations, transition guards, or authentication postconditions
+- secure information requirements use secure-component collection rather than conversation collection
 - presentation bindings do not introduce alternate guards or postconditions
 - maturity and evidence status remain distinct concepts
 
