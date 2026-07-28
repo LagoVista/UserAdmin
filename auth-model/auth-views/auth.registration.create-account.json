@@ -1,0 +1,31 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.registration.create-account",
+  "name": "Create Account",
+  "description": "Creates a new password-based account using identity and credential details.",
+  "category": "registration",
+  "routeId": "auth.route.registration.create-account",
+  "status": "active",
+  "controls": [
+    { "id": "email", "name": "Email", "controlType": "email-input", "finder": "field:email", "required": true, "sensitivity": "personal" },
+    { "id": "first-name", "name": "First Name", "controlType": "text-input", "finder": "field:first-name", "required": true, "sensitivity": "personal" },
+    { "id": "last-name", "name": "Last Name", "controlType": "text-input", "finder": "field:last-name", "required": true, "sensitivity": "personal" },
+    { "id": "password", "name": "Password", "controlType": "password-input", "finder": "field:password", "required": true, "sensitivity": "credential" },
+    { "id": "confirm-password", "name": "Confirm Password", "controlType": "password-input", "finder": "field:confirm-password", "required": true, "sensitivity": "credential" },
+    { "id": "validation-error", "name": "Validation Error", "controlType": "status", "finder": "status:validation-error" }
+  ],
+  "actions": [
+    { "id": "create-account", "name": "Create Account", "actionType": "button", "finder": "action:create-account" },
+    { "id": "cancel", "name": "Cancel", "actionType": "button", "finder": "action:cancel" }
+  ],
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "RegisterUserNewComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "runtimeEntityId": "BA1F170FC9BF421BA2453A7A518FF994",
+    "runtimeSha256Hex": "eab50367d306ac40e554bce84a5720bb2619122cc8e6507d254481d9eee16db7",
+    "webComponent": "RegisterUserNewComponent"
+  }
+}
