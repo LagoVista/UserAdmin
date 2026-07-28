@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.native-provider.create-user",
+  "name": "Create Native Provider User",
+  "summary": "Creates a new durable identity for a validated unlinked provider subject after duplicate checks pass.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 60,
+  "sourceState": { "expression": "pending-identity-status == resolution-required and pending-identity-flow == native-provider and credential-proof == native-provider-proved and durable-identity == absent and profile-completeness == complete" },
+  "actionKey": "auth.action.native-provider.create-user",
+  "guards": [
+    { "expression": "provider subject has no existing durable identity link", "failureCode": "provider-subject-already-linked" },
+    { "expression": "canonical identity duplicate check passed", "failureCode": "existing-canonical-identity-requires-link" }
+  ],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.durable-identity", "operation": "set", "valueExpression": "resolved" },
+    { "dimensionKey": "auth.dimension.account-status", "operation": "set", "valueExpression": "active" },
+    { "dimensionKey": "auth.dimension.home-workspace", "operation": "set", "valueExpression": "required" },
+    { "dimensionKey": "auth.dimension.pending-identity-status", "operation": "set", "valueExpression": "resolved" }
+  ],
+  "requiredEffects": ["create-durable-user-once", "persist-provider-link", "record-idempotency-result"],
+  "forbiddenEffects": ["create-second-durable-user", "create-home-workspace", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.email-identities.not-conflated", "auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
