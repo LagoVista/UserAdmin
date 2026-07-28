@@ -1,0 +1,32 @@
+{
+  "$schema": "../schemas/conversation-type.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.conversation.organization-switching",
+  "name": "Organization Switching",
+  "summary": "Helps an authenticated member explicitly change the active organization context while making the authorization and data-scope change highly visible.",
+  "version": 1,
+  "maturity": "proposed",
+  "goals": [{ "key": "switch-organization", "summary": "Help a member explicitly change the active organization context." }],
+  "supportedJourneyKeys": [],
+  "entryPredicate": { "expression": "An authenticated durable identity belongs to one or more organizations and requests to inspect or change the active organization." },
+  "completionPredicate": { "expression": "The active organization is explicitly changed to an accessible membership, left unchanged by cancellation, or the request is blocked or escalated safely." },
+  "informationRequirements": [
+    { "key": "organization-memberships", "summary": "Display-safe organizations, membership roles, and current organization context available to the durable identity.", "sensitivity": "sensitive", "collection": "existing-state", "requiredForGoalKeys": ["switch-organization"] },
+    { "key": "target-organization", "summary": "The organization the person explicitly chooses as the new active context.", "sensitivity": "sensitive", "collection": "conversation", "requiredForGoalKeys": ["switch-organization"] }
+  ],
+  "allowedActionKeys": [],
+  "prohibitedActionKeys": [],
+  "decisionPoints": [{ "key": "resolve-target-membership", "summary": "Resolve the requested organization to exactly one currently accessible membership.", "basis": ["membership list", "organization name or key", "membership status", "current organization"] }],
+  "confirmationRequirements": [{ "key": "confirm-organization-switch", "summary": "Require explicit confirmation that identifies the source and destination organizations before changing context.", "requiredBeforeActionKeys": [] }],
+  "secureInteractions": [],
+  "escalationConditions": [
+    { "key": "ambiguous-organization", "condition": "The requested organization does not resolve to exactly one accessible membership.", "outcome": "Do not switch; ask the person to select from permitted memberships or route to access resolution." },
+    { "key": "membership-not-accessible", "condition": "The target membership is absent, disabled, expired, or otherwise not permitted.", "outcome": "Leave the current organization unchanged and explain valid access-request or support paths." }
+  ],
+  "lifecycle": { "pause": "Persist only the pending target selection outside the transcript when needed.", "resume": "Reload current organization and memberships before presenting confirmation.", "abandonment": "Leave the active organization unchanged.", "expiration": "Discard stale target selections without affecting memberships or current organization." },
+  "supportedChannels": ["web", "android", "ios", "vtm", "voice"],
+  "presentationExpectations": ["Always show the current organization before and after a switch.", "Explain that roles, tools, and visible data may change with organization context.", "Never switch implicitly from conversational inference alone.", "Provide an equivalent traditional organization selector."],
+  "scenarioKeys": [],
+  "openQuestions": ["Which canonical organization-switching journey and action should this conversation reference?"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.11", "note": "Split from the original HR Onboarding goal set on 2026-07-28." }]
+}
