@@ -54,25 +54,25 @@
     "stateDimensions": 17,
     "compositeStateCatalogs": 1,
     "invariants": 20,
-    "actions": 0,
-    "transitions": 0,
-    "journeys": 0,
-    "scenarios": 0,
+    "actions": 4,
+    "transitions": 4,
+    "journeys": 1,
+    "scenarios": 4,
     "presentationBindings": 0,
     "decisions": 0,
     "unresolved": 0
   },
   "currentWork": {
-    "guideSection": "4.3",
+    "guideSection": "4.4",
     "status": "complete",
-    "summary": "Composite-state relationships and twenty foundational invariants are authored. Next major area: Section 4.4, Guest and claimable-value flow."
+    "summary": "Guest identity activation, value detection, claimable-value promotion, and atomic durable-identity claim are authored as actions, transitions, scenarios, and one journey. Next major area: Section 4.5, PendingIdentity lifecycle."
   },
   "sourceReferences": [
     {
       "sourceType": "discussion",
       "reference": "AUTH-MODEL-GUIDE.md",
-      "section": "4.3",
-      "note": "Invariant catalog plan"
+      "section": "4.4",
+      "note": "Guest and claimable-value flow"
     },
     {
       "sourceType": "decision",
@@ -87,7 +87,12 @@
     {
       "sourceType": "decision",
       "reference": "auth-model/SECTION-4.3-HANDOFF.md",
-      "note": "Composite relationships and foundational invariant handoff"
+      "note": "Composite relationships and foundational invariants"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.4-HANDOFF.md",
+      "note": "Guest and claimable-value journey handoff"
     }
   ]
 }
