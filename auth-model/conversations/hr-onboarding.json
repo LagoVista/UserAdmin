@@ -4,10 +4,18 @@
   "key": "auth.conversation.hr-onboarding",
   "name": "HR Onboarding",
   "summary": "Acts as the HR-style entry and routing conversation that identifies a person's immediate account, invitation, or organization goal and transfers orchestration to the matching bounded conversation type.",
-  "version": 2,
+  "version": 3,
   "maturity": "proposed",
   "goals": [{ "key": "route-onboarding-request", "summary": "Determine the person's immediate onboarding goal and route to the matching bounded conversation." }],
   "supportedJourneyKeys": [],
+  "routedConversationKeys": [
+    "auth.conversation.account-access-assistance",
+    "auth.conversation.user-registration",
+    "auth.conversation.invitation-resolution",
+    "auth.conversation.user-invitation",
+    "auth.conversation.organization-creation",
+    "auth.conversation.organization-switching"
+  ],
   "entryPredicate": { "expression": "A guest, PendingIdentity, or durable identity requests help with account access, registration, invitations, organization creation, or organization switching." },
   "completionPredicate": { "expression": "The request is routed to exactly one applicable bounded conversation, answered without state mutation, abandoned, or escalated safely." },
   "informationRequirements": [
@@ -20,15 +28,10 @@
     "key": "select-bounded-conversation",
     "summary": "Select exactly one bounded conversation without performing its state-changing actions in the router.",
     "basis": [
-      "auth.conversation.account-access-assistance",
-      "auth.conversation.user-registration",
-      "auth.conversation.invitation-resolution",
-      "auth.conversation.user-invitation",
-      "auth.conversation.organization-creation",
-      "auth.conversation.organization-switching",
       "entry intent",
       "current composite state",
-      "current principal authority"
+      "current principal authority",
+      "routed conversation entry predicates"
     ]
   }],
   "confirmationRequirements": [],
@@ -52,9 +55,9 @@
     "Provide equivalent traditional navigation into each bounded workflow."
   ],
   "scenarioKeys": [],
-  "openQuestions": ["Should a future schema revision add explicit routedConversationKeys for referential validation of router conversations?"],
+  "openQuestions": [],
   "sourceReferences": [
     { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.11", "note": "Guided VTM onboarding and traditional form equivalence." },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation", "note": "Narrowed to a router after splitting the original goal set into bounded conversations on 2026-07-28." }
+    { "sourceType": "discussion", "reference": "ChatGPT conversation", "note": "Added explicit routed conversation references on 2026-07-28." }
   ]
 }
