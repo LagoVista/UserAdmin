@@ -21,6 +21,13 @@
       "controlType": "copyable-value",
       "finder": "display:secret",
       "sensitivity": "secret"
+    },
+    {
+      "id": "enrollment-error",
+      "name": "Enrollment Error",
+      "controlType": "status",
+      "finder": "status:enrollment-error",
+      "visibilityCondition": "TOTP enrollment setup failed."
     }
   ],
   "actions": [
