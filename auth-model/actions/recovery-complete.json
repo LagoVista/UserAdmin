@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.recovery.complete",
+  "name": "Complete Account Recovery",
+  "summary": "Completes recovery for the existing durable identity after replacement credentials and required security cleanup are confirmed.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "recovery-reference", "valueType": "reference", "required": true, "description": "Recovery ceremony ready for completion." }
+  ],
+  "guards": [
+    { "expression": "recovery-state == credential-reset-required", "failureCode": "recovery-not-ready-for-completion" },
+    { "expression": "replacement-credential-established == true", "failureCode": "replacement-credential-not-established" },
+    { "expression": "required-security-cleanup-complete == true", "failureCode": "recovery-security-cleanup-incomplete" }
+  ],
+  "permittedMutations": ["auth.dimension.recovery-state", "auth.dimension.session-capability"],
+  "requiredEffects": ["revoke-existing-sessions-and-refresh-tokens", "invalidate-unused-recovery-challenges", "rotate-security-stamps-or-equivalent", "notify-user-of-recovery", "record-recovery-completed"],
+  "forbiddenEffects": ["create-durable-user", "accept-invitation", "change-home-workspace", "silently-grant-step-up"],
+  "invariantKeys": ["auth.invariant.recovery.existing-identity-only", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.14" }]
+}
