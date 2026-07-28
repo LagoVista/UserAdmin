@@ -1,0 +1,16 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.passkey.management",
+  "name": "Manage Passkeys",
+  "path": "/auth/passkey/management",
+  "routeType": "view",
+  "viewId": "auth.passkey.management",
+  "status": "active",
+  "platforms": {
+    "web": { "status": "implemented" },
+    "mobile": { "status": "planned" }
+  },
+  "source": { "commonLinksMember": "PasskeyManagement" },
+  "notes": ["Replaces /auth/passkey/manage."]
+}
