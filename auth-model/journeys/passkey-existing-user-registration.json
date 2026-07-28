@@ -1,0 +1,13 @@
+{
+  "$schema": "../schemas/journey.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.journey.passkey.existing-user-registration",
+  "name": "Existing User Passkey Registration",
+  "summary": "Adds a passkey to the currently authenticated durable user without creating or switching identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioKeys": ["auth.scenario.passkey.existing-user-registration"],
+  "entryPredicate": { "expression": "durable-identity == resolved and session-capability in [authenticated-limited,authenticated-normal,step-up]" },
+  "completionPredicate": { "expression": "durable-identity == resolved and credential-proof == passkey-proved and session identity is unchanged" },
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
