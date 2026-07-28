@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.native-provider.select-link-target",
+  "name": "Select Existing User for Provider Link",
+  "summary": "Requires explicit confirmation before an unlinked provider subject may target an existing durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "security-invariant",
+  "journeyKeys": ["auth.journey.native-provider.existing-user"],
+  "transitionKey": "auth.transition.native-provider.select-link-target",
+  "preconditions": { "expression": "pending-identity-status == resolution-required and credential-proof == native-provider-proved and durable-identity == absent" },
+  "setup": ["Create one eligible existing durable identity without a link to the validated provider subject."],
+  "inputs": [
+    { "key": "durable-identity-reference", "valueType": "reference", "required": true },
+    { "key": "selection-confirmed", "valueType": "boolean", "required": true, "example": true }
+  ],
+  "actionKey": "auth.action.native-provider.select-link-target",
+  "postconditions": { "expression": "durable-identity == existing and pending-identity-status == resolution-required" },
+  "requiredEffects": ["record-explicit-link-target-selection"],
+  "forbiddenEffects": ["link-provider-subject", "create-durable-user", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.pending-identity.no-normal-authorization"],
+  "expectedAuthLogEvents": ["native-provider-link-target-selected"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
