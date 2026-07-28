@@ -1,0 +1,60 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.mfa.totp.enroll",
+  "name": "TOTP Enrollment",
+  "description": "Presents the authenticator enrollment QR code and secret before the user confirms the generated verification code.",
+  "category": "totp",
+  "routeId": "auth.route.mfa.totp.enroll",
+  "status": "active",
+  "controls": [
+    {
+      "id": "qr-code",
+      "name": "Authenticator QR Code",
+      "controlType": "qr-code",
+      "finder": "display:qr-code",
+      "sensitivity": "secret"
+    },
+    {
+      "id": "secret",
+      "name": "Authenticator Secret",
+      "controlType": "copyable-value",
+      "finder": "display:secret",
+      "sensitivity": "secret"
+    }
+  ],
+  "actions": [
+    {
+      "id": "continue",
+      "name": "Continue",
+      "actionType": "button",
+      "finder": "action:continue"
+    },
+    {
+      "id": "cancel",
+      "name": "Cancel",
+      "actionType": "button",
+      "finder": "action:cancel"
+    }
+  ],
+  "platforms": {
+    "web": {
+      "status": "implemented",
+      "implementation": "TotpEnrollStartComponent"
+    },
+    "mobile": {
+      "status": "implemented",
+      "implementation": "app/auth/mfa/totp/enroll.tsx"
+    }
+  },
+  "source": {
+    "runtimeEntityId": "F3EE5F762E3A4D03A5358F21F4DC027F",
+    "runtimeSha256Hex": "307b86b739d69febb50ccd4e6b2a429d38938763bfaf5513d8cd7eaae8c2b262",
+    "webComponent": "TotpEnrollStartComponent",
+    "mobileComponent": "app/auth/mfa/totp/enroll.tsx"
+  },
+  "notes": [
+    "The runtime inventory represented the QR code and secret as unknown fields. The canonical contract models them as non-input display controls.",
+    "The prior action id 'next' is normalized to the semantic action id 'continue'."
+  ]
+}
