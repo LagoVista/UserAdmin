@@ -18,6 +18,8 @@
     "journeys": "journeys",
     "scenarios": "scenarios",
     "conversationTypes": "conversations",
+    "authViews": "auth-views",
+    "authRoutes": "auth-routes",
     "presentationBindings": "presentation",
     "decisions": "decisions",
     "unresolved": "unresolved"
@@ -33,6 +35,8 @@
     "journey": "schemas/journey.schema.json",
     "scenario": "schemas/scenario.schema.json",
     "conversationType": "schemas/conversation-type.schema.json",
+    "authView": "schemas/auth-view.schema.json",
+    "authRoute": "schemas/auth-route.schema.json",
     "presentationBinding": "schemas/presentation-binding.schema.json"
   },
   "validation": {
@@ -54,17 +58,20 @@
     "journeys": 12,
     "scenarios": 50,
     "conversationTypes": 7,
+    "authViews": 0,
+    "authRoutes": 0,
     "presentationBindings": 6,
     "decisions": 0,
     "unresolved": 0
   },
   "currentWork": {
-    "guideSection": "4.15",
-    "status": "complete",
-    "summary": "Presentation bindings now distinguish canonical authentication actions from UI-only navigation. The first UI-only family models the web Welcome screen paths for email, provider, and passkey continuation with source and destination views, routes, semantic finders, component operations, and capability gates, without inventing fake server transitions. Next major area: Section 4.16, Test binding and evidence aggregation."
+    "guideSection": "4.16",
+    "status": "in-progress",
+    "summary": "Canonical AuthView and AuthRoute contracts are established in Git. The next pass converts the validated Cosmos AuthView inventory into canonical specifications, reconciles required controls and route surfaces against the Angular implementation, normalizes identifiers and paths, then aligns CommonLinks, provideAuthRoutes(), web components, and mobile coverage."
   },
   "sourceReferences": [
     { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.15", "note": "UI-only transitions, AuthView coverage, and platform evidence" },
+    { "sourceType": "decision", "reference": "auth-model/AUTH-VIEW-ROUTE-CONTRACT.md", "note": "Canonical AuthView and AuthRoute authority, identifier, projection, and reconciliation rules" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.1-HANDOFF.md", "note": "Repository model foundation" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.2-HANDOFF.md", "note": "Composite identity state decisions" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.3-HANDOFF.md", "note": "Composite relationships and foundational invariants" },
