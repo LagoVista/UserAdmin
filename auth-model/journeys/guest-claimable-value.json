@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/journey.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.journey.guest.claimable-value",
+  "name": "Guest to Claimed Value",
+  "summary": "Allows an anonymous participant to create meaningful value before account resolution and later claim it into an explicitly resolved durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioKeys": [
+    "auth.scenario.guest.activate",
+    "auth.scenario.guest.detect-value",
+    "auth.scenario.guest.mark-value-claimable",
+    "auth.scenario.guest.claim-value"
+  ],
+  "entryPredicate": { "expression": "guest-identity == none and durable-identity == absent and claimable-value == none" },
+  "completionPredicate": { "expression": "guest-identity == claimed and claimable-value == claimed and durable-identity == resolved" },
+  "alternateJourneyKeys": [],
+  "sourceReferences": [
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "2.3, 3.7, 3.8, 4.4" },
+    { "sourceType": "decision", "reference": "auth-model/SECTION-4.3-HANDOFF.md", "note": "Foundational guest and claim invariants" }
+  ]
+}
