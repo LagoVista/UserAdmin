@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.pending-identity.complete-verification",
+  "name": "Complete Pending Identity Verification",
+  "summary": "Accepts valid flow-specific proof and advances the PendingIdentity to resolution-required without granting normal authorization.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.pending-identity.lifecycle"],
+  "transitionKey": "auth.transition.pending-identity.complete-verification",
+  "preconditions": { "expression": "pending-identity-status == verifying and pending-identity-flow != none and session-capability == identity-ceremony" },
+  "setup": ["Establish valid verification evidence for the active flow."],
+  "inputs": [
+    { "key": "verification-reference", "valueType": "reference", "required": true },
+    { "key": "proof-result", "valueType": "object", "required": true }
+  ],
+  "actionKey": "auth.action.pending-identity.complete-verification",
+  "postconditions": { "expression": "pending-identity-status == resolution-required and credential-proof in [primary,multi-factor,recovery] and session-capability == identity-ceremony" },
+  "requiredEffects": ["persist-verification-evidence", "record-verification-completed"],
+  "forbiddenEffects": ["create-duplicate-durable-user", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.pending-identity.exactly-one-flow", "auth.invariant.identity-resolution.no-duplicate-user"],
+  "expectedAuthLogEvents": ["pending-identity-verification-completed"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.5" }]
+}
