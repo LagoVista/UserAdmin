@@ -1,0 +1,30 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.mfa.totp.confirm",
+  "name": "Confirm TOTP Enrollment",
+  "description": "Navigates to the screen that validates the authenticator code and enables TOTP.",
+  "path": "/auth/mfa/totp/confirm",
+  "routeType": "view",
+  "viewId": "auth.mfa.totp.confirm",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": {
+      "status": "implemented",
+      "implementation": "provideAuthRoutes -> TotpEnrollConfirmComponent"
+    },
+    "mobile": {
+      "status": "implemented",
+      "implementation": "app/auth/mfa/totp/confirm.tsx"
+    }
+  },
+  "source": {
+    "commonLinksMember": "TOTPEnrollConfirm",
+    "angularComponent": "TotpEnrollConfirmComponent",
+    "mobileRoute": "/auth/mfa/totp/confirm"
+  },
+  "notes": [
+    "This canonical path corrects the runtime inventory typo '/auth/mfa/top/confirm'."
+  ]
+}
