@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.passkey.begin-existing-user-registration",
+  "name": "Begin Existing User Passkey Registration",
+  "summary": "Issues a passkey creation challenge bound to the current durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 60,
+  "sourceState": { "expression": "durable-identity == resolved and session-capability in [authenticated-limited,authenticated-normal,step-up] and credential-proof != challenge-issued" },
+  "actionKey": "auth.action.passkey.begin-existing-user-registration",
+  "guards": [],
+  "destinationTransform": [{ "dimensionKey": "auth.dimension.credential-proof", "operation": "set", "valueExpression": "challenge-issued" }],
+  "requiredEffects": ["create-short-lived-user-bound-registration-challenge", "exclude-existing-credentials"],
+  "forbiddenEffects": ["create-durable-user", "persist-passkey-credential", "change-durable-identity"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
