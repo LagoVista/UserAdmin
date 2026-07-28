@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.oauth.fault",
+  "name": "OAuth Fault",
+  "description": "Presents the failure outcome from an external authentication provider.",
+  "path": "/auth/oauth/fault",
+  "routeType": "view",
+  "viewId": "auth.oauth.fault",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "OauthFaultComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "commonLinksMember": "OAuthFault",
+    "angularComponent": "OauthFaultComponent"
+  }
+}
