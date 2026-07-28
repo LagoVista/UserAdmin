@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lagovista.com/schemas/auth-model/invariant-catalog.schema.json",
+  "title": "Authentication Invariant Catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "key", "name", "summary", "version", "maturity", "invariants", "sourceReferences"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "1.0" },
+    "key": { "type": "string", "const": "auth.invariant.catalog" },
+    "name": { "type": "string", "minLength": 1 },
+    "summary": { "type": "string", "minLength": 1 },
+    "version": { "type": "integer", "minimum": 1 },
+    "maturity": { "enum": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"] },
+    "invariants": { "type": "array", "minItems": 1, "items": { "$ref": "invariant.schema.json" } },
+    "sourceReferences": { "type": "array", "items": { "type": "object", "required": ["sourceType", "reference"], "properties": { "sourceType": { "enum": ["ddr", "code", "test", "discussion", "decision", "external"] }, "reference": { "type": "string" }, "section": { "type": "string" }, "commit": { "type": "string" }, "note": { "type": "string" } } } },
+    "definitionHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}
