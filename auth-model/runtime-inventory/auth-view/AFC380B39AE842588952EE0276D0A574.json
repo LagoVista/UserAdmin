@@ -1,0 +1,101 @@
+{
+    "Route": "/auth/mfa/top/confirm",
+    "ViewId": "auth.mfa.totp.confirm",
+    "Actions": [
+        {
+            "Id": "confirm",
+            "Name": "Enable TOTP",
+            "Finder": "[data-testid=\"action:confirm\"]"
+        },
+        {
+            "Id": "back",
+            "Name": "Back",
+            "Finder": "[data-testid=\"action:back\"]"
+        },
+        {
+            "Id": "cancel",
+            "Name": "Cancel",
+            "Finder": "[data-testid=\"action:cancel\"]"
+        }
+    ],
+    "Fields": [
+        {
+            "Id": "totp",
+            "Name": "Totp",
+            "FieldType": "text",
+            "Finder": "[data-testid=\"field:totp\"]"
+        },
+        {
+            "Id": "error-message",
+            "Name": "Code is required.\n      Enter a 6-digit code.",
+            "FieldType": "label",
+            "Finder": "[data-testid=\"label:error-message\"]"
+        }
+    ],
+    "IsPublic": false,
+    "OwnerOrganization": {
+        "Id": "AA2C78499D0140A5A9CE4B7581EF9691",
+        "Text": "Software Logistics",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": null,
+        "OwnerOrgId": null,
+        "Key": null
+    },
+    "OwnerUser": null,
+    "id": "AFC380B39AE842588952EE0276D0A574",
+    "DatabaseName": "nuviot",
+    "EntityType": "AuthView",
+    "_etag": "\"06001591-0000-0500-0000-6a69064f0000\"",
+    "Name": "TOTP - Enroll - Confirm",
+    "Key": "totpenrolconfirm",
+    "Category": null,
+    "Description": null,
+    "AISessions": [],
+    "AuditHistory": [],
+    "IsDeleted": false,
+    "DeletedBy": null,
+    "DeletionDate": null,
+    "IsDeprecated": false,
+    "DeprecatedBy": null,
+    "DeprecationDate": null,
+    "DeprecationNotes": null,
+    "CreationDate": "2026-07-28T19:43:11.259Z",
+    "LastUpdatedDate": "2026-07-28T19:43:11.259Z",
+    "CreatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "LastUpdatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "ClonedFromId": null,
+    "ClonedFromOrg": null,
+    "ClonedRevision": null,
+    "IsDraft": false,
+    "Revision": 1,
+    "RevisionTimeStamp": "2026-01-26T14:45:35.003Z",
+    "Labels": [],
+    "Stars": null,
+    "RatingsCount": 0,
+    "Ratings": [],
+    "_rid": "0hUQANwtAwBV2QAAAAAAAA==",
+    "_self": "dbs/0hUQAA==/colls/0hUQANwtAwA=/docs/0hUQANwtAwBV2QAAAAAAAA==/",
+    "_attachments": "attachments/",
+    "Sha256Hex": "e8f9719aa8c27fd12f1a8301cb469c27e8e52788ac12b4cd787059559a24feca",
+    "_ts": 1785267791
+}

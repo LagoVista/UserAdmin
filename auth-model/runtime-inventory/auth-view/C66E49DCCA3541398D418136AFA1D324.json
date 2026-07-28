@@ -1,0 +1,103 @@
+{
+    "Route": "/auth/continue/email/unable",
+    "ViewId": "auth.signin-unable",
+    "Actions": [
+        {
+            "Id": "try-again",
+            "Name": "Try again",
+            "Finder": "[data-testid=\"action:try-again\"]"
+        },
+        {
+            "Id": "create-account",
+            "Name": "Create an account",
+            "Finder": "[data-testid=\"action:create-account\"]"
+        },
+        {
+            "Id": "forgot-password",
+            "Name": "Forgot password?",
+            "Finder": "[data-testid=\"action:forgot-password\"]"
+        },
+        {
+            "Id": "change-email",
+            "Name": "Change email",
+            "Finder": "[data-testid=\"action:change-email\"]"
+        },
+        {
+            "Id": "continue-provider",
+            "Name": "Continue with a provider",
+            "Finder": "[data-testid=\"action:continue-provider\"]"
+        },
+        {
+            "Id": "continue-passkey",
+            "Name": "Continue with Passkey",
+            "Finder": "[data-testid=\"action:continue-passkey\"]"
+        }
+    ],
+    "Fields": [],
+    "IsPublic": false,
+    "OwnerOrganization": {
+        "Id": "AA2C78499D0140A5A9CE4B7581EF9691",
+        "Text": "Software Logistics",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": null,
+        "OwnerOrgId": null,
+        "Key": null
+    },
+    "OwnerUser": null,
+    "id": "C66E49DCCA3541398D418136AFA1D324",
+    "DatabaseName": "nuviot",
+    "EntityType": "AuthView",
+    "_etag": "\"0600c890-0000-0500-0000-6a6906460000\"",
+    "Name": "Password Auth Failed",
+    "Key": "passwordauthfailed",
+    "Category": null,
+    "Description": null,
+    "AISessions": [],
+    "AuditHistory": [],
+    "IsDeleted": false,
+    "DeletedBy": null,
+    "DeletionDate": null,
+    "IsDeprecated": false,
+    "DeprecatedBy": null,
+    "DeprecationDate": null,
+    "DeprecationNotes": null,
+    "CreationDate": "2026-07-28T19:43:02.740Z",
+    "LastUpdatedDate": "2026-07-28T19:43:02.740Z",
+    "CreatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "LastUpdatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "ClonedFromId": null,
+    "ClonedFromOrg": null,
+    "ClonedRevision": null,
+    "IsDraft": false,
+    "Revision": 1,
+    "RevisionTimeStamp": "2026-02-03T16:21:39.74Z",
+    "Labels": [],
+    "Stars": null,
+    "RatingsCount": 0,
+    "Ratings": [],
+    "_rid": "0hUQANwtAwBT2QAAAAAAAA==",
+    "_self": "dbs/0hUQAA==/colls/0hUQANwtAwA=/docs/0hUQANwtAwBT2QAAAAAAAA==/",
+    "_attachments": "attachments/",
+    "Sha256Hex": "ff14153aee6dafde6e46eba5558e064d1eecaabe0d80bfd4ca63a83f8c750063",
+    "_ts": 1785267782
+}

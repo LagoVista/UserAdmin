@@ -1,0 +1,102 @@
+{
+    "Route": "/auth/reset/{code}",
+    "ViewId": "auth.reset",
+    "Actions": [
+        {
+            "Id": "reset",
+            "Name": "Reset password",
+            "Finder": "[data-testid=\"action:reset\"]"
+        },
+        {
+            "Id": "cancel",
+            "Name": "Cancel",
+            "Finder": "[data-testid=\"action:cancel\"]"
+        }
+    ],
+    "Fields": [
+        {
+            "Id": "newpassword",
+            "Name": "NewPassword",
+            "FieldType": "password",
+            "Finder": "[data-testid=\"field:newPassword\"]"
+        },
+        {
+            "Id": "confirmpassword",
+            "Name": "ConfirmPassword",
+            "FieldType": "password",
+            "Finder": "[data-testid=\"field:confirmPassword\"]"
+        },
+        {
+            "Id": "error-message",
+            "Name": "Password is required.\n      Password must be at least 8 characters.",
+            "FieldType": "label",
+            "Finder": "[data-testid=\"label:error-message\"]"
+        }
+    ],
+    "IsPublic": false,
+    "OwnerOrganization": {
+        "Id": "AA2C78499D0140A5A9CE4B7581EF9691",
+        "Text": "Software Logistics",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": null,
+        "OwnerOrgId": null,
+        "Key": null
+    },
+    "OwnerUser": null,
+    "id": "BB23CECB524D4103AFF320DCC5FF1590",
+    "DatabaseName": "nuviot",
+    "EntityType": "AuthView",
+    "_etag": "\"0600f790-0000-0500-0000-6a69064c0000\"",
+    "Name": "Reset Password",
+    "Key": "resetpassword",
+    "Category": null,
+    "Description": null,
+    "AISessions": [],
+    "AuditHistory": [],
+    "IsDeleted": false,
+    "DeletedBy": null,
+    "DeletionDate": null,
+    "IsDeprecated": false,
+    "DeprecatedBy": null,
+    "DeprecationDate": null,
+    "DeprecationNotes": null,
+    "CreationDate": "2026-07-28T19:43:07.999Z",
+    "LastUpdatedDate": "2026-07-28T19:43:07.999Z",
+    "CreatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "LastUpdatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "ClonedFromId": null,
+    "ClonedFromOrg": null,
+    "ClonedRevision": null,
+    "IsDraft": false,
+    "Revision": 1,
+    "RevisionTimeStamp": "2026-01-26T14:53:20.344Z",
+    "Labels": [],
+    "Stars": null,
+    "RatingsCount": 0,
+    "Ratings": [],
+    "_rid": "0hUQANwtAwBU2QAAAAAAAA==",
+    "_self": "dbs/0hUQAA==/colls/0hUQANwtAwA=/docs/0hUQANwtAwBU2QAAAAAAAA==/",
+    "_attachments": "attachments/",
+    "Sha256Hex": "693e1151f6dc007e04feeda2a4b1c815115d066fe4658590376f56b8286b4dde",
+    "_ts": 1785267788
+}

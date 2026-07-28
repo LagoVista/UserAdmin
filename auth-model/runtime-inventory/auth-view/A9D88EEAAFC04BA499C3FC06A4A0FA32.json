@@ -1,0 +1,92 @@
+{
+    "Route": "/auth/passkey/manage",
+    "ViewId": "auth.mfa.passkey.manage",
+    "Actions": [
+        {
+            "Id": "remove-passkey",
+            "Name": "Remove",
+            "Finder": "[data-testid=\"action:remove-passkey\"]"
+        },
+        {
+            "Id": "add-passkey",
+            "Name": "Add passkey",
+            "Finder": "[data-testid=\"action:add-passkey\"]"
+        },
+        {
+            "Id": "done",
+            "Name": "Done",
+            "Finder": "[data-testid=\"action:done\"]"
+        }
+    ],
+    "Fields": [],
+    "IsPublic": false,
+    "OwnerOrganization": {
+        "Id": "AA2C78499D0140A5A9CE4B7581EF9691",
+        "Text": "Software Logistics",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": null,
+        "OwnerOrgId": null,
+        "Key": null
+    },
+    "OwnerUser": null,
+    "id": "A9D88EEAAFC04BA499C3FC06A4A0FA32",
+    "DatabaseName": "nuviot",
+    "EntityType": "AuthView",
+    "_etag": "\"0600ab90-0000-0500-0000-6a6906430000\"",
+    "Name": "Passkey - Manage",
+    "Key": "passkeymanager",
+    "Category": {
+        "Id": "passkey",
+        "Text": "Passkey",
+        "Key": "passkey"
+    },
+    "Description": null,
+    "AISessions": [],
+    "AuditHistory": [],
+    "IsDeleted": false,
+    "DeletedBy": null,
+    "DeletionDate": null,
+    "IsDeprecated": false,
+    "DeprecatedBy": null,
+    "DeprecationDate": null,
+    "DeprecationNotes": null,
+    "CreationDate": "2026-07-28T19:42:59.077Z",
+    "LastUpdatedDate": "2026-07-28T19:42:59.077Z",
+    "CreatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "LastUpdatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "ClonedFromId": null,
+    "ClonedFromOrg": null,
+    "ClonedRevision": null,
+    "IsDraft": false,
+    "Revision": 2,
+    "RevisionTimeStamp": "2026-01-26T14:24:56.661Z",
+    "Labels": [],
+    "Stars": null,
+    "RatingsCount": 0,
+    "Ratings": [],
+    "_rid": "0hUQANwtAwBS2QAAAAAAAA==",
+    "_self": "dbs/0hUQAA==/colls/0hUQANwtAwA=/docs/0hUQANwtAwBS2QAAAAAAAA==/",
+    "_attachments": "attachments/",
+    "Sha256Hex": "b356adc78c6718229e889814975b62db465fd08e87e3b4170aaae9ecc06bdd27",
+    "_ts": 1785267779
+}

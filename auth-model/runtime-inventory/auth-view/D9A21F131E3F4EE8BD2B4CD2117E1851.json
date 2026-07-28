@@ -1,0 +1,93 @@
+{
+    "Route": "/auth/welcome/back",
+    "ViewId": "auth.welcome.back",
+    "Actions": [
+        {
+            "Id": "continue",
+            "Name": "Continue",
+            "Finder": "[data-testid=\"action:continue\"]"
+        },
+        {
+            "Id": "use-different-email",
+            "Name": "Use a different email",
+            "Finder": "[data-testid=\"action:use-different-email\"]"
+        },
+        {
+            "Id": "clear-remembered",
+            "Name": "Clear remembered sign-ins",
+            "Finder": "[data-testid=\"action:clear-remembered\"]"
+        },
+        {
+            "Id": "start-over",
+            "Name": "Start over",
+            "Finder": "[data-testid=\"action:start-over\"]"
+        }
+    ],
+    "Fields": [],
+    "IsPublic": false,
+    "OwnerOrganization": {
+        "Id": "AA2C78499D0140A5A9CE4B7581EF9691",
+        "Text": "Software Logistics",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": null,
+        "OwnerOrgId": null,
+        "Key": null
+    },
+    "OwnerUser": null,
+    "id": "D9A21F131E3F4EE8BD2B4CD2117E1851",
+    "DatabaseName": "nuviot",
+    "EntityType": "AuthView",
+    "_etag": "\"06006591-0000-0500-0000-6a6906580000\"",
+    "Name": "Welcome Back",
+    "Key": "welcomeback",
+    "Category": null,
+    "Description": null,
+    "AISessions": [],
+    "AuditHistory": [],
+    "IsDeleted": false,
+    "DeletedBy": null,
+    "DeletionDate": null,
+    "IsDeprecated": false,
+    "DeprecatedBy": null,
+    "DeprecationDate": null,
+    "DeprecationNotes": null,
+    "CreationDate": "2026-07-28T19:43:20.662Z",
+    "LastUpdatedDate": "2026-07-28T19:43:20.662Z",
+    "CreatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "LastUpdatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "ClonedFromId": null,
+    "ClonedFromOrg": null,
+    "ClonedRevision": null,
+    "IsDraft": false,
+    "Revision": 1,
+    "RevisionTimeStamp": "2026-01-26T14:27:15.352Z",
+    "Labels": [],
+    "Stars": null,
+    "RatingsCount": 0,
+    "Ratings": [],
+    "_rid": "0hUQANwtAwBY2QAAAAAAAA==",
+    "_self": "dbs/0hUQAA==/colls/0hUQANwtAwA=/docs/0hUQANwtAwBY2QAAAAAAAA==/",
+    "_attachments": "attachments/",
+    "Sha256Hex": "0f3e747334882187321fb11eb9583953c66b19eaf303bbb03305246587b14871",
+    "_ts": 1785267800
+}
