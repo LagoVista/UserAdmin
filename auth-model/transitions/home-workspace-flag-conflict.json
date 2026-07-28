@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.home-workspace.flag-conflict",
+  "name": "Flag Home Workspace Conflict",
+  "summary": "Moves an irreconcilable home-workspace condition into an explicit blocked conflict state.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 70,
+  "sourceState": { "expression": "durable-identity == resolved and home-workspace in [required,creating]" },
+  "actionKey": "auth.action.home-workspace.flag-conflict",
+  "guards": [{ "expression": "existing-home-workspace-count > 1 or home-owner-membership-invalid == true", "failureCode": "home-workspace-conflict-not-present" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.home-workspace", "operation": "set", "valueExpression": "conflict" },
+    { "dimensionKey": "auth.dimension.workspace-membership", "operation": "set", "valueExpression": "conflict" },
+    { "dimensionKey": "auth.dimension.current-workspace", "operation": "set", "valueExpression": "invalid" },
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "set", "valueExpression": "blocked" }
+  ],
+  "requiredEffects": ["record-home-workspace-conflict", "block-registration-completion"],
+  "forbiddenEffects": ["choose-arbitrary-home-workspace", "delete-workspace-automatically", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.home-workspace.exactly-one", "auth.invariant.home-workspace.owner-member", "auth.invariant.current-workspace.requires-access", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.9" }]
+}
