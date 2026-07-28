@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.invitation.validate-valid",
+  "name": "Validate Invitation as Valid",
+  "summary": "Moves an attached invitation to valid after successful proof, target, expiration, and consumption checks.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 100,
+  "sourceState": { "expression": "invitation-status == attached" },
+  "actionKey": "auth.action.invitation.validate",
+  "guards": [{ "expression": "invitation-proof-valid == true and invitation-expired == false and invitation-consumed == false and target-workspace-valid == true", "failureCode": "invitation-not-valid" }],
+  "destinationTransform": [{ "dimensionKey": "auth.dimension.invitation-status", "operation": "set", "valueExpression": "valid" }],
+  "requiredEffects": ["record-invitation-validation"],
+  "forbiddenEffects": ["resolve-durable-identity", "create-membership", "change-home-workspace"],
+  "invariantKeys": ["auth.invariant.invitation.not-identity-proof", "auth.invariant.invitation.consumed-once", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10" }]
+}
