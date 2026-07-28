@@ -1,0 +1,13 @@
+{
+  "$schema": "../schemas/journey.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.journey.passkey.step-up",
+  "name": "Passkey Step Up",
+  "summary": "Obtains fresh elevated proof for the current durable identity through a user-verifying passkey assertion.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioKeys": ["auth.scenario.passkey.step-up"],
+  "entryPredicate": { "expression": "durable-identity == resolved and session-capability in [authenticated-limited,authenticated-normal]" },
+  "completionPredicate": { "expression": "durable-identity == resolved and credential-proof == passkey-proved and session-capability == step-up" },
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
