@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.native-provider.establish-session",
+  "name": "Establish Native Provider Session",
+  "summary": "Establishes a normal authenticated session only after durable identity, account, and workspace requirements are satisfied.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "durable-identity-reference", "valueType": "reference", "required": true }
+  ],
+  "guards": [
+    { "expression": "durable-identity == resolved", "failureCode": "durable-identity-required" },
+    { "expression": "account-status == active", "failureCode": "active-account-required" },
+    { "expression": "home-workspace == established and current-workspace == home", "failureCode": "home-workspace-required" }
+  ],
+  "permittedMutations": ["auth.dimension.session-capability"],
+  "requiredEffects": ["issue-normal-authenticated-session", "record-native-provider-session-established"],
+  "forbiddenEffects": ["create-durable-user", "create-home-workspace", "change-provider-link"],
+  "invariantKeys": ["auth.invariant.home-workspace.exactly-one", "auth.invariant.current-workspace.requires-access"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
