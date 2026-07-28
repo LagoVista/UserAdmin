@@ -1,0 +1,19 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.home-workspace.complete-creation",
+  "name": "Complete Home Workspace Creation",
+  "summary": "Completes home-workspace creation, owner membership, and deterministic home selection as one committed outcome.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "durable-identity-reference", "valueType": "reference", "required": true, "description": "Resolved durable identity receiving the workspace." },
+    { "key": "home-workspace-reference", "valueType": "reference", "required": true, "description": "Created home workspace." }
+  ],
+  "guards": [{ "expression": "durable-identity == resolved and home-workspace == creating", "failureCode": "home-workspace-creation-not-active" }],
+  "permittedMutations": ["auth.dimension.home-workspace", "auth.dimension.workspace-membership", "auth.dimension.current-workspace"],
+  "requiredEffects": ["commit-exactly-one-home-workspace", "create-home-owner-membership", "select-home-workspace", "record-home-workspace-created"],
+  "forbiddenEffects": ["create-second-home-workspace", "omit-owner-membership", "select-external-workspace", "consume-workspace-invitation"],
+  "invariantKeys": ["auth.invariant.home-workspace.exactly-one", "auth.invariant.home-workspace.owner-member", "auth.invariant.registration.completes-in-home-workspace", "auth.invariant.current-workspace.requires-access", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.9" }]
+}
