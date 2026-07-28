@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.recovery.request",
+  "name": "Request Account Recovery",
+  "summary": "Moves an inactive recovery state into requested while projecting only recovery ceremony capability.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 100,
+  "sourceState": { "expression": "recovery-state in [none,expired,failed,completed]" },
+  "actionKey": "auth.action.recovery.request",
+  "guards": [
+    { "expression": "recovery-cooldown-active == false", "failureCode": "recovery-cooldown-active" }
+  ],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.recovery-state", "operation": "set", "valueExpression": "requested" },
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "set", "valueExpression": "identity-ceremony" }
+  ],
+  "requiredEffects": ["create-single-use-recovery-record", "apply-enumeration-resistant-response", "record-recovery-request", "apply-rate-limit-and-cooldown-policy"],
+  "forbiddenEffects": ["create-durable-user", "confirm-account-existence", "authenticate-user", "accept-invitation", "switch-current-workspace"],
+  "invariantKeys": ["auth.invariant.recovery.existing-identity-only", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.14" }]
+}
