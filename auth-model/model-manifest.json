@@ -49,22 +49,22 @@
     "stateDimensions": 17,
     "compositeStateCatalogs": 1,
     "invariants": 20,
-    "actions": 34,
-    "transitions": 34,
-    "journeys": 9,
-    "scenarios": 33,
+    "actions": 38,
+    "transitions": 38,
+    "journeys": 10,
+    "scenarios": 37,
     "conversationTypes": 1,
     "presentationBindings": 0,
     "decisions": 0,
     "unresolved": 0
   },
   "currentWork": {
-    "guideSection": "4.8",
+    "guideSection": "4.9",
     "status": "complete",
-    "summary": "Passkey new-user registration, existing-user credential registration, authentication, and step-up are modeled as separate begin and complete ceremonies with single-use challenge binding, credential ownership validation, signature-counter updates, PendingIdentity isolation, and duplicate-user prevention. Next major area: Section 4.9, Home workspace creation."
+    "summary": "Home-workspace establishment is modeled as a canonical registration-independent lifecycle with idempotent creation, reconciliation of one valid existing workspace, owner membership, deterministic home selection, and an explicit blocked conflict state. Next major area: Section 4.10, Invitation resolution."
   },
   "sourceReferences": [
-    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8", "note": "Passkey registration, authentication, and step-up" },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.9", "note": "Home workspace establishment" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.1-HANDOFF.md", "note": "Repository model foundation" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.2-HANDOFF.md", "note": "Composite identity state decisions" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.3-HANDOFF.md", "note": "Composite relationships and foundational invariants" },
@@ -73,6 +73,7 @@
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.6-HANDOFF.md", "note": "Password registration handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.7-HANDOFF.md", "note": "Native-provider registration and linking handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.8-HANDOFF.md", "note": "Passkey registration, authentication, and step-up handoff" },
+    { "sourceType": "decision", "reference": "auth-model/SECTION-4.9-HANDOFF.md", "note": "Home workspace establishment handoff" },
     { "sourceType": "discussion", "reference": "auth-model/conversations/hr-onboarding.json", "note": "Initial proposed agent-assisted HR onboarding conversation definition" }
   ]
 }
