@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.native-provider.create-new-user",
+  "name": "Create New Native Provider User",
+  "summary": "Creates a new durable user for a validated provider subject only after duplicate checks and profile requirements pass.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.native-provider.new-user-registration"],
+  "transitionKey": "auth.transition.native-provider.create-user",
+  "preconditions": { "expression": "pending-identity-status == resolution-required and credential-proof == native-provider-proved and durable-identity == absent and profile-completeness == complete" },
+  "setup": ["Ensure the provider subject has no durable identity link and canonical duplicate checks pass."],
+  "inputs": [
+    { "key": "pending-identity-reference", "valueType": "reference", "required": true },
+    { "key": "idempotency-key", "valueType": "string", "required": true }
+  ],
+  "actionKey": "auth.action.native-provider.create-user",
+  "postconditions": { "expression": "durable-identity == resolved and account-status == active and home-workspace == required and pending-identity-status == resolved" },
+  "requiredEffects": ["create-durable-user-once", "persist-provider-link", "record-idempotency-result"],
+  "forbiddenEffects": ["create-second-durable-user", "create-home-workspace", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.email-identities.not-conflated"],
+  "expectedAuthLogEvents": ["native-provider-user-created"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
