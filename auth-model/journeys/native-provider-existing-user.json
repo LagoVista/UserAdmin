@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/journey.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.journey.native-provider.existing-user",
+  "name": "Native Provider Existing User Resolution",
+  "summary": "Resolves a validated Apple or Google provider subject to an existing durable identity through an existing link or an explicitly confirmed new link.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioKeys": [
+    "auth.scenario.native-provider.email-mismatch-preserved",
+    "auth.scenario.native-provider.resolve-linked-user",
+    "auth.scenario.native-provider.select-link-target",
+    "auth.scenario.native-provider.link-existing-user",
+    "auth.scenario.native-provider.establish-session"
+  ],
+  "entryPredicate": { "expression": "pending-identity-status == pending and pending-identity-flow == native-provider" },
+  "completionPredicate": { "expression": "durable-identity == resolved and pending-identity-status == resolved and session-capability == authenticated-normal" },
+  "alternateJourneyKeys": ["auth.journey.native-provider.new-user-registration"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
