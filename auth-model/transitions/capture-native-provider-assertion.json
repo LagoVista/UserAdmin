@@ -1,0 +1,24 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.native-provider.capture-assertion",
+  "name": "Capture Native Provider Assertion",
+  "summary": "Validates the native-provider assertion and moves the PendingIdentity to explicit identity resolution.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 100,
+  "sourceState": { "expression": "pending-identity-status == pending and pending-identity-flow == native-provider and credential-proof == none" },
+  "actionKey": "auth.action.native-provider.capture-assertion",
+  "guards": [
+    { "expression": "input.provider-subject is valid for input.provider", "failureCode": "invalid-provider-subject" }
+  ],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.credential-proof", "operation": "set", "valueExpression": "native-provider-proved" },
+    { "dimensionKey": "auth.dimension.email-ownership", "operation": "derive", "valueExpression": "provider-verified when input.provider-email-verified == true; otherwise asserted when provider email exists; otherwise unknown" },
+    { "dimensionKey": "auth.dimension.pending-identity-status", "operation": "set", "valueExpression": "resolution-required" }
+  ],
+  "requiredEffects": ["persist-provider-subject", "persist-provider-claims-hash", "preserve-provider-email-as-distinct-evidence"],
+  "forbiddenEffects": ["resolve-user-by-email-alone", "create-durable-user", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.email-identities.not-conflated", "auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.pending-identity.exactly-one-flow", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
