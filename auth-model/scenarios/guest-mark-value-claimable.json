@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.guest.mark-value-claimable",
+  "name": "Mark Guest Value Claimable",
+  "summary": "Promotes detected guest-created value into a stable claimable state without creating an account.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.guest.claimable-value"],
+  "transitionKey": "auth.transition.guest.mark-value-claimable",
+  "preconditions": { "expression": "guest-identity == active and claimable-value == detected and durable-identity == absent" },
+  "setup": ["Associate detected value with the active guest identity."],
+  "inputs": [],
+  "actionKey": "auth.action.guest.mark-value-claimable",
+  "postconditions": { "expression": "guest-identity == active and claimable-value == claimable and durable-identity == absent" },
+  "requiredEffects": ["persist-claimable-value-binding"],
+  "forbiddenEffects": ["create-durable-user", "claim-value"],
+  "invariantKeys": ["auth.invariant.guest.may-create-value", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "expectedAuthLogEvents": ["guest-value-marked-claimable"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.4" }]
+}
