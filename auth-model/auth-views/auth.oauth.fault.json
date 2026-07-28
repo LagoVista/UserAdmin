@@ -7,7 +7,9 @@
   "category": "provider",
   "routeId": "auth.route.oauth.fault",
   "status": "active",
-  "controls": [],
+  "controls": [
+    { "id": "oauth-error", "name": "OAuth Error", "controlType": "status", "finder": "status:oauth-error" }
+  ],
   "actions": [
     { "id": "back", "name": "Back", "actionType": "link", "finder": "action:back" }
   ],
