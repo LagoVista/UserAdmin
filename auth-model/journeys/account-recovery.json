@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/journey.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.journey.account-recovery",
+  "name": "Account Recovery",
+  "summary": "Restores access to an existing durable identity through enumeration-resistant request handling, approved proof, replacement credentials, security cleanup, and fresh sign-in.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioKeys": [
+    "auth.scenario.recovery.request",
+    "auth.scenario.recovery.issue-challenge",
+    "auth.scenario.recovery.verify-proof",
+    "auth.scenario.recovery.establish-replacement-credential",
+    "auth.scenario.recovery.complete"
+  ],
+  "entryPredicate": { "expression": "recovery-state in [none,expired,failed,completed] and a person requests recovery for an existing durable identity" },
+  "completionPredicate": { "expression": "recovery-state == completed and durable-identity == resolved and replacement-credential-established == true and prior sessions are revoked and session-capability == anonymous" },
+  "alternateJourneyKeys": [],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.14" }]
+}
