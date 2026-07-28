@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.invitation.accepted",
+  "name": "Invitation Accepted",
+  "description": "Displays the successful invitation acceptance outcome.",
+  "path": "/auth/invitation/accepted",
+  "routeType": "view",
+  "viewId": "auth.invitation.accepted",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "InviteAcceptedComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "commonLinksMember": "InviteAccepted",
+    "angularComponent": "InviteAcceptedComponent"
+  },
+  "notes": [
+    "Replaces /auth/invite/accepted and the optional id variant."
+  ]
+}
