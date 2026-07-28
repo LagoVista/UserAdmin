@@ -76,7 +76,7 @@ namespace LagoVista.UserAdmin.Managers
 
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendingEmailConfirm, userId: userHeader.Id, userName: userHeader.Text, extras: $"Raw Token={code.Substring(5)}*************");
 
-                var callbackUrl = $"{GetWebURI()}/auth/email/confirm?p={appUser.Id}&c={code}";
+                var callbackUrl = $"{GetWebURI()}{CommonLinks.EmailVerificationConfirm}?p={appUser.Id}&c={code}";
                 var mobileCallbackUrl = $"nuviot:confirmemail/?userId={appUser.Id}&code={code}";
 
                 var subject = String.IsNullOrEmpty(confirmSubject) ? UserAdminResources.Email_Verification_Subject.Replace("[APP_NAME]", _appConfig.AppName) : confirmSubject;
@@ -120,13 +120,13 @@ namespace LagoVista.UserAdmin.Managers
             if (user == null) throw new ArgumentNullException(nameof(user));
 
             if (String.IsNullOrEmpty(user.Email) || String.IsNullOrEmpty(user.FirstName) || String.IsNullOrEmpty(user.LastName))
-                return InvokeResult<string>.Create(CommonLinks.CompleteUserRegistration);
+                return InvokeResult<string>.Create(CommonLinks.RegistrationCompleteProfile);
 
             if (!user.EmailConfirmed)
             {
                 var sendConfirmResult = await SendConfirmationEmailAsync(user);
                 if (sendConfirmResult.Successful)
-                    return InvokeResult<string>.Create(CommonLinks.ConfirmEmailSent);
+                    return InvokeResult<string>.Create(CommonLinks.EmailVerificationSent);
                 else
                     return sendConfirmResult.ToInvokeResult<string>();
             }
@@ -146,10 +146,10 @@ namespace LagoVista.UserAdmin.Managers
 
             user.PendingInviteIds = remainingInviteIds.ToArray();
 
-            if (user.PendingInviteIds.Length == 1) return InvokeResult<string>.Create(CommonLinks.AcceptInviteId.Replace("{inviteid}", user.PendingInviteIds.First()));
+            if (user.PendingInviteIds.Length == 1) return InvokeResult<string>.Create(CommonLinks.InvitationReview.Replace("{invitation-id}", user.PendingInviteIds.First()));
             else if (user.PendingInviteIds.Any()) return InvokeResult<string>.Create(CommonLinks.Invitations);
 
-            if (user.CurrentOrganization == null) return InvokeResult<string>.Create(CommonLinks.CreateDefaultOrg);
+            if (user.CurrentOrganization == null) return InvokeResult<string>.Create(CommonLinks.OrganizationCreate);
 
             if (!String.IsNullOrEmpty(user.PendingRedirect)) return InvokeResult<string>.Create(user.PendingRedirect);
             if (!String.IsNullOrEmpty(user.CurrentOrganization?.HomePage)) return InvokeResult<string>.Create(user.CurrentOrganization?.HomePage);
