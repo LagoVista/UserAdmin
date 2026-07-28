@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.recovery.verify-proof",
+  "name": "Verify Recovery Proof",
+  "summary": "Consumes approved recovery proof and binds the ceremony to the existing durable identity without granting normal access.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.account-recovery"],
+  "transitionKey": "auth.transition.recovery.verify-proof",
+  "preconditions": { "expression": "recovery-state in [challenge-issued,proof-pending] and durable-identity == resolved" },
+  "setup": ["Issue a valid, unused recovery challenge bound to an existing durable identity."],
+  "inputs": [
+    { "key": "recovery-reference", "valueType": "reference", "required": true, "example": "recovery-record" },
+    { "key": "proof-reference", "valueType": "reference", "required": true, "example": "secure-proof-result" }
+  ],
+  "actionKey": "auth.action.recovery.verify-proof",
+  "postconditions": { "expression": "recovery-state == proved and durable-identity == resolved and session-capability == authenticated-limited" },
+  "requiredEffects": ["consume-recovery-challenge-once", "record-proof-strength-and-method", "bind-existing-durable-identity", "record-recovery-proof-verified"],
+  "forbiddenEffects": ["create-durable-user", "grant-normal-application-authorization", "accept-invitation", "switch-current-workspace"],
+  "invariantKeys": ["auth.invariant.recovery.existing-identity-only", "auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.transition.deterministic-post-state"],
+  "expectedAuthLogEvents": ["recovery-proof-verified"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.14" }]
+}
