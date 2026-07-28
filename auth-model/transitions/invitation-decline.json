@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.invitation.decline",
+  "name": "Decline Invitation",
+  "summary": "Moves a valid or acceptance-pending invitation to declined without changing membership or workspace state.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 100,
+  "sourceState": { "expression": "invitation-status in [valid,acceptance-pending]" },
+  "actionKey": "auth.action.invitation.decline",
+  "guards": [{ "expression": "decline-confirmed == true", "failureCode": "invitation-decline-not-confirmed" }],
+  "destinationTransform": [{ "dimensionKey": "auth.dimension.invitation-status", "operation": "set", "valueExpression": "declined" }],
+  "requiredEffects": ["record-invitation-declined"],
+  "forbiddenEffects": ["create-membership", "change-home-workspace", "switch-current-workspace"],
+  "invariantKeys": ["auth.invariant.invitation.accept-does-not-change-home", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10" }]
+}
