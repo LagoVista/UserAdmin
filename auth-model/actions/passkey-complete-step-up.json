@@ -1,0 +1,16 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.passkey.complete-step-up",
+  "name": "Complete Passkey Step Up",
+  "summary": "Validates a user-verifying passkey assertion and grants a fresh elevated session capability without changing durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [{ "key": "challenge-id", "valueType": "reference", "required": true, "description": "Single-use step-up challenge." }, { "key": "assertion", "valueType": "object", "required": true, "description": "WebAuthn assertion returned by the secure component." }],
+  "guards": [{ "expression": "challenge requires user verification and credential belongs to the current durable identity", "failureCode": "invalid-step-up-assertion" }],
+  "permittedMutations": ["credential-proof", "session-capability"],
+  "requiredEffects": ["consume-passkey-challenge", "validate-user-verifying-assertion", "advance-sign-counter", "record-fresh-mfa-time"],
+  "forbiddenEffects": ["change-durable-identity", "create-durable-user", "grant-step-up-on-preferred-only-user-verification"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "code", "reference": "src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "CompleteAuthenticationAsync with isStepUp records LastMfaDateTimeUtc" }, { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
