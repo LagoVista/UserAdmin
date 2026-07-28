@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.passkey.management",
+  "name": "Manage Passkeys",
+  "description": "Lists the user's passkeys and provides actions to add or remove credentials.",
+  "category": "passkey",
+  "routeId": "auth.route.passkey.management",
+  "status": "active",
+  "controls": [
+    { "id": "passkey-list", "name": "Passkey List", "controlType": "display", "finder": "display:passkey-list" },
+    { "id": "management-status", "name": "Management Status", "controlType": "status", "finder": "status:management-status" }
+  ],
+  "actions": [
+    { "id": "add-passkey", "name": "Add Passkey", "actionType": "button", "finder": "action:add-passkey" },
+    { "id": "remove-passkey", "name": "Remove Passkey", "actionType": "button", "finder": "action:remove-passkey" },
+    { "id": "done", "name": "Done", "actionType": "button", "finder": "action:done" }
+  ],
+  "platforms": {
+    "web": { "status": "implemented" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "runtimeEntityId": "A9D88EEAAFC04BA499C3FC06A4A0FA32",
+    "runtimeSha256Hex": "b356adc78c6718229e889814975b62db465fd08e87e3b4170aaae9ecc06bdd27"
+  }
+}
