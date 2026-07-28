@@ -1,0 +1,29 @@
+{
+  "$schema": "../schemas/conversation-type.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.conversation.user-invitation",
+  "name": "User Invitation",
+  "summary": "Helps an authorized member prepare, review, and send an invitation to another person without bypassing role-assignment or organization policy.",
+  "version": 1,
+  "maturity": "proposed",
+  "goals": [{ "key": "invite-user", "summary": "Help an authorized member prepare and send an invitation to another person." }],
+  "supportedJourneyKeys": [],
+  "entryPredicate": { "expression": "An authenticated member requests to invite another person and has a potentially valid target organization context." },
+  "completionPredicate": { "expression": "The invitation is sent, explicitly canceled, blocked by policy, or escalated without unauthorized membership creation." },
+  "informationRequirements": [
+    { "key": "invitee-details", "summary": "The invitee name, email, intended role, and optional team or sponsor context.", "sensitivity": "profile", "collection": "conversation", "requiredForGoalKeys": ["invite-user"] },
+    { "key": "inviter-authority", "summary": "The inviter's current organization, permissions, and assignable roles.", "sensitivity": "sensitive", "collection": "existing-state", "requiredForGoalKeys": ["invite-user"] }
+  ],
+  "allowedActionKeys": [],
+  "prohibitedActionKeys": [],
+  "decisionPoints": [{ "key": "validate-invitation-scope", "summary": "Determine whether the requested organization, role, and access scope may be invited by the current principal.", "basis": ["current organization", "inviter permissions", "assignable roles", "duplicate membership and invitation state"] }],
+  "confirmationRequirements": [{ "key": "send-invitation", "summary": "Show the invitee, organization, role, and access scope and require explicit confirmation before sending.", "requiredBeforeActionKeys": [] }],
+  "secureInteractions": [],
+  "escalationConditions": [{ "key": "insufficient-authority", "condition": "The current principal cannot assign the requested role or invite into the selected organization.", "outcome": "Do not send the invitation; explain valid alternatives or route to an authorized administrator." }],
+  "lifecycle": { "pause": "Persist a draft invitation only when policy permits and keep it separate from the chat transcript.", "resume": "Reload organization, role, membership, and invitation state before presenting confirmation.", "abandonment": "Discard or retain the draft according to policy without sending it.", "expiration": "Expire stale drafts independently from sent invitations." },
+  "supportedChannels": ["web", "android", "ios", "vtm", "voice"],
+  "presentationExpectations": ["Present a clear invitation summary before sending.", "Never imply that an invitation creates membership before acceptance.", "Expose only roles the current principal may assign.", "Provide an equivalent traditional invitation form."],
+  "scenarioKeys": [],
+  "openQuestions": ["Which canonical invitation-creation journey and actions should this conversation reference?"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.11", "note": "Split from the original HR Onboarding goal set on 2026-07-28." }]
+}
