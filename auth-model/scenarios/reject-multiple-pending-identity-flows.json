@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.pending-identity.reject-multiple-flows",
+  "name": "Reject Multiple Pending Identity Flows",
+  "summary": "Rejects any PendingIdentity state that activates more than one authentication flow bucket.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "security-invariant",
+  "journeyKeys": ["auth.journey.pending-identity.lifecycle"],
+  "transitionKey": null,
+  "preconditions": { "expression": "pending-identity-status in [pending,verification-required,verifying,resolution-required] and populated-flow-bucket-count > 1" },
+  "setup": ["Construct a PendingIdentity with conflicting populated flow buckets."],
+  "inputs": [],
+  "actionKey": "auth.action.pending-identity.begin",
+  "postconditions": { "expression": "transition rejected and durable-identity != resolved and session-capability != authenticated-normal" },
+  "requiredEffects": ["record-pending-identity-flow-conflict"],
+  "forbiddenEffects": ["persist-conflicting-flow-buckets", "resolve-durable-identity", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.pending-identity.exactly-one-flow", "auth.invariant.pending-identity.no-normal-authorization"],
+  "expectedAuthLogEvents": ["pending-identity-flow-conflict"],
+  "evidenceRequirements": ["server"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.5" }]
+}
