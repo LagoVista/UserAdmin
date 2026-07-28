@@ -4,7 +4,7 @@
   "title": "Authentication Presentation Binding",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "key", "name", "summary", "version", "maturity", "channel", "platform", "actionKey", "fieldBindings", "actionBinding", "sourceReferences"],
+  "required": ["schemaVersion", "key", "name", "summary", "version", "maturity", "bindingKind", "channel", "platform", "fieldBindings", "actionBinding", "sourceReferences"],
   "properties": {
     "$schema": { "type": "string" },
     "schemaVersion": { "const": "1.0" },
@@ -13,10 +13,12 @@
     "summary": { "type": "string", "minLength": 1 },
     "version": { "type": "integer", "minimum": 1 },
     "maturity": { "$ref": "#/$defs/maturity" },
+    "bindingKind": { "enum": ["canonical-action", "ui-navigation"] },
     "channel": { "enum": ["traditional-form", "guided-vtm", "native-ui", "web-ui", "api"] },
     "platform": { "enum": ["server", "web", "android", "ios", "vtm"] },
     "scenarioKeys": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^auth\\.scenario\\." } },
-    "actionKey": { "type": "string", "pattern": "^auth\\.action\\." },
+    "actionKey": { "type": ["string", "null"], "pattern": "^auth\\.action\\." },
+    "navigationKey": { "type": ["string", "null"], "pattern": "^auth\\.navigation\\." },
     "authViewKey": { "type": ["string", "null"] },
     "route": { "type": ["string", "null"] },
     "viewId": { "type": ["string", "null"] },
@@ -51,6 +53,16 @@
     "sourceReferences": { "type": "array", "items": { "$ref": "#/$defs/sourceReference" } },
     "definitionHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
   },
+  "allOf": [
+    {
+      "if": { "properties": { "bindingKind": { "const": "canonical-action" } } },
+      "then": { "required": ["actionKey"] }
+    },
+    {
+      "if": { "properties": { "bindingKind": { "const": "ui-navigation" } } },
+      "then": { "required": ["navigationKey"] }
+    }
+  ],
   "$defs": {
     "maturity": { "enum": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"] },
     "sourceReference": {
