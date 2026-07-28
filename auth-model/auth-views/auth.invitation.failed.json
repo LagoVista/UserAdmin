@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.invitation.failed",
+  "name": "Invitation Failed",
+  "description": "Explains that an invitation could not be loaded or accepted and provides safe recovery paths.",
+  "category": "invitation",
+  "routeId": "auth.route.invitation.failed",
+  "status": "active",
+  "controls": [],
+  "actions": [
+    { "id": "back-to-sign-in", "name": "Back to Sign In", "actionType": "button", "finder": "action:back-to-sign-in" },
+    { "id": "start-over", "name": "Start Over", "actionType": "button", "finder": "action:start-over" }
+  ],
+  "platforms": {
+    "web": { "status": "implemented" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "runtimeEntityId": "4895DA8676C84BCAB5809484884AA054",
+    "runtimeSha256Hex": "6cc8e94df8e555e253e5229759c5822599d79d2a232f18b9d175b934450cecd4"
+  }
+}
