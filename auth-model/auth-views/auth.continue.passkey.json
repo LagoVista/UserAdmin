@@ -7,7 +7,9 @@
   "category": "passkey",
   "routeId": "auth.route.continue.passkey",
   "status": "active",
-  "controls": [],
+  "controls": [
+    { "id": "passkey-error", "name": "Passkey Error", "controlType": "status", "finder": "status:passkey-error", "visibilityCondition": "Passkey authentication or creation failed." }
+  ],
   "actions": [
     { "id": "use-passkey", "name": "Use Passkey", "actionType": "native-capability", "finder": "action:use-passkey" },
     { "id": "back", "name": "Back", "actionType": "button", "finder": "action:back" },
