@@ -1,0 +1,25 @@
+{
+  "$schema": "../schemas/state-dimension.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.dimension.mfa-state",
+  "name": "MFA State",
+  "summary": "Describes MFA enrollment, challenge, and recent step-up strength.",
+  "version": 1,
+  "maturity": "proposed",
+  "authority": "canonical",
+  "valueType": "enumeration",
+  "requiredForCanonicalSnapshot": true,
+  "values": [
+    { "key": "not-enrolled", "name": "Not Enrolled", "summary": "No MFA factor is enrolled." },
+    { "key": "enrolled", "name": "Enrolled", "summary": "At least one MFA factor is enrolled but no current step-up exists." },
+    { "key": "challenge-required", "name": "Challenge Required", "summary": "A stronger proof is required for the requested action." },
+    { "key": "challenge-active", "name": "Challenge Active", "summary": "An MFA or step-up challenge is in progress." },
+    { "key": "satisfied", "name": "Satisfied", "summary": "MFA or step-up proof is currently fresh enough for its intended capability." },
+    { "key": "expired", "name": "Expired", "summary": "Previous step-up proof is no longer fresh." },
+    { "key": "locked", "name": "Locked", "summary": "MFA attempts are temporarily blocked." }
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "AuthStateService.GetAuthSession", "note": "MfaStepUpTimeStamp and current 15-minute projection" },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Testing/AuthTenantStateSnapshot.cs" }
+  ]
+}
