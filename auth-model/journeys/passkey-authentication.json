@@ -1,0 +1,13 @@
+{
+  "$schema": "../schemas/journey.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.journey.passkey.authentication",
+  "name": "Passkey Authentication",
+  "summary": "Authenticates an existing durable identity using a single-use passkey assertion challenge.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioKeys": ["auth.scenario.passkey.authentication"],
+  "entryPredicate": { "expression": "session-capability in [anonymous,identity-ceremony,authenticated-limited] and account-status not-in [disabled,closed]" },
+  "completionPredicate": { "expression": "credential-proof == passkey-proved and durable-identity == resolved and session-capability in [authenticated-limited,authenticated-normal]" },
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
