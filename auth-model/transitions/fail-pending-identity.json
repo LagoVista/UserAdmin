@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.pending-identity.fail",
+  "name": "Fail Pending Identity",
+  "summary": "Terminates an active PendingIdentity after a non-recoverable ceremony failure.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 30,
+  "sourceState": { "expression": "pending-identity-status in [pending,verification-required,verifying,resolution-required]" },
+  "actionKey": "auth.action.pending-identity.fail",
+  "guards": [],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.pending-identity-status", "operation": "set", "valueExpression": "failed" },
+    { "dimensionKey": "auth.dimension.pending-identity-flow", "operation": "set", "valueExpression": "none" },
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "derive", "valueExpression": "blocked or anonymous according to failure policy" }
+  ],
+  "requiredEffects": ["invalidate-pending-identity-secrets", "record-pending-identity-failed"],
+  "forbiddenEffects": ["resolve-durable-identity", "grant-normal-application-authorization", "silently-retry-terminal-failure"],
+  "invariantKeys": ["auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.5" }]
+}
