@@ -1,0 +1,39 @@
+{
+  "$schema": "../schemas/presentation-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.presentation.web.invitation-review",
+  "name": "Web Invitation Review",
+  "summary": "Binds the traditional invitation review route to invitation validation and identity-path selection without treating the invitation as authentication proof or accepting it during navigation.",
+  "version": 1,
+  "maturity": "proposed",
+  "channel": "traditional-form",
+  "platform": "web",
+  "scenarioKeys": [
+    "auth.scenario.invitation.validate-valid",
+    "auth.scenario.invitation.select-current-account",
+    "auth.scenario.invitation.select-another-account",
+    "auth.scenario.invitation.sign-in-then-select",
+    "auth.scenario.invitation.register-then-select"
+  ],
+  "actionKey": "auth.action.invitation.validate",
+  "authViewKey": "auth.invite.review",
+  "route": "/auth/invite/accept/:id",
+  "viewId": "auth.invite.review",
+  "fieldBindings": [
+    { "inputKey": "invitation-id", "authViewFieldId": null, "finder": "route-param:id", "bindingType": "generated", "valueSource": "route parameter" }
+  ],
+  "actionBinding": {
+    "authFieldActionId": null,
+    "finder": null,
+    "bindingType": "api-call",
+    "operationReference": "UserService.getInvitation"
+  },
+  "expectedViewId": "auth.invite.review",
+  "expectedRoute": "/auth/invite/accept/:id",
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared/auth-routes.ts", "note": "Invitation review route." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared/user/accept-invite/accept-invite.component.ts", "note": "Invitation lookup and identity-path navigation." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared/user/accept-invite/accept-invite.component.html", "note": "Existing-account, new-account, and provider path choices." },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.12" }
+  ]
+}
