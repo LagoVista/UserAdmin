@@ -1,0 +1,24 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.native-provider.create-user",
+  "name": "Create Native Provider User",
+  "summary": "Creates a new durable user after validated provider proof, duplicate-user checks, and required profile data are complete.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "pending-identity-reference", "valueType": "reference", "required": true },
+    { "key": "idempotency-key", "valueType": "string", "required": true }
+  ],
+  "guards": [
+    { "expression": "native provider proof is valid", "failureCode": "native-provider-proof-required" },
+    { "expression": "profile-completeness == complete", "failureCode": "profile-incomplete" },
+    { "expression": "provider subject has no existing durable identity link", "failureCode": "provider-subject-already-linked" },
+    { "expression": "canonical identity duplicate check passed", "failureCode": "existing-canonical-identity-requires-link" }
+  ],
+  "permittedMutations": ["auth.dimension.durable-identity", "auth.dimension.account-status", "auth.dimension.home-workspace", "auth.dimension.pending-identity-status"],
+  "requiredEffects": ["create-durable-user-once", "persist-provider-link", "record-idempotency-result"],
+  "forbiddenEffects": ["create-second-durable-user", "create-home-workspace", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.email-identities.not-conflated"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
