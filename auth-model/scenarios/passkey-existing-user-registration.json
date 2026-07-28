@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.passkey.existing-user-registration",
+  "name": "Existing User Passkey Registration",
+  "summary": "Adds a passkey to the current durable user without creating or switching identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.passkey.existing-user-registration"],
+  "transitionKey": "auth.transition.passkey.complete-existing-user-registration",
+  "preconditions": { "expression": "durable-identity == resolved and credential-proof == challenge-issued and session-capability in [authenticated-limited,authenticated-normal,step-up]" },
+  "setup": ["Issue a user-bound passkey registration challenge excluding existing credentials."],
+  "inputs": [{ "key": "attestation", "valueType": "object", "required": true, "description": "Valid WebAuthn attestation from the secure component." }],
+  "actionKey": "auth.action.passkey.complete-existing-user-registration",
+  "postconditions": { "expression": "durable-identity == resolved and credential-proof == passkey-proved and session identity is unchanged" },
+  "requiredEffects": ["consume-passkey-challenge", "validate-attestation", "persist-passkey-credential-for-current-user"],
+  "forbiddenEffects": ["create-durable-user", "bind-credential-to-different-user", "change-session-identity"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user"],
+  "expectedAuthLogEvents": ["passkey-existing-user-registration-begun", "passkey-existing-user-registration-completed"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "code", "reference": "src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "BeginRegistrationOptionsAsync and CompleteRegistrationAsync" }, { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
