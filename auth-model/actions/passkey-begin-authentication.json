@@ -1,0 +1,16 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.passkey.begin-authentication",
+  "name": "Begin Passkey Authentication",
+  "summary": "Issues a short-lived passkey assertion challenge for normal authentication.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [{ "key": "return-location", "valueType": "string", "required": false, "description": "Validated post-authentication return location." }],
+  "guards": [{ "expression": "account-status != disabled and account-status != closed", "failureCode": "account-not-eligible" }],
+  "permittedMutations": ["credential-proof"],
+  "requiredEffects": ["create-short-lived-passkey-authentication-challenge"],
+  "forbiddenEffects": ["authenticate-before-assertion", "grant-step-up", "expose-credential-material"],
+  "invariantKeys": ["auth.invariant.disabled-user.no-normal-session", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "code", "reference": "src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "BeginAuthenticationOptionsAsync and BeginPasswordlessAuthenticationOptionsAsync" }, { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
