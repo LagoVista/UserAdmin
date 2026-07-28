@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/state-dimension.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.dimension.guest-identity",
+  "name": "Guest Identity",
+  "summary": "Describes anonymous participation before a durable identity has been resolved.",
+  "version": 1,
+  "maturity": "proposed",
+  "authority": "canonical",
+  "valueType": "enumeration",
+  "requiredForCanonicalSnapshot": true,
+  "values": [
+    { "key": "none", "name": "None", "summary": "No guest identity or guest-owned interaction is active." },
+    { "key": "active", "name": "Active", "summary": "A guest session is active and may own conversation state or ephemeral work." },
+    { "key": "claim-pending", "name": "Claim Pending", "summary": "The guest identity is being associated with a resolved durable identity." },
+    { "key": "claimed", "name": "Claimed", "summary": "The guest-owned interaction has been attached to a durable identity.", "terminal": true },
+    { "key": "expired", "name": "Expired", "summary": "The guest identity can no longer be resumed or claimed.", "terminal": true }
+  ],
+  "sourceReferences": [
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "2.3" }
+  ]
+}
