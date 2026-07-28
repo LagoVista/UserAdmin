@@ -3,29 +3,76 @@
   "schemaVersion": "1.0",
   "key": "auth.conversation.invitation-resolution",
   "name": "Invitation Resolution",
-  "summary": "Helps a person review and resolve an organization invitation through an explicitly selected durable identity.",
-  "version": 1,
+  "summary": "Helps a person review and resolve an organization invitation through an explicitly selected durable identity while keeping authentication proof and workspace switching outside the conversation.",
+  "version": 2,
   "maturity": "proposed",
   "goals": [{ "key": "resolve-invitation", "summary": "Help a person understand, accept, decline, or safely resolve an organization invitation." }],
-  "supportedJourneyKeys": [],
+  "supportedJourneyKeys": ["auth.journey.invitation.resolution"],
   "routedConversationKeys": [],
   "entryPredicate": { "expression": "A pending invitation exists and the person requests help reviewing or resolving it." },
   "completionPredicate": { "expression": "The invitation is accepted, declined, expired, already consumed, abandoned, or escalated without ambiguous identity mutation." },
   "informationRequirements": [
     { "key": "invitation-state", "summary": "Display-safe invitation, inviter, target organization, role, and expiration information.", "sensitivity": "sensitive", "collection": "existing-state", "requiredForGoalKeys": ["resolve-invitation"] },
     { "key": "identity-selection", "summary": "The durable identity explicitly selected to resolve the invitation.", "sensitivity": "sensitive", "collection": "conversation", "requiredForGoalKeys": ["resolve-invitation"] },
+    { "key": "invitation-decision", "summary": "The person's explicit decision to accept or decline the validated invitation.", "sensitivity": "sensitive", "collection": "conversation", "requiredForGoalKeys": ["resolve-invitation"] },
     { "key": "authentication-secrets", "summary": "Any credentials or verification proofs needed to establish or switch the selected identity.", "sensitivity": "secret", "collection": "secure-component", "requiredForGoalKeys": ["resolve-invitation"] }
   ],
-  "allowedActionKeys": [],
+  "allowedActionKeys": [
+    "auth.action.invitation.validate",
+    "auth.action.invitation.select-identity",
+    "auth.action.invitation.accept",
+    "auth.action.invitation.decline"
+  ],
   "prohibitedActionKeys": [],
-  "decisionPoints": [{ "key": "select-invitation-identity", "summary": "Select the durable identity that will accept or decline the invitation.", "basis": ["current authenticated identity", "invited email", "verified identifiers", "available account paths"] }],
-  "confirmationRequirements": [{ "key": "accept-or-decline-invitation", "summary": "Require explicit confirmation before accepting or declining the invitation.", "requiredBeforeActionKeys": [] }],
-  "secureInteractions": [{ "key": "invitation-identity-establishment", "summary": "Authenticate or register the explicitly selected identity outside conversational context.", "componentType": "standard-authentication-ui", "conversationMayProvide": ["invitation reference", "display-safe organization context", "selected account path", "return location"], "componentCollects": ["passwords", "one-time codes", "passkey material", "provider tokens"], "sanitizedOutcomes": ["completed", "canceled", "failed", "additional-verification-required", "expired"], "resumeBehavior": "Refresh invitation and identity state before offering acceptance or decline." }],
-  "escalationConditions": [{ "key": "invitation-identity-ambiguity", "condition": "The selected identity cannot be safely bound to the invitation-resolution action.", "outcome": "Pause invitation mutation and route to deterministic account resolution or support." }],
-  "lifecycle": { "pause": "Persist the invitation reference, selected path, and secure handoff outside the transcript.", "resume": "Reload invitation status and identity state before continuing.", "abandonment": "Leave the invitation unchanged unless the person explicitly declined it.", "expiration": "Treat invitation and secure-handoff expiration independently and explain the current valid options." },
+  "decisionPoints": [
+    { "key": "select-invitation-identity", "summary": "Select the durable identity that will accept or decline the invitation.", "basis": ["current authenticated identity", "invited email", "verified identifiers", "available account paths"] },
+    { "key": "offer-invitation-decision", "summary": "Offer acceptance or decline only after invitation validation and explicit durable-identity selection.", "basis": ["invitation status", "selected durable identity", "membership state", "prior invitation consumption"] }
+  ],
+  "confirmationRequirements": [{
+    "key": "accept-or-decline-invitation",
+    "summary": "Require explicit confirmation immediately before accepting or declining the invitation.",
+    "requiredBeforeActionKeys": ["auth.action.invitation.accept", "auth.action.invitation.decline"]
+  }],
+  "secureInteractions": [{
+    "key": "invitation-identity-establishment",
+    "summary": "Authenticate or register the explicitly selected identity outside conversational context.",
+    "componentType": "standard-authentication-ui",
+    "conversationMayProvide": ["invitation reference", "display-safe organization context", "selected account path", "return location"],
+    "componentCollects": ["passwords", "one-time codes", "passkey material", "provider tokens"],
+    "sanitizedOutcomes": ["completed", "canceled", "failed", "additional-verification-required", "expired"],
+    "resumeBehavior": "Discard conversational assumptions, refresh invitation and identity state, and continue only from the next permitted canonical action."
+  }],
+  "escalationConditions": [
+    { "key": "invitation-identity-ambiguity", "condition": "The selected identity cannot be safely bound to the invitation-resolution action.", "outcome": "Pause invitation mutation and route to deterministic account resolution or support." },
+    { "key": "invitation-state-changed", "condition": "The invitation expired, was consumed, or membership changed while the conversation was paused.", "outcome": "Explain the refreshed state and do not replay the previously proposed action." }
+  ],
+  "lifecycle": {
+    "pause": "Persist the invitation reference, selected path, explicit confirmation state, and secure handoff outside the transcript.",
+    "resume": "Reload invitation status, durable identity, and membership state before continuing; prior confirmation does not authorize an action against changed state.",
+    "abandonment": "Leave the invitation unchanged unless the person explicitly completed the decline action.",
+    "expiration": "Treat invitation and secure-handoff expiration independently and explain the currently valid options."
+  },
   "supportedChannels": ["web", "android", "ios", "vtm", "voice"],
-  "presentationExpectations": ["Explain the invitation before requesting a decision.", "Make the selected durable identity explicit.", "Never treat the invitation itself as identity proof.", "Provide an equivalent traditional invitation flow."],
-  "scenarioKeys": [],
-  "openQuestions": ["Which canonical invitation-resolution journey and actions should this conversation reference?"],
-  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10 and 4.11", "note": "Split from the original HR Onboarding goal set on 2026-07-28." }]
+  "presentationExpectations": [
+    "Explain the invitation before requesting a decision.",
+    "Make the selected durable identity explicit.",
+    "Never treat the invitation itself as identity proof.",
+    "Explain canonical validation failures without inventing alternate recovery behavior.",
+    "Do not switch the current workspace as part of invitation acceptance.",
+    "Provide an equivalent traditional invitation flow invoking the same logical actions."
+  ],
+  "scenarioKeys": [
+    "auth.scenario.invitation.validate-valid",
+    "auth.scenario.invitation.select-current-account",
+    "auth.scenario.invitation.select-another-account",
+    "auth.scenario.invitation.sign-in-then-select",
+    "auth.scenario.invitation.register-then-select",
+    "auth.scenario.invitation.accept-membership",
+    "auth.scenario.invitation.reject-consumed"
+  ],
+  "openQuestions": [],
+  "sourceReferences": [
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10 and 4.11", "note": "Bound guided invitation resolution to the canonical journey, actions, confirmations, and scenarios." },
+    { "sourceType": "decision", "reference": "auth-model/SECTION-4.10-HANDOFF.md", "note": "Invitation resolution canonical core." }
+  ]
 }
