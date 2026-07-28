@@ -1,0 +1,39 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.email-verification.confirmed",
+  "name": "Email Confirmed",
+  "description": "Confirms that the user's email address has been successfully verified.",
+  "category": "email-verification",
+  "routeId": "auth.route.email-verification.confirmed",
+  "status": "active",
+  "controls": [],
+  "actions": [
+    {
+      "id": "continue",
+      "name": "Continue",
+      "actionType": "button",
+      "finder": "action:continue"
+    },
+    {
+      "id": "sign-out",
+      "name": "Sign Out",
+      "actionType": "button",
+      "finder": "action:sign-out"
+    }
+  ],
+  "platforms": {
+    "web": {
+      "status": "implemented",
+      "implementation": "EmailConfirmedComponent"
+    },
+    "mobile": {
+      "status": "planned"
+    }
+  },
+  "source": {
+    "runtimeEntityId": "B31F45282DB64447802987613BE928F5",
+    "runtimeSha256Hex": "58d3f42b1452c7f6324c087afd169fd7078ea1bae2c664a1b44e55e43401f086",
+    "webComponent": "EmailConfirmedComponent"
+  }
+}
