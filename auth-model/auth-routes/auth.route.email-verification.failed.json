@@ -1,0 +1,25 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.email-verification.failed",
+  "name": "Email Verification Failed",
+  "description": "Displays the unsuccessful email verification outcome.",
+  "path": "/auth/email-verification/failed",
+  "routeType": "view",
+  "viewId": "auth.email-verification.failed",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": {
+      "status": "implemented",
+      "implementation": "EmailCouldNotConfirmComponent"
+    },
+    "mobile": {
+      "status": "planned"
+    }
+  },
+  "source": {
+    "commonLinksMember": "EmailVerificationFailed",
+    "angularComponent": "EmailCouldNotConfirmComponent"
+  }
+}
