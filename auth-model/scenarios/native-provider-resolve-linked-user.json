@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.native-provider.resolve-linked-user",
+  "name": "Resolve Linked Native Provider User",
+  "summary": "Resolves a validated provider subject that is already linked to exactly one durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.native-provider.existing-user"],
+  "transitionKey": "auth.transition.native-provider.resolve-linked-subject",
+  "preconditions": { "expression": "pending-identity-status == resolution-required and credential-proof == native-provider-proved and provider-subject-link-count == 1" },
+  "setup": ["Link the provider subject to one existing active durable identity."],
+  "inputs": [
+    { "key": "provider-subject", "valueType": "string", "required": true },
+    { "key": "durable-identity-reference", "valueType": "reference", "required": true }
+  ],
+  "actionKey": "auth.action.native-provider.resolve-linked-subject",
+  "postconditions": { "expression": "durable-identity == resolved and pending-identity-status == resolved" },
+  "requiredEffects": ["record-provider-subject-resolution"],
+  "forbiddenEffects": ["create-durable-user", "relink-provider-subject", "resolve-user-by-email-alone"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.email-identities.not-conflated"],
+  "expectedAuthLogEvents": ["native-provider-subject-resolved"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
