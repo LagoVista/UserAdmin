@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.pending-identity.resolve",
+  "name": "Resolve Pending Identity",
+  "summary": "Binds a fully proven pending identity to one canonical durable identity and closes the airlock.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [{ "key": "durable-identity-reference", "valueType": "reference", "required": true }],
+  "guards": [
+    { "expression": "pending-identity-status == resolution-required", "failureCode": "identity-resolution-not-ready" },
+    { "expression": "credential-proof in [primary,multi-factor,recovery]", "failureCode": "credential-proof-insufficient" },
+    { "expression": "input.durable-identity-reference resolves to exactly one canonical identity", "failureCode": "durable-identity-resolution-ambiguous" }
+  ],
+  "permittedMutations": ["auth.dimension.pending-identity-status", "auth.dimension.pending-identity-flow", "auth.dimension.durable-identity", "auth.dimension.session-capability"],
+  "requiredEffects": ["bind-pending-identity-to-durable-identity", "record-pending-identity-resolved"],
+  "forbiddenEffects": ["create-duplicate-durable-user", "retain-active-flow-bucket", "grant-capability-beyond-resolved-account-state"],
+  "invariantKeys": ["auth.invariant.pending-identity.exactly-one-flow", "auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.5" }]
+}
