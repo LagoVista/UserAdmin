@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/state-dimension.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.dimension.pending-identity-status",
+  "name": "Pending Identity Status",
+  "summary": "Describes the lifecycle of the secure identity-resolution airlock before durable identity resolution.",
+  "version": 1,
+  "maturity": "proposed",
+  "authority": "canonical",
+  "valueType": "enumeration",
+  "requiredForCanonicalSnapshot": true,
+  "values": [
+    { "key": "none", "name": "None", "summary": "No pending identity exists." },
+    { "key": "pending", "name": "Pending", "summary": "The identity ceremony is active and awaiting its next valid action." },
+    { "key": "verification-required", "name": "Verification Required", "summary": "Additional identity proof is required before resolution." },
+    { "key": "verifying", "name": "Verifying", "summary": "A verification operation is in progress." },
+    { "key": "resolution-required", "name": "Resolution Required", "summary": "Credential proof exists but create, link, or reject resolution remains." },
+    { "key": "resolved", "name": "Resolved", "summary": "The pending identity has resolved to a durable identity.", "terminal": true },
+    { "key": "expired", "name": "Expired", "summary": "The pending identity is no longer usable.", "terminal": true },
+    { "key": "canceled", "name": "Canceled", "summary": "The ceremony was canceled.", "terminal": true },
+    { "key": "failed", "name": "Failed", "summary": "The ceremony ended in a terminal failure.", "terminal": true }
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Users/PendingIdentity.cs", "note": "PendingIdentityStatus and lifecycle intent" },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.5" }
+  ]
+}
