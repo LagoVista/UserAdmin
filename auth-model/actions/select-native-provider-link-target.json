@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.native-provider.select-link-target",
+  "name": "Select Native Provider Link Target",
+  "summary": "Explicitly selects the existing durable identity that may receive an unlinked validated provider subject.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "durable-identity-reference", "valueType": "reference", "required": true },
+    { "key": "selection-confirmed", "valueType": "boolean", "required": true }
+  ],
+  "guards": [
+    { "expression": "selection-confirmed == true", "failureCode": "provider-link-target-confirmation-required" },
+    { "expression": "selected durable identity exists and is eligible for linking", "failureCode": "provider-link-target-invalid" }
+  ],
+  "permittedMutations": ["auth.dimension.durable-identity"],
+  "requiredEffects": ["record-explicit-link-target-selection"],
+  "forbiddenEffects": ["link-provider-subject", "create-durable-user", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.email-identities.not-conflated", "auth.invariant.pending-identity.no-normal-authorization"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
