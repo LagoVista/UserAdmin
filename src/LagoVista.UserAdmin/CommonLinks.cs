@@ -2,45 +2,61 @@
 // ContentHash: e517fe679a6df5f337645f349297c67bea1621dc2d9c4ba1805439908e28e354
 // IndexVersion: 2
 // --- END CODE INDEX META ---
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace LagoVista.UserAdmin
 {
     public static class CommonLinks
     {
-        
-        public const string Login = "/auth/login";
-        public const string LoginOut = "/auth/logout";
+        public const string AuthEntry = "/auth";
+        public const string AuthWelcome = "/auth/welcome";
+        public const string AuthWelcomeBack = "/auth/welcome/back";
+
+        public const string AuthContinueEmail = "/auth/continue/email";
+        public const string AuthContinueEmailPassword = "/auth/continue/email/password";
+        public const string AuthContinuePasskey = "/auth/continue/passkey";
+        public const string AuthContinueProvider = "/auth/continue/provider";
+        public const string AuthContinueTotp = "/auth/continue/totp";
+        public const string AuthSignInUnable = "/auth/sign-in/unable";
+
+        public const string PasswordResetRequest = "/auth/password/reset/request";
+        public const string PasswordResetSent = "/auth/password/reset/sent";
+        public const string PasswordResetComplete = "/auth/password/reset/{code}";
+
+        public const string MagicLinkSent = "/auth/magic-link/sent";
+        public const string MagicLinkHandle = "/auth/magic-link/handle";
+
+        public const string OAuthLogins = "/auth/oauth/logins";
+        public const string OAuthStart = "/auth/oauth/start";
+        public const string OAuthHandle = "/auth/oauth/handle";
+        public const string OAuthAccessDenied = "/auth/oauth/access-denied";
+        public const string OAuthFault = "/auth/oauth/fault";
+
+        public const string EmailVerificationConfirm = "/auth/email-verification/confirm";
+        public const string EmailVerificationSent = "/auth/email-verification/sent";
+        public const string EmailVerificationConfirmed = "/auth/email-verification/confirmed";
+        public const string EmailVerificationFailed = "/auth/email-verification/failed";
+
+        public const string RegistrationCreateAccount = "/auth/registration/create-account";
+        public const string RegistrationCompleteProfile = "/auth/registration/complete-profile";
+
+        public const string InvitationReview = "/auth/invitation/{invitation-id}";
+        public const string InvitationAccepted = "/auth/invitation/accepted";
+        public const string InvitationFailed = "/auth/invitation/failed";
+        public const string Invitations = "/auth/invitations";
+
+        public const string TotpEnrollmentStart = "/auth/mfa/totp/enroll";
+        public const string TotpEnrollmentConfirm = "/auth/mfa/totp/confirm";
+        public const string PasskeyStepUp = "/auth/mfa/passkey/step-up";
+
+        public const string PasskeyEnrollmentStart = "/auth/passkey/enrollment/start";
+        public const string PasskeyEnrollmentConfirm = "/auth/passkey/enrollment/confirm";
+        public const string PasskeyManagement = "/auth/passkey/management";
+
+        public const string UserState = "/auth/user/state";
+        public const string OrganizationCreate = "/auth/organization/create";
+        public const string OrganizationCreating = "/auth/organization/creating";
+        public const string Logout = "/auth/logout";
 
         public const string Home = "/home";
         public const string HomeWelcome = "/home/welcome";
-        public const string Register = "/auth/register";
-        public const string CompleteUserRegistration = "/auth/user/register";
-        public const string CreateDefaultOrg = "/auth/org/create";
-
-        public const string ConfirmEmail = "/auth/user/email/confirm";
-        public const string ConfirmEmailSent = "/auth/user/email/confirm/sent";
-        public const string EmailConfirmed = "/auth/user/email/confirmed";
-        public const string CouldNotConfirmEmail = "/auth/user/email/couldnotconfirm";
-
-        public const string CreatingOrganization = "/auth/org/creating";
-
-        public const string ForgotPasswordSent = "/auth/password/forgot/sent";
-
-        public const string Invitations = "/auth/invitations";
-        public const string AcceptInviteId = "/auth/invite/accept/{inviteid}";
-        public const string InviteAccepted = "/auth/invite/accepted";
-        public const string InviteAcceptedFailed = "/auth/invite/failed";
-
-        public const string OAuthFault = "/auth/oauth/fault";
-        public const string OAuthAccessDenied = "/auth/oauth/accessdenied";
-
-        public const string TOTPEnrollStart = "/auth/mfa/totp/enroll";
-        public const string TOTPEnrollConfirm = "/auth/mfa/totp/confirm";
-
-        public const string PasskeyEnrollStart = "/auth/passkey/enroll/start";
-        public const string PasskeyEnrollConfirm = "/auth/passkey/enroll/confirm";
     }
 }
