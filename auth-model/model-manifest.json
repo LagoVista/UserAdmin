@@ -24,7 +24,9 @@
   "schemas": {
     "modelManifest": "schemas/model-manifest.schema.json",
     "stateDimension": "schemas/state-dimension.schema.json",
+    "compositeStateCatalog": "schemas/composite-state-catalog.schema.json",
     "invariant": "schemas/invariant.schema.json",
+    "invariantCatalog": "schemas/invariant-catalog.schema.json",
     "action": "schemas/action.schema.json",
     "transition": "schemas/transition.schema.json",
     "journey": "schemas/journey.schema.json",
@@ -50,7 +52,8 @@
   ],
   "inventory": {
     "stateDimensions": 17,
-    "invariants": 0,
+    "compositeStateCatalogs": 1,
+    "invariants": 20,
     "actions": 0,
     "transitions": 0,
     "journeys": 0,
@@ -60,16 +63,16 @@
     "unresolved": 0
   },
   "currentWork": {
-    "guideSection": "4.2",
+    "guideSection": "4.3",
     "status": "complete",
-    "summary": "Composite identity state dimensions complete. Next major area: Section 4.3, Invariant catalog."
+    "summary": "Composite-state relationships and twenty foundational invariants are authored. Next major area: Section 4.4, Guest and claimable-value flow."
   },
   "sourceReferences": [
     {
       "sourceType": "discussion",
       "reference": "AUTH-MODEL-GUIDE.md",
-      "section": "4.2",
-      "note": "Composite identity state dimension plan"
+      "section": "4.3",
+      "note": "Invariant catalog plan"
     },
     {
       "sourceType": "decision",
@@ -79,7 +82,12 @@
     {
       "sourceType": "decision",
       "reference": "auth-model/SECTION-4.2-HANDOFF.md",
-      "note": "Composite identity state decisions and handoff"
+      "note": "Composite identity state decisions"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.3-HANDOFF.md",
+      "note": "Composite relationships and foundational invariant handoff"
     }
   ]
 }
