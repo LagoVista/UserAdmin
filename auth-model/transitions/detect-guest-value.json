@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.guest.detect-value",
+  "name": "Detect Guest Value",
+  "summary": "Marks an active guest interaction as having produced value worth preserving.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 90,
+  "sourceState": { "expression": "guest-identity == active and claimable-value == none and durable-identity == absent" },
+  "actionKey": "auth.action.guest.detect-value",
+  "guards": [{ "expression": "input.value-reference exists", "failureCode": "value-reference-required" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.claimable-value", "operation": "set", "valueExpression": "detected" }
+  ],
+  "requiredEffects": ["associate-value-reference-with-guest-session"],
+  "forbiddenEffects": ["create-durable-user", "claim-value"],
+  "invariantKeys": ["auth.invariant.guest.may-create-value", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.4" }]
+}
