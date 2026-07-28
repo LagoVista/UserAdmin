@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.recovery.issue-challenge",
+  "name": "Issue Recovery Challenge",
+  "summary": "Issues one policy-approved, single-use recovery challenge bound to the existing durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.account-recovery"],
+  "transitionKey": "auth.transition.recovery.issue-challenge",
+  "preconditions": { "expression": "recovery-state == requested and durable-identity == resolved" },
+  "setup": ["Resolve the recovery request internally to an existing durable identity without exposing that result to an unproved caller."],
+  "inputs": [
+    { "key": "recovery-reference", "valueType": "reference", "required": true, "example": "recovery-record" },
+    { "key": "challenge-method", "valueType": "string", "required": true, "example": "verified-email" }
+  ],
+  "actionKey": "auth.action.recovery.issue-challenge",
+  "postconditions": { "expression": "recovery-state == challenge-issued and session-capability == identity-ceremony" },
+  "requiredEffects": ["issue-single-use-expiring-challenge", "bind-challenge-to-recovery-and-identity", "record-recovery-challenge-issued"],
+  "forbiddenEffects": ["create-durable-user", "grant-normal-application-authorization", "change-home-workspace", "accept-invitation"],
+  "invariantKeys": ["auth.invariant.recovery.existing-identity-only", "auth.invariant.transition.deterministic-post-state"],
+  "expectedAuthLogEvents": ["recovery-challenge-issued"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.14" }]
+}
