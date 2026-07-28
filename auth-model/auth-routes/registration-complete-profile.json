@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.registration.complete-profile",
+  "name": "Complete Profile",
+  "description": "Displays the profile completion surface for a partially registered user.",
+  "path": "/auth/registration/complete-profile",
+  "routeType": "view",
+  "viewId": "auth.registration.complete-profile",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "RegisterUserComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "commonLinksMember": "CompleteUserRegistration",
+    "angularComponent": "RegisterUserComponent"
+  },
+  "notes": [
+    "Replaces /auth/user/register."
+  ]
+}
