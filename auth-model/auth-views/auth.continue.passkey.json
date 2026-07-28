@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.continue.passkey",
+  "name": "Continue with Passkey",
+  "description": "Starts authentication with a registered passkey and provides navigation back to the authentication entry flow.",
+  "category": "passkey",
+  "routeId": "auth.route.continue.passkey",
+  "status": "active",
+  "controls": [],
+  "actions": [
+    { "id": "use-passkey", "name": "Use Passkey", "actionType": "native-capability", "finder": "action:use-passkey" },
+    { "id": "back", "name": "Back", "actionType": "button", "finder": "action:back" },
+    { "id": "start-over", "name": "Start Over", "actionType": "link", "finder": "action:start-over" }
+  ],
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "ContinuePasskeyComponent" },
+    "mobile": { "status": "implemented", "implementation": "app/auth/continue/passkey.tsx" }
+  },
+  "source": {
+    "runtimeEntityId": "05B1F7DE697D427A8FCCC0CC718E0164",
+    "runtimeSha256Hex": "521628217707b15540a176c20aa0730999b5705c63d3d75b9eaeff7f85edd22c",
+    "webComponent": "ContinuePasskeyComponent",
+    "mobileComponent": "app/auth/continue/passkey.tsx"
+  }
+}
