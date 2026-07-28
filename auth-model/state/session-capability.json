@@ -1,0 +1,24 @@
+{
+  "$schema": "../schemas/state-dimension.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.dimension.session-capability",
+  "name": "Session Capability",
+  "summary": "Projects what the current session may do from canonical identity, account, workspace, MFA, and recovery state.",
+  "version": 1,
+  "maturity": "proposed",
+  "authority": "session-projection",
+  "valueType": "enumeration",
+  "requiredForCanonicalSnapshot": false,
+  "values": [
+    { "key": "anonymous", "name": "Anonymous", "summary": "The session has no authenticated identity but may use explicitly permitted guest capabilities." },
+    { "key": "identity-ceremony", "name": "Identity Ceremony", "summary": "The session may only continue a PendingIdentity or recovery ceremony." },
+    { "key": "authenticated-limited", "name": "Authenticated Limited", "summary": "A durable identity is authenticated but profile, email, workspace, MFA, or recovery gates restrict normal access." },
+    { "key": "authenticated-normal", "name": "Authenticated Normal", "summary": "The session may use ordinary application capabilities in the selected workspace." },
+    { "key": "step-up", "name": "Step Up", "summary": "The session has fresh elevated proof for higher-risk operations." },
+    { "key": "blocked", "name": "Blocked", "summary": "The session cannot proceed because the account or state violates an access rule." }
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "AuthStateService.GetAuthSession", "note": "Existing A/R/E/O/M session projection" },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.13" }
+  ]
+}
