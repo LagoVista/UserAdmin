@@ -1,0 +1,24 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.magic-link.sent",
+  "name": "Magic Link Sent",
+  "description": "Presents confirmation that a magic sign-in link was sent.",
+  "path": "/auth/magic-link/sent",
+  "routeType": "view",
+  "viewId": "auth.magic-link.sent",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "MagicLinkSentComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "commonLinksMember": "MagicLinkSent",
+    "angularComponent": "MagicLinkSentComponent"
+  },
+  "notes": [
+    "Replaces the invalid runtime API path with a canonical UI route.",
+    "CommonLinks does not currently define this member."
+  ]
+}
