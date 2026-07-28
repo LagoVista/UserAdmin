@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.passkey.create-and-bind-user",
+  "name": "Create and Bind Passkey User",
+  "summary": "Creates one durable user from verified passkey proof and then atomically binds the pending credential.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "composite",
+  "journeyKeys": ["auth.journey.passkey.new-user-registration"],
+  "transitionKey": "auth.transition.passkey.bind-pending-credential",
+  "preconditions": { "expression": "pending-identity-status == resolution-required and credential-proof == passkey-proved and durable-identity == creation-required" },
+  "setup": ["Confirm identity-resolution policy permits creating a new durable user."],
+  "inputs": [{ "key": "pending-identity-reference", "valueType": "reference", "required": true, "description": "PendingIdentity containing verified credential material." }],
+  "actionKey": "auth.action.passkey.bind-pending-credential",
+  "postconditions": { "expression": "durable-identity == resolved and pending-identity-status == resolved and home-workspace == required" },
+  "requiredEffects": ["create-one-durable-user", "atomically-bind-passkey-credential-to-durable-user", "clear-pending-passkey-material"],
+  "forbiddenEffects": ["create-duplicate-user", "bind-credential-to-different-user", "establish-normal-session"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.pending-identity.no-normal-authorization"],
+  "expectedAuthLogEvents": ["passkey-durable-user-created", "passkey-credential-bound"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
