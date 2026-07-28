@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/state-dimension.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.dimension.pending-identity-flow",
+  "name": "Pending Identity Flow",
+  "summary": "Identifies the single authentication proof bucket active for a pending identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "authority": "canonical",
+  "valueType": "enumeration",
+  "requiredForCanonicalSnapshot": true,
+  "values": [
+    { "key": "none", "name": "None", "summary": "No pending authentication flow is active." },
+    { "key": "password", "name": "Password", "summary": "Password-based registration or resolution is active." },
+    { "key": "native-provider", "name": "Native Provider", "summary": "Apple or Google native-provider resolution is active." },
+    { "key": "oauth-external", "name": "OAuth External", "summary": "An external OAuth provider flow is active." },
+    { "key": "passkey", "name": "Passkey", "summary": "Passkey creation or resolution is active." }
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Users/PendingIdentity.cs", "note": "PendingIdentityFlowType and exactly-one-bucket invariant" }
+  ]
+}
