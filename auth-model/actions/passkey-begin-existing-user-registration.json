@@ -1,0 +1,16 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.passkey.begin-existing-user-registration",
+  "name": "Begin Existing User Passkey Registration",
+  "summary": "Issues a credential-creation challenge bound to an already resolved durable user.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [{ "key": "durable-user-id", "valueType": "reference", "required": true, "description": "Authenticated durable user adding a passkey." }],
+  "guards": [{ "expression": "durable-identity == resolved and session-capability in [authenticated-limited,authenticated-normal,step-up]", "failureCode": "authenticated-durable-identity-required" }],
+  "permittedMutations": ["credential-proof"],
+  "requiredEffects": ["create-short-lived-user-bound-registration-challenge", "exclude-existing-credentials"],
+  "forbiddenEffects": ["create-durable-user", "persist-passkey-credential", "change-durable-identity"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "code", "reference": "src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "BeginRegistrationOptionsAsync" }, { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
