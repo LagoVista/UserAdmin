@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.invitation.reject-consumed",
+  "name": "Reject Consumed Invitation",
+  "summary": "Rejects reuse of an invitation that has already been consumed.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "negative",
+  "journeyKeys": ["auth.journey.invitation.resolve"],
+  "transitionKey": "auth.transition.invitation.validate-invalid",
+  "preconditions": { "expression": "invitation-status == attached and invitation-consumed == true" },
+  "setup": ["Attach proof for a previously accepted invitation."],
+  "inputs": [{ "key": "invitation-reference", "valueType": "reference", "required": true, "description": "Previously consumed invitation." }],
+  "actionKey": "auth.action.invitation.validate",
+  "postconditions": { "expression": "invitation-status == invalid and workspace-membership unchanged" },
+  "requiredEffects": ["record-invitation-invalid"],
+  "forbiddenEffects": ["create-second-membership", "consume-invitation-again", "change-home-workspace"],
+  "invariantKeys": ["auth.invariant.invitation.consumed-once"],
+  "expectedAuthLogEvents": ["invitation-validation-failed"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10" }]
+}
