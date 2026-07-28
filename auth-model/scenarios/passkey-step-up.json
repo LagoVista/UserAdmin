@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.passkey.step-up",
+  "name": "Passkey Step Up",
+  "summary": "Grants fresh elevated proof only after a user-verifying passkey assertion for the current durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.passkey.step-up"],
+  "transitionKey": "auth.transition.passkey.complete-step-up",
+  "preconditions": { "expression": "durable-identity == resolved and credential-proof == challenge-issued and session-capability in [authenticated-limited,authenticated-normal]" },
+  "setup": ["Issue a passkey step-up challenge requiring user verification."],
+  "inputs": [{ "key": "assertion", "valueType": "object", "required": true, "description": "User-verifying WebAuthn assertion from the secure component." }],
+  "actionKey": "auth.action.passkey.complete-step-up",
+  "postconditions": { "expression": "durable-identity == resolved and credential-proof == passkey-proved and session-capability == step-up" },
+  "requiredEffects": ["consume-passkey-challenge", "validate-user-verifying-assertion", "advance-sign-counter", "record-fresh-mfa-time"],
+  "forbiddenEffects": ["change-durable-identity", "create-durable-user", "grant-step-up-without-required-user-verification"],
+  "invariantKeys": ["auth.invariant.transition.deterministic-post-state"],
+  "expectedAuthLogEvents": ["passkey-step-up-challenge-issued", "passkey-step-up-succeeded"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "code", "reference": "src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "isStepUp path requires user verification and records LastMfaDateTimeUtc" }, { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
