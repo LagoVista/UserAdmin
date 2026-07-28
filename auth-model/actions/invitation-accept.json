@@ -1,0 +1,19 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.invitation.accept",
+  "name": "Accept Invitation",
+  "summary": "Atomically grants the selected durable identity membership in the invited workspace and consumes the invitation.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "invitation-reference", "valueType": "reference", "required": true, "description": "Validated invitation." },
+    { "key": "selected-durable-identity-reference", "valueType": "reference", "required": true, "description": "Explicitly confirmed accepting identity." }
+  ],
+  "guards": [{ "expression": "invitation-status == acceptance-pending and durable-identity == resolved and selected-durable-identity-confirmed == true", "failureCode": "invitation-acceptance-not-confirmed" }],
+  "permittedMutations": ["auth.dimension.invitation-status", "auth.dimension.workspace-membership"],
+  "requiredEffects": ["create-external-workspace-membership-once", "consume-invitation-once", "record-invitation-accepted"],
+  "forbiddenEffects": ["change-home-workspace", "switch-current-workspace", "create-durable-user", "create-second-membership"],
+  "invariantKeys": ["auth.invariant.invitation.accept-does-not-change-home", "auth.invariant.invitation.requires-selected-identity", "auth.invariant.invitation.consumed-once"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10" }]
+}
