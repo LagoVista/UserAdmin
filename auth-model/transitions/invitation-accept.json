@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.invitation.accept",
+  "name": "Accept Invitation",
+  "summary": "Atomically adds the invited workspace membership and consumes the invitation while preserving the home workspace and current workspace.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 100,
+  "sourceState": { "expression": "invitation-status == acceptance-pending and durable-identity == resolved" },
+  "actionKey": "auth.action.invitation.accept",
+  "guards": [{ "expression": "selected-durable-identity-confirmed == true and invitation-consumed == false", "failureCode": "invitation-acceptance-not-permitted" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.invitation-status", "operation": "set", "valueExpression": "accepted" },
+    { "dimensionKey": "auth.dimension.workspace-membership", "operation": "derive", "valueExpression": "multiple" }
+  ],
+  "requiredEffects": ["create-external-workspace-membership-once", "consume-invitation-once", "record-invitation-accepted"],
+  "forbiddenEffects": ["change-home-workspace", "switch-current-workspace", "create-durable-user"],
+  "invariantKeys": ["auth.invariant.invitation.accept-does-not-change-home", "auth.invariant.invitation.requires-selected-identity", "auth.invariant.invitation.consumed-once", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10" }]
+}
