@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.passkey.authentication",
+  "name": "Passkey Authentication",
+  "summary": "Authenticates an existing durable user with a valid passkey assertion and updates the signature counter.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.passkey.authentication"],
+  "transitionKey": "auth.transition.passkey.complete-authentication",
+  "preconditions": { "expression": "credential-proof == challenge-issued and account-status not-in [disabled,closed]" },
+  "setup": ["Issue a normal-authentication passkey challenge."],
+  "inputs": [{ "key": "assertion", "valueType": "object", "required": true, "description": "Valid WebAuthn assertion from the secure component." }],
+  "actionKey": "auth.action.passkey.complete-authentication",
+  "postconditions": { "expression": "credential-proof == passkey-proved and durable-identity == resolved and session-capability in [authenticated-limited,authenticated-normal]" },
+  "requiredEffects": ["consume-passkey-challenge", "validate-passkey-assertion", "advance-sign-counter", "resolve-existing-durable-user"],
+  "forbiddenEffects": ["create-durable-user", "resolve-different-user", "grant-step-up"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.disabled-user.no-normal-session"],
+  "expectedAuthLogEvents": ["passkey-authentication-challenge-issued", "passkey-authentication-succeeded"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "code", "reference": "src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "CompleteAuthenticationAsync" }, { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
