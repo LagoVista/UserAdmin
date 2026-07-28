@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.passkey.enrollment.confirm",
+  "name": "Confirm Passkey Enrollment",
+  "description": "Confirms that passkey enrollment completed and lets the user continue from the enrollment flow.",
+  "category": "passkey",
+  "routeId": "auth.route.passkey.enrollment.confirm",
+  "status": "active",
+  "controls": [
+    { "id": "enrollment-status", "name": "Enrollment Status", "controlType": "status", "finder": "status:enrollment-status" }
+  ],
+  "actions": [
+    { "id": "complete-enrollment", "name": "Complete Enrollment", "actionType": "button", "finder": "action:complete-enrollment" },
+    { "id": "back", "name": "Back", "actionType": "button", "finder": "action:back" }
+  ],
+  "platforms": {
+    "web": { "status": "implemented" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "runtimeEntityId": "8E5DC402BE8743BCAB1892A73B854742",
+    "runtimeSha256Hex": "e9b572f64f6c6411705d5b9447c661039752fd81117c67ecd9f33480baa59efe"
+  },
+  "notes": ["The prior finish/done ambiguity is replaced by the single semantic action complete-enrollment."]
+}
