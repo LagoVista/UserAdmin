@@ -1,0 +1,29 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.native-provider.email-mismatch-preserved",
+  "name": "Preserve Native Provider Email Mismatch",
+  "summary": "Validates a provider assertion while preserving provider, registered, and invited emails as distinct evidence values when they differ.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "security-invariant",
+  "journeyKeys": ["auth.journey.native-provider.existing-user", "auth.journey.native-provider.new-user-registration"],
+  "transitionKey": "auth.transition.native-provider.capture-assertion",
+  "preconditions": { "expression": "pending-identity-status == pending and pending-identity-flow == native-provider and registered-email != provider-email and invited-email != provider-email" },
+  "setup": ["Create a native-provider PendingIdentity with distinct registered, provider, and invited email values."],
+  "inputs": [
+    { "key": "provider", "valueType": "string", "required": true, "example": "google" },
+    { "key": "provider-subject", "valueType": "string", "required": true },
+    { "key": "claims-hash", "valueType": "string", "required": true },
+    { "key": "provider-email", "valueType": "string", "required": true },
+    { "key": "provider-email-verified", "valueType": "boolean", "required": true, "example": true }
+  ],
+  "actionKey": "auth.action.native-provider.capture-assertion",
+  "postconditions": { "expression": "credential-proof == native-provider-proved and email-ownership == provider-verified and registered-email, provider-email, and invited-email remain distinct" },
+  "requiredEffects": ["persist-provider-subject", "preserve-provider-email-as-distinct-evidence"],
+  "forbiddenEffects": ["overwrite-registered-email", "overwrite-invited-email", "resolve-user-by-email-alone"],
+  "invariantKeys": ["auth.invariant.email-identities.not-conflated", "auth.invariant.pending-identity.no-normal-authorization"],
+  "expectedAuthLogEvents": ["native-provider-assertion-captured"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
