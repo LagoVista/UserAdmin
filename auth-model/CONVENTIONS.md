@@ -1,0 +1,120 @@
+# Authentication Model Conventions
+
+## Stable keys
+
+Keys use lowercase kebab-case segments separated by periods.
+
+Pattern:
+
+`^auth\.[a-z][a-z0-9-]{1,63}(\.[a-z][a-z0-9-]{1,63})+$`
+
+Rules:
+
+- Keys begin with `auth.` and include a definition-type segment.
+- Segments start with a lowercase letter.
+- Segments contain lowercase letters, digits, and single hyphens.
+- Segments do not contain consecutive hyphens or end with a hyphen.
+- A key is a permanent identity and is never reused for a different meaning.
+
+Recommended prefixes:
+
+- `auth.dimension.*`
+- `auth.invariant.*`
+- `auth.action.*`
+- `auth.transition.*`
+- `auth.journey.*`
+- `auth.scenario.*`
+- `auth.presentation.*`
+- `auth.decision.*`
+- `auth.unresolved.*`
+
+## Definition maturity
+
+Allowed maturity values:
+
+- `proposed`: discovered or drafted but not yet reviewed
+- `reviewed`: reviewed for semantic correctness
+- `approved`: accepted as current authored truth
+- `implemented`: corresponding implementation is believed complete
+- `verified`: required evidence passes against the current definition hash
+- `deprecated`: retained for history but no longer current
+
+Maturity is monotonic in normal operation except when a definition changes materially. A material change may move `implemented` or `verified` back to `reviewed` or `approved` and makes prior evidence stale.
+
+## Definition versions
+
+- `schemaVersion` identifies the JSON schema contract used by the file.
+- `version` is a positive integer for the semantic definition.
+- Increment `version` whenever behavior, applicability, requirements, guards, expected effects, or referenced truth changes materially.
+- Editorial changes that do not alter meaning do not require a version increment.
+
+## Source references
+
+Every authored definition includes one or more source references when evidence exists.
+
+A source reference contains:
+
+- `sourceType`: `ddr`, `code`, `test`, `discussion`, `decision`, or `external`
+- `reference`: stable repository path, DDR identifier, test symbol, decision key, or durable URL
+- optional `section`
+- optional `commit`
+- optional `note`
+
+Source references explain provenance. They do not automatically establish authority.
+
+## Canonical normalization and hashing
+
+The canonical definition hash is SHA-256 over UTF-8 encoded canonical JSON.
+
+Canonical JSON rules:
+
+1. Exclude the `definitionHash` property itself.
+2. Preserve JSON value types exactly.
+3. Sort all object properties by ordinal property name.
+4. Preserve array order unless the schema explicitly declares the array unordered.
+5. For unordered string/reference sets, sort by ordinal value before serialization.
+6. Serialize without insignificant whitespace.
+7. Use JSON literals `true`, `false`, and `null`.
+8. Use invariant numeric formatting.
+9. Normalize strings to Unicode NFC.
+10. Do not normalize, trim, or recase authored string values except where the schema explicitly requires it.
+
+The resulting lowercase hexadecimal digest is stored as `definitionHash` in generated/runtime projections. Authored source files may omit it and allow validation tooling to compute it.
+
+## References
+
+- References use stable keys only.
+- All references must resolve within the current manifest unless explicitly marked external.
+- Circular references are permitted only where the schema explicitly allows them.
+- Journeys may reference scenarios in ordered sequence.
+- Scenarios reference one action and may reference one transition.
+- Presentation bindings reference logical actions, scenarios, views, and platforms without redefining behavioral truth.
+
+## Validation levels
+
+### Schema validation
+
+Every file validates against its declared JSON schema.
+
+### Referential validation
+
+Every internal key reference resolves to exactly one authored definition of the expected type.
+
+### Semantic validation
+
+At minimum:
+
+- all definition keys are globally unique
+- versions are positive integers
+- deprecated definitions are not used by approved definitions unless explicitly allowed
+- an action declares at least one permitted state mutation or required side effect
+- a transition references exactly one action
+- a scenario references exactly one action
+- a scenario changes at least one state variable or produces at least one required effect
+- a journey contains at least one scenario
+- presentation bindings do not introduce alternate guards or postconditions
+- maturity and evidence status remain distinct concepts
+
+### Determinism validation
+
+For any applicable transition, identical normalized source state, action, context, and inputs must select one destination transformation and one required-effects set. Ambiguous overlapping approved transitions are invalid unless an explicit priority or mutually exclusive guard proves determinism.
