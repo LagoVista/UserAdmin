@@ -1,0 +1,120 @@
+{
+    "Route": "/auth/register",
+    "ViewId": "auth.register.new",
+    "Actions": [
+        {
+            "Id": "register",
+            "Name": "Create account",
+            "Finder": "[data-testid=\"action:register\"]"
+        },
+        {
+            "Id": "cancel",
+            "Name": "Cancel",
+            "Finder": "[data-testid=\"action:cancel\"]"
+        }
+    ],
+    "Fields": [
+        {
+            "Id": "email",
+            "Name": "Email",
+            "FieldType": "email",
+            "Finder": "[data-testid=\"field:email\"]"
+        },
+        {
+            "Id": "password",
+            "Name": "Password",
+            "FieldType": "password",
+            "Finder": "[data-testid=\"field:password\"]"
+        },
+        {
+            "Id": "confirmpassword",
+            "Name": "ConfirmPassword",
+            "FieldType": "password",
+            "Finder": "[data-testid=\"field:confirmPassword\"]"
+        },
+        {
+            "Id": "error-message",
+            "Name": "Email is required.\n      Enter a valid email address.",
+            "FieldType": "label",
+            "Finder": "[data-testid=\"label:error-message\"]"
+        },
+        {
+            "Id": "firstname",
+            "Name": "FirstName",
+            "FieldType": "text",
+            "Finder": "input[formcontrolname=\"firstName\"]"
+        },
+        {
+            "Id": "lastname",
+            "Name": "LastName",
+            "FieldType": "text",
+            "Finder": "input[formcontrolname=\"lastName\"]"
+        }
+    ],
+    "IsPublic": false,
+    "OwnerOrganization": {
+        "Id": "AA2C78499D0140A5A9CE4B7581EF9691",
+        "Text": "Software Logistics",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": null,
+        "OwnerOrgId": null,
+        "Key": null
+    },
+    "OwnerUser": null,
+    "id": "BA1F170FC9BF421BA2453A7A518FF994",
+    "DatabaseName": "nuviot",
+    "EntityType": "AuthView",
+    "_etag": "\"0600738f-0000-0500-0000-6a6906160000\"",
+    "Name": "Create Registration (New User)",
+    "Key": "createregistration",
+    "Category": null,
+    "Description": null,
+    "AISessions": [],
+    "AuditHistory": [],
+    "IsDeleted": false,
+    "DeletedBy": null,
+    "DeletionDate": null,
+    "IsDeprecated": false,
+    "DeprecatedBy": null,
+    "DeprecationDate": null,
+    "DeprecationNotes": null,
+    "CreationDate": "2026-07-28T19:42:13.998Z",
+    "LastUpdatedDate": "2026-07-28T19:42:13.998Z",
+    "CreatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "LastUpdatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "ClonedFromId": null,
+    "ClonedFromOrg": null,
+    "ClonedRevision": null,
+    "IsDraft": false,
+    "Revision": 1,
+    "RevisionTimeStamp": "2026-01-28T12:36:50.849Z",
+    "Labels": [],
+    "Stars": null,
+    "RatingsCount": 0,
+    "Ratings": [],
+    "_rid": "0hUQANwtAwBE2QAAAAAAAA==",
+    "_self": "dbs/0hUQAA==/colls/0hUQANwtAwA=/docs/0hUQANwtAwBE2QAAAAAAAA==/",
+    "_attachments": "attachments/",
+    "Sha256Hex": "eab50367d306ac40e554bce84a5720bb2619122cc8e6507d254481d9eee16db7",
+    "_ts": 1785267734
+}

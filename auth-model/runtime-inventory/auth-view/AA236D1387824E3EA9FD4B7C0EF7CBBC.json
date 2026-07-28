@@ -1,0 +1,119 @@
+{
+    "Route": "/auth/continue/email/password",
+    "ViewId": "auth.continue.email.password",
+    "Actions": [
+        {
+            "Id": "next",
+            "Name": "Next",
+            "Finder": "[data-testid=\"action:next\"]"
+        },
+        {
+            "Id": "cancel",
+            "Name": "Cancel",
+            "Finder": "[data-testid=\"action:cancel\"]"
+        },
+        {
+            "Id": "forgot-password",
+            "Name": "Forgot password?",
+            "Finder": "[data-testid=\"action:forgot-password\"]"
+        },
+        {
+            "Id": "start-over",
+            "Name": "Start over",
+            "Finder": "[data-testid=\"action:start-over\"]"
+        },
+        {
+            "Id": "FD58E83ABF604E7E81A0F4CF046AC1AA",
+            "Name": "Send Magic Link",
+            "Finder": "[data-testid=\"action:send-magic-link\"]"
+        }
+    ],
+    "Fields": [
+        {
+            "Id": "email",
+            "Name": "Email",
+            "FieldType": "email",
+            "Finder": "[data-testid=\"field:email\"]"
+        },
+        {
+            "Id": "password",
+            "Name": "Password",
+            "FieldType": "password",
+            "Finder": "[data-testid=\"field:password\"]"
+        },
+        {
+            "Id": "error-message",
+            "Name": "Password is required.",
+            "FieldType": "label",
+            "Finder": "[data-testid=\"label:error-message\"]"
+        }
+    ],
+    "IsPublic": false,
+    "PublicPromotedBy": null,
+    "PublicPromotionDate": null,
+    "OwnerOrganization": {
+        "Id": "AA2C78499D0140A5A9CE4B7581EF9691",
+        "Text": "Software Logistics",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": null,
+        "OwnerOrgId": null,
+        "Key": null
+    },
+    "OwnerUser": null,
+    "id": "AA236D1387824E3EA9FD4B7C0EF7CBBC",
+    "DatabaseName": "nuviot",
+    "EntityType": "AuthView",
+    "_etag": "\"0600358f-0000-0500-0000-6a69060e0000\"",
+    "Name": "Auth - Continue - Email - Password",
+    "Key": "continueemailloginpassword",
+    "Category": null,
+    "Description": null,
+    "AISessions": [],
+    "AuditHistory": [],
+    "IsDeleted": false,
+    "DeletedBy": null,
+    "DeletionDate": null,
+    "IsDeprecated": false,
+    "DeprecatedBy": null,
+    "DeprecationDate": null,
+    "DeprecationNotes": null,
+    "CreationDate": "2026-07-28T19:42:06.424Z",
+    "LastUpdatedDate": "2026-07-28T19:42:06.424Z",
+    "CreatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "LastUpdatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "ClonedFromId": null,
+    "ClonedFromOrg": null,
+    "ClonedRevision": null,
+    "Sha256Hex": "dcee1aeb5ac78eb01b16c0844a7520867b4373076388097d62f76e5c44611781",
+    "IsDraft": false,
+    "Revision": 4,
+    "RevisionTimeStamp": "2026-02-12T17:24:26.241Z",
+    "Labels": [],
+    "Stars": null,
+    "RatingsCount": 0,
+    "Ratings": [],
+    "_rid": "0hUQANwtAwBC2QAAAAAAAA==",
+    "_self": "dbs/0hUQAA==/colls/0hUQANwtAwA=/docs/0hUQANwtAwBC2QAAAAAAAA==/",
+    "_attachments": "attachments/",
+    "_ts": 1785267726
+}

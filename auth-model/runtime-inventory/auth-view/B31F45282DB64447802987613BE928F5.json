@@ -1,0 +1,83 @@
+{
+    "Route": "/auth/user/email/confirmed",
+    "ViewId": "auth.user.email.confirmed",
+    "Actions": [
+        {
+            "Id": "continue",
+            "Name": "Continue",
+            "Finder": "button[data-action=\"continue\"]"
+        },
+        {
+            "Id": "sign-out",
+            "Name": "Sign out",
+            "Finder": "button[data-action=\"sign-out\"]"
+        }
+    ],
+    "Fields": [],
+    "IsPublic": false,
+    "OwnerOrganization": {
+        "Id": "AA2C78499D0140A5A9CE4B7581EF9691",
+        "Text": "Software Logistics",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": null,
+        "OwnerOrgId": null,
+        "Key": null
+    },
+    "OwnerUser": null,
+    "id": "B31F45282DB64447802987613BE928F5",
+    "DatabaseName": "nuviot",
+    "EntityType": "AuthView",
+    "_etag": "\"06009f8f-0000-0500-0000-6a69061c0000\"",
+    "Name": "Email - Confirmed",
+    "Key": "emailconfirmed",
+    "Category": null,
+    "Description": null,
+    "AISessions": [],
+    "AuditHistory": [],
+    "IsDeleted": false,
+    "DeletedBy": null,
+    "DeletionDate": null,
+    "IsDeprecated": false,
+    "DeprecatedBy": null,
+    "DeprecationDate": null,
+    "DeprecationNotes": null,
+    "CreationDate": "2026-07-28T19:42:20.445Z",
+    "LastUpdatedDate": "2026-07-28T19:42:20.445Z",
+    "CreatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "LastUpdatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "ClonedFromId": null,
+    "ClonedFromOrg": null,
+    "ClonedRevision": null,
+    "IsDraft": false,
+    "Revision": 1,
+    "RevisionTimeStamp": "2026-01-26T14:39:27.041Z",
+    "Labels": [],
+    "Stars": null,
+    "RatingsCount": 0,
+    "Ratings": [],
+    "_rid": "0hUQANwtAwBG2QAAAAAAAA==",
+    "_self": "dbs/0hUQAA==/colls/0hUQANwtAwA=/docs/0hUQANwtAwBG2QAAAAAAAA==/",
+    "_attachments": "attachments/",
+    "Sha256Hex": "58d3f42b1452c7f6324c087afd169fd7078ea1bae2c664a1b44e55e43401f086",
+    "_ts": 1785267740
+}

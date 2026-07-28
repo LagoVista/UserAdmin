@@ -89,7 +89,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_IconNamespace, HelpResource: UserAdminResources.Names.Organization_IconNamespace_Help, NamespaceType: NamespaceTypes.Organization, NamespaceUniqueMessageResource: UserAdminResources.Names.Organization_NamespaceInUse,
             FieldType: FieldTypes.NameSpace, IsRequired: false, IsUserEditable: true, ResourceType: typeof(UserAdminResources))]
-        public OrgNamespace IconNamespace { get; set; }
+        public OrgNamespace IconNamespace { get; set; } = "softwarelogistics";
 
         [FormField(LabelResource: UserAdminResources.Names.Organization_WebSite, FieldType: FieldTypes.Text, ResourceType: typeof(UserAdminResources))]
         public String WebSite { get; set; }

@@ -1,0 +1,108 @@
+{
+    "Route": "/auth/continue/provider",
+    "ViewId": "auth.continue.provider",
+    "Actions": [
+        {
+            "Id": "oauth-github",
+            "Name": "GitHub\n        Continue with GitHub",
+            "Finder": "[data-testid=\"action:oauth-github\"]"
+        },
+        {
+            "Id": "oauth-microsoft",
+            "Name": "Microsoft\n        Continue with Microsoft",
+            "Finder": "[data-testid=\"action:oauth-microsoft\"]"
+        },
+        {
+            "Id": "oauth-google",
+            "Name": "Google\n        Continue with Google",
+            "Finder": "[data-testid=\"action:oauth-google\"]"
+        },
+        {
+            "Id": "oauth-linkedin",
+            "Name": "LinkedIn\n        Continue with LinkedIn",
+            "Finder": "[data-testid=\"action:oauth-linkedin\"]"
+        },
+        {
+            "Id": "oauth-twitter",
+            "Name": "Twitter\n        Continue with Twitter",
+            "Finder": "[data-testid=\"action:oauth-twitter\"]"
+        },
+        {
+            "Id": "login-email",
+            "Name": "Sign in with Email",
+            "Finder": "[data-testid=\"action:login-email\"]"
+        },
+        {
+            "Id": "cancel",
+            "Name": "Cancel",
+            "Finder": "[data-testid=\"action:cancel\"]"
+        }
+    ],
+    "Fields": [],
+    "IsPublic": false,
+    "OwnerOrganization": {
+        "Id": "AA2C78499D0140A5A9CE4B7581EF9691",
+        "Text": "Software Logistics",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": null,
+        "OwnerOrgId": null,
+        "Key": null
+    },
+    "OwnerUser": null,
+    "id": "205AD1E713CD494F987E0884767F7A4B",
+    "DatabaseName": "nuviot",
+    "EntityType": "AuthView",
+    "_etag": "\"0600f28e-0000-0500-0000-6a6906070000\"",
+    "Name": "Auth - Continue - Provider",
+    "Key": "authcontinueprovider",
+    "Category": null,
+    "Description": null,
+    "AISessions": [],
+    "AuditHistory": [],
+    "IsDeleted": false,
+    "DeletedBy": null,
+    "DeletionDate": null,
+    "IsDeprecated": false,
+    "DeprecatedBy": null,
+    "DeprecationDate": null,
+    "DeprecationNotes": null,
+    "CreationDate": "2026-07-28T19:41:59.652Z",
+    "LastUpdatedDate": "2026-07-28T19:41:59.652Z",
+    "CreatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "LastUpdatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "ClonedFromId": null,
+    "ClonedFromOrg": null,
+    "ClonedRevision": null,
+    "IsDraft": false,
+    "Revision": 1,
+    "RevisionTimeStamp": "2026-01-26T14:47:16.833Z",
+    "Labels": [],
+    "Stars": null,
+    "RatingsCount": 0,
+    "Ratings": [],
+    "_rid": "0hUQANwtAwBA2QAAAAAAAA==",
+    "_self": "dbs/0hUQAA==/colls/0hUQANwtAwA=/docs/0hUQANwtAwBA2QAAAAAAAA==/",
+    "_attachments": "attachments/",
+    "Sha256Hex": "b598cf22154f554701b1d17f4637b8f692bf23b635d06405dfa76c4bb2f87227",
+    "_ts": 1785267719
+}

@@ -1,0 +1,102 @@
+{
+    "Route": "/auth/org/create",
+    "ViewId": "auth.org.create",
+    "Actions": [
+        {
+            "Id": "createorganization",
+            "Name": "Create organization",
+            "Finder": "[data-testid=\"action:createOrganization\"]"
+        },
+        {
+            "Id": "signout",
+            "Name": "Sign out",
+            "Finder": "[data-testid=\"action:signout\"]"
+        }
+    ],
+    "Fields": [
+        {
+            "Id": "orgname",
+            "Name": "OrgName",
+            "FieldType": "text",
+            "Finder": "[data-testid=\"field:orgName\"]"
+        },
+        {
+            "Id": "orgnamespace",
+            "Name": "OrgNameSpace",
+            "FieldType": "text",
+            "Finder": "[data-testid=\"field:orgNameSpace\"]"
+        },
+        {
+            "Id": "orgwebsite",
+            "Name": "OrgWebSite",
+            "FieldType": "text",
+            "Finder": "[data-testid=\"field:orgWebSite\"]"
+        }
+    ],
+    "IsPublic": false,
+    "OwnerOrganization": {
+        "Id": "AA2C78499D0140A5A9CE4B7581EF9691",
+        "Text": "Software Logistics",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": null,
+        "OwnerOrgId": null,
+        "Key": null
+    },
+    "OwnerUser": null,
+    "id": "8C4E8C85E5DF4AE68C788A6D17181A0E",
+    "DatabaseName": "nuviot",
+    "EntityType": "AuthView",
+    "_etag": "\"0600568f-0000-0500-0000-6a6906120000\"",
+    "Name": "Create Organization",
+    "Key": "createorganization",
+    "Category": null,
+    "Description": null,
+    "AISessions": [],
+    "AuditHistory": [],
+    "IsDeleted": false,
+    "DeletedBy": null,
+    "DeletionDate": null,
+    "IsDeprecated": false,
+    "DeprecatedBy": null,
+    "DeprecationDate": null,
+    "DeprecationNotes": null,
+    "CreationDate": "2026-07-28T19:42:09.916Z",
+    "LastUpdatedDate": "2026-07-28T19:42:09.916Z",
+    "CreatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "LastUpdatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "ClonedFromId": null,
+    "ClonedFromOrg": null,
+    "ClonedRevision": null,
+    "IsDraft": false,
+    "Revision": 1,
+    "RevisionTimeStamp": "2026-01-26T17:01:08.848Z",
+    "Labels": [],
+    "Stars": null,
+    "RatingsCount": 0,
+    "Ratings": [],
+    "_rid": "0hUQANwtAwBD2QAAAAAAAA==",
+    "_self": "dbs/0hUQAA==/colls/0hUQANwtAwA=/docs/0hUQANwtAwBD2QAAAAAAAA==/",
+    "_attachments": "attachments/",
+    "Sha256Hex": "cfba4e8a9dc11f528ec94e686b7b15939f85408975390736c5e6532865984e6d",
+    "_ts": 1785267730
+}

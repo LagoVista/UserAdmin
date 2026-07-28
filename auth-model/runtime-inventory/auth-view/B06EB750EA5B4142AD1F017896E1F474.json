@@ -1,0 +1,112 @@
+{
+    "Route": "/auth/continue/totp",
+    "ViewId": "auth.continue.totp",
+    "Actions": [
+        {
+            "Id": "verify",
+            "Name": "Verify",
+            "Finder": "[data-testid=\"action:verify\"]"
+        },
+        {
+            "Id": "cancel",
+            "Name": "Cancel",
+            "Finder": "[data-testid=\"action:cancel\"]"
+        },
+        {
+            "Id": "use-password",
+            "Name": "Use password instead",
+            "Finder": "[data-testid=\"action:use-password\"]"
+        },
+        {
+            "Id": "start-over",
+            "Name": "Start over",
+            "Finder": "[data-testid=\"action:start-over\"]"
+        }
+    ],
+    "Fields": [
+        {
+            "Id": "email",
+            "Name": "Email",
+            "FieldType": "email",
+            "Finder": "[data-testid=\"field:email\"]"
+        },
+        {
+            "Id": "totp",
+            "Name": "Totp",
+            "FieldType": "text",
+            "Finder": "[data-testid=\"field:totp\"]"
+        },
+        {
+            "Id": "error-message",
+            "Name": "Code is required.\n      Enter a 6-digit code.",
+            "FieldType": "label",
+            "Finder": "[data-testid=\"label:error-message\"]"
+        }
+    ],
+    "IsPublic": false,
+    "OwnerOrganization": {
+        "Id": "AA2C78499D0140A5A9CE4B7581EF9691",
+        "Text": "Software Logistics",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": null,
+        "OwnerOrgId": null,
+        "Key": null
+    },
+    "OwnerUser": null,
+    "id": "B06EB750EA5B4142AD1F017896E1F474",
+    "DatabaseName": "nuviot",
+    "EntityType": "AuthView",
+    "_etag": "\"0600148f-0000-0500-0000-6a69060b0000\"",
+    "Name": "Auth - Continue - TOTP",
+    "Key": "authcontinuetotp",
+    "Category": null,
+    "Description": null,
+    "AISessions": [],
+    "AuditHistory": [],
+    "IsDeleted": false,
+    "DeletedBy": null,
+    "DeletionDate": null,
+    "IsDeprecated": false,
+    "DeprecatedBy": null,
+    "DeprecationDate": null,
+    "DeprecationNotes": null,
+    "CreationDate": "2026-07-28T19:42:03.039Z",
+    "LastUpdatedDate": "2026-07-28T19:42:03.039Z",
+    "CreatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "LastUpdatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "ClonedFromId": null,
+    "ClonedFromOrg": null,
+    "ClonedRevision": null,
+    "IsDraft": false,
+    "Revision": 1,
+    "RevisionTimeStamp": "2026-01-26T14:43:50.918Z",
+    "Labels": [],
+    "Stars": null,
+    "RatingsCount": 0,
+    "Ratings": [],
+    "_rid": "0hUQANwtAwBB2QAAAAAAAA==",
+    "_self": "dbs/0hUQAA==/colls/0hUQANwtAwA=/docs/0hUQANwtAwBB2QAAAAAAAA==/",
+    "_attachments": "attachments/",
+    "Sha256Hex": "ac3c8a86afda0ed1b962984cd1277aaf1cd1b6935400bbe90d07ca23d8230977",
+    "_ts": 1785267723
+}

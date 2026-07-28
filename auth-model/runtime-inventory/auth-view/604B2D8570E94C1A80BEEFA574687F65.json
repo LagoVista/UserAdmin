@@ -1,0 +1,88 @@
+{
+    "Route": "/auth/forgot/sent",
+    "ViewId": "auth.forgot.sent",
+    "Actions": [
+        {
+            "Id": "back",
+            "Name": "Back to sign-in",
+            "Finder": "[data-testid=\"action:back\"]"
+        },
+        {
+            "Id": "resend",
+            "Name": "Resend email",
+            "Finder": "[data-testid=\"action:resend\"]"
+        },
+        {
+            "Id": "cancel",
+            "Name": "Cancel",
+            "Finder": "[data-testid=\"action:cancel\"]"
+        }
+    ],
+    "Fields": [],
+    "IsPublic": false,
+    "OwnerOrganization": {
+        "Id": "AA2C78499D0140A5A9CE4B7581EF9691",
+        "Text": "Software Logistics",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": null,
+        "OwnerOrgId": null,
+        "Key": null
+    },
+    "OwnerUser": null,
+    "id": "604B2D8570E94C1A80BEEFA574687F65",
+    "DatabaseName": "nuviot",
+    "EntityType": "AuthView",
+    "_etag": "\"0600c58f-0000-0500-0000-6a6906230000\"",
+    "Name": "Forgot ",
+    "Key": "forgot",
+    "Category": null,
+    "Description": null,
+    "AISessions": [],
+    "AuditHistory": [],
+    "IsDeleted": false,
+    "DeletedBy": null,
+    "DeletionDate": null,
+    "IsDeprecated": false,
+    "DeprecatedBy": null,
+    "DeprecationDate": null,
+    "DeprecationNotes": null,
+    "CreationDate": "2026-07-28T19:42:27.170Z",
+    "LastUpdatedDate": "2026-07-28T19:42:27.170Z",
+    "CreatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "LastUpdatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "ClonedFromId": null,
+    "ClonedFromOrg": null,
+    "ClonedRevision": null,
+    "IsDraft": false,
+    "Revision": 1,
+    "RevisionTimeStamp": "2026-01-26T14:55:02.334Z",
+    "Labels": [],
+    "Stars": null,
+    "RatingsCount": 0,
+    "Ratings": [],
+    "_rid": "0hUQANwtAwBI2QAAAAAAAA==",
+    "_self": "dbs/0hUQAA==/colls/0hUQANwtAwA=/docs/0hUQANwtAwBI2QAAAAAAAA==/",
+    "_attachments": "attachments/",
+    "Sha256Hex": "b93962f759a9058fb8658db575afbb7e6da5972d073edc023604fafacc9efd3e",
+    "_ts": 1785267747
+}

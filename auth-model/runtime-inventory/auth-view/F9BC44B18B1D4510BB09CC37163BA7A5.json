@@ -1,0 +1,88 @@
+{
+    "Route": "/auth/email/confirm/sent",
+    "ViewId": "auth.user.confirm.emailsent",
+    "Actions": [
+        {
+            "Id": "resend-email",
+            "Name": "Resend email",
+            "Finder": "[data-testid=\"action:resend-email\"]"
+        },
+        {
+            "Id": "back-to-sign-in",
+            "Name": "Back to sign-in",
+            "Finder": "[data-testid=\"action:back-to-sign-in\"]"
+        },
+        {
+            "Id": "sign-out",
+            "Name": "Sign out",
+            "Finder": "[data-testid=\"action:sign-out\"]"
+        }
+    ],
+    "Fields": [],
+    "IsPublic": false,
+    "OwnerOrganization": {
+        "Id": "AA2C78499D0140A5A9CE4B7581EF9691",
+        "Text": "Software Logistics",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": null,
+        "OwnerOrgId": null,
+        "Key": null
+    },
+    "OwnerUser": null,
+    "id": "F9BC44B18B1D4510BB09CC37163BA7A5",
+    "DatabaseName": "nuviot",
+    "EntityType": "AuthView",
+    "_etag": "\"06008a8f-0000-0500-0000-6a6906190000\"",
+    "Name": "Email - Confirmation Sent",
+    "Key": "emailconfirmationsent",
+    "Category": null,
+    "Description": null,
+    "AISessions": [],
+    "AuditHistory": [],
+    "IsDeleted": false,
+    "DeletedBy": null,
+    "DeletionDate": null,
+    "IsDeprecated": false,
+    "DeprecatedBy": null,
+    "DeprecationDate": null,
+    "DeprecationNotes": null,
+    "CreationDate": "2026-07-28T19:42:17.232Z",
+    "LastUpdatedDate": "2026-07-28T19:42:17.232Z",
+    "CreatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "LastUpdatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "ClonedFromId": null,
+    "ClonedFromOrg": null,
+    "ClonedRevision": null,
+    "IsDraft": false,
+    "Revision": 1,
+    "RevisionTimeStamp": "2026-01-26T14:40:51.048Z",
+    "Labels": [],
+    "Stars": null,
+    "RatingsCount": 0,
+    "Ratings": [],
+    "_rid": "0hUQANwtAwBF2QAAAAAAAA==",
+    "_self": "dbs/0hUQAA==/colls/0hUQANwtAwA=/docs/0hUQANwtAwBF2QAAAAAAAA==/",
+    "_attachments": "attachments/",
+    "Sha256Hex": "4f73a88d912002f3116b45448814a93885181b9e58d22ea804aaef6972559a64",
+    "_ts": 1785267737
+}

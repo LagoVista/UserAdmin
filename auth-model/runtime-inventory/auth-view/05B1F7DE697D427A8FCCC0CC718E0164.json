@@ -1,0 +1,88 @@
+{
+    "Route": "/auth/continue/passkey",
+    "ViewId": "auth.continue.passkey",
+    "Actions": [
+        {
+            "Id": "use-passkey",
+            "Name": "Use passkey",
+            "Finder": "[data-testid=\"action:use-passkey\"]"
+        },
+        {
+            "Id": "back",
+            "Name": "Back",
+            "Finder": "[data-testid=\"action:back\"]"
+        },
+        {
+            "Id": "start-over",
+            "Name": "Start over",
+            "Finder": "[data-testid=\"action:start-over\"]"
+        }
+    ],
+    "Fields": [],
+    "IsPublic": false,
+    "OwnerOrganization": {
+        "Id": "AA2C78499D0140A5A9CE4B7581EF9691",
+        "Text": "Software Logistics",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": null,
+        "OwnerOrgId": null,
+        "Key": null
+    },
+    "OwnerUser": null,
+    "id": "05B1F7DE697D427A8FCCC0CC718E0164",
+    "DatabaseName": "nuviot",
+    "EntityType": "AuthView",
+    "_etag": "\"0600d98e-0000-0500-0000-6a6906040000\"",
+    "Name": "Auth - Continue - Passkey",
+    "Key": "authcontinuepasskey",
+    "Category": null,
+    "Description": null,
+    "AISessions": [],
+    "AuditHistory": [],
+    "IsDeleted": false,
+    "DeletedBy": null,
+    "DeletionDate": null,
+    "IsDeprecated": false,
+    "DeprecatedBy": null,
+    "DeprecationDate": null,
+    "DeprecationNotes": null,
+    "CreationDate": "2026-07-28T19:41:56.575Z",
+    "LastUpdatedDate": "2026-07-28T19:41:56.575Z",
+    "CreatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "LastUpdatedBy": {
+        "Id": "CC648B3B51164A8296EB7092F312D5CB",
+        "Text": "Kevin Wolf",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "cc648b3b51164a8296eb7092f312d5cb"
+    },
+    "ClonedFromId": null,
+    "ClonedFromOrg": null,
+    "ClonedRevision": null,
+    "IsDraft": false,
+    "Revision": 1,
+    "RevisionTimeStamp": "2026-01-26T14:42:48.441Z",
+    "Labels": [],
+    "Stars": null,
+    "RatingsCount": 0,
+    "Ratings": [],
+    "_rid": "0hUQANwtAwA-2QAAAAAAAA==",
+    "_self": "dbs/0hUQAA==/colls/0hUQANwtAwA=/docs/0hUQANwtAwA-2QAAAAAAAA==/",
+    "_attachments": "attachments/",
+    "Sha256Hex": "521628217707b15540a176c20aa0730999b5705c63d3d75b9eaeff7f85edd22c",
+    "_ts": 1785267716
+}
