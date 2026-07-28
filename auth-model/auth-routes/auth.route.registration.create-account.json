@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.registration.create-account",
+  "name": "Create Account Route",
+  "description": "Displays the initial password-based account registration surface.",
+  "path": "/auth/registration/create-account",
+  "routeType": "view",
+  "viewId": "auth.registration.create-account",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "RegisterUserNewComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "commonLinksMember": "CreateAccount",
+    "angularComponent": "RegisterUserNewComponent"
+  },
+  "notes": [
+    "Canonical replacement for /auth/register."
+  ]
+}
