@@ -1,0 +1,24 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.sign-in.unable",
+  "name": "Sign-In Unable",
+  "description": "Presents alternate authentication and recovery choices when email sign-in cannot continue.",
+  "path": "/auth/sign-in/unable",
+  "routeType": "view",
+  "viewId": "auth.sign-in.unable",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "SigninUnableComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "commonLinksMember": "SignInUnable",
+    "angularComponent": "SigninUnableComponent"
+  },
+  "notes": [
+    "Replaces the continuation-nested runtime path with a canonical outcome route.",
+    "CommonLinks does not currently define this member."
+  ]
+}
