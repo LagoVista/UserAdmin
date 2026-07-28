@@ -8,6 +8,7 @@
   "maturity": "proposed",
   "goals": [{ "key": "resolve-invitation", "summary": "Help a person understand, accept, decline, or safely resolve an organization invitation." }],
   "supportedJourneyKeys": [],
+  "routedConversationKeys": [],
   "entryPredicate": { "expression": "A pending invitation exists and the person requests help reviewing or resolving it." },
   "completionPredicate": { "expression": "The invitation is accepted, declined, expired, already consumed, abandoned, or escalated without ambiguous identity mutation." },
   "informationRequirements": [
