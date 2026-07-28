@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/state-dimension.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.dimension.workspace-membership",
+  "name": "Workspace Membership",
+  "summary": "Describes the user's relationship to workspaces beyond the home-workspace invariant.",
+  "version": 1,
+  "maturity": "proposed",
+  "authority": "canonical",
+  "valueType": "enumeration",
+  "requiredForCanonicalSnapshot": true,
+  "values": [
+    { "key": "none", "name": "None", "summary": "No durable workspace membership exists." },
+    { "key": "home-only", "name": "Home Only", "summary": "The user belongs only to the home workspace." },
+    { "key": "multiple", "name": "Multiple", "summary": "The user belongs to the home workspace and one or more external workspaces." },
+    { "key": "conflict", "name": "Conflict", "summary": "Membership state violates a workspace invariant." }
+  ],
+  "sourceReferences": [
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.9" },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Testing/AuthTenantStateSnapshot.cs", "note": "BelongsToOrg and IsOrgAdmin test state" }
+  ]
+}
