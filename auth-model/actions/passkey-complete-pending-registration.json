@@ -1,0 +1,16 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.passkey.complete-pending-registration",
+  "name": "Complete Pending Passkey Registration",
+  "summary": "Consumes and validates a passkey attestation challenge and stores verified credential material against the PendingIdentity.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [{ "key": "challenge-id", "valueType": "reference", "required": true, "description": "Single-use passkey challenge." }, { "key": "attestation", "valueType": "object", "required": true, "description": "WebAuthn attestation returned by the secure component." }],
+  "guards": [{ "expression": "challenge is unexpired, unconsumed, origin-bound, rp-bound, and pending-identity-bound", "failureCode": "invalid-passkey-challenge" }],
+  "permittedMutations": ["credential-proof", "pending-identity-status"],
+  "requiredEffects": ["consume-passkey-challenge", "validate-attestation", "persist-pending-passkey-credential"],
+  "forbiddenEffects": ["create-durable-user", "bind-credential-to-unresolved-durable-user", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "code", "reference": "src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "CompletePasswordlessRegistrationAsync currently combines attestation and user creation; the model separates them" }, { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
