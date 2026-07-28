@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.recovery.issue-challenge",
+  "name": "Issue Recovery Challenge",
+  "summary": "Issues one permitted recovery challenge for an existing durable identity through an approved recovery channel.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "recovery-reference", "valueType": "reference", "required": true, "description": "Active recovery ceremony reference." },
+    { "key": "challenge-method", "valueType": "string", "required": true, "description": "Approved email, recovery-code, passkey, MFA, support-assisted, or equivalent recovery proof method." }
+  ],
+  "guards": [
+    { "expression": "recovery-state == requested", "failureCode": "recovery-not-requested" },
+    { "expression": "existing-durable-identity-resolved == true", "failureCode": "recovery-identity-not-resolved" },
+    { "expression": "challenge-method permitted by recovery policy", "failureCode": "recovery-method-not-permitted" }
+  ],
+  "permittedMutations": ["auth.dimension.recovery-state", "auth.dimension.session-capability"],
+  "requiredEffects": ["issue-single-use-expiring-challenge", "bind-challenge-to-recovery-and-identity", "record-recovery-challenge-issued"],
+  "forbiddenEffects": ["create-durable-user", "grant-normal-application-authorization", "change-home-workspace", "accept-invitation"],
+  "invariantKeys": ["auth.invariant.recovery.existing-identity-only", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.14" }]
+}
