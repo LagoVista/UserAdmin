@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.recovery.request",
+  "name": "Request Account Recovery",
+  "summary": "Begins a recovery ceremony for a potentially existing durable identity without disclosing whether the submitted identifier is registered.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "recovery-locator", "valueType": "string", "required": true, "description": "Email, username, credential identifier, or another permitted account locator." },
+    { "key": "recovery-reason", "valueType": "string", "required": true, "description": "Password loss, passkey loss, email loss, MFA loss, suspected compromise, or another supported recovery reason." }
+  ],
+  "guards": [
+    { "expression": "recovery-state in [none,expired,failed,completed]", "failureCode": "recovery-already-active" },
+    { "expression": "recovery-cooldown-active == false", "failureCode": "recovery-cooldown-active" }
+  ],
+  "permittedMutations": ["auth.dimension.recovery-state", "auth.dimension.session-capability"],
+  "requiredEffects": ["create-single-use-recovery-record", "apply-enumeration-resistant-response", "record-recovery-request", "apply-rate-limit-and-cooldown-policy"],
+  "forbiddenEffects": ["create-durable-user", "confirm-account-existence", "authenticate-user", "accept-invitation", "switch-current-workspace"],
+  "invariantKeys": ["auth.invariant.recovery.existing-identity-only", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.14" }]
+}
