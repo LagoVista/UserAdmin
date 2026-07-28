@@ -1,0 +1,16 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.passkey.begin-step-up",
+  "name": "Begin Passkey Step Up",
+  "summary": "Issues a short-lived passkey assertion challenge requiring user verification for an already authenticated durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [{ "key": "durable-user-id", "valueType": "reference", "required": true, "description": "Authenticated durable identity requesting elevated proof." }],
+  "guards": [{ "expression": "session-capability in [authenticated-limited,authenticated-normal] and durable-identity == resolved", "failureCode": "authenticated-durable-identity-required" }],
+  "permittedMutations": ["credential-proof"],
+  "requiredEffects": ["create-short-lived-passkey-step-up-challenge", "require-user-verification"],
+  "forbiddenEffects": ["grant-step-up-before-assertion", "change-durable-identity", "create-durable-user"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "code", "reference": "src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "BeginAuthenticationOptionsAsync with isStepUp requiring user verification" }, { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
