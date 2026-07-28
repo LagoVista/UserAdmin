@@ -53,7 +53,7 @@
     "transitions": 38,
     "journeys": 10,
     "scenarios": 37,
-    "conversationTypes": 1,
+    "conversationTypes": 7,
     "presentationBindings": 0,
     "decisions": 0,
     "unresolved": 0
@@ -74,6 +74,6 @@
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.7-HANDOFF.md", "note": "Native-provider registration and linking handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.8-HANDOFF.md", "note": "Passkey registration, authentication, and step-up handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.9-HANDOFF.md", "note": "Home workspace establishment handoff" },
-    { "sourceType": "discussion", "reference": "auth-model/conversations/hr-onboarding.json", "note": "Initial proposed agent-assisted HR onboarding conversation definition" }
+    { "sourceType": "discussion", "reference": "auth-model/conversations/hr-onboarding.json", "note": "HR onboarding router and six bounded proposed workflow conversations" }
   ]
 }
