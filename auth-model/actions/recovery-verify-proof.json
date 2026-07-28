@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.recovery.verify-proof",
+  "name": "Verify Recovery Proof",
+  "summary": "Consumes and validates approved recovery proof, resolving only to the pre-existing durable identity bound to the ceremony.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "recovery-reference", "valueType": "reference", "required": true, "description": "Active recovery ceremony reference." },
+    { "key": "proof-reference", "valueType": "reference", "required": true, "description": "Opaque proof reference collected by a secure recovery component." }
+  ],
+  "guards": [
+    { "expression": "recovery-state in [challenge-issued,proof-pending]", "failureCode": "recovery-proof-not-expected" },
+    { "expression": "recovery-challenge-valid-and-unused == true", "failureCode": "recovery-challenge-invalid" },
+    { "expression": "proof resolves to bound existing durable identity", "failureCode": "recovery-proof-identity-mismatch" }
+  ],
+  "permittedMutations": ["auth.dimension.recovery-state", "auth.dimension.durable-identity", "auth.dimension.session-capability"],
+  "requiredEffects": ["consume-recovery-challenge-once", "record-proof-strength-and-method", "bind-existing-durable-identity", "record-recovery-proof-verified"],
+  "forbiddenEffects": ["create-durable-user", "grant-normal-application-authorization", "accept-invitation", "switch-current-workspace"],
+  "invariantKeys": ["auth.invariant.recovery.existing-identity-only", "auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.14" }]
+}
