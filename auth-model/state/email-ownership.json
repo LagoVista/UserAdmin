@@ -1,0 +1,24 @@
+{
+  "$schema": "../schemas/state-dimension.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.dimension.email-ownership",
+  "name": "Email Ownership",
+  "summary": "Describes whether an email address is absent, asserted, or verified as owned by the identity being resolved.",
+  "version": 1,
+  "maturity": "proposed",
+  "authority": "canonical",
+  "valueType": "enumeration",
+  "requiredForCanonicalSnapshot": true,
+  "values": [
+    { "key": "unknown", "name": "Unknown", "summary": "No usable email assertion exists." },
+    { "key": "asserted", "name": "Asserted", "summary": "An email was supplied but ownership is not verified." },
+    { "key": "verification-pending", "name": "Verification Pending", "summary": "A verification ceremony is active." },
+    { "key": "verified", "name": "Verified", "summary": "Ownership of the canonical email was verified." },
+    { "key": "provider-verified", "name": "Provider Verified", "summary": "A trusted provider asserted and verified the email." },
+    { "key": "conflict", "name": "Conflict", "summary": "Verified or asserted emails conflict and require resolution." }
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Users/PendingIdentity.cs", "note": "RegisteredEmail, VerifiedEmail, and provider email are distinct" },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "3" }
+  ]
+}
