@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.native-provider.resolve-linked-subject",
+  "name": "Resolve Linked Native Provider Subject",
+  "summary": "Resolves a validated provider subject that is already linked to exactly one durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "provider-subject", "valueType": "string", "required": true },
+    { "key": "durable-identity-reference", "valueType": "reference", "required": true }
+  ],
+  "guards": [
+    { "expression": "provider subject has exactly one existing durable identity link", "failureCode": "provider-subject-link-not-unique" }
+  ],
+  "permittedMutations": ["auth.dimension.durable-identity", "auth.dimension.pending-identity-status"],
+  "requiredEffects": ["record-provider-subject-resolution"],
+  "forbiddenEffects": ["create-durable-user", "relink-provider-subject", "resolve-user-by-email-alone"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.email-identities.not-conflated"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
