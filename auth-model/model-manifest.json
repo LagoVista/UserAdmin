@@ -54,17 +54,17 @@
     "journeys": 12,
     "scenarios": 50,
     "conversationTypes": 7,
-    "presentationBindings": 3,
+    "presentationBindings": 6,
     "decisions": 0,
     "unresolved": 0
   },
   "currentWork": {
-    "guideSection": "4.14",
+    "guideSection": "4.15",
     "status": "complete",
-    "summary": "Account recovery is modeled as an enumeration-resistant ceremony that resolves only to an existing durable identity, issues and consumes single-use proof, establishes replacement credentials through secure components, keeps authorization recovery-limited, revokes prior sessions and recovery material, and requires fresh sign-in after completion. Next major area: Section 4.15, UI-only transitions and AuthView coverage."
+    "summary": "Presentation bindings now distinguish canonical authentication actions from UI-only navigation. The first UI-only family models the web Welcome screen paths for email, provider, and passkey continuation with source and destination views, routes, semantic finders, component operations, and capability gates, without inventing fake server transitions. Next major area: Section 4.16, Test binding and evidence aggregation."
   },
   "sourceReferences": [
-    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.14", "note": "Account recovery, replacement credentials, cooldowns, and session revocation" },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.15", "note": "UI-only transitions, AuthView coverage, and platform evidence" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.1-HANDOFF.md", "note": "Repository model foundation" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.2-HANDOFF.md", "note": "Composite identity state decisions" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.3-HANDOFF.md", "note": "Composite relationships and foundational invariants" },
@@ -79,6 +79,7 @@
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.12-HANDOFF.md", "note": "Traditional form onboarding and presentation binding handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.13-HANDOFF.md", "note": "Session projection and routing handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.14-HANDOFF.md", "note": "Account recovery handoff" },
+    { "sourceType": "decision", "reference": "auth-model/SECTION-4.15-HANDOFF.md", "note": "UI-only transitions and AuthView coverage handoff" },
     { "sourceType": "discussion", "reference": "auth-model/conversations/hr-onboarding.json", "note": "HR onboarding router and six bounded proposed workflow conversations" }
   ]
 }
