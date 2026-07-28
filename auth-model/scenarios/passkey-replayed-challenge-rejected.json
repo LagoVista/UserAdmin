@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.passkey.replayed-challenge-rejected",
+  "name": "Replayed Passkey Challenge Rejected",
+  "summary": "Rejects a second attempt to consume an already used passkey registration or authentication challenge.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "security",
+  "preconditions": { "expression": "passkey challenge has already been consumed" },
+  "setup": ["Successfully complete one passkey ceremony using the challenge."],
+  "inputs": [{ "key": "challenge-id", "valueType": "reference", "required": true, "description": "Previously consumed challenge identifier." }],
+  "actionKey": "auth.action.passkey.complete-authentication",
+  "postconditions": { "expression": "credential-proof and session-capability are unchanged" },
+  "requiredEffects": ["reject-consumed-challenge", "record-passkey-replay-rejection"],
+  "forbiddenEffects": ["validate-assertion", "advance-sign-counter", "grant-session-capability", "persist-credential"],
+  "invariantKeys": ["auth.invariant.transition.deterministic-post-state"],
+  "expectedAuthLogEvents": ["passkey-challenge-replay-rejected"],
+  "evidenceRequirements": ["server"],
+  "sourceReferences": [{ "sourceType": "code", "reference": "src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "Completion paths consume challenges before validation" }, { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
