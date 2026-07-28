@@ -1,0 +1,16 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.continue.totp",
+  "name": "Continue with TOTP",
+  "path": "/auth/continue/totp",
+  "routeType": "view",
+  "viewId": "auth.continue.totp",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "ContinueTotpComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": { "commonLinksMember": "AuthContinueTotp", "angularComponent": "ContinueTotpComponent" }
+}
