@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.native-provider.establish-session",
+  "name": "Establish Native Provider Session",
+  "summary": "Establishes a normal authenticated session after durable identity and workspace requirements are satisfied.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 40,
+  "sourceState": { "expression": "durable-identity == resolved and account-status == active and home-workspace == established and current-workspace == home and session-capability != authenticated-normal" },
+  "actionKey": "auth.action.native-provider.establish-session",
+  "guards": [],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "set", "valueExpression": "authenticated-normal" }
+  ],
+  "requiredEffects": ["issue-normal-authenticated-session", "record-native-provider-session-established"],
+  "forbiddenEffects": ["create-durable-user", "create-home-workspace", "change-provider-link"],
+  "invariantKeys": ["auth.invariant.home-workspace.exactly-one", "auth.invariant.current-workspace.requires-access", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
