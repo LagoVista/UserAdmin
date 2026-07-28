@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/state-dimension.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.dimension.profile-completeness",
+  "name": "Profile Completeness",
+  "summary": "Describes whether required registration profile data is sufficient for durable-user creation or normal access.",
+  "version": 1,
+  "maturity": "proposed",
+  "authority": "canonical",
+  "valueType": "enumeration",
+  "requiredForCanonicalSnapshot": true,
+  "values": [
+    { "key": "unknown", "name": "Unknown", "summary": "Profile completeness has not been evaluated." },
+    { "key": "incomplete", "name": "Incomplete", "summary": "One or more required profile values are missing or invalid." },
+    { "key": "complete", "name": "Complete", "summary": "All required profile values are present and valid." }
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "AuthStateService.GetAuthSession", "note": "Current ProfileComplete projection" },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Testing/AuthTenantStateSnapshot.cs" }
+  ]
+}
