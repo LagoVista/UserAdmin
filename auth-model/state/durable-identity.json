@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/state-dimension.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.dimension.durable-identity",
+  "name": "Durable Identity",
+  "summary": "Describes whether the ceremony has resolved to a canonical AppUser.",
+  "version": 1,
+  "maturity": "proposed",
+  "authority": "canonical",
+  "valueType": "enumeration",
+  "requiredForCanonicalSnapshot": true,
+  "values": [
+    { "key": "absent", "name": "Absent", "summary": "No durable user has been resolved." },
+    { "key": "existing", "name": "Existing", "summary": "An existing durable user has been selected." },
+    { "key": "creation-required", "name": "Creation Required", "summary": "A new durable user must be created after remaining requirements are satisfied." },
+    { "key": "creating", "name": "Creating", "summary": "Durable-user creation is in progress." },
+    { "key": "resolved", "name": "Resolved", "summary": "A canonical durable user is established." },
+    { "key": "conflict", "name": "Conflict", "summary": "Resolution is ambiguous or conflicts with an existing identity." }
+  ],
+  "sourceReferences": [
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "2.3" }
+  ]
+}
