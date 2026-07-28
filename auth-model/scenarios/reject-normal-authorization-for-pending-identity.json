@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.pending-identity.reject-normal-authorization",
+  "name": "Reject Normal Authorization for Pending Identity",
+  "summary": "Proves that no active PendingIdentity state can receive ordinary application authorization.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "security-invariant",
+  "journeyKeys": ["auth.journey.pending-identity.lifecycle"],
+  "transitionKey": null,
+  "preconditions": { "expression": "pending-identity-status in [pending,verification-required,verifying,resolution-required]" },
+  "setup": ["Create an active PendingIdentity in each non-terminal lifecycle state."],
+  "inputs": [],
+  "actionKey": "auth.action.pending-identity.begin",
+  "postconditions": { "expression": "session-capability == identity-ceremony and session-capability != authenticated-normal" },
+  "requiredEffects": ["record-authorization-projection-evaluated"],
+  "forbiddenEffects": ["grant-normal-application-authorization", "select-current-workspace-as-authenticated-user"],
+  "invariantKeys": ["auth.invariant.pending-identity.no-normal-authorization"],
+  "expectedAuthLogEvents": ["pending-identity-authorization-restricted"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.5" }]
+}
