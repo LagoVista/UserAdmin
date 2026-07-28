@@ -22,7 +22,15 @@
       "controlType": "status",
       "finder": "status:validation-error",
       "sensitivity": "public",
-      "visibilityCondition": "A verification code validation error is present."
+      "visibilityCondition": "The verification code is missing or malformed."
+    },
+    {
+      "id": "verification-error",
+      "name": "Verification Error",
+      "controlType": "status",
+      "finder": "status:verification-error",
+      "sensitivity": "public",
+      "visibilityCondition": "The server rejected or could not verify the submitted code."
     }
   ],
   "actions": [
@@ -64,6 +72,6 @@
   "notes": [
     "The runtime route typo '/auth/mfa/top/confirm' is corrected by the canonical route contract.",
     "The runtime key typo 'totpenrolconfirm' is intentionally not carried into canonical truth.",
-    "Validation copy is not used as the semantic control name."
+    "Client-side validation and server verification errors use distinct semantic controls."
   ]
 }
