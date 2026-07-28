@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.oauth.access-denied",
+  "name": "OAuth Access Denied",
+  "description": "Explains that the external provider denied access and lets the user return to authentication choices.",
+  "category": "provider",
+  "routeId": "auth.route.oauth.access-denied",
+  "status": "active",
+  "controls": [],
+  "actions": [
+    { "id": "back", "name": "Back", "actionType": "link", "finder": "action:back" }
+  ],
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "OauthAccessDeniedComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "runtimeEntityId": "DAAACF6EF3F3433EA43546B6D498C223",
+    "runtimeSha256Hex": "df768b906df04be2f8155780c574f0e2b98feb9c5c1f873116e93a0d557829d6",
+    "webComponent": "OauthAccessDeniedComponent"
+  }
+}
