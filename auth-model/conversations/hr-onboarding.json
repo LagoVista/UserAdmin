@@ -4,18 +4,26 @@
   "key": "auth.conversation.hr-onboarding",
   "name": "HR Onboarding",
   "summary": "Acts as the HR-style entry and routing conversation that identifies a person's immediate account, invitation, or organization goal and transfers orchestration to the matching bounded conversation type.",
-  "version": 3,
+  "version": 4,
   "maturity": "proposed",
   "goals": [{ "key": "route-onboarding-request", "summary": "Determine the person's immediate onboarding goal and route to the matching bounded conversation." }],
   "supportedJourneyKeys": [],
-  "routedConversationKeys": [
-    "auth.conversation.account-access-assistance",
-    "auth.conversation.user-registration",
-    "auth.conversation.invitation-resolution",
-    "auth.conversation.user-invitation",
-    "auth.conversation.organization-creation",
-    "auth.conversation.organization-switching"
+  "routedConversationKeys": ["auth.conversation.account-access-assistance", "auth.conversation.user-registration", "auth.conversation.invitation-resolution", "auth.conversation.user-invitation", "auth.conversation.organization-creation", "auth.conversation.organization-switching"],
+  "distinctiveCharacteristics": [
+    "This is the durable front desk for account and organization services rather than a workflow-specific mutation surface.",
+    "It can use prior chapter summaries and user-relevant system events to recognize context before routing.",
+    "It preserves non-secret handoff context while selecting exactly one bounded conversation for the requested outcome."
   ],
+  "exampleInteractions": [{
+    "key": "route-returning-member",
+    "name": "Route a Returning Member",
+    "summary": "A returning member asks about a prior account-service topic and the router uses durable chapter history to continue in the correct conversation.",
+    "entries": [
+      { "sequence": 1, "entryType": "user-message", "actor": "user", "text": "I have another question about the invitation I sent Fred." },
+      { "sequence": 2, "entryType": "agent-message", "actor": "agent", "text": "I found your invitation history. Fred accepted the invitation on July 29. I'll open the invitation chapter so we can continue there." },
+      { "sequence": 3, "entryType": "control", "actor": "system", "text": "Invitation conversation activated.", "authoritativeReferenceType": "conversation-routing" }
+    ]
+  }],
   "entryPredicate": { "expression": "A guest, PendingIdentity, or durable identity requests help with account access, registration, invitations, organization creation, or organization switching." },
   "completionPredicate": { "expression": "The request is routed to exactly one applicable bounded conversation, answered without state mutation, abandoned, or escalated safely." },
   "informationRequirements": [
@@ -24,40 +32,20 @@
   ],
   "allowedActionKeys": [],
   "prohibitedActionKeys": [],
-  "decisionPoints": [{
-    "key": "select-bounded-conversation",
-    "summary": "Select exactly one bounded conversation without performing its state-changing actions in the router.",
-    "basis": [
-      "entry intent",
-      "current composite state",
-      "current principal authority",
-      "routed conversation entry predicates"
-    ]
-  }],
+  "decisionPoints": [{ "key": "select-bounded-conversation", "summary": "Select exactly one bounded conversation without performing its state-changing actions in the router.", "basis": ["entry intent", "current composite state", "current principal authority", "routed conversation entry predicates"] }],
   "confirmationRequirements": [],
   "secureInteractions": [],
   "escalationConditions": [
     { "key": "ambiguous-goal", "condition": "The request maps to multiple materially different outcomes and cannot be resolved safely from current state.", "outcome": "Ask a focused non-secret question that distinguishes the applicable bounded conversation." },
     { "key": "unsupported-onboarding-goal", "condition": "No authored bounded conversation supports the requested outcome.", "outcome": "Explain the limitation and route to traditional UI or human support without inventing behavior." }
   ],
-  "lifecycle": {
-    "pause": "Persist the unresolved entry intent and sanitized routing context outside the transcript when needed.",
-    "resume": "Reload authoritative identity, invitation, and membership state before routing.",
-    "abandonment": "Allow the person to leave without invoking a state-changing action.",
-    "expiration": "Discard stale routing context independently from durable authentication and organization state."
-  },
+  "lifecycle": { "pause": "Persist the unresolved entry intent and sanitized routing context outside the transcript when needed.", "resume": "Reload authoritative identity, invitation, and membership state before routing.", "abandonment": "Allow the person to leave without invoking a state-changing action.", "expiration": "Discard stale routing context independently from durable authentication and organization state." },
   "supportedChannels": ["web", "android", "ios", "vtm", "voice"],
-  "presentationExpectations": [
-    "Present the assistant as an HR-style onboarding guide.",
-    "Answer simple explanatory questions before routing when no state change is required.",
-    "Explain the handoff and preserve relevant non-secret context.",
-    "Do not collect authentication secrets or execute workflow-specific state changes in the router.",
-    "Provide equivalent traditional navigation into each bounded workflow."
-  ],
+  "presentationExpectations": ["Present the assistant as an HR-style onboarding guide.", "Answer simple explanatory questions before routing when no state change is required.", "Explain the handoff and preserve relevant non-secret context.", "Do not collect authentication secrets or execute workflow-specific state changes in the router.", "Provide equivalent traditional navigation into each bounded workflow."],
   "scenarioKeys": [],
   "openQuestions": [],
   "sourceReferences": [
     { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.11", "note": "Guided VTM onboarding and traditional form equivalence." },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation", "note": "Added explicit routed conversation references on 2026-07-28." }
+    { "sourceType": "discussion", "reference": "ChatGPT conversation", "note": "Added explicit routed conversation references and durable-history examples on 2026-07-28." }
   ]
 }
