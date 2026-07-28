@@ -61,7 +61,7 @@ namespace LagoVista.UserAdmin
         public const string HomeWelcome = "/home/welcome";
 
         // Temporary member aliases keep existing server call sites compiling while
-        // their references are migrated. All aliases resolve to canonical routes.
+        // their references are migrated. All aliases emit canonical route paths.
         public const string Login = AuthEntry;
         public const string LoginOut = Logout;
         public const string Register = RegistrationCreateAccount;
@@ -73,7 +73,7 @@ namespace LagoVista.UserAdmin
         public const string CouldNotConfirmEmail = EmailVerificationFailed;
         public const string CreatingOrganization = OrganizationCreating;
         public const string ForgotPasswordSent = PasswordResetSent;
-        public const string AcceptInviteId = InvitationReview;
+        public const string AcceptInviteId = "/auth/invitation/{inviteid}";
         public const string InviteAccepted = InvitationAccepted;
         public const string InviteAcceptedFailed = InvitationFailed;
         public const string TOTPEnrollStart = TotpEnrollmentStart;
