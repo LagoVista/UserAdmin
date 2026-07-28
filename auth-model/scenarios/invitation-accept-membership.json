@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.invitation.accept-membership",
+  "name": "Accept Invitation Membership",
+  "summary": "Adds one external workspace membership to the explicitly selected durable identity and consumes the invitation without changing home or current workspace.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "transition",
+  "journeyKeys": ["auth.journey.invitation.resolve"],
+  "transitionKey": "auth.transition.invitation.accept",
+  "preconditions": { "expression": "invitation-status == acceptance-pending and durable-identity == resolved and home-workspace == established" },
+  "setup": ["Explicitly confirm the selected durable identity and invitation acceptance."],
+  "inputs": [
+    { "key": "invitation-reference", "valueType": "reference", "required": true, "description": "Validated invitation." },
+    { "key": "selected-durable-identity-reference", "valueType": "reference", "required": true, "description": "Confirmed accepting identity." }
+  ],
+  "actionKey": "auth.action.invitation.accept",
+  "postconditions": { "expression": "invitation-status == accepted and workspace-membership == multiple and home-workspace unchanged and current-workspace unchanged" },
+  "requiredEffects": ["create-external-workspace-membership-once", "consume-invitation-once"],
+  "forbiddenEffects": ["change-home-workspace", "switch-current-workspace", "create-durable-user"],
+  "invariantKeys": ["auth.invariant.invitation.accept-does-not-change-home", "auth.invariant.invitation.requires-selected-identity", "auth.invariant.invitation.consumed-once"],
+  "expectedAuthLogEvents": ["invitation-accepted"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10" }]
+}
