@@ -1,0 +1,75 @@
+{
+  "$schema": "./schemas/model-manifest.schema.json",
+  "schemaVersion": "1.0",
+  "modelKey": "auth.model.user-admin",
+  "name": "LagoVista User Authentication Model",
+  "version": 1,
+  "maturity": "proposed",
+  "authority": {
+    "definitions": "git",
+    "runtimeEvidence": "cosmos-db",
+    "guide": "../AUTH-MODEL-GUIDE.md"
+  },
+  "definitionRoots": {
+    "stateDimensions": "state",
+    "invariants": "invariants",
+    "actions": "actions",
+    "transitions": "transitions",
+    "journeys": "journeys",
+    "scenarios": "scenarios",
+    "presentationBindings": "presentation",
+    "decisions": "decisions",
+    "unresolved": "unresolved"
+  },
+  "schemas": {
+    "modelManifest": "schemas/model-manifest.schema.json",
+    "stateDimension": "schemas/state-dimension.schema.json",
+    "invariant": "schemas/invariant.schema.json",
+    "action": "schemas/action.schema.json",
+    "transition": "schemas/transition.schema.json",
+    "journey": "schemas/journey.schema.json",
+    "scenario": "schemas/scenario.schema.json",
+    "presentationBinding": "schemas/presentation-binding.schema.json"
+  },
+  "validation": {
+    "jsonSchemaDraft": "2020-12",
+    "keyPattern": "^auth\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})+$",
+    "canonicalHashAlgorithm": "sha256",
+    "canonicalHashEncoding": "lowercase-hex",
+    "requireUniqueKeys": true,
+    "requireResolvedReferences": true,
+    "rejectAmbiguousApprovedTransitions": true
+  },
+  "maturityValues": [
+    "proposed",
+    "reviewed",
+    "approved",
+    "implemented",
+    "verified",
+    "deprecated"
+  ],
+  "inventory": {
+    "stateDimensions": 0,
+    "invariants": 0,
+    "actions": 0,
+    "transitions": 0,
+    "journeys": 0,
+    "scenarios": 0,
+    "presentationBindings": 0,
+    "decisions": 0,
+    "unresolved": 0
+  },
+  "currentWork": {
+    "guideSection": "4.1",
+    "status": "in-progress",
+    "summary": "Establishing repository structure, schemas, conventions, deterministic hashing, and validation rules."
+  },
+  "sourceReferences": [
+    {
+      "sourceType": "discussion",
+      "reference": "AUTH-MODEL-GUIDE.md",
+      "section": "4.1",
+      "note": "Repository model foundation plan"
+    }
+  ]
+}
