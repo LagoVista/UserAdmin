@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.passkey.create-durable-user",
+  "name": "Create Durable User from Passkey Proof",
+  "summary": "Creates the durable user after validated passkey proof without yet binding the credential or establishing a normal session.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 90,
+  "sourceState": { "expression": "pending-identity-status == resolution-required and pending-identity-flow == passkey and credential-proof == passkey-proved and durable-identity == creation-required" },
+  "actionKey": "auth.action.passkey.create-durable-user",
+  "guards": [{ "expression": "no existing canonical identity matches", "failureCode": "existing-identity-must-be-resolved" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.durable-identity", "operation": "set", "valueExpression": "resolved" },
+    { "dimensionKey": "auth.dimension.account-status", "operation": "set", "valueExpression": "active" },
+    { "dimensionKey": "auth.dimension.home-workspace", "operation": "set", "valueExpression": "required" }
+  ],
+  "requiredEffects": ["create-one-durable-user", "record-passkey-user-creation", "mark-home-workspace-required"],
+  "forbiddenEffects": ["create-home-workspace", "bind-unvalidated-credential", "establish-normal-session", "create-duplicate-user"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
