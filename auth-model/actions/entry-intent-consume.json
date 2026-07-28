@@ -1,0 +1,19 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.entry-intent.consume",
+  "name": "Consume Entry Intent",
+  "summary": "Consumes one validated stashed entry intent explicitly and independently from session projection.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [{ "key": "entry-intent-reference", "valueType": "reference", "required": true, "description": "Reference to the stashed entry intent selected for one-time consumption." }],
+  "guards": [{ "expression": "entry-intent-status == stashed", "failureCode": "entry-intent-not-stashed" }],
+  "permittedMutations": ["auth.dimension.entry-intent-status"],
+  "requiredEffects": ["validate-entry-intent", "consume-entry-intent-once", "record-entry-intent-consumed"],
+  "forbiddenEffects": ["authenticate-user", "change-session-capability", "change-canonical-identity-state", "select-client-route"],
+  "invariantKeys": ["auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Interfaces/IEntryIntentService.cs", "note": "ConsumeAsync is destructive and therefore must not be hidden inside a projection read." },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.13" }
+  ]
+}
