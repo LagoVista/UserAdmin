@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.passkey.complete-authentication",
+  "name": "Complete Passkey Authentication",
+  "summary": "Validates the passkey assertion, resolves the existing durable identity, and grants the appropriate authenticated session capability.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 75,
+  "sourceState": { "expression": "credential-proof == challenge-issued and session-capability in [anonymous,identity-ceremony,authenticated-limited]" },
+  "actionKey": "auth.action.passkey.complete-authentication",
+  "guards": [{ "expression": "assertion credential maps to exactly one enabled durable user", "failureCode": "invalid-passkey-assertion" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.credential-proof", "operation": "set", "valueExpression": "passkey-proved" },
+    { "dimensionKey": "auth.dimension.durable-identity", "operation": "set", "valueExpression": "resolved" },
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "derive", "valueExpression": "authenticated-normal when account, profile, workspace, and policy gates pass; otherwise authenticated-limited" }
+  ],
+  "requiredEffects": ["consume-passkey-challenge", "validate-passkey-assertion", "advance-sign-counter", "resolve-existing-durable-user"],
+  "forbiddenEffects": ["create-durable-user", "resolve-different-user", "grant-step-up-without-required-user-verification"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.disabled-user.no-normal-session", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.8" }]
+}
