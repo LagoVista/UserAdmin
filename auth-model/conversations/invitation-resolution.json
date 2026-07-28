@@ -1,0 +1,30 @@
+{
+  "$schema": "../schemas/conversation-type.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.conversation.invitation-resolution",
+  "name": "Invitation Resolution",
+  "summary": "Helps a person review and resolve an organization invitation through an explicitly selected durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "goals": [{ "key": "resolve-invitation", "summary": "Help a person understand, accept, decline, or safely resolve an organization invitation." }],
+  "supportedJourneyKeys": [],
+  "entryPredicate": { "expression": "A pending invitation exists and the person requests help reviewing or resolving it." },
+  "completionPredicate": { "expression": "The invitation is accepted, declined, expired, already consumed, abandoned, or escalated without ambiguous identity mutation." },
+  "informationRequirements": [
+    { "key": "invitation-state", "summary": "Display-safe invitation, inviter, target organization, role, and expiration information.", "sensitivity": "sensitive", "collection": "existing-state", "requiredForGoalKeys": ["resolve-invitation"] },
+    { "key": "identity-selection", "summary": "The durable identity explicitly selected to resolve the invitation.", "sensitivity": "sensitive", "collection": "conversation", "requiredForGoalKeys": ["resolve-invitation"] },
+    { "key": "authentication-secrets", "summary": "Any credentials or verification proofs needed to establish or switch the selected identity.", "sensitivity": "secret", "collection": "secure-component", "requiredForGoalKeys": ["resolve-invitation"] }
+  ],
+  "allowedActionKeys": [],
+  "prohibitedActionKeys": [],
+  "decisionPoints": [{ "key": "select-invitation-identity", "summary": "Select the durable identity that will accept or decline the invitation.", "basis": ["current authenticated identity", "invited email", "verified identifiers", "available account paths"] }],
+  "confirmationRequirements": [{ "key": "accept-or-decline-invitation", "summary": "Require explicit confirmation before accepting or declining the invitation.", "requiredBeforeActionKeys": [] }],
+  "secureInteractions": [{ "key": "invitation-identity-establishment", "summary": "Authenticate or register the explicitly selected identity outside conversational context.", "componentType": "standard-authentication-ui", "conversationMayProvide": ["invitation reference", "display-safe organization context", "selected account path", "return location"], "componentCollects": ["passwords", "one-time codes", "passkey material", "provider tokens"], "sanitizedOutcomes": ["completed", "canceled", "failed", "additional-verification-required", "expired"], "resumeBehavior": "Refresh invitation and identity state before offering acceptance or decline." }],
+  "escalationConditions": [{ "key": "invitation-identity-ambiguity", "condition": "The selected identity cannot be safely bound to the invitation-resolution action.", "outcome": "Pause invitation mutation and route to deterministic account resolution or support." }],
+  "lifecycle": { "pause": "Persist the invitation reference, selected path, and secure handoff outside the transcript.", "resume": "Reload invitation status and identity state before continuing.", "abandonment": "Leave the invitation unchanged unless the person explicitly declined it.", "expiration": "Treat invitation and secure-handoff expiration independently and explain the current valid options." },
+  "supportedChannels": ["web", "android", "ios", "vtm", "voice"],
+  "presentationExpectations": ["Explain the invitation before requesting a decision.", "Make the selected durable identity explicit.", "Never treat the invitation itself as identity proof.", "Provide an equivalent traditional invitation flow."],
+  "scenarioKeys": [],
+  "openQuestions": ["Which canonical invitation-resolution journey and actions should this conversation reference?"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10 and 4.11", "note": "Split from the original HR Onboarding goal set on 2026-07-28." }]
+}
