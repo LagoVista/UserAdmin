@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.invitation.review",
+  "name": "Review Invitation",
+  "description": "Loads and validates an invitation before the user selects an acceptance identity path.",
+  "path": "/auth/invitation/{invitation-id}",
+  "routeType": "view",
+  "viewId": "auth.invitation.review",
+  "parameters": [
+    { "id": "invitation-id", "required": true, "sensitivity": "credential" }
+  ],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "AcceptInviteComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": { "commonLinksMember": "AcceptInvitation", "angularComponent": "AcceptInviteComponent" },
+  "notes": ["Replaces /auth/invite/accept/{inviteid}."]
+}
