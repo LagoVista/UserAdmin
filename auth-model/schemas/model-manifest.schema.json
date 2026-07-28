@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lagovista.com/schemas/auth-model/model-manifest.schema.json",
+  "title": "Authentication Model Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "modelKey", "name", "version", "maturity", "authority", "definitionRoots", "schemas", "validation", "maturityValues", "inventory", "currentWork", "sourceReferences"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+$" },
+    "modelKey": { "type": "string", "pattern": "^auth\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})+$" },
+    "name": { "type": "string", "minLength": 1 },
+    "version": { "type": "integer", "minimum": 1 },
+    "maturity": { "$ref": "#/$defs/maturity" },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["definitions", "runtimeEvidence", "guide"],
+      "properties": {
+        "definitions": { "const": "git" },
+        "runtimeEvidence": { "type": "string", "minLength": 1 },
+        "guide": { "type": "string", "minLength": 1 }
+      }
+    },
+    "definitionRoots": { "type": "object", "minProperties": 1, "additionalProperties": { "type": "string", "minLength": 1 } },
+    "schemas": { "type": "object", "minProperties": 1, "additionalProperties": { "type": "string", "minLength": 1 } },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["jsonSchemaDraft", "keyPattern", "canonicalHashAlgorithm", "canonicalHashEncoding", "requireUniqueKeys", "requireResolvedReferences", "rejectAmbiguousApprovedTransitions"],
+      "properties": {
+        "jsonSchemaDraft": { "const": "2020-12" },
+        "keyPattern": { "type": "string", "minLength": 1 },
+        "canonicalHashAlgorithm": { "const": "sha256" },
+        "canonicalHashEncoding": { "const": "lowercase-hex" },
+        "requireUniqueKeys": { "const": true },
+        "requireResolvedReferences": { "const": true },
+        "rejectAmbiguousApprovedTransitions": { "const": true }
+      }
+    },
+    "maturityValues": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/maturity" } },
+    "inventory": { "type": "object", "minProperties": 1, "additionalProperties": { "type": "integer", "minimum": 0 } },
+    "currentWork": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["guideSection", "status", "summary"],
+      "properties": {
+        "guideSection": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["not-started", "in-progress", "needs-review", "blocked", "complete"] },
+        "summary": { "type": "string", "minLength": 1 }
+      }
+    },
+    "sourceReferences": { "type": "array", "items": { "$ref": "#/$defs/sourceReference" } }
+  },
+  "$defs": {
+    "maturity": { "enum": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"] },
+    "sourceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "reference"],
+      "properties": {
+        "sourceType": { "enum": ["ddr", "code", "test", "discussion", "decision", "external"] },
+        "reference": { "type": "string", "minLength": 1 },
+        "section": { "type": "string" },
+        "commit": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}
