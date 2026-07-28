@@ -1,0 +1,36 @@
+{
+  "$schema": "../schemas/conversation-type.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.conversation.organization-creation",
+  "name": "Organization Creation",
+  "summary": "Guides an eligible person through creation of a new organization tenant while preserving explicit authority, duplicate checks, legal confirmation, and secure handoffs.",
+  "version": 1,
+  "maturity": "proposed",
+  "goals": [{ "key": "create-organization", "summary": "Guide an eligible person through creation of a new organization tenant." }],
+  "supportedJourneyKeys": [],
+  "entryPredicate": { "expression": "An authenticated or registration-resolved person requests a new organization and is eligible to initiate tenant creation." },
+  "completionPredicate": { "expression": "The organization is created with an explicit initial administrator, canceled, blocked as a duplicate or policy conflict, or escalated safely." },
+  "informationRequirements": [
+    { "key": "organization-details", "summary": "Organization name, type, locale, timezone, preferred key or domain, and initial configuration.", "sensitivity": "profile", "collection": "conversation", "requiredForGoalKeys": ["create-organization"] },
+    { "key": "creator-identity-and-eligibility", "summary": "The resolved durable identity and policy state authorizing tenant creation.", "sensitivity": "sensitive", "collection": "existing-state", "requiredForGoalKeys": ["create-organization"] },
+    { "key": "contractual-or-payment-secrets", "summary": "Payment data, strong identity proof, or other protected information required by policy.", "sensitivity": "secret", "collection": "secure-component", "requiredForGoalKeys": ["create-organization"] }
+  ],
+  "allowedActionKeys": [],
+  "prohibitedActionKeys": [],
+  "decisionPoints": [
+    { "key": "check-organization-duplicate", "summary": "Determine whether the intended organization may already exist or require a join/request-access path instead.", "basis": ["organization name", "domain", "existing memberships", "known tenant matches"] },
+    { "key": "validate-creator-eligibility", "summary": "Determine whether the selected durable identity may create the organization and become its initial administrator.", "basis": ["identity state", "platform policy", "subscription eligibility", "risk controls"] }
+  ],
+  "confirmationRequirements": [{ "key": "create-tenant", "summary": "Present the organization identity, initial administrator, plan, and material policy terms and require explicit confirmation before creation.", "requiredBeforeActionKeys": [] }],
+  "secureInteractions": [{ "key": "organization-creation-secure-ceremony", "summary": "Collect contractual, payment, or step-up authentication data outside conversational context when required.", "componentType": "standard-secure-ui", "conversationMayProvide": ["organization draft reference", "display-safe plan and policy context", "return location"], "componentCollects": ["payment details", "step-up credentials", "protected legal acknowledgements"], "sanitizedOutcomes": ["completed", "canceled", "failed", "additional-verification-required", "expired"], "resumeBehavior": "Refresh creator eligibility and organization-availability state before permitting creation." }],
+  "escalationConditions": [
+    { "key": "probable-duplicate-organization", "condition": "The requested organization appears to match an existing tenant.", "outcome": "Pause creation and offer membership discovery, access request, or support resolution." },
+    { "key": "creator-not-eligible", "condition": "The resolved identity cannot create a tenant under current policy.", "outcome": "Do not create the organization and explain valid next steps." }
+  ],
+  "lifecycle": { "pause": "Persist a non-secret organization draft and secure handoff reference outside the transcript.", "resume": "Reload duplicate, eligibility, plan, and policy state before continuing.", "abandonment": "Leave no partially created tenant; retain or discard the draft according to policy.", "expiration": "Expire stale drafts and secure handoffs independently from durable identities and existing organizations." },
+  "supportedChannels": ["web", "android", "ios", "vtm", "voice"],
+  "presentationExpectations": ["Explain the difference between creating and joining an organization.", "Make the initial administrator and organization context explicit.", "Use standard secure controls for payment, step-up, and protected acknowledgements.", "Provide an equivalent traditional tenant-creation wizard."],
+  "scenarioKeys": [],
+  "openQuestions": ["Which canonical organization-creation journey and actions should this conversation reference?"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.11", "note": "Split from the original HR Onboarding goal set on 2026-07-28." }]
+}
