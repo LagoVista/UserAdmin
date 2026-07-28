@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/state-dimension.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.dimension.recovery-state",
+  "name": "Recovery State",
+  "summary": "Describes account-recovery progress and restrictions without conflating recovery with registration.",
+  "version": 1,
+  "maturity": "proposed",
+  "authority": "canonical",
+  "valueType": "enumeration",
+  "requiredForCanonicalSnapshot": true,
+  "values": [
+    { "key": "none", "name": "None", "summary": "No recovery ceremony is active." },
+    { "key": "requested", "name": "Requested", "summary": "Recovery was requested but proof has not begun." },
+    { "key": "challenge-issued", "name": "Challenge Issued", "summary": "A recovery challenge was issued." },
+    { "key": "proof-pending", "name": "Proof Pending", "summary": "Recovery proof is being collected or verified." },
+    { "key": "proved", "name": "Proved", "summary": "Approved recovery proof has resolved to an existing durable identity." },
+    { "key": "credential-reset-required", "name": "Credential Reset Required", "summary": "A replacement credential must be established before normal access." },
+    { "key": "completed", "name": "Completed", "summary": "Recovery completed and required security effects were applied.", "terminal": true },
+    { "key": "expired", "name": "Expired", "summary": "The recovery ceremony expired.", "terminal": true },
+    { "key": "failed", "name": "Failed", "summary": "The recovery ceremony failed.", "terminal": true }
+  ],
+  "sourceReferences": [
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.14" }
+  ]
+}
