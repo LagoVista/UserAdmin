@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.pending-identity.require-verification",
+  "name": "Require Pending Identity Verification",
+  "summary": "Places an active PendingIdentity behind an explicit proof gate.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 90,
+  "sourceState": { "expression": "pending-identity-status == pending and pending-identity-flow != none" },
+  "actionKey": "auth.action.pending-identity.require-verification",
+  "guards": [],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.pending-identity-status", "operation": "set", "valueExpression": "verification-required" },
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "derive", "valueExpression": "identity-ceremony" }
+  ],
+  "requiredEffects": ["record-verification-requirement"],
+  "forbiddenEffects": ["resolve-durable-identity", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.pending-identity.exactly-one-flow", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.5" }]
+}
