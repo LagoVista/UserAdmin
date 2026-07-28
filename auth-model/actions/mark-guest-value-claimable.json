@@ -1,0 +1,19 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.guest.mark-value-claimable",
+  "name": "Mark Guest Value Claimable",
+  "summary": "Promotes detected guest value into a stable claimable state.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [],
+  "guards": [
+    { "expression": "guest-identity == active", "failureCode": "guest-not-active" },
+    { "expression": "claimable-value == detected", "failureCode": "value-not-detected" }
+  ],
+  "permittedMutations": ["auth.dimension.claimable-value"],
+  "requiredEffects": ["persist-claimable-value-binding"],
+  "forbiddenEffects": ["create-durable-user", "claim-value"],
+  "invariantKeys": ["auth.invariant.guest.may-create-value", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.4" }]
+}
