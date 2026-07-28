@@ -7,7 +7,15 @@
   "category": "email-verification",
   "routeId": "auth.route.email-verification.failed",
   "status": "active",
-  "controls": [],
+  "controls": [
+    {
+      "id": "verification-error",
+      "name": "Verification Error",
+      "controlType": "status",
+      "finder": "status:verification-error",
+      "sensitivity": "public"
+    }
+  ],
   "actions": [
     {
       "id": "resend-email",
@@ -16,10 +24,10 @@
       "finder": "action:resend-email"
     },
     {
-      "id": "back",
-      "name": "Back",
+      "id": "back-to-sign-in",
+      "name": "Back to Sign In",
       "actionType": "button",
-      "finder": "action:back"
+      "finder": "action:back-to-sign-in"
     },
     {
       "id": "sign-out",
