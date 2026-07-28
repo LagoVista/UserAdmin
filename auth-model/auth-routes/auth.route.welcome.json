@@ -1,0 +1,30 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.welcome",
+  "name": "Welcome",
+  "description": "Primary authentication entry route for selecting a supported sign-in method.",
+  "path": "/auth/welcome",
+  "routeType": "view",
+  "viewId": "auth.welcome",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": {
+      "status": "implemented",
+      "implementation": "provideAuthRoutes -> AuthWelcomeComponent"
+    },
+    "mobile": {
+      "status": "implemented",
+      "implementation": "app/auth/welcome.tsx"
+    }
+  },
+  "source": {
+    "commonLinksMember": "AuthWelcome",
+    "angularComponent": "AuthWelcomeComponent",
+    "mobileRoute": "/auth/welcome"
+  },
+  "notes": [
+    "CommonLinks does not yet expose this route; the server projection will be patched after the canonical route inventory is complete."
+  ]
+}
