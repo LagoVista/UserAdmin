@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.pending-identity.expire",
+  "name": "Expire Pending Identity",
+  "summary": "Terminates an active PendingIdentity after its validity window closes.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 50,
+  "sourceState": { "expression": "pending-identity-status in [pending,verification-required,verifying,resolution-required]" },
+  "actionKey": "auth.action.pending-identity.expire",
+  "guards": [],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.pending-identity-status", "operation": "set", "valueExpression": "expired" },
+    { "dimensionKey": "auth.dimension.pending-identity-flow", "operation": "set", "valueExpression": "none" },
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "derive", "valueExpression": "anonymous or blocked according to remaining state" }
+  ],
+  "requiredEffects": ["invalidate-pending-identity-secrets", "record-pending-identity-expired"],
+  "forbiddenEffects": ["resolve-durable-identity", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.5" }]
+}
