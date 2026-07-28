@@ -1,0 +1,29 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.registration.complete-profile",
+  "name": "Complete Profile",
+  "description": "Collects the remaining profile information required to complete user registration.",
+  "category": "registration",
+  "routeId": "auth.route.registration.complete-profile",
+  "status": "active",
+  "controls": [
+    { "id": "email", "name": "Email", "controlType": "email-input", "finder": "field:email", "required": true, "sensitivity": "personal" },
+    { "id": "first-name", "name": "First name", "controlType": "text-input", "finder": "field:first-name", "required": true, "sensitivity": "personal" },
+    { "id": "last-name", "name": "Last name", "controlType": "text-input", "finder": "field:last-name", "required": true, "sensitivity": "personal" },
+    { "id": "validation-error", "name": "Validation error", "controlType": "status", "finder": "status:validation-error" }
+  ],
+  "actions": [
+    { "id": "complete-profile", "name": "Complete profile", "actionType": "button", "finder": "action:complete-profile" },
+    { "id": "back", "name": "Back", "actionType": "button", "finder": "action:back" }
+  ],
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "RegisterUserComponent" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "runtimeEntityId": "0625A7FDFEA44DCEB48F65D7CD91EF0E",
+    "runtimeSha256Hex": "978282518d9d837b7913c6f3b21008605fb9fe931d0e8d742d6b810dc1d1d9d3",
+    "webComponent": "RegisterUserComponent"
+  }
+}
