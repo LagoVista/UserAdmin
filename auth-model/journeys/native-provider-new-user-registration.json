@@ -1,0 +1,19 @@
+{
+  "$schema": "../schemas/journey.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.journey.native-provider.new-user-registration",
+  "name": "Native Provider New User Registration",
+  "summary": "Creates a new durable identity from a validated Apple or Google provider subject without conflating provider email with other email evidence.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioKeys": [
+    "auth.scenario.native-provider.email-mismatch-preserved",
+    "auth.scenario.native-provider.create-new-user",
+    "auth.scenario.native-provider.create-home-workspace",
+    "auth.scenario.native-provider.establish-session"
+  ],
+  "entryPredicate": { "expression": "pending-identity-status == pending and pending-identity-flow == native-provider" },
+  "completionPredicate": { "expression": "durable-identity == resolved and account-status == active and home-workspace == established and current-workspace == home and session-capability == authenticated-normal" },
+  "alternateJourneyKeys": ["auth.journey.native-provider.existing-user"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
