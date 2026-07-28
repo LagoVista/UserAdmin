@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.native-provider.resolve-linked-subject",
+  "name": "Resolve Linked Native Provider Subject",
+  "summary": "Resolves a validated provider subject that already maps to one durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 90,
+  "sourceState": { "expression": "pending-identity-status == resolution-required and pending-identity-flow == native-provider and credential-proof == native-provider-proved and durable-identity == absent" },
+  "actionKey": "auth.action.native-provider.resolve-linked-subject",
+  "guards": [{ "expression": "provider subject has exactly one durable identity link", "failureCode": "provider-subject-link-not-unique" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.durable-identity", "operation": "set", "valueExpression": "resolved" },
+    { "dimensionKey": "auth.dimension.pending-identity-status", "operation": "set", "valueExpression": "resolved" }
+  ],
+  "requiredEffects": ["record-provider-subject-resolution"],
+  "forbiddenEffects": ["create-durable-user", "relink-provider-subject", "resolve-user-by-email-alone"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.email-identities.not-conflated", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
