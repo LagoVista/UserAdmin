@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.pending-identity.resolve-existing-user",
+  "name": "Resolve Pending Identity to Existing User",
+  "summary": "Binds a proven PendingIdentity to exactly one existing durable identity and closes the active flow bucket.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "integration",
+  "journeyKeys": ["auth.journey.pending-identity.lifecycle"],
+  "transitionKey": "auth.transition.pending-identity.resolve",
+  "preconditions": { "expression": "pending-identity-status == resolution-required and pending-identity-flow != none and durable-identity == existing" },
+  "setup": ["Resolve one canonical existing durable identity matching the validated proof."],
+  "inputs": [{ "key": "durable-identity-reference", "valueType": "reference", "required": true }],
+  "actionKey": "auth.action.pending-identity.resolve",
+  "postconditions": { "expression": "pending-identity-status == resolved and pending-identity-flow == none and durable-identity == resolved" },
+  "requiredEffects": ["bind-pending-identity-to-durable-identity", "record-pending-identity-resolved"],
+  "forbiddenEffects": ["create-duplicate-durable-user", "retain-active-flow-bucket", "grant-capability-beyond-resolved-account-state"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.transition.deterministic-post-state"],
+  "expectedAuthLogEvents": ["pending-identity-resolved"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.5" }]
+}
