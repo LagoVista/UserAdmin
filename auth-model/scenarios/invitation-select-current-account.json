@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/scenario.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.scenario.invitation.select-current-account",
+  "name": "Select Current Account for Invitation",
+  "summary": "Uses the currently authenticated durable identity after explicit confirmation.",
+  "version": 1,
+  "maturity": "proposed",
+  "scenarioType": "transition",
+  "journeyKeys": ["auth.journey.invitation.resolve"],
+  "transitionKey": "auth.transition.invitation.select-identity",
+  "preconditions": { "expression": "invitation-status == valid and durable-identity == resolved and session-capability == authenticated-normal" },
+  "setup": ["Authenticate a durable user with an established home workspace."],
+  "inputs": [{ "key": "selected-durable-identity-reference", "valueType": "reference", "required": true, "description": "Current account selected by the person." }],
+  "actionKey": "auth.action.invitation.select-identity",
+  "postconditions": { "expression": "invitation-status == acceptance-pending and selected-durable-identity == current-durable-identity" },
+  "requiredEffects": ["present-acceptance-summary"],
+  "forbiddenEffects": ["create-membership", "change-home-workspace", "switch-current-workspace"],
+  "invariantKeys": ["auth.invariant.invitation.requires-selected-identity"],
+  "expectedAuthLogEvents": ["invitation-identity-selected"],
+  "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10" }]
+}
