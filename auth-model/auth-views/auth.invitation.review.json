@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.invitation.review",
+  "name": "Review Invitation",
+  "description": "Reviews an organization invitation and presents the valid identity paths available to accept it.",
+  "category": "invitation",
+  "routeId": "auth.route.invitation.review",
+  "status": "active",
+  "controls": [],
+  "actions": [
+    { "id": "accept-with-current-account", "name": "Accept with Current Account", "actionType": "button", "finder": "action:accept-with-current-account" },
+    { "id": "sign-in-with-another-account", "name": "Sign In with Another Account", "actionType": "button", "finder": "action:sign-in-with-another-account" },
+    { "id": "create-account", "name": "Create Account", "actionType": "button", "finder": "action:create-account" },
+    { "id": "cancel", "name": "Cancel", "actionType": "button", "finder": "action:cancel" }
+  ],
+  "platforms": {
+    "web": { "status": "implemented", "implementation": "AcceptInviteComponent" },
+    "mobile": { "status": "planned", "notes": "Requires parity reconciliation after web identifiers are patched." }
+  },
+  "source": { "webComponent": "AcceptInviteComponent" },
+  "notes": ["The invitation identifier is a route parameter, not a visible control."]
+}
