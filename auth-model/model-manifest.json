@@ -49,22 +49,22 @@
     "stateDimensions": 18,
     "compositeStateCatalogs": 1,
     "invariants": 20,
-    "actions": 43,
-    "transitions": 45,
-    "journeys": 11,
-    "scenarios": 45,
+    "actions": 48,
+    "transitions": 50,
+    "journeys": 12,
+    "scenarios": 50,
     "conversationTypes": 7,
     "presentationBindings": 3,
     "decisions": 0,
     "unresolved": 0
   },
   "currentWork": {
-    "guideSection": "4.13",
+    "guideSection": "4.14",
     "status": "complete",
-    "summary": "Session retrieval is modeled as a pure projection over authoritative authentication state. Session capability, required/recommended/allowed logical actions, entry intent, presentation context, and platform navigation are separate concerns. Destructive entry-intent consumption is now an explicit action, transition, and scenario rather than a hidden side effect of reading the session. Next major area: Section 4.14, Account recovery."
+    "summary": "Account recovery is modeled as an enumeration-resistant ceremony that resolves only to an existing durable identity, issues and consumes single-use proof, establishes replacement credentials through secure components, keeps authorization recovery-limited, revokes prior sessions and recovery material, and requires fresh sign-in after completion. Next major area: Section 4.15, UI-only transitions and AuthView coverage."
   },
   "sourceReferences": [
-    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.13", "note": "Session projection, logical actions, entry intent, and client routing" },
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.14", "note": "Account recovery, replacement credentials, cooldowns, and session revocation" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.1-HANDOFF.md", "note": "Repository model foundation" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.2-HANDOFF.md", "note": "Composite identity state decisions" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.3-HANDOFF.md", "note": "Composite relationships and foundational invariants" },
@@ -78,6 +78,7 @@
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.11-HANDOFF.md", "note": "Guided VTM onboarding handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.12-HANDOFF.md", "note": "Traditional form onboarding and presentation binding handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.13-HANDOFF.md", "note": "Session projection and routing handoff" },
+    { "sourceType": "decision", "reference": "auth-model/SECTION-4.14-HANDOFF.md", "note": "Account recovery handoff" },
     { "sourceType": "discussion", "reference": "auth-model/conversations/hr-onboarding.json", "note": "HR onboarding router and six bounded proposed workflow conversations" }
   ]
 }
