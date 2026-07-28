@@ -1,0 +1,28 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.email-verification.sent",
+  "name": "Email Verification Sent Route",
+  "description": "Displays the confirmation that an email verification message was sent.",
+  "path": "/auth/email-verification/sent",
+  "routeType": "view",
+  "viewId": "auth.email-verification.sent",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": {
+      "status": "implemented",
+      "implementation": "ConfirmEmailSentComponent"
+    },
+    "mobile": {
+      "status": "planned"
+    }
+  },
+  "source": {
+    "commonLinksMember": "EmailVerificationSent",
+    "angularComponent": "ConfirmEmailSentComponent"
+  },
+  "notes": [
+    "Canonical replacement for /auth/email/confirm/sent."
+  ]
+}
