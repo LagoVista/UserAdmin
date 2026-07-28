@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.native-provider.create-home-workspace",
+  "name": "Create Native Provider Home Workspace",
+  "summary": "Creates the required home workspace for a newly created native-provider user and establishes owner membership.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "durable-identity-reference", "valueType": "reference", "required": true },
+    { "key": "idempotency-key", "valueType": "string", "required": true }
+  ],
+  "guards": [
+    { "expression": "durable identity is resolved and home-workspace == required", "failureCode": "home-workspace-not-required" }
+  ],
+  "permittedMutations": ["auth.dimension.home-workspace", "auth.dimension.workspace-membership", "auth.dimension.current-workspace"],
+  "requiredEffects": ["create-exactly-one-home-workspace", "create-owner-membership", "select-home-workspace", "record-idempotency-result"],
+  "forbiddenEffects": ["create-second-home-workspace", "accept-invitation", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.home-workspace.exactly-one", "auth.invariant.home-workspace.owner-member", "auth.invariant.registration.completes-in-home-workspace"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+}
