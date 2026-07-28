@@ -1,0 +1,25 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.recovery.verify-proof",
+  "name": "Verify Recovery Proof",
+  "summary": "Moves a valid recovery challenge to proved while retaining recovery-only session capability.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 100,
+  "sourceState": { "expression": "recovery-state in [challenge-issued,proof-pending] and durable-identity == resolved" },
+  "actionKey": "auth.action.recovery.verify-proof",
+  "guards": [
+    { "expression": "recovery-challenge-valid-and-unused == true", "failureCode": "recovery-challenge-invalid" },
+    { "expression": "proof resolves to bound existing durable identity", "failureCode": "recovery-proof-identity-mismatch" }
+  ],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.recovery-state", "operation": "set", "valueExpression": "proved" },
+    { "dimensionKey": "auth.dimension.durable-identity", "operation": "derive", "valueExpression": "existing-bound-durable-identity" },
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "set", "valueExpression": "authenticated-limited" }
+  ],
+  "requiredEffects": ["consume-recovery-challenge-once", "record-proof-strength-and-method", "bind-existing-durable-identity", "record-recovery-proof-verified"],
+  "forbiddenEffects": ["create-durable-user", "grant-normal-application-authorization", "accept-invitation", "switch-current-workspace"],
+  "invariantKeys": ["auth.invariant.recovery.existing-identity-only", "auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.14" }]
+}
