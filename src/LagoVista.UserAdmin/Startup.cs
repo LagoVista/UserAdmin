@@ -1,3 +1,5 @@
+using LagoVista.UserAdmin.Authentication;
+using LagoVista.UserAdmin.Authentication.Flows;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Managers;
@@ -42,6 +44,8 @@ namespace LagoVista.UserAdmin
             services.AddScoped<ISecureLinkManager, SecureLinkManager>();
             services.AddScoped<IUserRegistrationManager, UserRegistrationManager>();
             services.AddScoped<IFunctionMapManager, FunctionMapManager>();
+            services.AddScoped<IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest>, PasswordRecoveryRequestFlowHandler>();
+            services.AddScoped<IAuthenticationFlowService, AuthenticationFlowService>();
 
             Services.Startup.ConfigureServices(services, configuration);
 
