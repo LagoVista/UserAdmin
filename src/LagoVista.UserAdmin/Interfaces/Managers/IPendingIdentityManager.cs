@@ -11,7 +11,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 {
     public interface IPendingIdentityManager
     {
-        Task<UserLoginResponse> PasswordSignInAsync(AuthLoginRequest loginRequest);
+        Task<AuthenticationResponse> PasswordSignInAsync(AuthLoginRequest loginRequest);
         Task AddPendingIdentity(PendingIdentity identity);
         Task<PendingIdentity> GetPendingIdentityAsync(string pendingIdentityId);
         Task UpdatePendingIdentity(PendingIdentity identity);
