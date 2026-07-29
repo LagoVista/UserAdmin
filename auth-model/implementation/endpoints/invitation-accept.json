@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/auth-endpoint-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.endpoint.invitation.accept",
+  "name": "Invitation Acceptance Endpoint",
+  "summary": "Maps the existing invitation acceptance endpoint to the canonical invitation acceptance flow handler.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdminRest",
+  "projectPath": "src/LagoVista.UserAdmin.Rest",
+  "sourcePath": "src/LagoVista.UserAdmin.Rest/Rest/AuthServices.cs",
+  "controllerType": "PublicAuthServices",
+  "methodName": "AcceptInvite",
+  "httpMethods": ["GET"],
+  "routeTemplates": ["/api/auth/invite/accept/{inviteid}"],
+  "requestContract": "route:inviteid",
+  "responseContract": "IActionResult",
+  "handlerKey": "auth.handler.invitation.accept",
+  "transitionKeys": ["auth.transition.invitation.accept"],
+  "projectionNotes": ["Authenticated acceptance currently calls IOrganizationManager directly; unauthenticated access stores the invitation identifier and redirects to the canonical invitation surface."],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/AuthServices.cs", "section": "AcceptInvite" }
+  ]
+}
