@@ -65,7 +65,7 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
                 new OrgUser(ORG_ID,Guid.NewGuid().ToId())
             });
 
-            _signInManager.Setup(sim => sim.PasswordSignInAsync(It.IsAny<AuthLoginRequest>())).Returns(Task.FromResult(InvokeResult<UserLoginResponse>.Create(new UserLoginResponse())));
+            _signInManager.Setup(sim => sim.PasswordSignInAsync(It.IsAny<AuthLoginRequest>())).Returns(Task.FromResult(InvokeResult<AuthenticationResponse>.Create(new AuthenticationResponse())));
             _userManager.Setup(usm => usm.FindByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { Id = Guid.NewGuid().ToId(), CurrentOrganization = new OrganizationSummary() { Id = ORG_ID, Name = "dontcare", Text = "dontcare" } }));
             _userManager.Setup(usm => usm.FindByNameAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { CurrentOrganization = new OrganizationSummary() { Id = ORG_ID, Name = "dontcare", Text = "dontcare" } }));
             _refreshTokenManager.Setup(rtm => rtm.GenerateRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task<RefreshToken>.FromResult(InvokeResult<RefreshToken>.Create(new RefreshToken("XXXX"))));
@@ -82,9 +82,6 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
             });
         }
 
-        //TODO: SHould write some tests here but behind schedule...did deskcheck of code and after refactoring its very straight forward.
-
-
         [TestMethod]
         public async Task ShouldGenerateAccessToken()
         {
@@ -100,17 +97,14 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
                 OrgName = "orgname",
                 Password = "pwd",
                 UserName = "email@foo.net"
-
             };
 
             var result = await _authTokenManager.AccessTokenGrantAsync(request);
             foreach (var err in result.Errors)
-            {
                 Console.WriteLine(err.Message);
-            }
+
             Assert.IsTrue(result.Successful);
         }
-
 
         [TestMethod]
         public async Task ShouldGenerateRefreshToken()
@@ -127,14 +121,12 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
                 OrgName = "orgname",
                 Password = "pwd",
                 UserName = "email@foo.net"
-
             };
 
             var result = await _authTokenManager.RefreshTokenGrantAsync(request);
             foreach (var err in result.Errors)
-            {
                 Console.WriteLine(err.Message);
-            }
+
             Assert.IsTrue(result.Successful);
         }
     }
