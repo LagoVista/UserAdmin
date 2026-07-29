@@ -45,8 +45,13 @@ namespace LagoVista.UserAdmin.Managers
 
         public UserLoginResponse Resolve(AuthenticationResolutionContext context)
         {
-            return Apply(new UserLoginResponse(), context);
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            var response = new UserLoginResponse();
+            return Apply(response, context);
         }
+
 
         public UserLoginResponse Apply(UserLoginResponse response, AuthenticationResolutionContext context)
         {

@@ -1,4 +1,5 @@
 using LagoVista.UserAdmin.Models.Auth;
+using LagoVista.UserAdmin.Models.DTOs;
 using System;
 
 namespace LagoVista.UserAdmin.Authentication.Flows

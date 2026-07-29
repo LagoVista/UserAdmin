@@ -2,6 +2,7 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Authentication.Flows;
 using LagoVista.UserAdmin.Models.Auth;
+using LagoVista.UserAdmin.Models.DTOs;
 using System;
 using System.Threading.Tasks;
 
