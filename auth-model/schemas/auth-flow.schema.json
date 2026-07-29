@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lagovista.com/schemas/auth-model/auth-flow.schema.json",
+  "title": "Authentication Flow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "key", "name", "summary", "version", "maturity", "requestContract", "resultContract", "handlerKeys", "transitionKeys", "entryActionKeys", "supportedAudiences", "sourceReferences"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "1.0" },
+    "key": { "type": "string", "pattern": "^auth\\.flow\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$" },
+    "name": { "type": "string", "minLength": 1 },
+    "summary": { "type": "string", "minLength": 1 },
+    "version": { "type": "integer", "minimum": 1 },
+    "maturity": { "enum": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"] },
+    "requestContract": { "type": "string", "minLength": 1 },
+    "resultContract": { "type": "string", "minLength": 1 },
+    "handlerKeys": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^auth\\.handler\\." } },
+    "transitionKeys": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^auth\\.transition\\." } },
+    "entryActionKeys": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^auth\\.action\\." } },
+    "supportedAudiences": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "notes": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "sourceReferences": { "type": "array", "items": { "type": "object", "required": ["sourceType", "reference"], "properties": { "sourceType": { "enum": ["ddr", "code", "test", "discussion", "decision", "external"] }, "reference": { "type": "string", "minLength": 1 }, "note": { "type": "string" } }, "additionalProperties": false } }
+  }
+}
