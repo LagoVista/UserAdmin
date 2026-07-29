@@ -19,7 +19,6 @@ namespace LagoVista.UserAdmin.Auth.Tests
         public void ValidResolvedUser_ReturnsAuthenticated()
         {
             var result = _resolver.Resolve(CreateResolvedContext());
-
             Assert.AreEqual(AuthenticationResponseState.Authenticated, result.AuthenticationState);
             Assert.IsTrue(result.CanEnterApplication);
         }
@@ -29,9 +28,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         {
             var context = CreateResolvedContext();
             context.CredentialValidated = false;
-
             var result = _resolver.Resolve(context);
-
             Assert.AreEqual(AuthenticationResponseState.InvalidCredentials, result.AuthenticationState);
             Assert.IsFalse(result.CanEnterApplication);
         }
@@ -42,9 +39,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var context = CreateResolvedContext();
             context.AccountDisabled = true;
             context.AccountLocked = true;
-
             var result = _resolver.Resolve(context);
-
             Assert.AreEqual(AuthenticationResponseState.AccountDisabled, result.AuthenticationState);
         }
 
@@ -53,9 +48,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         {
             var context = CreateResolvedContext();
             context.AccountLocked = true;
-
             var result = _resolver.Resolve(context);
-
             Assert.AreEqual(AuthenticationResponseState.AccountLocked, result.AuthenticationState);
         }
 
@@ -64,9 +57,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         {
             var context = CreatePendingContext();
             context.PendingIdentityExpired = true;
-
             var result = _resolver.Resolve(context);
-
             Assert.AreEqual(AuthenticationResponseState.PendingIdentityExpired, result.AuthenticationState);
         }
 
@@ -81,7 +72,6 @@ namespace LagoVista.UserAdmin.Auth.Tests
             };
 
             var result = _resolver.Resolve(context);
-
             Assert.AreEqual(AuthenticationResponseState.RegistrationRequired, result.AuthenticationState);
         }
 
@@ -89,7 +79,6 @@ namespace LagoVista.UserAdmin.Auth.Tests
         public void PendingIdentityWithoutVerifiedEmail_ReturnsEmailVerificationRequired()
         {
             var result = _resolver.Resolve(CreatePendingContext());
-
             Assert.AreEqual(AuthenticationResponseState.EmailVerificationRequired, result.AuthenticationState);
         }
 
@@ -99,9 +88,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var context = CreatePendingContext();
             context.EmailVerified = true;
             context.VerifiedEmailMatchesExistingUser = true;
-
             var result = _resolver.Resolve(context);
-
             Assert.AreEqual(AuthenticationResponseState.IdentityLinkRequired, result.AuthenticationState);
         }
 
@@ -111,9 +98,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var context = CreateResolvedContext();
             context.AuthBucketLinked = true;
             context.MfaRequired = true;
-
             var result = _resolver.Resolve(context);
-
             Assert.AreEqual(AuthenticationResponseState.MfaRequired, result.AuthenticationState);
         }
 
@@ -139,7 +124,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         [TestMethod]
         public void Apply_PreservesExistingResponsePayload()
         {
-            var response = new UserLoginResponse
+            var response = new AuthenticationResponse
             {
                 RedirectPage = "/home",
                 ResponseMessage = "Welcome"
