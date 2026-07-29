@@ -1,15 +1,20 @@
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Models.Auth;
 using System;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Authentication.Flows
 {
-    [CriticalCoverage]
-    public class PasswordLoginFlowHandler : IAuthenticationFlowHandler<PasswordLoginFlowRequest>
+    public interface IPasswordLoginFlowHandler
     {
-        public const string TransitionKey = "auth.transition.login.password";
+        Task<InvokeResult<AuthenticationResponse>> HandleAsync(AuthLoginRequest request);
+    }
 
+    [CriticalCoverage]
+    public class PasswordLoginFlowHandler : IPasswordLoginFlowHandler
+    {
         private readonly ISignInManager _signInManager;
 
         public PasswordLoginFlowHandler(ISignInManager signInManager)
@@ -17,12 +22,11 @@ namespace LagoVista.UserAdmin.Authentication.Flows
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
         }
 
-        public async Task<AuthenticationFlowResult> HandleAsync(PasswordLoginFlowRequest request)
+        public Task<InvokeResult<AuthenticationResponse>> HandleAsync(AuthLoginRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var result = await _signInManager.PasswordSignInAsync(request.Request);
-            return new AuthenticationFlowResult(TransitionKey, result);
+            return _signInManager.PasswordSignInAsync(request);
         }
     }
 }
