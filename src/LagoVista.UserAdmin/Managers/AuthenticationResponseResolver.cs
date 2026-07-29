@@ -43,19 +43,17 @@ namespace LagoVista.UserAdmin.Managers
             return AuthenticationResponseState.Authenticated;
         }
 
-        public UserLoginResponse Resolve(AuthenticationResolutionContext context)
+        public AuthenticationResponse Resolve(AuthenticationResolutionContext context)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
 
-            var response = new UserLoginResponse();
-            return Apply(response, context);
+            return Apply(new AuthenticationResponse(), context);
         }
 
-
-        public UserLoginResponse Apply(UserLoginResponse response, AuthenticationResolutionContext context)
+        public AuthenticationResponse Apply(AuthenticationResponse response, AuthenticationResolutionContext context)
         {
-            if (response == null) throw new ArgumentNullException(nameof(response));
+            if (response is null) throw new ArgumentNullException(nameof(response));
             if (context == null) throw new ArgumentNullException(nameof(context));
 
             response.AuthenticationState = ResolveState(context);
