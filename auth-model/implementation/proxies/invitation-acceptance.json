@@ -13,11 +13,11 @@
   "sourcePath": "generated/auth/client.ts",
   "serviceType": "AuthClient",
   "methodName": "getInviteAcceptByInviteid",
-  "requestContract": "inviteid:string",
+  "requestContract": "none",
   "resultContract": "void",
   "generator": "Aptix EndpointProjectGenerator",
   "consumingPlatforms": ["web", "mobile"],
-  "notes": ["Stable identity is reconciled through generated/auth/operations.json; method names may change without changing this binding."],
+  "notes": ["The invite ID is a path parameter rather than a request body.", "Stable identity is reconciled through generated/auth/operations.json; method names may change without changing this binding."],
   "sourceReferences": [
     { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/operations.json", "note": "Generated Swagger operation manifest." }
   ]
