@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/auth-flow-handler.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.handler.invitation.accept",
+  "name": "Invitation Acceptance Flow Handler",
+  "summary": "Provides the typed application boundary for accepting an invitation and reporting the canonical invitation acceptance transition.",
+  "version": 1,
+  "maturity": "proposed",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "src/LagoVista.UserAdmin",
+  "sourcePath": "src/LagoVista.UserAdmin/Authentication/Flows/InvitationAcceptanceFlowHandler.cs",
+  "interfaceName": "IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest>",
+  "typeName": "InvitationAcceptanceFlowHandler",
+  "methodName": "HandleAsync",
+  "requestContract": "InvitationAcceptanceFlowRequest",
+  "resultContract": "AuthenticationFlowResult",
+  "transitionKeys": ["auth.transition.invitation.accept"],
+  "dependencies": ["IOrganizationManager", "IAuthenticationLogManager", "IUserRedirectServices"],
+  "notes": ["The handler preserves invitation and workspace invariants while membership persistence remains in the organization manager."],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/AuthServices.cs", "note": "Current authenticated invitation endpoint delegates directly to IOrganizationManager.AcceptInvitationAsync." },
+    { "sourceType": "decision", "reference": "auth-model/transitions/invitation-accept.json" }
+  ]
+}
