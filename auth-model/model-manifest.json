@@ -21,6 +21,9 @@
     "authViews": "auth-views",
     "authRoutes": "auth-routes",
     "presentationBindings": "presentation",
+    "authFlowHandlers": "implementation/handlers",
+    "authEndpointBindings": "implementation/endpoints",
+    "authTestBindings": "implementation/tests",
     "decisions": "decisions",
     "unresolved": "unresolved"
   },
@@ -37,7 +40,10 @@
     "conversationType": "schemas/conversation-type.schema.json",
     "authView": "schemas/auth-view.schema.json",
     "authRoute": "schemas/auth-route.schema.json",
-    "presentationBinding": "schemas/presentation-binding.schema.json"
+    "presentationBinding": "schemas/presentation-binding.schema.json",
+    "authFlowHandler": "schemas/auth-flow-handler.schema.json",
+    "authEndpointBinding": "schemas/auth-endpoint-binding.schema.json",
+    "authTestBinding": "schemas/auth-test-binding.schema.json"
   },
   "validation": {
     "jsonSchemaDraft": "2020-12",
@@ -61,17 +67,21 @@
     "authViews": 0,
     "authRoutes": 0,
     "presentationBindings": 6,
+    "authFlowHandlers": 3,
+    "authEndpointBindings": 3,
+    "authTestBindings": 3,
     "decisions": 0,
     "unresolved": 0
   },
   "currentWork": {
-    "guideSection": "4.16",
+    "guideSection": "4.17",
     "status": "in-progress",
-    "summary": "Canonical AuthView and AuthRoute contracts are established in Git. The next pass converts the validated Cosmos AuthView inventory into canonical specifications, reconciles required controls and route surfaces against the Angular implementation, normalizes identifiers and paths, then aligns CommonLinks, provideAuthRoutes(), web components, and mobile coverage."
+    "summary": "Canonical implementation bindings now connect transitions to planned flow handlers, stable REST endpoint surfaces, and registered test proofs. The next pass introduces AuthenticationFlowService and the first handler implementation while preserving public routes and response contracts."
   },
   "sourceReferences": [
     { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.15", "note": "UI-only transitions, AuthView coverage, and platform evidence" },
     { "sourceType": "decision", "reference": "auth-model/AUTH-VIEW-ROUTE-CONTRACT.md", "note": "Canonical AuthView and AuthRoute authority, identifier, projection, and reconciliation rules" },
+    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-07-29", "note": "Flow handlers, endpoint projections, transition mappings, and test-proof registration" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.1-HANDOFF.md", "note": "Repository model foundation" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.2-HANDOFF.md", "note": "Composite identity state decisions" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.3-HANDOFF.md", "note": "Composite relationships and foundational invariants" },
