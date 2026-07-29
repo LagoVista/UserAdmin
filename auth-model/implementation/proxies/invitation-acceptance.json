@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/auth-proxy-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.proxy.invitation.accept",
+  "name": "Invitation Acceptance Generated Proxy",
+  "summary": "Binds the canonical invitation acceptance endpoint to its generated Swagger client operation.",
+  "version": 1,
+  "maturity": "implemented",
+  "endpointBindingKey": "auth.endpoint.invitation.accept",
+  "operationContractId": "nuvos.endpoint.auth.public-auth-services-accept-invite-api-auth-invite-accept-inviteid",
+  "operationId": "PublicAuthServices_AcceptInvite_api_auth_invite_accept_inviteid",
+  "repository": "nuviot/nuvos-app-contracts",
+  "sourcePath": "generated/auth/client.ts",
+  "serviceType": "AuthClient",
+  "methodName": "getInviteAcceptByInviteid",
+  "requestContract": "inviteid:string",
+  "resultContract": "void",
+  "generator": "Aptix EndpointProjectGenerator",
+  "consumingPlatforms": ["web", "mobile"],
+  "notes": ["Stable identity is reconciled through generated/auth/operations.json; method names may change without changing this binding."],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/operations.json", "note": "Generated Swagger operation manifest." }
+  ]
+}
