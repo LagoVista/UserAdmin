@@ -4,7 +4,7 @@
   "title": "Authentication Generated Proxy Binding",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "key", "name", "summary", "version", "maturity", "endpointBindingKey", "repository", "sourcePath", "serviceType", "methodName", "requestContract", "resultContract", "generator", "consumingPlatforms", "sourceReferences"],
+  "required": ["schemaVersion", "key", "name", "summary", "version", "maturity", "endpointBindingKey", "operationContractId", "operationId", "repository", "sourcePath", "serviceType", "methodName", "requestContract", "resultContract", "generator", "consumingPlatforms", "sourceReferences"],
   "properties": {
     "$schema": { "type": "string" },
     "schemaVersion": { "const": "1.0" },
@@ -14,6 +14,8 @@
     "version": { "type": "integer", "minimum": 1 },
     "maturity": { "enum": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"] },
     "endpointBindingKey": { "type": "string", "pattern": "^auth\\.endpoint\\." },
+    "operationContractId": { "type": "string", "pattern": "^nuvos\\.endpoint\\.[a-z0-9-]+\\.[a-z0-9-]+$" },
+    "operationId": { "type": "string", "minLength": 1 },
     "repository": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
     "sourcePath": { "type": "string", "minLength": 1 },
     "serviceType": { "type": "string", "minLength": 1 },
