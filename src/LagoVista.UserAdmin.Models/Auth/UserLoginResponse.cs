@@ -6,6 +6,7 @@ using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Models.Users;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -15,6 +16,7 @@ namespace LagoVista.UserAdmin.Models.Auth
     /// Legacy login response retained for downstream compatibility.
     /// New authentication flows should use AuthenticationResponse.
     /// </summary>
+    [Obsolete("UserLoginResponse is retained for compatibility only. New authentication flows should use AuthenticationResponse.", false)]
     [EntityDescription(
         Domains.AuthDomain, UserAdminResources.Names.UserLoginResponse_Name, UserAdminResources.Names.UserLoginResponse_Help,
         UserAdminResources.Names.UserLoginResponse_Description, EntityDescriptionAttribute.EntityTypes.OrganizationModel, typeof(UserAdminResources),
