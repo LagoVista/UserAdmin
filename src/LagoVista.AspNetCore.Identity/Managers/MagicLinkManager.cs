@@ -24,13 +24,8 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IMagicLinkAttemptStore _store;
         private readonly IAppConfig _appConfig;
         private readonly ISignInManager _signinManager;
-        public MagicLinkManager(
-            IUserManager userManager,
-            IEmailSender emailSender,
-            IAuthenticationLogManager authLogMgr,
-            IMagicLinkAttemptStore store,
-            ISignInManager signinManager,
-            IAppConfig appConfig)
+
+        public MagicLinkManager(IUserManager userManager, IEmailSender emailSender, IAuthenticationLogManager authLogMgr, IMagicLinkAttemptStore store, ISignInManager signinManager, IAppConfig appConfig)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
@@ -56,28 +51,14 @@ namespace LagoVista.UserAdmin.Managers
             var channel = NormalizeChannel(request.Channel);
             if (channel == null) return InvokeResult<string>.FromError("invalid_channel");
 
-            // Always log the request (non-enumeration compatible).
-            await _authLogMgr.AddAsync(
-                AuthLogTypes.MagicLinkRequested,
-                userName: email,
-                orgId: _appConfig.SystemOwnerOrg.Id,
-                errors: "",
-                extras: $"channel={channel}",
-                redirectUri: request.ReturnUrl ?? "");
+            await _authLogMgr.AddAsync(AuthLogTypes.MagicLinkRequested, userName: email, orgId: _appConfig.SystemOwnerOrg.Id, errors: "", extras: $"channel={channel}", redirectUri: request.ReturnUrl ?? "");
 
-            // Sign-in only: resolve existing user.
             var appUser = await _userManager.FindByEmailAsync(email);
-
-            // Non-enumerating: return success even if not found.
             if (appUser == null)
-            {
                 return InvokeResult<string>.Create(String.Empty);
-            }
 
             var nowUtc = DateTime.UtcNow;
             var rawCode = GenerateCode();
-            var codeHash = Hash(rawCode);
-
             var attempt = new MagicLinkAttempt
             {
                 Id = Guid.NewGuid().ToString("N"),
@@ -85,7 +66,7 @@ namespace LagoVista.UserAdmin.Managers
                 UserId = appUser.Id,
                 Channel = channel,
                 Purpose = MagicLinkAttempt.Purpose_SignIn,
-                CodeHash = codeHash,
+                CodeHash = Hash(rawCode),
                 ExpiresAtUtc = nowUtc.Add(MagicLinkTtl),
                 ConsumedAtUtc = null,
                 ReturnUrl = request.ReturnUrl,
@@ -96,163 +77,71 @@ namespace LagoVista.UserAdmin.Managers
 
             var create = await _store.CreateAsync(attempt);
             if (!create.Successful)
-            {
                 return create.ToInvokeResult<string>();
-            }
 
-            var subject = "Your sign-in link";
-            var body = BuildEmailBody(attempt, rawCode);
-
-            var orgEh = _appConfig.SystemOwnerOrg;
             var userEh = ToEntityHeader(appUser);
-
-            var send = await _emailSender.SendInBackgroundAsync(email, subject, body, orgEh, userEh);
+            var send = await _emailSender.SendInBackgroundAsync(email, "Your sign-in link", BuildEmailBody(attempt, rawCode), _appConfig.SystemOwnerOrg, userEh);
             if (!send.Successful)
             {
-                await _authLogMgr.AddAsync(
-                    AuthLogTypes.MagicLinkConsumeFailed,
-                    user: userEh,
-                    org: orgEh,
-                    errors: "email_send_failed",
-                    extras: $"channel={channel}",
-                    redirectUri: request.ReturnUrl ?? "",
-                    challengeId: attempt.Id);
-
-                // Still return success to remain non-enumerating and avoid leaking mail delivery.
+                await _authLogMgr.AddAsync(AuthLogTypes.MagicLinkConsumeFailed, user: userEh, org: _appConfig.SystemOwnerOrg, errors: "email_send_failed", extras: $"channel={channel}", redirectUri: request.ReturnUrl ?? "", challengeId: attempt.Id);
                 return InvokeResult<string>.Create(String.Empty);
             }
 
-            await _authLogMgr.AddAsync(
-                AuthLogTypes.MagicLinkSent,
-                user: userEh,
-                org: orgEh,
-                errors: "",
-                extras: $"channel={channel}",
-                redirectUri: request.ReturnUrl ?? "",
-                challengeId: attempt.Id);
-
+            await _authLogMgr.AddAsync(AuthLogTypes.MagicLinkSent, user: userEh, org: _appConfig.SystemOwnerOrg, errors: "", extras: $"channel={channel}", redirectUri: request.ReturnUrl ?? "", challengeId: attempt.Id);
             return InvokeResult<string>.Create(rawCode);
         }
 
-        public async Task<InvokeResult<UserLoginResponse>> ConsumeAsync(string code, MagicLinkConsumeContext context)
+        public async Task<InvokeResult<AuthenticationResponse>> ConsumeAsync(string code, MagicLinkConsumeContext context)
         {
             if (string.IsNullOrWhiteSpace(code))
-                return InvokeResult<UserLoginResponse>.FromError("missing_code");
+                return InvokeResult<AuthenticationResponse>.FromError("missing_code");
 
             var channel = NormalizeChannel(context?.Channel);
             if (channel == null)
-                return InvokeResult<UserLoginResponse>.FromError("invalid_channel");
+                return InvokeResult<AuthenticationResponse>.FromError("invalid_channel");
 
             var nowUtc = DateTime.UtcNow;
-            var codeHash = Hash(code);
-
-            var consume = await _store.TryConsumeAsync(codeHash, nowUtc);
+            var consume = await _store.TryConsumeAsync(Hash(code), nowUtc);
             if (!consume.Successful)
             {
-                await _authLogMgr.AddAsync(
-                    AuthLogTypes.MagicLinkConsumeFailed,
-                    org: _appConfig.SystemOwnerOrg,
-                    errors: FirstErrorOrDefault(consume),
-                    extras: $"channel={channel}",
-                    redirectUri: context?.ReturnUrl ?? "");
-
-                return InvokeResult<UserLoginResponse>.FromErrors(consume.Errors.ToArray());
+                await _authLogMgr.AddAsync(AuthLogTypes.MagicLinkConsumeFailed, org: _appConfig.SystemOwnerOrg, errors: FirstErrorOrDefault(consume), extras: $"channel={channel}", redirectUri: context?.ReturnUrl ?? "");
+                return InvokeResult<AuthenticationResponse>.FromErrors(consume.Errors.ToArray());
             }
 
             var attempt = consume.Result?.Attempt;
             if (attempt == null)
-            {
-                await _authLogMgr.AddAsync(
-                    AuthLogTypes.MagicLinkConsumeFailed,
-                    org: _appConfig.SystemOwnerOrg,
-                    errors: "not_found",
-                    extras: $"channel={channel}",
-                    redirectUri: context?.ReturnUrl ?? "");
-
-                return InvokeResult<UserLoginResponse>.FromError("not_found");
-            }
+                return InvokeResult<AuthenticationResponse>.FromError("not_found");
 
             if (!string.Equals(attempt.Channel, channel, StringComparison.Ordinal))
-            {
-                await _authLogMgr.AddAsync(
-                    AuthLogTypes.MagicLinkConsumeFailed,
-                    org: _appConfig.SystemOwnerOrg,
-                    errors: "channel_mismatch",
-                    extras: $"attemptChannel={attempt.Channel};channel={channel}",
-                    redirectUri: context?.ReturnUrl ?? "",
-                    challengeId: attempt.Id);
-
-                return InvokeResult<UserLoginResponse>.FromError("channel_mismatch");
-            }
+                return InvokeResult<AuthenticationResponse>.FromError("channel_mismatch");
 
             var appUser = await _userManager.FindByIdAsync(attempt.UserId);
             if (appUser == null)
-            {
-                await _authLogMgr.AddAsync(
-                    AuthLogTypes.MagicLinkConsumeFailed,
-                    org: _appConfig.SystemOwnerOrg,
-                    errors: "user_not_found",
-                    extras: $"channel={channel}",
-                    challengeId: attempt.Id);
-
-                return InvokeResult<UserLoginResponse>.FromError("user_not_found");
-            }
+                return InvokeResult<AuthenticationResponse>.FromError("user_not_found");
 
             var userEh = ToEntityHeader(appUser);
-            var orgEh = _appConfig.SystemOwnerOrg;
-
-            await _authLogMgr.AddAsync(
-                AuthLogTypes.MagicLinkConsumed,
-                user: userEh,
-                org: orgEh,
-                errors: "",
-                extras: $"channel={channel}",
-                redirectUri: context?.ReturnUrl ?? "",
-                challengeId: attempt.Id);
-
-            var response = new MagicLinkConsumeResponse
-            {
-                Attempt = attempt,
-                ExchangeCode = null
-            };
+            await _authLogMgr.AddAsync(AuthLogTypes.MagicLinkConsumed, user: userEh, org: _appConfig.SystemOwnerOrg, errors: "", extras: $"channel={channel}", redirectUri: context?.ReturnUrl ?? "", challengeId: attempt.Id);
 
             if (string.Equals(channel, MagicLinkAttempt.Channel_Mobile, StringComparison.Ordinal))
             {
                 var exchangeCode = GenerateCode();
-                var exchangeHash = Hash(exchangeCode);
-                var exchangeExpiresAtUtc = nowUtc.Add(ExchangeTtl);
-
-                var set = await _store.SetExchangeAsync(attempt.Id, exchangeHash, exchangeExpiresAtUtc, nowUtc);
+                var set = await _store.SetExchangeAsync(attempt.Id, Hash(exchangeCode), nowUtc.Add(ExchangeTtl), nowUtc);
                 if (!set.Successful)
+                    return InvokeResult<AuthenticationResponse>.FromErrors(set.Errors.ToArray());
+
+                await _authLogMgr.AddAsync(AuthLogTypes.MagicLinkExchangeIssued, user: userEh, org: _appConfig.SystemOwnerOrg, errors: "", extras: $"ttlMinutes={(int)ExchangeTtl.TotalMinutes}", challengeId: attempt.Id);
+
+                return InvokeResult<AuthenticationResponse>.Create(new AuthenticationResponse
                 {
-                    await _authLogMgr.AddAsync(
-                        AuthLogTypes.MagicLinkExchangeFailed,
-                        user: userEh,
-                        org: orgEh,
-                        errors: FirstErrorOrDefault(set),
-                        extras: $"channel={channel}",
-                        challengeId: attempt.Id);
-
-                    return InvokeResult<UserLoginResponse>.FromErrors(set.Errors.ToArray());
-                }
-
-                await _authLogMgr.AddAsync(
-                    AuthLogTypes.MagicLinkExchangeIssued,
-                    user: userEh,
-                    org: orgEh,
-                    errors: "",
-                    extras: $"ttlMinutes={(int)ExchangeTtl.TotalMinutes}",
-                    challengeId: attempt.Id);
-
-                response.ExchangeCode = exchangeCode;
+                    AuthenticationState = AuthenticationResponseState.Authenticated,
+                    AuthenticationReasonCode = "magic_link_exchange_issued",
+                    Provider = "magic-link",
+                    RedirectPage = exchangeCode
+                });
             }
 
-            // Sign in for .NET
             await _signinManager.SignInAsync(appUser, true);
-
-            // Sign in for app.
-            var signInResponse = await _signinManager.CompleteSignInToAppAsync(appUser);
-            return signInResponse;
+            return await _signinManager.CompleteSignInToAppAsync(appUser);
         }
 
         public async Task<InvokeResult<AppUser>> ExchangeAsync(string exchangeCode, MagicLinkExchangeContext context)
@@ -260,59 +149,19 @@ namespace LagoVista.UserAdmin.Managers
             if (string.IsNullOrWhiteSpace(exchangeCode))
                 return InvokeResult<AppUser>.FromError("missing_exchange_code");
 
-            var nowUtc = DateTime.UtcNow;
-            var exchangeHash = Hash(exchangeCode);
-
-            var consume = await _store.TryConsumeExchangeAsync(exchangeHash, nowUtc);
+            var consume = await _store.TryConsumeExchangeAsync(Hash(exchangeCode), DateTime.UtcNow);
             if (!consume.Successful)
-            {
-                await _authLogMgr.AddAsync(
-                    AuthLogTypes.MagicLinkExchangeFailed,
-                    org: _appConfig.SystemOwnerOrg,
-                    errors: FirstErrorOrDefault(consume),
-                    extras: "",
-                    challengeId: "");
-
                 return InvokeResult<AppUser>.FromErrors(consume.Errors.ToArray());
-            }
 
             var attempt = consume.Result?.Attempt;
             if (attempt == null)
-            {
-                await _authLogMgr.AddAsync(
-                    AuthLogTypes.MagicLinkExchangeFailed,
-                    org: _appConfig.SystemOwnerOrg,
-                    errors: "not_found",
-                    extras: "",
-                    challengeId: "");
-
                 return InvokeResult<AppUser>.FromError("not_found");
-            }
 
             var appUser = await _userManager.FindByIdAsync(attempt.UserId);
             if (appUser == null)
-            {
-                await _authLogMgr.AddAsync(
-                    AuthLogTypes.MagicLinkExchangeFailed,
-                    org: _appConfig.SystemOwnerOrg,
-                    errors: "user_not_found",
-                    extras: "",
-                    challengeId: attempt.Id);
-
                 return InvokeResult<AppUser>.FromError("user_not_found");
-            }
 
-            var userEh = ToEntityHeader(appUser);
-            var orgEh = _appConfig.SystemOwnerOrg;
-
-            await _authLogMgr.AddAsync(
-                AuthLogTypes.MagicLinkExchangeSucceeded,
-                user: userEh,
-                org: orgEh,
-                errors: "",
-                extras: "",
-                challengeId: attempt.Id);
-
+            await _authLogMgr.AddAsync(AuthLogTypes.MagicLinkExchangeSucceeded, user: ToEntityHeader(appUser), org: _appConfig.SystemOwnerOrg, errors: "", extras: "", challengeId: attempt.Id);
             return InvokeResult<AppUser>.Create(appUser);
         }
 
@@ -321,20 +170,13 @@ namespace LagoVista.UserAdmin.Managers
             var webBase = GetWebURI().TrimEnd('/');
             var webLink = $"{webBase}/auth/magiclink/handle?code={Uri.EscapeDataString(rawCode)}";
             var mobileLink = $"nuviot:/auth/securelink/consume?code={Uri.EscapeDataString(rawCode)}";
-
             var ttlMinutes = (int)MagicLinkTtl.TotalMinutes;
 
             var sb = new StringBuilder();
-            sb.AppendLine("<div>");
-            sb.AppendLine("<p>Use this link to sign in:</p>");
-            sb.AppendLine($"<a href='{webLink}'>Sign In in your browser</a>");
-            sb.AppendLine("</div>"); 
-            sb.AppendLine();
-            sb.AppendLine("<div>");
-            sb.AppendLine("<p>If you're signing in on a mobile device, you can also use this app link:</p>");
-            sb.AppendLine($"<a href='{mobileLink}'>Sign In in your app</a>");
-            sb.AppendLine("</div>");
-            sb.AppendLine();
+            sb.AppendLine("<div><p>Use this link to sign in:</p>");
+            sb.AppendLine($"<a href='{webLink}'>Sign In in your browser</a></div>");
+            sb.AppendLine("<div><p>If you're signing in on a mobile device, you can also use this app link:</p>");
+            sb.AppendLine($"<a href='{mobileLink}'>Sign In in your app</a></div>");
             sb.AppendLine($"This link expires in {ttlMinutes} minutes and can only be used once.");
             return sb.ToString();
         }
@@ -354,10 +196,8 @@ namespace LagoVista.UserAdmin.Managers
                 }
             }
 
-            if(environment.Contains("localhost"))
-            {
+            if (environment.Contains("localhost"))
                 environment = "http://localhost:4200";
-            }
 
             return environment;
         }
@@ -372,29 +212,18 @@ namespace LagoVista.UserAdmin.Managers
         {
             if (string.IsNullOrWhiteSpace(channel)) return null;
             channel = channel.Trim().ToLowerInvariant();
-
             if (string.Equals(channel, MagicLinkAttempt.Channel_Portal, StringComparison.Ordinal)) return MagicLinkAttempt.Channel_Portal;
             if (string.Equals(channel, MagicLinkAttempt.Channel_Mobile, StringComparison.Ordinal)) return MagicLinkAttempt.Channel_Mobile;
-
             return null;
         }
 
         private static string GenerateCode()
         {
-            // URL-safe base64 without paddingGetInt32
             var bytes = new byte[32];
             using (var rng = RandomNumberGenerator.Create())
-            {
                 rng.GetBytes(bytes);
-            }
-            var b64 = Convert.ToBase64String(bytes);
-            return b64.Replace("+", "-").Replace("/", "_").Replace("=", string.Empty);
-        }
 
-        private static string FirstErrorOrDefault(InvokeResult result)
-        {
-            if (result?.Errors == null || result.Errors.Count == 0) return "error";
-            return result.Errors[0].Message;
+            return Convert.ToBase64String(bytes).Replace("+", "-").Replace("/", "_").Replace("=", string.Empty);
         }
 
         private static string FirstErrorOrDefault<T>(InvokeResult<T> result)
@@ -416,16 +245,10 @@ namespace LagoVista.UserAdmin.Managers
 
             using (var sha = SHA256.Create())
             {
-                var bytes = Encoding.UTF8.GetBytes(secret);
-                var hash = sha.ComputeHash(bytes);
-
-                // Lowercase hex for stable storage and comparison
+                var hash = sha.ComputeHash(Encoding.UTF8.GetBytes(secret));
                 var sb = new StringBuilder(hash.Length * 2);
                 foreach (var b in hash)
-                {
                     sb.Append(b.ToString("x2"));
-                }
-
                 return sb.ToString();
             }
         }
