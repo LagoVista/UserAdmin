@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/auth-test-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.test-binding.invitation.accept",
+  "name": "Invitation Acceptance Flow Proof",
+  "summary": "Registers the planned flow-matrix proof for the canonical invitation acceptance transition.",
+  "version": 1,
+  "maturity": "proposed",
+  "testLevel": "flow-matrix",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "tests/LagoVista.UserAdmin.Tests",
+  "sourcePath": "tests/LagoVista.UserAdmin.Tests/Authentication/Flows/InvitationAcceptanceFlowTests.cs",
+  "framework": "MSTest",
+  "testTypeName": "InvitationAcceptanceFlowTests",
+  "testMethodNames": ["AcceptInvitation_WhenEligible_EmitsInvitationAcceptedTransition", "AcceptInvitation_WhenIdentityNotConfirmed_ReturnsNotPermitted", "AcceptInvitation_WhenAlreadyConsumed_DoesNotCreateDuplicateMembership"],
+  "handlerKeys": ["auth.handler.invitation.accept"],
+  "endpointBindingKeys": ["auth.endpoint.invitation.accept"],
+  "transitionKeys": ["auth.transition.invitation.accept"],
+  "proofObligations": ["transition-key", "resulting-state", "membership-created-once", "invitation-consumed-once", "home-workspace-preserved", "current-workspace-preserved"],
+  "notes": ["Handler integration tests must later prove atomic membership creation and invitation consumption through the real organization manager and persistence layer."],
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "auth-model/transitions/invitation-accept.json" }
+  ]
+}
