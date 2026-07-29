@@ -1,3 +1,4 @@
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Authentication.Flows;
 using LagoVista.UserAdmin.Models.Auth;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Authentication
 {
+    [CriticalCoverage]
     public class AuthenticationFlowService : IAuthenticationFlowService
     {
         private readonly IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> _passwordRecoveryRequestHandler;
