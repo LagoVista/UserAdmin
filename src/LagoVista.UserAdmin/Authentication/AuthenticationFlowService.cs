@@ -11,25 +11,18 @@ namespace LagoVista.UserAdmin.Authentication
     [CriticalCoverage]
     public class AuthenticationFlowService : IAuthenticationFlowService
     {
-        private readonly IAuthenticationFlowHandler<PasswordLoginFlowRequest> _passwordLoginHandler;
+        private readonly IPasswordLoginFlowHandler _passwordLoginHandler;
         private readonly IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> _passwordRecoveryRequestHandler;
 
-        public AuthenticationFlowService(IAuthenticationFlowHandler<PasswordLoginFlowRequest> passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler)
+        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler)
         {
             _passwordLoginHandler = passwordLoginHandler ?? throw new ArgumentNullException(nameof(passwordLoginHandler));
             _passwordRecoveryRequestHandler = passwordRecoveryRequestHandler ?? throw new ArgumentNullException(nameof(passwordRecoveryRequestHandler));
         }
 
-        public async Task<InvokeResult<AuthenticationResponse>> LoginWithPasswordAsync(AuthLoginRequest request)
+        public Task<InvokeResult<AuthenticationResponse>> LoginWithPasswordAsync(AuthLoginRequest request)
         {
-            var result = await _passwordLoginHandler.HandleAsync(new PasswordLoginFlowRequest(request));
-            if (result.TransitionKey != PasswordLoginFlowHandler.TransitionKey)
-                throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
-
-            if (result.PublicResult is InvokeResult<AuthenticationResponse> publicResult)
-                return publicResult;
-
-            throw new InvalidOperationException($"Authentication flow transition [{result.TransitionKey}] returned an unsupported result type [{result.PublicResult.GetType().FullName}].");
+            return _passwordLoginHandler.HandleAsync(request);
         }
 
         public async Task<InvokeResult> RequestPasswordRecoveryAsync(SendResetPasswordLink request)
