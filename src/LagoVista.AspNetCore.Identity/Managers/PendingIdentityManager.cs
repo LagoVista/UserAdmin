@@ -17,8 +17,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
 {
     internal class PendingIdentityManager : ManagerBase, IPendingIdentityManager
     {
-        IPendingIdentityRepo _identityRepo;
-        IPasswordHasher<PendingIdentity> _passwordHasher;
+        private readonly IPendingIdentityRepo _identityRepo;
+        private readonly IPasswordHasher<PendingIdentity> _passwordHasher;
 
         public PendingIdentityManager(IPendingIdentityRepo pendingIdentityRepo, IDependencyManager depManager, IPasswordHasher<PendingIdentity> passwordHasher, ISecurity security, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
@@ -29,42 +29,45 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public async Task AddNewOrgAsync(string id, CreateOrganizationViewModel newOrg)
         {
             var identity = await _identityRepo.GetPendingIdentityAsync(id);
-
             identity.OrgName = newOrg.Name;
             identity.ProposedOrgNamespace = newOrg.Namespace;
             identity.OrgWebSite = newOrg.WebSite;
-
             await _identityRepo.UpdatePendingIndentiyAsync(identity);
         }
 
-        public async Task AddPendingIdentity(PendingIdentity identity)
+        public Task AddPendingIdentity(PendingIdentity identity)
         {
-            await _identityRepo.AddPendingIdentityAsync(identity);
+            return _identityRepo.AddPendingIdentityAsync(identity);
         }
 
         public async Task AddRegistrationAsync(string id, RegisterUser registration)
         {
             var identity = await _identityRepo.GetPendingIdentityAsync(id);
-
             identity.FirstName = registration.FirstName;
             identity.LastName = registration.LastName;
             identity.RegisteredEmail = registration.Email;
             identity.PasswordHash = _passwordHasher.HashPassword(identity, registration.Password);
-
-
             await _identityRepo.UpdatePendingIndentiyAsync(identity);
         }
 
-        public async Task<UserLoginResponse> PasswordSignInAsync(AuthLoginRequest loginRequest)
+        public async Task<AuthenticationResponse> PasswordSignInAsync(AuthLoginRequest loginRequest)
         {
             var identity = await _identityRepo.GetPendingIdentityAsync(loginRequest.Email);
-
+            if (identity == null)
+            {
+                return new AuthenticationResponse
+                {
+                    AuthenticationState = AuthenticationResponseState.InvalidCredentials,
+                    AuthenticationReasonCode = "pending_identity_not_found"
+                };
+            }
 
             var result = _passwordHasher.VerifyHashedPassword(identity, identity.PasswordHash, loginRequest.Password);
-
-            return new UserLoginResponse()
+            return new AuthenticationResponse
             {
-                 
+                AuthenticationState = result == PasswordVerificationResult.Failed ? AuthenticationResponseState.InvalidCredentials : AuthenticationResponseState.RegistrationRequired,
+                PendingIdentityId = identity.Id,
+                AuthenticationReasonCode = result == PasswordVerificationResult.Failed ? "invalid_credentials" : "pending_identity_authenticated"
             };
         }
 
