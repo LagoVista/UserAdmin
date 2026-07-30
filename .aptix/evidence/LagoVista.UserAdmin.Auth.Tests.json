@@ -1,0 +1,198 @@
+{
+  "SchemaVersion": "1.1",
+  "ProjectName": "LagoVista.UserAdmin.Auth.Tests",
+  "ProjectPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj",
+  "AssemblyPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
+  "RunId": "65698b6f-108f-4e83-a2b2-7c8863107d6a",
+  "StartedUtc": "2026-07-30T17:05:16.2056789Z",
+  "CompletedUtc": "2026-07-30T17:05:51.1383544Z",
+  "ExitCode": 0,
+  "Outcome": "Passed",
+  "Summary": {
+    "Total": 15,
+    "Passed": 15,
+    "Failed": 0,
+    "Skipped": 0,
+    "DurationMilliseconds": 34932
+  },
+  "Tests": [
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.PasswordLoginFlowIntegrationTests",
+      "TestMethod": "InvalidCredentials_Should_ReturnFailure_And_RecordStartedThenFailed",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.password.establish-session",
+            "auth.flow.password.establish-session",
+            "auth.transition.password.establish-session"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "PasswordAuthenticationStarted",
+        "PasswordAuthenticationFailed"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.PasswordLoginFlowIntegrationTests",
+      "TestMethod": "SuccessfulLogin_Should_ReturnAuthenticated_And_RecordStartedThenSucceeded",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.password.establish-session",
+            "auth.flow.password.establish-session",
+            "auth.transition.password.establish-session"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "PasswordAuthenticationStarted",
+        "PasswordAuthenticationSucceeded"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.PasswordLoginFlowIntegrationTests",
+      "TestMethod": "UserNotFound_Should_ReturnFailure_And_RecordStartedThenUserNotFound",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.password.establish-session",
+            "auth.flow.password.establish-session",
+            "auth.transition.password.establish-session"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "PasswordAuthenticationStarted",
+        "PasswordAuthUserNotFound"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.PasswordLoginFlowTests",
+      "TestMethod": "LoginWithPasswordAsync_Should_Execute_Handler_And_Return_Manager_Result",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.password.establish-session",
+            "auth.flow.password.establish-session",
+            "auth.transition.password.establish-session"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    }
+  ],
+  "Issues": [],
+  "StandardOutput": [
+    "  Determining projects to restore...",
+    "  All projects are up-to-date for restore.",
+    "  LagoVista.UserAdmin.Models -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin.Models\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.Models.dll",
+    "  LagoVista.UserAdmin -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.dll",
+    "  LagoVista.AspNetCore.Identity -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.AspNetCore.Identity\\bin\\Debug\\net9.0\\LagoVista.AspNetCore.Identity.dll",
+    "  LagoVista.UserAdmin.Auth.Tests -\u003E D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
+    "Test run for D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll (.NETCoreApp,Version=v9.0)",
+    "A total of 1 test files matched the specified pattern.",
+    "Data collector \u0027XPlat code coverage\u0027 message: [coverlet]Coverlet.Collector.Utilities.CoverletDataCollectorException: CoverletCoverageDataCollector: Failed to instrument modules",
+    " ---\u003E System.AggregateException: One or more errors occurred. (The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.) (The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.) (The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.) (The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.) (The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.) (The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.) (The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.) (The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.) (The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.) (The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.) (The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.) (The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.)",
+    " ---\u003E System.IO.IOException: The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.",
+    "   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)",
+    "   at Coverlet.Core.Helpers.FileSystem.Copy(String sourceFileName, String destFileName, Boolean overwrite) in /_/src/coverlet.core/Helpers/FileSystem.cs:line 35",
+    "   at Coverlet.Core.Helpers.InstrumentationHelper.\u003C\u003Ec__DisplayClass17_0.\u003CRestoreOriginalModule\u003Eb__1() in /_/src/coverlet.core/Helpers/InstrumentationHelper.cs:line 279",
+    "   at Coverlet.Core.Helpers.RetryHelper.\u003C\u003Ec__DisplayClass0_0.\u003CRetry\u003Eb__0() in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 28",
+    "   at Coverlet.Core.Helpers.RetryHelper.Do[T](Func\u00601 action, Func\u00601 backoffStrategy, Int32 maxAttemptCount) in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 55",
+    "   --- End of inner exception stack trace ---",
+    "   at Coverlet.Core.Helpers.RetryHelper.Do[T](Func\u00601 action, Func\u00601 backoffStrategy, Int32 maxAttemptCount) in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 62",
+    "   at Coverlet.Core.Helpers.RetryHelper.Retry(Action action, Func\u00601 backoffStrategy, Int32 maxAttemptCount) in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 26",
+    "   at Coverlet.Core.Helpers.InstrumentationHelper.RestoreOriginalModule(String module, String identifier) in /_/src/coverlet.core/Helpers/InstrumentationHelper.cs:line 274",
+    "   at Coverlet.Core.Coverage.PrepareModules() in /_/src/coverlet.core/Coverage.cs:line 144",
+    "   at Coverlet.Collector.DataCollection.CoverageWrapper.PrepareModules(Coverage coverage) in /_/src/coverlet.collector/DataCollection/CoverageWrapper.cs:line 71",
+    "   at Coverlet.Collector.DataCollection.CoverageManager.InstrumentModules() in /_/src/coverlet.collector/DataCollection/CoverageManager.cs:line 66",
+    " ---\u003E (Inner Exception #1) System.IO.IOException: The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.",
+    "   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)",
+    "   at Coverlet.Core.Helpers.FileSystem.Copy(String sourceFileName, String destFileName, Boolean overwrite) in /_/src/coverlet.core/Helpers/FileSystem.cs:line 35",
+    "   at Coverlet.Core.Helpers.InstrumentationHelper.\u003C\u003Ec__DisplayClass17_0.\u003CRestoreOriginalModule\u003Eb__1() in /_/src/coverlet.core/Helpers/InstrumentationHelper.cs:line 279",
+    "   at Coverlet.Core.Helpers.RetryHelper.\u003C\u003Ec__DisplayClass0_0.\u003CRetry\u003Eb__0() in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 28",
+    "   at Coverlet.Core.Helpers.RetryHelper.Do[T](Func\u00601 action, Func\u00601 backoffStrategy, Int32 maxAttemptCount) in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 55\u003C---",
+    "",
+    " ---\u003E (Inner Exception #2) System.IO.IOException: The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.",
+    "   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)",
+    "   at Coverlet.Core.Helpers.FileSystem.Copy(String sourceFileName, String destFileName, Boolean overwrite) in /_/src/coverlet.core/Helpers/FileSystem.cs:line 35",
+    "   at Coverlet.Core.Helpers.InstrumentationHelper.\u003C\u003Ec__DisplayClass17_0.\u003CRestoreOriginalModule\u003Eb__1() in /_/src/coverlet.core/Helpers/InstrumentationHelper.cs:line 279",
+    "   at Coverlet.Core.Helpers.RetryHelper.\u003C\u003Ec__DisplayClass0_0.\u003CRetry\u003Eb__0() in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 28",
+    "   at Coverlet.Core.Helpers.RetryHelper.Do[T](Func\u00601 action, Func\u00601 backoffStrategy, Int32 maxAttemptCount) in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 55\u003C---",
+    "",
+    " ---\u003E (Inner Exception #3) System.IO.IOException: The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.",
+    "   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)",
+    "   at Coverlet.Core.Helpers.FileSystem.Copy(String sourceFileName, String destFileName, Boolean overwrite) in /_/src/coverlet.core/Helpers/FileSystem.cs:line 35",
+    "   at Coverlet.Core.Helpers.InstrumentationHelper.\u003C\u003Ec__DisplayClass17_0.\u003CRestoreOriginalModule\u003Eb__1() in /_/src/coverlet.core/Helpers/InstrumentationHelper.cs:line 279",
+    "   at Coverlet.Core.Helpers.RetryHelper.\u003C\u003Ec__DisplayClass0_0.\u003CRetry\u003Eb__0() in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 28",
+    "   at Coverlet.Core.Helpers.RetryHelper.Do[T](Func\u00601 action, Func\u00601 backoffStrategy, Int32 maxAttemptCount) in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 55\u003C---",
+    "",
+    " ---\u003E (Inner Exception #4) System.IO.IOException: The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.",
+    "   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)",
+    "   at Coverlet.Core.Helpers.FileSystem.Copy(String sourceFileName, String destFileName, Boolean overwrite) in /_/src/coverlet.core/Helpers/FileSystem.cs:line 35",
+    "   at Coverlet.Core.Helpers.InstrumentationHelper.\u003C\u003Ec__DisplayClass17_0.\u003CRestoreOriginalModule\u003Eb__1() in /_/src/coverlet.core/Helpers/InstrumentationHelper.cs:line 279",
+    "   at Coverlet.Core.Helpers.RetryHelper.\u003C\u003Ec__DisplayClass0_0.\u003CRetry\u003Eb__0() in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 28",
+    "   at Coverlet.Core.Helpers.RetryHelper.Do[T](Func\u00601 action, Func\u00601 backoffStrategy, Int32 maxAttemptCount) in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 55\u003C---",
+    "",
+    " ---\u003E (Inner Exception #5) System.IO.IOException: The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.",
+    "   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)",
+    "   at Coverlet.Core.Helpers.FileSystem.Copy(String sourceFileName, String destFileName, Boolean overwrite) in /_/src/coverlet.core/Helpers/FileSystem.cs:line 35",
+    "   at Coverlet.Core.Helpers.InstrumentationHelper.\u003C\u003Ec__DisplayClass17_0.\u003CRestoreOriginalModule\u003Eb__1() in /_/src/coverlet.core/Helpers/InstrumentationHelper.cs:line 279",
+    "   at Coverlet.Core.Helpers.RetryHelper.\u003C\u003Ec__DisplayClass0_0.\u003CRetry\u003Eb__0() in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 28",
+    "   at Coverlet.Core.Helpers.RetryHelper.Do[T](Func\u00601 action, Func\u00601 backoffStrategy, Int32 maxAttemptCount) in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 55\u003C---",
+    "",
+    " ---\u003E (Inner Exception #6) System.IO.IOException: The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.",
+    "   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)",
+    "   at Coverlet.Core.Helpers.FileSystem.Copy(String sourceFileName, String destFileName, Boolean overwrite) in /_/src/coverlet.core/Helpers/FileSystem.cs:line 35",
+    "   at Coverlet.Core.Helpers.InstrumentationHelper.\u003C\u003Ec__DisplayClass17_0.\u003CRestoreOriginalModule\u003Eb__1() in /_/src/coverlet.core/Helpers/InstrumentationHelper.cs:line 279",
+    "   at Coverlet.Core.Helpers.RetryHelper.\u003C\u003Ec__DisplayClass0_0.\u003CRetry\u003Eb__0() in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 28",
+    "   at Coverlet.Core.Helpers.RetryHelper.Do[T](Func\u00601 action, Func\u00601 backoffStrategy, Int32 maxAttemptCount) in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 55\u003C---",
+    "",
+    " ---\u003E (Inner Exception #7) System.IO.IOException: The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.",
+    "   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)",
+    "   at Coverlet.Core.Helpers.FileSystem.Copy(String sourceFileName, String destFileName, Boolean overwrite) in /_/src/coverlet.core/Helpers/FileSystem.cs:line 35",
+    "   at Coverlet.Core.Helpers.InstrumentationHelper.\u003C\u003Ec__DisplayClass17_0.\u003CRestoreOriginalModule\u003Eb__1() in /_/src/coverlet.core/Helpers/InstrumentationHelper.cs:line 279",
+    "   at Coverlet.Core.Helpers.RetryHelper.\u003C\u003Ec__DisplayClass0_0.\u003CRetry\u003Eb__0() in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 28",
+    "   at Coverlet.Core.Helpers.RetryHelper.Do[T](Func\u00601 action, Func\u00601 backoffStrategy, Int32 maxAttemptCount) in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 55\u003C---",
+    "",
+    " ---\u003E (Inner Exception #8) System.IO.IOException: The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.",
+    "   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)",
+    "   at Coverlet.Core.Helpers.FileSystem.Copy(String sourceFileName, String destFileName, Boolean overwrite) in /_/src/coverlet.core/Helpers/FileSystem.cs:line 35",
+    "   at Coverlet.Core.Helpers.InstrumentationHelper.\u003C\u003Ec__DisplayClass17_0.\u003CRestoreOriginalModule\u003Eb__1() in /_/src/coverlet.core/Helpers/InstrumentationHelper.cs:line 279",
+    "   at Coverlet.Core.Helpers.RetryHelper.\u003C\u003Ec__DisplayClass0_0.\u003CRetry\u003Eb__0() in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 28",
+    "   at Coverlet.Core.Helpers.RetryHelper.Do[T](Func\u00601 action, Func\u00601 backoffStrategy, Int32 maxAttemptCount) in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 55\u003C---",
+    "",
+    " ---\u003E (Inner Exception #9) System.IO.IOException: The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.",
+    "   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)",
+    "   at Coverlet.Core.Helpers.FileSystem.Copy(String sourceFileName, String destFileName, Boolean overwrite) in /_/src/coverlet.core/Helpers/FileSystem.cs:line 35",
+    "   at Coverlet.Core.Helpers.InstrumentationHelper.\u003C\u003Ec__DisplayClass17_0.\u003CRestoreOriginalModule\u003Eb__1() in /_/src/coverlet.core/Helpers/InstrumentationHelper.cs:line 279",
+    "   at Coverlet.Core.Helpers.RetryHelper.\u003C\u003Ec__DisplayClass0_0.\u003CRetry\u003Eb__0() in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 28",
+    "   at Coverlet.Core.Helpers.RetryHelper.Do[T](Func\u00601 action, Func\u00601 backoffStrategy, Int32 maxAttemptCount) in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 55\u003C---",
+    "",
+    " ---\u003E (Inner Exception #10) System.IO.IOException: The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.",
+    "   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)",
+    "   at Coverlet.Core.Helpers.FileSystem.Copy(String sourceFileName, String destFileName, Boolean overwrite) in /_/src/coverlet.core/Helpers/FileSystem.cs:line 35",
+    "   at Coverlet.Core.Helpers.InstrumentationHelper.\u003C\u003Ec__DisplayClass17_0.\u003CRestoreOriginalModule\u003Eb__1() in /_/src/coverlet.core/Helpers/InstrumentationHelper.cs:line 279",
+    "   at Coverlet.Core.Helpers.RetryHelper.\u003C\u003Ec__DisplayClass0_0.\u003CRetry\u003Eb__0() in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 28",
+    "   at Coverlet.Core.Helpers.RetryHelper.Do[T](Func\u00601 action, Func\u00601 backoffStrategy, Int32 maxAttemptCount) in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 55\u003C---",
+    "",
+    " ---\u003E (Inner Exception #11) System.IO.IOException: The process cannot access the file \u0027D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.pdb\u0027 because it is being used by another process.",
+    "   at System.IO.File.Copy(String sourceFileName, String destFileName, Boolean overwrite)",
+    "   at Coverlet.Core.Helpers.FileSystem.Copy(String sourceFileName, String destFileName, Boolean overwrite) in /_/src/coverlet.core/Helpers/FileSystem.cs:line 35",
+    "   at Coverlet.Core.Helpers.InstrumentationHelper.\u003C\u003Ec__DisplayClass17_0.\u003CRestoreOriginalModule\u003Eb__1() in /_/src/coverlet.core/Helpers/InstrumentationHelper.cs:line 279",
+    "   at Coverlet.Core.Helpers.RetryHelper.\u003C\u003Ec__DisplayClass0_0.\u003CRetry\u003Eb__0() in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 28",
+    "   at Coverlet.Core.Helpers.RetryHelper.Do[T](Func\u00601 action, Func\u00601 backoffStrategy, Int32 maxAttemptCount) in /_/src/coverlet.core/Helpers/RetryHelper.cs:line 55\u003C---",
+    "",
+    "   --- End of inner exception stack trace ---",
+    "   at Coverlet.Collector.DataCollection.CoverageManager.InstrumentModules() in /_/src/coverlet.collector/DataCollection/CoverageManager.cs:line 70",
+    "   at Coverlet.Collector.DataCollection.CoverletCoverageCollector.OnSessionStart(Object sender, SessionStartEventArgs sessionStartEventArgs) in /_/src/coverlet.collector/DataCollection/CoverletCoverageCollector.cs:line 143.",
+    "",
+    "Passed!  - Failed:     0, Passed:    15, Skipped:     0, Total:    15, Duration: 348 ms - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)"
+  ],
+  "StandardError": []
+}
