@@ -30,7 +30,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
     [TestFixture]
     public class PasswordLoginFlowIntegrationTests
     {
-        private const string PasswordLoginEvidence = "auth|auth.test-binding.password.establish-session|auth.flow.password.establish-session|auth.transition.password-establish-session";
+        private const string PasswordLoginEvidence = "auth|auth.test-binding.password.establish-session|auth.flow.password.establish-session|auth.transition.password.establish-session";
 
         [Test]
         [Property("AptixEvidence", PasswordLoginEvidence)]
