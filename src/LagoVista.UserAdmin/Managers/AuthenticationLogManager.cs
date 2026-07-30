@@ -78,20 +78,42 @@ namespace LagoVista.UserAdmin.Managers
             var userId = user == null ? "?" : user.Id;
             var userName = user == null ? "?" : user.Text;
 
-            return AddAsync(type, userId, userName, orgId, orgName, oauthProvider, errors, extras, redirectUri, inviteId, challengeId, credentialId, assertionId);
+            return AddAsync(type,
+                userId: userId,
+                userName: userName,
+                orgId: orgId,
+                orgName: orgName,
+                oauthProvider: oauthProvider,
+                errors: errors,
+                extras: extras,
+                redirectUri: redirectUri,
+                inviteId: inviteId,
+                challengeId: challengeId,
+                credentialId: credentialId,
+                assertionId: assertionId);
         }
 
         public Task AddAsync(AuthLogTypes type, AppUser user, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none",
               string credentialId = "none", string challengeId = "none",  string assertionId = "none")
         {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+
             var orgId = user.CurrentOrganization == null ? Guid.Empty.ToId() : user.CurrentOrganization.Id;
             var orgName = user.CurrentOrganization == null ? "?" : user.CurrentOrganization.Text;
 
-            var userId = user == null ? Guid.Empty.ToId() : user.Id;
-            var userName = user == null ? "?" : user.UserName;
-
-
-            return AddAsync(type, userId, userName, orgId, orgName, oauthProvider, errors, extras, redirectUri, inviteId, challengeId, credentialId, assertionId);
+            return AddAsync(type,
+                userId: user.Id,
+                userName: user.UserName,
+                orgId: orgId,
+                orgName: orgName,
+                oauthProvider: oauthProvider,
+                errors: errors,
+                extras: extras,
+                redirectUri: redirectUri,
+                inviteId: inviteId,
+                challengeId: challengeId,
+                credentialId: credentialId,
+                assertionId: assertionId);
         }
 
         public Task<ListResponse<AuthenticationLog>> GetAllAsync(ListRequest listRequest, EntityHeader org, EntityHeader user)
