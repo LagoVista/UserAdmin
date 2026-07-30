@@ -31,9 +31,13 @@ namespace LagoVista.UserAdmin.Auth.Tests
     public class PasswordLoginFlowIntegrationTests
     {
         private const string PasswordLoginEvidence = "auth|auth.test-binding.password.establish-session|auth.flow.password.establish-session|auth.transition.password.establish-session";
+        private const string UserNotFoundEvents = "PasswordAuthenticationStarted|PasswordAuthUserNotFound";
+        private const string InvalidCredentialsEvents = "PasswordAuthenticationStarted|PasswordAuthenticationFailed";
+        private const string SuccessfulLoginEvents = "PasswordAuthenticationStarted|PasswordAuthenticationSucceeded";
 
         [Test]
         [Property("AptixEvidence", PasswordLoginEvidence)]
+        [Property("AptixAuthEvents", UserNotFoundEvents)]
         public async Task UserNotFound_Should_ReturnFailure_And_RecordStartedThenUserNotFound()
         {
             var harness = CreateHarness();
@@ -52,6 +56,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
 
         [Test]
         [Property("AptixEvidence", PasswordLoginEvidence)]
+        [Property("AptixAuthEvents", InvalidCredentialsEvents)]
         public async Task InvalidCredentials_Should_ReturnFailure_And_RecordStartedThenFailed()
         {
             var harness = CreateHarness();
@@ -75,6 +80,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
 
         [Test]
         [Property("AptixEvidence", PasswordLoginEvidence)]
+        [Property("AptixAuthEvents", SuccessfulLoginEvents)]
         public async Task SuccessfulLogin_Should_ReturnAuthenticated_And_RecordStartedThenSucceeded()
         {
             var harness = CreateHarness();
