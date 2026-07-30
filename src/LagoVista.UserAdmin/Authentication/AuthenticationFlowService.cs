@@ -13,11 +13,13 @@ namespace LagoVista.UserAdmin.Authentication
     {
         private readonly IPasswordLoginFlowHandler _passwordLoginHandler;
         private readonly IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> _passwordRecoveryRequestHandler;
+        private readonly IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> _passwordRecoveryCompletionHandler;
 
-        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler)
+        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null)
         {
             _passwordLoginHandler = passwordLoginHandler ?? throw new ArgumentNullException(nameof(passwordLoginHandler));
             _passwordRecoveryRequestHandler = passwordRecoveryRequestHandler ?? throw new ArgumentNullException(nameof(passwordRecoveryRequestHandler));
+            _passwordRecoveryCompletionHandler = passwordRecoveryCompletionHandler;
         }
 
         public Task<InvokeResult<AuthenticationResponse>> LoginWithPasswordAsync(AuthLoginRequest request)
@@ -29,6 +31,18 @@ namespace LagoVista.UserAdmin.Authentication
         {
             var result = await _passwordRecoveryRequestHandler.HandleAsync(new PasswordRecoveryRequestFlowRequest(request));
             if (result.TransitionKey != PasswordRecoveryRequestFlowHandler.TransitionKey)
+                throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
+
+            return result.PublicResult;
+        }
+
+        public async Task<InvokeResult> CompletePasswordRecoveryAsync(ResetPassword request)
+        {
+            if (_passwordRecoveryCompletionHandler == null)
+                throw new InvalidOperationException("Password recovery completion flow handler is not configured.");
+
+            var result = await _passwordRecoveryCompletionHandler.HandleAsync(new PasswordRecoveryCompletionFlowRequest(request));
+            if (result.TransitionKey != PasswordRecoveryCompletionFlowHandler.TransitionKey)
                 throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
 
             return result.PublicResult;
