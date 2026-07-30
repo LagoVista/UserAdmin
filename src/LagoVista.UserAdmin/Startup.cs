@@ -4,6 +4,7 @@ using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Apps;
+using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Repos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,7 +48,7 @@ namespace LagoVista.UserAdmin
             services.AddScoped<IPasswordLoginFlowHandler, PasswordLoginFlowHandler>();
             services.AddScoped<IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest>, PasswordRecoveryRequestFlowHandler>();
             services.AddScoped<IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest>, PasswordRecoveryCompletionFlowHandler>();
-            services.AddScoped<IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest>, InvitationAcceptanceFlowHandler>();
+            services.AddScoped<IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse>, InvitationAcceptanceFlowHandler>();
             services.AddScoped<IAuthenticationFlowService, AuthenticationFlowService>();
 
             Services.Startup.ConfigureServices(services, configuration);
