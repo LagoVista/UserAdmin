@@ -108,8 +108,8 @@ namespace LagoVista.UserAdmin.Managers
                 var deletedUser = await _appUserRepo.FindByIdAsync(deletedByUser.Id);
                 if (!deletedUser.IsOrgAdmin && !deletedUser.IsSystemAdmin)
                 {
-                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletingUser, deletedByUser, org, extras: $"User Id: {id}");
-                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeleteUserFailed, deletedByUser, org,  extras: $"User deleting user must be the same user being deleted, or deleting user must be an org admin, userid: {id}.");
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.UserDeletionStarted, deletedByUser, org, extras: $"User Id: {id}");
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.UserDeletionFailed, deletedByUser, org,  extras: $"User deleting user must be the same user being deleted, or deleting user must be an org admin, userid: {id}.");
                     return InvokeResult.FromError($"Can not delete user, user deleting user must be the same user being deleted, or deleting user must be an org admin.");
                 }
             }
@@ -117,13 +117,13 @@ namespace LagoVista.UserAdmin.Managers
             var appUser = await _appUserRepo.FindByIdAsync(id);
             if (appUser == null)
             {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletingUser, deletedByUser, org, extras: $"User Id: {id}");
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeleteUserFailed, deletedByUser, org, errors:"User Not FOund", extras: $"Could not find User Id: {appUser.Id}");
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.UserDeletionStarted, deletedByUser, org, extras: $"User Id: {id}");
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.UserDeletionFailed, deletedByUser, org, errors:"User Not FOund", extras: $"Could not find User Id: {appUser.Id}");
 
                 throw new RecordNotFoundException(nameof(AppUser), id);
             }
 
-            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletingUser, deletedByUser, org, extras:$"Deleting user: {appUser.Name}, User Id: {appUser.Id}");
+            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.UserDeletionStarted, deletedByUser, org, extras:$"Deleting user: {appUser.Name}, User Id: {appUser.Id}");
 
             var cantDeleteReason = new StringBuilder();
 
@@ -153,7 +153,7 @@ namespace LagoVista.UserAdmin.Managers
 
             if(cantDeleteReason.Length > 0)
             {
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletedUser, deletedByUser, org, errors:cantDeleteReason.ToString(), extras: $"Could not delete user: {appUser.Name}, User Id: {appUser.Id}");
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.UserDeletionSucceeded, deletedByUser, org, errors:cantDeleteReason.ToString(), extras: $"Could not delete user: {appUser.Name}, User Id: {appUser.Id}");
                 return InvokeResult.FromError(cantDeleteReason.ToString());
             }
 
@@ -163,16 +163,16 @@ namespace LagoVista.UserAdmin.Managers
                 await _subscriptionManager.DeleteSubscriptionsForOrgAsync(orgToDelete.Id, org, deletedByUser);
                 await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.RemovedAllSubscriptionsForOrg, appUser.ToEntityHeader(), orgToDelete);
 
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletingOrg, appUser, extras: $"Org: {orgToDelete.Text}");
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.OrganizationDeletionStarted, appUser, extras: $"Org: {orgToDelete.Text}");
                 await _orgRepo.DeleteOrgAsync(orgToDelete.Id);
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletedOrg, appUser, extras: $"Org: {orgToDelete.Text}");
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.OrganizationDeletionSucceeded, appUser, extras: $"Org: {orgToDelete.Text}");
             }
 
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"[{deletedByUser.Text}] deleted the user [{appUser.Name}]");
 
             await _appUserRepo.DeleteAsync(appUser, softDelete);
 
-            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeletedUser, deletedByUser, org, extras: $"Deleted user: {appUser.Name}, User Id: {appUser.Id}");
+            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.UserDeletionSucceeded, deletedByUser, org, extras: $"Deleted user: {appUser.Name}, User Id: {appUser.Id}");
 
             return InvokeResult.Success;
         }

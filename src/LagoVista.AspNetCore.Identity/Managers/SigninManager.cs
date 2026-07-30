@@ -88,7 +88,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             if (appUser.IsAccountDisabled)
             {
-                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PaswwordAuthFailed, appUser.UserName, appUser.Id, extras: "Account Disabled");
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthenticationFailed, appUser.UserName, appUser.Id, extras: "Account Disabled");
                 UserLoginFailures.Inc();
                 return InvokeResult<AuthenticationResponse>.FromError($"Account [{appUser.UserName}] is disabled.");
             }
@@ -143,7 +143,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             await _appUserRepo.UpdateAsync(appUser);
 
             UserLoginSuccess.Inc();
-            await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthSuccess, appUser, inviteId: inviteId, redirectUri: response.RedirectPage);
+            await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthenticationSucceeded, appUser, inviteId: inviteId, redirectUri: response.RedirectPage);
 
             var redirectResult = await _userRedirectService.IdentityDefaultRedirectAsync(appUser);
             if (!redirectResult.Successful)
@@ -163,7 +163,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             if (string.IsNullOrEmpty(email)) return InvokeResult<AuthenticationResponse>.FromError("User name is a required field.");
             if (string.IsNullOrEmpty(loginRequest.Password)) return InvokeResult<AuthenticationResponse>.FromError("Password is a required field.");
 
-            await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthStart, userName: email, inviteId: loginRequest.InviteId);
+            await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthenticationStarted, userName: email, inviteId: loginRequest.InviteId);
 
             var signIn = UserSignInMetrics.WithLabels(nameof(PasswordSignInAsync));
             UserLoginAttempts.Inc();
@@ -187,13 +187,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             if (signInResult.IsLockedOut)
             {
-                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PaswwordAuthFailed, appUser, errors: "User is locked out.");
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthenticationFailed, appUser, errors: "User is locked out.");
                 UserLoginFailures.Inc();
                 signIn.Dispose();
                 return InvokeResult<AuthenticationResponse>.FromErrors(UserAdminErrorCodes.AuthUserLockedOut.ToErrorMessage());
             }
 
-            await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PaswwordAuthFailed, appUser, errors: "Likely invalid credentials.");
+            await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthenticationFailed, appUser, errors: "Likely invalid credentials.");
             UserLoginFailures.Inc();
             signIn.Dispose();
             return InvokeResult<AuthenticationResponse>.FromErrors(UserAdminErrorCodes.AuthInvalidCredentials.ToErrorMessage());

@@ -124,9 +124,9 @@ namespace LagoVista.UserAdmin.Managers
             var tokenCode = await _userManager.GeneratePasswordResetTokenAsync(appUser);
             var resetStatus = await _userManager.ResetPasswordAsync(appUser, tokenCode, changeRequest.NewPassword);
             if (resetStatus.Successful)
-                await _authLogMgr.AddAsync(AuthLogTypes.PasswordSetByAdminSuccss, appUser.Id, appUser.UserName, org.Id, org.Text, extras: $"Set By Admin: {user.Id}");
+                await _authLogMgr.AddAsync(AuthLogTypes.PasswordSetByAdminSucceeded, appUser.Id, appUser.UserName, org.Id, org.Text, extras: $"Set By Admin: {user.Id}");
             else
-                await _authLogMgr.AddAsync(AuthLogTypes.PasswordSetByAminFailed, appUser.Id, appUser.UserName,  org.Id, errors: resetStatus.ErrorMessage,extras: $"Set By Admin: {user.Id}");
+                await _authLogMgr.AddAsync(AuthLogTypes.PasswordSetByAdminFailed, appUser.Id, appUser.UserName,  org.Id, errors: resetStatus.ErrorMessage,extras: $"Set By Admin: {user.Id}");
 
             return resetStatus;
 

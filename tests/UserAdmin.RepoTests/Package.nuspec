@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>UserAdmin.RepoTest</id>
-    <version>3.0.3360.1512</version>
+    <version>3.0.3360.1831</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,13 +12,13 @@
     <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT LagoVista</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 7/29/2026 7:12:32 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 7/29/2026 10:31:52 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net9.0">
-        <dependency id="LagoVista.Core.TestBase" version="3.0.3360.1512" />
-        <dependency id="LagoVista.Relational.Tests.Core" version="3.0.3360.1512" />
-        <dependency id="LagoVista.UserAdmin.Repos" version="3.0.3360.1512" />
+        <dependency id="LagoVista.Core.TestBase" version="3.0.3360.1746" />
+        <dependency id="LagoVista.Relational.Tests.Core" version="3.0.3360.1746" />
+        <dependency id="LagoVista.UserAdmin.Repos" version="3.0.3360.1831" />
       </group>
     </dependencies>
   </metadata>

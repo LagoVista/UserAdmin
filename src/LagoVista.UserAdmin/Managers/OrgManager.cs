@@ -147,7 +147,7 @@ namespace LagoVista.UserAdmin.Managers
             /* Create the Organization in Storage */
             await _organizationRepo.AddOrganizationAsync(organization);
 
-            await _authLogMgr.AddAsync(AuthLogTypes.CreatingOrg, user.Id, user.Text, organization.Id, organization.Name);
+            await _authLogMgr.AddAsync(AuthLogTypes.OrganizationCreationStarted, user.Id, user.Text, organization.Id, organization.Name);
 
             var currentUser = await _appUserRepo.FindByIdAsync(user.Id);
 
@@ -180,14 +180,14 @@ namespace LagoVista.UserAdmin.Managers
             /* This isn't working correctly so for now, just do inline, want to background it at some point */
             //await _taskQueue.QueueBackgroundWorkItemAsync(async (token) =>
             //{
-            await _authLogMgr.AddAsync(AuthLogTypes.PopulatingNewOrg, user.Id, user.Text, organization.Id, organization.Name);
+            await _authLogMgr.AddAsync(AuthLogTypes.OrganizationPopulationStarted, user.Id, user.Text, organization.Id, organization.Name);
             await _orgInitializer.Init(organization.ToEntityHeader(), currentUser.ToEntityHeader(), organizationViewModel.CreateGettingStartedData);
-            await _authLogMgr.AddAsync(AuthLogTypes.PopulatedNewOrg, user.Id, user.Text, organization.Id, organization.Name);
+            await _authLogMgr.AddAsync(AuthLogTypes.OrganizationPopulationSucceeded, user.Id, user.Text, organization.Id, organization.Name);
             //});
 
             await LogEntityActionAsync(organization.Id, typeof(Organization).Name, "Created Organization", organization.ToEntityHeader(), user);
 
-            await _authLogMgr.AddAsync(AuthLogTypes.CreatedOrg, user.Id, user.Text, organization.Id, organization.Name);
+            await _authLogMgr.AddAsync(AuthLogTypes.OrganizationCreationSucceeded, user.Id, user.Text, organization.Id, organization.Name);
 
             return InvokeResult<Organization>.Create(organization);
         }
@@ -440,7 +440,7 @@ namespace LagoVista.UserAdmin.Managers
             if (invite == null || !invite.IsActive())
             {
                 var reason = invite == null ? "Could not load invite" : $"Status: {invite.Status}";
-                await _authLogMgr.AddAsync(AuthLogTypes.AcceptInviteFailed, acceptedUser, inviteId: inviteId, extras: $"Accept not valid to be accepted, Status: {reason}.");
+                await _authLogMgr.AddAsync(AuthLogTypes.InviteAcceptanceFailed, acceptedUser, inviteId: inviteId, extras: $"Accept not valid to be accepted, Status: {reason}.");
                 var acceptResult = InvokeResult<AcceptInviteResponse>.FromErrors(UserAdminErrorCodes.AuthInviteNotActive.ToErrorMessage());
                 acceptResult.RedirectURL = $"{CommonLinks.InviteAcceptedFailed}?err={acceptResult.ErrorMessage}";
                 return acceptResult;
@@ -452,7 +452,7 @@ namespace LagoVista.UserAdmin.Managers
             var result = await AddUserToOrgAsync(acceptedUser.ToEntityHeader(), orgHeader, invitingUser);
             if (!result.Successful)
             {
-                await _authLogMgr.AddAsync(AuthLogTypes.AcceptInviteFailed, acceptedUser, inviteId: inviteId, extras: result.ErrorMessage);
+                await _authLogMgr.AddAsync(AuthLogTypes.InviteAcceptanceFailed, acceptedUser, inviteId: inviteId, extras: result.ErrorMessage);
                 var acceptResult = InvokeResult<AcceptInviteResponse>.FromInvokeResult(result);
                 acceptResult.RedirectURL = $"{CommonLinks.InviteAcceptedFailed}?err={result.ErrorMessage}";
                 return acceptResult;
@@ -478,7 +478,7 @@ namespace LagoVista.UserAdmin.Managers
 
             var msg = $"Congratulations! You have accepted the invitation from {invite.InvitedByName} to the {invite.OrganizationName} organization. ";
 
-            await _authLogMgr.AddAsync(AuthLogTypes.AcceptedInvite, acceptedUser.ToEntityHeader(), acceptedUser.CurrentOrganization.ToEntityHeader(), inviteId: inviteId);
+            await _authLogMgr.AddAsync(AuthLogTypes.InviteAcceptanceSucceeded, acceptedUser.ToEntityHeader(), acceptedUser.CurrentOrganization.ToEntityHeader(), inviteId: inviteId);
 
             var response = new AcceptInviteResponse()
             {

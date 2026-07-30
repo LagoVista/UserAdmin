@@ -83,7 +83,7 @@ namespace LagoVista.UserAdmin.Managers
             var send = await _emailSender.SendInBackgroundAsync(email, "Your sign-in link", BuildEmailBody(attempt, rawCode), _appConfig.SystemOwnerOrg, userEh);
             if (!send.Successful)
             {
-                await _authLogMgr.AddAsync(AuthLogTypes.MagicLinkConsumeFailed, user: userEh, org: _appConfig.SystemOwnerOrg, errors: "email_send_failed", extras: $"channel={channel}", redirectUri: request.ReturnUrl ?? "", challengeId: attempt.Id);
+                await _authLogMgr.AddAsync(AuthLogTypes.MagicLinkConsumptionFailed, user: userEh, org: _appConfig.SystemOwnerOrg, errors: "email_send_failed", extras: $"channel={channel}", redirectUri: request.ReturnUrl ?? "", challengeId: attempt.Id);
                 return InvokeResult<string>.Create(String.Empty);
             }
 
@@ -104,7 +104,7 @@ namespace LagoVista.UserAdmin.Managers
             var consume = await _store.TryConsumeAsync(Hash(code), nowUtc);
             if (!consume.Successful)
             {
-                await _authLogMgr.AddAsync(AuthLogTypes.MagicLinkConsumeFailed, org: _appConfig.SystemOwnerOrg, errors: FirstErrorOrDefault(consume), extras: $"channel={channel}", redirectUri: context?.ReturnUrl ?? "");
+                await _authLogMgr.AddAsync(AuthLogTypes.MagicLinkConsumptionFailed, org: _appConfig.SystemOwnerOrg, errors: FirstErrorOrDefault(consume), extras: $"channel={channel}", redirectUri: context?.ReturnUrl ?? "");
                 return InvokeResult<AuthenticationResponse>.FromErrors(consume.Errors.ToArray());
             }
 

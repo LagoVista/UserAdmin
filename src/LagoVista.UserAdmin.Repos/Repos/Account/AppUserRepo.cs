@@ -107,7 +107,7 @@ namespace LagoVista.UserAdmin.Repos.Users
                 if (ex.InnerException != null)
                     msg.Append($";{ex.InnerException.Message}");
 
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.DeleteUserFailed, user, errors: msg.ToString());
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.UserDeletionFailed, user, errors: msg.ToString());
 
                 throw;
             }

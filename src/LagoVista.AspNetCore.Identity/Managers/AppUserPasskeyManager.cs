@@ -204,12 +204,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
         {
             if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
 
-            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyAuthenticationOptionsBeginStart, user, org);
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyAuthenticationOptionsSent, user, org);
 
             var (rpId, origin) = GetRpIdAndOrigin();
             var safeUrl = NormalizePasskeyUrl(passkeyUrl);
 
-            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeySetupBegin, user, org);
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeySetupStarted, user, org);
 
             var creds = await _credentialRepo.GetByUserAsync(userId, rpId);
 

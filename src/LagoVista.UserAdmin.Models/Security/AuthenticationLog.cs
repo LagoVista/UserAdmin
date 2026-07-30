@@ -13,13 +13,13 @@ namespace LagoVista.UserAdmin.Models.Security
 {
     public enum AuthLogTypes
     {
-        PasswordAuthStart,
-        PasswordAuthSuccess,
-        PaswwordAuthFailed,
+        PasswordAuthenticationStarted,
+        PasswordAuthenticationSucceeded,
+        PasswordAuthenticationFailed,
         PasswordAuthUserNotFound,
        
         CreateEmailUser,
-        CreateExernalLoginUser,
+        ExternalLoginUserCreationStarted,
         CreateUserSuccess,
         CreateUserError,
 
@@ -28,11 +28,11 @@ namespace LagoVista.UserAdmin.Models.Security
         PhoneValidated,
         ManualOrgCreate,
         ChangeOrg,
-        CreatingOrg,
-        CreatedOrg,
+        OrganizationCreationStarted,
+        OrganizationCreationSucceeded,
         AssignedCurrentOrgToUser,
-        PopulatingNewOrg,
-        PopulatedNewOrg,
+        OrganizationPopulationStarted,
+        OrganizationPopulationSucceeded,
         UserPasswordLogin,
         UserLogout,
         UserPasswordFailedLogin,
@@ -43,8 +43,8 @@ namespace LagoVista.UserAdmin.Models.Security
         OAuthCreateOrg,
         OAuthAppendUserLogin,
         OAuthRemoveUserLogin,
-        OAuthFinalizingLogin,
-        OAuthFinalizedLogin,
+        OAuthLoginFinalizationStarted,
+        OAuthLoginFinalizationSucceeded,
         OAuthLogin,
         OAuthAccessDefined,
         OAuthFault,
@@ -56,24 +56,24 @@ namespace LagoVista.UserAdmin.Models.Security
         AddUserToOrg,
         SetAsOrgAdmin,
         ClearOrgAdmin,
-        PasswordSetByAdminSuccss,
-        PasswordSetByAminFailed,
+        PasswordSetByAdminSucceeded,
+        PasswordSetByAdminFailed,
         ChangePasswordSuccess,
         ChangePasswordFailed,
         InviteUser,
         RegisterUser,
 
 
-        AcceptingInvite,
-        AcceptedInvite,
-        AcceptInviteFailed,
+        InviteAcceptanceStarted,
+        InviteAcceptanceSucceeded,
+        InviteAcceptanceFailed,
         
-        DeletingUser,
-        DeleteUserFailed,
-        DeletedUser,
+        UserDeletionStarted,
+        UserDeletionFailed,
+        UserDeletionSucceeded,
 
-        DeletingOrg,
-        DeletedOrg,
+        OrganizationDeletionStarted,
+        OrganizationDeletionSucceeded,
 
         RemoveUserFromOrg,
         DisableUser,
@@ -154,11 +154,11 @@ namespace LagoVista.UserAdmin.Models.Security
         PasskeyCompleteRegistrationSuccess,
         PasskeyCompleteRegistrationFailed,
 
-        PasskeySetupBegin,
-        PasskeySetupConfirmed,
+        PasskeySetupStarted,
+        PasskeySetupSucceeded,
         PasskeySetupFailed,
 
-        PasskeyAuthenticationOptionsBeginStart,
+        PasskeyAuthenticationOptionsSent,
         PasskeyAuthenticationOptionsBeginSent,
         PasskeyAuthenticationOptionsBeginFailed,
 
@@ -209,7 +209,7 @@ namespace LagoVista.UserAdmin.Models.Security
         MagicLinkRequested,
         MagicLinkSent,
         MagicLinkConsumed,
-        MagicLinkConsumeFailed,
+        MagicLinkConsumptionFailed,
         MagicLinkExchangeIssued,
         MagicLinkExchangeSucceeded,
         MagicLinkExchangeFailed

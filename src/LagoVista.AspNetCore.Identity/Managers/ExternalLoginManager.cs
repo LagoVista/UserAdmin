@@ -162,7 +162,7 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             _adminLogger.Trace($"{this.Tag} User: {appUser.Email}");
-            await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizingLogin, appUser, inviteId: inviteId, redirectUri: String.IsNullOrEmpty( returnUrl) ? String.Empty : returnUrl,  oauthProvider: provider);
+            await _authLogManager.AddAsync(AuthLogTypes.OAuthLoginFinalizationStarted, appUser, inviteId: inviteId, redirectUri: String.IsNullOrEmpty( returnUrl) ? String.Empty : returnUrl,  oauthProvider: provider);
 
             await _signInManager.SignInAsync(appUser, false);
 
@@ -188,39 +188,39 @@ namespace LagoVista.UserAdmin.Managers
                             if (response.Successful)
                             {
                                 var redirectUrl = $"{rootScheme}acceptinvite?userid={singleUseToken.Result.UserId}&token={singleUseToken.Result.Token}&inviteid={inviteId}&page=acceptinvite";
-                                await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, inviteId: inviteId, oauthProvider: provider, extras: $"Mobile - Accept Invite", redirectUri: redirectUrl);
+                                await _authLogManager.AddAsync(AuthLogTypes.OAuthLoginFinalizationSucceeded, appUser, inviteId: inviteId, oauthProvider: provider, extras: $"Mobile - Accept Invite", redirectUri: redirectUrl);
                                 return InvokeResult<string>.Create(NormalizeReturnUrl(redirectUrl));
                             }
                             else
                             {
-                                await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, inviteId: inviteId, oauthProvider: provider, extras: $"Could not accept invitation - {response.ErrorMessage}", redirectUri: response.RedirectURL);
+                                await _authLogManager.AddAsync(AuthLogTypes.OAuthLoginFinalizationSucceeded, appUser, inviteId: inviteId, oauthProvider: provider, extras: $"Could not accept invitation - {response.ErrorMessage}", redirectUri: response.RedirectURL);
                                 return InvokeResult<string>.Create(NormalizeReturnUrl(response.RedirectURL));
                             }
                         }
                         else if (!appUser.EmailConfirmed)
                         {
                             var redirectUrl = $"{rootScheme}confirmemail?userid={singleUseToken.Result.UserId}&token={singleUseToken.Result.Token}";
-                            await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, oauthProvider: provider, extras: $"Mobile - Confirm Email", redirectUri: redirectUrl);
+                            await _authLogManager.AddAsync(AuthLogTypes.OAuthLoginFinalizationSucceeded, appUser, oauthProvider: provider, extras: $"Mobile - Confirm Email", redirectUri: redirectUrl);
                             return InvokeResult<string>.Create(NormalizeReturnUrl(redirectUrl));
                         }
                         else if (appUser.CurrentOrganization == null)
                         {
                             var redirectUrl = $"{rootScheme}createorg?userid={singleUseToken.Result.UserId}&token={singleUseToken.Result.Token}";
-                            await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, oauthProvider: provider, extras: $"Mobile - Create Org", redirectUri: redirectUrl);
+                            await _authLogManager.AddAsync(AuthLogTypes.OAuthLoginFinalizationSucceeded, appUser, oauthProvider: provider, extras: $"Mobile - Create Org", redirectUri: redirectUrl);
                             return InvokeResult<string>.Create(NormalizeReturnUrl(redirectUrl));
                         }
                         else if (appUser.ShowWelcome)
                         {
                             var redirectUrl = $"{rootScheme}welcome?userid={singleUseToken.Result.UserId}&token={singleUseToken.Result.Token}";
                             _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] - Mobile - Welcome View: {redirectUrl}");
-                            await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, oauthProvider: provider, extras: $"Mobile - Show Welcome", redirectUri: redirectUrl);
+                            await _authLogManager.AddAsync(AuthLogTypes.OAuthLoginFinalizationSucceeded, appUser, oauthProvider: provider, extras: $"Mobile - Show Welcome", redirectUri: redirectUrl);
                             return InvokeResult<string>.Create(NormalizeReturnUrl(redirectUrl));
                         }
                         else
                         {
                             var redirectUrl = $"{rootScheme}home?userid={singleUseToken.Result.UserId}&token={singleUseToken.Result.Token}&page=home";
                             _adminLogger.Trace($"[OAUTH__FinalizeExternalLogin] - Mobile - Home View: {redirectUrl}");
-                            await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, oauthProvider: provider, extras: $"Mobile - Show Home", redirectUri: redirectUrl);
+                            await _authLogManager.AddAsync(AuthLogTypes.OAuthLoginFinalizationSucceeded, appUser, oauthProvider: provider, extras: $"Mobile - Show Home", redirectUri: redirectUrl);
                             return InvokeResult<string>.Create(NormalizeReturnUrl(redirectUrl));
                         }
                     }
@@ -235,14 +235,14 @@ namespace LagoVista.UserAdmin.Managers
                 }
                 else
                 {
-                    await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, oauthProvider: provider, extras: $"Return URL Provided", redirectUri: returnUrl);
+                    await _authLogManager.AddAsync(AuthLogTypes.OAuthLoginFinalizationSucceeded, appUser, oauthProvider: provider, extras: $"Return URL Provided", redirectUri: returnUrl);
                     return InvokeResult<string>.Create(NormalizeReturnUrl(returnUrl));
                 }
             }
             else if(String.IsNullOrEmpty(appUser.Email) || string.IsNullOrEmpty(appUser.FirstName) || string.IsNullOrEmpty(appUser.LastName))
             {
                 _adminLogger.Trace($"{this.Tag} - Email/FirstName/LastName is empty, sending to registration.");
-                await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, oauthProvider: provider, extras: $"Web - one of Email/FirstName/LastName empty");
+                await _authLogManager.AddAsync(AuthLogTypes.OAuthLoginFinalizationSucceeded, appUser, oauthProvider: provider, extras: $"Web - one of Email/FirstName/LastName empty");
                 return InvokeResult<string>.Create(NormalizeReturnUrl($"{CommonLinks.CompleteUserRegistration}"));
             }
             // user does exist and is configured properly.
@@ -254,39 +254,39 @@ namespace LagoVista.UserAdmin.Managers
                 if (response.Successful)
                 {
                     _adminLogger.Trace($"{this.Tag} - Web - Email was confirmed, has invite");
-                    await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, inviteId: inviteId, oauthProvider: provider, extras: appUser.EmailConfirmed ?
+                    await _authLogManager.AddAsync(AuthLogTypes.OAuthLoginFinalizationSucceeded, appUser, inviteId: inviteId, oauthProvider: provider, extras: appUser.EmailConfirmed ?
                         $"Web - Email was confirmed, has invite" : $"Web - Email was not confirmed, has invite"
                         , redirectUri: redirectUri);
                     return InvokeResult<string>.Create(NormalizeReturnUrl(redirectUri));
                 }
                 else
                 {
-                    await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, inviteId: inviteId, oauthProvider: provider, extras: $"Could not accept invitation - {response.ErrorMessage}", redirectUri: response.RedirectURL);
+                    await _authLogManager.AddAsync(AuthLogTypes.OAuthLoginFinalizationSucceeded, appUser, inviteId: inviteId, oauthProvider: provider, extras: $"Could not accept invitation - {response.ErrorMessage}", redirectUri: response.RedirectURL);
                     return InvokeResult<string>.Create(NormalizeReturnUrl(response.RedirectURL));
                 }
             }
             else if (!appUser.EmailConfirmed)
             {
                 _adminLogger.Trace($"{this.Tag} - Web - Email Not Confirmed");
-                await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, oauthProvider: provider, extras: $"Web - Email Not Confirmed", redirectUri: $"{CommonLinks.ConfirmEmailSent}?email={appUser.Email}");
+                await _authLogManager.AddAsync(AuthLogTypes.OAuthLoginFinalizationSucceeded, appUser, oauthProvider: provider, extras: $"Web - Email Not Confirmed", redirectUri: $"{CommonLinks.ConfirmEmailSent}?email={appUser.Email}");
                 return InvokeResult<string>.Create(NormalizeReturnUrl($"{CommonLinks.ConfirmEmailSent}?email={appUser.Email.ToLower()}"));
             }
             else if (appUser.CurrentOrganization == null)
             {
                 _adminLogger.Trace($"{this.Tag} - Web - No Current Organization");
-                await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, oauthProvider: provider, extras: $"Web - No Current Organization", redirectUri: CommonLinks.CreateDefaultOrg);
+                await _authLogManager.AddAsync(AuthLogTypes.OAuthLoginFinalizationSucceeded, appUser, oauthProvider: provider, extras: $"Web - No Current Organization", redirectUri: CommonLinks.CreateDefaultOrg);
                 return InvokeResult<string>.Create(NormalizeReturnUrl(CommonLinks.CreateDefaultOrg));
             }
             else if (appUser.ShowWelcome)
             {
                 _adminLogger.Trace($"{this.Tag} - Web - Welcome View");
-                await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser.ToEntityHeader(), appUser.CurrentOrganization.ToEntityHeader(), oauthProvider: provider, extras: $"Web - Welcome View", redirectUri: CommonLinks.HomeWelcome);
+                await _authLogManager.AddAsync(AuthLogTypes.OAuthLoginFinalizationSucceeded, appUser.ToEntityHeader(), appUser.CurrentOrganization.ToEntityHeader(), oauthProvider: provider, extras: $"Web - Welcome View", redirectUri: CommonLinks.HomeWelcome);
                 return InvokeResult<string>.Create(NormalizeReturnUrl(CommonLinks.HomeWelcome));
             }
             else
             {
                 _adminLogger.Trace($"{this.Tag} - Web - Return Home View");
-                await _authLogManager.AddAsync(AuthLogTypes.OAuthFinalizedLogin, appUser, oauthProvider: provider, extras: $"Web - Home", redirectUri: CommonLinks.Home);
+                await _authLogManager.AddAsync(AuthLogTypes.OAuthLoginFinalizationSucceeded, appUser, oauthProvider: provider, extras: $"Web - Home", redirectUri: CommonLinks.Home);
                 return InvokeResult<string>.Create(NormalizeReturnUrl(CommonLinks.Home));
             }
         }
