@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.email-verification.complete",
+  "name": "Complete Email Verification",
+  "summary": "Confirms the email address for an existing durable identity using a valid verification challenge.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "verification-code", "valueType": "secret", "required": true, "description": "Email verification challenge supplied by the user." }
+  ],
+  "guards": [
+    { "expression": "durable-identity == resolved", "failureCode": "email-verification-user-not-found" },
+    { "expression": "verification-code-valid == true", "failureCode": "email-verification-invalid" }
+  ],
+  "permittedMutations": [],
+  "requiredEffects": ["confirm-email-once", "record-email-verification-result"],
+  "forbiddenEffects": ["create-durable-user", "change-home-workspace", "switch-current-workspace"],
+  "invariantKeys": ["auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/UserVerficationManager.cs" }]
+}
