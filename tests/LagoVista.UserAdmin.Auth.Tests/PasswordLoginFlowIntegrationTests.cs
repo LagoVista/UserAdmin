@@ -97,7 +97,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 AuthLogTypes.PasswordAuthenticationStarted,
                 AuthLogTypes.PasswordAuthenticationSucceeded
             }));
-            Assert.That(harness.Log.Events.Last().UserId, Is.EqualTo(user.Id));
+            Assert.That(harness.Log.Events.Last().UserId, Is.EqualTo(user.Id.Value));
         }
 
         private static AuthLoginRequest CreateRequest(string email, string password = "password")
