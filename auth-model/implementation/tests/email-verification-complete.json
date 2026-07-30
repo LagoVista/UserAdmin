@@ -1,0 +1,37 @@
+{
+  "$schema": "../../schemas/auth-test-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.test-binding.email-verification.complete",
+  "name": "Email Verification Completion Flow Proof",
+  "summary": "Registers executed NUnit evidence for the canonical email verification completion transition.",
+  "version": 1,
+  "maturity": "implemented",
+  "testLevel": "integration",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "tests/LagoVista.UserAdmin.Auth.Tests",
+  "sourcePath": "tests/LagoVista.UserAdmin.Auth.Tests/EmailVerificationFlowIntegrationTests.cs",
+  "framework": "NUnit",
+  "testTypeName": "EmailVerificationFlowIntegrationTests",
+  "testMethodNames": [
+    "ValidToken_Should_CompleteVerification_And_ReturnRedirect",
+    "InvalidToken_Should_ReturnFailure_WithoutSuccessfulTransitionResult",
+    "AlreadyConfirmedUser_Should_ReturnIdempotentSuccess"
+  ],
+  "handlerKeys": ["auth.handler.email-verification.complete"],
+  "endpointBindingKeys": [],
+  "transitionKeys": ["auth.transition.email-verification.complete"],
+  "proofObligations": [
+    "transition-key",
+    "valid-token-success",
+    "invalid-token-failure",
+    "idempotent-confirmation",
+    "redirect-preserved"
+  ],
+  "notes": [
+    "NUnit tests carry AptixEvidence references for this test binding, the email verification flow, and the canonical completion transition.",
+    "Controller routing is intentionally deferred to a later controller-focused session."
+  ],
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "auth-model/transitions/email-verification-complete.json" }
+  ]
+}
