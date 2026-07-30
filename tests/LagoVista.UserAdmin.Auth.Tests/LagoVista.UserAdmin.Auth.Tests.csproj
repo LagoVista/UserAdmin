@@ -20,5 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="../../src/LagoVista.UserAdmin/LagoVista.UserAdmin.csproj" />
-    </ItemGroup>
-  </Project>
+    <ProjectReference Include="../../src/LagoVista.AspNetCore.Identity/LagoVista.AspNetCore.Identity.csproj" />
+  </ItemGroup>
+</Project>
