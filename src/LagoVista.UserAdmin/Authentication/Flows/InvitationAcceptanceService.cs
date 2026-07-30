@@ -1,3 +1,4 @@
+using LagoVista.Core;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Interfaces.Managers;
@@ -5,8 +6,8 @@ using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Auth;
+using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Security;
-using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Resources;
 using System;
 using System.Threading.Tasks;
@@ -61,7 +62,7 @@ namespace LagoVista.UserAdmin.Authentication.Flows
             InvitationAcceptanceUserStateUpdater.ApplyAcceptedMembership(acceptedUser, organization);
 
             invite.Accepted = true;
-            invite.Status = Models.Orgs.Invitation.StatusTypes.Accepted;
+            invite.Status = Invitation.StatusTypes.Accepted;
             invite.DateAccepted = DateTime.UtcNow.ToJSONString();
 
             await _inviteUserRepo.UpdateInvitationAsync(invite);
