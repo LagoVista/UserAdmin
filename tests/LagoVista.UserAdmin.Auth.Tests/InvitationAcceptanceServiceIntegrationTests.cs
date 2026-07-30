@@ -18,8 +18,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
     public class InvitationAcceptanceServiceIntegrationTests
     {
         private const string InvitationAcceptanceEvidence = "auth|auth.test-binding.invitation.accept|auth.flow.invitation.accept|auth.transition.invitation.accept";
-        private const string InviteId = "invite-123";
-        private const string UserId = "user-123";
+        private const string InviteId = "ACDCC506553E40F097895AB073F9FC2F";
+        private const string UserId = "8F36C506553E40F097895AB073F9ACDC";
 
         [Test]
         [Property("AptixEvidence", InvitationAcceptanceEvidence)]
@@ -30,7 +30,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var organizationManager = new Mock<IOrganizationManager>(MockBehavior.Strict);
             var invitationRepo = new Mock<IInviteUserRepo>(MockBehavior.Strict);
             var appUserRepo = new Mock<IAppUserRepo>(MockBehavior.Strict);
-            var currentOrganization = new OrganizationSummary { Id = "home-org", Name = "Home Organization" };
+            var currentOrganization = new OrganizationSummary { Id = "32B3E13402A847EC8578EDE34C1D078D", Name = "Home Organization", Text="Home Organization", Namespace="ns012346" };
             var user = new AppUser("user@example.com", "test")
             {
                 Id = UserId,

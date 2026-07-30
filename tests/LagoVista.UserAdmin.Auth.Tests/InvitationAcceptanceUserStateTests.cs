@@ -16,7 +16,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         [Property("AptixEvidence", InvitationAcceptanceEvidence)]
         public void ApplyAcceptedMembership_Should_PreserveCurrentOrganization_And_AddMembershipOnce()
         {
-            var currentOrganization = new OrganizationSummary { Id = "home-org", Name = "Home Organization" };
+            var currentOrganization = new OrganizationSummary { Id = "32B3E13402A847EC8578EDE34C1D078D", Name = "Home Organization" };
             var acceptedOrganization = EntityHeader.Create("invited-org", "Invited Organization");
             var user = new AppUser("user@example.com", "test")
             {
