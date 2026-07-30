@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "1.0",
+  "categories": [
+    {
+      "key": "account-recovery",
+      "name": "Account Recovery",
+      "description": "Password recovery requests, proof verification, challenge issuance, credential replacement, and completion.",
+      "keyPrefixes": ["auth.scenario.recovery.", "auth.transition.recovery."]
+    },
+    {
+      "key": "invitation",
+      "name": "Invitation",
+      "description": "Invitation validation, identity selection, acceptance, rejection, and membership outcomes.",
+      "keyPrefixes": ["auth.scenario.invitation.", "auth.transition.invitation."]
+    },
+    {
+      "key": "password-registration",
+      "name": "Password Registration",
+      "description": "Pending password identity creation, email proof, profile completion, credential establishment, durable user creation, workspace creation, and registration session establishment.",
+      "keyPrefixes": ["auth.scenario.password.", "auth.transition.password."]
+    },
+    {
+      "key": "passkey",
+      "name": "Passkey",
+      "description": "Passkey authentication, registration, binding, replay rejection, and step-up ceremonies.",
+      "keyPrefixes": ["auth.scenario.passkey.", "auth.transition.passkey."]
+    },
+    {
+      "key": "native-provider",
+      "name": "Native Provider",
+      "description": "OAuth and native-provider assertion capture, identity resolution, linking, user creation, workspace creation, and session establishment.",
+      "keyPrefixes": ["auth.scenario.native-provider.", "auth.transition.native-provider.", "auth.transition.capture-native-provider-", "auth.transition.create-native-provider-", "auth.transition.establish-native-provider-", "auth.transition.link-native-provider-", "auth.transition.resolve-linked-native-provider", "auth.transition.select-native-provider-"]
+    },
+    {
+      "key": "pending-identity",
+      "name": "Pending Identity",
+      "description": "Creation, verification, resolution, cancellation, expiration, and failure of pending identities.",
+      "keyPrefixes": ["auth.scenario.pending-identity.", "auth.scenario.begin-pending-identity-", "auth.scenario.resolve-pending-identity-", "auth.scenario.complete-pending-identity-", "auth.scenario.reject-multiple-pending-identity-", "auth.transition.begin-pending-identity", "auth.transition.require-pending-identity-", "auth.transition.complete-pending-identity-", "auth.transition.resolve-pending-identity", "auth.transition.cancel-pending-identity", "auth.transition.expire-pending-identity", "auth.transition.fail-pending-identity"]
+    },
+    {
+      "key": "home-workspace",
+      "name": "Home Workspace",
+      "description": "Home workspace creation, completion, reconciliation, and conflict handling.",
+      "keyPrefixes": ["auth.scenario.home-workspace.", "auth.transition.home-workspace."]
+    },
+    {
+      "key": "guest-identity",
+      "name": "Guest Identity",
+      "description": "Guest identity activation, value detection, claimability, claiming, and session establishment.",
+      "keyPrefixes": ["auth.scenario.guest.", "auth.transition.activate-guest-", "auth.transition.detect-guest-", "auth.transition.mark-guest-", "auth.transition.claim-guest-"]
+    },
+    {
+      "key": "entry-intent",
+      "name": "Entry Intent",
+      "description": "Capture and consumption of entry intent used to continue an authentication journey.",
+      "keyPrefixes": ["auth.scenario.entry-intent.", "auth.transition.entry-intent."]
+    },
+    {
+      "key": "email-verification",
+      "name": "Email Verification",
+      "description": "Existing-user email verification completion outside password registration.",
+      "keyPrefixes": ["auth.scenario.email-verification.", "auth.transition.email-verification."]
+    }
+  ],
+  "overrides": {}
+}
