@@ -33,13 +33,13 @@ namespace LagoVista.UserAdmin.Tests.Authentication
         [TestMethod]
         public void AuthenticationFlowService_Should_Require_Handler()
         {
-            Assert.ThrowsException<ArgumentNullException>(() => new AuthenticationFlowService(null, null));
+            Assert.ThrowsExactly<ArgumentNullException>(() => new AuthenticationFlowService(null, null));
         }
 
         [TestMethod]
         public void PasswordRecoveryRequestFlowHandler_Should_Require_Password_Manager()
         {
-            Assert.ThrowsException<ArgumentNullException>(() => new PasswordRecoveryRequestFlowHandler(null));
+            Assert.ThrowsExactly<ArgumentNullException>(() => new PasswordRecoveryRequestFlowHandler(null));
         }
     }
 }
