@@ -17,6 +17,11 @@ namespace LagoVista.UserAdmin.Models.Security
         PasswordAuthenticationSucceeded,
         PasswordAuthenticationFailed,
         PasswordAuthUserNotFound,
+
+        PasswordRecoveryRequested,
+        PasswordRecoveryCodeGenerated,
+        PasswordRecoveryMessageSent,
+        PasswordRecoveryCompleted,
        
         CreateEmailUser,
         ExternalLoginUserCreationStarted,
@@ -232,7 +237,7 @@ namespace LagoVista.UserAdmin.Models.Security
         {
             AuthType = authType.ToString();
             PartitionKey = (500000 - (Convert.ToInt32(DateTime.UtcNow.ToDateOnly().Replace("-", String.Empty).Replace("/",String.Empty)) - 200000000)).ToString();
-         
+          
             RowKey = DateTime.Now.ToInverseTicksRowKey();
             TimeStamp = DateTime.UtcNow.ToJSONString();
         }
