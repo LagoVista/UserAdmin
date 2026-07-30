@@ -37,7 +37,7 @@ namespace LagoVista.UserAdmin.Managers
         }
 
         public Task AddAsync(AuthLogTypes type, string userId = "?", string userName = "?", string orgId = "?", string orgName = "?", string oauthProvider = "", 
-        string errors = "", string extras = "", string redirectUri = "none", string inviteId = "none", string challengeId = "none", string credentialId = "none", string assertionId = "none")
+        string errors = "", string extras = "", string redirectUri = "none", string inviteId = "none", string credentialId = "none", string challengeId = "none", string assertionId = "none")
         {
             String ip = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
 
@@ -88,8 +88,8 @@ namespace LagoVista.UserAdmin.Managers
                 extras: extras,
                 redirectUri: redirectUri,
                 inviteId: inviteId,
-                challengeId: challengeId,
                 credentialId: credentialId,
+                challengeId: challengeId,
                 assertionId: assertionId);
         }
 
@@ -111,8 +111,8 @@ namespace LagoVista.UserAdmin.Managers
                 extras: extras,
                 redirectUri: redirectUri,
                 inviteId: inviteId,
-                challengeId: challengeId,
                 credentialId: credentialId,
+                challengeId: challengeId,
                 assertionId: assertionId);
         }
 
