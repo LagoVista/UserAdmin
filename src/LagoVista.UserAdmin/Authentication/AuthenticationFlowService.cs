@@ -14,9 +14,9 @@ namespace LagoVista.UserAdmin.Authentication
         private readonly IPasswordLoginFlowHandler _passwordLoginHandler;
         private readonly IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> _passwordRecoveryRequestHandler;
         private readonly IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> _passwordRecoveryCompletionHandler;
-        private readonly IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest> _invitationAcceptanceHandler;
+        private readonly IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> _invitationAcceptanceHandler;
 
-        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest> invitationAcceptanceHandler = null)
+        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> invitationAcceptanceHandler = null)
         {
             _passwordLoginHandler = passwordLoginHandler ?? throw new ArgumentNullException(nameof(passwordLoginHandler));
             _passwordRecoveryRequestHandler = passwordRecoveryRequestHandler ?? throw new ArgumentNullException(nameof(passwordRecoveryRequestHandler));
@@ -59,7 +59,7 @@ namespace LagoVista.UserAdmin.Authentication
             if (result.TransitionKey != InvitationAcceptanceFlowHandler.TransitionKey)
                 throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
 
-            return (InvokeResult<AcceptInviteResponse>)result.PublicResult;
+            return result.PublicResult;
         }
     }
 }
