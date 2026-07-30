@@ -1,3 +1,4 @@
+using LagoVista.Core;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.UserAdmin.Interfaces.Managers;
@@ -65,10 +66,10 @@ namespace LagoVista.UserAdmin.Auth.Tests
         public Task AddAsync(AuthLogTypes type, EntityHeader user = null, EntityHeader org = null, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none", string credentialId = "", string challengeId = "", string assertionId = "")
         {
             return AddAsync(type,
-                userId: user?.Id ?? "?",
-                userName: user?.Text ?? "?",
-                orgId: org?.Id ?? "?",
-                orgName: org?.Text ?? "?",
+                userId: user == null ? "?" : user.Id,
+                userName: user == null ? "?" : user.Text,
+                orgId: org == null ? "?" : org.Id,
+                orgName: org == null ? "?" : org.Text,
                 oauthProvier: oauthProvider,
                 errors: errors,
                 extras: extras,
@@ -81,11 +82,13 @@ namespace LagoVista.UserAdmin.Auth.Tests
 
         public Task AddAsync(AuthLogTypes type, AppUser appUser, string oauthProvider = "", string errors = "", string extras = "", string redirectUri = "", string inviteId = "none", string credentialId = "", string challengeId = "", string assertionId = "")
         {
+            if (appUser == null) throw new ArgumentNullException(nameof(appUser));
+
             return AddAsync(type,
-                userId: appUser?.Id ?? "?",
-                userName: appUser?.UserName ?? "?",
-                orgId: appUser?.CurrentOrganization?.Id ?? "?",
-                orgName: appUser?.CurrentOrganization?.Name ?? "?",
+                userId: appUser.Id,
+                userName: appUser.UserName,
+                orgId: appUser.CurrentOrganization == null ? Guid.Empty.ToId() : appUser.CurrentOrganization.Id,
+                orgName: appUser.CurrentOrganization == null ? "?" : appUser.CurrentOrganization.Text,
                 oauthProvier: oauthProvider,
                 errors: errors,
                 extras: extras,
