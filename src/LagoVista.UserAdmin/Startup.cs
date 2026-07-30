@@ -48,6 +48,7 @@ namespace LagoVista.UserAdmin
             services.AddScoped<IPasswordLoginFlowHandler, PasswordLoginFlowHandler>();
             services.AddScoped<IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest>, PasswordRecoveryRequestFlowHandler>();
             services.AddScoped<IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest>, PasswordRecoveryCompletionFlowHandler>();
+            services.AddScoped<IInvitationAcceptanceService, InvitationAcceptanceService>();
             services.AddScoped<IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse>, InvitationAcceptanceFlowHandler>();
             services.AddScoped<IAuthenticationFlowService, AuthenticationFlowService>();
 
