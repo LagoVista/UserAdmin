@@ -1,3 +1,4 @@
+using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.DTOs;
@@ -11,5 +12,6 @@ namespace LagoVista.UserAdmin.Authentication
         Task<InvokeResult> RequestPasswordRecoveryAsync(SendResetPasswordLink request);
         Task<InvokeResult> CompletePasswordRecoveryAsync(ResetPassword request);
         Task<InvokeResult<AcceptInviteResponse>> AcceptInvitationAsync(string inviteId, string userId);
+        Task<InvokeResult> VerifyEmailAsync(ConfirmEmail request, EntityHeader user);
     }
 }
