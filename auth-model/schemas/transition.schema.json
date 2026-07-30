@@ -13,6 +13,7 @@
     "summary": { "type": "string", "minLength": 1 },
     "version": { "type": "integer", "minimum": 1 },
     "maturity": { "$ref": "#/$defs/maturity" },
+    "categoryKey": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$" },
     "priority": { "type": "integer", "minimum": 0, "default": 0 },
     "sourceState": { "$ref": "#/$defs/predicate" },
     "actionKey": { "type": "string", "pattern": "^auth\\.action\\." },
