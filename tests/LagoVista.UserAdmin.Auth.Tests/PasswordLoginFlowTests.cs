@@ -12,10 +12,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
     [TestFixture]
     public class PasswordLoginFlowTests
     {
-        private const string SuccessfulPasswordLoginEvidence = "auth|auth.test-binding.password.establish-session|auth.flow.password.establish-session|auth.transition.password.establish-session";
-
         [Test]
-        [Property("AptixEvidence", SuccessfulPasswordLoginEvidence)]
         public async Task LoginWithPasswordAsync_Should_Execute_Handler_And_Return_Manager_Result()
         {
             var request = new AuthLoginRequest
