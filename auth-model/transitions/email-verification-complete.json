@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.email-verification.complete",
+  "name": "Complete Email Verification",
+  "summary": "Confirms the selected durable identity email address using a valid verification challenge without changing tenant or session identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 100,
+  "sourceState": { "expression": "durable-identity == resolved and email-confirmed == false" },
+  "actionKey": "auth.action.email-verification.complete",
+  "guards": [{ "expression": "verification-code-valid == true", "failureCode": "email-verification-invalid" }],
+  "destinationTransform": [],
+  "requiredEffects": ["confirm-email-once", "record-email-verification-result"],
+  "forbiddenEffects": ["create-durable-user", "change-home-workspace", "switch-current-workspace"],
+  "invariantKeys": ["auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/UserVerficationManager.cs" }]
+}
