@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schemas/auth-flow.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.flow.email-verification.complete",
+  "name": "Email Verification Completion",
+  "summary": "Validates an email confirmation challenge for the selected durable identity and reports the canonical completion transition.",
+  "version": 1,
+  "maturity": "implemented",
+  "requestContract": "EmailVerificationFlowRequest",
+  "resultContract": "AuthenticationFlowResult",
+  "handlerKeys": ["auth.handler.email-verification.complete"],
+  "transitionKeys": ["auth.transition.email-verification.complete"],
+  "entryActionKeys": ["auth.action.email-verification.complete"],
+  "supportedAudiences": ["platform-user", "tenant-user", "customer-end-user"],
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "auth-model/transitions/email-verification-complete.json" },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationFlowHandler.cs" }
+  ]
+}
