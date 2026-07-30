@@ -13,6 +13,7 @@
     "summary": { "type": "string", "minLength": 1 },
     "version": { "type": "integer", "minimum": 1 },
     "maturity": { "$ref": "#/$defs/maturity" },
+    "categoryKey": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$" },
     "scenarioType": { "enum": ["server", "ui", "composite", "conversation", "security-invariant", "recovery", "integration"] },
     "journeyKeys": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^auth\\.journey\\." } },
     "transitionKey": { "type": ["string", "null"], "pattern": "^auth\\.transition\\." },
