@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/auth-flow-handler.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.handler.email-verification.complete",
+  "name": "Email Verification Flow Handler",
+  "summary": "Provides the application boundary for validating an email verification challenge and reporting the canonical completion transition.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "src/LagoVista.UserAdmin",
+  "sourcePath": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationFlowHandler.cs",
+  "interfaceName": "IAuthenticationFlowHandler<EmailVerificationFlowRequest>",
+  "typeName": "EmailVerificationFlowHandler",
+  "methodName": "HandleAsync",
+  "requestContract": "EmailVerificationFlowRequest",
+  "resultContract": "AuthenticationFlowResult",
+  "transitionKeys": ["auth.transition.email-verification.complete"],
+  "dependencies": ["IUserVerficationManager"],
+  "notes": ["The handler delegates verification and redirect selection to the existing user verification manager while preserving the canonical transition boundary."],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationFlowHandler.cs" },
+    { "sourceType": "decision", "reference": "auth-model/transitions/email-verification-complete.json" }
+  ]
+}
