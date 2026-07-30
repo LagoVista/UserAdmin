@@ -67,6 +67,8 @@ namespace LagoVista.UserAdmin.Managers
             var validationResult = _authRequestValidators.ValidateSendPasswordLinkRequest(sendResetPasswordLink);
             if (!validationResult.Successful) return validationResult;
 
+            await _authLogMgr.AddAsync(AuthLogTypes.PasswordRecoveryRequested, userName: sendResetPasswordLink.Email);
+
             var appUser = await _userManager.FindByEmailAsync(sendResetPasswordLink.Email);
 
             if (appUser == null)
@@ -76,6 +78,8 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(appUser);
+            await _authLogMgr.AddAsync(AuthLogTypes.PasswordRecoveryCodeGenerated, appUser);
+
             var encodedToken = System.Net.WebUtility.UrlEncode(token);
             var callbackUrl = $"{GetWebURI()}{ACTION_RESET_PASSWORD}?code={encodedToken}";
             var mobileCallbackUrl = $"nuviot://resetpassword?code={token}";
@@ -94,6 +98,8 @@ namespace LagoVista.UserAdmin.Managers
             var result = await _emailSender.SendAsync(sendResetPasswordLink.Email, subject, body, _appConfig.SystemOwnerOrg, appUser.ToEntityHeader());
             if (result.Successful)
             {
+                await _authLogMgr.AddAsync(AuthLogTypes.PasswordRecoveryMessageSent, appUser);
+
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_SendResetPasswordLinkAsync", "SentLink",
                      appUser.Id.ToKVP("appUserId"),
                      appUser.Email.ToKVP("toEmailAddress"));
@@ -186,6 +192,8 @@ namespace LagoVista.UserAdmin.Managers
             var result = await _userManager.ResetPasswordAsync(appUser, resetPassword.Token, resetPassword.NewPassword);
             if (result.Successful)
             {
+                await _authLogMgr.AddAsync(AuthLogTypes.PasswordRecoveryCompleted, appUser);
+
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_ResetPasswordAsync", "PasswordChange",
                  appUser.Id.ToKVP("appUserId"),
                  appUser.Email.ToKVP("userEmailAddress"));
