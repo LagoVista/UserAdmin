@@ -1,4 +1,5 @@
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Authentication.Flows;
 using LagoVista.UserAdmin.Models.Auth;
@@ -15,13 +16,15 @@ namespace LagoVista.UserAdmin.Authentication
         private readonly IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> _passwordRecoveryRequestHandler;
         private readonly IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> _passwordRecoveryCompletionHandler;
         private readonly IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> _invitationAcceptanceHandler;
+        private readonly IAuthenticationFlowHandler<EmailVerificationFlowRequest> _emailVerificationHandler;
 
-        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> invitationAcceptanceHandler = null)
+        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> invitationAcceptanceHandler = null, IAuthenticationFlowHandler<EmailVerificationFlowRequest> emailVerificationHandler = null)
         {
             _passwordLoginHandler = passwordLoginHandler ?? throw new ArgumentNullException(nameof(passwordLoginHandler));
             _passwordRecoveryRequestHandler = passwordRecoveryRequestHandler ?? throw new ArgumentNullException(nameof(passwordRecoveryRequestHandler));
             _passwordRecoveryCompletionHandler = passwordRecoveryCompletionHandler;
             _invitationAcceptanceHandler = invitationAcceptanceHandler;
+            _emailVerificationHandler = emailVerificationHandler;
         }
 
         public Task<InvokeResult<AuthenticationResponse>> LoginWithPasswordAsync(AuthLoginRequest request)
@@ -57,6 +60,18 @@ namespace LagoVista.UserAdmin.Authentication
 
             var result = await _invitationAcceptanceHandler.HandleAsync(new InvitationAcceptanceFlowRequest(inviteId, userId));
             if (result.TransitionKey != InvitationAcceptanceFlowHandler.TransitionKey)
+                throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
+
+            return result.PublicResult;
+        }
+
+        public async Task<InvokeResult> VerifyEmailAsync(ConfirmEmail request, EntityHeader user)
+        {
+            if (_emailVerificationHandler == null)
+                throw new InvalidOperationException("Email verification flow handler is not configured.");
+
+            var result = await _emailVerificationHandler.HandleAsync(new EmailVerificationFlowRequest(request, user));
+            if (result.TransitionKey != EmailVerificationFlowHandler.TransitionKey)
                 throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
 
             return result.PublicResult;
