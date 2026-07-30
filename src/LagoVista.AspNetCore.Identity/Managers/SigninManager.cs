@@ -171,7 +171,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var appUser = await _userManager.FindByEmailAsync(userName);
             if (appUser == null)
             {
-                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthUserNotFound, userName);
+                await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthUserNotFound, userName: userName);
                 UserLoginFailures.Inc();
                 signIn.Dispose();
                 return InvokeResult<AuthenticationResponse>.FromError($"Could not find user [{email}].");
