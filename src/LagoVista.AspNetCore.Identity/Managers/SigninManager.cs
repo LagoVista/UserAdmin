@@ -9,6 +9,7 @@ using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
+using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Resources;

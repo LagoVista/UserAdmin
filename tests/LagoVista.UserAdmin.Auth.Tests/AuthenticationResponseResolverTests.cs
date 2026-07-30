@@ -1,67 +1,75 @@
 using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Auth;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace LagoVista.UserAdmin.Auth.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class AuthenticationResponseResolverTests
     {
         private AuthenticationResponseResolver _resolver;
 
-        [TestInitialize]
+        [SetUp]
         public void Initialize()
         {
             _resolver = new AuthenticationResponseResolver();
         }
 
-        [TestMethod]
+        [Test]
         public void ValidResolvedUser_ReturnsAuthenticated()
         {
             var result = _resolver.Resolve(CreateResolvedContext());
-            Assert.AreEqual(AuthenticationResponseState.Authenticated, result.AuthenticationState);
-            Assert.IsTrue(result.CanEnterApplication);
+            Assert.That(result.AuthenticationState, Is.EqualTo(AuthenticationResponseState.Authenticated));
+            Assert.That(result.CanEnterApplication, Is.True);
         }
 
-        [TestMethod]
+        [Test]
         public void InvalidCredential_ReturnsInvalidCredentials()
         {
             var context = CreateResolvedContext();
             context.CredentialValidated = false;
+
             var result = _resolver.Resolve(context);
-            Assert.AreEqual(AuthenticationResponseState.InvalidCredentials, result.AuthenticationState);
-            Assert.IsFalse(result.CanEnterApplication);
+
+            Assert.That(result.AuthenticationState, Is.EqualTo(AuthenticationResponseState.InvalidCredentials));
+            Assert.That(result.CanEnterApplication, Is.False);
         }
 
-        [TestMethod]
+        [Test]
         public void DisabledAccount_TakesPriorityOverLockedAccount()
         {
             var context = CreateResolvedContext();
             context.AccountDisabled = true;
             context.AccountLocked = true;
+
             var result = _resolver.Resolve(context);
-            Assert.AreEqual(AuthenticationResponseState.AccountDisabled, result.AuthenticationState);
+
+            Assert.That(result.AuthenticationState, Is.EqualTo(AuthenticationResponseState.AccountDisabled));
         }
 
-        [TestMethod]
+        [Test]
         public void LockedAccount_ReturnsAccountLocked()
         {
             var context = CreateResolvedContext();
             context.AccountLocked = true;
+
             var result = _resolver.Resolve(context);
-            Assert.AreEqual(AuthenticationResponseState.AccountLocked, result.AuthenticationState);
+
+            Assert.That(result.AuthenticationState, Is.EqualTo(AuthenticationResponseState.AccountLocked));
         }
 
-        [TestMethod]
+        [Test]
         public void ExpiredPendingIdentity_ReturnsPendingIdentityExpired()
         {
             var context = CreatePendingContext();
             context.PendingIdentityExpired = true;
+
             var result = _resolver.Resolve(context);
-            Assert.AreEqual(AuthenticationResponseState.PendingIdentityExpired, result.AuthenticationState);
+
+            Assert.That(result.AuthenticationState, Is.EqualTo(AuthenticationResponseState.PendingIdentityExpired));
         }
 
-        [TestMethod]
+        [Test]
         public void NewAuthenticationProofWithoutPendingIdentity_ReturnsRegistrationRequired()
         {
             var context = new AuthenticationResolutionContext
@@ -72,37 +80,42 @@ namespace LagoVista.UserAdmin.Auth.Tests
             };
 
             var result = _resolver.Resolve(context);
-            Assert.AreEqual(AuthenticationResponseState.RegistrationRequired, result.AuthenticationState);
+
+            Assert.That(result.AuthenticationState, Is.EqualTo(AuthenticationResponseState.RegistrationRequired));
         }
 
-        [TestMethod]
+        [Test]
         public void PendingIdentityWithoutVerifiedEmail_ReturnsEmailVerificationRequired()
         {
             var result = _resolver.Resolve(CreatePendingContext());
-            Assert.AreEqual(AuthenticationResponseState.EmailVerificationRequired, result.AuthenticationState);
+            Assert.That(result.AuthenticationState, Is.EqualTo(AuthenticationResponseState.EmailVerificationRequired));
         }
 
-        [TestMethod]
+        [Test]
         public void VerifiedEmailMatchingExistingUser_ReturnsIdentityLinkRequired()
         {
             var context = CreatePendingContext();
             context.EmailVerified = true;
             context.VerifiedEmailMatchesExistingUser = true;
+
             var result = _resolver.Resolve(context);
-            Assert.AreEqual(AuthenticationResponseState.IdentityLinkRequired, result.AuthenticationState);
+
+            Assert.That(result.AuthenticationState, Is.EqualTo(AuthenticationResponseState.IdentityLinkRequired));
         }
 
-        [TestMethod]
+        [Test]
         public void LinkedAuthBucketWithMfa_ReturnsMfaRequired()
         {
             var context = CreateResolvedContext();
             context.AuthBucketLinked = true;
             context.MfaRequired = true;
+
             var result = _resolver.Resolve(context);
-            Assert.AreEqual(AuthenticationResponseState.MfaRequired, result.AuthenticationState);
+
+            Assert.That(result.AuthenticationState, Is.EqualTo(AuthenticationResponseState.MfaRequired));
         }
 
-        [TestMethod]
+        [Test]
         public void Resolve_CopiesSafeClientContext()
         {
             var context = CreatePendingContext();
@@ -114,14 +127,14 @@ namespace LagoVista.UserAdmin.Auth.Tests
 
             var result = _resolver.Resolve(context);
 
-            Assert.AreEqual("email-proof-required", result.AuthenticationReasonCode);
-            Assert.AreEqual("pending-123", result.PendingIdentityId);
-            Assert.AreEqual("k***@example.com", result.MaskedEmail);
-            Assert.AreEqual("google", result.Provider);
-            Assert.AreEqual("invite-456", result.InviteId);
+            Assert.That(result.AuthenticationReasonCode, Is.EqualTo("email-proof-required"));
+            Assert.That(result.PendingIdentityId, Is.EqualTo("pending-123"));
+            Assert.That(result.MaskedEmail, Is.EqualTo("k***@example.com"));
+            Assert.That(result.Provider, Is.EqualTo("google"));
+            Assert.That(result.InviteId, Is.EqualTo("invite-456"));
         }
 
-        [TestMethod]
+        [Test]
         public void Apply_PreservesExistingResponsePayload()
         {
             var response = new AuthenticationResponse
@@ -132,10 +145,10 @@ namespace LagoVista.UserAdmin.Auth.Tests
 
             var result = _resolver.Apply(response, CreateResolvedContext());
 
-            Assert.AreSame(response, result);
-            Assert.AreEqual("/home", result.RedirectPage);
-            Assert.AreEqual("Welcome", result.ResponseMessage);
-            Assert.AreEqual(AuthenticationResponseState.Authenticated, result.AuthenticationState);
+            Assert.That(result, Is.SameAs(response));
+            Assert.That(result.RedirectPage, Is.EqualTo("/home"));
+            Assert.That(result.ResponseMessage, Is.EqualTo("Welcome"));
+            Assert.That(result.AuthenticationState, Is.EqualTo(AuthenticationResponseState.Authenticated));
         }
 
         private static AuthenticationResolutionContext CreateResolvedContext()

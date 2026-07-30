@@ -33,7 +33,7 @@ namespace LagoVista.UserAdmin.Tests.Authentication
         [TestMethod]
         public void AuthenticationFlowService_Should_Require_Handler()
         {
-            Assert.ThrowsException<ArgumentNullException>(() => new AuthenticationFlowService(null));
+            Assert.ThrowsException<ArgumentNullException>(() => new AuthenticationFlowService(null, null));
         }
 
         [TestMethod]
