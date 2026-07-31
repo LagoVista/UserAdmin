@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.passkey.confirmation-to-home",
+  "name": "Enter Application After Passkey Registration",
+  "summary": "The newly registered user continues from enrollment confirmation into the application home view using the authenticated session already issued by the registration ceremony.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "passkey-registration",
+  "startViewKey": "auth.passkey.enrollment.confirm",
+  "action": { "id": "complete-enrollment", "finder": "action:complete-enrollment" },
+  "preconditions": { "expression": "session-capability == authenticated-normal and home-workspace == established and current-workspace == home" },
+  "inputs": [],
+  "serverInteraction": { "required": false },
+  "expectedViewKey": "app.home",
+  "postconditions": { "expression": "session-capability == authenticated-normal and app.home is visible" },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.passkey.enrollment.confirm" },
+    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-07-31", "note": "The final continue action is client navigation because the authenticated session already exists." }
+  ]
+}
