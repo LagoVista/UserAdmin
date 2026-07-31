@@ -1,0 +1,24 @@
+{
+  "$schema": "../schemas/end-to-end-behavior.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.behavior.invitation.acceptance",
+  "categoryKey": "invitation",
+  "name": "Accept Workspace Invitation",
+  "summary": "Validates an attached invitation, resolves or selects a durable identity, confirms acceptance, grants one additional workspace membership, and consumes the invitation without changing the user's home workspace.",
+  "version": 1,
+  "maturity": "proposed",
+  "entryPredicate": { "expression": "invitation-status == attached" },
+  "completionPredicate": { "expression": "invitation-status == accepted and workspace-membership includes invited-workspace and home-workspace is unchanged" },
+  "scenarioSteps": [
+    { "sequence": 1, "scenarioKey": "auth.scenario.invitation.validate-valid", "role": "required" },
+    { "sequence": 2, "scenarioKey": "auth.scenario.invitation.select-current-account", "role": "alternate" },
+    { "sequence": 2, "scenarioKey": "auth.scenario.invitation.select-another-account", "role": "alternate" },
+    { "sequence": 2, "scenarioKey": "auth.scenario.invitation.sign-in-then-select", "role": "alternate" },
+    { "sequence": 2, "scenarioKey": "auth.scenario.invitation.register-then-select", "role": "alternate" },
+    { "sequence": 3, "scenarioKey": "auth.scenario.invitation.accept-membership", "role": "required" },
+    { "sequence": 4, "scenarioKey": "auth.scenario.invitation.reject-consumed", "role": "rejection" }
+  ],
+  "supportedPlatforms": ["server", "web", "android", "ios", "vtm"],
+  "coverageAssessment": { "confidence": "medium", "rationale": "The primary acceptance paths and consumed-invitation rejection are represented, but several terminal rejection states and explicit decline are not yet atomic scenarios.", "knownGaps": ["Expired invitation", "Invalid invitation", "Revoked invitation", "Wrong-user invitation", "Explicit decline"] },
+  "sourceReferences": [{ "sourceType": "journey", "reference": "auth.journey.invitation.resolve" }]
+}
