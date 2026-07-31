@@ -1,0 +1,35 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.passkey.enrollment-to-confirmation",
+  "name": "Complete Passkey Account Registration",
+  "summary": "The user completes the native passkey ceremony; the server validates the credential and performs the complete new-account bootstrap before showing enrollment confirmation.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "passkey-registration",
+  "startViewKey": "auth.passkey.enrollment.start",
+  "action": { "id": "start-enrollment", "finder": "action:start-enrollment" },
+  "preconditions": { "expression": "pending-identity-status == pending and pending-identity-flow == passkey and passkey-creation-challenge == issued" },
+  "inputs": [
+    { "finder": "native:passkey-credential", "name": "Passkey Credential", "valueType": "object", "required": true, "description": "Credential response returned by the platform authenticator." }
+  ],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Validate the WebAuthn challenge, origin, and credential response; prevent duplicate credential binding; create exactly one durable user; create the user's home organization; derive and reserve its namespace from company or personal name; create the owner membership; set home and current organization; bind the passkey; resolve the pending identity; and issue the authenticated session.",
+    "transitionKeys": [
+      "auth.transition.passkey.complete-pending-registration",
+      "auth.transition.passkey.create-durable-user",
+      "auth.transition.passkey.bind-pending-credential"
+    ]
+  },
+  "expectedViewKey": "auth.passkey.enrollment.confirm",
+  "postconditions": { "expression": "pending-identity-status == resolved and durable-identity == resolved and credential-proof == passkey-proved and home-workspace == established and workspace-membership == owner and current-workspace == home and session-capability == authenticated-normal" },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.passkey.enrollment.start" },
+    { "sourceType": "auth-view", "reference": "auth.passkey.enrollment.confirm" },
+    { "sourceType": "journey", "reference": "auth.journey.passkey.new-user-registration" },
+    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-07-31", "note": "Account and home-organization bootstrap occurs beneath one user-visible passkey ceremony boundary." }
+  ]
+}
