@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/end-to-end-behavior.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.behavior.account-recovery",
+  "categoryKey": "account-recovery",
+  "name": "Recover Account Access",
+  "summary": "Restores access to an existing durable identity through an enumeration-resistant request, challenge issuance, proof verification, replacement credential establishment, and recovery completion.",
+  "version": 1,
+  "maturity": "proposed",
+  "entryPredicate": { "expression": "recovery-state in [none,expired,failed,completed] and session-capability == anonymous" },
+  "completionPredicate": { "expression": "recovery-state == completed and replacement-credential-established == true and prior sessions are revoked" },
+  "scenarioSteps": [
+    { "sequence": 1, "scenarioKey": "auth.scenario.recovery.request", "role": "required" },
+    { "sequence": 2, "scenarioKey": "auth.scenario.recovery.issue-challenge", "role": "required" },
+    { "sequence": 3, "scenarioKey": "auth.scenario.recovery.verify-proof", "role": "required" },
+    { "sequence": 4, "scenarioKey": "auth.scenario.recovery.establish-replacement-credential", "role": "required" },
+    { "sequence": 5, "scenarioKey": "auth.scenario.recovery.complete", "role": "required" }
+  ],
+  "supportedPlatforms": ["server", "web", "android", "ios", "vtm"],
+  "coverageAssessment": { "confidence": "medium", "rationale": "The successful recovery activity is fully decomposed into atomic scenarios, but rejected proof and challenge outcomes are not yet represented as separate scenarios.", "knownGaps": ["Expired proof", "Invalid proof", "Replayed challenge", "Replacement credential policy rejection"] },
+  "sourceReferences": [{ "sourceType": "journey", "reference": "auth.journey.account-recovery" }]
+}
