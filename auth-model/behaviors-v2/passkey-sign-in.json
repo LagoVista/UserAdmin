@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.passkey.sign-in",
+  "name": "Passkey Sign-In",
+  "summary": "A returning user chooses passkey authentication, completes the platform passkey ceremony, and reaches the application home view.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "passkey",
+  "scenarioKeys": [
+    "auth.scenario.passkey.welcome-to-passkey",
+    "auth.scenario.passkey.passkey-to-home"
+  ],
+  "entryViewKey": "auth.welcome",
+  "finalViewKey": "app.home",
+  "finalOutcome": "The existing durable user has an authenticated session established through a valid passkey assertion.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "journey", "reference": "auth.journey.passkey.authentication" }
+  ]
+}
