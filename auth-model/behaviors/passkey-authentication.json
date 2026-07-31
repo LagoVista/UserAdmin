@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/end-to-end-behavior.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.behavior.passkey.authentication",
+  "categoryKey": "passkey",
+  "name": "Authenticate with Passkey",
+  "summary": "Authenticates an existing durable identity using a single-use passkey challenge and establishes the permitted authenticated session.",
+  "version": 1,
+  "maturity": "proposed",
+  "entryPredicate": { "expression": "session-capability in [anonymous,identity-ceremony,authenticated-limited] and account-status not-in [disabled,closed]" },
+  "completionPredicate": { "expression": "credential-proof == passkey-proved and durable-identity == resolved and session-capability in [authenticated-limited,authenticated-normal]" },
+  "scenarioSteps": [
+    { "sequence": 1, "scenarioKey": "auth.scenario.passkey.authentication", "role": "required" },
+    { "sequence": 2, "scenarioKey": "auth.scenario.passkey.replayed-challenge-rejected", "role": "rejection" },
+    { "sequence": 2, "scenarioKey": "auth.scenario.passkey.credential-owner-mismatch-rejected", "role": "rejection" }
+  ],
+  "supportedPlatforms": ["server", "web", "android", "ios", "vtm"],
+  "coverageAssessment": { "confidence": "medium", "rationale": "Successful authentication and two important security rejection paths are represented, but challenge issuance and additional authenticator failure outcomes are not independently modeled.", "knownGaps": ["Explicit challenge issuance scenario", "Expired challenge", "Unknown credential", "Disabled account outcome"] },
+  "sourceReferences": [{ "sourceType": "journey", "reference": "auth.journey.passkey.authentication" }]
+}
