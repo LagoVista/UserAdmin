@@ -1,0 +1,43 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.password-recovery.reset-request-to-reset-sent",
+  "name": "Reset Request to Email Sent",
+  "summary": "The user submits an email address, the server requests password-reset delivery, and the client shows the reset-email-sent confirmation view.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "password-recovery",
+  "startViewKey": "auth.password.reset.request",
+  "action": {
+    "id": "send-reset-link",
+    "finder": "action:send-reset-link"
+  },
+  "preconditions": {
+    "expression": "session-capability == anonymous and auth.password.reset.request is visible"
+  },
+  "inputs": [
+    {
+      "finder": "field:email",
+      "name": "Email",
+      "valueType": "string",
+      "required": true,
+      "description": "Email address associated with the account requesting recovery."
+    }
+  ],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Request password-reset delivery without disclosing whether the submitted email identifies an account.",
+    "transitionKeys": []
+  },
+  "expectedViewKey": "auth.password.reset.sent",
+  "postconditions": {
+    "expression": "session-capability == anonymous and auth.password.reset.sent is visible"
+  },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.password.reset.request" },
+    { "sourceType": "auth-view", "reference": "auth.password.reset.sent" },
+    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-07-31", "note": "Forgot-password behavior expansion." }
+  ]
+}
