@@ -27,7 +27,9 @@
   "serverInteraction": {
     "required": true,
     "intent": "Request password-reset delivery without disclosing whether the submitted email identifies an account.",
-    "transitionKeys": []
+    "transitionKeys": [
+      "auth.transition.password.request-reset"
+    ]
   },
   "expectedViewKey": "auth.password.reset.sent",
   "postconditions": {
