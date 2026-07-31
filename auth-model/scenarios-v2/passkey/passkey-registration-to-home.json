@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.passkey.passkey-registration-to-home",
+  "name": "Passkey Registration to Home",
+  "summary": "The user confirms enrollment, the server creates exactly one durable user, binds the proved passkey credential, establishes the home workspace, and opens the application home view.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "passkey-registration",
+  "startViewKey": "auth.passkey.enrollment.confirm",
+  "action": { "id": "complete-enrollment", "finder": "action:complete-enrollment" },
+  "preconditions": { "expression": "pending-identity-status == resolution-required and credential-proof == passkey-proved and durable-identity == absent" },
+  "inputs": [],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Create one durable user, bind the proved pending passkey credential, establish the required home workspace, and issue the authenticated session.",
+    "transitionKeys": [
+      "auth.transition.passkey.create-durable-user",
+      "auth.transition.passkey.bind-pending-credential"
+    ]
+  },
+  "expectedViewKey": "app.home",
+  "postconditions": { "expression": "pending-identity-status == resolved and durable-identity == resolved and credential-proof == passkey-proved and home-workspace == established" },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.passkey.enrollment.confirm" },
+    { "sourceType": "journey", "reference": "auth.journey.passkey.new-user-registration" }
+  ]
+}
