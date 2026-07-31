@@ -1,0 +1,50 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.password-recovery.reset-complete-to-sign-in",
+  "name": "Reset Password to Sign In",
+  "summary": "The user submits a new password from a valid reset-link session, the server updates the credential, and the client returns to password sign-in.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "password-recovery",
+  "startViewKey": "auth.password.reset.complete",
+  "action": {
+    "id": "reset-password",
+    "finder": "action:reset-password"
+  },
+  "preconditions": {
+    "expression": "session-capability == anonymous and auth.password.reset.complete is visible with a valid password-reset token"
+  },
+  "inputs": [
+    {
+      "finder": "field:new-password",
+      "name": "New Password",
+      "valueType": "secret-reference",
+      "required": true,
+      "description": "New password supplied through the test runner's secure settings."
+    },
+    {
+      "finder": "field:confirm-password",
+      "name": "Confirm Password",
+      "valueType": "secret-reference",
+      "required": true,
+      "description": "Confirmation of the new password supplied through the test runner's secure settings."
+    }
+  ],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Validate the password-reset token, update the user's password credential, invalidate the token, and return the user to sign-in.",
+    "transitionKeys": []
+  },
+  "expectedViewKey": "auth.continue.email.password",
+  "postconditions": {
+    "expression": "session-capability == anonymous and auth.continue.email.password is visible with the password credential updated"
+  },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.password.reset.complete" },
+    { "sourceType": "auth-view", "reference": "auth.continue.email.password" },
+    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-07-31", "note": "Password-reset link completion behavior." }
+  ]
+}
