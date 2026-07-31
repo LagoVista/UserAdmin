@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.passkey.passkey-begin-registration",
+  "name": "Begin Passkey Registration",
+  "summary": "A user without a durable account begins a passkey registration ceremony and the client opens the passkey enrollment view.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "passkey-registration",
+  "startViewKey": "auth.continue.passkey",
+  "action": { "id": "use-passkey", "finder": "action:use-passkey" },
+  "preconditions": { "expression": "session-capability == anonymous and durable-identity == absent" },
+  "inputs": [],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Begin pending passkey registration without creating or authorizing a durable user prematurely.",
+    "transitionKeys": ["auth.transition.passkey.begin-pending-registration"]
+  },
+  "expectedViewKey": "auth.passkey.enrollment.start",
+  "postconditions": { "expression": "pending-identity-status == pending and pending-identity-flow == passkey" },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.continue.passkey" },
+    { "sourceType": "decision", "reference": "auth-model/transitions/passkey-begin-pending-registration.json" }
+  ]
+}
