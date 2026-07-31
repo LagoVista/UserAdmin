@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/end-to-end-behavior.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.behavior.native-provider.sign-in",
+  "categoryKey": "native-provider",
+  "name": "Sign In with Native Provider",
+  "summary": "Resolves a validated native-provider assertion to an existing durable identity through an existing link or an explicitly confirmed link, then establishes an authenticated session.",
+  "version": 1,
+  "maturity": "proposed",
+  "entryPredicate": { "expression": "pending-identity-status == pending and pending-identity-flow == native-provider" },
+  "completionPredicate": { "expression": "durable-identity == resolved and pending-identity-status == resolved and session-capability == authenticated-normal" },
+  "scenarioSteps": [
+    { "sequence": 1, "scenarioKey": "auth.scenario.native-provider.email-mismatch-preserved", "role": "rejection" },
+    { "sequence": 1, "scenarioKey": "auth.scenario.native-provider.resolve-linked-user", "role": "alternate" },
+    { "sequence": 1, "scenarioKey": "auth.scenario.native-provider.select-link-target", "role": "alternate" },
+    { "sequence": 2, "scenarioKey": "auth.scenario.native-provider.link-existing-user", "role": "alternate" },
+    { "sequence": 3, "scenarioKey": "auth.scenario.native-provider.establish-session", "role": "required" }
+  ],
+  "supportedPlatforms": ["server", "web", "android", "ios", "vtm"],
+  "coverageAssessment": { "confidence": "medium", "rationale": "Existing-link and explicit-link paths are represented together with email-mismatch preservation, but provider denial, invalid assertion, and missing-provider-subject outcomes are not yet atomic scenarios.", "knownGaps": ["Provider access denied", "Invalid or expired provider assertion", "Unknown provider subject", "Link-target rejection"] },
+  "sourceReferences": [{ "sourceType": "journey", "reference": "auth.journey.native-provider.existing-user" }]
+}
