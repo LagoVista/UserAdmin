@@ -1,64 +1,138 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "categories": [
+    {
+      "key": "password-authentication",
+      "name": "Password Authentication",
+      "description": "Existing-user password authentication outcomes and session establishment.",
+      "scenarioKeys": [],
+      "keyPrefixes": []
+    },
+    {
+      "key": "password-registration",
+      "name": "Password Registration",
+      "description": "Pending password identity creation, email proof, profile completion, credential establishment, durable user creation, workspace creation, and registration session establishment.",
+      "scenarioKeys": [
+        "auth.scenario.password.assert-email",
+        "auth.scenario.password.verify-email",
+        "auth.scenario.password.complete-profile",
+        "auth.scenario.password.establish-session",
+        "auth.scenario.password.begin-registration",
+        "auth.scenario.password.create-durable-user",
+        "auth.scenario.password.establish-credential",
+        "auth.scenario.password.create-home-workspace",
+        "auth.scenario.password.reused-email-proof-rejected"
+      ],
+      "keyPrefixes": ["auth.scenario.password.", "auth.transition.password."]
+    },
     {
       "key": "account-recovery",
       "name": "Account Recovery",
       "description": "Password recovery requests, proof verification, challenge issuance, credential replacement, and completion.",
+      "scenarioKeys": [
+        "auth.scenario.recovery.request",
+        "auth.scenario.recovery.complete",
+        "auth.scenario.recovery.verify-proof",
+        "auth.scenario.recovery.issue-challenge",
+        "auth.scenario.recovery.establish-replacement-credential"
+      ],
       "keyPrefixes": ["auth.scenario.recovery.", "auth.transition.recovery."]
     },
     {
       "key": "invitation",
       "name": "Invitation",
       "description": "Invitation validation, identity selection, acceptance, rejection, and membership outcomes.",
+      "scenarioKeys": [
+        "auth.scenario.invitation.validate-valid",
+        "auth.scenario.invitation.reject-consumed",
+        "auth.scenario.invitation.accept-membership",
+        "auth.scenario.invitation.sign-in-then-select",
+        "auth.scenario.invitation.register-then-select",
+        "auth.scenario.invitation.select-current-account",
+        "auth.scenario.invitation.select-another-account"
+      ],
       "keyPrefixes": ["auth.scenario.invitation.", "auth.transition.invitation."]
-    },
-    {
-      "key": "password-registration",
-      "name": "Password Registration",
-      "description": "Pending password identity creation, email proof, profile completion, credential establishment, durable user creation, workspace creation, and registration session establishment.",
-      "keyPrefixes": ["auth.scenario.password.", "auth.transition.password."]
     },
     {
       "key": "passkey",
       "name": "Passkey",
       "description": "Passkey authentication, registration, binding, replay rejection, and step-up ceremonies.",
+      "scenarioKeys": [
+        "auth.scenario.passkey.step-up",
+        "auth.scenario.passkey.authentication",
+        "auth.scenario.passkey.create-durable-user",
+        "auth.scenario.passkey.create-and-bind-user",
+        "auth.scenario.passkey.pending-registration",
+        "auth.scenario.passkey.existing-user-registration",
+        "auth.scenario.passkey.replayed-challenge-rejected",
+        "auth.scenario.passkey.credential-owner-mismatch-rejected"
+      ],
       "keyPrefixes": ["auth.scenario.passkey.", "auth.transition.passkey."]
     },
     {
       "key": "native-provider",
       "name": "Native Provider",
       "description": "OAuth and native-provider assertion capture, identity resolution, linking, user creation, workspace creation, and session establishment.",
+      "scenarioKeys": [
+        "auth.scenario.native-provider.create-new-user",
+        "auth.scenario.native-provider.establish-session",
+        "auth.scenario.native-provider.select-link-target",
+        "auth.scenario.native-provider.link-existing-user",
+        "auth.scenario.native-provider.resolve-linked-user",
+        "auth.scenario.native-provider.create-home-workspace",
+        "auth.scenario.native-provider.email-mismatch-preserved"
+      ],
       "keyPrefixes": ["auth.scenario.native-provider.", "auth.transition.native-provider.", "auth.transition.capture-native-provider-", "auth.transition.create-native-provider-", "auth.transition.establish-native-provider-", "auth.transition.link-native-provider-", "auth.transition.resolve-linked-native-provider", "auth.transition.select-native-provider-"]
     },
     {
       "key": "pending-identity",
       "name": "Pending Identity",
       "description": "Creation, verification, resolution, cancellation, expiration, and failure of pending identities.",
-      "keyPrefixes": ["auth.scenario.pending-identity.", "auth.scenario.begin-pending-identity-", "auth.scenario.resolve-pending-identity-", "auth.scenario.complete-pending-identity-", "auth.scenario.reject-multiple-pending-identity-", "auth.transition.begin-pending-identity", "auth.transition.require-pending-identity-", "auth.transition.complete-pending-identity-", "auth.transition.resolve-pending-identity", "auth.transition.cancel-pending-identity", "auth.transition.expire-pending-identity", "auth.transition.fail-pending-identity"]
+      "scenarioKeys": [
+        "auth.scenario.begin-pending-identity-password",
+        "auth.scenario.resolve-pending-identity-existing-user",
+        "auth.scenario.complete-pending-identity-verification",
+        "auth.scenario.reject-multiple-pending-identity-flows",
+        "auth.scenario.reject-normal-authorization-for-pending-identity"
+      ],
+      "keyPrefixes": ["auth.scenario.pending-identity.", "auth.scenario.begin-pending-identity-", "auth.scenario.resolve-pending-identity-", "auth.scenario.complete-pending-identity-", "auth.scenario.reject-multiple-pending-identity-", "auth.scenario.reject-normal-authorization-for-pending-identity", "auth.transition.begin-pending-identity", "auth.transition.require-pending-identity-", "auth.transition.complete-pending-identity-", "auth.transition.resolve-pending-identity", "auth.transition.cancel-pending-identity", "auth.transition.expire-pending-identity", "auth.transition.fail-pending-identity"]
     },
     {
       "key": "home-workspace",
       "name": "Home Workspace",
       "description": "Home workspace creation, completion, reconciliation, and conflict handling.",
+      "scenarioKeys": [
+        "auth.scenario.home-workspace.flag-conflict",
+        "auth.scenario.home-workspace.begin-creation",
+        "auth.scenario.home-workspace.complete-creation",
+        "auth.scenario.home-workspace.reconcile-existing"
+      ],
       "keyPrefixes": ["auth.scenario.home-workspace.", "auth.transition.home-workspace."]
     },
     {
       "key": "guest-identity",
       "name": "Guest Identity",
       "description": "Guest identity activation, value detection, claimability, claiming, and session establishment.",
+      "scenarioKeys": [
+        "auth.scenario.guest.claim-value",
+        "auth.scenario.guest.detect-value",
+        "auth.scenario.guest.establish-session",
+        "auth.scenario.guest.mark-value-claimable"
+      ],
       "keyPrefixes": ["auth.scenario.guest.", "auth.transition.activate-guest-", "auth.transition.detect-guest-", "auth.transition.mark-guest-", "auth.transition.claim-guest-"]
     },
     {
       "key": "entry-intent",
       "name": "Entry Intent",
       "description": "Capture and consumption of entry intent used to continue an authentication journey.",
+      "scenarioKeys": ["auth.scenario.entry-intent.consume"],
       "keyPrefixes": ["auth.scenario.entry-intent.", "auth.transition.entry-intent."]
     },
     {
       "key": "email-verification",
       "name": "Email Verification",
       "description": "Existing-user email verification completion outside password registration.",
+      "scenarioKeys": [],
       "keyPrefixes": ["auth.scenario.email-verification.", "auth.transition.email-verification."]
     }
   ],
