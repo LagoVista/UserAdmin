@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.passkey.account-registration",
+  "name": "Passkey Account Registration",
+  "summary": "A new user begins passkey registration, completes the platform authenticator ceremony, creates one durable account, binds the proved credential, and reaches the application home view.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "passkey-registration",
+  "scenarioKeys": [
+    "auth.scenario.passkey.passkey-begin-registration",
+    "auth.scenario.passkey.passkey-complete-registration-ceremony",
+    "auth.scenario.passkey.passkey-registration-to-home"
+  ],
+  "entryViewKey": "auth.continue.passkey",
+  "finalViewKey": "app.home",
+  "finalOutcome": "Exactly one durable user exists, the proved passkey is bound to that user, the home workspace is established, and the authenticated application session is active.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "journey", "reference": "auth.journey.passkey.new-user-registration" },
+    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-07-31", "note": "Passkey V2 behavior expansion." }
+  ]
+}
