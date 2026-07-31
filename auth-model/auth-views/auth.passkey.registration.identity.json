@@ -1,0 +1,31 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.passkey.registration.identity",
+  "name": "Passkey Registration Details",
+  "description": "Collects the identity details required to create a new passkey account and derive its home organization namespace.",
+  "category": "passkey",
+  "routeId": "auth.route.passkey.registration.identity",
+  "status": "active",
+  "controls": [
+    { "id": "first-name", "name": "First Name", "controlType": "text-input", "finder": "field:first-name", "required": true, "sensitivity": "personal" },
+    { "id": "last-name", "name": "Last Name", "controlType": "text-input", "finder": "field:last-name", "required": true, "sensitivity": "personal" },
+    { "id": "email", "name": "Email", "controlType": "email-input", "finder": "field:email", "required": true, "sensitivity": "personal" },
+    { "id": "company", "name": "Company", "controlType": "text-input", "finder": "field:company", "required": false, "sensitivity": "personal" },
+    { "id": "validation-error", "name": "Validation Error", "controlType": "status", "finder": "status:validation-error" }
+  ],
+  "actions": [
+    { "id": "start-registration", "name": "Create Passkey Account", "actionType": "button", "finder": "action:start-registration" },
+    { "id": "back", "name": "Back", "actionType": "button", "finder": "action:back" },
+    { "id": "cancel", "name": "Cancel", "actionType": "link", "finder": "action:cancel" }
+  ],
+  "platforms": {
+    "web": { "status": "planned" },
+    "mobile": { "status": "planned" }
+  },
+  "notes": [
+    "Every durable user receives a home organization tenant.",
+    "The preferred namespace is derived from Company when supplied, otherwise from First Name and Last Name.",
+    "Namespace collision handling is automatic and must not introduce another user-facing registration step."
+  ]
+}
