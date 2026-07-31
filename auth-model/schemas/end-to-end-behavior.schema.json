@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lagovista.com/auth/end-to-end-behavior.schema.json",
+  "title": "Authentication End-to-End Behavior",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "key", "categoryKey", "name", "summary", "version", "maturity", "entryPredicate", "completionPredicate", "scenarioSteps", "supportedPlatforms", "coverageAssessment", "sourceReferences"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "1.0" },
+    "key": { "type": "string", "pattern": "^auth\\.behavior\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$" },
+    "categoryKey": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$" },
+    "name": { "type": "string", "minLength": 3, "maxLength": 120 },
+    "summary": { "type": "string", "minLength": 10, "maxLength": 1000 },
+    "version": { "type": "integer", "minimum": 1 },
+    "maturity": { "enum": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"] },
+    "entryPredicate": { "$ref": "#/$defs/predicate" },
+    "completionPredicate": { "$ref": "#/$defs/predicate" },
+    "scenarioSteps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sequence", "scenarioKey", "role"],
+        "properties": {
+          "sequence": { "type": "integer", "minimum": 1 },
+          "scenarioKey": { "type": "string", "pattern": "^auth\\.scenario\\." },
+          "role": { "enum": ["required", "alternate", "rejection"] },
+          "summary": { "type": "string", "maxLength": 500 }
+        }
+      }
+    },
+    "supportedPlatforms": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "enum": ["server", "web", "android", "ios", "vtm"] }
+    },
+    "coverageAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["confidence", "rationale", "knownGaps"],
+      "properties": {
+        "confidence": { "enum": ["low", "medium", "high"] },
+        "rationale": { "type": "string", "minLength": 10, "maxLength": 1000 },
+        "knownGaps": { "type": "array", "items": { "type": "string", "minLength": 3, "maxLength": 500 } }
+      }
+    },
+    "sourceReferences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sourceType", "reference"],
+        "properties": {
+          "sourceType": { "type": "string" },
+          "reference": { "type": "string" },
+          "section": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expression"],
+      "properties": { "expression": { "type": "string", "minLength": 3 } }
+    }
+  }
+}
