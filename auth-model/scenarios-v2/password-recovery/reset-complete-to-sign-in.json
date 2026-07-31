@@ -34,9 +34,7 @@
   "serverInteraction": {
     "required": true,
     "intent": "Validate the password-reset token, update the user's password credential, invalidate the token, and return the user to sign-in.",
-    "transitionKeys": [
-      "auth.transition.password.complete-reset"
-    ]
+    "transitionKeys": ["auth.transition.recovery.complete"]
   },
   "expectedViewKey": "auth.continue.email.password",
   "postconditions": {
