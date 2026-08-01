@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using OpenIddict.Abstractions;
 using System;
 using System.Linq;
 
@@ -16,6 +15,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer
 
             services.AddSingleton(settings);
             services.AddScoped<IOAuthClientPolicyResolver, OAuthClientPolicyResolver>();
+            services.AddScoped<IOAuthClientPolicyValidator, OAuthClientPolicyValidator>();
 
             services.AddOpenIddict()
                 .AddServer(options =>
