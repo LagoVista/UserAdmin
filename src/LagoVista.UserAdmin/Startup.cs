@@ -22,6 +22,7 @@ namespace LagoVista.UserAdmin
             services.AddScoped<ITeamManager, TeamManager>();
             services.AddScoped<IAssetSetManager, AssetSetManager>();
             services.AddScoped<IScheduledDowntimeManager, ScheduledDowntimeManager>();
+            services.AddScoped<IOAuthClientApplicationManager, OAuthClientApplicationManager>();
             services.AddScoped<IHolidaySetManager, HolidaySetManager>();
             services.AddScoped<ISubscriptionManager, SubscriptionManager>();
             services.AddScoped<IModuleManager, ModuleManager>();
