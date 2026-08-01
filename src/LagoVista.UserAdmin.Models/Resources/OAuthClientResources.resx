@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="OAuthClientApplication_Title" xml:space="preserve"><value>OAuth Client Application</value></data>
+  <data name="OAuthClientApplications_Title" xml:space="preserve"><value>OAuth Client Applications</value></data>
+  <data name="OAuthClientApplication_Help" xml:space="preserve"><value>Registers an external application that may request OAuth authorization and tokens.</value></data>
+  <data name="OAuthClientApplication_Description" xml:space="preserve"><value>Defines the redirect locations, grants, scopes, resources, security controls, and credentials available to an OAuth client.</value></data>
+  <data name="OAuthClientApplication_ClientId" xml:space="preserve"><value>Client ID</value></data>
+  <data name="OAuthClientApplication_ClientId_Help" xml:space="preserve"><value>Globally unique OAuth identifier presented by the client.</value></data>
+  <data name="OAuthClientApplication_ClientType" xml:space="preserve"><value>Client Type</value></data>
+  <data name="OAuthClientApplication_ClientType_Help" xml:space="preserve"><value>Public clients use PKCE and cannot safely hold a secret. Confidential clients authenticate at the token endpoint.</value></data>
+  <data name="OAuthClientApplication_ClientType_Select" xml:space="preserve"><value>Select a client type</value></data>
+  <data name="OAuthClientApplication_ClientType_Public" xml:space="preserve"><value>Public</value></data>
+  <data name="OAuthClientApplication_ClientType_Confidential" xml:space="preserve"><value>Confidential</value></data>
+  <data name="OAuthClientApplication_Status" xml:space="preserve"><value>Status</value></data>
+  <data name="OAuthClientApplication_Status_Help" xml:space="preserve"><value>Controls whether the authorization server accepts requests from this client.</value></data>
+  <data name="OAuthClientApplication_Status_Select" xml:space="preserve"><value>Select a status</value></data>
+  <data name="OAuthClientApplication_Status_Active" xml:space="preserve"><value>Active</value></data>
+  <data name="OAuthClientApplication_Status_Disabled" xml:space="preserve"><value>Disabled</value></data>
+  <data name="OAuthClientApplication_Status_Revoked" xml:space="preserve"><value>Revoked</value></data>
+  <data name="OAuthClientApplication_ClientSecret" xml:space="preserve"><value>Client Secret</value></data>
+  <data name="OAuthClientApplication_ClientSecret_Help" xml:space="preserve"><value>Credential for confidential clients. The plaintext value is stored in secure storage and is not persisted with this record.</value></data>
+  <data name="OAuthClientApplication_RedirectUris" xml:space="preserve"><value>Redirect URIs</value></data>
+  <data name="OAuthClientApplication_RedirectUris_Help" xml:space="preserve"><value>Exact callback locations to which authorization responses may be sent.</value></data>
+  <data name="OAuthClientApplication_PostLogoutRedirectUris" xml:space="preserve"><value>Post-Logout Redirect URIs</value></data>
+  <data name="OAuthClientApplication_PostLogoutRedirectUris_Help" xml:space="preserve"><value>Allowed destinations after a logout flow completes.</value></data>
+  <data name="OAuthClientApplication_AllowedGrantTypes" xml:space="preserve"><value>Allowed Grant Types</value></data>
+  <data name="OAuthClientApplication_AllowedGrantTypes_Help" xml:space="preserve"><value>OAuth grants available to this client, such as authorization_code and refresh_token.</value></data>
+  <data name="OAuthClientApplication_AllowedScopes" xml:space="preserve"><value>Allowed Scopes</value></data>
+  <data name="OAuthClientApplication_AllowedScopes_Help" xml:space="preserve"><value>Permissions this client is permitted to request.</value></data>
+  <data name="OAuthClientApplication_AllowedResources" xml:space="preserve"><value>Allowed Resources</value></data>
+  <data name="OAuthClientApplication_AllowedResources_Help" xml:space="preserve"><value>Resource servers for which this client may request access tokens.</value></data>
+  <data name="OAuthClientApplication_RequirePkce" xml:space="preserve"><value>Require PKCE</value></data>
+  <data name="OAuthClientApplication_RequirePkce_Help" xml:space="preserve"><value>Requires proof-key validation for authorization-code exchanges.</value></data>
+  <data name="OAuthClientApplication_RequireConsent" xml:space="preserve"><value>Require Consent</value></data>
+  <data name="OAuthClientApplication_RequireConsent_Help" xml:space="preserve"><value>Requires the user to approve the requested access.</value></data>
+  <data name="OAuthClientApplication_AccessTokenLifetimeMinutes" xml:space="preserve"><value>Access Token Lifetime (Minutes)</value></data>
+  <data name="OAuthClientApplication_AccessTokenLifetimeMinutes_Help" xml:space="preserve"><value>Optional client-specific access-token lifetime.</value></data>
+  <data name="OAuthClientApplication_RefreshTokenLifetimeDays" xml:space="preserve"><value>Refresh Token Lifetime (Days)</value></data>
+  <data name="OAuthClientApplication_RefreshTokenLifetimeDays_Help" xml:space="preserve"><value>Optional client-specific refresh-token lifetime.</value></data>
+  <data name="OAuthClientApplication_LogoUrl" xml:space="preserve"><value>Logo URL</value></data>
+  <data name="OAuthClientApplication_PrivacyPolicyUrl" xml:space="preserve"><value>Privacy Policy URL</value></data>
+  <data name="OAuthClientApplication_TermsOfServiceUrl" xml:space="preserve"><value>Terms of Service URL</value></data>
+  <data name="OAuthClientSettingValue_Title" xml:space="preserve"><value>OAuth Client Setting</value></data>
+  <data name="OAuthClientSettingValue_Help" xml:space="preserve"><value>A configured OAuth value such as a redirect URI, grant, scope, or resource.</value></data>
+  <data name="OAuthClientSettingValue_Value" xml:space="preserve"><value>Value</value></data>
+</root>
