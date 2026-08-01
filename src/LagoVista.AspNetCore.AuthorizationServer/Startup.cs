@@ -17,10 +17,14 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             services.AddScoped<IOAuthClientPolicyResolver, OAuthClientPolicyResolver>();
             services.AddScoped<IOAuthClientPolicyValidator, OAuthClientPolicyValidator>();
 
+            services.AddControllers()
+                .AddApplicationPart(typeof(AuthorizationController).Assembly);
+
             services.AddOpenIddict()
                 .AddServer(options =>
                 {
                     options.EnableDegradedMode();
+                    options.AcceptAnonymousClients();
 
                     options.SetAuthorizationEndpointUris(AuthorizationServerConstants.AuthorizationEndpoint)
                            .SetTokenEndpointUris(AuthorizationServerConstants.TokenEndpoint);
@@ -50,8 +54,12 @@ namespace LagoVista.AspNetCore.AuthorizationServer
 
                     options.UseAspNetCore()
                            .EnableStatusCodePagesIntegration()
-                           .EnableAuthorizationEndpointPassthrough()
-                           .EnableTokenEndpointPassthrough();
+                           .EnableAuthorizationEndpointPassthrough();
+                })
+                .AddValidation(options =>
+                {
+                    options.UseLocalServer();
+                    options.UseAspNetCore();
                 });
         }
     }
