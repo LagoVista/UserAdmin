@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.passkey-registration.new-scenario",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "passkey-registration",
+  "preconditions": {
+    "expression": "true"
+  },
+  "inputs": [],
+  "postconditions": {
+    "expression": "true"
+  },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": [],
+  "sourceReferences": [],
+  "name": "Continue Pass Key to Registration",
+  "summary": "user clicks on User Passkey and moves to registration from.",
+  "startViewKey": "auth.continue.passkey",
+  "action": {
+    "id": "use-passkey",
+    "finder": "action:use-passkey"
+  },
+  "expectedViewKey": "auth.passkey.registration.identity",
+  "serverInteraction": {
+    "required": false
+  }
+}

@@ -3,19 +3,64 @@
   "ProjectName": "LagoVista.UserAdmin.Auth.Tests",
   "ProjectPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj",
   "AssemblyPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
-  "RunId": "312780ad-3202-41a2-b84f-eb5ed8a324d2",
-  "StartedUtc": "2026-07-30T20:13:49.4442508Z",
-  "CompletedUtc": "2026-07-30T20:14:01.7320469Z",
+  "RunId": "e4d5e0c8-8e21-4fa3-9424-b95e573c49ff",
+  "StartedUtc": "2026-07-30T21:28:29.3130967Z",
+  "CompletedUtc": "2026-07-30T21:28:39.8122907Z",
   "ExitCode": 0,
   "Outcome": "Passed",
   "Summary": {
-    "Total": 25,
-    "Passed": 25,
+    "Total": 28,
+    "Passed": 28,
     "Failed": 0,
     "Skipped": 0,
-    "DurationMilliseconds": 12287
+    "DurationMilliseconds": 10499
   },
   "Tests": [
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailVerificationFlowIntegrationTests",
+      "TestMethod": "AlreadyConfirmedUser_Should_ReturnIdempotentSuccess",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.email-verification.complete",
+            "auth.flow.email-verification.complete",
+            "auth.transition.email-verification.complete"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailVerificationFlowIntegrationTests",
+      "TestMethod": "InvalidToken_Should_ReturnFailure_WithoutSuccessfulTransitionResult",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.email-verification.complete",
+            "auth.flow.email-verification.complete",
+            "auth.transition.email-verification.complete"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailVerificationFlowIntegrationTests",
+      "TestMethod": "ValidToken_Should_CompleteVerification_And_ReturnRedirect",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.email-verification.complete",
+            "auth.flow.email-verification.complete",
+            "auth.transition.email-verification.complete"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
     {
       "TestType": "LagoVista.UserAdmin.Auth.Tests.InvitationAcceptanceFlowIntegrationTests",
       "TestMethod": "InactiveInvitation_Should_ReturnFailure_WithoutCreatingMembership",
@@ -165,21 +210,6 @@
       ]
     },
     {
-      "TestType": "LagoVista.UserAdmin.Auth.Tests.PasswordLoginFlowTests",
-      "TestMethod": "LoginWithPasswordAsync_Should_Execute_Handler_And_Return_Manager_Result",
-      "Evidence": [
-        {
-          "Profile": "auth",
-          "References": [
-            "auth.test-binding.password.establish-session",
-            "auth.flow.password.establish-session",
-            "auth.transition.password.establish-session"
-          ]
-        }
-      ],
-      "ObservedAuthEvents": []
-    },
-    {
       "TestType": "LagoVista.UserAdmin.Auth.Tests.PasswordRecoveryCompletionFlowIntegrationTests",
       "TestMethod": "FailedReset_Should_ReturnFailure_WithoutRecordingCompletion",
       "Evidence": [
@@ -251,22 +281,18 @@
   "Issues": [],
   "StandardOutput": [
     "  Determining projects to restore...",
-    "  Restored D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.AspNetCore.Identity\\LagoVista.AspNetCore.Identity.csproj (in 318 ms).",
-    "  Restored D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin.Models\\LagoVista.UserAdmin.Models.csproj (in 318 ms).",
-    "  Restored D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj (in 318 ms).",
-    "  Restored D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\LagoVista.UserAdmin.csproj (in 318 ms).",
+    "  All projects are up-to-date for restore.",
     "  LagoVista.UserAdmin.Models -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin.Models\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.Models.dll",
-    "CSC : warning CS8002: Referenced assembly \u0027RingCentral.Net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0027 does not have a strong name. [D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\LagoVista.UserAdmin.csproj]",
     "  LagoVista.UserAdmin -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.dll",
     "  LagoVista.AspNetCore.Identity -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.AspNetCore.Identity\\bin\\Debug\\net9.0\\LagoVista.AspNetCore.Identity.dll",
     "  LagoVista.UserAdmin.Auth.Tests -\u003E D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
     "Test run for D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll (.NETCoreApp,Version=v9.0)",
     "A total of 1 test files matched the specified pattern.",
     "",
-    "Passed!  - Failed:     0, Passed:    25, Skipped:     0, Total:    25, Duration: 492 ms - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
+    "Passed!  - Failed:     0, Passed:    28, Skipped:     0, Total:    28, Duration: 531 ms - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
     "",
     "Attachments:",
-    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\9863953b-210f-44f1-8e39-ac6607e73fe8\\coverage.cobertura.xml"
+    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\7b927516-1a8c-42d8-8272-a51b19c5220f\\coverage.cobertura.xml"
   ],
   "StandardError": []
 }

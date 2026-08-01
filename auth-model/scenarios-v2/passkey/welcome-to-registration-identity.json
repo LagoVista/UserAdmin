@@ -2,23 +2,46 @@
   "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
   "schemaVersion": "2.0",
   "key": "auth.scenario.passkey.welcome-to-registration-identity",
-  "name": "Choose Passkey Registration",
+  "name": "Choose Passkey To Confirm",
   "summary": "A new user chooses passkey registration from Welcome and reaches the identity-details view.",
   "version": 1,
   "maturity": "proposed",
   "categoryKey": "passkey-registration",
   "startViewKey": "auth.welcome",
-  "action": { "id": "continue-passkey", "finder": "action:continue-passkey" },
-  "preconditions": { "expression": "session-capability == anonymous" },
+  "action": {
+    "id": "continue-passkey",
+    "finder": "action:continue-passkey"
+  },
+  "preconditions": {
+    "expression": "session-capability == anonymous"
+  },
   "inputs": [],
-  "serverInteraction": { "required": false },
-  "expectedViewKey": "auth.passkey.registration.identity",
-  "postconditions": { "expression": "session-capability == anonymous and auth.passkey.registration.identity is visible" },
+  "serverInteraction": {
+    "required": false
+  },
+  "expectedViewKey": "auth.continue.passkey",
+  "postconditions": {
+    "expression": "session-capability == anonymous and auth.passkey.registration.identity is visible"
+  },
   "expectedAuthLogEvents": [],
-  "evidenceRequirements": ["web", "android", "ios"],
+  "evidenceRequirements": [
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "auth-view", "reference": "auth.welcome" },
-    { "sourceType": "auth-view", "reference": "auth.passkey.registration.identity" },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-07-31", "note": "Passkey account-registration happy path." }
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.welcome"
+    },
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.passkey.registration.identity"
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-07-31",
+      "note": "Passkey account-registration happy path."
+    }
   ]
 }
