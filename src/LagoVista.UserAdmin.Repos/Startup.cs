@@ -61,6 +61,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<IHolidaySetRepo, HolidaySetRepo>();
             services.AddScoped<IScheduledDowntimeRepo, ScheduledDowntimeRepo>();
             services.AddScoped<IScheduledDowntimeRepo, ScheduledDowntimeRepo>();
+            services.AddScoped<IOAuthClientApplicationRepo, OAuthClientApplicationRepo>();
             services.AddScoped<ITeamRepo, TeamRepo>();
             services.AddScoped<ITeamUserRepo, TeamUserRepo>();
             services.AddScoped<IAssetSetRepo, AssetSetRepo>();
