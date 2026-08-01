@@ -20,6 +20,32 @@ function ConvertTo-Base64Url {
     return [Convert]::ToBase64String($Bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_')
 }
 
+function ConvertTo-QueryString {
+    param([hashtable]$Values)
+
+    return ($Values.GetEnumerator() |
+        Sort-Object Key |
+        ForEach-Object {
+            "{0}={1}" -f [Uri]::EscapeDataString([string]$_.Key), [Uri]::EscapeDataString([string]$_.Value)
+        }) -join '&'
+}
+
+function Get-QueryValue {
+    param(
+        [Uri]$Uri,
+        [string]$Name
+    )
+
+    foreach ($item in $Uri.Query.TrimStart('?').Split('&', [StringSplitOptions]::RemoveEmptyEntries)) {
+        $parts = $item.Split('=', 2)
+        if ([Uri]::UnescapeDataString($parts[0]) -eq $Name) {
+            return [Uri]::UnescapeDataString($parts[1])
+        }
+    }
+
+    return $null
+}
+
 function New-CodeVerifier {
     $bytes = New-Object byte[] 64
     [Security.Cryptography.RandomNumberGenerator]::Fill($bytes)
@@ -37,17 +63,18 @@ $challengeBytes = [Security.Cryptography.SHA256]::HashData($verifierBytes)
 $challenge = ConvertTo-Base64Url $challengeBytes
 $state = [Guid]::NewGuid().ToString("N")
 
-$query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
-$query["client_id"] = $ClientId
-$query["redirect_uri"] = $RedirectUri
-$query["response_type"] = "code"
-$query["scope"] = $Scope
-$query["resource"] = $Resource
-$query["code_challenge"] = $challenge
-$query["code_challenge_method"] = "S256"
-$query["state"] = $state
+$query = ConvertTo-QueryString @{
+    client_id = $ClientId
+    redirect_uri = $RedirectUri
+    response_type = "code"
+    scope = $Scope
+    resource = $Resource
+    code_challenge = $challenge
+    code_challenge_method = "S256"
+    state = $state
+}
 
-$authorizationUrl = "$authorizeUri?$($query.ToString())"
+$authorizationUrl = "$authorizeUri?$query"
 $listener = [Net.HttpListener]::new()
 $listener.Prefixes.Add($RedirectUri)
 
@@ -66,20 +93,18 @@ try {
     $context.Response.OutputStream.Write($responseBytes, 0, $responseBytes.Length)
     $context.Response.Close()
 
-    $returnedState = $callback.Query.TrimStart('?').Split('&') |
-        ForEach-Object { $_.Split('=', 2) } |
-        Where-Object { $_[0] -eq 'state' } |
-        ForEach-Object { [Uri]::UnescapeDataString($_[1]) }
-
+    $returnedState = Get-QueryValue -Uri $callback -Name "state"
     if ($returnedState -ne $state) {
         throw "OAuth state validation failed."
     }
 
-    $code = $callback.Query.TrimStart('?').Split('&') |
-        ForEach-Object { $_.Split('=', 2) } |
-        Where-Object { $_[0] -eq 'code' } |
-        ForEach-Object { [Uri]::UnescapeDataString($_[1]) }
+    $error = Get-QueryValue -Uri $callback -Name "error"
+    if (![String]::IsNullOrWhiteSpace($error)) {
+        $description = Get-QueryValue -Uri $callback -Name "error_description"
+        throw "OAuth authorization failed: $error $description"
+    }
 
+    $code = Get-QueryValue -Uri $callback -Name "code"
     if ([String]::IsNullOrWhiteSpace($code)) {
         throw "The callback did not contain an authorization code: $callback"
     }
