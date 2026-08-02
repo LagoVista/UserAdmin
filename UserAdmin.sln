@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingCentralIntegrationTests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserAdmin.RepoTest", "tests\UserAdmin.RepoTests\UserAdmin.RepoTest.csproj", "{D438312C-0A1B-4ED9-48CF-B331A19D92FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.AspNetCore.AuthorizationServer", "src\LagoVista.AspNetCore.AuthorizationServer\LagoVista.AspNetCore.AuthorizationServer.csproj", "{1C0DC1A1-0CD8-3D31-5DBD-D77B4B43B2F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +72,10 @@ Global
 		{D438312C-0A1B-4ED9-48CF-B331A19D92FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D438312C-0A1B-4ED9-48CF-B331A19D92FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D438312C-0A1B-4ED9-48CF-B331A19D92FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C0DC1A1-0CD8-3D31-5DBD-D77B4B43B2F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C0DC1A1-0CD8-3D31-5DBD-D77B4B43B2F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C0DC1A1-0CD8-3D31-5DBD-D77B4B43B2F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C0DC1A1-0CD8-3D31-5DBD-D77B4B43B2F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +89,7 @@ Global
 		{90D2B8E5-55D1-4CE3-B951-5F9EBC04E2BF} = {68AF24F5-D5E7-40F5-AE0A-594167F89A44}
 		{C112D810-FE25-4A48-B564-A1F7496356EF} = {0D569608-298B-46AE-82D3-8481FE044E10}
 		{D438312C-0A1B-4ED9-48CF-B331A19D92FF} = {0D569608-298B-46AE-82D3-8481FE044E10}
+		{1C0DC1A1-0CD8-3D31-5DBD-D77B4B43B2F0} = {68AF24F5-D5E7-40F5-AE0A-594167F89A44}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4D5218A2-6C29-4E31-9F29-C471835EF463}
