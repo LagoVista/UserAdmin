@@ -1,10 +1,237 @@
-﻿/*7/14/2026 12:52:18 PM*/
+﻿/*8/1/2026 1:03:29 PM*/
 using System.Globalization;
 using System.Reflection;
 
-//Resources:UserAdminResources:AcceptInviteResponse_Description
+//Resources:OAuthClientResources:OAuthClientApplication_AccessTokenLifetimeMinutes
 namespace LagoVista.UserAdmin.Models.Resources
 {
+	public class OAuthClientResources
+	{
+        private static global::System.Resources.ResourceManager _resourceManager;
+        
+        /// <summary>
+        ///   Returns the cached ResourceManager instance used by this class.
+        /// </summary>
+        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
+        private static global::System.Resources.ResourceManager ResourceManager 
+		{
+            get 
+			{
+                if (object.ReferenceEquals(_resourceManager, null)) 
+				{
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LagoVista.UserAdmin.Models.Resources.OAuthClientResources", typeof(OAuthClientResources).GetTypeInfo().Assembly);
+                    _resourceManager = temp;
+                }
+                return _resourceManager;
+            }
+        }
+        
+        /// <summary>
+        ///   Returns the formatted resource string.
+        /// </summary>
+        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
+        private static string GetResourceString(string key, params string[] tokens)
+		{
+			var culture = CultureInfo.CurrentCulture;;
+            var str = ResourceManager.GetString(key, culture);
+
+			for(int i = 0; i < tokens.Length; i += 2)
+				str = str.Replace(tokens[i], tokens[i+1]);
+										
+            return str;
+        }
+        
+        /// <summary>
+        ///   Returns the formatted resource string.
+        /// </summary>
+		/*
+        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
+        private static HtmlString GetResourceHtmlString(string key, params string[] tokens)
+		{
+			var str = GetResourceString(key, tokens);
+							
+			if(str.StartsWith("HTML:"))
+				str = str.Substring(5);
+
+			return new HtmlString(str);
+        }*/
+		
+		public static string OAuthClientApplication_AccessTokenLifetimeMinutes { get { return GetResourceString("OAuthClientApplication_AccessTokenLifetimeMinutes"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_AccessTokenLifetimeMinutes_Help
+
+		public static string OAuthClientApplication_AccessTokenLifetimeMinutes_Help { get { return GetResourceString("OAuthClientApplication_AccessTokenLifetimeMinutes_Help"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_AllowedGrantTypes
+
+		public static string OAuthClientApplication_AllowedGrantTypes { get { return GetResourceString("OAuthClientApplication_AllowedGrantTypes"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_AllowedGrantTypes_Help
+
+		public static string OAuthClientApplication_AllowedGrantTypes_Help { get { return GetResourceString("OAuthClientApplication_AllowedGrantTypes_Help"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_AllowedResources
+
+		public static string OAuthClientApplication_AllowedResources { get { return GetResourceString("OAuthClientApplication_AllowedResources"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_AllowedResources_Help
+
+		public static string OAuthClientApplication_AllowedResources_Help { get { return GetResourceString("OAuthClientApplication_AllowedResources_Help"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_AllowedScopes
+
+		public static string OAuthClientApplication_AllowedScopes { get { return GetResourceString("OAuthClientApplication_AllowedScopes"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_AllowedScopes_Help
+
+		public static string OAuthClientApplication_AllowedScopes_Help { get { return GetResourceString("OAuthClientApplication_AllowedScopes_Help"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_ClientId
+
+		public static string OAuthClientApplication_ClientId { get { return GetResourceString("OAuthClientApplication_ClientId"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_ClientId_Help
+
+		public static string OAuthClientApplication_ClientId_Help { get { return GetResourceString("OAuthClientApplication_ClientId_Help"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_ClientSecret
+
+		public static string OAuthClientApplication_ClientSecret { get { return GetResourceString("OAuthClientApplication_ClientSecret"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_ClientSecret_Help
+
+		public static string OAuthClientApplication_ClientSecret_Help { get { return GetResourceString("OAuthClientApplication_ClientSecret_Help"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_ClientType
+
+		public static string OAuthClientApplication_ClientType { get { return GetResourceString("OAuthClientApplication_ClientType"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_ClientType_Confidential
+
+		public static string OAuthClientApplication_ClientType_Confidential { get { return GetResourceString("OAuthClientApplication_ClientType_Confidential"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_ClientType_Help
+
+		public static string OAuthClientApplication_ClientType_Help { get { return GetResourceString("OAuthClientApplication_ClientType_Help"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_ClientType_Public
+
+		public static string OAuthClientApplication_ClientType_Public { get { return GetResourceString("OAuthClientApplication_ClientType_Public"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_ClientType_Select
+
+		public static string OAuthClientApplication_ClientType_Select { get { return GetResourceString("OAuthClientApplication_ClientType_Select"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_Description
+
+		public static string OAuthClientApplication_Description { get { return GetResourceString("OAuthClientApplication_Description"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_Help
+
+		public static string OAuthClientApplication_Help { get { return GetResourceString("OAuthClientApplication_Help"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_LogoUrl
+
+		public static string OAuthClientApplication_LogoUrl { get { return GetResourceString("OAuthClientApplication_LogoUrl"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_PostLogoutRedirectUris
+
+		public static string OAuthClientApplication_PostLogoutRedirectUris { get { return GetResourceString("OAuthClientApplication_PostLogoutRedirectUris"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_PostLogoutRedirectUris_Help
+
+		public static string OAuthClientApplication_PostLogoutRedirectUris_Help { get { return GetResourceString("OAuthClientApplication_PostLogoutRedirectUris_Help"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_PrivacyPolicyUrl
+
+		public static string OAuthClientApplication_PrivacyPolicyUrl { get { return GetResourceString("OAuthClientApplication_PrivacyPolicyUrl"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_RedirectUris
+
+		public static string OAuthClientApplication_RedirectUris { get { return GetResourceString("OAuthClientApplication_RedirectUris"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_RedirectUris_Help
+
+		public static string OAuthClientApplication_RedirectUris_Help { get { return GetResourceString("OAuthClientApplication_RedirectUris_Help"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_RefreshTokenLifetimeDays
+
+		public static string OAuthClientApplication_RefreshTokenLifetimeDays { get { return GetResourceString("OAuthClientApplication_RefreshTokenLifetimeDays"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_RefreshTokenLifetimeDays_Help
+
+		public static string OAuthClientApplication_RefreshTokenLifetimeDays_Help { get { return GetResourceString("OAuthClientApplication_RefreshTokenLifetimeDays_Help"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_RequireConsent
+
+		public static string OAuthClientApplication_RequireConsent { get { return GetResourceString("OAuthClientApplication_RequireConsent"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_RequireConsent_Help
+
+		public static string OAuthClientApplication_RequireConsent_Help { get { return GetResourceString("OAuthClientApplication_RequireConsent_Help"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_RequirePkce
+
+		public static string OAuthClientApplication_RequirePkce { get { return GetResourceString("OAuthClientApplication_RequirePkce"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_RequirePkce_Help
+
+		public static string OAuthClientApplication_RequirePkce_Help { get { return GetResourceString("OAuthClientApplication_RequirePkce_Help"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_Status
+
+		public static string OAuthClientApplication_Status { get { return GetResourceString("OAuthClientApplication_Status"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_Status_Active
+
+		public static string OAuthClientApplication_Status_Active { get { return GetResourceString("OAuthClientApplication_Status_Active"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_Status_Disabled
+
+		public static string OAuthClientApplication_Status_Disabled { get { return GetResourceString("OAuthClientApplication_Status_Disabled"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_Status_Help
+
+		public static string OAuthClientApplication_Status_Help { get { return GetResourceString("OAuthClientApplication_Status_Help"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_Status_Revoked
+
+		public static string OAuthClientApplication_Status_Revoked { get { return GetResourceString("OAuthClientApplication_Status_Revoked"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_Status_Select
+
+		public static string OAuthClientApplication_Status_Select { get { return GetResourceString("OAuthClientApplication_Status_Select"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_TermsOfServiceUrl
+
+		public static string OAuthClientApplication_TermsOfServiceUrl { get { return GetResourceString("OAuthClientApplication_TermsOfServiceUrl"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_Title
+
+		public static string OAuthClientApplication_Title { get { return GetResourceString("OAuthClientApplication_Title"); } }
+//Resources:OAuthClientResources:OAuthClientApplications_Title
+
+		public static string OAuthClientApplications_Title { get { return GetResourceString("OAuthClientApplications_Title"); } }
+//Resources:OAuthClientResources:OAuthClientSettingValue_Help
+
+		public static string OAuthClientSettingValue_Help { get { return GetResourceString("OAuthClientSettingValue_Help"); } }
+//Resources:OAuthClientResources:OAuthClientSettingValue_Title
+
+		public static string OAuthClientSettingValue_Title { get { return GetResourceString("OAuthClientSettingValue_Title"); } }
+//Resources:OAuthClientResources:OAuthClientSettingValue_Value
+
+		public static string OAuthClientSettingValue_Value { get { return GetResourceString("OAuthClientSettingValue_Value"); } }
+//Resources:UserAdminResources:AcceptInviteResponse_Description
+
+		public static class Names
+		{
+			public const string OAuthClientApplication_AccessTokenLifetimeMinutes = "OAuthClientApplication_AccessTokenLifetimeMinutes";
+			public const string OAuthClientApplication_AccessTokenLifetimeMinutes_Help = "OAuthClientApplication_AccessTokenLifetimeMinutes_Help";
+			public const string OAuthClientApplication_AllowedGrantTypes = "OAuthClientApplication_AllowedGrantTypes";
+			public const string OAuthClientApplication_AllowedGrantTypes_Help = "OAuthClientApplication_AllowedGrantTypes_Help";
+			public const string OAuthClientApplication_AllowedResources = "OAuthClientApplication_AllowedResources";
+			public const string OAuthClientApplication_AllowedResources_Help = "OAuthClientApplication_AllowedResources_Help";
+			public const string OAuthClientApplication_AllowedScopes = "OAuthClientApplication_AllowedScopes";
+			public const string OAuthClientApplication_AllowedScopes_Help = "OAuthClientApplication_AllowedScopes_Help";
+			public const string OAuthClientApplication_ClientId = "OAuthClientApplication_ClientId";
+			public const string OAuthClientApplication_ClientId_Help = "OAuthClientApplication_ClientId_Help";
+			public const string OAuthClientApplication_ClientSecret = "OAuthClientApplication_ClientSecret";
+			public const string OAuthClientApplication_ClientSecret_Help = "OAuthClientApplication_ClientSecret_Help";
+			public const string OAuthClientApplication_ClientType = "OAuthClientApplication_ClientType";
+			public const string OAuthClientApplication_ClientType_Confidential = "OAuthClientApplication_ClientType_Confidential";
+			public const string OAuthClientApplication_ClientType_Help = "OAuthClientApplication_ClientType_Help";
+			public const string OAuthClientApplication_ClientType_Public = "OAuthClientApplication_ClientType_Public";
+			public const string OAuthClientApplication_ClientType_Select = "OAuthClientApplication_ClientType_Select";
+			public const string OAuthClientApplication_Description = "OAuthClientApplication_Description";
+			public const string OAuthClientApplication_Help = "OAuthClientApplication_Help";
+			public const string OAuthClientApplication_LogoUrl = "OAuthClientApplication_LogoUrl";
+			public const string OAuthClientApplication_PostLogoutRedirectUris = "OAuthClientApplication_PostLogoutRedirectUris";
+			public const string OAuthClientApplication_PostLogoutRedirectUris_Help = "OAuthClientApplication_PostLogoutRedirectUris_Help";
+			public const string OAuthClientApplication_PrivacyPolicyUrl = "OAuthClientApplication_PrivacyPolicyUrl";
+			public const string OAuthClientApplication_RedirectUris = "OAuthClientApplication_RedirectUris";
+			public const string OAuthClientApplication_RedirectUris_Help = "OAuthClientApplication_RedirectUris_Help";
+			public const string OAuthClientApplication_RefreshTokenLifetimeDays = "OAuthClientApplication_RefreshTokenLifetimeDays";
+			public const string OAuthClientApplication_RefreshTokenLifetimeDays_Help = "OAuthClientApplication_RefreshTokenLifetimeDays_Help";
+			public const string OAuthClientApplication_RequireConsent = "OAuthClientApplication_RequireConsent";
+			public const string OAuthClientApplication_RequireConsent_Help = "OAuthClientApplication_RequireConsent_Help";
+			public const string OAuthClientApplication_RequirePkce = "OAuthClientApplication_RequirePkce";
+			public const string OAuthClientApplication_RequirePkce_Help = "OAuthClientApplication_RequirePkce_Help";
+			public const string OAuthClientApplication_Status = "OAuthClientApplication_Status";
+			public const string OAuthClientApplication_Status_Active = "OAuthClientApplication_Status_Active";
+			public const string OAuthClientApplication_Status_Disabled = "OAuthClientApplication_Status_Disabled";
+			public const string OAuthClientApplication_Status_Help = "OAuthClientApplication_Status_Help";
+			public const string OAuthClientApplication_Status_Revoked = "OAuthClientApplication_Status_Revoked";
+			public const string OAuthClientApplication_Status_Select = "OAuthClientApplication_Status_Select";
+			public const string OAuthClientApplication_TermsOfServiceUrl = "OAuthClientApplication_TermsOfServiceUrl";
+			public const string OAuthClientApplication_Title = "OAuthClientApplication_Title";
+			public const string OAuthClientApplications_Title = "OAuthClientApplications_Title";
+			public const string OAuthClientSettingValue_Help = "OAuthClientSettingValue_Help";
+			public const string OAuthClientSettingValue_Title = "OAuthClientSettingValue_Title";
+			public const string OAuthClientSettingValue_Value = "OAuthClientSettingValue_Value";
+		}
+	}
 	public class UserAdminResources
 	{
         private static global::System.Resources.ResourceManager _resourceManager;
