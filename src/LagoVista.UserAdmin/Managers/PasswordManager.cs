@@ -69,7 +69,8 @@ namespace LagoVista.UserAdmin.Managers
 
             await _authLogMgr.AddAsync(AuthLogTypes.PasswordRecoveryRequested, userName: sendResetPasswordLink.Email);
 
-            var appUser = await _userManager.FindByEmailAsync(sendResetPasswordLink.Email);
+            var userName = String.IsNullOrWhiteSpace(sendResetPasswordLink.UserName) ? sendResetPasswordLink.Email : sendResetPasswordLink.UserName;
+            var appUser = await _userManager.FindByEmailAsync(userName);
 
             if (appUser == null)
             {

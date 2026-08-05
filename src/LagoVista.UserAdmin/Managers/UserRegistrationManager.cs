@@ -476,6 +476,7 @@ namespace LagoVista.UserAdmin.Managers
                 _adminLogger.Trace($"{this.Tag()} - Prevalidation complete.");
 
                 var appUser = BuildAppUser(newUser, userName, defaultUserId);
+                await ApplyAppEndUserContextAsync(newUser, appUser);
                 await ApplyExternalLoginAsync(appUser, externalLogin);
 
                 if (appUser.LoginType == LoginTypes.AppEndUser)

@@ -45,6 +45,8 @@ namespace LagoVista.UserAdmin
             services.AddScoped<ILocationDiagramManager, LocationDiagramManager>();
             services.AddScoped<ISecureLinkManager, SecureLinkManager>();
             services.AddScoped<IUserRegistrationManager, UserRegistrationManager>();
+            services.AddScoped<ICustomerUserManager, CustomerUserManager>();
+            services.AddScoped<ICustomerAuthManager, CustomerAuthManager>();
             services.AddScoped<IFunctionMapManager, FunctionMapManager>();
             services.AddScoped<IPasswordLoginFlowHandler, PasswordLoginFlowHandler>();
             services.AddScoped<IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest>, PasswordRecoveryRequestFlowHandler>();

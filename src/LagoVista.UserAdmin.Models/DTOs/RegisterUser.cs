@@ -71,6 +71,9 @@ namespace LagoVista.UserAdmin.Models.DTOs
         public EntityHeader Customer { get; set; }
         public EntityHeader CustomerContact { get; set; }
 
+        [JsonProperty("isCustomerAdmin")]
+        public bool IsCustomerAdmin { get; set; }
+
         [JsonProperty("customerName")]
         public string CustomerName { get; set; }
 
