@@ -478,6 +478,12 @@ namespace LagoVista.UserAdmin.Managers
                 var appUser = BuildAppUser(newUser, userName, defaultUserId);
                 await ApplyExternalLoginAsync(appUser, externalLogin);
 
+                if (appUser.LoginType == LoginTypes.AppEndUser)
+                {
+                    var endUserOrg = await _orgRepo.GetOrganizationAsync(appUser.EndUserAppOrg.Id);
+                    AppEndUserRegistrationGuard.ApplyOrganizationDefaults(newUser, endUserOrg, appUser);
+                }
+
                 var createIdentityResult = await CreateIdentityUserAsync(appUser, newUser, externalLogin);
                 if (!createIdentityResult.Successful)
                 {
