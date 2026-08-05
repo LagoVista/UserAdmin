@@ -18,6 +18,7 @@ using LagoVista.Models;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
+using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Users;
 using Newtonsoft.Json;
@@ -317,6 +318,21 @@ namespace LagoVista.UserAdmin.Repos.Users
         public async Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(ListRequest listRequest)
         {
             return await QuerySummaryAsync<UserInfoSummary, AppUser>(us => true, us => us.Name, listRequest);
+        }
+
+        public async Task<ListResponse<UserInfoSummary>> GetCustomerUsersAsync(string orgId, string customerId, ListRequest listRequest)
+        {
+            if (String.IsNullOrEmpty(orgId)) throw new ArgumentNullException(nameof(orgId));
+            if (String.IsNullOrEmpty(customerId)) throw new ArgumentNullException(nameof(customerId));
+
+            return await QuerySummaryAsync<UserInfoSummary, AppUser>(
+                user => user.LoginType == LoginTypes.AppEndUser &&
+                        user.EndUserAppOrg != null &&
+                        user.EndUserAppOrg.Id == orgId &&
+                        user.Customer != null &&
+                        user.Customer.Id == customerId,
+                user => user.Name,
+                listRequest);
         }
 
         public async Task<ListResponse<UserInfoSummary>> GetActiveUsersAsync(ListRequest listRequest)

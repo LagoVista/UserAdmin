@@ -6,6 +6,7 @@ using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Orgs;
+using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Models.Users;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Users
         Task<AppUser> FindByEmailAsync(string email);
         Task<AppUser> FindByThirdPartyLogin(string providerId, string providerKey);
         Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(ListRequest listRequest);
+        Task<ListResponse<UserInfoSummary>> GetCustomerUsersAsync(string orgId, string customerId, ListRequest listRequest);
         Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(ListRequest listRequest, bool? phoneConfirmed = true, bool? emailConfirmed = null);
         Task<ListResponse<UserInfoSummary>> GetUsersWithoutOrgsAsync(ListRequest listRequest);
         Task UpdateAsync(AppUser user);

@@ -219,6 +219,44 @@ namespace LagoVista.UserAdmin.Managers
             // --- END: CreateUserAsync helper methods (block 2) ---
 
             // --- BEGIN: CreateUserAsync helper methods (block 3) ---
+            private async Task ApplyAppEndUserContextAsync(RegisterUser newUser, AppUser appUser)
+            {
+                if (appUser.LoginType != LoginTypes.AppEndUser)
+                {
+                    return;
+                }
+
+                if (EntityHeader.IsNullOrEmpty(newUser.EndUserAppOrg))
+                    throw new InvalidOperationException("EndUserAppOrg is required for AppEndUser registration.");
+
+                if (EntityHeader.IsNullOrEmpty(newUser.Customer))
+                    throw new InvalidOperationException("Customer is required for AppEndUser registration.");
+
+                if (EntityHeader.IsNullOrEmpty(newUser.CustomerContact))
+                    throw new InvalidOperationException("CustomerContact is required for AppEndUser registration.");
+
+                if (!String.IsNullOrEmpty(newUser.OrgId) &&
+                    !String.Equals(newUser.OrgId, newUser.EndUserAppOrg.Id, StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new InvalidOperationException("OrgId must match EndUserAppOrg.Id for AppEndUser registration.");
+                }
+
+                var organization = await _orgRepo.GetOrganizationAsync(newUser.EndUserAppOrg.Id);
+                if (organization == null)
+                    throw new InvalidOperationException($"Could not load EndUserAppOrg [{newUser.EndUserAppOrg.Id}].");
+
+                if (EntityHeader.IsNullOrEmpty(organization.DefaultDeviceRepository))
+                    throw new InvalidOperationException($"Organization [{organization.Name}] does not have a default device repository configured.");
+
+                if (EntityHeader.IsNullOrEmpty(organization.DefaultInstance))
+                    throw new InvalidOperationException($"Organization [{organization.Name}] does not have a default deployment instance configured.");
+
+                appUser.CurrentOrganization = organization.CreateSummary();
+                appUser.CurrentRepo = organization.DefaultDeviceRepository;
+                appUser.CurrentInstance = organization.DefaultInstance;
+                appUser.IsCustomerAdmin = newUser.IsCustomerAdmin;
+            }
+
             private AppUser BuildAppUser(RegisterUser newUser, string userName, string defaultUserId)
             {
                 var createdBy = $"{newUser.FirstName} {newUser.LastName}".Trim();
@@ -478,12 +516,6 @@ namespace LagoVista.UserAdmin.Managers
                 var appUser = BuildAppUser(newUser, userName, defaultUserId);
                 await ApplyAppEndUserContextAsync(newUser, appUser);
                 await ApplyExternalLoginAsync(appUser, externalLogin);
-
-                if (appUser.LoginType == LoginTypes.AppEndUser)
-                {
-                    var endUserOrg = await _orgRepo.GetOrganizationAsync(appUser.EndUserAppOrg.Id);
-                    AppEndUserRegistrationGuard.ApplyOrganizationDefaults(newUser, endUserOrg, appUser);
-                }
 
                 var createIdentityResult = await CreateIdentityUserAsync(appUser, newUser, externalLogin);
                 if (!createIdentityResult.Successful)
