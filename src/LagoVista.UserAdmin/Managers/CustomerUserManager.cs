@@ -1,6 +1,9 @@
+using LagoVista.Core.Interfaces;
+using LagoVista.Core.Managers;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
+using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.DTOs;
@@ -10,13 +13,15 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Managers
 {
-    internal sealed class CustomerUserManager : ICustomerUserManager
+    internal sealed class CustomerUserManager : ManagerBase, ICustomerUserManager
     {
         private readonly IUserRegistrationManager _userRegistrationManager;
         private readonly IAppUserManager _appUserManager;
         private readonly IAppUserRepo _appUserRepo;
 
-        public CustomerUserManager(IUserRegistrationManager userRegistrationManager, IAppUserManager appUserManager, IAppUserRepo appUserRepo)
+        public CustomerUserManager(IUserRegistrationManager userRegistrationManager, IAppUserManager appUserManager, IAppUserRepo appUserRepo,
+            IDependencyManager dependencyManager, ISecurity security, IAdminLogger logger, IAppConfig appConfig) :
+            base(logger, appConfig, dependencyManager, security)
         {
             _userRegistrationManager = userRegistrationManager ?? throw new ArgumentNullException(nameof(userRegistrationManager));
             _appUserManager = appUserManager ?? throw new ArgumentNullException(nameof(appUserManager));
@@ -32,7 +37,8 @@ namespace LagoVista.UserAdmin.Managers
 
         private static void ValidateCustomerUser(AppUser appUser, EntityHeader customer, EntityHeader org)
         {
-            if (appUser == null) throw new InvalidOperationException("Could not locate the requested customer user.");
+            if (appUser == null)
+                throw new InvalidOperationException("Could not locate the requested customer user.");
 
             if (appUser.LoginType != LoginTypes.AppEndUser)
                 throw new UnauthorizedAccessException("The selected account is not an AppEndUser account.");
@@ -46,29 +52,18 @@ namespace LagoVista.UserAdmin.Managers
             if (EntityHeader.IsNullOrEmpty(appUser.Customer) ||
                 !String.Equals(appUser.Customer.Id, customer.Id, StringComparison.OrdinalIgnoreCase))
             {
-                throw new UnauthorizedAccessException("The selected account does not belong to the current customer.");
+                throw new UnauthorizedAccessException("The selected account does not belong to the requested customer.");
             }
         }
 
-        private async Task AuthorizeCustomerAdministratorAsync(EntityHeader customer, EntityHeader org, EntityHeader user)
+        private async Task<AppUser> GetCustomerUserAsync(string userId, EntityHeader customer, EntityHeader org)
         {
-            ValidateContext(customer, org, user);
-
-            var currentUser = await _appUserRepo.FindByIdAsync(user.Id);
-            ValidateCustomerUser(currentUser, customer, org);
-
-            if (!currentUser.IsCustomerAdmin)
-                throw new UnauthorizedAccessException("Customer administrator privileges are required to manage customer users.");
-        }
-
-        private async Task<AppUser> GetAuthorizedCustomerUserAsync(string userId, EntityHeader customer, EntityHeader org, EntityHeader user)
-        {
-            if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
-
-            await AuthorizeCustomerAdministratorAsync(customer, org, user);
+            if (String.IsNullOrWhiteSpace(userId))
+                throw new ArgumentNullException(nameof(userId));
 
             var appUser = await _appUserRepo.FindByIdAsync(userId);
             ValidateCustomerUser(appUser, customer, org);
+
             return appUser;
         }
 
@@ -122,7 +117,8 @@ namespace LagoVista.UserAdmin.Managers
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            await AuthorizeCustomerAdministratorAsync(customer, org, user);
+            ValidateContext(customer, org, user);
+            await AuthorizeAsync(user, org, typeof(AppUser), Actions.Create);
 
             request.Customer = customer;
             request.EndUserAppOrg = org;
@@ -133,22 +129,32 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<ListResponse<UserInfoSummary>> GetCustomerUsersAsync(EntityHeader customer, EntityHeader org, EntityHeader user, ListRequest listRequest)
         {
-            await AuthorizeCustomerAdministratorAsync(customer, org, user);
+            ValidateContext(customer, org, user);
+            await AuthorizeAsync(user, org, typeof(AppUser), Actions.Read);
+
             return await _appUserRepo.GetCustomerUsersAsync(org.Id, customer.Id, listRequest);
         }
 
         public async Task<InvokeResult<CustomerUserSummary>> GetCustomerUserAsync(string userId, EntityHeader customer, EntityHeader org, EntityHeader user)
         {
-            var appUser = await GetAuthorizedCustomerUserAsync(userId, customer, org, user);
+            ValidateContext(customer, org, user);
+            await AuthorizeAsync(user, org, typeof(AppUser), Actions.Read, userId);
+
+            var appUser = await GetCustomerUserAsync(userId, customer, org);
             return InvokeResult<CustomerUserSummary>.Create(CreateSummary(appUser));
         }
 
         public async Task<InvokeResult<CustomerUserSummary>> UpdateCustomerUserAsync(string userId, UpdateCustomerUserRequest request, EntityHeader customer, EntityHeader org, EntityHeader user)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            if (EntityHeader.IsNullOrEmpty(request.CustomerContact)) return InvokeResult<CustomerUserSummary>.FromError("CustomerContact is required.");
+            if (EntityHeader.IsNullOrEmpty(request.CustomerContact))
+                return InvokeResult<CustomerUserSummary>.FromError("CustomerContact is required.");
 
-            var appUser = await GetAuthorizedCustomerUserAsync(userId, customer, org, user);
+            ValidateContext(customer, org, user);
+            await AuthorizeAsync(user, org, typeof(AppUser), Actions.Update, userId);
+
+            var appUser = await GetCustomerUserAsync(userId, customer, org);
+
             appUser.FirstName = request.FirstName;
             appUser.LastName = request.LastName;
             appUser.CustomerContact = request.CustomerContact;
@@ -164,38 +170,54 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> EnableCustomerUserAsync(string userId, EntityHeader customer, EntityHeader org, EntityHeader user)
         {
-            var appUser = await GetAuthorizedCustomerUserAsync(userId, customer, org, user);
+            ValidateContext(customer, org, user);
+            await AuthorizeAsync(user, org, typeof(AppUser), Actions.Update, userId);
+
+            var appUser = await GetCustomerUserAsync(userId, customer, org);
+
             appUser.IsAccountDisabled = false;
             appUser.LastUpdatedBy = user;
             appUser.LastUpdatedDate = Core.UtcTimestamp.Now;
+
             return await _appUserManager.UpdateUserAsync(appUser, org, user);
         }
 
         public async Task<InvokeResult> DisableCustomerUserAsync(string userId, EntityHeader customer, EntityHeader org, EntityHeader user)
         {
-            var appUser = await GetAuthorizedCustomerUserAsync(userId, customer, org, user);
+            ValidateContext(customer, org, user);
+            await AuthorizeAsync(user, org, typeof(AppUser), Actions.Update, userId);
+
+            var appUser = await GetCustomerUserAsync(userId, customer, org);
 
             if (String.Equals(appUser.Id, user.Id, StringComparison.OrdinalIgnoreCase))
-                return InvokeResult.FromError("A customer administrator cannot disable their own account.");
+                return InvokeResult.FromError("A user cannot disable their own account.");
 
             appUser.IsAccountDisabled = true;
             appUser.LastUpdatedBy = user;
             appUser.LastUpdatedDate = Core.UtcTimestamp.Now;
+
             return await _appUserManager.UpdateUserAsync(appUser, org, user);
         }
 
         public async Task<InvokeResult> SetCustomerAdminAsync(string userId, EntityHeader customer, EntityHeader org, EntityHeader user)
         {
-            await GetAuthorizedCustomerUserAsync(userId, customer, org, user);
+            ValidateContext(customer, org, user);
+            await AuthorizeAsync(user, org, typeof(AppUser), Actions.Update, userId);
+
+            await GetCustomerUserAsync(userId, customer, org);
+
             return await _appUserManager.SetEndUserContactAsCustomerAdminAsync(userId, customer, org, user);
         }
 
         public async Task<InvokeResult> ClearCustomerAdminAsync(string userId, EntityHeader customer, EntityHeader org, EntityHeader user)
         {
-            await GetAuthorizedCustomerUserAsync(userId, customer, org, user);
+            ValidateContext(customer, org, user);
+            await AuthorizeAsync(user, org, typeof(AppUser), Actions.Update, userId);
+
+            await GetCustomerUserAsync(userId, customer, org);
 
             if (String.Equals(userId, user.Id, StringComparison.OrdinalIgnoreCase))
-                return InvokeResult.FromError("A customer administrator cannot revoke their own customer-administrator privileges.");
+                return InvokeResult.FromError("A user cannot revoke their own customer-administrator privileges.");
 
             return await _appUserManager.ClearEndUserContactAsCustomerAdminAsync(userId, customer, org, user);
         }
