@@ -168,7 +168,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
             var signIn = UserSignInMetrics.WithLabels(nameof(PasswordSignInAsync));
             UserLoginAttempts.Inc();
 
-            var appUser = await _userManager.FindByEmailAsync(userName);
+            var appUser = await _userManager.FindByNameAsync(userName);
             if (appUser == null)
             {
                 await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthUserNotFound, userName: userName);

@@ -204,7 +204,7 @@ namespace LagoVista.UserAdmin.Repos.Users
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"Did not find {email} in cache - {sw.Elapsed.TotalMilliseconds} ms");
                 sw.Restart();
-                var user = (await QueryAsync(usr => usr.Email == email.ToUpper())).FirstOrDefault();
+                var user = (await QueryAsync(usr => usr.Email == email.ToUpper() || usr.UserName == email.ToUpper())).FirstOrDefault();
                 if (user == null)
                 {
                     _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Warning, this.Tag(), $"Could not find user by email {email} - {sw.Elapsed.TotalMilliseconds} ms");
@@ -213,7 +213,7 @@ namespace LagoVista.UserAdmin.Repos.Users
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"Found user {email} in storage by email - {sw.Elapsed.TotalMilliseconds} ms");
                 accountId = user.Id;
                 sw.Restart();
-                await _cacheProvider.AddAsync(EmailCacheKey(email), accountId);
+                await _cacheProvider.AddAsync(EmailCacheKey(email == user.UserName ? user.UserName : user.Email), accountId);
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"Added user {email} to cache for account id {accountId} - {sw.Elapsed.TotalMilliseconds} ms");
             }
             sw.Restart();

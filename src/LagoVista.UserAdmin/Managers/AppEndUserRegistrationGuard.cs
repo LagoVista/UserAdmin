@@ -68,6 +68,7 @@ namespace LagoVista.UserAdmin.Managers
 
             appUser.EndUserAppOrg = request.EndUserAppOrg;
             appUser.Customer = request.Customer;
+            appUser.EmailConfirmed = true;
             appUser.CustomerContact = request.CustomerContact;
             appUser.CurrentOrganization = organization.CreateSummary();
             appUser.CurrentRepo = organization.DefaultDeviceRepository;

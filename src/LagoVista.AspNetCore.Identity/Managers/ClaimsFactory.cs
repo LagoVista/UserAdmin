@@ -167,8 +167,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 claims.Add(new Claim(InstanceName, user.CurrentInstance.Text));
             }
 
-            LogClaims(user, claims);
-
             return claims;
         }
 
