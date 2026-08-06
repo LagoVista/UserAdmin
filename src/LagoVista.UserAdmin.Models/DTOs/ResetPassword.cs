@@ -23,6 +23,9 @@ namespace LagoVista.UserAdmin.Models.DTOs
         [JsonProperty("email")]
         public string Email { get; set; }
 
+        [JsonProperty("endUserAppOrgId")]
+        public string EndUserAppOrgId { get; set; }
+
         [JsonProperty("token")]
         public string Token { get; set; }
 

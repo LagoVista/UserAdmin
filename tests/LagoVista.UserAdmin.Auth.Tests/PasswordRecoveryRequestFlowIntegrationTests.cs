@@ -33,7 +33,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var harness = CreateHarness();
             var user = new AppUser("user@example.com", "test") { UserName = "user@example.com", Email = "user@example.com", SecurityStamp = "security-stamp" };
 
-            harness.UserManager.Setup(manager => manager.FindByEmailAsync("user@example.com")).ReturnsAsync(user);
+            harness.UserManager.Setup(manager => manager.FindByNameAsync("user@example.com")).ReturnsAsync(user);
             harness.EmailSender
                 .Setup(sender => sender.SendAsync(
                     "user@example.com",
@@ -63,7 +63,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         public async Task UserNotFound_Should_ReturnSuccess_And_RecordRequestOnly()
         {
             var harness = CreateHarness();
-            harness.UserManager.Setup(manager => manager.FindByEmailAsync("missing@example.com")).ReturnsAsync((AppUser)null);
+            harness.UserManager.Setup(manager => manager.FindByNameAsync("missing@example.com")).ReturnsAsync((AppUser)null);
 
             var result = await harness.FlowService.RequestPasswordRecoveryAsync(new SendResetPasswordLink { Email = "missing@example.com" });
 

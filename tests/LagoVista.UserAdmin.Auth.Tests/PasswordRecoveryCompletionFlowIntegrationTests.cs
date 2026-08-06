@@ -33,7 +33,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var user = new AppUser("user@example.com", "test") { UserName = "user@example.com", Email = "user@example.com" };
             var request = CreateRequest();
 
-            harness.UserManager.Setup(manager => manager.FindByEmailAsync(request.Email)).ReturnsAsync(user);
+            harness.UserManager.Setup(manager => manager.FindByNameAsync(request.Email)).ReturnsAsync(user);
             harness.UserManager.Setup(manager => manager.ResetPasswordAsync(user, request.Token, request.NewPassword)).ReturnsAsync(InvokeResult.Success);
 
             var result = await harness.FlowService.CompletePasswordRecoveryAsync(request);
@@ -54,7 +54,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var request = CreateRequest();
             var failedResult = InvokeResult.FromErrors(new ErrorMessage("Reset failed."));
 
-            harness.UserManager.Setup(manager => manager.FindByEmailAsync(request.Email)).ReturnsAsync(user);
+            harness.UserManager.Setup(manager => manager.FindByNameAsync(request.Email)).ReturnsAsync(user);
             harness.UserManager.Setup(manager => manager.ResetPasswordAsync(user, request.Token, request.NewPassword)).ReturnsAsync(failedResult);
 
             var result = await harness.FlowService.CompletePasswordRecoveryAsync(request);

@@ -67,6 +67,11 @@ namespace LagoVista.UserAdmin.Managers
             return environment;
         }
 
+        private static string BuildPasswordRecoveryUserName(string email, string endUserAppOrgId)
+        {
+            return String.IsNullOrWhiteSpace(endUserAppOrgId) ? email : $"{email}@{endUserAppOrgId.Trim()}";
+        }
+
         private static string ComputeResetCodeHash(AppUser appUser, string code)
         {
             var key = !String.IsNullOrWhiteSpace(appUser.SecurityStamp) ? appUser.SecurityStamp : appUser.PasswordHash;
@@ -91,8 +96,8 @@ namespace LagoVista.UserAdmin.Managers
 
             await _authLogMgr.AddAsync(AuthLogTypes.PasswordRecoveryRequested, userName: sendResetPasswordLink.Email);
 
-            var userName = String.IsNullOrWhiteSpace(sendResetPasswordLink.UserName) ? sendResetPasswordLink.Email : sendResetPasswordLink.UserName;
-            var appUser = await _userManager.FindByEmailAsync(userName);
+            var userName = BuildPasswordRecoveryUserName(sendResetPasswordLink.Email, sendResetPasswordLink.EndUserAppOrgId);
+            var appUser = await _userManager.FindByNameAsync(userName);
 
             if (appUser == null)
             {
@@ -146,7 +151,8 @@ namespace LagoVista.UserAdmin.Managers
             if (request == null || String.IsNullOrWhiteSpace(request.Email) || String.IsNullOrWhiteSpace(request.Code) || request.Code.Length != 6)
                 return InvokeResult<string>.FromErrors(new ErrorMessage(invalidCodeMessage));
 
-            var appUser = await _userManager.FindByEmailAsync(request.Email);
+            var userName = BuildPasswordRecoveryUserName(request.Email, request.EndUserAppOrgId);
+            var appUser = await _userManager.FindByNameAsync(userName);
             if (appUser == null)
                 return InvokeResult<string>.FromErrors(new ErrorMessage(invalidCodeMessage));
 
@@ -234,7 +240,8 @@ namespace LagoVista.UserAdmin.Managers
             var validationResult = _authRequestValidators.ValidateResetPasswordRequest(resetPassword);
             if (!validationResult.Successful) return validationResult;
 
-            var appUser = await _userManager.FindByEmailAsync(resetPassword.Email);
+            var userName = BuildPasswordRecoveryUserName(resetPassword.Email, resetPassword.EndUserAppOrgId);
+            var appUser = await _userManager.FindByNameAsync(userName);
             if (appUser == null)
             {
                 _adminLogger.AddError("PasswordManager_ResetPasswordAsync", "CouldNotFindUser", new System.Collections.Generic.KeyValuePair<string, string>("resetPwdEmail", resetPassword.Email));
