@@ -5,6 +5,7 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Authentication;
 using LagoVista.UserAdmin.Authentication.Flows;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.DTOs;
@@ -88,6 +89,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 validators.Object,
                 userManager.Object,
                 new Mock<IEmailSender>(MockBehavior.Loose).Object,
+                new Mock<IPasswordResetCodeRepo>(MockBehavior.Loose).Object,
                 new Mock<IDependencyManager>(MockBehavior.Loose).Object,
                 new Mock<ISecurity>(MockBehavior.Loose).Object,
                 log,

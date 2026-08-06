@@ -21,6 +21,8 @@ namespace LagoVista.UserAdmin.Models.Security
         PasswordRecoveryRequested,
         PasswordRecoveryCodeGenerated,
         PasswordRecoveryMessageSent,
+        PasswordRecoveryCodeVerified,
+        PasswordRecoveryCodeVerificationFailed,
         PasswordRecoveryCompleted,
        
         CreateEmailUser,

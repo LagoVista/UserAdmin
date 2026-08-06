@@ -17,6 +17,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> ResetPasswordAsync(ResetPassword resetPassword);
         Task<InvokeResult> ChangePasswordAsync(ChangePassword changePasswordDTO, EntityHeader orgEntityHeader, EntityHeader userEntityHeader);
         Task<InvokeResult> SendResetPasswordLinkAsync(SendResetPasswordLink sendResetPasswordLink);
+        Task<InvokeResult<string>> VerifyPasswordResetCodeAsync(VerifyPasswordResetCode request);
         Task<InvokeResult> SetUserPasswordAsync(ChangePassword changeRequest, EntityHeader org, EntityHeader user);
     }
 }

@@ -18,6 +18,9 @@ using System.Threading.Tasks;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Models.Security;
+using LagoVista.UserAdmin.Interfaces.Repos.Security;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace LagoVista.UserAdmin.Managers
 {
@@ -29,11 +32,12 @@ namespace LagoVista.UserAdmin.Managers
         IUserManager _userManager;
         IAuthRequestValidators _authRequestValidators;
         private readonly IAuthenticationLogManager _authLogMgr;
+        private readonly IPasswordResetCodeRepo _passwordResetCodeRepo;
 
         public const string ACTION_RESET_PASSWORD = "/auth/resetpassword";
 
 
-        public PasswordManager(IAuthRequestValidators authRequestValidators, IUserManager userManager, IEmailSender emailSender, IDependencyManager depManager, ISecurity security, IAuthenticationLogManager authLogMgr, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
+        public PasswordManager(IAuthRequestValidators authRequestValidators, IUserManager userManager, IEmailSender emailSender, IPasswordResetCodeRepo passwordResetCodeRepo, IDependencyManager depManager, ISecurity security, IAuthenticationLogManager authLogMgr, IAdminLogger logger, IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
             _adminLogger = logger;
             _emailSender = emailSender;
@@ -41,6 +45,7 @@ namespace LagoVista.UserAdmin.Managers
             _userManager = userManager;
             _authRequestValidators = authRequestValidators;
             _authLogMgr = authLogMgr;
+            _passwordResetCodeRepo = passwordResetCodeRepo;
         }
 
         //In some cases, this will be called from API, we don't want to return API as part of the link.
@@ -62,6 +67,23 @@ namespace LagoVista.UserAdmin.Managers
             return environment;
         }
 
+        private static string ComputeResetCodeHash(AppUser appUser, string code)
+        {
+            var key = !String.IsNullOrWhiteSpace(appUser.SecurityStamp) ? appUser.SecurityStamp : appUser.PasswordHash;
+            if (String.IsNullOrWhiteSpace(key)) throw new InvalidOperationException("The user does not have security state available for password recovery.");
+
+            using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(key)))
+            {
+                return Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(code)));
+            }
+        }
+
+        private static bool ResetCodeHashesMatch(string expectedHash, string actualHash)
+        {
+            if (String.IsNullOrWhiteSpace(expectedHash) || String.IsNullOrWhiteSpace(actualHash)) return false;
+            return CryptographicOperations.FixedTimeEquals(Encoding.UTF8.GetBytes(expectedHash), Encoding.UTF8.GetBytes(actualHash));
+        }
+
         public async Task<InvokeResult> SendResetPasswordLinkAsync(SendResetPasswordLink sendResetPasswordLink)
         {
             var validationResult = _authRequestValidators.ValidateSendPasswordLinkRequest(sendResetPasswordLink);
@@ -75,38 +97,38 @@ namespace LagoVista.UserAdmin.Managers
             if (appUser == null)
             {
                 _adminLogger.AddError("PasswordManager_SendResetPasswordLinkAsync", "CouldNotFindUser", new System.Collections.Generic.KeyValuePair<string, string>("email", sendResetPasswordLink.Email));
-                return InvokeResult.FromErrors(new ErrorMessage(UserAdminResources.Err_ResetPwd_CouldNotFindUser));
+                return InvokeResult.Success;
             }
 
-            var token = await _userManager.GeneratePasswordResetTokenAsync(appUser);
+            var code = RandomNumberGenerator.GetInt32(0, 1000000).ToString("D6");
+            var now = DateTime.UtcNow;
+            var resetCode = new PasswordResetCode
+            {
+                Id = Guid.NewGuid().ToId(),
+                UserId = appUser.Id,
+                CodeHash = ComputeResetCodeHash(appUser, code),
+                CreatedUtc = now,
+                ExpiresUtc = now.AddMinutes(10),
+                AttemptCount = 0
+            };
+
+            await _passwordResetCodeRepo.StoreAsync(resetCode);
             await _authLogMgr.AddAsync(AuthLogTypes.PasswordRecoveryCodeGenerated, appUser);
 
-            var encodedToken = System.Net.WebUtility.UrlEncode(token);
-            var callbackUrl = $"{GetWebURI()}{ACTION_RESET_PASSWORD}?code={encodedToken}";
-            var mobileCallbackUrl = $"nuviot://resetpassword?code={token}";
-#if DIAG
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_SendResetPasswordLinkAsync", "SentToken",
-                 token.ToKVP("token"),
-                 appUser.Id.ToKVP("appUserId"),
-                 encodedToken.ToKVP("encodedToken"),
-                 appUser.Email.ToKVP("toEmailAddress"));
-#endif 
-
-
             var subject = UserAdminResources.Email_ResetPassword_Subject.Replace("[APP_NAME]", _appConfig.AppName);
-            var body = UserAdminResources.Email_ResetPassword_Body.Replace("[CALLBACK_URL]", callbackUrl).Replace("[MOBILE_CALLBACK_URL]", mobileCallbackUrl);
+            var body = UserAdminResources.Email_ResetPassword_Body.Replace("[RESET_CODE]", code);
 
             var result = await _emailSender.SendAsync(sendResetPasswordLink.Email, subject, body, _appConfig.SystemOwnerOrg, appUser.ToEntityHeader());
             if (result.Successful)
             {
                 await _authLogMgr.AddAsync(AuthLogTypes.PasswordRecoveryMessageSent, appUser);
 
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_SendResetPasswordLinkAsync", "SentLink",
+                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "PasswordManager_SendResetPasswordLinkAsync", "SentCode",
                      appUser.Id.ToKVP("appUserId"),
                      appUser.Email.ToKVP("toEmailAddress"));
 
 
-                await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "SentResetPasswordLink", _appConfig.SystemOwnerOrg, appUser.ToEntityHeader());
+                await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "SentResetPasswordCode", _appConfig.SystemOwnerOrg, appUser.ToEntityHeader());
             }
             else
             {
@@ -116,6 +138,42 @@ namespace LagoVista.UserAdmin.Managers
             return result;
         }
 
+
+        public async Task<InvokeResult<string>> VerifyPasswordResetCodeAsync(VerifyPasswordResetCode request)
+        {
+            const string invalidCodeMessage = "The password recovery code is invalid or expired.";
+
+            if (request == null || String.IsNullOrWhiteSpace(request.Email) || String.IsNullOrWhiteSpace(request.Code) || request.Code.Length != 6)
+                return InvokeResult<string>.FromErrors(new ErrorMessage(invalidCodeMessage));
+
+            var appUser = await _userManager.FindByEmailAsync(request.Email);
+            if (appUser == null)
+                return InvokeResult<string>.FromErrors(new ErrorMessage(invalidCodeMessage));
+
+            var resetCode = await _passwordResetCodeRepo.GetLatestAsync(appUser.Id);
+            if (resetCode == null || resetCode.ConsumedUtc.HasValue || resetCode.ExpiresUtc <= DateTime.UtcNow || resetCode.AttemptCount >= 5)
+            {
+                await _authLogMgr.AddAsync(AuthLogTypes.PasswordRecoveryCodeVerificationFailed, appUser);
+                return InvokeResult<string>.FromErrors(new ErrorMessage(invalidCodeMessage));
+            }
+
+            var submittedHash = ComputeResetCodeHash(appUser, request.Code);
+            if (!ResetCodeHashesMatch(resetCode.CodeHash, submittedHash))
+            {
+                resetCode.AttemptCount++;
+                if (resetCode.AttemptCount >= 5) resetCode.ConsumedUtc = DateTime.UtcNow;
+                await _passwordResetCodeRepo.UpdateAsync(resetCode);
+                await _authLogMgr.AddAsync(AuthLogTypes.PasswordRecoveryCodeVerificationFailed, appUser);
+                return InvokeResult<string>.FromErrors(new ErrorMessage(invalidCodeMessage));
+            }
+
+            resetCode.ConsumedUtc = DateTime.UtcNow;
+            await _passwordResetCodeRepo.UpdateAsync(resetCode);
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(appUser);
+            await _authLogMgr.AddAsync(AuthLogTypes.PasswordRecoveryCodeVerified, appUser);
+            return InvokeResult<string>.Create(token);
+        }
 
         public async Task<InvokeResult> SetUserPasswordAsync(ChangePassword changeRequest, EntityHeader org, EntityHeader user)
         {
