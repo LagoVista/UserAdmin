@@ -50,6 +50,7 @@ namespace LagoVista.UserAdmin
             services.AddScoped<IFunctionMapManager, FunctionMapManager>();
             services.AddScoped<IPasswordLoginFlowHandler, PasswordLoginFlowHandler>();
             services.AddScoped<IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest>, PasswordRecoveryRequestFlowHandler>();
+            services.AddScoped<IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string>, PasswordRecoveryVerificationFlowHandler>();
             services.AddScoped<IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest>, PasswordRecoveryCompletionFlowHandler>();
             services.AddScoped<IInvitationAcceptanceService, InvitationAcceptanceService>();
             services.AddScoped<IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse>, InvitationAcceptanceFlowHandler>();
