@@ -11,14 +11,17 @@ using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Models.Resources;
+using LagoVista.UserAdmin.Models.Security;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,9 +38,10 @@ namespace LagoVista.UserAdmin.Managers
         private readonly ISignInManager _signInManager;
         private readonly IAuthenticationLogManager _authLogMgr;
         private readonly IOrganizationManager _orgManager;
+        private readonly IEmailVerificationCodeRepo _emailVerificationCodeRepo;
 
          public UserVerficationManager(IAdminLogger adminLogger, IUserManager userMananger, IAppConfig appConfig, ISmsSender smsSender, IAppUserRepo appUserRepo, IAuthenticationLogManager authLogManager,
-                                       IOrganizationManager orgManager, ISignInManager signInManager, IEmailSender emailSender, IDependencyManager depManager, ISecurity security) : base(adminLogger, appConfig, depManager, security)
+                                       IOrganizationManager orgManager, ISignInManager signInManager, IEmailSender emailSender, IEmailVerificationCodeRepo emailVerificationCodeRepo, IDependencyManager depManager, ISecurity security) : base(adminLogger, appConfig, depManager, security)
         {
             _authLogMgr = authLogManager ?? throw new ArgumentNullException(nameof(authLogManager));
             _smsSender = smsSender ?? throw new ArgumentNullException(nameof(smsSender));
@@ -48,6 +52,7 @@ namespace LagoVista.UserAdmin.Managers
             _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
             _orgManager = orgManager ?? throw new ArgumentNullException(nameof(orgManager));
+            _emailVerificationCodeRepo = emailVerificationCodeRepo ?? throw new ArgumentNullException(nameof(emailVerificationCodeRepo));
         }
 
         public async Task<InvokeResult> CheckConfirmedAsync(EntityHeader userHeader)
@@ -89,6 +94,23 @@ namespace LagoVista.UserAdmin.Managers
             return environment;
         }
 
+        private static string ComputeEmailVerificationCodeHash(AppUser appUser, string code)
+        {
+            var key = !String.IsNullOrWhiteSpace(appUser.SecurityStamp) ? appUser.SecurityStamp : appUser.PasswordHash;
+            if (String.IsNullOrWhiteSpace(key)) throw new InvalidOperationException("The user does not have security state available for email verification.");
+
+            using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(key)))
+            {
+                return Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(code)));
+            }
+        }
+
+        private static bool EmailVerificationCodeHashesMatch(string expectedHash, string actualHash)
+        {
+            if (String.IsNullOrWhiteSpace(expectedHash) || String.IsNullOrWhiteSpace(actualHash)) return false;
+            return CryptographicOperations.FixedTimeEquals(Encoding.UTF8.GetBytes(expectedHash), Encoding.UTF8.GetBytes(actualHash));
+        }
+
         public async Task<InvokeResult<string>> SendConfirmationEmailAsync(string userId, string confirmSubject = "", string confirmBody = "", string appName = "", string logoFile = "")
         {
             var appUser = await _userManager.FindByIdAsync(userId);
@@ -110,25 +132,24 @@ namespace LagoVista.UserAdmin.Managers
 
             try
             {
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
-                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendingEmailConfirm, userId: userHeader.Id, userName: userHeader.Text, extras: $"Raw Token={token}");
+                var code = RandomNumberGenerator.GetInt32(0, 1000000).ToString("D6");
+                var now = DateTime.UtcNow;
+                var verificationCode = new EmailVerificationCode
+                {
+                    Id = Guid.NewGuid().ToId(),
+                    UserId = appUser.Id,
+                    CodeHash = ComputeEmailVerificationCodeHash(appUser, code),
+                    CreatedUtc = now,
+                    ExpiresUtc = now.AddMinutes(10),
+                    AttemptCount = 0
+                };
 
-                var encodedToken = System.Net.WebUtility.UrlEncode(token);
-
-                var callbackUrl = $"{GetWebURI()}/api/verify/email?userid={appUser.Id}&code={encodedToken}";
-                var mobileCallbackUrl = $"nuviot:confirmemail/?userId={appUser.Id}&code={encodedToken}";
-
-#if DEBUG
-                _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), "SentToken",
-                     token.ToKVP("token"),
-                     appUser.Id.ToKVP("appUserId"),
-                     encodedToken.ToKVP("encodedToken"),
-                     appUser.Email.ToKVP("toEmailAddress"));
-#endif
+                await _emailVerificationCodeRepo.StoreAsync(verificationCode);
+                await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.SendingEmailConfirm, userId: userHeader.Id, userName: userHeader.Text);
 
                 var subject = String.IsNullOrEmpty(confirmSubject) ? UserAdminResources.Email_Verification_Subject.Replace("[APP_NAME]", _appConfig.AppName) : confirmSubject;
-                var body = String.IsNullOrEmpty(confirmBody) ? UserAdminResources.Email_Verification_Body.Replace("[CALLBACK_URL]", callbackUrl).Replace("[MOBILE_CALLBACK_URL]", mobileCallbackUrl) :
-                                        confirmBody.Replace("[CALLBACK_URL]", callbackUrl).Replace("[MOBILE_CALLBACK_URL]", mobileCallbackUrl);
+                var bodyTemplate = String.IsNullOrEmpty(confirmBody) ? UserAdminResources.Email_Verification_Body : confirmBody;
+                var body = bodyTemplate.Replace("[VERIFICATION_CODE]", code).Replace("[CODE]", code);
 
                 var result = await _emailSender.SendAsync(appUser.Email, subject, body, _appConfig.SystemOwnerOrg, appUser.ToEntityHeader(), appName, logoFile);
 
@@ -137,15 +158,13 @@ namespace LagoVista.UserAdmin.Managers
                 {
                     appUser.VerifyEmailSentTimeStamp = DateTime.UtcNow.ToJSONString();
                     _adminLogger.Trace($"{this.Tag()} Success Sending Verification Email",
-                        new KeyValuePair<string, string>("callbackLink", callbackUrl),
-                        new KeyValuePair<string, string>("token", token.Substring(5) + "************"),
                         new KeyValuePair<string, string>("toUserId", appUser.Id),
                         new KeyValuePair<string, string>("toEmail", appUser.Email));
 
                     await _signInManager.RefreshUserLoginAsync(appUser);
                     return InvokeResult<string>.Create(_appConfig.Environment == Environments.Development ||
                         _appConfig.Environment == Environments.Local ||
-                        _appConfig.Environment == Environments.LocalDevelopment ? encodedToken : String.Empty);
+                        _appConfig.Environment == Environments.LocalDevelopment ? code : String.Empty);
                 }
                 else
                     return InvokeResult<string>.FromInvokeResult(result);
@@ -274,21 +293,56 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthCouldNotFindUserAccount.ToErrorMessage());
             }
 
-#if DEBUG
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "UserVerficationManager_ValidateEmailAsync", "ReceivedToken",
-                 confirmemaildto.ReceivedCode.ToKVP("token"),
-                 appUser.Id.ToKVP("appUserId"),
-                 appUser.Email.ToKVP("toEmailAddress"));
-#endif 
+            InvokeResult result;
 
-            var result = await _userManager.ConfirmEmailAsync(appUser, confirmemaildto.ReceivedCode);
+            if (appUser.EmailConfirmed)
+            {
+                result = InvokeResult.Success;
+            }
+            else
+            {
+                const string invalidCodeMessage = "The email verification code is invalid or expired.";
+
+                if (confirmemaildto == null || String.IsNullOrWhiteSpace(confirmemaildto.ReceivedCode) || confirmemaildto.ReceivedCode.Length != 6)
+                {
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.EmailConfirmFailed, appUser, extras: invalidCodeMessage);
+                    return InvokeResult.FromError(invalidCodeMessage);
+                }
+
+                var verificationCode = await _emailVerificationCodeRepo.GetLatestAsync(appUser.Id);
+                if (verificationCode == null || verificationCode.ConsumedUtc.HasValue || verificationCode.ExpiresUtc <= DateTime.UtcNow || verificationCode.AttemptCount >= 5)
+                {
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.EmailConfirmFailed, appUser, extras: invalidCodeMessage);
+                    return InvokeResult.FromError(invalidCodeMessage);
+                }
+
+                var submittedHash = ComputeEmailVerificationCodeHash(appUser, confirmemaildto.ReceivedCode);
+                if (!EmailVerificationCodeHashesMatch(verificationCode.CodeHash, submittedHash))
+                {
+                    verificationCode.AttemptCount++;
+                    if (verificationCode.AttemptCount >= 5) verificationCode.ConsumedUtc = DateTime.UtcNow;
+                    await _emailVerificationCodeRepo.UpdateAsync(verificationCode);
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.EmailConfirmFailed, appUser, extras: invalidCodeMessage);
+                    return InvokeResult.FromError(invalidCodeMessage);
+                }
+
+                appUser.EmailConfirmed = true;
+                result = await _userManager.UpdateAsync(appUser);
+                if (result.Successful)
+                {
+                    verificationCode.ConsumedUtc = DateTime.UtcNow;
+                    await _emailVerificationCodeRepo.UpdateAsync(verificationCode);
+                    await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "ConfirmedEmail", appUser.CurrentOrganization?.ToEntityHeader(), appUser.ToEntityHeader());
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.ConfirmEmailSuccess, appUser);
+                }
+            }
+
             if (result.Successful)
             {
                 await _signInManager.SignInAsync(appUser);
 
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "UserVerficationManager_ValidateEmailAsync", "Success_ConfirmEmail",
-                    new KeyValuePair<string, string>("userId", appUser.Id),
-                    new KeyValuePair<string, string>("code", confirmemaildto.ReceivedCode));
+                    new KeyValuePair<string, string>("userId", appUser.Id));
 
                 if(null != appUser.CurrentOrganization)
                 {
@@ -310,8 +364,7 @@ namespace LagoVista.UserAdmin.Managers
             else
             {
                 _adminLogger.LogInvokeResult("UserVerficationManager_ValidateEmailAsync", result,
-                    new KeyValuePair<string, string>("userId", appUser.Id),
-                    new KeyValuePair<string, string>("sentToken", confirmemaildto.ReceivedCode));
+                    new KeyValuePair<string, string>("userId", appUser.Id));
                 return result;
             }
         }

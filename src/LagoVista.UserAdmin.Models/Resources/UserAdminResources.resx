@@ -742,13 +742,11 @@
     <value>Sorry, there was an error sending your reset password link, please try again later.</value>
   </data>
   <data name="Email_Verification_Body" xml:space="preserve">
-    <value>&lt;p&gt;Thank you for registering for access to NuvIoT.&lt;/p&gt; 
+    <value>&lt;p&gt;Thank you for registering for access to NuvIoT.&lt;/p&gt;
 
-&lt;p&gt;To confirm your email address and complete the registration process, please click on this &lt;a href='[CALLBACK_URL]'&gt;Confirm Email&lt;/a&gt; link or &lt;a href='[MOBILE_CALLBACK_URL]'&gt;mobile link&lt;/a&gt; on your mobile phone or Windows App.&lt;/p&gt;
+&lt;p&gt;Your email verification code is &lt;strong&gt;[VERIFICATION_CODE]&lt;/strong&gt;. This code expires in 10 minutes.&lt;/p&gt;
 
-&lt;p&gt;You can also copy the link below into the address bar of your browser.&lt;/p&gt; 
-
-&lt;div style='font-family:consolas'&gt;[CALLBACK_URL]&lt;/div&gt;
+&lt;p&gt;Enter this code in the application to confirm your email address and complete the registration process.&lt;/p&gt;
 
 </value>
   </data>
@@ -2118,7 +2116,7 @@
     <value>Confirm Email Body</value>
   </data>
   <data name="Organization_EmailConfirmBody_Help" xml:space="preserve">
-    <value>This is the body of the email message that will be sent to ask the user to confirm their account.   If one is not provided, the standard message associated with NuvIoT will be used. This method should include some tags that will be replaced by links the user should click on, those links are [CALLBACK_URL] and [MOBILE_CALLBACK_URL].</value>
+    <value>This is the body of the email message that will be sent to ask the user to confirm their account. If one is not provided, the standard message associated with NuvIoT will be used. Include [VERIFICATION_CODE] where the six-digit email verification code should appear.</value>
   </data>
   <data name="AppUser_UserName" xml:space="preserve">
     <value>User Name</value>
