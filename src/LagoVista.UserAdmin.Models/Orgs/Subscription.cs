@@ -47,6 +47,9 @@ namespace LagoVista.UserAdmin.Models.Orgs
         [FormField(LabelResource: UserAdminResources.Names.Subscription_Customer,  IsUserEditable: true, FieldType: FieldTypes.CustomerPicker, ResourceType: typeof(UserAdminResources), IsRequired: false)]
         public EntityHeader Customer { get; set; }
 
+        [MapTo("SubscriptionLevelId")]
+        public EntityHeader SubscriptionLevel { get; set; }
+
         public string PaymentTokenSecretId { get; set; }
 
         [IgnoreOnMapTo()]
