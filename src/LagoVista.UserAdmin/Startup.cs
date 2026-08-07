@@ -25,6 +25,7 @@ namespace LagoVista.UserAdmin
             services.AddScoped<IOAuthClientApplicationManager, OAuthClientApplicationManager>();
             services.AddScoped<IHolidaySetManager, HolidaySetManager>();
             services.AddScoped<ISubscriptionManager, SubscriptionManager>();
+            services.AddScoped<ISubscriptionLevelManager, SubscriptionLevelManager>();
             services.AddScoped<IModuleManager, ModuleManager>();
             services.AddScoped<IAppInstanceManager, AppInstanceManager>();
             services.AddScoped<IUserVerficationManager, UserVerficationManager>();

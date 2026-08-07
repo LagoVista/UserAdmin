@@ -98,6 +98,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<IAppUserRelationalRepo, AppUserRelationalRepo>();
             services.AddScoped<IOrganizationRelationalRepo, OrganizationRelationalRepo>();
             services.AddScoped<ISubscriptionRepo, SubscriptionRepo>();
+            services.AddScoped<ISubscriptionLevelRepo, SubscriptionLevelRepo>();
             services.AddScoped<IDeviceOwnerRelationalRepo, DeviceOwnerRelationalRepo>();
 
             services.AddScoped<IOAuthSettings, OAuthSettings>();
