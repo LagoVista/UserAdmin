@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.UserAdmin.Repos</id>
-    <version>3.0.3368.1830</version>
+    <version>3.0.3369.0702</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,14 +12,14 @@
     <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 8/6/2026 10:30:42 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 8/7/2026 11:02:39 AM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net9.0">
-        <dependency id="LagoVista.CloudStorage" version="3.0.3368.1830" />
-        <dependency id="LagoVista.Relational" version="3.0.3368.1830" />
-        <dependency id="LagoVista.Core.Configuration" version="3.0.3368.1830" />
-        <dependency id="LagoVista.UserAdmin" version="3.0.3368.1830" />
+        <dependency id="LagoVista.CloudStorage" version="3.0.3369.0702" />
+        <dependency id="LagoVista.Relational" version="3.0.3369.0702" />
+        <dependency id="LagoVista.Core.Configuration" version="3.0.3369.0702" />
+        <dependency id="LagoVista.UserAdmin" version="3.0.3369.0702" />
       </group>
     </dependencies>
   </metadata>

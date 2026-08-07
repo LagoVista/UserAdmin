@@ -71,6 +71,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<IRoleAccessRepo, RoleAccessRepo>();
             services.AddTransient<ISingleUseTokenRepo, SingleUseTokenRepo>();
             services.AddTransient<IPasswordResetCodeRepo, PasswordResetCodeRepo>();
+            services.AddTransient<IEmailVerificationCodeRepo, EmailVerificationCodeRepo>();
             services.AddScoped<IDistributionListRepo, DistributionListRepo>();
             services.AddScoped<ICalendarRepo, CalendarRepo>();
             services.AddScoped<IMostRecentlyUsedRepo, MostRecentUsedRepo>();
