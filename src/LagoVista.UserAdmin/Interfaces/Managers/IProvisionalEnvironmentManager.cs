@@ -7,5 +7,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
     public interface IProvisionalEnvironmentManager
     {
         Task<InvokeResult<CreateProvisionalEnvironmentResponse>> CreateAsync(CreateProvisionalEnvironmentRequest request);
+        Task<InvokeResult<RestoreProvisionalEnvironmentResponse>> RestoreAsync(RestoreProvisionalEnvironmentRequest request);
+        Task<InvokeResult> RecordActivityAsync(string provisionalEnvironmentId);
     }
 }

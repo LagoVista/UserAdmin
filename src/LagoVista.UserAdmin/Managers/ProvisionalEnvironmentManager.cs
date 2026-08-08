@@ -122,6 +122,71 @@ namespace LagoVista.UserAdmin.Managers
             });
         }
 
+        public async Task<InvokeResult<RestoreProvisionalEnvironmentResponse>> RestoreAsync(RestoreProvisionalEnvironmentRequest request)
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+
+            var hasRecoveryToken = !String.IsNullOrWhiteSpace(request.RecoveryToken);
+            var hasInstallationId = !String.IsNullOrWhiteSpace(request.InstallationId);
+            if (!hasRecoveryToken && !hasInstallationId) return InvokeResult<RestoreProvisionalEnvironmentResponse>.FromError("A recovery token or installation ID is required.");
+
+            var recoveryEnvironment = hasRecoveryToken ? await _environmentRepo.FindByRecoveryTokenHashAsync(Hash(request.RecoveryToken)) : null;
+            var installationEnvironment = hasInstallationId ? await _environmentRepo.FindByInstallationIdHashAsync(Hash(request.InstallationId)) : null;
+
+            if (hasRecoveryToken && hasInstallationId && (recoveryEnvironment == null || installationEnvironment == null || !String.Equals(recoveryEnvironment.Id, installationEnvironment.Id, StringComparison.Ordinal)))
+                return InvokeResult<RestoreProvisionalEnvironmentResponse>.FromError("The supplied continuity credentials do not identify the same provisional environment.");
+
+            var environment = recoveryEnvironment ?? installationEnvironment;
+            if (environment == null) return InvokeResult<RestoreProvisionalEnvironmentResponse>.FromError("The provisional environment could not be restored.");
+
+            var activityResult = await RecordActivityAsync(environment);
+            if (!activityResult.Successful) return InvokeResult<RestoreProvisionalEnvironmentResponse>.FromInvokeResult(activityResult);
+
+            return InvokeResult<RestoreProvisionalEnvironmentResponse>.Create(ToRestoreResponse(environment));
+        }
+
+        public async Task<InvokeResult> RecordActivityAsync(string provisionalEnvironmentId)
+        {
+            if (String.IsNullOrWhiteSpace(provisionalEnvironmentId)) return InvokeResult.FromError("ProvisionalEnvironmentId is required.");
+
+            var environment = await _environmentRepo.GetByIdAsync(provisionalEnvironmentId);
+            if (environment == null) return InvokeResult.FromError("The provisional environment was not found.");
+
+            return await RecordActivityAsync(environment);
+        }
+
+        private async Task<InvokeResult> RecordActivityAsync(ProvisionalEnvironment environment)
+        {
+            if (environment.State != ProvisionalEnvironmentState.Active) return InvokeResult.FromError($"Provisional environment is {environment.State.ToString().ToLowerInvariant()}.");
+
+            var now = DateTime.UtcNow;
+            if (environment.ExpiresUtc.ToUniversalTime() <= now)
+            {
+                environment.State = ProvisionalEnvironmentState.Expired;
+                environment.ExpiredUtc = now;
+                environment.StateChangedUtc = now;
+                await _environmentRepo.UpdateAsync(environment);
+                return InvokeResult.FromError("The provisional environment has expired.");
+            }
+
+            environment.LastActivityUtc = now;
+            environment.ExpiresUtc = now.AddDays(ActiveLifetimeDays);
+            await _environmentRepo.UpdateAsync(environment);
+            return InvokeResult.Success;
+        }
+
+        private static RestoreProvisionalEnvironmentResponse ToRestoreResponse(ProvisionalEnvironment environment)
+        {
+            return new RestoreProvisionalEnvironmentResponse
+            {
+                ProvisionalEnvironmentId = environment.Id,
+                AppUserId = environment.AppUserId,
+                OrganizationId = environment.OrganizationId,
+                SubscriptionId = environment.SubscriptionId,
+                ExpiresUtc = environment.ExpiresUtc
+            };
+        }
+
         private async Task<InvokeResult<AppUser>> EnsureUserAsync(ProvisionalEnvironment environment)
         {
             var appUser = await _userManager.FindByIdAsync(environment.AppUserId);

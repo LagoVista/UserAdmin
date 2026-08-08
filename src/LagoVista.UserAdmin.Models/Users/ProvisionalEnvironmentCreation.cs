@@ -29,4 +29,19 @@ namespace LagoVista.UserAdmin.Models.Users
         public DateTime ExpiresUtc { get; set; }
         public bool WasResumed { get; set; }
     }
+
+    public class RestoreProvisionalEnvironmentRequest
+    {
+        public string RecoveryToken { get; set; }
+        public string InstallationId { get; set; }
+    }
+
+    public class RestoreProvisionalEnvironmentResponse
+    {
+        public string ProvisionalEnvironmentId { get; set; }
+        public string AppUserId { get; set; }
+        public string OrganizationId { get; set; }
+        public string SubscriptionId { get; set; }
+        public DateTime ExpiresUtc { get; set; }
+    }
 }
