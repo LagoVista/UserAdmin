@@ -192,6 +192,55 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult<Organization>.Create(organization);
         }
 
+        public async Task<InvokeResult<Organization>> CreateProvisionalOrganizationAsync(AppUser appUser, string organizationId)
+        {
+            if (appUser == null) throw new ArgumentNullException(nameof(appUser));
+            if (String.IsNullOrEmpty(organizationId)) throw new ArgumentNullException(nameof(organizationId));
+
+            var user = EntityHeader.Create(appUser.Id, appUser.UserName);
+            var organization = await _organizationRepo.GetOrganizationAsync(organizationId);
+            if (organization == null)
+            {
+                organization = new Organization
+                {
+                    Id = organizationId,
+                    Name = "Provisional Workspace",
+                    Namespace = $"provisional{organizationId}",
+                    Status = UserAdminResources.Organization_Status_Active,
+                    TechnicalContact = user,
+                    AdminContact = user,
+                    BillingContact = user,
+                    DefaultProjectLead = user,
+                    DefaultProjectAdminLead = user,
+                    DefaultContributor = user,
+                    DefaultQAResource = user,
+                    Owner = user,
+                    IsForProductLine = false
+                };
+
+                organization.SetCreationUpdatedFields(user);
+                await _organizationRepo.AddOrganizationAsync(organization);
+            }
+
+            var ownerRoleId = _defaultRoleList.GetStandardRoles().Single(role => role.Key == DefaultRoleList.OWNER).Id;
+            if (!await _userRoleManager.UserHasRoleAsync(ownerRoleId, appUser.Id, organization.Id)) await _userRoleManager.GrantUserRoleAsync(appUser.Id, ownerRoleId, organization.ToEntityHeader(), user);
+
+            if (!await _orgUserRepo.QueryOrgHasUserAsync(organization.Id, appUser.Id))
+            {
+                var addUserResult = await AddUserToOrgAsync(appUser, organization.ToEntityHeader(), user, true, true);
+                if (!addUserResult.Successful) return InvokeResult<Organization>.FromInvokeResult(addUserResult);
+            }
+
+            if (appUser.Organizations == null) appUser.Organizations = new List<EntityHeader>();
+            if (!appUser.Organizations.Any(org => org.Id == organization.Id)) appUser.Organizations.Add(organization.ToEntityHeader());
+            appUser.IsOrgAdmin = true;
+            appUser.IsAppBuilder = true;
+            appUser.CurrentOrganization = organization.CreateSummary();
+            await _appUserRepo.UpdateAsync(appUser);
+
+            return InvokeResult<Organization>.Create(organization);
+        }
+
         public async Task<InvokeResult> CreateOrganizationAsync(Organization newOrg, EntityHeader userOrg, EntityHeader user)
         {
             /* This means that the user is creating the org upon sign up, 

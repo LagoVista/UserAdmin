@@ -37,6 +37,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public const string PaymentTokenStatus_Invalid = "invalid";
 
         public const string SubscriptionKey_Trial = "trial";
+        public const string SubscriptionKey_Provisional = "provisional";
 
         public Subscription()
         {

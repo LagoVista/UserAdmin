@@ -26,6 +26,7 @@ namespace LagoVista.UserAdmin
             services.AddScoped<IHolidaySetManager, HolidaySetManager>();
             services.AddScoped<ISubscriptionManager, SubscriptionManager>();
             services.AddScoped<ISubscriptionLevelManager, SubscriptionLevelManager>();
+            services.AddScoped<IProvisionalEnvironmentManager, ProvisionalEnvironmentManager>();
             services.AddScoped<IModuleManager, ModuleManager>();
             services.AddScoped<IAppInstanceManager, AppInstanceManager>();
             services.AddScoped<IUserVerficationManager, UserVerficationManager>();

@@ -56,6 +56,11 @@ namespace LagoVista.UserAdmin.Managers
                     subscription.PaymentTokenStatus = Subscription.PaymentTokenStatus_Waived;
                 }
             }
+            else if (subscription.Key == Subscription.SubscriptionKey_Provisional)
+            {
+                subscription.PaymentTokenStatus = Subscription.PaymentTokenStatus_Waived;
+                subscription.Status = Subscription.Status_OK;
+            }
             else
             {
                 if (String.IsNullOrEmpty(subscription.PaymentToken))
