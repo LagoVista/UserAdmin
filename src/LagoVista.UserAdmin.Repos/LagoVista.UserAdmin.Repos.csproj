@@ -6,6 +6,7 @@
     <PackageReference Include="LagoVista.CloudStorage" Version="3.0.3370.1300" />
     <PackageReference Include="LagoVista.Relational" Version="3.0.3370.1300" />
     <PackageReference Include="LagoVista.Core.Configuration" Version="3.0.3370.1300" />
+    <PackageReference Include="LagoVista.JobManager" Version="3.0.3370.1300" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.UserAdmin\LagoVista.UserAdmin.csproj" />

@@ -2,6 +2,7 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Repos;
 using LagoVista.IoT.Logging;
+using LagoVista.JobManager.Jobs;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Repos;
 using LagoVista.UserAdmin.Interfaces.Repos.Account;
@@ -96,6 +97,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<IProvisionalEnvironmentCreationIndexRepo, ProvisionalEnvironmentCreationIndexRepo>();
             services.AddScoped<IProvisionalEnvironmentStateIndexRepo, ProvisionalEnvironmentStateIndexRepo>();
             services.AddScoped<IProvisionalEnvironmentRepo, ProvisionalEnvironmentRepo>();
+            services.AddLagoVistaJob<ProvisionalEnvironmentLifecycleJob>();
             services.AddTransient<ITestArtifactStorage, TestArtifactStorage>();
             services.AddTransient<IPasskeyChallengeStore, RedisPasskeyChallengeStore>();
             services.AddTransient<IMagicLinkAttemptStore, MagicLinkAttemptCacheStore>();
