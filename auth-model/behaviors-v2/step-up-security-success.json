@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.step-up-security.success",
+  "name": "Step-Up Security Success",
+  "summary": "An authenticated user attempts to enter a protected application area or perform a protected operation, is required to provide fresh approved MFA proof, successfully satisfies that challenge, and continues without changing durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "reconciliationStatus": "needs-reconciliation",
+  "categoryKey": "step-up-authentication",
+  "scenarioKeys": [],
+  "finalOutcome": "The current authenticated identity has fresh MFA assurance sufficient for the protected area or operation, and the user may continue the originally requested activity.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "journey", "reference": "auth.journey.passkey.step-up", "note": "Existing passkey journey is evidence for one mechanism that can satisfy step-up security." },
+    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-08", "note": "Protected application areas require an MFA capability; the canonical behavior is independent of the factor used." }
+  ]
+}
