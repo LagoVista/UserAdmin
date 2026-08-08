@@ -1,0 +1,15 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.passkey.step-up-success",
+  "name": "Passkey Step-Up Success",
+  "summary": "An authenticated user provides fresh user-verifying passkey proof to authorize an operation that requires elevated authentication assurance.",
+  "version": 1,
+  "maturity": "proposed",
+  "reconciliationStatus": "needs-reconciliation",
+  "categoryKey": "step-up-authentication",
+  "scenarioKeys": [],
+  "finalOutcome": "Fresh passkey proof exists for the current durable identity and the session has the required step-up capability.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [{ "sourceType": "journey", "reference": "auth.journey.passkey.step-up" }]
+}

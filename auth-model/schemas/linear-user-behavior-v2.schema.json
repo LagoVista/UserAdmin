@@ -15,8 +15,6 @@
     "reconciliationStatus",
     "categoryKey",
     "scenarioKeys",
-    "entryViewKey",
-    "finalViewKey",
     "finalOutcome",
     "supportedPlatforms",
     "sourceReferences"
@@ -39,8 +37,8 @@
       "items": { "type": "string", "pattern": "^auth\\.scenario\\." },
       "description": "Ordered decomposition into atomic scenarios. May be empty while behavior-first reconciliation is still defining downstream requirements."
     },
-    "entryViewKey": { "$ref": "#/$defs/viewKey" },
-    "finalViewKey": { "$ref": "#/$defs/viewKey" },
+    "entryViewKey": { "$ref": "#/$defs/optionalViewKey" },
+    "finalViewKey": { "$ref": "#/$defs/optionalViewKey" },
     "finalOutcome": { "type": "string", "minLength": 1 },
     "supportedPlatforms": { "type": "array", "uniqueItems": true, "items": { "enum": ["server", "web", "android", "ios", "vtm"] } },
     "sourceReferences": {
@@ -61,6 +59,7 @@
     "definitionHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
   },
   "$defs": {
-    "viewKey": { "type": "string", "pattern": "^(auth|app)\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$" }
+    "viewKey": { "type": "string", "pattern": "^(auth|app)\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$" },
+    "optionalViewKey": { "anyOf": [{ "$ref": "#/$defs/viewKey" }, { "type": "null" }] }
   }
 }

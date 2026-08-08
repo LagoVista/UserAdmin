@@ -1,0 +1,15 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.native-provider.registration-success",
+  "name": "Native Provider Registration Success",
+  "summary": "A new user establishes a durable account from a validated supported native-provider identity and enters the application without conflating provider email with independent email evidence.",
+  "version": 1,
+  "maturity": "proposed",
+  "reconciliationStatus": "needs-reconciliation",
+  "categoryKey": "native-provider-registration",
+  "scenarioKeys": [],
+  "finalOutcome": "A new durable user exists, the provider identity is bound to it, a home workspace exists, and an authenticated session is active.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [{ "sourceType": "journey", "reference": "auth.journey.native-provider.new-user-registration" }]
+}

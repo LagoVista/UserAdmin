@@ -1,0 +1,15 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.passkey.add-success",
+  "name": "Add Passkey Success",
+  "summary": "An authenticated existing user adds a passkey to the current durable identity without creating or switching accounts.",
+  "version": 1,
+  "maturity": "proposed",
+  "reconciliationStatus": "needs-reconciliation",
+  "categoryKey": "passkey-management",
+  "scenarioKeys": [],
+  "finalOutcome": "A new passkey credential is registered to the current durable identity and the active session identity is unchanged.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [{ "sourceType": "journey", "reference": "auth.journey.passkey.existing-user-registration" }]
+}

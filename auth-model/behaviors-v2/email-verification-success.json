@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.email-verification.success",
+  "name": "Email Verification Success",
+  "summary": "A user receives an email verification code, submits the six-digit code through a deterministic secure UI, and proves control of the email address.",
+  "version": 1,
+  "maturity": "proposed",
+  "reconciliationStatus": "needs-reconciliation",
+  "categoryKey": "email-verification",
+  "scenarioKeys": [],
+  "finalOutcome": "Email ownership is verified for the current durable identity and the verification proof cannot be reused.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationFlowHandler.cs" },
+    { "sourceType": "code", "reference": "auth-model/actions/email-verification-complete.json" }
+  ]
+}

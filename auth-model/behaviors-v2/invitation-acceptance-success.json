@@ -1,0 +1,15 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.invitation.acceptance-success",
+  "name": "Invitation Acceptance Success",
+  "summary": "A user resolves an invitation against the correct durable identity, explicitly accepts it, and gains membership in the invited workspace without changing the home workspace.",
+  "version": 1,
+  "maturity": "proposed",
+  "reconciliationStatus": "needs-reconciliation",
+  "categoryKey": "invitation",
+  "scenarioKeys": [],
+  "finalOutcome": "The invitation is consumed, the user has membership in the invited workspace, and the user's home workspace is unchanged.",
+  "supportedPlatforms": ["server", "web", "android", "ios", "vtm"],
+  "sourceReferences": [{ "sourceType": "journey", "reference": "auth.journey.invitation.resolve" }]
+}
