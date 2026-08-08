@@ -79,22 +79,22 @@
     "stateDimensions": 18,
     "compositeStateCatalogs": 1,
     "invariants": 20,
-    "actions": 48,
-    "transitions": 50,
+    "actions": 49,
+    "transitions": 52,
     "journeys": 12,
     "scenarios": 6,
     "legacyScenarios": 50,
     "endToEndBehaviors": 26,
     "legacyEndToEndBehaviors": 6,
     "conversationTypes": 7,
-    "authViews": 0,
+    "authViews": 2,
     "authRoutes": 0,
     "presentationBindings": 6,
-    "authFlows": 3,
-    "authFlowHandlers": 3,
-    "authEndpointBindings": 3,
-    "authProxyBindings": 3,
-    "authTestBindings": 3,
+    "authFlows": 4,
+    "authFlowHandlers": 4,
+    "authEndpointBindings": 4,
+    "authProxyBindings": 4,
+    "authTestBindings": 4,
     "decisions": 0,
     "unresolved": 0,
     "behaviorCategories": 19
@@ -102,7 +102,7 @@
   "currentWork": {
     "guideSection": "4.17",
     "status": "in-progress",
-    "summary": "Password Management behavior and scenario reviews are complete. Presentation reconciliation is now in progress against the canonical auth.password.change input surface and auth.password.change.complete success surface; rejected password changes remain on auth.password.change with an actionable error."
+    "summary": "Password Management presentation is approved. The shared generated proxy and REST route now enter through AuthenticationFlowService and PasswordChangeFlowHandler, with canonical success/failure transitions and integration proof through the real PasswordManager and LagoVista Identity adapter. Passing Aptix runtime evidence remains to be regenerated before Implementation and Tests are marked complete."
   },
   "sourceReferences": [
     {
@@ -215,6 +215,11 @@
       "sourceType": "discussion",
       "reference": "ChatGPT conversation 2026-08-08",
       "note": "Behavior-first reconciliation, category normalization, TOTP behavior framing, External Identity Provider terminology and management, Enterprise SSO framing, Magic Link deprecation decision, mechanism-independent step-up security, and post-login invitation acceptance."
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-08-08",
+      "note": "Password Management is the reference implementation pattern: shared generated proxy to REST endpoint to AuthenticationFlowService to typed flow handler to domain/credential managers to canonical transition to machine-readable test evidence."
     }
   ]
 }
