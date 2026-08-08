@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.totp.sign-in-success",
+  "name": "TOTP Sign-In Success",
+  "summary": "A returning user with TOTP enabled identifies the existing account, supplies a valid time-based one-time authenticator code, and establishes an authenticated application session without using the account password for that continuation path.",
+  "version": 1,
+  "maturity": "proposed",
+  "reconciliationStatus": "needs-reconciliation",
+  "categoryKey": "totp-sign-in",
+  "scenarioKeys": [],
+  "finalOutcome": "The submitted TOTP proof is accepted for the existing durable identity and an authenticated application session is active.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "VerifyTotpAsync supports login-time TOTP verification." },
+    { "sourceType": "auth-view", "reference": "auth.continue.totp", "note": "Existing authentication view collects the TOTP verification code and permits password fallback." }
+  ]
+}
