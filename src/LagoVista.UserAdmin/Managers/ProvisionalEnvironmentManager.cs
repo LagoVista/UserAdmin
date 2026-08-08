@@ -6,6 +6,8 @@ using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Users;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +18,8 @@ namespace LagoVista.UserAdmin.Managers
     {
         private const int RecoveryTokenBytes = 32;
         private const int ActiveLifetimeDays = 30;
+        private const int ExpiredRetentionDays = 30;
+        private const int MaximumLifecycleBatchSize = 500;
 
         private readonly IProvisionalEnvironmentRepo _environmentRepo;
         private readonly IUserManager _userManager;
@@ -155,6 +159,65 @@ namespace LagoVista.UserAdmin.Managers
             return await RecordActivityAsync(environment);
         }
 
+        public async Task<InvokeResult<IEnumerable<ProvisionalEnvironmentLifecycleSummary>>> GetByStateAsync(ProvisionalEnvironmentState state, DateTime? dueBeforeUtc = null, int take = 100)
+        {
+            var takeResult = ValidateTake(take);
+            if (!takeResult.Successful) return InvokeResult<IEnumerable<ProvisionalEnvironmentLifecycleSummary>>.FromInvokeResult(takeResult);
+
+            var environments = await _environmentRepo.GetByStateAsync(state, dueBeforeUtc?.ToUniversalTime(), take);
+            return InvokeResult<IEnumerable<ProvisionalEnvironmentLifecycleSummary>>.Create(environments.Select(ToLifecycleSummary).ToList());
+        }
+
+        public async Task<InvokeResult<ProvisionalEnvironmentLifecycleBatchResult>> ExpireAsync(DateTime? asOfUtc = null, int take = 100)
+        {
+            var takeResult = ValidateTake(take);
+            if (!takeResult.Successful) return InvokeResult<ProvisionalEnvironmentLifecycleBatchResult>.FromInvokeResult(takeResult);
+
+            var now = DateTime.UtcNow;
+            var cutoffUtc = (asOfUtc ?? now).ToUniversalTime();
+            var environments = (await _environmentRepo.GetByStateAsync(ProvisionalEnvironmentState.Active, cutoffUtc, take)).ToList();
+            var result = new ProvisionalEnvironmentLifecycleBatchResult { ExaminedCount = environments.Count };
+
+            foreach (var environment in environments)
+            {
+                if (environment.State != ProvisionalEnvironmentState.Active || environment.ExpiresUtc.ToUniversalTime() > cutoffUtc) continue;
+
+                environment.State = ProvisionalEnvironmentState.Expired;
+                environment.ExpiredUtc = now;
+                environment.PurgeAfterUtc = now.AddDays(ExpiredRetentionDays);
+                environment.StateChangedUtc = now;
+                await _environmentRepo.UpdateAsync(environment);
+                result.UpdatedCount++;
+                result.ProvisionalEnvironmentIds.Add(environment.Id);
+            }
+
+            return InvokeResult<ProvisionalEnvironmentLifecycleBatchResult>.Create(result);
+        }
+
+        public async Task<InvokeResult<ProvisionalEnvironmentLifecycleBatchResult>> PrepareForPurgeAsync(DateTime? asOfUtc = null, int take = 100)
+        {
+            var takeResult = ValidateTake(take);
+            if (!takeResult.Successful) return InvokeResult<ProvisionalEnvironmentLifecycleBatchResult>.FromInvokeResult(takeResult);
+
+            var now = DateTime.UtcNow;
+            var cutoffUtc = (asOfUtc ?? now).ToUniversalTime();
+            var environments = (await _environmentRepo.GetByStateAsync(ProvisionalEnvironmentState.Expired, cutoffUtc, take)).ToList();
+            var result = new ProvisionalEnvironmentLifecycleBatchResult { ExaminedCount = environments.Count };
+
+            foreach (var environment in environments)
+            {
+                if (environment.State != ProvisionalEnvironmentState.Expired || !environment.PurgeAfterUtc.HasValue || environment.PurgeAfterUtc.Value.ToUniversalTime() > cutoffUtc) continue;
+
+                environment.State = ProvisionalEnvironmentState.PurgePending;
+                environment.StateChangedUtc = now;
+                await _environmentRepo.UpdateAsync(environment);
+                result.UpdatedCount++;
+                result.ProvisionalEnvironmentIds.Add(environment.Id);
+            }
+
+            return InvokeResult<ProvisionalEnvironmentLifecycleBatchResult>.Create(result);
+        }
+
         private async Task<InvokeResult> RecordActivityAsync(ProvisionalEnvironment environment)
         {
             if (environment.State != ProvisionalEnvironmentState.Active) return InvokeResult.FromError($"Provisional environment is {environment.State.ToString().ToLowerInvariant()}.");
@@ -185,6 +248,29 @@ namespace LagoVista.UserAdmin.Managers
                 SubscriptionId = environment.SubscriptionId,
                 ExpiresUtc = environment.ExpiresUtc
             };
+        }
+
+        private static ProvisionalEnvironmentLifecycleSummary ToLifecycleSummary(ProvisionalEnvironment environment)
+        {
+            return new ProvisionalEnvironmentLifecycleSummary
+            {
+                ProvisionalEnvironmentId = environment.Id,
+                State = environment.State,
+                AppUserId = environment.AppUserId,
+                OrganizationId = environment.OrganizationId,
+                SubscriptionId = environment.SubscriptionId,
+                CreatedUtc = environment.CreatedUtc,
+                LastActivityUtc = environment.LastActivityUtc,
+                ExpiresUtc = environment.ExpiresUtc,
+                PurgeAfterUtc = environment.PurgeAfterUtc
+            };
+        }
+
+        private static InvokeResult ValidateTake(int take)
+        {
+            if (take <= 0) return InvokeResult.FromError("Take must be greater than zero.");
+            if (take > MaximumLifecycleBatchSize) return InvokeResult.FromError($"Take cannot exceed {MaximumLifecycleBatchSize}.");
+            return InvokeResult.Success;
         }
 
         private async Task<InvokeResult<AppUser>> EnsureUserAsync(ProvisionalEnvironment environment)

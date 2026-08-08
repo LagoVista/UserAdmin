@@ -71,7 +71,7 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments
             }
             catch
             {
-                if (stateIndexInserted) await TryAsync(() => _stateIndexRepo.DeleteAsync(environment.State, environment.ExpiresUtc, environment.Id));
+                if (stateIndexInserted) await TryAsync(() => _stateIndexRepo.DeleteAsync(environment.State, GetLifecycleDueUtc(environment), environment.Id));
                 if (installationIndexInserted) await TryAsync(() => _installationIndexRepo.DeleteAsync(environment.InstallationIdHash));
                 if (recoveryIndexInserted) await TryAsync(() => _recoveryIndexRepo.DeleteAsync(environment.RecoveryTokenHash));
                 if (creationIndexInserted) await TryAsync(() => _creationIndexRepo.DeleteAsync(environment.CreationRequestId));
@@ -114,7 +114,7 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments
             var environments = await Task.WhenAll(environmentIds.Distinct().Select(GetByIdAsync));
             var cutoffUtc = expiresBeforeUtc?.ToUniversalTime();
 
-            return environments.Where(environment => environment != null && environment.State == state && (!cutoffUtc.HasValue || environment.ExpiresUtc.ToUniversalTime() <= cutoffUtc.Value)).Take(take).ToList();
+            return environments.Where(environment => environment != null && environment.State == state && (!cutoffUtc.HasValue || GetLifecycleDueUtc(environment) <= cutoffUtc.Value)).Take(take).ToList();
         }
 
         public async Task UpdateAsync(ProvisionalEnvironment environment)
@@ -135,7 +135,7 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments
             if (!String.Equals(existing.CreationRequestId, environment.CreationRequestId, StringComparison.Ordinal) && !String.IsNullOrEmpty(existing.CreationRequestId)) await _creationIndexRepo.DeleteAsync(existing.CreationRequestId);
             if (!String.Equals(existing.RecoveryTokenHash, environment.RecoveryTokenHash, StringComparison.Ordinal) && !String.IsNullOrEmpty(existing.RecoveryTokenHash)) await _recoveryIndexRepo.DeleteAsync(existing.RecoveryTokenHash);
             if (!String.Equals(existing.InstallationIdHash, environment.InstallationIdHash, StringComparison.Ordinal) && !String.IsNullOrEmpty(existing.InstallationIdHash)) await _installationIndexRepo.DeleteAsync(existing.InstallationIdHash);
-            if (existing.State != environment.State || existing.ExpiresUtc != environment.ExpiresUtc) await _stateIndexRepo.DeleteAsync(existing.State, existing.ExpiresUtc, existing.Id);
+            if (existing.State != environment.State || GetLifecycleDueUtc(existing) != GetLifecycleDueUtc(environment)) await _stateIndexRepo.DeleteAsync(existing.State, GetLifecycleDueUtc(existing), existing.Id);
             var persisted = await _environmentRepo.GetByIdAsync(environment.Id);
             if (persisted != null) environment.ETag = persisted.ETag;
             await CacheAsync(persisted ?? environment);
@@ -153,7 +153,7 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments
                 if (!String.IsNullOrEmpty(environment.CreationRequestId)) await TryAsync(() => _creationIndexRepo.DeleteAsync(environment.CreationRequestId));
                 if (!String.IsNullOrEmpty(environment.RecoveryTokenHash)) await TryAsync(() => _recoveryIndexRepo.DeleteAsync(environment.RecoveryTokenHash));
                 if (!String.IsNullOrEmpty(environment.InstallationIdHash)) await TryAsync(() => _installationIndexRepo.DeleteAsync(environment.InstallationIdHash));
-                await TryAsync(() => _stateIndexRepo.DeleteAsync(environment.State, environment.ExpiresUtc, environment.Id));
+                await TryAsync(() => _stateIndexRepo.DeleteAsync(environment.State, GetLifecycleDueUtc(environment), environment.Id));
                 await InvalidateCacheAsync(environment);
             }
 
@@ -219,9 +219,16 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments
 
         private async Task<bool> EnsureStateIndexAsync(ProvisionalEnvironment environment)
         {
-            if (await _stateIndexRepo.ExistsAsync(environment.State, environment.ExpiresUtc, environment.Id)) return false;
-            await _stateIndexRepo.InsertAsync(environment.State, environment.ExpiresUtc, environment.Id);
+            var lifecycleDueUtc = GetLifecycleDueUtc(environment);
+            if (await _stateIndexRepo.ExistsAsync(environment.State, lifecycleDueUtc, environment.Id)) return false;
+            await _stateIndexRepo.InsertAsync(environment.State, lifecycleDueUtc, environment.Id);
             return true;
+        }
+
+        private static DateTime GetLifecycleDueUtc(ProvisionalEnvironment environment)
+        {
+            if (environment.State == ProvisionalEnvironmentState.Expired || environment.State == ProvisionalEnvironmentState.PurgePending) return environment.PurgeAfterUtc?.ToUniversalTime() ?? DateTime.MaxValue;
+            return environment.ExpiresUtc.ToUniversalTime();
         }
 
         private async Task CacheAsync(ProvisionalEnvironment environment)
