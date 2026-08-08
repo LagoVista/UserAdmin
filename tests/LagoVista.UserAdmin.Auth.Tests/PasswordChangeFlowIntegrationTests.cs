@@ -29,6 +29,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
     {
         private const string SuccessEvidence = "auth|auth.test-binding.password-management.change|auth.flow.password-management.change|auth.transition.password-management.change-success";
         private const string FailedEvidence = "auth|auth.test-binding.password-management.change|auth.flow.password-management.change|auth.transition.password-management.change-failed";
+        private const string TestUserId = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+        private const string TestOrganizationId = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB";
 
         [Test]
         [Property("AptixEvidence", SuccessEvidence)]
@@ -83,8 +85,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var passwordResetCodeRepo = new Mock<IPasswordResetCodeRepo>(MockBehavior.Loose);
             var emailSender = new Mock<IEmailSender>(MockBehavior.Loose);
             var identityUserManager = CreateIdentityUserManagerMock();
-            var user = new AppUser("user@example.com", "test") { Id = "user-id", UserName = "user@example.com", Email = "user@example.com" };
-            var organization = EntityHeader.Create("org-id", "Organization");
+            var user = new AppUser("user@example.com", "test") { Id = TestUserId, UserName = "user@example.com", Email = "user@example.com" };
+            var organization = EntityHeader.Create(TestOrganizationId, "Organization");
             var userHeader = EntityHeader.Create(user.Id, "User");
 
             var lagoVistaIdentityUserManager = new LagoVistaIdentityUserManager(identityUserManager.Object, log, adminLogger.Object, appConfig.Object, dependencyManager.Object, security.Object);
