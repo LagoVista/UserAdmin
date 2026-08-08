@@ -18,8 +18,9 @@ namespace LagoVista.UserAdmin.Authentication
         private readonly IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> _invitationAcceptanceHandler;
         private readonly IAuthenticationFlowHandler<EmailVerificationFlowRequest> _emailVerificationHandler;
         private readonly IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> _passwordRecoveryVerificationHandler;
+        private readonly IAuthenticationFlowHandler<PasswordChangeFlowRequest> _passwordChangeHandler;
 
-        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> invitationAcceptanceHandler = null, IAuthenticationFlowHandler<EmailVerificationFlowRequest> emailVerificationHandler = null, IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> passwordRecoveryVerificationHandler = null)
+        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> invitationAcceptanceHandler = null, IAuthenticationFlowHandler<EmailVerificationFlowRequest> emailVerificationHandler = null, IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> passwordRecoveryVerificationHandler = null, IAuthenticationFlowHandler<PasswordChangeFlowRequest> passwordChangeHandler = null)
         {
             _passwordLoginHandler = passwordLoginHandler ?? throw new ArgumentNullException(nameof(passwordLoginHandler));
             _passwordRecoveryRequestHandler = passwordRecoveryRequestHandler ?? throw new ArgumentNullException(nameof(passwordRecoveryRequestHandler));
@@ -27,11 +28,24 @@ namespace LagoVista.UserAdmin.Authentication
             _invitationAcceptanceHandler = invitationAcceptanceHandler;
             _emailVerificationHandler = emailVerificationHandler;
             _passwordRecoveryVerificationHandler = passwordRecoveryVerificationHandler;
+            _passwordChangeHandler = passwordChangeHandler;
         }
 
         public Task<InvokeResult<AuthenticationResponse>> LoginWithPasswordAsync(AuthLoginRequest request)
         {
             return _passwordLoginHandler.HandleAsync(request);
+        }
+
+        public async Task<InvokeResult> ChangePasswordAsync(ChangePassword request, EntityHeader organization, EntityHeader user)
+        {
+            if (_passwordChangeHandler == null)
+                throw new InvalidOperationException("Password change flow handler is not configured.");
+
+            var result = await _passwordChangeHandler.HandleAsync(new PasswordChangeFlowRequest(request, organization, user));
+            if (result.TransitionKey != PasswordChangeFlowHandler.SuccessTransitionKey && result.TransitionKey != PasswordChangeFlowHandler.FailedTransitionKey)
+                throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
+
+            return result.PublicResult;
         }
 
         public async Task<InvokeResult> RequestPasswordRecoveryAsync(SendResetPasswordLink request)
