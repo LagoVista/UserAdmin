@@ -31,6 +31,7 @@ using LagoVista.UserAdmin.Repos.Repos.Testing;
 using LagoVista.UserAdmin.Repos.Repos.Users;
 using LagoVista.UserAdmin.Repos.Security;
 using LagoVista.UserAdmin.Repos.TableStorage.Passkeys;
+using LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments;
 using LagoVista.UserAdmin.Repos.Testing;
 using LagoVista.UserAdmin.Repos.Users;
 using LagoVista.UserAdmin.Resources;
@@ -89,6 +90,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<IPendingIdentityRepo, PendingIdentityRepo>();
             services.AddScoped<IAppUserPasskeyCredentialRepo, PasskeyCredentialRepo>();
             services.AddScoped<IPasskeyCredentialIndexRepo, PasskeyCredentialIndexRepo>();
+            services.AddScoped<IProvisionalEnvironmentEntityRepo, ProvisionalEnvironmentEntityRepo>();
             services.AddTransient<ITestArtifactStorage, TestArtifactStorage>();
             services.AddTransient<IPasskeyChallengeStore, RedisPasskeyChallengeStore>();
             services.AddTransient<IMagicLinkAttemptStore, MagicLinkAttemptCacheStore>();
