@@ -1,4 +1,5 @@
 using LagoVista.CloudStorage.Storage;
+using LagoVista.Core.Models;
 using System;
 
 namespace LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments

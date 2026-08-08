@@ -76,7 +76,7 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments
                 PromptVersion = environment.PromptVersion
             };
 
-            if (!String.IsNullOrEmpty(environment.ETag)) entity.ETag = new ETag(environment.ETag);
+            if (!String.IsNullOrEmpty(environment.ETag)) entity.ETag = environment.ETag;
             return entity;
         }
 
@@ -110,7 +110,7 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments
                 AgentKey = entity.AgentKey,
                 AgentVersion = entity.AgentVersion,
                 PromptVersion = entity.PromptVersion,
-                ETag = Convert.ToString(entity.ETag, CultureInfo.InvariantCulture)
+                ETag = entity.ETag
             };
         }
 
