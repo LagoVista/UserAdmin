@@ -97,6 +97,8 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<IProvisionalEnvironmentCreationIndexRepo, ProvisionalEnvironmentCreationIndexRepo>();
             services.AddScoped<IProvisionalEnvironmentStateIndexRepo, ProvisionalEnvironmentStateIndexRepo>();
             services.AddScoped<IProvisionalEnvironmentRepo, ProvisionalEnvironmentRepo>();
+            services.AddScoped<IProvisionalEnvironmentArchiveStore, ProvisionalEnvironmentArchiveStore>();
+            services.AddScoped<IProvisionalEnvironmentBillingArchiveRepo, ProvisionalEnvironmentBillingArchiveRepo>();
             services.AddLagoVistaJob<ProvisionalEnvironmentLifecycleJob>();
             services.AddTransient<ITestArtifactStorage, TestArtifactStorage>();
             services.AddTransient<IPasskeyChallengeStore, RedisPasskeyChallengeStore>();
