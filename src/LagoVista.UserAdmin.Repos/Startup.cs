@@ -93,6 +93,8 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<IProvisionalEnvironmentEntityRepo, ProvisionalEnvironmentEntityRepo>();
             services.AddScoped<IProvisionalEnvironmentRecoveryIndexRepo, ProvisionalEnvironmentRecoveryIndexRepo>();
             services.AddScoped<IProvisionalEnvironmentInstallationIndexRepo, ProvisionalEnvironmentInstallationIndexRepo>();
+            services.AddScoped<IProvisionalEnvironmentCreationIndexRepo, ProvisionalEnvironmentCreationIndexRepo>();
+            services.AddScoped<IProvisionalEnvironmentStateIndexRepo, ProvisionalEnvironmentStateIndexRepo>();
             services.AddTransient<ITestArtifactStorage, TestArtifactStorage>();
             services.AddTransient<IPasskeyChallengeStore, RedisPasskeyChallengeStore>();
             services.AddTransient<IMagicLinkAttemptStore, MagicLinkAttemptCacheStore>();
