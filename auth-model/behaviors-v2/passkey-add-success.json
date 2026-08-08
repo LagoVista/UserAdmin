@@ -6,10 +6,25 @@
   "summary": "An authenticated existing user adds a passkey to the current durable identity without creating or switching accounts.",
   "version": 1,
   "maturity": "proposed",
-  "reconciliationStatus": "needs-reconciliation",
   "categoryKey": "passkey-management",
   "scenarioKeys": [],
   "finalOutcome": "A new passkey credential is registered to the current durable identity and the active session identity is unchanged.",
-  "supportedPlatforms": ["server", "web", "android", "ios"],
-  "sourceReferences": [{ "sourceType": "journey", "reference": "auth.journey.passkey.existing-user-registration" }]
+  "supportedPlatforms": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
+  "sourceReferences": [
+    {
+      "sourceType": "journey",
+      "reference": "auth.journey.passkey.existing-user-registration"
+    }
+  ],
+  "progress": {
+    "scenarios": "not-started",
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

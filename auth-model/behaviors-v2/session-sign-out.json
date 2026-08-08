@@ -6,10 +6,26 @@
   "summary": "An authenticated user ends the active application session and returns to an anonymous authentication state.",
   "version": 1,
   "maturity": "proposed",
-  "reconciliationStatus": "needs-reconciliation",
   "categoryKey": "session-management",
   "scenarioKeys": [],
   "finalOutcome": "The active authenticated session is ended and protected application state is no longer available through that session.",
-  "supportedPlatforms": ["server", "web", "android", "ios"],
-  "sourceReferences": [{ "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/AuthServices.cs", "note": "Public auth logoff endpoint terminates the current sign-in session." }]
+  "supportedPlatforms": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/AuthServices.cs",
+      "note": "Public auth logoff endpoint terminates the current sign-in session."
+    }
+  ],
+  "progress": {
+    "scenarios": "not-started",
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

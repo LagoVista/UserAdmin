@@ -24,9 +24,24 @@
     "expression": "session-capability == anonymous and auth.continue.email is visible"
   },
   "expectedAuthLogEvents": [],
-  "evidenceRequirements": ["web", "android", "ios"],
+  "evidenceRequirements": [
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "auth-view", "reference": "auth.welcome" },
-    { "sourceType": "auth-view", "reference": "auth.continue.email" }
-  ]
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.welcome"
+    },
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.continue.email"
+    }
+  ],
+  "progress": {
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

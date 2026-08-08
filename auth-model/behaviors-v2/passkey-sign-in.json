@@ -6,7 +6,6 @@
   "summary": "A returning user chooses passkey authentication, completes the platform passkey ceremony, and reaches the application home view.",
   "version": 1,
   "maturity": "proposed",
-  "reconciliationStatus": "needs-reconciliation",
   "categoryKey": "passkey-sign-in",
   "scenarioKeys": [
     "auth.scenario.passkey.welcome-to-passkey",
@@ -15,8 +14,22 @@
   "entryViewKey": "auth.welcome",
   "finalViewKey": "app.home",
   "finalOutcome": "The existing durable user has an authenticated session established through a valid passkey assertion.",
-  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "supportedPlatforms": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "journey", "reference": "auth.journey.passkey.authentication" }
-  ]
+    {
+      "sourceType": "journey",
+      "reference": "auth.journey.passkey.authentication"
+    }
+  ],
+  "progress": {
+    "scenarios": "not-started",
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

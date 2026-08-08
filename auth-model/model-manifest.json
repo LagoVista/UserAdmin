@@ -5,39 +5,216 @@
   "name": "LagoVista User Authentication Model",
   "version": 1,
   "maturity": "proposed",
-  "authority": { "definitions": "git", "runtimeEvidence": "cosmos-db", "guide": "../AUTH-MODEL-GUIDE.md" },
+  "authority": {
+    "definitions": "git",
+    "runtimeEvidence": "cosmos-db",
+    "guide": "../AUTH-MODEL-GUIDE.md"
+  },
   "definitionRoots": {
-    "stateDimensions": "state", "invariants": "invariants", "actions": "actions", "transitions": "transitions", "journeys": "journeys", "scenarios": "scenarios-v2", "legacyScenarios": "scenarios", "endToEndBehaviors": "behaviors-v2", "legacyEndToEndBehaviors": "behaviors", "conversationTypes": "conversations", "authViews": "auth-views", "authRoutes": "auth-routes", "presentationBindings": "presentation", "authFlows": "implementation/flows", "authFlowHandlers": "implementation/handlers", "authEndpointBindings": "implementation/endpoints", "authProxyBindings": "implementation/proxies", "authTestBindings": "implementation/tests", "decisions": "decisions", "unresolved": "unresolved"
+    "stateDimensions": "state",
+    "invariants": "invariants",
+    "actions": "actions",
+    "transitions": "transitions",
+    "journeys": "journeys",
+    "scenarios": "scenarios-v2",
+    "legacyScenarios": "scenarios",
+    "endToEndBehaviors": "behaviors-v2",
+    "legacyEndToEndBehaviors": "behaviors",
+    "conversationTypes": "conversations",
+    "authViews": "auth-views",
+    "authRoutes": "auth-routes",
+    "presentationBindings": "presentation",
+    "authFlows": "implementation/flows",
+    "authFlowHandlers": "implementation/handlers",
+    "authEndpointBindings": "implementation/endpoints",
+    "authProxyBindings": "implementation/proxies",
+    "authTestBindings": "implementation/tests",
+    "decisions": "decisions",
+    "unresolved": "unresolved",
+    "behaviorCategories": "behavior-category-catalog.json"
   },
   "schemas": {
-    "modelManifest": "schemas/model-manifest.schema.json", "stateDimension": "schemas/state-dimension.schema.json", "compositeStateCatalog": "schemas/composite-state-catalog.schema.json", "invariant": "schemas/invariant.schema.json", "invariantCatalog": "schemas/invariant-catalog.schema.json", "action": "schemas/action.schema.json", "transition": "schemas/transition.schema.json", "journey": "schemas/journey.schema.json", "scenario": "schemas/app-user-test-scenario-v2.schema.json", "legacyScenario": "schemas/scenario.schema.json", "endToEndBehavior": "schemas/linear-user-behavior-v2.schema.json", "legacyEndToEndBehavior": "schemas/end-to-end-behavior.schema.json", "conversationType": "schemas/conversation-type.schema.json", "authView": "schemas/auth-view.schema.json", "authRoute": "schemas/auth-route.schema.json", "presentationBinding": "schemas/presentation-binding.schema.json", "authFlow": "schemas/auth-flow.schema.json", "authFlowHandler": "schemas/auth-flow-handler.schema.json", "authEndpointBinding": "schemas/auth-endpoint-binding.schema.json", "authProxyBinding": "schemas/auth-proxy-binding.schema.json", "authTestBinding": "schemas/auth-test-binding.schema.json"
+    "modelManifest": "schemas/model-manifest.schema.json",
+    "stateDimension": "schemas/state-dimension.schema.json",
+    "compositeStateCatalog": "schemas/composite-state-catalog.schema.json",
+    "invariant": "schemas/invariant.schema.json",
+    "invariantCatalog": "schemas/invariant-catalog.schema.json",
+    "action": "schemas/action.schema.json",
+    "transition": "schemas/transition.schema.json",
+    "journey": "schemas/journey.schema.json",
+    "scenario": "schemas/app-user-test-scenario-v2.schema.json",
+    "legacyScenario": "schemas/scenario.schema.json",
+    "endToEndBehavior": "schemas/linear-user-behavior-v2.schema.json",
+    "legacyEndToEndBehavior": "schemas/end-to-end-behavior.schema.json",
+    "conversationType": "schemas/conversation-type.schema.json",
+    "authView": "schemas/auth-view.schema.json",
+    "authRoute": "schemas/auth-route.schema.json",
+    "presentationBinding": "schemas/presentation-binding.schema.json",
+    "authFlow": "schemas/auth-flow.schema.json",
+    "authFlowHandler": "schemas/auth-flow-handler.schema.json",
+    "authEndpointBinding": "schemas/auth-endpoint-binding.schema.json",
+    "authProxyBinding": "schemas/auth-proxy-binding.schema.json",
+    "authTestBinding": "schemas/auth-test-binding.schema.json",
+    "behaviorCategoryCatalog": "schemas/behavior-category-catalog.schema.json",
+    "reconciliationProgress": "schemas/auth-reconciliation-progress.schema.json"
   },
-  "validation": { "jsonSchemaDraft": "2020-12", "keyPattern": "^auth\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})+$", "canonicalHashAlgorithm": "sha256", "canonicalHashEncoding": "lowercase-hex", "requireUniqueKeys": true, "requireResolvedReferences": true, "rejectAmbiguousApprovedTransitions": true },
-  "maturityValues": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"],
-  "inventory": { "stateDimensions": 18, "compositeStateCatalogs": 1, "invariants": 20, "actions": 48, "transitions": 50, "journeys": 12, "scenarios": 4, "legacyScenarios": 50, "endToEndBehaviors": 25, "legacyEndToEndBehaviors": 6, "conversationTypes": 7, "authViews": 0, "authRoutes": 0, "presentationBindings": 6, "authFlows": 3, "authFlowHandlers": 3, "authEndpointBindings": 3, "authProxyBindings": 3, "authTestBindings": 3, "decisions": 0, "unresolved": 0 },
-  "currentWork": { "guideSection": "4.17", "status": "in-progress", "summary": "V2 behavior-first reconciliation is building the canonical behavior universe before scenario decomposition. External Identity Provider management is now a distinct category alongside provider sign-in and registration; Magic Link support is intentionally being dropped and is not represented as a V2 category; TOTP sign-in, enrollment, and management are explicit behavior families; Enterprise SSO is a distinct proposed capability; step-up security is mechanism-independent; and invitation acceptance occurs after login." },
+  "validation": {
+    "jsonSchemaDraft": "2020-12",
+    "keyPattern": "^auth\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})+$",
+    "canonicalHashAlgorithm": "sha256",
+    "canonicalHashEncoding": "lowercase-hex",
+    "requireUniqueKeys": true,
+    "requireResolvedReferences": true,
+    "rejectAmbiguousApprovedTransitions": true
+  },
+  "maturityValues": [
+    "proposed",
+    "reviewed",
+    "approved",
+    "implemented",
+    "verified",
+    "deprecated"
+  ],
+  "inventory": {
+    "stateDimensions": 18,
+    "compositeStateCatalogs": 1,
+    "invariants": 20,
+    "actions": 48,
+    "transitions": 50,
+    "journeys": 12,
+    "scenarios": 4,
+    "legacyScenarios": 50,
+    "endToEndBehaviors": 25,
+    "legacyEndToEndBehaviors": 6,
+    "conversationTypes": 7,
+    "authViews": 0,
+    "authRoutes": 0,
+    "presentationBindings": 6,
+    "authFlows": 3,
+    "authFlowHandlers": 3,
+    "authEndpointBindings": 3,
+    "authProxyBindings": 3,
+    "authTestBindings": 3,
+    "decisions": 0,
+    "unresolved": 0,
+    "behaviorCategories": 19
+  },
+  "currentWork": {
+    "guideSection": "4.17",
+    "status": "in-progress",
+    "summary": "V2 reconciliation now uses hierarchical reviewed progress from behavior category through behavior and atomic scenario. The behavior-category inventory has been reviewed as complete; each active category begins with its behavior-definition phase not started until that category is explicitly reviewed. Behavior progress tracks scenarios, presentation, implementation, and tests; scenario progress tracks presentation, implementation, and tests. This phase model supersedes the former coarse behavior reconciliation status."
+  },
   "sourceReferences": [
-    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.15", "note": "UI-only transitions, AuthView coverage, and platform evidence" },
-    { "sourceType": "decision", "reference": "auth-model/AUTH-VIEW-ROUTE-CONTRACT.md", "note": "Canonical AuthView and AuthRoute authority, identifier, projection, and reconciliation rules" },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-07-31", "note": "V2 reset defines scenarios as one UI action from one starting view to one deterministic resulting view and state, then composes them into linear outcome-specific behaviors." },
-    { "sourceType": "decision", "reference": "auth-model/archive/scenarios-v1/README.md", "note": "The V1 server-oriented scenario catalog is retained as a frozen legacy reference." },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-07-29", "note": "Flows, handlers, endpoint and stable generated proxy projections, transition mappings, test-proof registration, and implementation visualization" },
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.1-HANDOFF.md", "note": "Repository model foundation" },
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.2-HANDOFF.md", "note": "Composite identity state decisions" },
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.3-HANDOFF.md", "note": "Foundational guest and claim invariants" },
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.4-HANDOFF.md", "note": "Guest and claimable-value journey handoff" },
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.5-HANDOFF.md", "note": "PendingIdentity lifecycle handoff" },
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.6-HANDOFF.md", "note": "Password registration handoff" },
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.7-HANDOFF.md", "note": "Legacy native-provider registration and linking handoff; terminology is reconciled at the V2 behavior layer as External Identity Provider." },
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.8-HANDOFF.md", "note": "Passkey registration, authentication, and step-up handoff" },
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.9-HANDOFF.md", "note": "Home workspace establishment handoff" },
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.10-HANDOFF.md", "note": "Invitation resolution handoff" },
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.11-HANDOFF.md", "note": "Guided VTM onboarding router and bounded conversations" },
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.12-HANDOFF.md", "note": "Traditional form onboarding and presentation binding handoff" },
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.13-HANDOFF.md", "note": "Session projection and routing handoff" },
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.14-HANDOFF.md", "note": "Account recovery handoff" },
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.15-HANDOFF.md", "note": "UI-only transitions and AuthView coverage handoff" },
-    { "sourceType": "discussion", "reference": "auth-model/conversations/hr-onboarding.json", "note": "HR onboarding router and six bounded proposed workflow conversations" },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-08", "note": "Behavior-first reconciliation, category normalization, TOTP behavior framing, External Identity Provider terminology and management, Enterprise SSO framing, Magic Link deprecation decision, mechanism-independent step-up security, and post-login invitation acceptance." }
+    {
+      "sourceType": "discussion",
+      "reference": "AUTH-MODEL-GUIDE.md",
+      "section": "4.15",
+      "note": "UI-only transitions, AuthView coverage, and platform evidence"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/AUTH-VIEW-ROUTE-CONTRACT.md",
+      "note": "Canonical AuthView and AuthRoute authority, identifier, projection, and reconciliation rules"
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-07-31",
+      "note": "V2 reset defines scenarios as one UI action from one starting view to one deterministic resulting view and state, then composes them into linear outcome-specific behaviors."
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/archive/scenarios-v1/README.md",
+      "note": "The V1 server-oriented scenario catalog is retained as a frozen legacy reference."
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-07-29",
+      "note": "Flows, handlers, endpoint and stable generated proxy projections, transition mappings, test-proof registration, and implementation visualization"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.1-HANDOFF.md",
+      "note": "Repository model foundation"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.2-HANDOFF.md",
+      "note": "Composite identity state decisions"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.3-HANDOFF.md",
+      "note": "Foundational guest and claim invariants"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.4-HANDOFF.md",
+      "note": "Guest and claimable-value journey handoff"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.5-HANDOFF.md",
+      "note": "PendingIdentity lifecycle handoff"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.6-HANDOFF.md",
+      "note": "Password registration handoff"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.7-HANDOFF.md",
+      "note": "Legacy native-provider registration and linking handoff; terminology is reconciled at the V2 behavior layer as External Identity Provider."
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.8-HANDOFF.md",
+      "note": "Passkey registration, authentication, and step-up handoff"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.9-HANDOFF.md",
+      "note": "Home workspace establishment handoff"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.10-HANDOFF.md",
+      "note": "Invitation resolution handoff"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.11-HANDOFF.md",
+      "note": "Guided VTM onboarding router and bounded conversations"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.12-HANDOFF.md",
+      "note": "Traditional form onboarding and presentation binding handoff"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.13-HANDOFF.md",
+      "note": "Session projection and routing handoff"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.14-HANDOFF.md",
+      "note": "Account recovery handoff"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.15-HANDOFF.md",
+      "note": "UI-only transitions and AuthView coverage handoff"
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "auth-model/conversations/hr-onboarding.json",
+      "note": "HR onboarding router and six bounded proposed workflow conversations"
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-08-08",
+      "note": "Behavior-first reconciliation, category normalization, TOTP behavior framing, External Identity Provider terminology and management, Enterprise SSO framing, Magic Link deprecation decision, mechanism-independent step-up security, and post-login invitation acceptance."
+    }
   ]
 }

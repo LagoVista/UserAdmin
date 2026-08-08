@@ -6,13 +6,32 @@
   "summary": "An already-authenticated user working in their home workspace sees a pending invitation in the application, reviews it, explicitly accepts it, and gains membership in the invited workspace without changing the user's home workspace.",
   "version": 2,
   "maturity": "proposed",
-  "reconciliationStatus": "needs-reconciliation",
   "categoryKey": "invitation-acceptance",
   "scenarioKeys": [],
   "finalOutcome": "The invitation is consumed, the authenticated user has membership in the invited workspace, and the user's home workspace remains unchanged; invitation acceptance is not part of login or registration.",
-  "supportedPlatforms": ["server", "web", "android", "ios", "vtm"],
+  "supportedPlatforms": [
+    "server",
+    "web",
+    "android",
+    "ios",
+    "vtm"
+  ],
   "sourceReferences": [
-    { "sourceType": "journey", "reference": "auth.journey.invitation.resolve", "note": "Legacy journey retained as discovery evidence; entry timing must be reconciled to post-authentication portal handling." },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-08", "note": "Invitation acceptance occurs after authentication from the user's home application experience rather than during login." }
-  ]
+    {
+      "sourceType": "journey",
+      "reference": "auth.journey.invitation.resolve",
+      "note": "Legacy journey retained as discovery evidence; entry timing must be reconciled to post-authentication portal handling."
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-08-08",
+      "note": "Invitation acceptance occurs after authentication from the user's home application experience rather than during login."
+    }
+  ],
+  "progress": {
+    "scenarios": "not-started",
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

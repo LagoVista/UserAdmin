@@ -6,13 +6,31 @@
   "summary": "A new user establishes a durable account from a validated supported external identity provider identity, binds that provider identity to the new user, and enters the application without conflating provider email with independent email ownership evidence.",
   "version": 1,
   "maturity": "proposed",
-  "reconciliationStatus": "needs-reconciliation",
   "categoryKey": "external-identity-provider-registration",
   "scenarioKeys": [],
   "finalOutcome": "A new durable user exists, the external provider identity is bound to it, the required home context exists, and an authenticated application session is active.",
-  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "supportedPlatforms": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "journey", "reference": "auth.journey.native-provider.new-user-registration", "note": "Legacy journey provides discovery evidence and retains historical terminology until its own reconciliation." },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-08", "note": "External Identity Provider is the canonical terminology for provider-mediated identity establishment." }
-  ]
+    {
+      "sourceType": "journey",
+      "reference": "auth.journey.native-provider.new-user-registration",
+      "note": "Legacy journey provides discovery evidence and retains historical terminology until its own reconciliation."
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-08-08",
+      "note": "External Identity Provider is the canonical terminology for provider-mediated identity establishment."
+    }
+  ],
+  "progress": {
+    "scenarios": "not-started",
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

@@ -8,10 +8,21 @@
   "maturity": "proposed",
   "categoryKey": "passkey-registration",
   "startViewKey": "auth.passkey.enrollment.start",
-  "action": { "id": "start-enrollment", "finder": "action:start-enrollment" },
-  "preconditions": { "expression": "pending-identity-status == pending and pending-identity-flow == passkey and passkey-creation-challenge == issued" },
+  "action": {
+    "id": "start-enrollment",
+    "finder": "action:start-enrollment"
+  },
+  "preconditions": {
+    "expression": "pending-identity-status == pending and pending-identity-flow == passkey and passkey-creation-challenge == issued"
+  },
   "inputs": [
-    { "finder": "native:passkey-credential", "name": "Passkey Credential", "valueType": "object", "required": true, "description": "Credential response returned by the platform authenticator." }
+    {
+      "finder": "native:passkey-credential",
+      "name": "Passkey Credential",
+      "valueType": "object",
+      "required": true,
+      "description": "Credential response returned by the platform authenticator."
+    }
   ],
   "serverInteraction": {
     "required": true,
@@ -23,13 +34,38 @@
     ]
   },
   "expectedViewKey": "auth.passkey.enrollment.confirm",
-  "postconditions": { "expression": "pending-identity-status == resolved and durable-identity == resolved and credential-proof == passkey-proved and home-workspace == established and workspace-membership == owner and current-workspace == home and session-capability == authenticated-normal" },
+  "postconditions": {
+    "expression": "pending-identity-status == resolved and durable-identity == resolved and credential-proof == passkey-proved and home-workspace == established and workspace-membership == owner and current-workspace == home and session-capability == authenticated-normal"
+  },
   "expectedAuthLogEvents": [],
-  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "evidenceRequirements": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "auth-view", "reference": "auth.passkey.enrollment.start" },
-    { "sourceType": "auth-view", "reference": "auth.passkey.enrollment.confirm" },
-    { "sourceType": "journey", "reference": "auth.journey.passkey.new-user-registration" },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-07-31", "note": "Account and home-organization bootstrap occurs beneath one user-visible passkey ceremony boundary." }
-  ]
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.passkey.enrollment.start"
+    },
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.passkey.enrollment.confirm"
+    },
+    {
+      "sourceType": "journey",
+      "reference": "auth.journey.passkey.new-user-registration"
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-07-31",
+      "note": "Account and home-organization bootstrap occurs beneath one user-visible passkey ceremony boundary."
+    }
+  ],
+  "progress": {
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

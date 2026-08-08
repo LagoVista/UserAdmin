@@ -27,17 +27,39 @@
   "serverInteraction": {
     "required": true,
     "intent": "Request password-reset delivery without disclosing whether the submitted email identifies an account.",
-    "transitionKeys": ["auth.transition.recovery.request"]
+    "transitionKeys": [
+      "auth.transition.recovery.request"
+    ]
   },
   "expectedViewKey": "auth.password.reset.sent",
   "postconditions": {
     "expression": "session-capability == anonymous and auth.password.reset.sent is visible"
   },
   "expectedAuthLogEvents": [],
-  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "evidenceRequirements": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "auth-view", "reference": "auth.password.reset.request" },
-    { "sourceType": "auth-view", "reference": "auth.password.reset.sent" },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-07-31", "note": "Forgot-password behavior expansion." }
-  ]
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.password.reset.request"
+    },
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.password.reset.sent"
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-07-31",
+      "note": "Forgot-password behavior expansion."
+    }
+  ],
+  "progress": {
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

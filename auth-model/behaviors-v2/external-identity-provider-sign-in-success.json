@@ -6,13 +6,31 @@
   "summary": "A returning user authenticates through a supported external identity provider, the validated provider identity is resolved to an existing durable user, and an authenticated application session is established.",
   "version": 1,
   "maturity": "proposed",
-  "reconciliationStatus": "needs-reconciliation",
   "categoryKey": "external-identity-provider-sign-in",
   "scenarioKeys": [],
   "finalOutcome": "A validated external provider identity has been mapped to the existing durable user and an authenticated application session is active.",
-  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "supportedPlatforms": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "journey", "reference": "auth.journey.native-provider.existing-user", "note": "Legacy journey provides discovery evidence and retains historical terminology until its own reconciliation." },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-08", "note": "Provider-specific sign-in such as Google, Microsoft, or Apple belongs beneath one External Identity Provider behavior; OIDC/OAuth are implementation protocol concerns rather than separate user behaviors." }
-  ]
+    {
+      "sourceType": "journey",
+      "reference": "auth.journey.native-provider.existing-user",
+      "note": "Legacy journey provides discovery evidence and retains historical terminology until its own reconciliation."
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-08-08",
+      "note": "Provider-specific sign-in such as Google, Microsoft, or Apple belongs beneath one External Identity Provider behavior; OIDC/OAuth are implementation protocol concerns rather than separate user behaviors."
+    }
+  ],
+  "progress": {
+    "scenarios": "not-started",
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

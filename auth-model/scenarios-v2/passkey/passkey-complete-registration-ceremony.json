@@ -8,21 +8,49 @@
   "maturity": "proposed",
   "categoryKey": "passkey-registration",
   "startViewKey": "auth.passkey.enrollment.start",
-  "action": { "id": "start-enrollment", "finder": "action:start-enrollment" },
-  "preconditions": { "expression": "pending-identity-status == pending and pending-identity-flow == passkey" },
+  "action": {
+    "id": "start-enrollment",
+    "finder": "action:start-enrollment"
+  },
+  "preconditions": {
+    "expression": "pending-identity-status == pending and pending-identity-flow == passkey"
+  },
   "inputs": [],
   "serverInteraction": {
     "required": true,
     "intent": "Complete the pending passkey registration ceremony and retain the proved credential for durable-user binding.",
-    "transitionKeys": ["auth.transition.passkey.complete-pending-registration"]
+    "transitionKeys": [
+      "auth.transition.passkey.complete-pending-registration"
+    ]
   },
   "expectedViewKey": "auth.passkey.enrollment.confirm",
-  "postconditions": { "expression": "credential-proof == passkey-proved and pending-identity-status == resolution-required" },
+  "postconditions": {
+    "expression": "credential-proof == passkey-proved and pending-identity-status == resolution-required"
+  },
   "expectedAuthLogEvents": [],
-  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "evidenceRequirements": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "auth-view", "reference": "auth.passkey.enrollment.start" },
-    { "sourceType": "auth-view", "reference": "auth.passkey.enrollment.confirm" },
-    { "sourceType": "decision", "reference": "auth-model/transitions/passkey-complete-pending-registration.json" }
-  ]
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.passkey.enrollment.start"
+    },
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.passkey.enrollment.confirm"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/transitions/passkey-complete-pending-registration.json"
+    }
+  ],
+  "progress": {
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

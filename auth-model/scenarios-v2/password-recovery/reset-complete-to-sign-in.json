@@ -34,17 +34,39 @@
   "serverInteraction": {
     "required": true,
     "intent": "Validate the password-reset token, update the user's password credential, invalidate the token, and return the user to sign-in.",
-    "transitionKeys": ["auth.transition.recovery.complete"]
+    "transitionKeys": [
+      "auth.transition.recovery.complete"
+    ]
   },
   "expectedViewKey": "auth.continue.email.password",
   "postconditions": {
     "expression": "session-capability == anonymous and auth.continue.email.password is visible with the password credential updated"
   },
   "expectedAuthLogEvents": [],
-  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "evidenceRequirements": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "auth-view", "reference": "auth.password.reset.complete" },
-    { "sourceType": "auth-view", "reference": "auth.continue.email.password" },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-07-31", "note": "Password-reset link completion behavior." }
-  ]
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.password.reset.complete"
+    },
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.continue.email.password"
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-07-31",
+      "note": "Password-reset link completion behavior."
+    }
+  ],
+  "progress": {
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

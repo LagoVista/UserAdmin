@@ -6,13 +6,30 @@
   "summary": "Deprecated mechanism-specific step-up behavior retained for historical references; canonical step-up requirements are now modeled independently of the MFA mechanism used to satisfy them.",
   "version": 2,
   "maturity": "deprecated",
-  "reconciliationStatus": "reconciled",
   "categoryKey": "passkey-step-up",
   "scenarioKeys": [],
   "finalOutcome": "Use auth.behavior.step-up-security.success for the canonical user-facing behavior. Passkey proof may remain one supported mechanism for satisfying that behavior.",
-  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "supportedPlatforms": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "journey", "reference": "auth.journey.passkey.step-up" },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-08", "note": "Step-up security is a mechanism-independent MFA requirement; passkey is one possible proof mechanism." }
-  ]
+    {
+      "sourceType": "journey",
+      "reference": "auth.journey.passkey.step-up"
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-08-08",
+      "note": "Step-up security is a mechanism-independent MFA requirement; passkey is one possible proof mechanism."
+    }
+  ],
+  "progress": {
+    "scenarios": "complete",
+    "presentation": "complete",
+    "implementation": "complete",
+    "tests": "complete"
+  }
 }

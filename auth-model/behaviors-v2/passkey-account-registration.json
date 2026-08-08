@@ -6,7 +6,6 @@
   "summary": "A new user chooses passkey registration, provides first name, last name, email, and optional company details, completes the platform passkey ceremony, receives an automatically created home organization, and enters the application.",
   "version": 2,
   "maturity": "proposed",
-  "reconciliationStatus": "needs-reconciliation",
   "categoryKey": "passkey-registration",
   "scenarioKeys": [
     "auth.scenario.passkey.welcome-to-registration-identity",
@@ -18,9 +17,27 @@
   "entryViewKey": "auth.welcome",
   "finalViewKey": "app.home",
   "finalOutcome": "Exactly one durable user exists; the proved passkey is bound to that user; the user owns one home organization tenant with a reserved namespace derived from Company when supplied or from First Name and Last Name otherwise; the home organization is also current; and an authenticated application session is active.",
-  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "supportedPlatforms": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "journey", "reference": "auth.journey.passkey.new-user-registration" },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-07-31", "note": "Happy path revised around user-visible action boundaries and automatic home-organization creation." }
-  ]
+    {
+      "sourceType": "journey",
+      "reference": "auth.journey.passkey.new-user-registration"
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-07-31",
+      "note": "Happy path revised around user-visible action boundaries and automatic home-organization creation."
+    }
+  ],
+  "progress": {
+    "scenarios": "not-started",
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

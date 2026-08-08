@@ -8,8 +8,13 @@
   "maturity": "proposed",
   "categoryKey": "passkey-registration",
   "startViewKey": "auth.passkey.enrollment.confirm",
-  "action": { "id": "complete-enrollment", "finder": "action:complete-enrollment" },
-  "preconditions": { "expression": "pending-identity-status == resolution-required and credential-proof == passkey-proved and durable-identity == absent" },
+  "action": {
+    "id": "complete-enrollment",
+    "finder": "action:complete-enrollment"
+  },
+  "preconditions": {
+    "expression": "pending-identity-status == resolution-required and credential-proof == passkey-proved and durable-identity == absent"
+  },
   "inputs": [],
   "serverInteraction": {
     "required": true,
@@ -20,11 +25,29 @@
     ]
   },
   "expectedViewKey": "app.home",
-  "postconditions": { "expression": "pending-identity-status == resolved and durable-identity == resolved and credential-proof == passkey-proved and home-workspace == established" },
+  "postconditions": {
+    "expression": "pending-identity-status == resolved and durable-identity == resolved and credential-proof == passkey-proved and home-workspace == established"
+  },
   "expectedAuthLogEvents": [],
-  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "evidenceRequirements": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "auth-view", "reference": "auth.passkey.enrollment.confirm" },
-    { "sourceType": "journey", "reference": "auth.journey.passkey.new-user-registration" }
-  ]
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.passkey.enrollment.confirm"
+    },
+    {
+      "sourceType": "journey",
+      "reference": "auth.journey.passkey.new-user-registration"
+    }
+  ],
+  "progress": {
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

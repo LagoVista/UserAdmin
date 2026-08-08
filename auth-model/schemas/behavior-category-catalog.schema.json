@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lagovista.com/schemas/auth-model/behavior-category-catalog.schema.json",
+  "title": "Authentication Behavior Category Catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "key",
+    "name",
+    "inventoryStatus",
+    "categories",
+    "sourceReferences"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "key": {
+      "const": "auth.catalog.behavior-categories"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inventoryStatus": {
+      "$ref": "auth-reconciliation-progress.schema.json#/$defs/phaseStatus"
+    },
+    "categories": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "key",
+          "name",
+          "behaviorKeys",
+          "progress"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)+$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "behaviorKeys": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^auth\\.behavior\\."
+            }
+          },
+          "progress": {
+            "$ref": "auth-reconciliation-progress.schema.json#/$defs/categoryProgress"
+          }
+        }
+      }
+    },
+    "sourceReferences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sourceType",
+          "reference"
+        ],
+        "properties": {
+          "sourceType": {
+            "enum": [
+              "discussion",
+              "decision",
+              "code",
+              "test",
+              "external"
+            ]
+          },
+          "reference": {
+            "type": "string",
+            "minLength": 1
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

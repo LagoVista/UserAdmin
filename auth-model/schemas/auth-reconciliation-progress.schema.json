@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lagovista.com/schemas/auth-model/auth-reconciliation-progress.schema.json",
+  "title": "Authentication Reconciliation Progress",
+  "$defs": {
+    "phaseStatus": {
+      "enum": [
+        "not-started",
+        "in-progress",
+        "needs-review",
+        "complete",
+        "blocked"
+      ],
+      "description": "A review-progress phase. 'complete' means the phase has been reviewed and agreed as canonical, not merely that related artifacts exist."
+    },
+    "categoryProgress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "behaviors",
+        "scenarios",
+        "presentation",
+        "implementation",
+        "tests"
+      ],
+      "properties": {
+        "behaviors": {
+          "$ref": "#/$defs/phaseStatus"
+        },
+        "scenarios": {
+          "$ref": "#/$defs/phaseStatus"
+        },
+        "presentation": {
+          "$ref": "#/$defs/phaseStatus"
+        },
+        "implementation": {
+          "$ref": "#/$defs/phaseStatus"
+        },
+        "tests": {
+          "$ref": "#/$defs/phaseStatus"
+        }
+      }
+    },
+    "behaviorProgress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scenarios",
+        "presentation",
+        "implementation",
+        "tests"
+      ],
+      "properties": {
+        "scenarios": {
+          "$ref": "#/$defs/phaseStatus"
+        },
+        "presentation": {
+          "$ref": "#/$defs/phaseStatus"
+        },
+        "implementation": {
+          "$ref": "#/$defs/phaseStatus"
+        },
+        "tests": {
+          "$ref": "#/$defs/phaseStatus"
+        }
+      }
+    },
+    "scenarioProgress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "presentation",
+        "implementation",
+        "tests"
+      ],
+      "properties": {
+        "presentation": {
+          "$ref": "#/$defs/phaseStatus"
+        },
+        "implementation": {
+          "$ref": "#/$defs/phaseStatus"
+        },
+        "tests": {
+          "$ref": "#/$defs/phaseStatus"
+        }
+      }
+    }
+  }
+}

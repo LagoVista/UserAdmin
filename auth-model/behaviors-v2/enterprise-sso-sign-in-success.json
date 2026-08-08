@@ -6,12 +6,26 @@
   "summary": "A user enters through an enterprise-managed single sign-on trust relationship, authenticates with the organization's identity provider under customer-controlled identity policy, resolves to the appropriate durable user and organization context, and enters an authenticated application session.",
   "version": 1,
   "maturity": "proposed",
-  "reconciliationStatus": "needs-reconciliation",
   "categoryKey": "enterprise-sso-sign-in",
   "scenarioKeys": [],
   "finalOutcome": "The enterprise identity has been validated through the configured trust relationship, the appropriate durable application identity and organization context are resolved, and an authenticated session is active.",
-  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "supportedPlatforms": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-08", "note": "Enterprise SSO is intentionally framed before implementation exists. It is a distinct business behavior from user-selected external-provider sign-in even when both eventually use OIDC underneath." }
-  ]
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-08-08",
+      "note": "Enterprise SSO is intentionally framed before implementation exists. It is a distinct business behavior from user-selected external-provider sign-in even when both eventually use OIDC underneath."
+    }
+  ],
+  "progress": {
+    "scenarios": "not-started",
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

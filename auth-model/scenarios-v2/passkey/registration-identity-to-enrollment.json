@@ -8,26 +8,75 @@
   "maturity": "proposed",
   "categoryKey": "passkey-registration",
   "startViewKey": "auth.passkey.registration.identity",
-  "action": { "id": "start-registration", "finder": "action:start-registration" },
-  "preconditions": { "expression": "session-capability == anonymous and durable-identity == absent" },
+  "action": {
+    "id": "start-registration",
+    "finder": "action:start-registration"
+  },
+  "preconditions": {
+    "expression": "session-capability == anonymous and durable-identity == absent"
+  },
   "inputs": [
-    { "finder": "field:first-name", "name": "First Name", "valueType": "string", "required": true },
-    { "finder": "field:last-name", "name": "Last Name", "valueType": "string", "required": true },
-    { "finder": "field:email", "name": "Email", "valueType": "string", "required": true },
-    { "finder": "field:company", "name": "Company", "valueType": "string", "required": false }
+    {
+      "finder": "field:first-name",
+      "name": "First Name",
+      "valueType": "string",
+      "required": true
+    },
+    {
+      "finder": "field:last-name",
+      "name": "Last Name",
+      "valueType": "string",
+      "required": true
+    },
+    {
+      "finder": "field:email",
+      "name": "Email",
+      "valueType": "string",
+      "required": true
+    },
+    {
+      "finder": "field:company",
+      "name": "Company",
+      "valueType": "string",
+      "required": false
+    }
   ],
   "serverInteraction": {
     "required": true,
     "intent": "Validate identity details, reject an existing durable identity when appropriate, establish the pending passkey identity, derive the preferred home-organization namespace, and issue WebAuthn credential-creation options without creating the durable user prematurely.",
-    "transitionKeys": ["auth.transition.passkey.begin-pending-registration"]
+    "transitionKeys": [
+      "auth.transition.passkey.begin-pending-registration"
+    ]
   },
   "expectedViewKey": "auth.passkey.enrollment.start",
-  "postconditions": { "expression": "pending-identity-status == pending and pending-identity-flow == passkey and passkey-creation-challenge == issued" },
+  "postconditions": {
+    "expression": "pending-identity-status == pending and pending-identity-flow == passkey and passkey-creation-challenge == issued"
+  },
   "expectedAuthLogEvents": [],
-  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "evidenceRequirements": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "auth-view", "reference": "auth.passkey.registration.identity" },
-    { "sourceType": "decision", "reference": "auth-model/transitions/passkey-begin-pending-registration.json" },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-07-31", "note": "Every new durable user receives an automatically created home organization." }
-  ]
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.passkey.registration.identity"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/transitions/passkey-begin-pending-registration.json"
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-07-31",
+      "note": "Every new durable user receives an automatically created home organization."
+    }
+  ],
+  "progress": {
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

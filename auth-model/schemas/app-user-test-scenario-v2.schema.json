@@ -12,6 +12,7 @@
     "summary",
     "version",
     "maturity",
+    "progress",
     "categoryKey",
     "startViewKey",
     "action",
@@ -25,78 +26,236 @@
     "sourceReferences"
   ],
   "properties": {
-    "$schema": { "type": "string" },
-    "schemaVersion": { "const": "2.0" },
-    "key": { "type": "string", "pattern": "^auth\\.scenario\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$" },
-    "name": { "type": "string", "minLength": 1 },
-    "summary": { "type": "string", "minLength": 1 },
-    "version": { "type": "integer", "minimum": 1 },
-    "maturity": { "enum": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"] },
-    "categoryKey": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$" },
-    "startViewKey": { "$ref": "#/$defs/viewKey" },
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": "2.0"
+    },
+    "key": {
+      "type": "string",
+      "pattern": "^auth\\.scenario\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "maturity": {
+      "enum": [
+        "proposed",
+        "reviewed",
+        "approved",
+        "implemented",
+        "verified",
+        "deprecated"
+      ]
+    },
+    "categoryKey": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{1,63}$"
+    },
+    "startViewKey": {
+      "$ref": "#/$defs/viewKey"
+    },
     "action": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "finder"],
+      "required": [
+        "id",
+        "finder"
+      ],
       "properties": {
-        "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$" },
-        "finder": { "type": "string", "pattern": "^action:[a-z][a-z0-9]*(?:-[a-z0-9]+)*$" }
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+        },
+        "finder": {
+          "type": "string",
+          "pattern": "^action:[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+        }
       }
     },
-    "preconditions": { "$ref": "#/$defs/stateAssertion" },
-    "inputs": { "type": "array", "items": { "$ref": "#/$defs/input" } },
+    "preconditions": {
+      "$ref": "#/$defs/stateAssertion"
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/input"
+      }
+    },
     "serverInteraction": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["required"],
+      "required": [
+        "required"
+      ],
       "properties": {
-        "required": { "type": "boolean" },
-        "intent": { "type": "string", "minLength": 1 },
-        "transitionKeys": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^auth\\.transition\\." } }
+        "required": {
+          "type": "boolean"
+        },
+        "intent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transitionKeys": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^auth\\.transition\\."
+          }
+        }
       }
     },
-    "expectedViewKey": { "$ref": "#/$defs/viewKey" },
-    "expectedVisibleFinders": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
-    "postconditions": { "$ref": "#/$defs/stateAssertion" },
-    "expectedAuthLogEvents": { "type": "array", "items": { "type": "string", "minLength": 1 } },
-    "evidenceRequirements": { "type": "array", "uniqueItems": true, "items": { "enum": ["server", "web", "android", "ios", "vtm"] } },
-    "sourceReferences": { "type": "array", "items": { "$ref": "#/$defs/sourceReference" } },
-    "definitionHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+    "expectedViewKey": {
+      "$ref": "#/$defs/viewKey"
+    },
+    "expectedVisibleFinders": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "postconditions": {
+      "$ref": "#/$defs/stateAssertion"
+    },
+    "expectedAuthLogEvents": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "evidenceRequirements": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "server",
+          "web",
+          "android",
+          "ios",
+          "vtm"
+        ]
+      }
+    },
+    "sourceReferences": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/sourceReference"
+      }
+    },
+    "definitionHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "progress": {
+      "$ref": "auth-reconciliation-progress.schema.json#/$defs/scenarioProgress",
+      "description": "Tracks reviewed presentation, implementation, and test reconciliation phases for this atomic scenario."
+    }
   },
   "$defs": {
-    "viewKey": { "type": "string", "pattern": "^(auth|app)\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$" },
+    "viewKey": {
+      "type": "string",
+      "pattern": "^(auth|app)\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$"
+    },
     "stateAssertion": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["expression"],
+      "required": [
+        "expression"
+      ],
       "properties": {
-        "expression": { "type": "string", "minLength": 1 },
-        "description": { "type": "string" }
+        "expression": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        }
       }
     },
     "input": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["finder", "name", "valueType", "required"],
+      "required": [
+        "finder",
+        "name",
+        "valueType",
+        "required"
+      ],
       "properties": {
-        "finder": { "type": "string", "pattern": "^(field|control):[a-z][a-z0-9]*(?:-[a-z0-9]+)*$" },
-        "name": { "type": "string", "minLength": 1 },
-        "valueType": { "enum": ["string", "boolean", "integer", "timestamp", "reference", "secret-reference"] },
-        "required": { "type": "boolean" },
+        "finder": {
+          "type": "string",
+          "pattern": "^(field|control):[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "valueType": {
+          "enum": [
+            "string",
+            "boolean",
+            "integer",
+            "timestamp",
+            "reference",
+            "secret-reference"
+          ]
+        },
+        "required": {
+          "type": "boolean"
+        },
         "example": {},
-        "description": { "type": "string" }
+        "description": {
+          "type": "string"
+        }
       }
     },
     "sourceReference": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["sourceType", "reference"],
+      "required": [
+        "sourceType",
+        "reference"
+      ],
       "properties": {
-        "sourceType": { "enum": ["ddr", "code", "test", "discussion", "decision", "auth-view", "behavior", "external"] },
-        "reference": { "type": "string", "minLength": 1 },
-        "section": { "type": "string" },
-        "commit": { "type": "string" },
-        "note": { "type": "string" }
+        "sourceType": {
+          "enum": [
+            "ddr",
+            "code",
+            "test",
+            "discussion",
+            "decision",
+            "auth-view",
+            "behavior",
+            "external"
+          ]
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "section": {
+          "type": "string"
+        },
+        "commit": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
       }
     }
   }

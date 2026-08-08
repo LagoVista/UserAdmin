@@ -43,5 +43,10 @@
       "reference": "ChatGPT conversation 2026-07-31",
       "note": "Passkey account-registration happy path."
     }
-  ]
+  ],
+  "progress": {
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

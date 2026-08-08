@@ -8,20 +8,45 @@
   "maturity": "proposed",
   "categoryKey": "passkey-registration",
   "startViewKey": "auth.continue.passkey",
-  "action": { "id": "use-passkey", "finder": "action:use-passkey" },
-  "preconditions": { "expression": "session-capability == anonymous and durable-identity == absent" },
+  "action": {
+    "id": "use-passkey",
+    "finder": "action:use-passkey"
+  },
+  "preconditions": {
+    "expression": "session-capability == anonymous and durable-identity == absent"
+  },
   "inputs": [],
   "serverInteraction": {
     "required": true,
     "intent": "Begin pending passkey registration without creating or authorizing a durable user prematurely.",
-    "transitionKeys": ["auth.transition.passkey.begin-pending-registration"]
+    "transitionKeys": [
+      "auth.transition.passkey.begin-pending-registration"
+    ]
   },
   "expectedViewKey": "auth.passkey.enrollment.start",
-  "postconditions": { "expression": "pending-identity-status == pending and pending-identity-flow == passkey" },
+  "postconditions": {
+    "expression": "pending-identity-status == pending and pending-identity-flow == passkey"
+  },
   "expectedAuthLogEvents": [],
-  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "evidenceRequirements": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "auth-view", "reference": "auth.continue.passkey" },
-    { "sourceType": "decision", "reference": "auth-model/transitions/passkey-begin-pending-registration.json" }
-  ]
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.continue.passkey"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/transitions/passkey-begin-pending-registration.json"
+    }
+  ],
+  "progress": {
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

@@ -6,10 +6,26 @@
   "summary": "An anonymous participant creates meaningful value before registration and later claims that value into an explicitly resolved durable identity.",
   "version": 1,
   "maturity": "proposed",
-  "reconciliationStatus": "needs-reconciliation",
   "categoryKey": "guest-value-claim",
   "scenarioKeys": [],
   "finalOutcome": "The guest-created value belongs to the resolved durable identity and is no longer owned by the guest identity.",
-  "supportedPlatforms": ["server", "web", "android", "ios", "vtm"],
-  "sourceReferences": [{ "sourceType": "journey", "reference": "auth.journey.guest.claimable-value" }]
+  "supportedPlatforms": [
+    "server",
+    "web",
+    "android",
+    "ios",
+    "vtm"
+  ],
+  "sourceReferences": [
+    {
+      "sourceType": "journey",
+      "reference": "auth.journey.guest.claimable-value"
+    }
+  ],
+  "progress": {
+    "scenarios": "not-started",
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

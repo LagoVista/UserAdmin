@@ -8,20 +8,48 @@
   "maturity": "proposed",
   "categoryKey": "passkey",
   "startViewKey": "auth.continue.passkey",
-  "action": { "id": "use-passkey", "finder": "action:use-passkey" },
-  "preconditions": { "expression": "session-capability == anonymous and a registered passkey is available" },
+  "action": {
+    "id": "use-passkey",
+    "finder": "action:use-passkey"
+  },
+  "preconditions": {
+    "expression": "session-capability == anonymous and a registered passkey is available"
+  },
   "inputs": [],
   "serverInteraction": {
     "required": true,
     "intent": "Issue and validate a passkey authentication challenge, resolve the existing durable user, advance the signature counter, and establish the application session.",
-    "transitionKeys": ["auth.transition.passkey.complete-authentication"]
+    "transitionKeys": [
+      "auth.transition.passkey.complete-authentication"
+    ]
   },
   "expectedViewKey": "app.home",
-  "postconditions": { "expression": "credential-proof == passkey-proved and session-capability in [authenticated-limited,authenticated-normal]" },
-  "expectedAuthLogEvents": ["passkey-authentication-challenge-issued", "passkey-authentication-succeeded"],
-  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "postconditions": {
+    "expression": "credential-proof == passkey-proved and session-capability in [authenticated-limited,authenticated-normal]"
+  },
+  "expectedAuthLogEvents": [
+    "passkey-authentication-challenge-issued",
+    "passkey-authentication-succeeded"
+  ],
+  "evidenceRequirements": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "auth-view", "reference": "auth.continue.passkey" },
-    { "sourceType": "decision", "reference": "auth-model/transitions/passkey-complete-authentication.json" }
-  ]
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.continue.passkey"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/transitions/passkey-complete-authentication.json"
+    }
+  ],
+  "progress": {
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

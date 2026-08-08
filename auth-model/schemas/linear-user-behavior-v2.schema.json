@@ -12,7 +12,7 @@
     "summary",
     "version",
     "maturity",
-    "reconciliationStatus",
+    "progress",
     "categoryKey",
     "scenarioKeys",
     "finalOutcome",
@@ -20,16 +20,37 @@
     "sourceReferences"
   ],
   "properties": {
-    "$schema": { "type": "string" },
-    "schemaVersion": { "const": "2.0" },
-    "key": { "type": "string", "pattern": "^auth\\.behavior\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$" },
-    "name": { "type": "string", "minLength": 1 },
-    "summary": { "type": "string", "minLength": 1 },
-    "version": { "type": "integer", "minimum": 1 },
-    "maturity": { "enum": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"] },
-    "reconciliationStatus": {
-      "enum": ["needs-reconciliation", "reconciling", "reconciled", "blocked"],
-      "description": "Tracks whether the behavior's downstream scenario, presentation, implementation, and test evidence has been reconciled independently of specification maturity."
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": "2.0"
+    },
+    "key": {
+      "type": "string",
+      "pattern": "^auth\\.behavior\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "maturity": {
+      "enum": [
+        "proposed",
+        "reviewed",
+        "approved",
+        "implemented",
+        "verified",
+        "deprecated"
+      ]
     },
     "categoryKey": {
       "type": "string",
@@ -39,32 +60,96 @@
     },
     "scenarioKeys": {
       "type": "array",
-      "items": { "type": "string", "pattern": "^auth\\.scenario\\." },
+      "items": {
+        "type": "string",
+        "pattern": "^auth\\.scenario\\."
+      },
       "description": "Ordered decomposition into atomic scenarios. May be empty while behavior-first reconciliation is still defining downstream requirements."
     },
-    "entryViewKey": { "$ref": "#/$defs/optionalViewKey" },
-    "finalViewKey": { "$ref": "#/$defs/optionalViewKey" },
-    "finalOutcome": { "type": "string", "minLength": 1 },
-    "supportedPlatforms": { "type": "array", "uniqueItems": true, "items": { "enum": ["server", "web", "android", "ios", "vtm"] } },
+    "entryViewKey": {
+      "$ref": "#/$defs/optionalViewKey"
+    },
+    "finalViewKey": {
+      "$ref": "#/$defs/optionalViewKey"
+    },
+    "finalOutcome": {
+      "type": "string",
+      "minLength": 1
+    },
+    "supportedPlatforms": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "server",
+          "web",
+          "android",
+          "ios",
+          "vtm"
+        ]
+      }
+    },
     "sourceReferences": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["sourceType", "reference"],
+        "required": [
+          "sourceType",
+          "reference"
+        ],
         "properties": {
-          "sourceType": { "enum": ["ddr", "code", "test", "discussion", "decision", "auth-view", "journey", "external"] },
-          "reference": { "type": "string", "minLength": 1 },
-          "section": { "type": "string" },
-          "commit": { "type": "string" },
-          "note": { "type": "string" }
+          "sourceType": {
+            "enum": [
+              "ddr",
+              "code",
+              "test",
+              "discussion",
+              "decision",
+              "auth-view",
+              "journey",
+              "external"
+            ]
+          },
+          "reference": {
+            "type": "string",
+            "minLength": 1
+          },
+          "section": {
+            "type": "string"
+          },
+          "commit": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
         }
       }
     },
-    "definitionHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+    "definitionHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "progress": {
+      "$ref": "auth-reconciliation-progress.schema.json#/$defs/behaviorProgress",
+      "description": "Tracks reviewed downstream reconciliation phases for this behavior."
+    }
   },
   "$defs": {
-    "viewKey": { "type": "string", "pattern": "^(auth|app)\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$" },
-    "optionalViewKey": { "anyOf": [{ "$ref": "#/$defs/viewKey" }, { "type": "null" }] }
+    "viewKey": {
+      "type": "string",
+      "pattern": "^(auth|app)\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$"
+    },
+    "optionalViewKey": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/viewKey"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
   }
 }

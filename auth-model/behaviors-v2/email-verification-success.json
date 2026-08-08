@@ -6,13 +6,29 @@
   "summary": "A user receives an email verification code, submits the six-digit code through a deterministic secure UI, and proves control of the email address.",
   "version": 1,
   "maturity": "proposed",
-  "reconciliationStatus": "needs-reconciliation",
   "categoryKey": "email-verification",
   "scenarioKeys": [],
   "finalOutcome": "Email ownership is verified for the current durable identity and the verification proof cannot be reused.",
-  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "supportedPlatforms": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationFlowHandler.cs" },
-    { "sourceType": "code", "reference": "auth-model/actions/email-verification-complete.json" }
-  ]
+    {
+      "sourceType": "code",
+      "reference": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationFlowHandler.cs"
+    },
+    {
+      "sourceType": "code",
+      "reference": "auth-model/actions/email-verification-complete.json"
+    }
+  ],
+  "progress": {
+    "scenarios": "not-started",
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

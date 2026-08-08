@@ -6,13 +6,31 @@
   "summary": "An authenticated user manages an external identity provider association for the current durable identity, including explicitly linking an unlinked provider subject to the current account or maintaining an existing provider association without changing the durable identity.",
   "version": 1,
   "maturity": "proposed",
-  "reconciliationStatus": "needs-reconciliation",
   "categoryKey": "external-identity-provider-management",
   "scenarioKeys": [],
   "finalOutcome": "The requested external identity provider association change has been applied to the current durable identity without creating or switching durable identities.",
-  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "supportedPlatforms": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.7-HANDOFF.md", "note": "Existing provider model requires explicit target selection and confirmation for linking an unlinked provider subject to an existing durable identity, with atomic and idempotent linking." },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-08", "note": "Category-universe review identified External Identity Provider Management as distinct from provider sign-in and registration. Magic Link support is intentionally being dropped and is not represented as a V2 category." }
-  ]
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/SECTION-4.7-HANDOFF.md",
+      "note": "Existing provider model requires explicit target selection and confirmation for linking an unlinked provider subject to an existing durable identity, with atomic and idempotent linking."
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-08-08",
+      "note": "Category-universe review identified External Identity Provider Management as distinct from provider sign-in and registration. Magic Link support is intentionally being dropped and is not represented as a V2 category."
+    }
+  ],
+  "progress": {
+    "scenarios": "not-started",
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

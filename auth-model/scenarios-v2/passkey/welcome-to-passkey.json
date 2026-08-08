@@ -8,16 +8,40 @@
   "maturity": "proposed",
   "categoryKey": "passkey",
   "startViewKey": "auth.welcome",
-  "action": { "id": "continue-passkey", "finder": "action:continue-passkey" },
-  "preconditions": { "expression": "session-capability == anonymous and auth.welcome is visible" },
+  "action": {
+    "id": "continue-passkey",
+    "finder": "action:continue-passkey"
+  },
+  "preconditions": {
+    "expression": "session-capability == anonymous and auth.welcome is visible"
+  },
   "inputs": [],
-  "serverInteraction": { "required": false },
+  "serverInteraction": {
+    "required": false
+  },
   "expectedViewKey": "auth.continue.passkey",
-  "postconditions": { "expression": "session-capability == anonymous and auth.continue.passkey is visible" },
+  "postconditions": {
+    "expression": "session-capability == anonymous and auth.continue.passkey is visible"
+  },
   "expectedAuthLogEvents": [],
-  "evidenceRequirements": ["web", "android", "ios"],
+  "evidenceRequirements": [
+    "web",
+    "android",
+    "ios"
+  ],
   "sourceReferences": [
-    { "sourceType": "auth-view", "reference": "auth.welcome" },
-    { "sourceType": "auth-view", "reference": "auth.continue.passkey" }
-  ]
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.welcome"
+    },
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.continue.passkey"
+    }
+  ],
+  "progress": {
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
 }

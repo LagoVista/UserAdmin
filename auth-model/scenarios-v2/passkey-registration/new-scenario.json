@@ -25,5 +25,10 @@
   "expectedViewKey": "auth.passkey.registration.identity",
   "serverInteraction": {
     "required": false
+  },
+  "progress": {
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
   }
 }
