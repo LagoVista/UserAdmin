@@ -91,6 +91,8 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<IAppUserPasskeyCredentialRepo, PasskeyCredentialRepo>();
             services.AddScoped<IPasskeyCredentialIndexRepo, PasskeyCredentialIndexRepo>();
             services.AddScoped<IProvisionalEnvironmentEntityRepo, ProvisionalEnvironmentEntityRepo>();
+            services.AddScoped<IProvisionalEnvironmentRecoveryIndexRepo, ProvisionalEnvironmentRecoveryIndexRepo>();
+            services.AddScoped<IProvisionalEnvironmentInstallationIndexRepo, ProvisionalEnvironmentInstallationIndexRepo>();
             services.AddTransient<ITestArtifactStorage, TestArtifactStorage>();
             services.AddTransient<IPasskeyChallengeStore, RedisPasskeyChallengeStore>();
             services.AddTransient<IMagicLinkAttemptStore, MagicLinkAttemptCacheStore>();
