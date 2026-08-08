@@ -159,12 +159,14 @@ namespace LagoVista.UserAdmin.Managers
             return await RecordActivityAsync(environment);
         }
 
-        public async Task<InvokeResult> ClaimAsync(string provisionalEnvironmentId)
+        public async Task<InvokeResult> ClaimAsync(string provisionalEnvironmentId, string appUserId)
         {
             if (String.IsNullOrWhiteSpace(provisionalEnvironmentId)) return InvokeResult.FromError("ProvisionalEnvironmentId is required.");
+            if (String.IsNullOrWhiteSpace(appUserId)) return InvokeResult.FromError("AppUserId is required.");
 
             var environment = await _environmentRepo.GetByIdAsync(provisionalEnvironmentId);
             if (environment == null) return InvokeResult.FromError("The provisional environment was not found.");
+            if (!String.Equals(environment.AppUserId, appUserId, StringComparison.Ordinal)) return InvokeResult.FromError("The provisional environment does not belong to the current user.");
             if (environment.State == ProvisionalEnvironmentState.Claimed) return InvokeResult.Success;
             if (environment.State != ProvisionalEnvironmentState.Active) return InvokeResult.FromError($"Provisional environment is {environment.State.ToString().ToLowerInvariant()}.");
 
