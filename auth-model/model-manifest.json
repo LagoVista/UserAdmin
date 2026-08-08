@@ -82,7 +82,7 @@
     "actions": 48,
     "transitions": 50,
     "journeys": 12,
-    "scenarios": 4,
+    "scenarios": 6,
     "legacyScenarios": 50,
     "endToEndBehaviors": 26,
     "legacyEndToEndBehaviors": 6,
@@ -102,7 +102,7 @@
   "currentWork": {
     "guideSection": "4.17",
     "status": "in-progress",
-    "summary": "Password Management is the first category advancing through hierarchical reconciliation. Its behavior universe is reviewed complete with Password Change Success and Password Change Failed; scenario reconciliation is now in progress. Other categories retain their prior reconciliation phase states."
+    "summary": "Password Management behavior review is complete. Two canonical atomic scenarios are authored and awaiting review: successful password-change submit and credential-service rejected submit. Both require the canonical auth.password.change presentation surface, which does not yet exist and will be reconciled in the next phase after scenario approval."
   },
   "sourceReferences": [
     {
