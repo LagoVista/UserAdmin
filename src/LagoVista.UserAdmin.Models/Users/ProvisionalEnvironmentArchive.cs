@@ -83,4 +83,25 @@ namespace LagoVista.UserAdmin.Models.Users
         public DateTime ArchivedUtc { get; set; }
         public bool AlreadyExisted { get; set; }
     }
+
+    public class ProvisionalEnvironmentArchiveAccountingRequest
+    {
+        public ProvisionalEnvironment Environment { get; set; }
+        public ProvisionalEnvironmentArchiveWriteResult Archive { get; set; }
+        public IReadOnlyCollection<ProvisionalEnvironmentBillingEventArchive> BillingEvents { get; set; }
+    }
+
+    public class ProvisionalEnvironmentArchiveAccountingResult
+    {
+        public string ArchiveSubscriptionId { get; set; }
+        public string RollupBillingEventId { get; set; }
+        public string ProductId { get; set; }
+        public int BillingEventCount { get; set; }
+        public decimal TotalActualCost { get; set; }
+        public decimal TotalExtended { get; set; }
+        public long TotalTokens { get; set; }
+        public decimal TotalQuantity { get; set; }
+        public bool ArchiveSubscriptionAlreadyExisted { get; set; }
+        public bool RollupAlreadyExisted { get; set; }
+    }
 }

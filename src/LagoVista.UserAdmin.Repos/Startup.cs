@@ -99,6 +99,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<IProvisionalEnvironmentRepo, ProvisionalEnvironmentRepo>();
             services.AddScoped<IProvisionalEnvironmentArchiveStore, ProvisionalEnvironmentArchiveStore>();
             services.AddScoped<IProvisionalEnvironmentBillingArchiveRepo, ProvisionalEnvironmentBillingArchiveRepo>();
+            services.AddScoped<IProvisionalEnvironmentArchiveAccountingService, ProvisionalEnvironmentArchiveAccountingService>();
             services.AddLagoVistaJob<ProvisionalEnvironmentLifecycleJob>();
             services.AddTransient<ITestArtifactStorage, TestArtifactStorage>();
             services.AddTransient<IPasskeyChallengeStore, RedisPasskeyChallengeStore>();
