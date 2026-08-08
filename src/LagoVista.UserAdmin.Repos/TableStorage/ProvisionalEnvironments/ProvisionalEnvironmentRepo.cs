@@ -252,7 +252,7 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments
             }
         }
 
-        private async Task<T> TryGetCacheAsync<T>(string key)
+        private async Task<T> TryGetCacheAsync<T>(string key) where T : class
         {
             try
             {
