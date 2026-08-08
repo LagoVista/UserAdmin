@@ -149,11 +149,12 @@
       "key": "password-management",
       "name": "Password Management",
       "behaviorKeys": [
+        "auth.behavior.password.change-failed",
         "auth.behavior.password.change-success"
       ],
       "progress": {
-        "behaviors": "not-started",
-        "scenarios": "not-started",
+        "behaviors": "complete",
+        "scenarios": "in-progress",
         "presentation": "not-started",
         "implementation": "not-started",
         "tests": "not-started"
@@ -285,6 +286,11 @@
       "sourceType": "discussion",
       "reference": "ChatGPT conversation 2026-08-08",
       "note": "Hierarchical reconciliation progress is authored at category, behavior, and scenario levels. A phase is complete only after review and agreement, not merely because related files exist."
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-08-08",
+      "note": "Password Management behavior review resolved the category to Password Change Success and Password Change Failed; validation and identity failure permutations belong at the scenario/test layers."
     }
   ]
 }

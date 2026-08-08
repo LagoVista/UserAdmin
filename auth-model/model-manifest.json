@@ -84,7 +84,7 @@
     "journeys": 12,
     "scenarios": 4,
     "legacyScenarios": 50,
-    "endToEndBehaviors": 25,
+    "endToEndBehaviors": 26,
     "legacyEndToEndBehaviors": 6,
     "conversationTypes": 7,
     "authViews": 0,
@@ -102,7 +102,7 @@
   "currentWork": {
     "guideSection": "4.17",
     "status": "in-progress",
-    "summary": "V2 reconciliation now uses hierarchical reviewed progress from behavior category through behavior and atomic scenario. The behavior-category inventory has been reviewed as complete; each active category begins with its behavior-definition phase not started until that category is explicitly reviewed. Behavior progress tracks scenarios, presentation, implementation, and tests; scenario progress tracks presentation, implementation, and tests. This phase model supersedes the former coarse behavior reconciliation status."
+    "summary": "Password Management is the first category advancing through hierarchical reconciliation. Its behavior universe is reviewed complete with Password Change Success and Password Change Failed; scenario reconciliation is now in progress. Other categories retain their prior reconciliation phase states."
   },
   "sourceReferences": [
     {
