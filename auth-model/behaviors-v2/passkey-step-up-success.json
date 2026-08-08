@@ -3,13 +3,16 @@
   "schemaVersion": "2.0",
   "key": "auth.behavior.passkey.step-up-success",
   "name": "Passkey Step-Up Success",
-  "summary": "An authenticated user provides fresh user-verifying passkey proof to authorize an operation that requires elevated authentication assurance.",
-  "version": 1,
-  "maturity": "proposed",
-  "reconciliationStatus": "needs-reconciliation",
+  "summary": "Deprecated mechanism-specific step-up behavior retained for historical references; canonical step-up requirements are now modeled independently of the MFA mechanism used to satisfy them.",
+  "version": 2,
+  "maturity": "deprecated",
+  "reconciliationStatus": "reconciled",
   "categoryKey": "step-up-authentication",
   "scenarioKeys": [],
-  "finalOutcome": "Fresh passkey proof exists for the current durable identity and the session has the required step-up capability.",
+  "finalOutcome": "Use auth.behavior.step-up-security.success for the canonical user-facing behavior. Passkey proof may remain one supported mechanism for satisfying that behavior.",
   "supportedPlatforms": ["server", "web", "android", "ios"],
-  "sourceReferences": [{ "sourceType": "journey", "reference": "auth.journey.passkey.step-up" }]
+  "sourceReferences": [
+    { "sourceType": "journey", "reference": "auth.journey.passkey.step-up" },
+    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-08", "note": "Step-up security is a mechanism-independent MFA requirement; passkey is one possible proof mechanism." }
+  ]
 }
