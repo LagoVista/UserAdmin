@@ -213,7 +213,7 @@ namespace LagoVista.UserAdmin.Managers
             var subscription = await _subscriptionRepo.GetSubscriptionAsync(subscriptionId, org, user);
             if (subscription == null) return InvokeResult.Success;
             if (subscription.Key != Subscription.SubscriptionKey_Provisional) return InvokeResult.FromError("The subscription is no longer provisional.");
-            if (subscription.Organization == null || subscription.Organization.Id != orgId) return InvokeResult.FromError("The subscription does not belong to the provisional organization.");
+            if (subscription.OwnerOrganization == null || subscription.OwnerOrganization.Id != orgId) return InvokeResult.FromError("The subscription does not belong to the provisional organization.");
 
             await _subscriptionRepo.DeleteSubscriptionAsync(subscriptionId, org, user);
             return InvokeResult.Success;
