@@ -12,6 +12,7 @@
     "summary",
     "version",
     "maturity",
+    "reconciliationStatus",
     "categoryKey",
     "scenarioKeys",
     "entryViewKey",
@@ -28,11 +29,15 @@
     "summary": { "type": "string", "minLength": 1 },
     "version": { "type": "integer", "minimum": 1 },
     "maturity": { "enum": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"] },
+    "reconciliationStatus": {
+      "enum": ["needs-reconciliation", "reconciling", "reconciled", "blocked"],
+      "description": "Tracks whether the behavior's downstream scenario, presentation, implementation, and test evidence has been reconciled independently of specification maturity."
+    },
     "categoryKey": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$" },
     "scenarioKeys": {
       "type": "array",
-      "minItems": 1,
-      "items": { "type": "string", "pattern": "^auth\\.scenario\\." }
+      "items": { "type": "string", "pattern": "^auth\\.scenario\\." },
+      "description": "Ordered decomposition into atomic scenarios. May be empty while behavior-first reconciliation is still defining downstream requirements."
     },
     "entryViewKey": { "$ref": "#/$defs/viewKey" },
     "finalViewKey": { "$ref": "#/$defs/viewKey" },
@@ -45,7 +50,7 @@
         "additionalProperties": false,
         "required": ["sourceType", "reference"],
         "properties": {
-          "sourceType": { "enum": ["ddr", "code", "test", "discussion", "decision", "auth-view", "external"] },
+          "sourceType": { "enum": ["ddr", "code", "test", "discussion", "decision", "auth-view", "journey", "external"] },
           "reference": { "type": "string", "minLength": 1 },
           "section": { "type": "string" },
           "commit": { "type": "string" },

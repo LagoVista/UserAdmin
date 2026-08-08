@@ -6,6 +6,7 @@
   "summary": "A returning user chooses passkey authentication, completes the platform passkey ceremony, and reaches the application home view.",
   "version": 1,
   "maturity": "proposed",
+  "reconciliationStatus": "needs-reconciliation",
   "categoryKey": "passkey",
   "scenarioKeys": [
     "auth.scenario.passkey.welcome-to-passkey",
