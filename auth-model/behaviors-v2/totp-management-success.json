@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.totp.management-success",
+  "name": "TOTP Management Success",
+  "summary": "An authenticated user manages the TOTP capability associated with the current durable identity, including rotating recovery codes or disabling/resetting the enrolled MFA configuration without changing identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "reconciliationStatus": "needs-reconciliation",
+  "categoryKey": "totp-management",
+  "scenarioKeys": [],
+  "finalOutcome": "The requested TOTP maintenance operation has been applied to the current durable identity while the durable identity itself remains unchanged.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Interfaces/Managers/IAppUserMfaManager.cs", "note": "The manager contract supports recovery-code rotation, TOTP/MFA disable, and MFA reset operations." },
+    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-08", "note": "Behavior-universe reconciliation groups TOTP maintenance actions under a single user-facing management capability until scenario decomposition determines whether separate outcome behaviors are warranted." }
+  ]
+}

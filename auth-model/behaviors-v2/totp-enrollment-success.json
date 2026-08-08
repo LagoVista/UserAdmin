@@ -1,0 +1,19 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.totp.enrollment-success",
+  "name": "TOTP Enrollment Success",
+  "summary": "An authenticated user enrolls a time-based one-time password authenticator, confirms possession with a valid generated code, enables MFA for the current durable identity, and receives recovery codes for later account access.",
+  "version": 1,
+  "maturity": "proposed",
+  "reconciliationStatus": "needs-reconciliation",
+  "categoryKey": "totp-enrollment",
+  "scenarioKeys": [],
+  "finalOutcome": "TOTP is enabled for the current durable identity, the authenticator secret is stored securely, and a fresh set of recovery codes has been issued to the user.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "BeginTotpEnrollmentAsync and ConfirmTotpEnrollmentAsync implement authenticator enrollment and confirmation." },
+    { "sourceType": "auth-view", "reference": "auth.mfa.totp.enroll", "note": "Existing AuthView represents TOTP enrollment." },
+    { "sourceType": "auth-view", "reference": "auth.mfa.totp.confirm", "note": "Existing AuthView represents enrollment confirmation." }
+  ]
+}
