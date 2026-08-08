@@ -14,8 +14,8 @@
   },
   "validation": { "jsonSchemaDraft": "2020-12", "keyPattern": "^auth\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})+$", "canonicalHashAlgorithm": "sha256", "canonicalHashEncoding": "lowercase-hex", "requireUniqueKeys": true, "requireResolvedReferences": true, "rejectAmbiguousApprovedTransitions": true },
   "maturityValues": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"],
-  "inventory": { "stateDimensions": 18, "compositeStateCatalogs": 1, "invariants": 20, "actions": 48, "transitions": 50, "journeys": 12, "scenarios": 4, "legacyScenarios": 50, "endToEndBehaviors": 19, "legacyEndToEndBehaviors": 6, "conversationTypes": 7, "authViews": 0, "authRoutes": 0, "presentationBindings": 6, "authFlows": 3, "authFlowHandlers": 3, "authEndpointBindings": 3, "authProxyBindings": 3, "authTestBindings": 3, "decisions": 0, "unresolved": 0 },
-  "currentWork": { "guideSection": "4.17", "status": "in-progress", "summary": "V2 behavior-first reconciliation is building the canonical behavior universe before scenario decomposition. Major user intents evidenced by existing journeys and implementation have been seeded with reconciliation status and may intentionally omit scenario and AuthView bindings until those downstream layers are reconciled." },
+  "inventory": { "stateDimensions": 18, "compositeStateCatalogs": 1, "invariants": 20, "actions": 48, "transitions": 50, "journeys": 12, "scenarios": 4, "legacyScenarios": 50, "endToEndBehaviors": 20, "legacyEndToEndBehaviors": 6, "conversationTypes": 7, "authViews": 0, "authRoutes": 0, "presentationBindings": 6, "authFlows": 3, "authFlowHandlers": 3, "authEndpointBindings": 3, "authProxyBindings": 3, "authTestBindings": 3, "decisions": 0, "unresolved": 0 },
+  "currentWork": { "guideSection": "4.17", "status": "in-progress", "summary": "V2 behavior-first reconciliation is building the canonical behavior universe before scenario decomposition. Step-up security is modeled as a mechanism-independent MFA behavior, and invitation acceptance is an authenticated post-login application capability rather than part of authentication entry." },
   "sourceReferences": [
     { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.15", "note": "UI-only transitions, AuthView coverage, and platform evidence" },
     { "sourceType": "decision", "reference": "auth-model/AUTH-VIEW-ROUTE-CONTRACT.md", "note": "Canonical AuthView and AuthRoute authority, identifier, projection, and reconciliation rules" },
@@ -38,6 +38,6 @@
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.14-HANDOFF.md", "note": "Account recovery handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.15-HANDOFF.md", "note": "UI-only transitions and AuthView coverage handoff" },
     { "sourceType": "discussion", "reference": "auth-model/conversations/hr-onboarding.json", "note": "HR onboarding router and six bounded proposed workflow conversations" },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-08", "note": "Behavior-first reconciliation, reconciliation-status semantics, and canonical behavior-universe seeding." }
+    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-08", "note": "Behavior-first reconciliation, canonical behavior-universe seeding, mechanism-independent step-up security, and post-login invitation acceptance." }
   ]
 }
