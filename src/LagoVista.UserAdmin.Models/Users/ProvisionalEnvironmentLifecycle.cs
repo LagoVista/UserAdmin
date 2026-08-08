@@ -20,6 +20,15 @@ namespace LagoVista.UserAdmin.Models.Users
     {
         public int ExaminedCount { get; set; }
         public int UpdatedCount { get; set; }
+        public int DeletedCount { get; set; }
+        public int BlockedCount { get; set; }
         public List<string> ProvisionalEnvironmentIds { get; set; } = new List<string>();
+        public List<ProvisionalEnvironmentLifecycleFailure> Failures { get; set; } = new List<ProvisionalEnvironmentLifecycleFailure>();
+    }
+
+    public class ProvisionalEnvironmentLifecycleFailure
+    {
+        public string ProvisionalEnvironmentId { get; set; }
+        public string Reason { get; set; }
     }
 }

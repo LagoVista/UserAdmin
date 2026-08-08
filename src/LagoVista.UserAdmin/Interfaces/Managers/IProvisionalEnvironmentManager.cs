@@ -15,5 +15,6 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult<IEnumerable<ProvisionalEnvironmentLifecycleSummary>>> GetByStateAsync(ProvisionalEnvironmentState state, DateTime? dueBeforeUtc = null, int take = 100);
         Task<InvokeResult<ProvisionalEnvironmentLifecycleBatchResult>> ExpireAsync(DateTime? asOfUtc = null, int take = 100);
         Task<InvokeResult<ProvisionalEnvironmentLifecycleBatchResult>> PrepareForPurgeAsync(DateTime? asOfUtc = null, int take = 100);
+        Task<InvokeResult<ProvisionalEnvironmentLifecycleBatchResult>> PurgeAsync(int take = 100);
     }
 }

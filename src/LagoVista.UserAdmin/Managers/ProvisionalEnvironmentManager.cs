@@ -251,6 +251,44 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult<ProvisionalEnvironmentLifecycleBatchResult>.Create(result);
         }
 
+        public async Task<InvokeResult<ProvisionalEnvironmentLifecycleBatchResult>> PurgeAsync(int take = 100)
+        {
+            var takeResult = ValidateTake(take);
+            if (!takeResult.Successful) return InvokeResult<ProvisionalEnvironmentLifecycleBatchResult>.FromInvokeResult(takeResult);
+
+            var environments = (await _environmentRepo.GetByStateAsync(ProvisionalEnvironmentState.PurgePending, null, take)).ToList();
+            var result = new ProvisionalEnvironmentLifecycleBatchResult { ExaminedCount = environments.Count };
+
+            foreach (var environment in environments)
+            {
+                try
+                {
+                    var purgeResult = await _organizationManager.PurgeProvisionalOrganizationAsync(environment.OrganizationId, environment.AppUserId, environment.SubscriptionId);
+                    if (!purgeResult.Successful)
+                    {
+                        result.BlockedCount++;
+                        result.Failures.Add(new ProvisionalEnvironmentLifecycleFailure
+                        {
+                            ProvisionalEnvironmentId = environment.Id,
+                            Reason = purgeResult.Errors.FirstOrDefault()?.Message ?? "The provisional environment could not be purged."
+                        });
+                        continue;
+                    }
+
+                    await _environmentRepo.DeleteAsync(environment.Id);
+                    result.DeletedCount++;
+                    result.ProvisionalEnvironmentIds.Add(environment.Id);
+                }
+                catch (Exception ex)
+                {
+                    result.BlockedCount++;
+                    result.Failures.Add(new ProvisionalEnvironmentLifecycleFailure { ProvisionalEnvironmentId = environment.Id, Reason = ex.Message });
+                }
+            }
+
+            return InvokeResult<ProvisionalEnvironmentLifecycleBatchResult>.Create(result);
+        }
+
         private async Task<InvokeResult> RecordActivityAsync(ProvisionalEnvironment environment)
         {
             if (environment.State != ProvisionalEnvironmentState.Active) return InvokeResult.FromError($"Provisional environment is {environment.State.ToString().ToLowerInvariant()}.");

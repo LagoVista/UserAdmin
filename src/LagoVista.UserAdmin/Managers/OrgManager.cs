@@ -1378,6 +1378,44 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
+        public async Task<InvokeResult> PurgeProvisionalOrganizationAsync(string orgId, string appUserId, string subscriptionId)
+        {
+            if (String.IsNullOrWhiteSpace(orgId)) return InvokeResult.FromError("OrganizationId is required.");
+            if (String.IsNullOrWhiteSpace(appUserId)) return InvokeResult.FromError("AppUserId is required.");
+            if (String.IsNullOrWhiteSpace(subscriptionId)) return InvokeResult.FromError("SubscriptionId is required.");
+
+            var appUser = await _appUserRepo.FindByIdAsync(appUserId);
+            if (appUser != null)
+            {
+                if (!appUser.IsAnonymous) return InvokeResult.FromError("The provisional user has been established and cannot be purged.");
+                if (appUser.Organizations != null && appUser.Organizations.Any(userOrg => userOrg.Id != orgId)) return InvokeResult.FromError("The provisional user belongs to another organization.");
+            }
+
+            var organization = await _organizationRepo.GetOrganizationAsync(orgId);
+            if (organization != null)
+            {
+                if (organization.Owner == null || organization.Owner.Id != appUserId || organization.Namespace != $"provisional{orgId}") return InvokeResult.FromError("The organization is no longer a provisional workspace.");
+
+                var users = (await _orgUserRepo.GetUsersForOrgAsync(orgId)).ToList();
+                if (users.Any(orgUser => orgUser.UserId != appUserId)) return InvokeResult.FromError("The provisional organization contains another user.");
+                if (await _organizationRepo.HasBillingRecords(orgId)) return InvokeResult.FromError("Organization has billing events and cannot be purged.");
+            }
+
+            var subscriptionResult = await _subscriptionManager.PurgeProvisionalSubscriptionAsync(subscriptionId, orgId, appUserId);
+            if (!subscriptionResult.Successful) return subscriptionResult;
+
+            var orgHeader = organization?.ToEntityHeader() ?? EntityHeader.Create(orgId, "Provisional Workspace");
+            var userHeader = appUser?.ToEntityHeader() ?? EntityHeader.Create(appUserId, "Provisional Environment");
+            var roles = await _userRoleManager.GetRolesForUserAsync(appUserId, orgHeader, userHeader);
+            foreach (var role in roles) await _userRoleManager.RevokeUserRoleAsync(role.Id, orgHeader, userHeader);
+
+            if (await _orgUserRepo.QueryOrgHasUserAsync(orgId, appUserId)) await _orgUserRepo.RemoveUserFromOrgAsync(orgId, appUserId, userHeader);
+            if (organization != null) await _organizationRepo.DeleteOrgAsync(orgId);
+            if (appUser != null) await _appUserRepo.DeleteAsync(appUser, false);
+
+            return InvokeResult.Success;
+        }
+
         public async Task<ListResponse<OrganizationSummary>> GetAllOrgsAsync(EntityHeader org, EntityHeader user, ListRequest listRequest)
         {
             var appUser = await _appUserRepo.FindByIdAsync(user.Id);

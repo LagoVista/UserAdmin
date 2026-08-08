@@ -50,6 +50,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> ClearAppBuilderAsync(string userId, EntityHeader org, EntityHeader user);
 
         Task<InvokeResult> DeleteOrgAsync(string orgId, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> PurgeProvisionalOrganizationAsync(string orgId, string appUserId, string subscriptionId);
 
         Task<ListResponse<OwnedObject>> GetOwnedObjectsForOrgAsync(string orgId, ListRequest request, EntityHeader org, EntityHeader user);
 
