@@ -102,7 +102,7 @@
   "currentWork": {
     "guideSection": "4.17",
     "status": "in-progress",
-    "summary": "Password Management behavior review is complete. Two canonical atomic scenarios are authored and awaiting review: successful password-change submit and credential-service rejected submit. Both require the canonical auth.password.change presentation surface, which does not yet exist and will be reconciled in the next phase after scenario approval."
+    "summary": "Password Management behavior and scenario reviews are complete. Presentation reconciliation is now in progress against the canonical auth.password.change input surface and auth.password.change.complete success surface; rejected password changes remain on auth.password.change with an actionable error."
   },
   "sourceReferences": [
     {
@@ -144,7 +144,7 @@
     {
       "sourceType": "decision",
       "reference": "auth-model/SECTION-4.3-HANDOFF.md",
-      "note": "Foundational guest and claim invariants"
+      "note": "Foundational guest and claimable-value journey handoff"
     },
     {
       "sourceType": "decision",
