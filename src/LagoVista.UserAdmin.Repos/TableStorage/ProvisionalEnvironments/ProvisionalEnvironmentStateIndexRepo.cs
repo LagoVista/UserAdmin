@@ -32,6 +32,12 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments
             });
         }
 
+        public async Task<bool> ExistsAsync(ProvisionalEnvironmentState state, DateTime expiresUtc, string environmentId)
+        {
+            var entity = await GetAsync(ProvisionalEnvironmentStateIndexEntity.CreatePartitionKey(state, environmentId), ProvisionalEnvironmentStateIndexEntity.CreateRowKey(expiresUtc, environmentId), false);
+            return entity != null;
+        }
+
         public async Task<IEnumerable<string>> FindEnvironmentIdsAsync(ProvisionalEnvironmentState state, DateTime? expiresBeforeUtc, int take)
         {
             if (take <= 0) return Enumerable.Empty<string>();
