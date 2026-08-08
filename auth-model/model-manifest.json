@@ -102,7 +102,7 @@
   "currentWork": {
     "guideSection": "4.17",
     "status": "in-progress",
-    "summary": "Password Management presentation is approved. The shared generated proxy and REST route now enter through AuthenticationFlowService and PasswordChangeFlowHandler, with canonical success/failure transitions and integration proof through the real PasswordManager and LagoVista Identity adapter. Passing Aptix runtime evidence remains to be regenerated before Implementation and Tests are marked complete."
+    "summary": "Password Management reconciliation is complete. The shared generated proxy and REST route enter through AuthenticationFlowService and PasswordChangeFlowHandler, both canonical success and failure transitions are implemented, and the AdminAuth integration suite proves the real PasswordManager and LagoVista Identity adapter paths with generated Aptix runtime evidence."
   },
   "sourceReferences": [
     {
