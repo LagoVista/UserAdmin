@@ -41,7 +41,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         public async Task UserNotFound_Should_ReturnFailure_And_RecordStartedThenUserNotFound()
         {
             var harness = CreateHarness();
-            harness.UserManager.Setup(manager => manager.FindByEmailAsync("missing@example.com")).ReturnsAsync((AppUser)null);
+            harness.UserManager.Setup(manager => manager.FindByNameAsync("missing@example.com")).ReturnsAsync((AppUser)null);
 
             var result = await harness.FlowService.LoginWithPasswordAsync(CreateRequest("missing@example.com"));
 
@@ -62,7 +62,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var harness = CreateHarness();
             var user = new AppUser("user@example.com", "test") { UserName = "user@example.com" };
 
-            harness.UserManager.Setup(manager => manager.FindByEmailAsync("user@example.com")).ReturnsAsync(user);
+            harness.UserManager.Setup(manager => manager.FindByNameAsync("user@example.com")).ReturnsAsync(user);
             harness.AspNetSignInManager
                 .Setup(manager => manager.PasswordSignInAsync("user@example.com", "wrong-password", true, false))
                 .ReturnsAsync(SignInResult.Failed);
@@ -86,7 +86,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var harness = CreateHarness();
             var user = new AppUser("user@example.com", "test") { UserName = "user@example.com" };
 
-            harness.UserManager.Setup(manager => manager.FindByEmailAsync("user@example.com")).ReturnsAsync(user);
+            harness.UserManager.Setup(manager => manager.FindByNameAsync("user@example.com")).ReturnsAsync(user);
             harness.AspNetSignInManager
                 .Setup(manager => manager.PasswordSignInAsync("user@example.com", "correct-password", true, false))
                 .ReturnsAsync(SignInResult.Success);
