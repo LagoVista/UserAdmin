@@ -7,7 +7,7 @@
   "version": 1,
   "maturity": "proposed",
   "reconciliationStatus": "needs-reconciliation",
-  "categoryKey": "guest-identity",
+  "categoryKey": "guest-value-claim",
   "scenarioKeys": [],
   "finalOutcome": "The guest-created value belongs to the resolved durable identity and is no longer owned by the guest identity.",
   "supportedPlatforms": ["server", "web", "android", "ios", "vtm"],

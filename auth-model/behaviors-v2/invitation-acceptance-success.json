@@ -7,7 +7,7 @@
   "version": 2,
   "maturity": "proposed",
   "reconciliationStatus": "needs-reconciliation",
-  "categoryKey": "invitation",
+  "categoryKey": "invitation-acceptance",
   "scenarioKeys": [],
   "finalOutcome": "The invitation is consumed, the authenticated user has membership in the invited workspace, and the user's home workspace remains unchanged; invitation acceptance is not part of login or registration.",
   "supportedPlatforms": ["server", "web", "android", "ios", "vtm"],

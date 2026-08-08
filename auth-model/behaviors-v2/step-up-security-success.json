@@ -7,7 +7,7 @@
   "version": 1,
   "maturity": "proposed",
   "reconciliationStatus": "needs-reconciliation",
-  "categoryKey": "step-up-authentication",
+  "categoryKey": "security-step-up",
   "scenarioKeys": [],
   "finalOutcome": "The current authenticated identity has fresh MFA assurance sufficient for the protected area or operation, and the user may continue the originally requested activity.",
   "supportedPlatforms": ["server", "web", "android", "ios"],

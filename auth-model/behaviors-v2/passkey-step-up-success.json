@@ -7,7 +7,7 @@
   "version": 2,
   "maturity": "deprecated",
   "reconciliationStatus": "reconciled",
-  "categoryKey": "step-up-authentication",
+  "categoryKey": "passkey-step-up",
   "scenarioKeys": [],
   "finalOutcome": "Use auth.behavior.step-up-security.success for the canonical user-facing behavior. Passkey proof may remain one supported mechanism for satisfying that behavior.",
   "supportedPlatforms": ["server", "web", "android", "ios"],

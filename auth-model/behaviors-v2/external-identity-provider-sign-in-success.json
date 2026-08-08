@@ -7,7 +7,7 @@
   "version": 1,
   "maturity": "proposed",
   "reconciliationStatus": "needs-reconciliation",
-  "categoryKey": "external-identity-provider",
+  "categoryKey": "external-identity-provider-sign-in",
   "scenarioKeys": [],
   "finalOutcome": "A validated external provider identity has been mapped to the existing durable user and an authenticated application session is active.",
   "supportedPlatforms": ["server", "web", "android", "ios"],

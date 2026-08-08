@@ -7,7 +7,7 @@
   "version": 1,
   "maturity": "proposed",
   "reconciliationStatus": "needs-reconciliation",
-  "categoryKey": "enterprise-sso",
+  "categoryKey": "enterprise-sso-sign-in",
   "scenarioKeys": [],
   "finalOutcome": "The enterprise identity has been validated through the configured trust relationship, the appropriate durable application identity and organization context are resolved, and an authenticated session is active.",
   "supportedPlatforms": ["server", "web", "android", "ios"],

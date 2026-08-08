@@ -31,7 +31,12 @@
       "enum": ["needs-reconciliation", "reconciling", "reconciled", "blocked"],
       "description": "Tracks whether the behavior's downstream scenario, presentation, implementation, and test evidence has been reconciled independently of specification maturity."
     },
-    "categoryKey": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$" },
+    "categoryKey": {
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)+$",
+      "description": "Behavior family in subject-action form, such as passkey-sign-in, password-recovery, or invitation-acceptance."
+    },
     "scenarioKeys": {
       "type": "array",
       "items": { "type": "string", "pattern": "^auth\\.scenario\\." },
