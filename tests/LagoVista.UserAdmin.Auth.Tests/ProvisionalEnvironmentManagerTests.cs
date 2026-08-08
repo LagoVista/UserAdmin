@@ -1,3 +1,4 @@
+using LagoVista.Core;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
@@ -130,11 +131,11 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var now = DateTime.UtcNow;
             return new ProvisionalEnvironment
             {
-                Id = Guid.NewGuid().ToString("N"),
+                Id = Guid.NewGuid().ToId(),
                 State = ProvisionalEnvironmentState.Active,
-                AppUserId = Guid.NewGuid().ToString("N"),
-                OrganizationId = Guid.NewGuid().ToString("N"),
-                SubscriptionId = Guid.NewGuid().ToString("N"),
+                AppUserId = Guid.NewGuid().ToId(),
+                OrganizationId = Guid.NewGuid().ToId(),
+                SubscriptionId = Guid.NewGuid().ToString(),
                 CreatedUtc = now.AddDays(-1),
                 ActivatedUtc = now.AddDays(-1),
                 LastActivityUtc = now.AddDays(-1),
