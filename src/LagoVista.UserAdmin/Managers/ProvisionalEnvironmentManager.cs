@@ -159,6 +159,39 @@ namespace LagoVista.UserAdmin.Managers
             return await RecordActivityAsync(environment);
         }
 
+        public async Task<InvokeResult> ClaimAsync(string provisionalEnvironmentId)
+        {
+            if (String.IsNullOrWhiteSpace(provisionalEnvironmentId)) return InvokeResult.FromError("ProvisionalEnvironmentId is required.");
+
+            var environment = await _environmentRepo.GetByIdAsync(provisionalEnvironmentId);
+            if (environment == null) return InvokeResult.FromError("The provisional environment was not found.");
+            if (environment.State == ProvisionalEnvironmentState.Claimed) return InvokeResult.Success;
+            if (environment.State != ProvisionalEnvironmentState.Active) return InvokeResult.FromError($"Provisional environment is {environment.State.ToString().ToLowerInvariant()}.");
+
+            var now = DateTime.UtcNow;
+            if (environment.ExpiresUtc.ToUniversalTime() <= now)
+            {
+                environment.State = ProvisionalEnvironmentState.Expired;
+                environment.ExpiredUtc = now;
+                environment.PurgeAfterUtc = now.AddDays(ExpiredRetentionDays);
+                environment.StateChangedUtc = now;
+                await _environmentRepo.UpdateAsync(environment);
+                return InvokeResult.FromError("The provisional environment has expired.");
+            }
+
+            var appUser = await _userManager.FindByIdAsync(environment.AppUserId);
+            if (appUser == null) return InvokeResult.FromError("The provisional environment user was not found.");
+            if (appUser.IsAnonymous) return InvokeResult.FromError("The provisional environment user must be established before the environment can be claimed.");
+
+            environment.State = ProvisionalEnvironmentState.Claimed;
+            environment.ClaimedUtc = now;
+            environment.StateChangedUtc = now;
+            environment.RecoveryTokenHash = null;
+            environment.InstallationIdHash = null;
+            await _environmentRepo.UpdateAsync(environment);
+            return InvokeResult.Success;
+        }
+
         public async Task<InvokeResult<IEnumerable<ProvisionalEnvironmentLifecycleSummary>>> GetByStateAsync(ProvisionalEnvironmentState state, DateTime? dueBeforeUtc = null, int take = 100)
         {
             var takeResult = ValidateTake(take);
@@ -227,6 +260,7 @@ namespace LagoVista.UserAdmin.Managers
             {
                 environment.State = ProvisionalEnvironmentState.Expired;
                 environment.ExpiredUtc = now;
+                environment.PurgeAfterUtc = now.AddDays(ExpiredRetentionDays);
                 environment.StateChangedUtc = now;
                 await _environmentRepo.UpdateAsync(environment);
                 return InvokeResult.FromError("The provisional environment has expired.");
