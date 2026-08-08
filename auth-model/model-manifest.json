@@ -14,8 +14,8 @@
   },
   "validation": { "jsonSchemaDraft": "2020-12", "keyPattern": "^auth\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})+$", "canonicalHashAlgorithm": "sha256", "canonicalHashEncoding": "lowercase-hex", "requireUniqueKeys": true, "requireResolvedReferences": true, "rejectAmbiguousApprovedTransitions": true },
   "maturityValues": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"],
-  "inventory": { "stateDimensions": 18, "compositeStateCatalogs": 1, "invariants": 20, "actions": 48, "transitions": 50, "journeys": 12, "scenarios": 4, "legacyScenarios": 50, "endToEndBehaviors": 20, "legacyEndToEndBehaviors": 6, "conversationTypes": 7, "authViews": 0, "authRoutes": 0, "presentationBindings": 6, "authFlows": 3, "authFlowHandlers": 3, "authEndpointBindings": 3, "authProxyBindings": 3, "authTestBindings": 3, "decisions": 0, "unresolved": 0 },
-  "currentWork": { "guideSection": "4.17", "status": "in-progress", "summary": "V2 behavior-first reconciliation is building the canonical behavior universe before scenario decomposition. Step-up security is modeled as a mechanism-independent MFA behavior, and invitation acceptance is an authenticated post-login application capability rather than part of authentication entry." },
+  "inventory": { "stateDimensions": 18, "compositeStateCatalogs": 1, "invariants": 20, "actions": 48, "transitions": 50, "journeys": 12, "scenarios": 4, "legacyScenarios": 50, "endToEndBehaviors": 23, "legacyEndToEndBehaviors": 6, "conversationTypes": 7, "authViews": 0, "authRoutes": 0, "presentationBindings": 6, "authFlows": 3, "authFlowHandlers": 3, "authEndpointBindings": 3, "authProxyBindings": 3, "authTestBindings": 3, "decisions": 0, "unresolved": 0 },
+  "currentWork": { "guideSection": "4.17", "status": "in-progress", "summary": "V2 behavior-first reconciliation is building the canonical behavior universe before scenario decomposition. External Identity Provider is the canonical provider-mediated identity terminology, Enterprise SSO is framed as a distinct proposed capability, step-up security is mechanism-independent, and invitation acceptance occurs after login." },
   "sourceReferences": [
     { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.15", "note": "UI-only transitions, AuthView coverage, and platform evidence" },
     { "sourceType": "decision", "reference": "auth-model/AUTH-VIEW-ROUTE-CONTRACT.md", "note": "Canonical AuthView and AuthRoute authority, identifier, projection, and reconciliation rules" },
@@ -28,7 +28,7 @@
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.4-HANDOFF.md", "note": "Guest and claimable-value journey handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.5-HANDOFF.md", "note": "PendingIdentity lifecycle handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.6-HANDOFF.md", "note": "Password registration handoff" },
-    { "sourceType": "decision", "reference": "auth-model/SECTION-4.7-HANDOFF.md", "note": "Native-provider registration and linking handoff" },
+    { "sourceType": "decision", "reference": "auth-model/SECTION-4.7-HANDOFF.md", "note": "Legacy native-provider registration and linking handoff; terminology is reconciled at the V2 behavior layer as External Identity Provider." },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.8-HANDOFF.md", "note": "Passkey registration, authentication, and step-up handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.9-HANDOFF.md", "note": "Home workspace establishment handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.10-HANDOFF.md", "note": "Invitation resolution handoff" },
@@ -38,6 +38,6 @@
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.14-HANDOFF.md", "note": "Account recovery handoff" },
     { "sourceType": "decision", "reference": "auth-model/SECTION-4.15-HANDOFF.md", "note": "UI-only transitions and AuthView coverage handoff" },
     { "sourceType": "discussion", "reference": "auth-model/conversations/hr-onboarding.json", "note": "HR onboarding router and six bounded proposed workflow conversations" },
-    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-08", "note": "Behavior-first reconciliation, canonical behavior-universe seeding, mechanism-independent step-up security, and post-login invitation acceptance." }
+    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-08", "note": "Behavior-first reconciliation, External Identity Provider terminology, Enterprise SSO framing, mechanism-independent step-up security, and post-login invitation acceptance." }
   ]
 }

@@ -3,13 +3,16 @@
   "schemaVersion": "2.0",
   "key": "auth.behavior.native-provider.sign-in-success",
   "name": "Native Provider Sign-In Success",
-  "summary": "A returning user authenticates with a supported native identity provider, resolves the provider assertion to an existing durable identity, and enters an authenticated session.",
-  "version": 1,
-  "maturity": "proposed",
-  "reconciliationStatus": "needs-reconciliation",
+  "summary": "Deprecated terminology retained for historical references. The canonical behavior is External Identity Provider Sign-In Success.",
+  "version": 2,
+  "maturity": "deprecated",
+  "reconciliationStatus": "reconciled",
   "categoryKey": "native-provider",
   "scenarioKeys": [],
-  "finalOutcome": "The existing durable user is resolved from the validated provider identity and an authenticated session is active.",
+  "finalOutcome": "Use auth.behavior.external-identity-provider.sign-in-success for the canonical behavior.",
   "supportedPlatforms": ["server", "web", "android", "ios"],
-  "sourceReferences": [{ "sourceType": "journey", "reference": "auth.journey.native-provider.existing-user" }]
+  "sourceReferences": [
+    { "sourceType": "journey", "reference": "auth.journey.native-provider.existing-user" },
+    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-08", "note": "Native provider terminology was replaced by External Identity Provider because the capability represents provider-mediated identity rather than a platform-native credential." }
+  ]
 }

@@ -3,13 +3,16 @@
   "schemaVersion": "2.0",
   "key": "auth.behavior.native-provider.registration-success",
   "name": "Native Provider Registration Success",
-  "summary": "A new user establishes a durable account from a validated supported native-provider identity and enters the application without conflating provider email with independent email evidence.",
-  "version": 1,
-  "maturity": "proposed",
-  "reconciliationStatus": "needs-reconciliation",
+  "summary": "Deprecated terminology retained for historical references. The canonical behavior is External Identity Provider Registration Success.",
+  "version": 2,
+  "maturity": "deprecated",
+  "reconciliationStatus": "reconciled",
   "categoryKey": "native-provider-registration",
   "scenarioKeys": [],
-  "finalOutcome": "A new durable user exists, the provider identity is bound to it, a home workspace exists, and an authenticated session is active.",
+  "finalOutcome": "Use auth.behavior.external-identity-provider.registration-success for the canonical behavior.",
   "supportedPlatforms": ["server", "web", "android", "ios"],
-  "sourceReferences": [{ "sourceType": "journey", "reference": "auth.journey.native-provider.new-user-registration" }]
+  "sourceReferences": [
+    { "sourceType": "journey", "reference": "auth.journey.native-provider.new-user-registration" },
+    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-08", "note": "Native provider terminology was replaced by External Identity Provider across the provider-mediated identity family." }
+  ]
 }
