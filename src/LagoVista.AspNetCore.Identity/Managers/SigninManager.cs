@@ -174,7 +174,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthUserNotFound, userName: userName);
                 UserLoginFailures.Inc();
                 signIn.Dispose();
-                return InvokeResult<AuthenticationResponse>.FromError($"Could not find user [{email}].");
+                return InvokeResult<AuthenticationResponse>.FromErrors(UserAdminErrorCodes.AuthInvalidCredentials.ToErrorMessage());
             }
 
             var signInResult = await _signinManager.PasswordSignInAsync(userName, loginRequest.Password, loginRequest.RememberMe, loginRequest.LockoutOnFailure);
