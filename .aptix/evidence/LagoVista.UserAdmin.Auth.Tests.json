@@ -3,22 +3,22 @@
   "ProjectName": "LagoVista.UserAdmin.Auth.Tests",
   "ProjectPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj",
   "AssemblyPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
-  "RunId": "e4d5e0c8-8e21-4fa3-9424-b95e573c49ff",
-  "StartedUtc": "2026-07-30T21:28:29.3130967Z",
-  "CompletedUtc": "2026-07-30T21:28:39.8122907Z",
+  "RunId": "5fa4c129-d8fa-49e5-b063-ac9b4bf9f268",
+  "StartedUtc": "2026-08-09T17:33:57.7983038Z",
+  "CompletedUtc": "2026-08-09T17:34:09.4282222Z",
   "ExitCode": 0,
   "Outcome": "Passed",
   "Summary": {
-    "Total": 28,
-    "Passed": 28,
+    "Total": 48,
+    "Passed": 48,
     "Failed": 0,
     "Skipped": 0,
-    "DurationMilliseconds": 10499
+    "DurationMilliseconds": 11629
   },
   "Tests": [
     {
       "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailVerificationFlowIntegrationTests",
-      "TestMethod": "AlreadyConfirmedUser_Should_ReturnIdempotentSuccess",
+      "TestMethod": "AlreadyConfirmedUser_Should_ReturnIdempotentSuccess_WithoutReadingCode",
       "Evidence": [
         {
           "Profile": "auth",
@@ -33,7 +33,7 @@
     },
     {
       "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailVerificationFlowIntegrationTests",
-      "TestMethod": "InvalidToken_Should_ReturnFailure_WithoutSuccessfulTransitionResult",
+      "TestMethod": "ConsumedCode_Should_ReturnFailure_WithoutUpdatingCodeOrUser",
       "Evidence": [
         {
           "Profile": "auth",
@@ -44,11 +44,13 @@
           ]
         }
       ],
-      "ObservedAuthEvents": []
+      "ObservedAuthEvents": [
+        "EmailConfirmFailed"
+      ]
     },
     {
       "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailVerificationFlowIntegrationTests",
-      "TestMethod": "ValidToken_Should_CompleteVerification_And_ReturnRedirect",
+      "TestMethod": "ExpiredCode_Should_ReturnFailure_WithoutUpdatingCodeOrUser",
       "Evidence": [
         {
           "Profile": "auth",
@@ -59,7 +61,60 @@
           ]
         }
       ],
-      "ObservedAuthEvents": []
+      "ObservedAuthEvents": [
+        "EmailConfirmFailed"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailVerificationFlowIntegrationTests",
+      "TestMethod": "FifthInvalidAttempt_Should_ConsumeCode_And_ReturnFailure",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.email-verification.complete",
+            "auth.flow.email-verification.complete",
+            "auth.transition.email-verification.complete"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "EmailConfirmFailed"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailVerificationFlowIntegrationTests",
+      "TestMethod": "InvalidCode_Should_IncrementAttemptCount_And_ReturnFailure",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.email-verification.complete",
+            "auth.flow.email-verification.complete",
+            "auth.transition.email-verification.complete"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "EmailConfirmFailed"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailVerificationFlowIntegrationTests",
+      "TestMethod": "ValidCode_Should_ConfirmEmail_ConsumeCode_SignIn_And_ReturnRedirect",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.email-verification.complete",
+            "auth.flow.email-verification.complete",
+            "auth.transition.email-verification.complete"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "ConfirmEmailSuccess"
+      ]
     },
     {
       "TestType": "LagoVista.UserAdmin.Auth.Tests.InvitationAcceptanceFlowIntegrationTests",
@@ -156,15 +211,67 @@
       "ObservedAuthEvents": []
     },
     {
-      "TestType": "LagoVista.UserAdmin.Auth.Tests.PasswordLoginFlowIntegrationTests",
-      "TestMethod": "InvalidCredentials_Should_ReturnFailure_And_RecordStartedThenFailed",
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.PasswordChangeFlowIntegrationTests",
+      "TestMethod": "RejectedChange_Should_RunRealFlowAndManagers_AndEmitFailedTransitionEvidence",
       "Evidence": [
         {
           "Profile": "auth",
           "References": [
-            "auth.test-binding.password.establish-session",
-            "auth.flow.password.establish-session",
-            "auth.transition.password.establish-session"
+            "auth.test-binding.password-management.change",
+            "auth.flow.password-management.change",
+            "auth.transition.password-management.change-failed"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "ChangePasswordFailed"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.PasswordChangeFlowIntegrationTests",
+      "TestMethod": "SuccessfulChange_Should_RunRealFlowAndManagers_AndEmitSuccessTransitionEvidence",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.password-management.change",
+            "auth.flow.password-management.change",
+            "auth.transition.password-management.change-success"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "ChangePasswordSuccess"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.PasswordLoginFlowIntegrationTests",
+      "TestMethod": "InvalidCredentials_Should_ReturnSamePublicRejection_And_RecordStartedThenFailed",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.password-sign-in",
+            "auth.flow.password-sign-in",
+            "auth.transition.password-sign-in.rejected"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "PasswordAuthenticationStarted",
+        "PasswordAuthenticationFailed"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.PasswordLoginFlowIntegrationTests",
+      "TestMethod": "LockedOut_Should_ReturnLockoutResult_And_RecordStartedThenFailed",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.password-sign-in",
+            "auth.flow.password-sign-in",
+            "auth.transition.password-sign-in.locked-out"
           ]
         }
       ],
@@ -180,9 +287,9 @@
         {
           "Profile": "auth",
           "References": [
-            "auth.test-binding.password.establish-session",
-            "auth.flow.password.establish-session",
-            "auth.transition.password.establish-session"
+            "auth.test-binding.password-sign-in",
+            "auth.flow.password-sign-in",
+            "auth.transition.password-sign-in.success"
           ]
         }
       ],
@@ -193,14 +300,14 @@
     },
     {
       "TestType": "LagoVista.UserAdmin.Auth.Tests.PasswordLoginFlowIntegrationTests",
-      "TestMethod": "UserNotFound_Should_ReturnFailure_And_RecordStartedThenUserNotFound",
+      "TestMethod": "UserNotFound_Should_ReturnSamePublicRejection_And_RecordStartedThenUserNotFound",
       "Evidence": [
         {
           "Profile": "auth",
           "References": [
-            "auth.test-binding.password.establish-session",
-            "auth.flow.password.establish-session",
-            "auth.transition.password.establish-session"
+            "auth.test-binding.password-sign-in",
+            "auth.flow.password-sign-in",
+            "auth.transition.password-sign-in.rejected"
           ]
         }
       ],
@@ -218,7 +325,7 @@
           "References": [
             "auth.test-binding.recovery.complete",
             "auth.flow.recovery.complete",
-            "auth.transition.recovery.complete"
+            "auth.transition.password-recovery.completion-rejected"
           ]
         }
       ],
@@ -233,7 +340,7 @@
           "References": [
             "auth.test-binding.recovery.complete",
             "auth.flow.recovery.complete",
-            "auth.transition.recovery.complete"
+            "auth.transition.password-recovery.completed"
           ]
         }
       ],
@@ -250,7 +357,7 @@
           "References": [
             "auth.test-binding.recovery.request",
             "auth.flow.recovery.request",
-            "auth.transition.recovery.request"
+            "auth.transition.password-recovery.request-accepted"
           ]
         }
       ],
@@ -262,37 +369,75 @@
     },
     {
       "TestType": "LagoVista.UserAdmin.Auth.Tests.PasswordRecoveryRequestFlowIntegrationTests",
-      "TestMethod": "UserNotFound_Should_ReturnFailure_And_RecordRequestOnly",
+      "TestMethod": "UserNotFound_Should_ReturnSuccess_And_RecordRequestOnly",
       "Evidence": [
         {
           "Profile": "auth",
           "References": [
             "auth.test-binding.recovery.request",
             "auth.flow.recovery.request",
-            "auth.transition.recovery.request"
+            "auth.transition.password-recovery.request-accepted"
           ]
         }
       ],
       "ObservedAuthEvents": [
         "PasswordRecoveryRequested"
       ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.PasswordRecoveryVerificationFlowIntegrationTests",
+      "TestMethod": "InvalidCode_Should_ReturnNeutralRejection_IncrementAttempt_And_RecordFailure",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.recovery.verify",
+            "auth.flow.recovery.verify",
+            "auth.transition.password-recovery.rejected"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "PasswordRecoveryCodeVerificationFailed"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.PasswordRecoveryVerificationFlowIntegrationTests",
+      "TestMethod": "ValidCode_Should_ConsumeCode_GenerateResetToken_And_RecordVerified",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.recovery.verify",
+            "auth.flow.recovery.verify",
+            "auth.transition.password-recovery.code-accepted"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "PasswordRecoveryCodeVerified"
+      ]
     }
   ],
   "Issues": [],
   "StandardOutput": [
     "  Determining projects to restore...",
-    "  All projects are up-to-date for restore.",
+    "  Restored D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin.Models\\LagoVista.UserAdmin.Models.csproj (in 616 ms).",
+    "  Restored D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.AspNetCore.Identity\\LagoVista.AspNetCore.Identity.csproj (in 616 ms).",
+    "  Restored D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\LagoVista.UserAdmin.csproj (in 616 ms).",
+    "  Restored D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj (in 616 ms).",
     "  LagoVista.UserAdmin.Models -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin.Models\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.Models.dll",
+    "CSC : warning CS8002: Referenced assembly \u0027RingCentral.Net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0027 does not have a strong name. [D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\LagoVista.UserAdmin.csproj]",
     "  LagoVista.UserAdmin -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.dll",
     "  LagoVista.AspNetCore.Identity -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.AspNetCore.Identity\\bin\\Debug\\net9.0\\LagoVista.AspNetCore.Identity.dll",
     "  LagoVista.UserAdmin.Auth.Tests -\u003E D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
     "Test run for D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll (.NETCoreApp,Version=v9.0)",
     "A total of 1 test files matched the specified pattern.",
     "",
-    "Passed!  - Failed:     0, Passed:    28, Skipped:     0, Total:    28, Duration: 531 ms - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
+    "Passed!  - Failed:     0, Passed:    48, Skipped:     0, Total:    48, Duration: 450 ms - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
     "",
     "Attachments:",
-    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\7b927516-1a8c-42d8-8272-a51b19c5220f\\coverage.cobertura.xml"
+    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\faed7ce4-d7e4-4506-ac2d-6755caf28507\\coverage.cobertura.xml"
   ],
   "StandardError": []
 }

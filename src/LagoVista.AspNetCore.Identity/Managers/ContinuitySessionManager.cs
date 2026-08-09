@@ -1,5 +1,6 @@
 using LagoVista.AspNetCore.Identity.Interfaces;
 using LagoVista.Core.Validation;
+using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
