@@ -142,6 +142,27 @@
         "visibilityCondition": { "type": "string", "minLength": 1 }
       }
     },
+    "platformConformance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["verified", "needs-review", "mismatch", "not-applicable"]
+        },
+        "checkedUtc": { "type": "string", "format": "date-time" },
+        "checkedAgainst": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["view-identity", "controls", "actions", "finders", "navigation"]
+          },
+          "uniqueItems": true
+        },
+        "notes": { "type": "string", "minLength": 1 }
+      }
+    },
     "platformSupport": {
       "type": "object",
       "additionalProperties": false,
@@ -155,6 +176,7 @@
         "path": { "type": "string", "minLength": 1 },
         "component": { "type": "string", "minLength": 1 },
         "implementation": { "type": "string", "minLength": 1 },
+        "conformance": { "$ref": "#/$defs/platformConformance" },
         "notes": { "type": "string", "minLength": 1 }
       }
     }
