@@ -76,6 +76,7 @@ namespace LagoVista.UserAdmin.Models.Testing
         public string EmailConfirmationToken { get; set; }
         public string PasswordRecoveryCode { get; set; }
         public string EmailVerificationCode { get; set; }
+        public string PasswordResetToken { get; set; }
     }
 
     /// <summary>
