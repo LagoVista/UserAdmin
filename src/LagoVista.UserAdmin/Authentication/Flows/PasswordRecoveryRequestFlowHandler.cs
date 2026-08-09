@@ -8,7 +8,7 @@ namespace LagoVista.UserAdmin.Authentication.Flows
     [CriticalCoverage]
     public class PasswordRecoveryRequestFlowHandler : IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest>
     {
-        public const string TransitionKey = "auth.transition.recovery.request";
+        public const string TransitionKey = "auth.transition.password-recovery.request-accepted";
 
         private readonly IPasswordManager _passwordManager;
 
