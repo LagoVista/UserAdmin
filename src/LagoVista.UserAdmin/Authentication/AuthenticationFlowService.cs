@@ -31,9 +31,13 @@ namespace LagoVista.UserAdmin.Authentication
             _passwordChangeHandler = passwordChangeHandler;
         }
 
-        public Task<InvokeResult<AuthenticationResponse>> LoginWithPasswordAsync(AuthLoginRequest request)
+        public async Task<InvokeResult<AuthenticationResponse>> LoginWithPasswordAsync(AuthLoginRequest request)
         {
-            return _passwordLoginHandler.HandleAsync(request);
+            var result = await _passwordLoginHandler.HandleAsync(request);
+            if (result.TransitionKey != PasswordLoginFlowHandler.SuccessTransitionKey && result.TransitionKey != PasswordLoginFlowHandler.RejectedTransitionKey && result.TransitionKey != PasswordLoginFlowHandler.LockedOutTransitionKey)
+                throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
+
+            return result.PublicResult;
         }
 
         public async Task<InvokeResult> ChangePasswordAsync(ChangePassword request, EntityHeader organization, EntityHeader user)
