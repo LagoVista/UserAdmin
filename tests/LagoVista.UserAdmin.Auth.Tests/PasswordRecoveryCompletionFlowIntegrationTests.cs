@@ -21,11 +21,12 @@ namespace LagoVista.UserAdmin.Auth.Tests
     [TestFixture]
     public class PasswordRecoveryCompletionFlowIntegrationTests
     {
-        private const string RecoveryCompletionEvidence = "auth|auth.test-binding.recovery.complete|auth.flow.recovery.complete|auth.transition.recovery.complete";
+        private const string RecoveryCompletionSuccessEvidence = "auth|auth.test-binding.recovery.complete|auth.flow.recovery.complete|auth.transition.password-recovery.completed";
+        private const string RecoveryCompletionRejectedEvidence = "auth|auth.test-binding.recovery.complete|auth.flow.recovery.complete|auth.transition.password-recovery.completion-rejected";
         private const string SuccessfulCompletionEvents = "PasswordRecoveryCompleted";
 
         [Test]
-        [Property("AptixEvidence", RecoveryCompletionEvidence)]
+        [Property("AptixEvidence", RecoveryCompletionSuccessEvidence)]
         [Property("AptixAuthEvents", SuccessfulCompletionEvents)]
         public async Task SuccessfulReset_Should_CompleteRecovery_And_RecordMilestone()
         {
@@ -46,7 +47,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         }
 
         [Test]
-        [Property("AptixEvidence", RecoveryCompletionEvidence)]
+        [Property("AptixEvidence", RecoveryCompletionRejectedEvidence)]
         public async Task FailedReset_Should_ReturnFailure_WithoutRecordingCompletion()
         {
             var harness = CreateHarness();
