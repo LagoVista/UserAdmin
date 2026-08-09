@@ -26,14 +26,20 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IOrganizationManager _organizationManager;
         private readonly ISubscriptionManager _subscriptionManager;
         private readonly ISubscriptionLevelManager _subscriptionLevelManager;
+        private readonly IProvisionalEnvironmentBillingArchiveRepo _billingArchiveRepo;
+        private readonly IProvisionalEnvironmentArchiveStore _archiveStore;
+        private readonly IProvisionalEnvironmentArchiveAccountingService _archiveAccountingService;
 
-        public ProvisionalEnvironmentManager(IProvisionalEnvironmentRepo environmentRepo, IUserManager userManager, IOrganizationManager organizationManager, ISubscriptionManager subscriptionManager, ISubscriptionLevelManager subscriptionLevelManager)
+        public ProvisionalEnvironmentManager(IProvisionalEnvironmentRepo environmentRepo, IUserManager userManager, IOrganizationManager organizationManager, ISubscriptionManager subscriptionManager, ISubscriptionLevelManager subscriptionLevelManager, IProvisionalEnvironmentBillingArchiveRepo billingArchiveRepo, IProvisionalEnvironmentArchiveStore archiveStore, IProvisionalEnvironmentArchiveAccountingService archiveAccountingService)
         {
             _environmentRepo = environmentRepo ?? throw new ArgumentNullException(nameof(environmentRepo));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _organizationManager = organizationManager ?? throw new ArgumentNullException(nameof(organizationManager));
             _subscriptionManager = subscriptionManager ?? throw new ArgumentNullException(nameof(subscriptionManager));
             _subscriptionLevelManager = subscriptionLevelManager ?? throw new ArgumentNullException(nameof(subscriptionLevelManager));
+            _billingArchiveRepo = billingArchiveRepo ?? throw new ArgumentNullException(nameof(billingArchiveRepo));
+            _archiveStore = archiveStore ?? throw new ArgumentNullException(nameof(archiveStore));
+            _archiveAccountingService = archiveAccountingService ?? throw new ArgumentNullException(nameof(archiveAccountingService));
         }
 
         public async Task<InvokeResult<CreateProvisionalEnvironmentResponse>> CreateAsync(CreateProvisionalEnvironmentRequest request)
@@ -265,15 +271,22 @@ namespace LagoVista.UserAdmin.Managers
             {
                 try
                 {
+                    var validationResult = await _organizationManager.ValidateProvisionalOrganizationForPurgeAsync(environment.OrganizationId, environment.AppUserId, environment.SubscriptionId);
+                    if (!validationResult.Successful)
+                    {
+                        AddPurgeFailure(result, environment.Id, validationResult.Errors.FirstOrDefault()?.Message ?? "The provisional environment is no longer eligible for purge.");
+                        continue;
+                    }
+
+                    var billingEvents = await _billingArchiveRepo.GetBillingEventsAsync(environment.OrganizationId, environment.SubscriptionId);
+                    var archive = await _archiveStore.WriteAndVerifyAsync(new ProvisionalEnvironmentArchiveWriteRequest { Manifest = CreateArchiveManifest(environment, billingEvents), BillingEvents = billingEvents });
+                    await _archiveAccountingService.EnsureRollupAsync(new ProvisionalEnvironmentArchiveAccountingRequest { Environment = environment, Archive = archive, BillingEvents = billingEvents });
+                    await _billingArchiveRepo.DeleteBillingEventsAsync(environment.OrganizationId, environment.SubscriptionId, billingEvents.Select(item => item.Id).ToList());
+
                     var purgeResult = await _organizationManager.PurgeProvisionalOrganizationAsync(environment.OrganizationId, environment.AppUserId, environment.SubscriptionId);
                     if (!purgeResult.Successful)
                     {
-                        result.BlockedCount++;
-                        result.Failures.Add(new ProvisionalEnvironmentLifecycleFailure
-                        {
-                            ProvisionalEnvironmentId = environment.Id,
-                            Reason = purgeResult.Errors.FirstOrDefault()?.Message ?? "The provisional environment could not be purged."
-                        });
+                        AddPurgeFailure(result, environment.Id, purgeResult.Errors.FirstOrDefault()?.Message ?? "The provisional environment could not be purged.");
                         continue;
                     }
 
@@ -283,12 +296,50 @@ namespace LagoVista.UserAdmin.Managers
                 }
                 catch (Exception ex)
                 {
-                    result.BlockedCount++;
-                    result.Failures.Add(new ProvisionalEnvironmentLifecycleFailure { ProvisionalEnvironmentId = environment.Id, Reason = ex.Message });
+                    AddPurgeFailure(result, environment.Id, ex.Message);
                 }
             }
 
             return InvokeResult<ProvisionalEnvironmentLifecycleBatchResult>.Create(result);
+        }
+
+        private static ProvisionalEnvironmentArchiveManifest CreateArchiveManifest(ProvisionalEnvironment environment, IReadOnlyCollection<ProvisionalEnvironmentBillingEventArchive> billingEvents)
+        {
+            return new ProvisionalEnvironmentArchiveManifest
+            {
+                ProvisionalEnvironmentId = environment.Id,
+                AppUserId = environment.AppUserId,
+                OrganizationId = environment.OrganizationId,
+                SubscriptionId = environment.SubscriptionId,
+                EstablishedUtc = environment.ActivatedUtc ?? environment.CreatedUtc,
+                LastActivityUtc = environment.LastActivityUtc,
+                ExpiredUtc = environment.ExpiredUtc,
+                ArchivedUtc = DateTime.UtcNow,
+                ArchiveReason = "Provisional environment retention period elapsed.",
+                ConversionJourneyId = environment.ConversionJourneyId,
+                AcquisitionSourceKey = environment.AcquisitionSourceKey,
+                CampaignKey = environment.CampaignKey,
+                EntryPointType = environment.EntryPointType,
+                EntryPointKey = environment.EntryPointKey,
+                ExperimentKey = environment.ExperimentKey,
+                ExperimentVariantKey = environment.ExperimentVariantKey,
+                AgentKey = environment.AgentKey,
+                AgentVersion = environment.AgentVersion,
+                PromptVersion = environment.PromptVersion,
+                BillingEventCount = billingEvents.Count,
+                TotalActualCost = billingEvents.Sum(item => item.ActualCost ?? 0m),
+                TotalExtended = billingEvents.Sum(item => item.Extended ?? 0m),
+                TotalTokens = billingEvents.Sum(item => item.Tokens ?? 0L),
+                TotalQuantity = billingEvents.Sum(item => item.Quantity ?? 0m),
+                EarliestBillingEventUtc = billingEvents.Count == 0 ? null : billingEvents.Min(item => item.StartTimestamp),
+                LatestBillingEventUtc = billingEvents.Count == 0 ? null : billingEvents.Max(item => item.EndTimestamp ?? item.StartTimestamp)
+            };
+        }
+
+        private static void AddPurgeFailure(ProvisionalEnvironmentLifecycleBatchResult result, string provisionalEnvironmentId, string reason)
+        {
+            result.BlockedCount++;
+            result.Failures.Add(new ProvisionalEnvironmentLifecycleFailure { ProvisionalEnvironmentId = provisionalEnvironmentId, Reason = reason });
         }
 
         private async Task<InvokeResult> RecordActivityAsync(ProvisionalEnvironment environment)

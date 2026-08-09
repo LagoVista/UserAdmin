@@ -17,6 +17,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> AddSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user);
         Task<InvokeResult> DeleteSubscriptionsForOrgAsync(string id, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> ValidateProvisionalSubscriptionForPurgeAsync(string subscriptionId, string orgId, string appUserId);
         Task<InvokeResult> PurgeProvisionalSubscriptionAsync(string subscriptionId, string orgId, string appUserId);
         Task<Subscription> GetTrialSubscriptionAsync(EntityHeader org, EntityHeader user);
         Task<Subscription> GetSubscriptionAsync(GuidString36 id, EntityHeader org, EntityHeader user);

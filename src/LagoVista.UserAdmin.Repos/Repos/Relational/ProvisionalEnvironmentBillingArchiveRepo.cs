@@ -35,6 +35,26 @@ namespace LagoVista.UserAdmin.Repos.Relational
             return billingEvents.Select(ToArchive).ToList();
         }
 
+        public async Task<int> DeleteBillingEventsAsync(string organizationId, string subscriptionId, IReadOnlyCollection<string> billingEventIds)
+        {
+            if (String.IsNullOrWhiteSpace(organizationId)) throw new ArgumentNullException(nameof(organizationId));
+            if (!Guid.TryParse(subscriptionId, out var parsedSubscriptionId)) throw new ArgumentException("SubscriptionId must be a GUID.", nameof(subscriptionId));
+            if (billingEventIds == null) throw new ArgumentNullException(nameof(billingEventIds));
+            if (billingEventIds.Count == 0) return 0;
+
+            var parsedBillingEventIds = billingEventIds.Select(id => Guid.TryParse(id, out var parsedId) ? parsedId : throw new ArgumentException($"Billing event ID '{id}' is not a GUID.", nameof(billingEventIds))).ToList();
+            await using var ctx = CreateContext();
+            var currentIds = await ctx.BillingEvents
+                .ReadonlyQuery()
+                .Where(billingEvent => billingEvent.SubscriptionId == parsedSubscriptionId && billingEvent.Subscription.OrganizationId == organizationId)
+                .Select(billingEvent => billingEvent.Id)
+                .ToListAsync();
+
+            if (currentIds.Count != parsedBillingEventIds.Count || currentIds.Except(parsedBillingEventIds).Any()) throw new InvalidOperationException("The provisional billing events changed after the archive was verified.");
+
+            return await ctx.BillingEvents.Where(billingEvent => parsedBillingEventIds.Contains(billingEvent.Id)).ExecuteDeleteAsync();
+        }
+
         private static ProvisionalEnvironmentBillingEventArchive ToArchive(BillingEventDTO billingEvent)
         {
             return new ProvisionalEnvironmentBillingEventArchive

@@ -39,22 +39,28 @@ namespace LagoVista.UserAdmin.Repos.Relational
             var billingEvents = request.BillingEvents.OrderBy(item => item.StartTimestamp).ThenBy(item => item.Id).ToList();
             var archiveSubscription = await EnsureArchiveSubscriptionAsync();
             var result = CreateResult(request, archiveSubscription.Subscription.Id, archiveSubscription.AlreadyExisted);
-            if (billingEvents.Count == 0) return result;
+            if (request.Archive.BillingEventCount == 0) return result;
 
             var rollupId = CreateDeterministicGuid($"{RollupIdNamespace}:{request.Environment.Id}");
             result.RollupBillingEventId = rollupId.ToString("D");
-            result.ProductId = billingEvents[0].ProductId;
 
             await using var ctx = await _contextFactory.CreateDbContextAsync();
             var existing = await ctx.BillingEvents.ReadonlyQuery().SingleOrDefaultAsync(item => item.Id == rollupId);
             if (existing != null)
             {
-                ValidateExistingRollup(existing, request, result);
+                ValidateExistingRollup(existing, request, result, billingEvents.Count > 0);
+                result.ProductId = existing.ProductId.ToString("D");
+                result.TotalActualCost = existing.ActualCost ?? 0m;
+                result.TotalExtended = existing.Extended ?? 0m;
+                result.TotalTokens = existing.Tokens ?? 0L;
                 result.RollupAlreadyExisted = true;
                 return result;
             }
 
+            if (billingEvents.Count == 0) throw new InvalidOperationException($"The verified archive for provisional environment '{request.Environment.Id}' contains billing events, but its accounting rollup was not found.");
+
             var first = billingEvents[0];
+            result.ProductId = first.ProductId;
             if (!Guid.TryParse(first.ProductId, out var productId)) throw new InvalidOperationException("The archived billing event product ID is invalid.");
 
             var startUtc = billingEvents.Min(item => item.StartTimestamp).ToUniversalTime();
@@ -96,7 +102,7 @@ namespace LagoVista.UserAdmin.Repos.Relational
                 ctx.ChangeTracker.Clear();
                 existing = await ctx.BillingEvents.ReadonlyQuery().SingleOrDefaultAsync(item => item.Id == rollupId);
                 if (existing == null) throw;
-                ValidateExistingRollup(existing, request, result);
+                ValidateExistingRollup(existing, request, result, true);
                 result.RollupAlreadyExisted = true;
             }
 
@@ -154,7 +160,7 @@ namespace LagoVista.UserAdmin.Repos.Relational
             return new ProvisionalEnvironmentArchiveAccountingResult
             {
                 ArchiveSubscriptionId = archiveSubscriptionId.ToString("D"),
-                BillingEventCount = request.BillingEvents.Count,
+                BillingEventCount = request.Archive.BillingEventCount,
                 TotalActualCost = request.BillingEvents.Sum(item => item.ActualCost ?? 0m),
                 TotalExtended = request.BillingEvents.Sum(item => item.Extended ?? 0m),
                 TotalTokens = request.BillingEvents.Sum(item => item.Tokens ?? 0L),
@@ -172,13 +178,13 @@ namespace LagoVista.UserAdmin.Repos.Relational
             if (String.IsNullOrWhiteSpace(request.Environment.Id)) throw new InvalidOperationException("The provisional environment ID is required.");
             if (String.IsNullOrWhiteSpace(request.Archive.ArchivePath)) throw new InvalidOperationException("A verified archive path is required before creating an accounting rollup.");
             if (String.IsNullOrWhiteSpace(request.Archive.BillingEventsSha256)) throw new InvalidOperationException("A verified billing-event archive hash is required before creating an accounting rollup.");
-            if (request.Archive.BillingEventCount != request.BillingEvents.Count) throw new InvalidOperationException("The verified archive billing-event count does not match the accounting input.");
+            if (request.BillingEvents.Count > 0 && request.Archive.BillingEventCount != request.BillingEvents.Count) throw new InvalidOperationException("The verified archive billing-event count does not match the accounting input.");
             if (request.BillingEvents.Any(item => !String.Equals(item.SubscriptionId, request.Environment.SubscriptionId, StringComparison.OrdinalIgnoreCase))) throw new InvalidOperationException("The accounting input contains a billing event from another subscription.");
         }
 
-        private static void ValidateExistingRollup(BillingEventDTO existing, ProvisionalEnvironmentArchiveAccountingRequest request, ProvisionalEnvironmentArchiveAccountingResult expected)
+        private static void ValidateExistingRollup(BillingEventDTO existing, ProvisionalEnvironmentArchiveAccountingRequest request, ProvisionalEnvironmentArchiveAccountingResult expected, bool validateTotals)
         {
-            if (existing.SubscriptionId.ToString("D") != expected.ArchiveSubscriptionId || existing.ActualCost != expected.TotalActualCost || existing.Extended != expected.TotalExtended || existing.Tokens != expected.TotalTokens || String.IsNullOrWhiteSpace(existing.Notes) || !existing.Notes.Contains(request.Archive.BillingEventsSha256, StringComparison.Ordinal))
+            if (existing.SubscriptionId.ToString("D") != expected.ArchiveSubscriptionId || String.IsNullOrWhiteSpace(existing.Notes) || !existing.Notes.Contains(request.Archive.BillingEventsSha256, StringComparison.Ordinal) || (validateTotals && (existing.ActualCost != expected.TotalActualCost || existing.Extended != expected.TotalExtended || existing.Tokens != expected.TotalTokens)))
                 throw new InvalidOperationException($"The existing archival billing rollup for provisional environment '{request.Environment.Id}' does not match the verified archive.");
         }
 

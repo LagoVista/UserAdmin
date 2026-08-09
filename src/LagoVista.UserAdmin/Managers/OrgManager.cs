@@ -1380,6 +1380,28 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> PurgeProvisionalOrganizationAsync(string orgId, string appUserId, string subscriptionId)
         {
+            var validationResult = await ValidateProvisionalOrganizationForPurgeAsync(orgId, appUserId, subscriptionId);
+            if (!validationResult.Successful) return validationResult;
+
+            var appUser = await _appUserRepo.FindByIdAsync(appUserId);
+            var organization = await _organizationRepo.GetOrganizationAsync(orgId);
+            var subscriptionResult = await _subscriptionManager.PurgeProvisionalSubscriptionAsync(subscriptionId, orgId, appUserId);
+            if (!subscriptionResult.Successful) return subscriptionResult;
+
+            var orgHeader = organization?.ToEntityHeader() ?? EntityHeader.Create(orgId, "Provisional Workspace");
+            var userHeader = appUser?.ToEntityHeader() ?? EntityHeader.Create(appUserId, "Provisional Environment");
+            var roles = await _userRoleManager.GetRolesForUserAsync(appUserId, orgHeader, userHeader);
+            foreach (var role in roles) await _userRoleManager.RevokeUserRoleAsync(role.Id, orgHeader, userHeader);
+
+            if (await _orgUserRepo.QueryOrgHasUserAsync(orgId, appUserId)) await _orgUserRepo.RemoveUserFromOrgAsync(orgId, appUserId, userHeader);
+            if (organization != null) await _organizationRepo.DeleteOrgAsync(orgId);
+            if (appUser != null) await _appUserRepo.DeleteAsync(appUser, false);
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> ValidateProvisionalOrganizationForPurgeAsync(string orgId, string appUserId, string subscriptionId)
+        {
             if (String.IsNullOrWhiteSpace(orgId)) return InvokeResult.FromError("OrganizationId is required.");
             if (String.IsNullOrWhiteSpace(appUserId)) return InvokeResult.FromError("AppUserId is required.");
             if (String.IsNullOrWhiteSpace(subscriptionId)) return InvokeResult.FromError("SubscriptionId is required.");
@@ -1398,22 +1420,9 @@ namespace LagoVista.UserAdmin.Managers
 
                 var users = (await _orgUserRepo.GetUsersForOrgAsync(orgId)).ToList();
                 if (users.Any(orgUser => orgUser.UserId != appUserId)) return InvokeResult.FromError("The provisional organization contains another user.");
-                if (await _organizationRepo.HasBillingRecords(orgId)) return InvokeResult.FromError("Organization has billing events and cannot be purged.");
             }
 
-            var subscriptionResult = await _subscriptionManager.PurgeProvisionalSubscriptionAsync(subscriptionId, orgId, appUserId);
-            if (!subscriptionResult.Successful) return subscriptionResult;
-
-            var orgHeader = organization?.ToEntityHeader() ?? EntityHeader.Create(orgId, "Provisional Workspace");
-            var userHeader = appUser?.ToEntityHeader() ?? EntityHeader.Create(appUserId, "Provisional Environment");
-            var roles = await _userRoleManager.GetRolesForUserAsync(appUserId, orgHeader, userHeader);
-            foreach (var role in roles) await _userRoleManager.RevokeUserRoleAsync(role.Id, orgHeader, userHeader);
-
-            if (await _orgUserRepo.QueryOrgHasUserAsync(orgId, appUserId)) await _orgUserRepo.RemoveUserFromOrgAsync(orgId, appUserId, userHeader);
-            if (organization != null) await _organizationRepo.DeleteOrgAsync(orgId);
-            if (appUser != null) await _appUserRepo.DeleteAsync(appUser, false);
-
-            return InvokeResult.Success;
+            return await _subscriptionManager.ValidateProvisionalSubscriptionForPurgeAsync(subscriptionId, orgId, appUserId);
         }
 
         public async Task<ListResponse<OrganizationSummary>> GetAllOrgsAsync(EntityHeader org, EntityHeader user, ListRequest listRequest)

@@ -203,19 +203,28 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> PurgeProvisionalSubscriptionAsync(string subscriptionId, string orgId, string appUserId)
         {
+            if (await _organizationRepo.HasBillingRecords(orgId)) return InvokeResult.FromError("Organization has billing events and cannot be purged.");
+            var validationResult = await ValidateProvisionalSubscriptionForPurgeAsync(subscriptionId, orgId, appUserId);
+            if (!validationResult.Successful) return validationResult;
+
+            var org = EntityHeader.Create(orgId, "Provisional Workspace");
+            var user = EntityHeader.Create(appUserId, "Provisional Environment");
+            var subscription = await _subscriptionRepo.GetSubscriptionAsync(subscriptionId, org, user);
+            if (subscription != null) await _subscriptionRepo.DeleteSubscriptionAsync(subscriptionId, org, user);
+            return InvokeResult.Success;
+        }
+
+        public async Task<InvokeResult> ValidateProvisionalSubscriptionForPurgeAsync(string subscriptionId, string orgId, string appUserId)
+        {
             if (String.IsNullOrWhiteSpace(subscriptionId)) return InvokeResult.FromError("SubscriptionId is required.");
             if (String.IsNullOrWhiteSpace(orgId)) return InvokeResult.FromError("OrganizationId is required.");
             if (String.IsNullOrWhiteSpace(appUserId)) return InvokeResult.FromError("AppUserId is required.");
-            if (await _organizationRepo.HasBillingRecords(orgId)) return InvokeResult.FromError("Organization has billing events and cannot be purged.");
-
             var org = EntityHeader.Create(orgId, "Provisional Workspace");
             var user = EntityHeader.Create(appUserId, "Provisional Environment");
             var subscription = await _subscriptionRepo.GetSubscriptionAsync(subscriptionId, org, user);
             if (subscription == null) return InvokeResult.Success;
             if (subscription.Key != Subscription.SubscriptionKey_Provisional) return InvokeResult.FromError("The subscription is no longer provisional.");
             if (subscription.OwnerOrganization == null || subscription.OwnerOrganization.Id != orgId) return InvokeResult.FromError("The subscription does not belong to the provisional organization.");
-
-            await _subscriptionRepo.DeleteSubscriptionAsync(subscriptionId, org, user);
             return InvokeResult.Success;
         }
     }

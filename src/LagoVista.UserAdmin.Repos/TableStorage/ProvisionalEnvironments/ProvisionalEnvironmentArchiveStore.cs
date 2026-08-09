@@ -47,6 +47,11 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments
                 if (existingManifest != null && String.Equals(existingManifest.ProvisionalEnvironmentId, request.Manifest.ProvisionalEnvironmentId, StringComparison.Ordinal))
                 {
                     await VerifyBillingEventsAsync(container, billingEventsBlobName, existingManifest.BillingEventsSha256);
+                    if (billingEvents.Count > 0)
+                    {
+                        var currentSha256 = ComputeSha256(Encoding.UTF8.GetBytes(SerializeBillingEvents(billingEvents)));
+                        if (!String.Equals(currentSha256, existingManifest.BillingEventsSha256, StringComparison.OrdinalIgnoreCase)) throw new InvalidOperationException("The current billing events do not match the existing provisional-environment archive.");
+                    }
                     return ToResult(archivePath, manifestBlobName, billingEventsBlobName, existingManifest, true);
                 }
             }

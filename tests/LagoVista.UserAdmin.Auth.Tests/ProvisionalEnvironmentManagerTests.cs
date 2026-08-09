@@ -7,6 +7,8 @@ using LagoVista.UserAdmin.Models.Users;
 using Moq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Auth.Tests
@@ -115,7 +117,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var harness = CreateHarness();
 
             harness.EnvironmentRepo.Setup(repo => repo.GetByStateAsync(ProvisionalEnvironmentState.PurgePending, null, 100)).ReturnsAsync(new[] { environment });
-            harness.OrganizationManager.Setup(manager => manager.PurgeProvisionalOrganizationAsync(environment.OrganizationId, environment.AppUserId, environment.SubscriptionId)).ReturnsAsync(InvokeResult.FromError("blocked"));
+            harness.OrganizationManager.Setup(manager => manager.ValidateProvisionalOrganizationForPurgeAsync(environment.OrganizationId, environment.AppUserId, environment.SubscriptionId)).ReturnsAsync(InvokeResult.FromError("blocked"));
 
             var result = await harness.Manager.PurgeAsync(100);
 
@@ -123,7 +125,35 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(result.Result.BlockedCount, Is.EqualTo(1));
             Assert.That(result.Result.DeletedCount, Is.EqualTo(0));
             Assert.That(result.Result.Failures, Has.Count.EqualTo(1));
+            harness.BillingArchiveRepo.Verify(repo => repo.GetBillingEventsAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             harness.EnvironmentRepo.Verify(repo => repo.DeleteAsync(It.IsAny<string>()), Times.Never);
+        }
+
+        [Test]
+        public async Task PurgeAsync_Should_Archive_RollUp_And_DeleteBillingBeforeEnvironment()
+        {
+            var environment = CreateActiveEnvironment();
+            environment.State = ProvisionalEnvironmentState.PurgePending;
+            var billingEvent = new ProvisionalEnvironmentBillingEventArchive { Id = Guid.NewGuid().ToString("D"), SubscriptionId = environment.SubscriptionId, ProductId = Guid.NewGuid().ToString("D"), StartTimestamp = DateTime.UtcNow.AddHours(-1), EndTimestamp = DateTime.UtcNow, ActualCost = 1.25m, Extended = 2.50m };
+            var archive = new ProvisionalEnvironmentArchiveWriteResult { ArchivePath = "2026/08/08/archive", BillingEventsSha256 = "hash", BillingEventCount = 1 };
+            var harness = CreateHarness();
+
+            harness.EnvironmentRepo.Setup(repo => repo.GetByStateAsync(ProvisionalEnvironmentState.PurgePending, null, 100)).ReturnsAsync(new[] { environment });
+            harness.OrganizationManager.Setup(manager => manager.ValidateProvisionalOrganizationForPurgeAsync(environment.OrganizationId, environment.AppUserId, environment.SubscriptionId)).ReturnsAsync(InvokeResult.Success);
+            harness.BillingArchiveRepo.Setup(repo => repo.GetBillingEventsAsync(environment.OrganizationId, environment.SubscriptionId)).ReturnsAsync(new[] { billingEvent });
+            harness.ArchiveStore.Setup(store => store.WriteAndVerifyAsync(It.IsAny<ProvisionalEnvironmentArchiveWriteRequest>())).ReturnsAsync(archive);
+            harness.ArchiveAccountingService.Setup(service => service.EnsureRollupAsync(It.IsAny<ProvisionalEnvironmentArchiveAccountingRequest>())).ReturnsAsync(new ProvisionalEnvironmentArchiveAccountingResult { RollupBillingEventId = Guid.NewGuid().ToString("D") });
+            harness.BillingArchiveRepo.Setup(repo => repo.DeleteBillingEventsAsync(environment.OrganizationId, environment.SubscriptionId, It.Is<IReadOnlyCollection<string>>(ids => ids.Count == 1 && ids.Contains(billingEvent.Id)))).ReturnsAsync(1);
+            harness.OrganizationManager.Setup(manager => manager.PurgeProvisionalOrganizationAsync(environment.OrganizationId, environment.AppUserId, environment.SubscriptionId)).ReturnsAsync(InvokeResult.Success);
+            harness.EnvironmentRepo.Setup(repo => repo.DeleteAsync(environment.Id)).Returns(Task.CompletedTask);
+
+            var result = await harness.Manager.PurgeAsync(100);
+
+            Assert.That(result.Successful, Is.True);
+            Assert.That(result.Result.DeletedCount, Is.EqualTo(1));
+            Assert.That(result.Result.BlockedCount, Is.EqualTo(0));
+            harness.ArchiveStore.Verify(store => store.WriteAndVerifyAsync(It.Is<ProvisionalEnvironmentArchiveWriteRequest>(request => request.Manifest.ProvisionalEnvironmentId == environment.Id && request.Manifest.TotalActualCost == 1.25m && request.Manifest.TotalExtended == 2.50m)), Times.Once);
+            harness.EnvironmentRepo.Verify(repo => repo.DeleteAsync(environment.Id), Times.Once);
         }
 
         private static ProvisionalEnvironment CreateActiveEnvironment()
@@ -151,24 +181,33 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var organizationManager = new Mock<IOrganizationManager>(MockBehavior.Strict);
             var subscriptionManager = new Mock<ISubscriptionManager>(MockBehavior.Strict);
             var subscriptionLevelManager = new Mock<ISubscriptionLevelManager>(MockBehavior.Strict);
-            var manager = new ProvisionalEnvironmentManager(environmentRepo.Object, userManager.Object, organizationManager.Object, subscriptionManager.Object, subscriptionLevelManager.Object);
-            return new Harness(manager, environmentRepo, userManager, organizationManager);
+            var billingArchiveRepo = new Mock<IProvisionalEnvironmentBillingArchiveRepo>(MockBehavior.Strict);
+            var archiveStore = new Mock<IProvisionalEnvironmentArchiveStore>(MockBehavior.Strict);
+            var archiveAccountingService = new Mock<IProvisionalEnvironmentArchiveAccountingService>(MockBehavior.Strict);
+            var manager = new ProvisionalEnvironmentManager(environmentRepo.Object, userManager.Object, organizationManager.Object, subscriptionManager.Object, subscriptionLevelManager.Object, billingArchiveRepo.Object, archiveStore.Object, archiveAccountingService.Object);
+            return new Harness(manager, environmentRepo, userManager, organizationManager, billingArchiveRepo, archiveStore, archiveAccountingService);
         }
 
         private sealed class Harness
         {
-            public Harness(ProvisionalEnvironmentManager manager, Mock<IProvisionalEnvironmentRepo> environmentRepo, Mock<IUserManager> userManager, Mock<IOrganizationManager> organizationManager)
+            public Harness(ProvisionalEnvironmentManager manager, Mock<IProvisionalEnvironmentRepo> environmentRepo, Mock<IUserManager> userManager, Mock<IOrganizationManager> organizationManager, Mock<IProvisionalEnvironmentBillingArchiveRepo> billingArchiveRepo, Mock<IProvisionalEnvironmentArchiveStore> archiveStore, Mock<IProvisionalEnvironmentArchiveAccountingService> archiveAccountingService)
             {
                 Manager = manager;
                 EnvironmentRepo = environmentRepo;
                 UserManager = userManager;
                 OrganizationManager = organizationManager;
+                BillingArchiveRepo = billingArchiveRepo;
+                ArchiveStore = archiveStore;
+                ArchiveAccountingService = archiveAccountingService;
             }
 
             public ProvisionalEnvironmentManager Manager { get; }
             public Mock<IProvisionalEnvironmentRepo> EnvironmentRepo { get; }
             public Mock<IUserManager> UserManager { get; }
             public Mock<IOrganizationManager> OrganizationManager { get; }
+            public Mock<IProvisionalEnvironmentBillingArchiveRepo> BillingArchiveRepo { get; }
+            public Mock<IProvisionalEnvironmentArchiveStore> ArchiveStore { get; }
+            public Mock<IProvisionalEnvironmentArchiveAccountingService> ArchiveAccountingService { get; }
         }
     }
 }
