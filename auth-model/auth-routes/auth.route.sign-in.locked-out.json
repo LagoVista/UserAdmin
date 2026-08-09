@@ -1,0 +1,19 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.sign-in.locked-out",
+  "name": "Sign-In Locked Out",
+  "description": "Presents recovery and support choices when password authentication is blocked by the account lockout state.",
+  "path": "/auth/sign-in/locked-out",
+  "routeType": "view",
+  "viewId": "auth.sign-in.locked-out",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "planned" },
+    "mobile": { "status": "planned" }
+  },
+  "notes": [
+    "Canonical lockout outcome route. The current server already returns a lockout-specific authentication result; client implementations remain to be reconciled."
+  ]
+}
