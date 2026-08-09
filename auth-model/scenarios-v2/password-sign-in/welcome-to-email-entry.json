@@ -41,12 +41,12 @@
     {
       "sourceType": "decision",
       "reference": "ChatGPT conversation 2026-08-09",
-      "note": "Presentation review confirms the existing Welcome and Continue with Email surfaces as the shared client-only prefix for password sign-in."
+      "note": "Implementation review confirms the existing web and mobile Welcome and Continue with Email implementations for this client-only step."
     }
   ],
   "progress": {
     "presentation": "complete",
-    "implementation": "not-started",
+    "implementation": "complete",
     "tests": "not-started"
   }
 }
