@@ -16,8 +16,32 @@
     { "id": "continue-passkey", "name": "Continue with Passkey", "actionType": "link", "finder": "action:continue-passkey" }
   ],
   "platforms": {
-    "web": { "status": "planned" },
-    "mobile": { "status": "planned" }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "user/signin-locked-out/signin-locked-out.component.ts",
+      "component": "SigninLockedOutComponent",
+      "implementation": "SigninLockedOutComponent with signin-locked-out.component.html; AuthRoutePaths.signInLockedOut is registered and password login routes AUTH030 here.",
+      "conformance": {
+        "status": "verified",
+        "checkedUtc": "2026-08-09T15:22:00Z",
+        "checkedAgainst": ["view-identity", "actions", "finders"],
+        "notes": "Verified auth.sign-in.locked-out screen identity and all five canonical actions/finders against SigninLockedOutComponent and its template."
+      }
+    },
+    "mobile": {
+      "status": "implemented",
+      "repository": "nuviot/vtm-client",
+      "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+      "component": "AuthOutcomeScreen",
+      "implementation": "app/auth/continue/email/locked-out.tsx -> AuthOutcomeScreen; password sign-in preserves AUTH030 as locked-out and routes here.",
+      "conformance": {
+        "status": "verified",
+        "checkedUtc": "2026-08-09T15:22:00Z",
+        "checkedAgainst": ["view-identity", "actions", "finders"],
+        "notes": "Verified /auth/continue/email/locked-out uses the canonical screen identity and all five canonical semantic actions/finders."
+      }
+    }
   },
   "notes": [
     "This surface is intentionally distinct from auth.sign-in.unable because lockout is a canonical account-state outcome with different next actions.",
