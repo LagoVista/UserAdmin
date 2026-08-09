@@ -156,9 +156,19 @@ namespace LagoVista.UserAdmin.Managers
             run.Verification.Errors ??= new List<string>();
             run.Verification.Warnings ??= new List<string>();
 
-            var expectedView = scenario.ExpectedView == null || String.IsNullOrWhiteSpace(scenario.ExpectedView.Id) ? null : await _authViewRepo.GetByIdAsync(scenario.ExpectedView.Id);
-            if (expectedView != null && !String.Equals(expectedView.ViewId, run.FinalViewId, StringComparison.OrdinalIgnoreCase))
-                run.Verification.Errors.Add($"Expected final view '{expectedView.ViewId}' but runner observed '{run.FinalViewId ?? "null"}'.");
+            if (scenario.ExpectedView != null && !String.IsNullOrWhiteSpace(scenario.ExpectedView.Id))
+            {
+                var expectedViewId = scenario.ExpectedView.Id;
+                if (!expectedViewId.StartsWith("app.", StringComparison.OrdinalIgnoreCase))
+                {
+                    var expectedView = await _authViewRepo.GetByIdAsync(expectedViewId);
+                    if (expectedView != null)
+                        expectedViewId = expectedView.ViewId;
+                }
+
+                if (!String.Equals(expectedViewId, run.FinalViewId, StringComparison.OrdinalIgnoreCase))
+                    run.Verification.Errors.Add($"Expected final view '{expectedViewId}' but runner observed '{run.FinalViewId ?? "null"}'.");
+            }
 
             run.Verification.FinalSnapshot = await BuildFinalSnapshotAsync();
             ComparePostConditions(scenario.PostConditions, run.Verification.FinalSnapshot, run.Verification.Errors);
