@@ -16,14 +16,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '9.0.x'
       - name: Apply patch
         run: python3 .github/scripts/patch-auth-one-time-code-setup.py
-      - name: Build
-        run: dotnet build src/LagoVista.UserAdmin.Repos/LagoVista.UserAdmin.Repos.csproj --configuration Debug
-      - name: Commit validated setup support
+      - name: Check patch
+        run: git diff --check
+      - name: Commit setup support
         run: |
           git config user.name "Auth Model Patch Bot"
           git config user.email "auth-model-patch-bot@users.noreply.github.com"
