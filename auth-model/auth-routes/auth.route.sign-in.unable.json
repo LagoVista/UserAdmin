@@ -10,10 +10,15 @@
   "parameters": [],
   "status": "active",
   "commonLinks": {
-    "status": "planned",
+    "status": "implemented",
+    "repository": "LagoVista/UserAdmin",
+    "path": "src/LagoVista.UserAdmin/CommonLinks.cs",
+    "member": "AuthSignInUnable",
+    "route": "/auth/sign-in/unable",
     "conformance": {
-      "status": "needs-review",
-      "notes": "The canonical route contract requires a CommonLinks projection, but the existing reconciliation notes state that CommonLinks does not currently define this route."
+      "status": "verified",
+      "checkedAgainst": ["canonical-path", "member-value", "parameters"],
+      "notes": "CommonLinks.AuthSignInUnable exactly matches the canonical sign-in unable route."
     }
   },
   "platforms": {
@@ -45,6 +50,7 @@
     }
   },
   "source": {
+    "commonLinksMember": "AuthSignInUnable",
     "angularComponent": "SigninUnableComponent",
     "mobileRoute": "app/auth/sign-in/unable.tsx"
   },
