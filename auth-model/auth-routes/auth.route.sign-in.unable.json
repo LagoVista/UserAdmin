@@ -35,12 +35,12 @@
       "repository": "nuviot/vtm-client",
       "path": "app/auth/sign-in/unable.tsx",
       "route": "/auth/sign-in/unable",
-      "component": "AuthOutcomeScreen",
-      "implementation": "AuthOutcomeScreen",
+      "component": "SignInUnableScreen",
+      "implementation": "SignInUnableScreen",
       "conformance": {
-        "status": "needs-review",
-        "checkedAgainst": ["canonical-path", "route-registration"],
-        "notes": "Expo Router now exposes the canonical route, but AuthOutcomeScreen still keys its outcome definition by the legacy /auth/continue/email/unable pathname. The canonical route exists but the view binding still needs normalization."
+        "status": "verified",
+        "checkedAgainst": ["canonical-path", "route-registration", "view-binding", "parameters"],
+        "notes": "Expo Router exposes the canonical sign-in outcome path and binds it to SignInUnableScreen. The legacy /auth/continue/email/unable route remains a compatibility alias."
       }
     }
   },
@@ -49,6 +49,6 @@
     "mobileRoute": "app/auth/sign-in/unable.tsx"
   },
   "notes": [
-    "The legacy /auth/continue/email/unable path may remain as a compatibility alias after the canonical route is fully bound."
+    "The legacy /auth/continue/email/unable path remains a compatibility alias and is not the canonical projection."
   ]
 }
