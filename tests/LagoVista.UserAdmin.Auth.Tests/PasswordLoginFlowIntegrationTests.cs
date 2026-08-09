@@ -12,6 +12,7 @@ using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.Security;
 using LagoVista.UserAdmin.Models.Users;
+using LagoVista.UserAdmin.Resources;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -30,15 +31,18 @@ namespace LagoVista.UserAdmin.Auth.Tests
     [TestFixture]
     public class PasswordLoginFlowIntegrationTests
     {
-        private const string PasswordLoginEvidence = "auth|auth.test-binding.password.establish-session|auth.flow.password.establish-session|auth.transition.password.establish-session";
+        private const string SuccessEvidence = "auth|auth.test-binding.password-sign-in|auth.flow.password-sign-in|auth.transition.password-sign-in.success";
+        private const string RejectedEvidence = "auth|auth.test-binding.password-sign-in|auth.flow.password-sign-in|auth.transition.password-sign-in.rejected";
+        private const string LockedOutEvidence = "auth|auth.test-binding.password-sign-in|auth.flow.password-sign-in|auth.transition.password-sign-in.locked-out";
         private const string UserNotFoundEvents = "PasswordAuthenticationStarted|PasswordAuthUserNotFound";
         private const string InvalidCredentialsEvents = "PasswordAuthenticationStarted|PasswordAuthenticationFailed";
         private const string SuccessfulLoginEvents = "PasswordAuthenticationStarted|PasswordAuthenticationSucceeded";
+        private const string LockedOutEvents = "PasswordAuthenticationStarted|PasswordAuthenticationFailed";
 
         [Test]
-        [Property("AptixEvidence", PasswordLoginEvidence)]
+        [Property("AptixEvidence", RejectedEvidence)]
         [Property("AptixAuthEvents", UserNotFoundEvents)]
-        public async Task UserNotFound_Should_ReturnFailure_And_RecordStartedThenUserNotFound()
+        public async Task UserNotFound_Should_ReturnSamePublicRejection_And_RecordStartedThenUserNotFound()
         {
             var harness = CreateHarness();
             harness.UserManager.Setup(manager => manager.FindByNameAsync("missing@example.com")).ReturnsAsync((AppUser)null);
@@ -46,6 +50,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var result = await harness.FlowService.LoginWithPasswordAsync(CreateRequest("missing@example.com"));
 
             Assert.That(result.Successful, Is.False);
+            Assert.That(result.Errors.Single().ErrorCode, Is.EqualTo(UserAdminErrorCodes.AuthInvalidCredentials.Code));
+            Assert.That(result.Errors.Single().Message, Is.EqualTo(UserAdminErrorCodes.AuthInvalidCredentials.Message));
             Assert.That(harness.Log.Events.Select(evt => evt.Type), Is.EqualTo(new AuthLogTypes?[]
             {
                 AuthLogTypes.PasswordAuthenticationStarted,
@@ -55,9 +61,9 @@ namespace LagoVista.UserAdmin.Auth.Tests
         }
 
         [Test]
-        [Property("AptixEvidence", PasswordLoginEvidence)]
+        [Property("AptixEvidence", RejectedEvidence)]
         [Property("AptixAuthEvents", InvalidCredentialsEvents)]
-        public async Task InvalidCredentials_Should_ReturnFailure_And_RecordStartedThenFailed()
+        public async Task InvalidCredentials_Should_ReturnSamePublicRejection_And_RecordStartedThenFailed()
         {
             var harness = CreateHarness();
             var user = new AppUser("user@example.com", "test") { UserName = "user@example.com" };
@@ -70,6 +76,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var result = await harness.FlowService.LoginWithPasswordAsync(CreateRequest("user@example.com", "wrong-password"));
 
             Assert.That(result.Successful, Is.False);
+            Assert.That(result.Errors.Single().ErrorCode, Is.EqualTo(UserAdminErrorCodes.AuthInvalidCredentials.Code));
+            Assert.That(result.Errors.Single().Message, Is.EqualTo(UserAdminErrorCodes.AuthInvalidCredentials.Message));
             Assert.That(harness.Log.Events.Select(evt => evt.Type), Is.EqualTo(new AuthLogTypes?[]
             {
                 AuthLogTypes.PasswordAuthenticationStarted,
@@ -79,7 +87,32 @@ namespace LagoVista.UserAdmin.Auth.Tests
         }
 
         [Test]
-        [Property("AptixEvidence", PasswordLoginEvidence)]
+        [Property("AptixEvidence", LockedOutEvidence)]
+        [Property("AptixAuthEvents", LockedOutEvents)]
+        public async Task LockedOut_Should_ReturnLockoutResult_And_RecordStartedThenFailed()
+        {
+            var harness = CreateHarness();
+            var user = new AppUser("user@example.com", "test") { UserName = "user@example.com" };
+
+            harness.UserManager.Setup(manager => manager.FindByNameAsync("user@example.com")).ReturnsAsync(user);
+            harness.AspNetSignInManager
+                .Setup(manager => manager.PasswordSignInAsync("user@example.com", "password", true, false))
+                .ReturnsAsync(SignInResult.LockedOut);
+
+            var result = await harness.FlowService.LoginWithPasswordAsync(CreateRequest("user@example.com"));
+
+            Assert.That(result.Successful, Is.False);
+            Assert.That(result.Errors.Single().ErrorCode, Is.EqualTo(UserAdminErrorCodes.AuthUserLockedOut.Code));
+            Assert.That(harness.Log.Events.Select(evt => evt.Type), Is.EqualTo(new AuthLogTypes?[]
+            {
+                AuthLogTypes.PasswordAuthenticationStarted,
+                AuthLogTypes.PasswordAuthenticationFailed
+            }));
+            Assert.That(harness.Log.Events.Last().Errors, Is.EqualTo("User is locked out."));
+        }
+
+        [Test]
+        [Property("AptixEvidence", SuccessEvidence)]
         [Property("AptixAuthEvents", SuccessfulLoginEvents)]
         public async Task SuccessfulLogin_Should_ReturnAuthenticated_And_RecordStartedThenSucceeded()
         {
@@ -170,7 +203,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 new Mock<ILookupNormalizer>().Object,
                 new IdentityErrorDescriber(),
                 new Mock<IServiceProvider>().Object,
-                new Mock<ILogger<UserManager<AppUser>>>().Object);
+                new Mock<ILogger<UserManager<AppUser>>().Object);
 
             return new Mock<AspNetSignInManager>(
                 aspNetUserManager.Object,
