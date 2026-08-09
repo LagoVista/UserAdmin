@@ -22,7 +22,13 @@
       "repository": "softwarelogistics/nuviot-ui-shared",
       "path": "user/signin-unable/signin-unable.component.ts",
       "component": "SigninUnableComponent",
-      "implementation": "SigninUnableComponent"
+      "implementation": "SigninUnableComponent with signin-unable.component.html",
+      "conformance": {
+        "status": "verified",
+        "checkedUtc": "2026-08-09T14:35:00Z",
+        "checkedAgainst": ["view-identity", "actions", "finders"],
+        "notes": "Verified the auth.sign-in.unable screen identity and all six canonical actions/finders against SigninUnableComponent and signin-unable.component.html."
+      }
     },
     "mobile": {
       "status": "implemented",
@@ -30,6 +36,12 @@
       "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
       "component": "AuthOutcomeScreen",
       "implementation": "app/auth/continue/email/unable.tsx -> AuthOutcomeScreen",
+      "conformance": {
+        "status": "verified",
+        "checkedUtc": "2026-08-09T14:35:00Z",
+        "checkedAgainst": ["view-identity", "actions", "finders"],
+        "notes": "Verified the /auth/continue/email/unable outcome definition uses the canonical sign-in-unable screen identity and all six canonical semantic actions."
+      },
       "notes": "Expo route app/auth/continue/email/unable.tsx delegates to AuthOutcomeScreen, whose /auth/continue/email/unable definition implements the canonical actions."
     }
   },
