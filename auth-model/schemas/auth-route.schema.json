@@ -54,6 +54,7 @@
       "type": "string",
       "enum": ["proposed", "active", "deprecated", "retired"]
     },
+    "commonLinks": { "$ref": "#/$defs/commonLinksProjection" },
     "platforms": {
       "type": "object",
       "additionalProperties": false,
@@ -88,16 +89,57 @@
       "minLength": 2,
       "maxLength": 96
     },
-    "platformRoute": {
+    "projectionStatus": {
+      "type": "string",
+      "enum": ["implemented", "partial", "planned", "unsupported", "not-applicable"]
+    },
+    "routeConformance": {
       "type": "object",
       "additionalProperties": false,
       "required": ["status"],
       "properties": {
         "status": {
           "type": "string",
-          "enum": ["implemented", "partial", "planned", "unsupported", "not-applicable"]
+          "enum": ["verified", "needs-review", "mismatch", "not-applicable"]
         },
+        "checkedUtc": { "type": "string", "format": "date-time" },
+        "checkedAgainst": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["canonical-path", "route-registration", "view-binding", "parameters"]
+          },
+          "uniqueItems": true
+        },
+        "notes": { "type": "string", "minLength": 1 }
+      }
+    },
+    "commonLinksProjection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "$ref": "#/$defs/projectionStatus" },
+        "repository": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+        "path": { "type": "string", "minLength": 1 },
+        "member": { "type": "string", "minLength": 1 },
+        "value": { "type": "string", "minLength": 1 },
+        "conformance": { "$ref": "#/$defs/routeConformance" },
+        "notes": { "type": "string", "minLength": 1 }
+      }
+    },
+    "platformRoute": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "$ref": "#/$defs/projectionStatus" },
+        "repository": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+        "path": { "type": "string", "minLength": 1 },
+        "route": { "type": "string", "minLength": 1 },
+        "component": { "type": "string", "minLength": 1 },
         "implementation": { "type": "string", "minLength": 1 },
+        "conformance": { "$ref": "#/$defs/routeConformance" },
         "notes": { "type": "string", "minLength": 1 }
       }
     }
