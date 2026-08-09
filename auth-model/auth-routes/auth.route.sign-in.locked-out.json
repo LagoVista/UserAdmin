@@ -3,17 +3,52 @@
   "schemaVersion": "1.0",
   "routeId": "auth.route.sign-in.locked-out",
   "name": "Sign-In Locked Out",
-  "description": "Presents recovery and support choices when password authentication is blocked by the account lockout state.",
+  "description": "Presents recovery and alternate authentication choices when password authentication is blocked by account lockout.",
   "path": "/auth/sign-in/locked-out",
   "routeType": "view",
   "viewId": "auth.sign-in.locked-out",
   "parameters": [],
   "status": "active",
+  "commonLinks": {
+    "status": "planned",
+    "conformance": {
+      "status": "needs-review",
+      "notes": "The canonical route contract requires a CommonLinks projection, but no deterministic CommonLinks implementation has been located for this route."
+    }
+  },
   "platforms": {
-    "web": { "status": "planned" },
-    "mobile": { "status": "planned" }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "auth-routes.ts",
+      "route": "/auth/sign-in/locked-out",
+      "component": "SigninLockedOutComponent",
+      "implementation": "SigninLockedOutComponent",
+      "conformance": {
+        "status": "verified",
+        "checkedAgainst": ["canonical-path", "route-registration", "view-binding", "parameters"],
+        "notes": "Angular registers the canonical locked-out outcome route and binds it to SigninLockedOutComponent."
+      }
+    },
+    "mobile": {
+      "status": "implemented",
+      "repository": "nuviot/vtm-client",
+      "path": "app/auth/sign-in/locked-out.tsx",
+      "route": "/auth/sign-in/locked-out",
+      "component": "AuthOutcomeScreen",
+      "implementation": "AuthOutcomeScreen",
+      "conformance": {
+        "status": "needs-review",
+        "checkedAgainst": ["canonical-path", "route-registration"],
+        "notes": "Expo Router now exposes the canonical route, but AuthOutcomeScreen still keys its locked-out definition by the legacy /auth/continue/email/locked-out pathname. The canonical route exists but the view binding still needs normalization."
+      }
+    }
+  },
+  "source": {
+    "angularComponent": "SigninLockedOutComponent",
+    "mobileRoute": "app/auth/sign-in/locked-out.tsx"
   },
   "notes": [
-    "Canonical lockout outcome route. The current server already returns a lockout-specific authentication result; client implementations remain to be reconciled."
+    "The legacy /auth/continue/email/locked-out path may remain as a compatibility alias after the canonical route is fully bound."
   ]
 }
