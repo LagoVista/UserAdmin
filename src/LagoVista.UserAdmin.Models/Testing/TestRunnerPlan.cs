@@ -69,6 +69,7 @@ namespace LagoVista.UserAdmin.Models.Testing
 
         public string EmailAddress { get; set; }
         public string Password { get; set; }
+        public string InvalidPassword { get; set; }
 
         public string PreloginLink { get; set; }
         public string MagicLinkToken { get; set; }
@@ -180,9 +181,7 @@ namespace LagoVista.UserAdmin.Models.Testing
         /// <summary>Default timeout for waits/actions in ms.</summary>
         public int TimeoutMs { get; set; } = 30000;
 
-        /// <summary>
-        /// If true, runner enables Playwright tracing and uploads trace path as an artifact reference.
-        /// </summary>
+        /// <summary>Default timeout for waits/actions in ms.</summary>
         public bool EnableTracing { get; set; } = false;
     }
 
