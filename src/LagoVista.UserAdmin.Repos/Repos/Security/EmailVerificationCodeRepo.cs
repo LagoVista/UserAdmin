@@ -78,10 +78,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             await base.UpdateAsync(entity);
         }
 
-        public async Task ClearAsync(string userId)
+        public Task ClearAsync(string userId)
         {
-            var entities = await GetByPartitionIdAsync(userId);
-            foreach (var entity in entities) await DeleteAsync(entity);
+            return RemoveByPartitionKeyAsync(userId);
         }
     }
 }
