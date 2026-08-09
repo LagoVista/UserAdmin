@@ -8,7 +8,8 @@ namespace LagoVista.UserAdmin.Authentication.Flows
     [CriticalCoverage]
     public class PasswordRecoveryVerificationFlowHandler : IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string>
     {
-        public const string TransitionKey = "auth.transition.recovery.verify";
+        public const string AcceptedTransitionKey = "auth.transition.password-recovery.code-accepted";
+        public const string RejectedTransitionKey = "auth.transition.password-recovery.rejected";
 
         private readonly IPasswordManager _passwordManager;
 
@@ -22,7 +23,8 @@ namespace LagoVista.UserAdmin.Authentication.Flows
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             var result = await _passwordManager.VerifyPasswordResetCodeAsync(request.Request);
-            return new AuthenticationFlowResult<string>(TransitionKey, result);
+            var transitionKey = result.Successful ? AcceptedTransitionKey : RejectedTransitionKey;
+            return new AuthenticationFlowResult<string>(transitionKey, result);
         }
     }
 }
