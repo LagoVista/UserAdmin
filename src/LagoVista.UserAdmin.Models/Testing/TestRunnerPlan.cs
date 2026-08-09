@@ -1,4 +1,4 @@
-﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
@@ -181,7 +181,9 @@ namespace LagoVista.UserAdmin.Models.Testing
         /// <summary>Default timeout for waits/actions in ms.</summary>
         public int TimeoutMs { get; set; } = 30000;
 
-        /// <summary>Default timeout for waits/actions in ms.</summary>
+        /// <summary>
+        /// If true, runner enables Playwright tracing and uploads trace path as an artifact reference.
+        /// </summary>
         public bool EnableTracing { get; set; } = false;
     }
 

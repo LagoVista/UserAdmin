@@ -93,6 +93,7 @@ namespace LagoVista.UserAdmin.Managers
             await _userManager.ResetPasswordAsync(user, token, newPwd);
             credentials.EmailAddress = user.Email;
             credentials.Password = newPwd;
+            credentials.InvalidPassword = $"invalid!{Guid.NewGuid().ToId()}9876";
 
             return InvokeResult.Success;
         }
@@ -255,6 +256,13 @@ namespace LagoVista.UserAdmin.Managers
             if (preconditions.PhoneNumberConfirmed.Value != SetCondition.DontCare) testUser.PhoneNumberConfirmed = preconditions.PhoneNumberConfirmed.Value == SetCondition.Set;
             if (preconditions.TwoFactorEnabled.Value != SetCondition.DontCare) testUser.TwoFactorEnabled = preconditions.TwoFactorEnabled.Value == SetCondition.Set;
             if (preconditions.IsAccountDisabled.Value != SetCondition.DontCare) testUser.IsAccountDisabled = preconditions.IsAccountDisabled.Value == SetCondition.Set;
+            if (preconditions.IsLockedOut.Value != SetCondition.DontCare)
+            {
+                testUser.LockoutEnabled = preconditions.IsLockedOut.Value == SetCondition.Set;
+                testUser.LockoutDate = preconditions.IsLockedOut.Value == SetCondition.Set ? DateTime.UtcNow.AddHours(1).ToJSONString() : null;
+            }
+            if (preconditions.AccessFailedCount.HasValue) testUser.AccessFailedCount = preconditions.AccessFailedCount.Value;
+            if (preconditions.HasLastLogin.Value != SetCondition.DontCare) testUser.LastLogin = preconditions.HasLastLogin.Value == SetCondition.Set ? DateTime.UtcNow.AddMinutes(-5).ToJSONString() : null;
             if (preconditions.IsOrgAdmin.Value != SetCondition.DontCare) testUser.IsOrgAdmin = preconditions.IsOrgAdmin.Value == SetCondition.Set;
             if (preconditions.ShowWelcome.Value != SetCondition.DontCare) testUser.ShowWelcome = preconditions.ShowWelcome.Value == SetCondition.Set;
 
@@ -554,9 +562,10 @@ namespace LagoVista.UserAdmin.Managers
                 }
             }
 
+            var scenario = await _testScenarioRepo.GetByIdAsync(run.TestScenario.Id);
+            await VerifyCompletedRunAsync(run, scenario, org, user);
             await _testRunStore.CreateRunAsync(run);
 
-            var scenario = await _testScenarioRepo.GetByIdAsync(run.TestScenario.Id);
             var platformStatus = GetPlatformStatus(scenario, run.Platform);
 
             platformStatus.Status = run.Status;
