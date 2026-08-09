@@ -183,6 +183,128 @@
         },
         "description": {
           "type": "string"
+        },
+        "state": {
+          "$ref": "#/$defs/authTenantStateSnapshot",
+          "description": "Machine-readable execution projection of the state required or expected by this scenario."
+        }
+      }
+    },
+    "setCondition": {
+      "enum": [
+        "set",
+        "notset",
+        "dontcare"
+      ]
+    },
+    "oneTimeCodeStatus": {
+      "enum": [
+        "dontcare",
+        "notset",
+        "valid",
+        "expired",
+        "consumed"
+      ]
+    },
+    "oneTimeCodeState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/oneTimeCodeStatus"
+        },
+        "attemptCount": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "authTenantStateSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "belongsToOrg": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "emailConfirmed": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "ensurePendingIdentity": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "userHasOAuthGitHub": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "userHasEmail": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "userHasFirstName": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "userHasLastName": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "phoneNumberConfirmed": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "twoFactorEnabled": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "isAccountDisabled": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "isUserLoggedIn": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "isOrgAdmin": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "hasPassword": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "hasPasskey": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "generateConfirmEmail": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "sendMagicLink": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "hasTOTP": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "isAnonymous": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "showWelcome": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "externalLoginProviders": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "lastMfaDateTimeUtc": {
+          "type": "string"
+        },
+        "ensureUserExists": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "ensureUserDoesNotExist": {
+          "$ref": "#/$defs/setCondition"
+        },
+        "passwordRecoveryCode": {
+          "$ref": "#/$defs/oneTimeCodeState"
+        },
+        "emailVerificationCode": {
+          "$ref": "#/$defs/oneTimeCodeState"
         }
       }
     },
