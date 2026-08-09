@@ -64,7 +64,7 @@
   ],
   "progress": {
     "presentation": "complete",
-    "implementation": "not-started",
+    "implementation": "complete",
     "tests": "not-started"
   }
 }
