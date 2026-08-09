@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.sign-in.locked-out",
+  "name": "Account Locked",
+  "description": "Explains that password sign-in is temporarily blocked for the identified account and offers recovery or alternate authentication paths.",
+  "category": "recovery",
+  "routeId": "auth.route.sign-in.locked-out",
+  "status": "active",
+  "controls": [],
+  "actions": [
+    { "id": "forgot-password", "name": "Forgot Password", "actionType": "button", "finder": "action:forgot-password" },
+    { "id": "try-again", "name": "Try Again", "actionType": "button", "finder": "action:try-again" },
+    { "id": "change-email", "name": "Change Email", "actionType": "link", "finder": "action:change-email" },
+    { "id": "continue-provider", "name": "Continue with Provider", "actionType": "link", "finder": "action:continue-provider" },
+    { "id": "continue-passkey", "name": "Continue with Passkey", "actionType": "link", "finder": "action:continue-passkey" }
+  ],
+  "platforms": {
+    "web": { "status": "planned" },
+    "mobile": { "status": "planned" }
+  },
+  "notes": [
+    "This surface is intentionally distinct from auth.sign-in.unable because lockout is a canonical account-state outcome with different next actions.",
+    "Presentation must not disclose security details beyond the fact that password sign-in is currently blocked."
+  ]
+}
