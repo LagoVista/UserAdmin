@@ -555,6 +555,10 @@ namespace LagoVista.UserAdmin.Managers
             var scenario = await _testScenarioRepo.GetByIdAsync(run.TestScenario.Id);
             await VerifyCompletedRunAsync(run, scenario, org, user);
             await _testRunStore.CreateRunAsync(run);
+
+            if (run.Status == TestRunStatus.Failed && !String.IsNullOrWhiteSpace(run.ErrorMessage))
+                return InvokeResult.FromError("AuthTestReceiptFailed", run.ErrorMessage);
+
             return InvokeResult.Success;
         }
 
