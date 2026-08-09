@@ -27,6 +27,8 @@ namespace LagoVista.UserAdmin
             services.AddScoped<ISubscriptionManager, SubscriptionManager>();
             services.AddScoped<ISubscriptionLevelManager, SubscriptionLevelManager>();
             services.AddScoped<IProvisionalEnvironmentManager, ProvisionalEnvironmentManager>();
+            services.AddSingleton<IAnonymousVisitorPromotionOptions, AnonymousVisitorPromotionOptions>();
+            services.AddScoped<IAnonymousVisitorPromotionManager, AnonymousVisitorPromotionManager>();
             services.AddScoped<IModuleManager, ModuleManager>();
             services.AddScoped<IAppInstanceManager, AppInstanceManager>();
             services.AddScoped<IUserVerficationManager, UserVerficationManager>();

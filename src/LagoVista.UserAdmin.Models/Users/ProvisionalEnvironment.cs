@@ -24,6 +24,12 @@ namespace LagoVista.UserAdmin.Models.Users
 
         public string RecoveryTokenHash { get; set; }
         public string InstallationIdHash { get; set; }
+        public string BootstrapContext { get; set; }
+
+        public bool TermsAndConditionsAccepted { get; set; }
+        public string TermsAndConditionsVersion { get; set; }
+        public string TermsAndConditionsAcceptedIPAddress { get; set; }
+        public DateTime? TermsAndConditionsAcceptedUtc { get; set; }
 
         public DateTime CreatedUtc { get; set; }
         public DateTime? ActivatedUtc { get; set; }

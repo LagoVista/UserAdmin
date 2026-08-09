@@ -36,7 +36,7 @@ namespace LagoVista.UserAdmin.Models.Users
 
     public class ProvisionalEnvironmentArchiveManifest
     {
-        public int SchemaVersion { get; set; } = 1;
+        public int SchemaVersion { get; set; } = 2;
         public string ProvisionalEnvironmentId { get; set; }
         public string AppUserId { get; set; }
         public string OrganizationId { get; set; }
@@ -56,6 +56,10 @@ namespace LagoVista.UserAdmin.Models.Users
         public string AgentKey { get; set; }
         public string AgentVersion { get; set; }
         public string PromptVersion { get; set; }
+        public bool TermsAndConditionsAccepted { get; set; }
+        public string TermsAndConditionsVersion { get; set; }
+        public string TermsAndConditionsAcceptedIPAddress { get; set; }
+        public DateTime? TermsAndConditionsAcceptedUtc { get; set; }
         public int BillingEventCount { get; set; }
         public decimal TotalActualCost { get; set; }
         public decimal TotalExtended { get; set; }

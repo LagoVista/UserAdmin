@@ -134,6 +134,10 @@ namespace LagoVista.UserAdmin.Auth.Tests
         {
             var environment = CreateActiveEnvironment();
             environment.State = ProvisionalEnvironmentState.PurgePending;
+            environment.TermsAndConditionsAccepted = true;
+            environment.TermsAndConditionsVersion = "2026-08-09";
+            environment.TermsAndConditionsAcceptedIPAddress = "192.0.2.10";
+            environment.TermsAndConditionsAcceptedUtc = DateTime.UtcNow.AddDays(-1);
             var billingEvent = new ProvisionalEnvironmentBillingEventArchive { Id = Guid.NewGuid().ToString("D"), SubscriptionId = environment.SubscriptionId, ProductId = Guid.NewGuid().ToString("D"), StartTimestamp = DateTime.UtcNow.AddHours(-1), EndTimestamp = DateTime.UtcNow, ActualCost = 1.25m, Extended = 2.50m };
             var archive = new ProvisionalEnvironmentArchiveWriteResult { ArchivePath = "2026/08/08/archive", BillingEventsSha256 = "hash", BillingEventCount = 1 };
             var harness = CreateHarness();
@@ -152,7 +156,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(result.Successful, Is.True);
             Assert.That(result.Result.DeletedCount, Is.EqualTo(1));
             Assert.That(result.Result.BlockedCount, Is.EqualTo(0));
-            harness.ArchiveStore.Verify(store => store.WriteAndVerifyAsync(It.Is<ProvisionalEnvironmentArchiveWriteRequest>(request => request.Manifest.ProvisionalEnvironmentId == environment.Id && request.Manifest.TotalActualCost == 1.25m && request.Manifest.TotalExtended == 2.50m)), Times.Once);
+            harness.ArchiveStore.Verify(store => store.WriteAndVerifyAsync(It.Is<ProvisionalEnvironmentArchiveWriteRequest>(request => request.Manifest.SchemaVersion == 2 && request.Manifest.ProvisionalEnvironmentId == environment.Id && request.Manifest.TermsAndConditionsAccepted && request.Manifest.TermsAndConditionsVersion == "2026-08-09" && request.Manifest.TotalActualCost == 1.25m && request.Manifest.TotalExtended == 2.50m)), Times.Once);
             harness.EnvironmentRepo.Verify(repo => repo.DeleteAsync(environment.Id), Times.Once);
         }
 

@@ -16,6 +16,12 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments
 
         public string RecoveryTokenHash { get; set; }
         public string InstallationIdHash { get; set; }
+        public string BootstrapContext { get; set; }
+
+        public bool TermsAndConditionsAccepted { get; set; }
+        public string TermsAndConditionsVersion { get; set; }
+        public string TermsAndConditionsAcceptedIPAddress { get; set; }
+        public string TermsAndConditionsAcceptedUtc { get; set; }
 
         public string CreatedUtc { get; set; }
         public string ActivatedUtc { get; set; }

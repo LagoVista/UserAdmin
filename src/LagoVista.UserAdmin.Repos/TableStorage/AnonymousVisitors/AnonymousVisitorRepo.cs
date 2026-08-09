@@ -154,7 +154,7 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.AnonymousVisitors
         {
             if (visitor == null) throw new ArgumentNullException(nameof(visitor));
             if (String.IsNullOrEmpty(visitor.ActorId)) throw new ArgumentException("ActorId is required.", nameof(visitor));
-            if (String.IsNullOrEmpty(visitor.ContinuityTokenHash) && String.IsNullOrEmpty(visitor.InstallationIdHash)) throw new ArgumentException("A continuity token or installation identifier is required.", nameof(visitor));
+            if (visitor.State == AnonymousVisitorState.Active && String.IsNullOrEmpty(visitor.ContinuityTokenHash) && String.IsNullOrEmpty(visitor.InstallationIdHash)) throw new ArgumentException("Active visitors require a continuity token or installation identifier.", nameof(visitor));
             if ((visitor.BootstrapContext?.Length ?? 0) > AnonymousVisitor.MaximumBootstrapContextLength) throw new ArgumentException($"BootstrapContext cannot exceed {AnonymousVisitor.MaximumBootstrapContextLength} characters.", nameof(visitor));
             if (visitor.CreatedUtc == default(DateTime)) throw new ArgumentException("CreatedUtc is required.", nameof(visitor));
             if (visitor.LastActivityUtc == default(DateTime)) throw new ArgumentException("LastActivityUtc is required.", nameof(visitor));

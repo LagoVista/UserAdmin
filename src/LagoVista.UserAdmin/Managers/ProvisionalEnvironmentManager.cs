@@ -46,6 +46,8 @@ namespace LagoVista.UserAdmin.Managers
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
             if (String.IsNullOrWhiteSpace(request.CreationRequestId)) return InvokeResult<CreateProvisionalEnvironmentResponse>.FromError("CreationRequestId is required.");
+            if ((request.BootstrapContext?.Length ?? 0) > AnonymousVisitor.MaximumBootstrapContextLength) return InvokeResult<CreateProvisionalEnvironmentResponse>.FromError($"BootstrapContext cannot exceed {AnonymousVisitor.MaximumBootstrapContextLength} characters.");
+            if (request.TermsAndConditionsAccepted && String.IsNullOrWhiteSpace(request.TermsAndConditionsVersion)) return InvokeResult<CreateProvisionalEnvironmentResponse>.FromError("TermsAndConditionsVersion is required when terms and conditions are accepted.");
 
             var recoveryToken = CreateRecoveryToken();
             var environment = await _environmentRepo.FindByCreationRequestIdAsync(request.CreationRequestId);
@@ -64,6 +66,11 @@ namespace LagoVista.UserAdmin.Managers
                     SubscriptionId = Guid.NewGuid().ToId(),
                     RecoveryTokenHash = Hash(recoveryToken),
                     InstallationIdHash = HashOptional(request.InstallationId),
+                    BootstrapContext = request.BootstrapContext,
+                    TermsAndConditionsAccepted = request.TermsAndConditionsAccepted,
+                    TermsAndConditionsVersion = request.TermsAndConditionsVersion,
+                    TermsAndConditionsAcceptedIPAddress = request.TermsAndConditionsAcceptedIPAddress,
+                    TermsAndConditionsAcceptedUtc = request.TermsAndConditionsAccepted ? (DateTime?)now : null,
                     CreatedUtc = now,
                     LastActivityUtc = now,
                     ExpiresUtc = now.AddDays(ActiveLifetimeDays),
@@ -326,6 +333,10 @@ namespace LagoVista.UserAdmin.Managers
                 AgentKey = environment.AgentKey,
                 AgentVersion = environment.AgentVersion,
                 PromptVersion = environment.PromptVersion,
+                TermsAndConditionsAccepted = environment.TermsAndConditionsAccepted,
+                TermsAndConditionsVersion = environment.TermsAndConditionsVersion,
+                TermsAndConditionsAcceptedIPAddress = environment.TermsAndConditionsAcceptedIPAddress,
+                TermsAndConditionsAcceptedUtc = environment.TermsAndConditionsAcceptedUtc,
                 BillingEventCount = billingEvents.Count,
                 TotalActualCost = billingEvents.Sum(item => item.ActualCost ?? 0m),
                 TotalExtended = billingEvents.Sum(item => item.Extended ?? 0m),
@@ -409,7 +420,10 @@ namespace LagoVista.UserAdmin.Managers
                 CreatedBy = EntityHeader.Create(environment.AppUserId, "Provisional Environment"),
                 LastUpdatedBy = EntityHeader.Create(environment.AppUserId, "Provisional Environment"),
                 IsAnonymous = true,
-                ShowWelcome = false
+                ShowWelcome = false,
+                TermsAndConditionsAccepted = environment.TermsAndConditionsAccepted,
+                TermsAndConditionsAcceptedDateTime = environment.TermsAndConditionsAcceptedUtc?.ToString("O"),
+                TermsAndConditionsAcceptedIPAddress = environment.TermsAndConditionsAcceptedIPAddress
             };
 
             var createResult = await _userManager.CreateAsync(appUser);

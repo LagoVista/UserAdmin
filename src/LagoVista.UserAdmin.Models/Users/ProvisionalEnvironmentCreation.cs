@@ -6,6 +6,11 @@ namespace LagoVista.UserAdmin.Models.Users
     {
         public string CreationRequestId { get; set; }
         public string InstallationId { get; set; }
+        public string BootstrapContext { get; set; }
+
+        public bool TermsAndConditionsAccepted { get; set; }
+        public string TermsAndConditionsVersion { get; set; }
+        public string TermsAndConditionsAcceptedIPAddress { get; set; }
 
         public string ConversionJourneyId { get; set; }
         public string AcquisitionSourceKey { get; set; }
