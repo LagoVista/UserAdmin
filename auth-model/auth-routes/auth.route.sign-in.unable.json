@@ -3,22 +3,52 @@
   "schemaVersion": "1.0",
   "routeId": "auth.route.sign-in.unable",
   "name": "Sign-In Unable",
-  "description": "Presents alternate authentication and recovery choices when email sign-in cannot continue.",
+  "description": "Presents alternate authentication and recovery choices when password sign-in cannot continue.",
   "path": "/auth/sign-in/unable",
   "routeType": "view",
   "viewId": "auth.sign-in.unable",
   "parameters": [],
   "status": "active",
+  "commonLinks": {
+    "status": "planned",
+    "conformance": {
+      "status": "needs-review",
+      "notes": "The canonical route contract requires a CommonLinks projection, but the existing reconciliation notes state that CommonLinks does not currently define this route."
+    }
+  },
   "platforms": {
-    "web": { "status": "implemented", "implementation": "SigninUnableComponent" },
-    "mobile": { "status": "planned" }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "auth-routes.ts",
+      "route": "/auth/sign-in/unable",
+      "component": "SigninUnableComponent",
+      "implementation": "SigninUnableComponent",
+      "conformance": {
+        "status": "verified",
+        "checkedAgainst": ["canonical-path", "route-registration", "view-binding", "parameters"],
+        "notes": "Angular registers the canonical sign-in outcome route and binds it to SigninUnableComponent."
+      }
+    },
+    "mobile": {
+      "status": "implemented",
+      "repository": "nuviot/vtm-client",
+      "path": "app/auth/sign-in/unable.tsx",
+      "route": "/auth/sign-in/unable",
+      "component": "AuthOutcomeScreen",
+      "implementation": "AuthOutcomeScreen",
+      "conformance": {
+        "status": "needs-review",
+        "checkedAgainst": ["canonical-path", "route-registration"],
+        "notes": "Expo Router now exposes the canonical route, but AuthOutcomeScreen still keys its outcome definition by the legacy /auth/continue/email/unable pathname. The canonical route exists but the view binding still needs normalization."
+      }
+    }
   },
   "source": {
-    "commonLinksMember": "SignInUnable",
-    "angularComponent": "SigninUnableComponent"
+    "angularComponent": "SigninUnableComponent",
+    "mobileRoute": "app/auth/sign-in/unable.tsx"
   },
   "notes": [
-    "Replaces the continuation-nested runtime path with a canonical outcome route.",
-    "CommonLinks does not currently define this member."
+    "The legacy /auth/continue/email/unable path may remain as a compatibility alias after the canonical route is fully bound."
   ]
 }
