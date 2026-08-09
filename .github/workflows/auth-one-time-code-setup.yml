@@ -22,7 +22,7 @@ jobs:
       - name: Apply patch
         run: python3 .github/scripts/patch-auth-one-time-code-setup.py
       - name: Build
-        run: dotnet build UserAdmin.sln --configuration Debug
+        run: dotnet build src/LagoVista.UserAdmin.Repos/LagoVista.UserAdmin.Repos.csproj --configuration Debug
       - name: Commit validated setup support
         run: |
           git config user.name "Auth Model Patch Bot"
