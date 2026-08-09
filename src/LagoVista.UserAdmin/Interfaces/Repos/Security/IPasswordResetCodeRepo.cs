@@ -8,5 +8,6 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
         Task StoreAsync(PasswordResetCode resetCode);
         Task<PasswordResetCode> GetLatestAsync(string userId);
         Task UpdateAsync(PasswordResetCode resetCode);
+        Task ClearAsync(string userId);
     }
 }
