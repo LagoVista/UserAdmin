@@ -84,6 +84,8 @@ namespace LagoVista.UserAdmin.Models.Testing
 
         public int? AccessFailedCount { get; set; }
 
+        public EntityHeader<SetCondition> HasLastLogin { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
+
 
         [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_IsLoggedIn, HelpResource: UserAdminResources.Names.AuthTenantStateSnapshot_IsLoggedIn_Help, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
         public EntityHeader<SetCondition> IsUserLoggedIn { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
@@ -161,6 +163,7 @@ namespace LagoVista.UserAdmin.Models.Testing
                 nameof(HasTOTP),
                 nameof(IsAccountDisabled),
                 nameof(IsLockedOut),
+                nameof(HasLastLogin),
                 nameof(IsAnonymous),
                 nameof(ShowWelcome),
                 nameof(LastMfaDateTimeUtc),
