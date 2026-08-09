@@ -3,6 +3,7 @@ using LagoVista.UserAdmin.Authentication;
 using LagoVista.UserAdmin.Authentication.Flows;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Models.Auth;
+using LagoVista.UserAdmin.Resources;
 using Moq;
 using NUnit.Framework;
 using System.Threading.Tasks;
@@ -48,6 +49,48 @@ namespace LagoVista.UserAdmin.Auth.Tests
 
             signInManager.Verify(manager => manager.PasswordSignInAsync(request), Times.Once);
             signInManager.VerifyNoOtherCalls();
+        }
+
+        [Test]
+        public async Task PasswordLoginFlowHandler_Should_Emit_Success_Transition()
+        {
+            var request = new AuthLoginRequest { Email = "user@example.com", Password = "correct-password" };
+            var managerResult = InvokeResult<AuthenticationResponse>.Create(new AuthenticationResponse { AuthenticationState = AuthenticationResponseState.Authenticated });
+            var signInManager = new Mock<ISignInManager>(MockBehavior.Strict);
+            signInManager.Setup(manager => manager.PasswordSignInAsync(request)).ReturnsAsync(managerResult);
+
+            var result = await new PasswordLoginFlowHandler(signInManager.Object).HandleAsync(request);
+
+            Assert.That(result.TransitionKey, Is.EqualTo(PasswordLoginFlowHandler.SuccessTransitionKey));
+            Assert.That(result.PublicResult, Is.SameAs(managerResult));
+        }
+
+        [Test]
+        public async Task PasswordLoginFlowHandler_Should_Emit_Rejected_Transition()
+        {
+            var request = new AuthLoginRequest { Email = "user@example.com", Password = "wrong-password" };
+            var managerResult = InvokeResult<AuthenticationResponse>.FromErrors(UserAdminErrorCodes.AuthInvalidCredentials.ToErrorMessage());
+            var signInManager = new Mock<ISignInManager>(MockBehavior.Strict);
+            signInManager.Setup(manager => manager.PasswordSignInAsync(request)).ReturnsAsync(managerResult);
+
+            var result = await new PasswordLoginFlowHandler(signInManager.Object).HandleAsync(request);
+
+            Assert.That(result.TransitionKey, Is.EqualTo(PasswordLoginFlowHandler.RejectedTransitionKey));
+            Assert.That(result.PublicResult, Is.SameAs(managerResult));
+        }
+
+        [Test]
+        public async Task PasswordLoginFlowHandler_Should_Emit_LockedOut_Transition()
+        {
+            var request = new AuthLoginRequest { Email = "user@example.com", Password = "password" };
+            var managerResult = InvokeResult<AuthenticationResponse>.FromErrors(UserAdminErrorCodes.AuthUserLockedOut.ToErrorMessage());
+            var signInManager = new Mock<ISignInManager>(MockBehavior.Strict);
+            signInManager.Setup(manager => manager.PasswordSignInAsync(request)).ReturnsAsync(managerResult);
+
+            var result = await new PasswordLoginFlowHandler(signInManager.Object).HandleAsync(request);
+
+            Assert.That(result.TransitionKey, Is.EqualTo(PasswordLoginFlowHandler.LockedOutTransitionKey));
+            Assert.That(result.PublicResult, Is.SameAs(managerResult));
         }
     }
 }
