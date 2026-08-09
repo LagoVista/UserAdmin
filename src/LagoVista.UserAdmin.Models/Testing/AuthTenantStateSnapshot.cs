@@ -121,6 +121,11 @@ namespace LagoVista.UserAdmin.Models.Testing
         [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_LastMfaDateTimeUtc, HelpResource: UserAdminResources.Names.AuthTenantStateSnapshot_LastMfaDateTimeUtc_Help, FieldType: FieldTypes.DateTime, ResourceType: typeof(UserAdminResources))]
         public string LastMfaDateTimeUtc { get; set; }
 
+        /* One-time proof state */
+        public AuthOneTimeCodeState PasswordRecoveryCode { get; set; } = new AuthOneTimeCodeState();
+
+        public AuthOneTimeCodeState EmailVerificationCode { get; set; } = new AuthOneTimeCodeState();
+
         /* Setup helpers */
         [FormField(LabelResource: UserAdminResources.Names.AuthTenantStateSnapshot_EnsureUserExists, HelpResource: UserAdminResources.Names.AuthTenantStateSnapshot_EnsureUserExists_Help, EnumType: typeof(SetCondition), FieldType: FieldTypes.Picker, ResourceType: typeof(UserAdminResources))]
         public EntityHeader<SetCondition> EnsureUserExists { get; set; } = EntityHeader<SetCondition>.Create(SetCondition.DontCare);
@@ -140,6 +145,8 @@ namespace LagoVista.UserAdmin.Models.Testing
                 nameof(EmailConfirmed),
                 nameof(GenerateConfirmEmail),
                 nameof(SendMagicLink),
+                nameof(PasswordRecoveryCode),
+                nameof(EmailVerificationCode),
                 nameof(PhoneNumberConfirmed),
                 nameof(TwoFactorEnabled),
                 nameof(HasPassword),
