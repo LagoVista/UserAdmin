@@ -44,6 +44,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string OAuthToken = "com.lagovista.iot.oauth.token";
         public const string OAuthTokenVerifier = "com.lagovista.iot.oauth.tokenverifier";
         public const string Anonymous = "com.lagovista.iot.anonymous";
+        public const string ActorId = "com.lagovista.iot.actorid";
+        public const string IdentityStage = "com.lagovista.iot.identitystage";
+        public const string VisitorIdentityStage = "visitor";
         public const string EmailVerified = "com.lagovista.iot.emailverified";
         public const string PhoneVerfiied = "com.lagovista.iot.phoneverified";
         public const string IsSystemAdmin = "com.lagovista.iot.issystemadmin";
@@ -168,6 +171,46 @@ namespace LagoVista.AspNetCore.Identity.Managers
             }
 
             return claims;
+        }
+
+        public List<Claim> GetClaimsForAnonymousVisitor(AppUser user, string actorId)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            if (String.IsNullOrWhiteSpace(user.Id)) throw new ArgumentException("The shared anonymous AppUser must have an id.", nameof(user));
+            if (String.IsNullOrWhiteSpace(actorId)) throw new ArgumentNullException(nameof(actorId));
+            if (user.CurrentOrganization == null) throw new ArgumentException("The shared anonymous AppUser must have a current organization.", nameof(user));
+            if (String.IsNullOrWhiteSpace(user.CurrentOrganization.Id)) throw new ArgumentException("The shared anonymous organization must have an id.", nameof(user));
+            if (String.IsNullOrWhiteSpace(user.CurrentOrganization.Text)) throw new ArgumentException("The shared anonymous organization must have a name.", nameof(user));
+            if (String.IsNullOrWhiteSpace(user.CurrentOrganization.Namespace)) throw new ArgumentException("The shared anonymous organization must have a namespace.", nameof(user));
+
+            var currentUserName = String.IsNullOrWhiteSpace(user.UserName) ? user.Email : user.UserName;
+            if (String.IsNullOrWhiteSpace(currentUserName)) throw new ArgumentException("The shared anonymous AppUser must have a user name or email.", nameof(user));
+
+            return new List<Claim>
+            {
+                new Claim(Logintype, user.LoginType.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(CurrentUserName, currentUserName),
+                new Claim(CurrentUserId, user.Id),
+                new Claim(CurrentOrgNamespace, user.CurrentOrganization.Namespace),
+                new Claim(CurrentOrgName, user.CurrentOrganization.Text),
+                new Claim(CurrentOrgId, user.CurrentOrganization.Id),
+                new Claim(Anonymous, Boolean.TrueString),
+                new Claim(ActorId, actorId),
+                new Claim(IdentityStage, VisitorIdentityStage),
+                new Claim(IsPreviewUser, Boolean.FalseString),
+                new Claim(ExternalAccountVerified, Boolean.FalseString),
+                new Claim(EmailVerified, Boolean.FalseString),
+                new Claim(PhoneVerfiied, Boolean.FalseString),
+                new Claim(IsSystemAdmin, Boolean.FalseString),
+                new Claim(IsOrgAdmin, Boolean.FalseString),
+                new Claim(IsAppBuilder, Boolean.FalseString),
+                new Claim(IsUserDevice, Boolean.FalseString),
+                new Claim(IsCustomerAdmin, Boolean.FalseString),
+                new Claim(IsFinancceAdmin, Boolean.FalseString),
+                new Claim(TwoFactorEnabled, Boolean.FalseString),
+                new Claim(OrgRequireMfa, Boolean.FalseString),
+            };
         }
 
         public List<Claim> GetClaims(AppUser user, EntityHeader org, bool isOrgAdmin, bool isAppBuilder)
