@@ -33,6 +33,7 @@ using LagoVista.UserAdmin.Repos.Security;
 using LagoVista.UserAdmin.Repos.TableStorage.Passkeys;
 using LagoVista.UserAdmin.Repos.TableStorage.AnonymousVisitors;
 using LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments;
+using LagoVista.UserAdmin.Repos.TableStorage.ContinuityConversations;
 using LagoVista.UserAdmin.Repos.Testing;
 using LagoVista.UserAdmin.Repos.Users;
 using LagoVista.UserAdmin.Resources;
@@ -96,6 +97,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<IAnonymousVisitorInstallationIndexRepo, AnonymousVisitorInstallationIndexRepo>();
             services.AddScoped<IAnonymousVisitorStateIndexRepo, AnonymousVisitorStateIndexRepo>();
             services.AddScoped<IAnonymousVisitorRepo, AnonymousVisitorRepo>();
+            services.AddScoped<IContinuityConversationRepo, ContinuityConversationRepo>();
             services.AddScoped<IProvisionalEnvironmentEntityRepo, ProvisionalEnvironmentEntityRepo>();
             services.AddScoped<IProvisionalEnvironmentRecoveryIndexRepo, ProvisionalEnvironmentRecoveryIndexRepo>();
             services.AddScoped<IProvisionalEnvironmentInstallationIndexRepo, ProvisionalEnvironmentInstallationIndexRepo>();
