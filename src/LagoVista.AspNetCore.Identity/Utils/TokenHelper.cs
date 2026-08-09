@@ -134,6 +134,24 @@ namespace LagoVista.AspNetCore.Identity.Utils
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
 
+        public string GetAnonymousVisitorJWToken(AppUser user, string actorId, DateTime accessExpires)
+        {
+            var now = DateTime.UtcNow;
+            var claims = _claimsFactory.GetClaimsForAnonymousVisitor(user, actorId);
+            claims.Add(new Claim(JwtRegisteredClaimNames.Jti, NonceGenerator()));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64));
+
+            var jwt = new JwtSecurityToken(
+                issuer: _tokenOptions.Issuer,
+                audience: _tokenOptions.Audience,
+                claims: claims,
+                notBefore: now,
+                expires: accessExpires,
+                signingCredentials: _tokenOptions.SigningCredentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(jwt);
+        }
+
         public string GetJWToken(AppUser user, EntityHeader org, bool isOrgAdmin, bool isAppBuilder, DateTime accessExpires, string installationId)
         {
             var now = DateTime.UtcNow;
