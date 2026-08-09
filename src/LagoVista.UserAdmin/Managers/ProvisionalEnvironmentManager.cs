@@ -331,8 +331,8 @@ namespace LagoVista.UserAdmin.Managers
                 TotalExtended = billingEvents.Sum(item => item.Extended ?? 0m),
                 TotalTokens = billingEvents.Sum(item => item.Tokens ?? 0L),
                 TotalQuantity = billingEvents.Sum(item => item.Quantity ?? 0m),
-                EarliestBillingEventUtc = billingEvents.Count == 0 ? null : billingEvents.Min(item => item.StartTimestamp),
-                LatestBillingEventUtc = billingEvents.Count == 0 ? null : billingEvents.Max(item => item.EndTimestamp ?? item.StartTimestamp)
+                EarliestBillingEventUtc = billingEvents.Count == 0 ? (DateTime?)null : billingEvents.Min(item => item.StartTimestamp),
+                LatestBillingEventUtc = billingEvents.Count == 0 ? (DateTime?)null : billingEvents.Max(item => item.EndTimestamp ?? item.StartTimestamp)
             };
         }
 
