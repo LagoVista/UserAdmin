@@ -77,5 +77,11 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             entity.ConsumedUtc = verificationCode.ConsumedUtc?.ToString("O");
             await base.UpdateAsync(entity);
         }
+
+        public async Task ClearAsync(string userId)
+        {
+            var entities = await GetByPartitionIdAsync(userId);
+            foreach (var entity in entities) await DeleteAsync(entity);
+        }
     }
 }
