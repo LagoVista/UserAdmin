@@ -16,10 +16,11 @@ namespace LagoVista.UserAdmin
         public const string AuthContinueProvider = "/auth/continue/provider";
         public const string AuthContinueTotp = "/auth/continue/totp";
         public const string AuthSignInUnable = "/auth/sign-in/unable";
+        public const string AuthSignInLockedOut = "/auth/sign-in/locked-out";
 
         public const string PasswordResetRequest = "/auth/password/reset/request";
         public const string PasswordResetSent = "/auth/password/reset/sent";
-        public const string PasswordResetComplete = "/auth/password/reset/{code}";
+        public const string PasswordResetComplete = "/auth/password/reset/complete";
 
         public const string MagicLinkSent = "/auth/magic-link/sent";
         public const string MagicLinkHandle = "/auth/magic-link/handle";
