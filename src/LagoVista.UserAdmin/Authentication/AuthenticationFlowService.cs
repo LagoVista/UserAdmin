@@ -67,7 +67,7 @@ namespace LagoVista.UserAdmin.Authentication
                 throw new InvalidOperationException("Password recovery verification flow handler is not configured.");
 
             var result = await _passwordRecoveryVerificationHandler.HandleAsync(new PasswordRecoveryVerificationFlowRequest(request));
-            if (result.TransitionKey != PasswordRecoveryVerificationFlowHandler.TransitionKey)
+            if (result.TransitionKey != PasswordRecoveryVerificationFlowHandler.AcceptedTransitionKey && result.TransitionKey != PasswordRecoveryVerificationFlowHandler.RejectedTransitionKey)
                 throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
 
             return result.PublicResult;
@@ -79,7 +79,7 @@ namespace LagoVista.UserAdmin.Authentication
                 throw new InvalidOperationException("Password recovery completion flow handler is not configured.");
 
             var result = await _passwordRecoveryCompletionHandler.HandleAsync(new PasswordRecoveryCompletionFlowRequest(request));
-            if (result.TransitionKey != PasswordRecoveryCompletionFlowHandler.TransitionKey)
+            if (result.TransitionKey != PasswordRecoveryCompletionFlowHandler.CompletedTransitionKey && result.TransitionKey != PasswordRecoveryCompletionFlowHandler.RejectedTransitionKey)
                 throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
 
             return result.PublicResult;
