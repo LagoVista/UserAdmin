@@ -6,6 +6,7 @@ using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Interfaces.Repos.Testing;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Interfaces.REpos.Account;
@@ -16,6 +17,8 @@ using RingCentral;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Managers
@@ -37,6 +40,8 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IAuthViewRepo _authViewRepo;
         private readonly ITestArtifactStorage _testArtifactStorage;
         private readonly IUserRegistrationManager _userRegistrationManager;
+        private readonly IPasswordResetCodeRepo _passwordResetCodeRepo;
+        private readonly IEmailVerificationCodeRepo _emailVerificationCodeRepo;
         private readonly IAdminLogger _adminLogger;
 
         public AppUserTestingManager(IAppUserTestingDslRepo dslStore,
@@ -54,6 +59,8 @@ namespace LagoVista.UserAdmin.Managers
                                    IUserManager userManager,
                                    IMagicLinkManager magicLinkManager,
                                    IUserRegistrationManager userRegistrationManager,
+                                   IPasswordResetCodeRepo passwordResetCodeRepo,
+                                   IEmailVerificationCodeRepo emailVerificationCodeRepo,
                                    ITestArtifactStorage testArtifactStorage,
                                    IAppConfig appConfig) : base(logger, appConfig, depManager, security)
         {
@@ -69,6 +76,8 @@ namespace LagoVista.UserAdmin.Managers
             _authViewRepo = authViewRepo ?? throw new ArgumentNullException(nameof(authViewRepo));
             _testArtifactStorage = testArtifactStorage ?? throw new ArgumentNullException(nameof(testArtifactStorage));
             _userRegistrationManager = userRegistrationManager ?? throw new ArgumentNullException(nameof(userRegistrationManager));
+            _passwordResetCodeRepo = passwordResetCodeRepo ?? throw new ArgumentNullException(nameof(passwordResetCodeRepo));
+            _emailVerificationCodeRepo = emailVerificationCodeRepo ?? throw new ArgumentNullException(nameof(emailVerificationCodeRepo));
             _magicLinkManager = magicLinkManager ?? throw new ArgumentNullException(nameof(magicLinkManager));
         }
 
@@ -86,6 +95,64 @@ namespace LagoVista.UserAdmin.Managers
             credentials.Password = newPwd;
 
             return InvokeResult.Success;
+        }
+
+
+        private static string ComputeOneTimeCodeHash(AppUser appUser, string code)
+        {
+            var key = !String.IsNullOrWhiteSpace(appUser.SecurityStamp) ? appUser.SecurityStamp : appUser.PasswordHash;
+            if (String.IsNullOrWhiteSpace(key)) throw new InvalidOperationException("The test user does not have security state available for one-time codes.");
+
+            using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(key)))
+            {
+                return Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(code)));
+            }
+        }
+
+        private async Task ApplyPasswordRecoveryCodeSetupAsync(AppUser appUser, AuthOneTimeCodeState state, TestUserCredentials credentials)
+        {
+            if (state == null || state.Status == AuthOneTimeCodeStatus.DontCare) return;
+
+            await _passwordResetCodeRepo.ClearAsync(appUser.Id);
+            if (state.Status == AuthOneTimeCodeStatus.NotSet) return;
+
+            var code = RandomNumberGenerator.GetInt32(0, 1000000).ToString("D6");
+            var now = DateTime.UtcNow;
+            await _passwordResetCodeRepo.StoreAsync(new PasswordResetCode
+            {
+                Id = Guid.NewGuid().ToId(),
+                UserId = appUser.Id,
+                CodeHash = ComputeOneTimeCodeHash(appUser, code),
+                CreatedUtc = now,
+                ExpiresUtc = state.Status == AuthOneTimeCodeStatus.Expired ? now.AddMinutes(-1) : now.AddMinutes(10),
+                AttemptCount = state.AttemptCount ?? 0,
+                ConsumedUtc = state.Status == AuthOneTimeCodeStatus.Consumed ? (DateTime?)now : null
+            });
+
+            credentials.PasswordRecoveryCode = code;
+        }
+
+        private async Task ApplyEmailVerificationCodeSetupAsync(AppUser appUser, AuthOneTimeCodeState state, TestUserCredentials credentials)
+        {
+            if (state == null || state.Status == AuthOneTimeCodeStatus.DontCare) return;
+
+            await _emailVerificationCodeRepo.ClearAsync(appUser.Id);
+            if (state.Status == AuthOneTimeCodeStatus.NotSet) return;
+
+            var code = RandomNumberGenerator.GetInt32(0, 1000000).ToString("D6");
+            var now = DateTime.UtcNow;
+            await _emailVerificationCodeRepo.StoreAsync(new EmailVerificationCode
+            {
+                Id = Guid.NewGuid().ToId(),
+                UserId = appUser.Id,
+                CodeHash = ComputeOneTimeCodeHash(appUser, code),
+                CreatedUtc = now,
+                ExpiresUtc = state.Status == AuthOneTimeCodeStatus.Expired ? now.AddMinutes(-1) : now.AddMinutes(10),
+                AttemptCount = state.AttemptCount ?? 0,
+                ConsumedUtc = state.Status == AuthOneTimeCodeStatus.Consumed ? (DateTime?)now : null
+            });
+
+            credentials.EmailVerificationCode = code;
         }
 
         public async Task<InvokeResult<TestUserCredentials>> ApplySetupAsync(string testSceanrioId, EntityHeader org, EntityHeader user)
@@ -355,6 +422,9 @@ namespace LagoVista.UserAdmin.Managers
             {
                 await SetTestUserCredentials(testUser, userCredentials);
             }
+
+            await ApplyPasswordRecoveryCodeSetupAsync(testUser, preconditions.PasswordRecoveryCode, userCredentials);
+            await ApplyEmailVerificationCodeSetupAsync(testUser, preconditions.EmailVerificationCode, userCredentials);
 
             _adminLogger.Trace($"{this.Tag()} Updated user with preconditions.");   
             await AuthorizeAsync(testUser, AuthorizeResult.AuthorizeActions.Update, user, org);
