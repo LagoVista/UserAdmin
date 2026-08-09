@@ -79,6 +79,35 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(result.Result.WasRestored, Is.False);
         }
 
+        [Test]
+        public async Task ResetAsync_Should_Retire_Visitor_And_Create_Fresh_Visitor()
+        {
+            var harness = CreateHarness();
+            var visitor = new AnonymousVisitor { ActorId = "visitor-actor", State = AnonymousVisitorState.Active, ContinuityTokenHash = "old-hash" };
+            harness.VisitorRepo.Setup(repo => repo.GetByActorIdAsync("visitor-actor")).ReturnsAsync(visitor);
+            harness.VisitorManager.Setup(manager => manager.BootstrapAsync(It.IsAny<AnonymousVisitorBootstrapRequest>())).ReturnsAsync(InvokeResult<AnonymousVisitorBootstrapResponse>.Create(CreateVisitorResponse(false)));
+
+            var result = await harness.Manager.ResetAsync("visitor-actor", ClaimsFactory.VisitorIdentityStage, "old-token");
+
+            Assert.That(result.Successful, Is.True);
+            Assert.That(visitor.State, Is.EqualTo(AnonymousVisitorState.Expired));
+            Assert.That(visitor.ContinuityTokenHash, Is.Null);
+            harness.VisitorRepo.Verify(repo => repo.UpdateAsync(visitor), Times.Once);
+        }
+
+        [Test]
+        public async Task ResetAsync_Should_Reject_Provisional_When_Credential_Does_Not_Match_Actor()
+        {
+            var harness = CreateHarness();
+            harness.ProvisionalEnvironmentRepo.Setup(repo => repo.FindByRecoveryTokenHashAsync(It.IsAny<string>())).ReturnsAsync(new ProvisionalEnvironment { Id = "environment-id", OriginActorId = "different-actor", AppUserId = "app-user-id", State = ProvisionalEnvironmentState.Active });
+
+            var result = await harness.Manager.ResetAsync("journey-actor", ClaimsFactory.ProvisionalIdentityStage, "recovery-token");
+
+            Assert.That(result.Successful, Is.False);
+            harness.ProvisionalEnvironmentRepo.Verify(repo => repo.UpdateAsync(It.IsAny<ProvisionalEnvironment>()), Times.Never);
+            harness.VisitorManager.Verify(manager => manager.BootstrapAsync(It.IsAny<AnonymousVisitorBootstrapRequest>()), Times.Never);
+        }
+
         private static AnonymousVisitorBootstrapResponse CreateVisitorResponse(bool wasRestored)
         {
             return new AnonymousVisitorBootstrapResponse
@@ -97,21 +126,25 @@ namespace LagoVista.UserAdmin.Auth.Tests
         {
             var visitorManager = new Mock<IAnonymousVisitorBootstrapManager>();
             var provisionalManager = new Mock<IProvisionalEnvironmentManager>();
+            var visitorRepo = new Mock<IAnonymousVisitorRepo>();
+            var provisionalEnvironmentRepo = new Mock<IProvisionalEnvironmentRepo>();
             var appUserRepo = new Mock<IAppUserLoaderRepo>();
             var organizationRepo = new Mock<IOrganizationLoaderRepo>();
             var tokenOptions = new Mock<ITokenAuthOptions>();
             var tokenHelper = new Mock<ITokenHelper>();
-            var manager = new ContinuitySessionManager(visitorManager.Object, provisionalManager.Object, appUserRepo.Object, organizationRepo.Object, tokenOptions.Object, tokenHelper.Object);
-            return new Harness(manager, visitorManager, provisionalManager, appUserRepo, organizationRepo, tokenOptions, tokenHelper);
+            var manager = new ContinuitySessionManager(visitorManager.Object, provisionalManager.Object, visitorRepo.Object, provisionalEnvironmentRepo.Object, appUserRepo.Object, organizationRepo.Object, tokenOptions.Object, tokenHelper.Object);
+            return new Harness(manager, visitorManager, provisionalManager, visitorRepo, provisionalEnvironmentRepo, appUserRepo, organizationRepo, tokenOptions, tokenHelper);
         }
 
         private sealed class Harness
         {
-            public Harness(ContinuitySessionManager manager, Mock<IAnonymousVisitorBootstrapManager> visitorManager, Mock<IProvisionalEnvironmentManager> provisionalManager, Mock<IAppUserLoaderRepo> appUserRepo, Mock<IOrganizationLoaderRepo> organizationRepo, Mock<ITokenAuthOptions> tokenOptions, Mock<ITokenHelper> tokenHelper)
+            public Harness(ContinuitySessionManager manager, Mock<IAnonymousVisitorBootstrapManager> visitorManager, Mock<IProvisionalEnvironmentManager> provisionalManager, Mock<IAnonymousVisitorRepo> visitorRepo, Mock<IProvisionalEnvironmentRepo> provisionalEnvironmentRepo, Mock<IAppUserLoaderRepo> appUserRepo, Mock<IOrganizationLoaderRepo> organizationRepo, Mock<ITokenAuthOptions> tokenOptions, Mock<ITokenHelper> tokenHelper)
             {
                 Manager = manager;
                 VisitorManager = visitorManager;
                 ProvisionalManager = provisionalManager;
+                VisitorRepo = visitorRepo;
+                ProvisionalEnvironmentRepo = provisionalEnvironmentRepo;
                 AppUserRepo = appUserRepo;
                 OrganizationRepo = organizationRepo;
                 TokenOptions = tokenOptions;
@@ -121,6 +154,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
             public ContinuitySessionManager Manager { get; }
             public Mock<IAnonymousVisitorBootstrapManager> VisitorManager { get; }
             public Mock<IProvisionalEnvironmentManager> ProvisionalManager { get; }
+            public Mock<IAnonymousVisitorRepo> VisitorRepo { get; }
+            public Mock<IProvisionalEnvironmentRepo> ProvisionalEnvironmentRepo { get; }
             public Mock<IAppUserLoaderRepo> AppUserRepo { get; }
             public Mock<IOrganizationLoaderRepo> OrganizationRepo { get; }
             public Mock<ITokenAuthOptions> TokenOptions { get; }
