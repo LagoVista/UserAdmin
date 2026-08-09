@@ -10,10 +10,15 @@
   "parameters": [],
   "status": "active",
   "commonLinks": {
-    "status": "planned",
+    "status": "implemented",
+    "repository": "LagoVista/UserAdmin",
+    "path": "src/LagoVista.UserAdmin/CommonLinks.cs",
+    "member": "AuthSignInLockedOut",
+    "route": "/auth/sign-in/locked-out",
     "conformance": {
-      "status": "needs-review",
-      "notes": "The canonical route contract requires a CommonLinks projection, but no deterministic CommonLinks implementation has been located for this route."
+      "status": "verified",
+      "checkedAgainst": ["canonical-path", "member-value", "parameters"],
+      "notes": "CommonLinks.AuthSignInLockedOut exactly matches the canonical sign-in locked-out route."
     }
   },
   "platforms": {
@@ -45,6 +50,7 @@
     }
   },
   "source": {
+    "commonLinksMember": "AuthSignInLockedOut",
     "angularComponent": "SigninLockedOutComponent",
     "mobileRoute": "app/auth/sign-in/locked-out.tsx"
   },
