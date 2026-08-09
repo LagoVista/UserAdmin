@@ -17,12 +17,26 @@
     { "id": "continue-passkey", "name": "Continue with Passkey", "actionType": "link", "finder": "action:continue-passkey" }
   ],
   "platforms": {
-    "web": { "status": "implemented", "implementation": "SigninUnableComponent" },
-    "mobile": { "status": "planned" }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "user/signin-unable/signin-unable.component.ts",
+      "component": "SigninUnableComponent",
+      "implementation": "SigninUnableComponent"
+    },
+    "mobile": {
+      "status": "implemented",
+      "repository": "nuviot/vtm-client",
+      "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+      "component": "AuthOutcomeScreen",
+      "implementation": "app/auth/continue/email/unable.tsx -> AuthOutcomeScreen",
+      "notes": "Expo route app/auth/continue/email/unable.tsx delegates to AuthOutcomeScreen, whose /auth/continue/email/unable definition implements the canonical actions."
+    }
   },
   "source": {
     "runtimeEntityId": "C66E49DCCA3541398D418136AFA1D324",
     "runtimeSha256Hex": "ff14153aee6dafde6e46eba5558e064d1eecaabe0d80bfd4ca63a83f8c750063",
-    "webComponent": "SigninUnableComponent"
+    "webComponent": "SigninUnableComponent",
+    "mobileComponent": "AuthOutcomeScreen"
   }
 }
