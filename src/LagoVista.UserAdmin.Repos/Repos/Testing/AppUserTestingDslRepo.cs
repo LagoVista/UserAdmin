@@ -6,16 +6,27 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.Testing
 {
     public class AppUserTestingDslRepo : IAppUserTestingDslRepo
     {
+        private const string GitArchiveUrl = "https://github.com/LagoVista/UserAdmin/archive/refs/heads/master.zip";
+        private const string ScenarioPathMarker = "/auth-model/scenarios-v2/";
+        private const string AuthViewPathMarker = "/auth-model/auth-views/";
+
+        private static readonly HttpClient _httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(20) };
+
         private readonly IAdminLogger _adminLogger;
         private readonly string _authModelRoot;
+        private readonly SemaphoreSlim _gitLoadLock = new SemaphoreSlim(1, 1);
+        private List<AppUserTestScenario> _gitScenarioCache;
 
         public AppUserTestingDslRepo(IUserAdminSettings userAdminSettings, IAdminLogger adminLogger)
         {
@@ -30,47 +41,92 @@ namespace LagoVista.UserAdmin.Repos.Testing
 
         public Task UpdateTestScenarioAsync(AppUserTestScenario dsl) => ReadOnlyAsync();
 
-        public Task<AppUserTestScenario> GetByIdAsync(string id)
+        public async Task<AppUserTestScenario> GetByIdAsync(string id)
         {
             if (String.IsNullOrWhiteSpace(id))
-                return Task.FromResult<AppUserTestScenario>(null);
+                return null;
 
-            var scenario = LoadScenarios().FirstOrDefault(item => String.Equals(item.Id, id, StringComparison.OrdinalIgnoreCase) || String.Equals(item.Key, id, StringComparison.OrdinalIgnoreCase));
-            return Task.FromResult(scenario);
+            var scenarios = await LoadScenariosAsync(false);
+            return scenarios.FirstOrDefault(item => String.Equals(item.Id, id, StringComparison.OrdinalIgnoreCase) || String.Equals(item.Key, id, StringComparison.OrdinalIgnoreCase));
         }
 
-        public Task<ListResponse<AppUserTestScenarioSummary>> ListAsync(string orgId, ListRequest request)
+        public async Task<ListResponse<AppUserTestScenarioSummary>> ListAsync(string orgId, ListRequest request)
         {
             _ = orgId;
             request ??= ListRequest.CreateForAll();
 
-            var summaries = LoadScenarios().Select(item => item.CreateSummary()).OrderBy(item => item.Name).ToList();
+            // Refresh is the explicit signal to pull the latest canonical definitions from Git.
+            var scenarios = await LoadScenariosAsync(true);
+            var summaries = scenarios.Select(item => item.CreateSummary()).OrderBy(item => item.Name).ToList();
             var page = summaries.Skip(request.PageSize * (request.PageIndex - 1)).Take(request.PageSize);
-            return Task.FromResult(ListResponse<AppUserTestScenarioSummary>.Create(request, page));
+            return ListResponse<AppUserTestScenarioSummary>.Create(request, page);
         }
 
-        private List<AppUserTestScenario> LoadScenarios()
+        private async Task<List<AppUserTestScenario>> LoadScenariosAsync(bool forceGitRefresh)
+        {
+            if (!forceGitRefresh && _gitScenarioCache != null)
+                return _gitScenarioCache;
+
+            await _gitLoadLock.WaitAsync();
+            try
+            {
+                if (!forceGitRefresh && _gitScenarioCache != null)
+                    return _gitScenarioCache;
+
+                try
+                {
+                    _gitScenarioCache = await LoadScenariosFromGitAsync();
+                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] Loaded {_gitScenarioCache.Count} canonical auth scenarios from Git master.");
+                    return _gitScenarioCache;
+                }
+                catch (Exception ex)
+                {
+                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] Could not load canonical auth scenarios from Git; falling back to published JSON. {ex.Message}");
+                    return LoadScenariosFromPublishedJson();
+                }
+            }
+            finally
+            {
+                _gitLoadLock.Release();
+            }
+        }
+
+        private async Task<List<AppUserTestScenario>> LoadScenariosFromGitAsync()
+        {
+            var archiveBytes = await _httpClient.GetByteArrayAsync(GitArchiveUrl);
+            using var stream = new MemoryStream(archiveBytes, false);
+            using var archive = new ZipArchive(stream, ZipArchiveMode.Read, false);
+
+            var viewMap = LoadAuthViewMap(archive.Entries.Where(IsAuthViewEntry).Select(entry => ReadJson(entry)));
+            return archive.Entries.Where(IsScenarioEntry).Select(entry => HydrateScenario(ReadJson(entry), entry.FullName, viewMap)).OrderBy(item => item.Name).ToList();
+        }
+
+        private List<AppUserTestScenario> LoadScenariosFromPublishedJson()
         {
             var scenarioRoot = Path.Combine(_authModelRoot, "scenarios-v2");
             if (!Directory.Exists(scenarioRoot))
                 throw new DirectoryNotFoundException($"Published auth scenario directory was not found: '{scenarioRoot}'.");
 
-            var viewMap = LoadAuthViewMap();
-            var scenarios = Directory.GetFiles(scenarioRoot, "*.json", SearchOption.AllDirectories).Select(path => HydrateScenario(path, viewMap)).OrderBy(item => item.Name).ToList();
-            _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] Loaded {scenarios.Count} canonical auth scenarios from published JSON.");
+            var viewMap = LoadPublishedAuthViewMap();
+            var scenarios = Directory.GetFiles(scenarioRoot, "*.json", SearchOption.AllDirectories).Select(path => HydrateScenario(JObject.Parse(System.IO.File.ReadAllText(path)), path, viewMap)).OrderBy(item => item.Name).ToList();
+            _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] Loaded {scenarios.Count} canonical auth scenarios from published JSON fallback.");
             return scenarios;
         }
 
-        private Dictionary<string, EntityHeader> LoadAuthViewMap()
+        private Dictionary<string, EntityHeader> LoadPublishedAuthViewMap()
         {
             var viewRoot = Path.Combine(_authModelRoot, "auth-views");
             if (!Directory.Exists(viewRoot))
                 throw new DirectoryNotFoundException($"Published auth view directory was not found: '{viewRoot}'.");
 
+            return LoadAuthViewMap(Directory.GetFiles(viewRoot, "*.json", SearchOption.TopDirectoryOnly).Select(path => JObject.Parse(System.IO.File.ReadAllText(path))));
+        }
+
+        private static Dictionary<string, EntityHeader> LoadAuthViewMap(IEnumerable<JObject> authViews)
+        {
             var result = new Dictionary<string, EntityHeader>(StringComparer.OrdinalIgnoreCase);
-            foreach (var path in Directory.GetFiles(viewRoot, "*.json", SearchOption.TopDirectoryOnly))
+            foreach (var json in authViews)
             {
-                var json = JObject.Parse(System.IO.File.ReadAllText(path));
                 var viewId = json.Value<string>("viewId");
                 if (String.IsNullOrWhiteSpace(viewId))
                     continue;
@@ -83,10 +139,27 @@ namespace LagoVista.UserAdmin.Repos.Testing
             return result;
         }
 
-        private static AppUserTestScenario HydrateScenario(string path, IReadOnlyDictionary<string, EntityHeader> viewMap)
+        private static bool IsScenarioEntry(ZipArchiveEntry entry) => entry.FullName.Contains(ScenarioPathMarker, StringComparison.OrdinalIgnoreCase) && entry.FullName.EndsWith(".json", StringComparison.OrdinalIgnoreCase);
+
+        private static bool IsAuthViewEntry(ZipArchiveEntry entry)
         {
-            var json = JObject.Parse(System.IO.File.ReadAllText(path));
-            var key = RequiredString(json, "key", path);
+            var markerIndex = entry.FullName.IndexOf(AuthViewPathMarker, StringComparison.OrdinalIgnoreCase);
+            if (markerIndex < 0 || !entry.FullName.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            var relativePath = entry.FullName.Substring(markerIndex + AuthViewPathMarker.Length);
+            return !relativePath.Contains("/");
+        }
+
+        private static JObject ReadJson(ZipArchiveEntry entry)
+        {
+            using var reader = new StreamReader(entry.Open());
+            return JObject.Parse(reader.ReadToEnd());
+        }
+
+        private static AppUserTestScenario HydrateScenario(JObject json, string source, IReadOnlyDictionary<string, EntityHeader> viewMap)
+        {
+            var key = RequiredString(json, "key", source);
             var action = json["action"] as JObject;
             var actionId = action?.Value<string>("id");
             var actionFinder = action?.Value<string>("finder");
@@ -95,7 +168,7 @@ namespace LagoVista.UserAdmin.Repos.Testing
             {
                 Id = key,
                 Key = key,
-                Name = RequiredString(json, "name", path),
+                Name = RequiredString(json, "name", source),
                 Description = json.Value<string>("summary"),
                 AuthView = ResolveView(json.Value<string>("startViewKey"), viewMap),
                 ExpectedView = ResolveView(json.Value<string>("expectedViewKey"), viewMap),
@@ -182,11 +255,11 @@ namespace LagoVista.UserAdmin.Repos.Testing
             return $"[data-testid=\"{finder}\"]";
         }
 
-        private static string RequiredString(JObject json, string propertyName, string path)
+        private static string RequiredString(JObject json, string propertyName, string source)
         {
             var value = json.Value<string>(propertyName);
             if (String.IsNullOrWhiteSpace(value))
-                throw new InvalidDataException($"Canonical auth scenario '{path}' is missing required property '{propertyName}'.");
+                throw new InvalidDataException($"Canonical auth scenario '{source}' is missing required property '{propertyName}'.");
             return value;
         }
 
