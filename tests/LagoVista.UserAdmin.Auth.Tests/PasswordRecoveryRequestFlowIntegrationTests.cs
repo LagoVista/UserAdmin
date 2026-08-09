@@ -21,7 +21,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
     [TestFixture]
     public class PasswordRecoveryRequestFlowIntegrationTests
     {
-        private const string RecoveryRequestEvidence = "auth|auth.test-binding.recovery.request|auth.flow.recovery.request|auth.transition.recovery.request";
+        private const string RecoveryRequestEvidence = "auth|auth.test-binding.recovery.request|auth.flow.recovery.request|auth.transition.password-recovery.request-accepted";
         private const string SuccessfulRequestEvents = "PasswordRecoveryRequested|PasswordRecoveryCodeGenerated|PasswordRecoveryMessageSent";
         private const string UserNotFoundEvents = "PasswordRecoveryRequested";
 
