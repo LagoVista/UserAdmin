@@ -28,10 +28,7 @@ namespace LagoVista.UserAdmin.Managers
             AuthView expectedView = null;
             var expectedViewId = scenario.ExpectedView?.Id;
             if (!String.IsNullOrWhiteSpace(expectedViewId) && !expectedViewId.StartsWith("app.", StringComparison.OrdinalIgnoreCase))
-            {
                 expectedView = await _authViewRepo.GetByIdAsync(expectedViewId);
-                if (expectedView == null) return InvokeResult<AuthRunnerPlan>.FromError("AuthViewNotFound", $"Expected View '{expectedViewId}' not found.");
-            }
 
             await AuthorizeAsync(authView, AuthorizeResult.AuthorizeActions.Read, user, org);
 
