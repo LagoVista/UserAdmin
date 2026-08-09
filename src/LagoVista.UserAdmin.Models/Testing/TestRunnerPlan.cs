@@ -72,8 +72,10 @@ namespace LagoVista.UserAdmin.Models.Testing
 
         public string PreloginLink { get; set; }
         public string MagicLinkToken { get; set; }
-        public string PasskeyCredentialsId { get; set; } 
+        public string PasskeyCredentialsId { get; set; }
         public string EmailConfirmationToken { get; set; }
+        public string PasswordRecoveryCode { get; set; }
+        public string EmailVerificationCode { get; set; }
     }
 
     /// <summary>
