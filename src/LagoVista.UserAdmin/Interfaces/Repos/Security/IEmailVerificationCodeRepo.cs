@@ -8,5 +8,6 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
         Task StoreAsync(EmailVerificationCode verificationCode);
         Task<EmailVerificationCode> GetLatestAsync(string userId);
         Task UpdateAsync(EmailVerificationCode verificationCode);
+        Task ClearAsync(string userId);
     }
 }
