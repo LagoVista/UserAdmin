@@ -544,13 +544,75 @@ Category inventory
   -> Behaviors
   -> Scenarios
   -> Presentation/UI
-  -> Implementation/Code
+  -> Implementation
   -> Tests + runtime evidence
 ```
 
 A category-level green Tests phase means all relevant scenarios have sufficient proof. The detailed pass count belongs on the scenario card.
 
 `implementation/tests/*.json` binding maturity can remain `implemented` even when current execution evidence is passing. Binding maturity and evidence execution state are separate concepts. Do not automatically rename maturity to `verified` without an explicit model convention.
+
+## Cross-Repo AuthView Implementation and Conformance
+
+AuthViews are canonical presentation contracts owned by the auth model even when their executable surfaces live in other repositories. Do not treat an AuthView as implemented merely because a similarly named file or component exists.
+
+Each `platforms.web` and `platforms.mobile` entry may identify the exact implementation using:
+
+```text
+status
+repository
+path
+component
+implementation
+conformance
+```
+
+The repository and path are authoritative navigation coordinates for reconciliation. Follow them directly rather than searching broadly or inferring a component from notes. Web and mobile are reconciled independently.
+
+### Platform status semantics
+
+- `implemented` - the implementation exists and is believed to satisfy the canonical AuthView. Prefer `conformance.status: verified` before closing implementation progress.
+- `partial` - an implementation exists but one or more required canonical elements or semantics are missing.
+- `planned` - the canonical view is defined but the implementation does not yet exist.
+- `unsupported` - the platform intentionally does not support the view.
+- `not-applicable` - the view does not apply to that platform.
+
+### Conformance status semantics
+
+- `verified` - the declared source was inspected against the current AuthView.
+- `needs-review` - source exists but has not yet been reconciled against the current AuthView.
+- `mismatch` - source was inspected and does not conform; normally pair this with platform `partial`.
+- `not-applicable` - conformance does not apply because the platform is unsupported or not applicable.
+
+A conformance review should compare every semantic contract the AuthView actually defines:
+
+```text
+view identity / screen id
+required controls
+required actions
+semantic finders / test ids
+navigation or action behavior when the canonical model defines it
+```
+
+Do not claim a dimension in `checkedAgainst` unless the canonical model provides enough information to verify it. For example, if an AuthView names an action but does not define that action's destination, verify the action/finder but do not claim navigation conformance from inference.
+
+The practical invariant is:
+
+```text
+implemented != source file exists
+
+implemented + verified =
+    source location exists
+    + canonical view identity agrees
+    + required controls agree
+    + required actions agree
+    + required semantic finders agree
+    + any explicitly modeled navigation/action semantics agree
+```
+
+`auth.sign-in.unable` is the first worked example of this contract. Its Angular implementation is explicitly located in `softwarelogistics/nuviot-ui-shared`, its React Native implementation in `nuviot/vtm-client`, and both were reconciled against the canonical actions/finders. This review also demonstrated why deterministic source coordinates matter: the auth model had incorrectly recorded the mobile surface as planned even though a real implementation already existed.
+
+During Step 3 presentation review, define the canonical AuthView first. During implementation reconciliation, follow each platform's repository/path, inspect the real source, update platform status and conformance from observed truth, and only then roll scenario/behavior implementation progress upward.
 
 ## Git / Collaboration Discipline
 
@@ -612,6 +674,7 @@ A scenario is genuinely reconciled when all of the following are true:
 - manager/domain layer owns real rules
 - canonical auth event ownership is unambiguous and non-duplicated
 - implementation bindings resolve to real code
+- every required AuthView platform points to an exact repository/path and has been reconciled against the canonical controls/actions/finders before platform implementation is considered complete
 - integration test exercises the claimed real path
 - test asserts expected public result and meaningful side effects/events
 - `AptixEvidence` references the correct binding/flow/transition
