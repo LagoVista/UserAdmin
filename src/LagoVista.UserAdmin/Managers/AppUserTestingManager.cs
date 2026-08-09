@@ -423,6 +423,11 @@ namespace LagoVista.UserAdmin.Managers
                 await SetTestUserCredentials(testUser, userCredentials);
             }
 
+            if (preconditions.PasswordResetAuthority.Value == SetCondition.Set)
+            {
+                userCredentials.PasswordResetToken = await _userManager.GeneratePasswordResetTokenAsync(testUser);
+            }
+
             await ApplyPasswordRecoveryCodeSetupAsync(testUser, preconditions.PasswordRecoveryCode, userCredentials);
             await ApplyEmailVerificationCodeSetupAsync(testUser, preconditions.EmailVerificationCode, userCredentials);
 
