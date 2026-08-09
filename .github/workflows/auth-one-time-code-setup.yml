@@ -1,0 +1,34 @@
+name: Auth one-time-code setup
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - .github/workflows/auth-one-time-code-setup.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Apply patch
+        run: python3 .github/scripts/patch-auth-one-time-code-setup.py
+      - name: Build
+        run: dotnet build UserAdmin.sln --configuration Debug
+      - name: Commit validated setup support
+        run: |
+          git config user.name "Auth Model Patch Bot"
+          git config user.email "auth-model-patch-bot@users.noreply.github.com"
+          git rm .github/workflows/auth-one-time-code-setup.yml
+          git rm .github/scripts/patch-auth-one-time-code-setup.py
+          git add -A
+          git commit -m "materialize one time codes for auth tests"
+          git push origin HEAD:master
