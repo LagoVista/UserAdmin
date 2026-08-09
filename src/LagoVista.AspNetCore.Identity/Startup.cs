@@ -3,6 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.AspNetCore.Identity.Interfaces;
+using LagoVista.AspNetCore.Identity.Authorization;
 using LagoVista.AspNetCore.Identity.Managers;
 using LagoVista.AspNetCore.Identity.Models;
 using LagoVista.AspNetCore.Identity.Services;
@@ -16,6 +17,7 @@ using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Interfaces.REpos.Account;
 using LagoVista.UserAdmin.Managers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
@@ -35,6 +37,7 @@ namespace LagoVista.AspNetCore.Identity
             services.AddScoped<ISmsSender, TwilioSMSSender>();
 
             services.AddScoped<IClaimsFactory, ClaimsFactory>();
+            services.Configure<MvcOptions>(options => options.Filters.Add<AnonymousVisitorAuthorizationFilter>());
 
             services.AddScoped<ITokenHelper, TokenHelper>();
             services.AddScoped<IOrgHelper, OrgHelper>();
