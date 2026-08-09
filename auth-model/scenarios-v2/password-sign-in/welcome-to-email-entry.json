@@ -6,7 +6,7 @@
   "summary": "The user chooses email authentication from the Welcome view and the client opens the email-entry view.",
   "version": 1,
   "maturity": "proposed",
-  "categoryKey": "password-authentication",
+  "categoryKey": "password-sign-in",
   "startViewKey": "auth.welcome",
   "action": {
     "id": "continue-email",
