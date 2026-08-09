@@ -502,27 +502,20 @@ namespace LagoVista.UserAdmin.Managers
 
         /* Test Scenario Management */
 
-        public async Task<InvokeResult> AddTestScenarioAsync(AppUserTestScenario testScenario, EntityHeader org, EntityHeader user)
+        public Task<InvokeResult> AddTestScenarioAsync(AppUserTestScenario testScenario, EntityHeader org, EntityHeader user)
         {
-            ValidationCheck(testScenario, Actions.Create);
-            await AuthorizeAsync(user, org, typeof(AppUserTestScenario), Actions.Create);
-            await _testScenarioRepo.AddDSLAsync(testScenario);
-            return InvokeResult.Success;
+            return Task.FromResult(InvokeResult.FromError("ReadOnlyScenarioDefinition", "Authentication scenarios are authored in canonical auth-model JSON and are read-only at runtime."));
         }
 
-        public async Task<InvokeResult> UpdateTestScenarioAsync(AppUserTestScenario testScenario, EntityHeader org, EntityHeader user)
+        public Task<InvokeResult> UpdateTestScenarioAsync(AppUserTestScenario testScenario, EntityHeader org, EntityHeader user)
         {
-            ValidationCheck(testScenario, Actions.Update);
-            await AuthorizeAsync(user, org, typeof(AppUserTestScenario), Actions.Update);
-            await _testScenarioRepo.UpdateTestScenarioAsync(testScenario);
-            return InvokeResult.Success;
+            return Task.FromResult(InvokeResult.FromError("ReadOnlyScenarioDefinition", "Authentication scenarios are authored in canonical auth-model JSON and are read-only at runtime."));
         }
 
         public async Task<AppUserTestScenario> GetTestScenarioAsync(string id, EntityHeader org, EntityHeader user)
         {
-            var scenario = await _testScenarioRepo.GetByIdAsync(id);
-            await AuthorizeAsync(scenario, AuthorizeResult.AuthorizeActions.Read, user, org);
-            return scenario;
+            await AuthorizeOrgAccessAsync(user, org, typeof(AppUserTestScenario), Actions.Read);
+            return await _testScenarioRepo.GetByIdAsync(id);
         }
 
         public async Task<ListResponse<AppUserTestScenarioSummary>> GetTestScenariosForOrganizationAsync(ListRequest request, EntityHeader org, EntityHeader user)
@@ -531,12 +524,9 @@ namespace LagoVista.UserAdmin.Managers
             return await _testScenarioRepo.ListAsync(org.Id, request);
         }
 
-        public async Task<InvokeResult> DeleteTestScenarioAsync(string id, EntityHeader org, EntityHeader user)
+        public Task<InvokeResult> DeleteTestScenarioAsync(string id, EntityHeader org, EntityHeader user)
         {
-            var scenario = await _testScenarioRepo.GetByIdAsync(id);
-            await AuthorizeAsync(scenario, AuthorizeResult.AuthorizeActions.Delete, user, org);
-            await _testScenarioRepo.DeleteByIdAsync(id);
-            return InvokeResult.Success;
+            return Task.FromResult(InvokeResult.FromError("ReadOnlyScenarioDefinition", "Authentication scenarios are authored in canonical auth-model JSON and are read-only at runtime."));
         }
 
         /* Run Persistence */
@@ -565,18 +555,6 @@ namespace LagoVista.UserAdmin.Managers
             var scenario = await _testScenarioRepo.GetByIdAsync(run.TestScenario.Id);
             await VerifyCompletedRunAsync(run, scenario, org, user);
             await _testRunStore.CreateRunAsync(run);
-
-            var platformStatus = GetPlatformStatus(scenario, run.Platform);
-
-            platformStatus.Status = run.Status;
-            platformStatus.LastRun = run.Finished;
-            platformStatus.LastRunId = run.Id;
-            platformStatus.FinalViewId = run.FinalViewId;
-            platformStatus.ErrorMessage = run.ErrorMessage;
-
-            scenario.LastUpdatedDate = now;
-            scenario.LastUpdatedBy = user;
-            await _testScenarioRepo.UpdateTestScenarioAsync(scenario);
             return InvokeResult.Success;
         }
 
