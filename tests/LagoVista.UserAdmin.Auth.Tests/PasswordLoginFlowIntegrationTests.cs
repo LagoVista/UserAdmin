@@ -69,9 +69,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var user = new AppUser("user@example.com", "test") { UserName = "user@example.com" };
 
             harness.UserManager.Setup(manager => manager.FindByNameAsync("user@example.com")).ReturnsAsync(user);
-            harness.AspNetSignInManager
-                .Setup(manager => manager.PasswordSignInAsync("user@example.com", "wrong-password", true, false))
-                .ReturnsAsync(SignInResult.Failed);
+            harness.AspNetSignInManager.Setup(manager => manager.PasswordSignInAsync("user@example.com", "wrong-password", true, false)).ReturnsAsync(SignInResult.Failed);
 
             var result = await harness.FlowService.LoginWithPasswordAsync(CreateRequest("user@example.com", "wrong-password"));
 
@@ -95,9 +93,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var user = new AppUser("user@example.com", "test") { UserName = "user@example.com" };
 
             harness.UserManager.Setup(manager => manager.FindByNameAsync("user@example.com")).ReturnsAsync(user);
-            harness.AspNetSignInManager
-                .Setup(manager => manager.PasswordSignInAsync("user@example.com", "password", true, false))
-                .ReturnsAsync(SignInResult.LockedOut);
+            harness.AspNetSignInManager.Setup(manager => manager.PasswordSignInAsync("user@example.com", "password", true, false)).ReturnsAsync(SignInResult.LockedOut);
 
             var result = await harness.FlowService.LoginWithPasswordAsync(CreateRequest("user@example.com"));
 
@@ -120,9 +116,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var user = new AppUser("user@example.com", "test") { UserName = "user@example.com" };
 
             harness.UserManager.Setup(manager => manager.FindByNameAsync("user@example.com")).ReturnsAsync(user);
-            harness.AspNetSignInManager
-                .Setup(manager => manager.PasswordSignInAsync("user@example.com", "correct-password", true, false))
-                .ReturnsAsync(SignInResult.Success);
+            harness.AspNetSignInManager.Setup(manager => manager.PasswordSignInAsync("user@example.com", "correct-password", true, false)).ReturnsAsync(SignInResult.Success);
             harness.AppUserRepo.Setup(repo => repo.UpdateAsync(user)).Returns(Task.CompletedTask);
             harness.RedirectServices.Setup(service => service.IdentityDefaultRedirectAsync(user, null)).ReturnsAsync(InvokeResult<string>.Create("/home"));
 
@@ -203,7 +197,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 new Mock<ILookupNormalizer>().Object,
                 new IdentityErrorDescriber(),
                 new Mock<IServiceProvider>().Object,
-                new Mock<ILogger<UserManager<AppUser>>().Object);
+                new Mock<ILogger<UserManager<AppUser>>>().Object);
 
             return new Mock<AspNetSignInManager>(
                 aspNetUserManager.Object,
