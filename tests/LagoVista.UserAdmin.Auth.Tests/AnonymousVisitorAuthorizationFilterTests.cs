@@ -48,6 +48,30 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(context.Result, Is.Null);
         }
 
+        [Test]
+        public async Task OnAuthorizationAsync_Should_Forbid_Provisional_From_Unmarked_Endpoint()
+        {
+            var claims = new[] { new Claim(ClaimsFactory.IdentityStage, ClaimsFactory.ProvisionalIdentityStage) };
+            var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, "test"));
+            var context = CreateContext(principal, new List<IFilterMetadata>());
+
+            await new AnonymousVisitorAuthorizationFilter().OnAuthorizationAsync(context);
+
+            Assert.That(context.Result, Is.TypeOf<ForbidResult>());
+        }
+
+        [Test]
+        public async Task OnAuthorizationAsync_Should_Allow_Provisional_On_Marked_Endpoint()
+        {
+            var claims = new[] { new Claim(ClaimsFactory.IdentityStage, ClaimsFactory.ProvisionalIdentityStage) };
+            var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, "test"));
+            var context = CreateContext(principal, new List<IFilterMetadata> { new AllowProvisionalIdentityAttribute() });
+
+            await new AnonymousVisitorAuthorizationFilter().OnAuthorizationAsync(context);
+
+            Assert.That(context.Result, Is.Null);
+        }
+
         private static ClaimsPrincipal CreateVisitorPrincipal()
         {
             var claims = new[] { new Claim(ClaimsFactory.IdentityStage, ClaimsFactory.VisitorIdentityStage) };

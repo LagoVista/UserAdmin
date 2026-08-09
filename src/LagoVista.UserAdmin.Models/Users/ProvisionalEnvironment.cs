@@ -17,6 +17,7 @@ namespace LagoVista.UserAdmin.Models.Users
         public string Id { get; set; } = Guid.NewGuid().ToId();
         public ProvisionalEnvironmentState State { get; set; } = ProvisionalEnvironmentState.Provisioning;
         public string CreationRequestId { get; set; }
+        public string OriginActorId { get; set; }
 
         public string AppUserId { get; set; }
         public string OrganizationId { get; set; }

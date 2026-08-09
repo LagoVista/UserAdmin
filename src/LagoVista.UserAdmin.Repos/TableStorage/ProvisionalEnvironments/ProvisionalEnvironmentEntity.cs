@@ -9,6 +9,7 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments
         public string Id { get; set; }
         public string State { get; set; }
         public string CreationRequestId { get; set; }
+        public string OriginActorId { get; set; }
 
         public string AppUserId { get; set; }
         public string OrganizationId { get; set; }

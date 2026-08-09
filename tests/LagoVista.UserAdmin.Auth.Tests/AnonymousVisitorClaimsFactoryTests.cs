@@ -75,6 +75,19 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(claims.Any(claim => claim.Type == ClaimsFactory.InstanceId), Is.False);
         }
 
+        [Test]
+        public void GetClaimsForProvisionalIdentity_Should_Emit_Restricted_Provisional_Claims()
+        {
+            var user = CreateSharedUser();
+            var claims = new ClaimsFactory(new Mock<IAdminLogger>().Object).GetClaimsForProvisionalIdentity(user, "journey-actor-id");
+
+            Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.CurrentUserId).Value, Is.EqualTo(user.Id));
+            Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.CurrentOrgId).Value, Is.EqualTo(user.CurrentOrganization.Id));
+            Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.ActorId).Value, Is.EqualTo("journey-actor-id"));
+            Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.IdentityStage).Value, Is.EqualTo(ClaimsFactory.ProvisionalIdentityStage));
+            Assert.That(claims.Any(claim => claim.Type == ClaimTypes.Role), Is.False);
+        }
+
         private static AppUser CreateSharedUser()
         {
             return new AppUser("anonymous@system.local", "anonymous-system-user", "system")

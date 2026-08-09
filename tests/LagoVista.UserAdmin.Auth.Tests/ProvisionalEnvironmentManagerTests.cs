@@ -17,9 +17,10 @@ namespace LagoVista.UserAdmin.Auth.Tests
     public class ProvisionalEnvironmentManagerTests
     {
         [Test]
-        public async Task RestoreAsync_Should_RecordActivity_And_SlideExpiration()
+        public async Task RestoreAsync_Should_RotateCredential_RecordActivity_And_SlideExpiration()
         {
             var environment = CreateActiveEnvironment();
+            environment.RecoveryTokenHash = Hash("recovery-token");
             var originalExpiration = environment.ExpiresUtc;
             var harness = CreateHarness();
 
@@ -30,24 +31,21 @@ namespace LagoVista.UserAdmin.Auth.Tests
 
             Assert.That(result.Successful, Is.True);
             Assert.That(result.Result.ProvisionalEnvironmentId, Is.EqualTo(environment.Id));
+            Assert.That(result.Result.RecoveryToken, Is.Not.EqualTo("recovery-token"));
+            Assert.That(environment.RecoveryTokenHash, Is.EqualTo(Hash(result.Result.RecoveryToken)));
             Assert.That(environment.LastActivityUtc, Is.GreaterThan(environment.CreatedUtc));
             Assert.That(environment.ExpiresUtc, Is.GreaterThan(originalExpiration));
             harness.EnvironmentRepo.Verify(repo => repo.UpdateAsync(environment), Times.Once);
         }
 
         [Test]
-        public async Task RestoreAsync_Should_Reject_MismatchedContinuityCredentials()
+        public async Task RestoreAsync_Should_Reject_InstallationId_Without_RecoveryToken()
         {
-            var recoveryEnvironment = CreateActiveEnvironment();
-            var installationEnvironment = CreateActiveEnvironment();
             var harness = CreateHarness();
-
-            harness.EnvironmentRepo.Setup(repo => repo.FindByRecoveryTokenHashAsync(It.IsAny<string>())).ReturnsAsync(recoveryEnvironment);
-            harness.EnvironmentRepo.Setup(repo => repo.FindByInstallationIdHashAsync(It.IsAny<string>())).ReturnsAsync(installationEnvironment);
-
-            var result = await harness.Manager.RestoreAsync(new RestoreProvisionalEnvironmentRequest { RecoveryToken = "recovery-token", InstallationId = "installation-id" });
+            var result = await harness.Manager.RestoreAsync(new RestoreProvisionalEnvironmentRequest { InstallationId = "installation-id" });
 
             Assert.That(result.Successful, Is.False);
+            harness.EnvironmentRepo.Verify(repo => repo.FindByInstallationIdHashAsync(It.IsAny<string>()), Times.Never);
             harness.EnvironmentRepo.Verify(repo => repo.UpdateAsync(It.IsAny<ProvisionalEnvironment>()), Times.Never);
         }
 
@@ -190,6 +188,17 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var archiveAccountingService = new Mock<IProvisionalEnvironmentArchiveAccountingService>(MockBehavior.Strict);
             var manager = new ProvisionalEnvironmentManager(environmentRepo.Object, userManager.Object, organizationManager.Object, subscriptionManager.Object, subscriptionLevelManager.Object, billingArchiveRepo.Object, archiveStore.Object, archiveAccountingService.Object);
             return new Harness(manager, environmentRepo, userManager, organizationManager, billingArchiveRepo, archiveStore, archiveAccountingService);
+        }
+
+        private static string Hash(string value)
+        {
+            using (var sha256 = System.Security.Cryptography.SHA256.Create())
+            {
+                var bytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(value));
+                var builder = new System.Text.StringBuilder(bytes.Length * 2);
+                foreach (var item in bytes) builder.Append(item.ToString("x2"));
+                return builder.ToString();
+            }
         }
 
         private sealed class Harness

@@ -40,6 +40,7 @@ namespace LagoVista.AspNetCore.Identity
             services.Configure<MvcOptions>(options => options.Filters.Add<AnonymousVisitorAuthorizationFilter>());
             services.AddSingleton<IAnonymousVisitorBootstrapOptions, AnonymousVisitorBootstrapOptions>();
             services.AddScoped<IAnonymousVisitorBootstrapManager, AnonymousVisitorBootstrapManager>();
+            services.AddScoped<IContinuitySessionManager, ContinuitySessionManager>();
 
             services.AddScoped<ITokenHelper, TokenHelper>();
             services.AddScoped<IOrgHelper, OrgHelper>();

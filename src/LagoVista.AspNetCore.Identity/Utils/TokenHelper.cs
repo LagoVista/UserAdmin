@@ -136,8 +136,17 @@ namespace LagoVista.AspNetCore.Identity.Utils
 
         public string GetAnonymousVisitorJWToken(AppUser user, string actorId, DateTime accessExpires)
         {
+            return GetRestrictedJWToken(_claimsFactory.GetClaimsForAnonymousVisitor(user, actorId), accessExpires);
+        }
+
+        public string GetProvisionalJWToken(AppUser user, string actorId, DateTime accessExpires)
+        {
+            return GetRestrictedJWToken(_claimsFactory.GetClaimsForProvisionalIdentity(user, actorId), accessExpires);
+        }
+
+        private string GetRestrictedJWToken(List<Claim> claims, DateTime accessExpires)
+        {
             var now = DateTime.UtcNow;
-            var claims = _claimsFactory.GetClaimsForAnonymousVisitor(user, actorId);
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, NonceGenerator()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64));
 

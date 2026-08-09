@@ -50,6 +50,7 @@ namespace LagoVista.UserAdmin.Managers
             var createResult = await _provisionalEnvironmentManager.CreateAsync(new CreateProvisionalEnvironmentRequest
             {
                 CreationRequestId = CreateCreationRequestId(visitor.ActorId),
+                OriginActorId = visitor.ActorId,
                 InstallationId = request.InstallationId,
                 BootstrapContext = visitor.BootstrapContext,
                 TermsAndConditionsAccepted = true,

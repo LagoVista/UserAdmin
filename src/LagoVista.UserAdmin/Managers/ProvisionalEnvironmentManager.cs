@@ -61,6 +61,7 @@ namespace LagoVista.UserAdmin.Managers
                     Id = Guid.NewGuid().ToId(),
                     State = ProvisionalEnvironmentState.Provisioning,
                     CreationRequestId = request.CreationRequestId,
+                    OriginActorId = request.OriginActorId,
                     AppUserId = Guid.NewGuid().ToId(),
                     OrganizationId = Guid.NewGuid().ToId(),
                     SubscriptionId = Guid.NewGuid().ToId(),
@@ -104,6 +105,7 @@ namespace LagoVista.UserAdmin.Managers
 
             if (wasResumed)
             {
+                if (String.IsNullOrWhiteSpace(environment.OriginActorId)) environment.OriginActorId = request.OriginActorId;
                 environment.RecoveryTokenHash = Hash(recoveryToken);
                 if (!String.IsNullOrWhiteSpace(request.InstallationId)) environment.InstallationIdHash = Hash(request.InstallationId);
                 await _environmentRepo.UpdateAsync(environment);
@@ -129,6 +131,7 @@ namespace LagoVista.UserAdmin.Managers
 
             return InvokeResult<CreateProvisionalEnvironmentResponse>.Create(new CreateProvisionalEnvironmentResponse
             {
+                ActorId = environment.OriginActorId ?? environment.AppUserId,
                 ProvisionalEnvironmentId = environment.Id,
                 AppUserId = environment.AppUserId,
                 OrganizationId = environment.OrganizationId,
@@ -142,24 +145,30 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<InvokeResult<RestoreProvisionalEnvironmentResponse>> RestoreAsync(RestoreProvisionalEnvironmentRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
+            if (String.IsNullOrWhiteSpace(request.RecoveryToken)) return InvokeResult<RestoreProvisionalEnvironmentResponse>.FromError("A recovery token is required.");
 
-            var hasRecoveryToken = !String.IsNullOrWhiteSpace(request.RecoveryToken);
-            var hasInstallationId = !String.IsNullOrWhiteSpace(request.InstallationId);
-            if (!hasRecoveryToken && !hasInstallationId) return InvokeResult<RestoreProvisionalEnvironmentResponse>.FromError("A recovery token or installation ID is required.");
-
-            var recoveryEnvironment = hasRecoveryToken ? await _environmentRepo.FindByRecoveryTokenHashAsync(Hash(request.RecoveryToken)) : null;
-            var installationEnvironment = hasInstallationId ? await _environmentRepo.FindByInstallationIdHashAsync(Hash(request.InstallationId)) : null;
-
-            if (hasRecoveryToken && hasInstallationId && (recoveryEnvironment == null || installationEnvironment == null || !String.Equals(recoveryEnvironment.Id, installationEnvironment.Id, StringComparison.Ordinal)))
-                return InvokeResult<RestoreProvisionalEnvironmentResponse>.FromError("The supplied continuity credentials do not identify the same provisional environment.");
-
-            var environment = recoveryEnvironment ?? installationEnvironment;
+            var environment = await _environmentRepo.FindByRecoveryTokenHashAsync(Hash(request.RecoveryToken));
             if (environment == null) return InvokeResult<RestoreProvisionalEnvironmentResponse>.FromError("The provisional environment could not be restored.");
+            if (environment.State != ProvisionalEnvironmentState.Active) return InvokeResult<RestoreProvisionalEnvironmentResponse>.FromError($"Provisional environment is {environment.State.ToString().ToLowerInvariant()}.");
 
-            var activityResult = await RecordActivityAsync(environment);
-            if (!activityResult.Successful) return InvokeResult<RestoreProvisionalEnvironmentResponse>.FromInvokeResult(activityResult);
+            var now = DateTime.UtcNow;
+            if (environment.ExpiresUtc.ToUniversalTime() <= now)
+            {
+                environment.State = ProvisionalEnvironmentState.Expired;
+                environment.ExpiredUtc = now;
+                environment.PurgeAfterUtc = now.AddDays(ExpiredRetentionDays);
+                environment.StateChangedUtc = now;
+                await _environmentRepo.UpdateAsync(environment);
+                return InvokeResult<RestoreProvisionalEnvironmentResponse>.FromError("The provisional environment has expired.");
+            }
 
-            return InvokeResult<RestoreProvisionalEnvironmentResponse>.Create(ToRestoreResponse(environment));
+            var recoveryToken = CreateRecoveryToken();
+            environment.RecoveryTokenHash = Hash(recoveryToken);
+            environment.LastActivityUtc = now;
+            environment.ExpiresUtc = now.AddDays(ActiveLifetimeDays);
+            await _environmentRepo.UpdateAsync(environment);
+
+            return InvokeResult<RestoreProvisionalEnvironmentResponse>.Create(ToRestoreResponse(environment, recoveryToken));
         }
 
         public async Task<InvokeResult> RecordActivityAsync(string provisionalEnvironmentId)
@@ -374,15 +383,18 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        private static RestoreProvisionalEnvironmentResponse ToRestoreResponse(ProvisionalEnvironment environment)
+        private static RestoreProvisionalEnvironmentResponse ToRestoreResponse(ProvisionalEnvironment environment, string recoveryToken)
         {
             return new RestoreProvisionalEnvironmentResponse
             {
+                ActorId = environment.OriginActorId ?? environment.AppUserId,
                 ProvisionalEnvironmentId = environment.Id,
                 AppUserId = environment.AppUserId,
                 OrganizationId = environment.OrganizationId,
                 SubscriptionId = environment.SubscriptionId,
-                ExpiresUtc = environment.ExpiresUtc
+                RecoveryToken = recoveryToken,
+                ExpiresUtc = environment.ExpiresUtc,
+                BootstrapContext = environment.BootstrapContext
             };
         }
 

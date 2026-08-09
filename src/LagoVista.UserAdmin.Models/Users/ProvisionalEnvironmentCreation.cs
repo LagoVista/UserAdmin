@@ -5,6 +5,7 @@ namespace LagoVista.UserAdmin.Models.Users
     public class CreateProvisionalEnvironmentRequest
     {
         public string CreationRequestId { get; set; }
+        public string OriginActorId { get; set; }
         public string InstallationId { get; set; }
         public string BootstrapContext { get; set; }
 
@@ -26,6 +27,7 @@ namespace LagoVista.UserAdmin.Models.Users
 
     public class CreateProvisionalEnvironmentResponse
     {
+        public string ActorId { get; set; }
         public string ProvisionalEnvironmentId { get; set; }
         public string AppUserId { get; set; }
         public string OrganizationId { get; set; }
@@ -43,10 +45,13 @@ namespace LagoVista.UserAdmin.Models.Users
 
     public class RestoreProvisionalEnvironmentResponse
     {
+        public string ActorId { get; set; }
         public string ProvisionalEnvironmentId { get; set; }
         public string AppUserId { get; set; }
         public string OrganizationId { get; set; }
         public string SubscriptionId { get; set; }
+        public string RecoveryToken { get; set; }
         public DateTime ExpiresUtc { get; set; }
+        public string BootstrapContext { get; set; }
     }
 }

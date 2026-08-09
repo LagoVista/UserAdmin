@@ -47,6 +47,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string ActorId = "com.lagovista.iot.actorid";
         public const string IdentityStage = "com.lagovista.iot.identitystage";
         public const string VisitorIdentityStage = "visitor";
+        public const string ProvisionalIdentityStage = "provisional";
         public const string EmailVerified = "com.lagovista.iot.emailverified";
         public const string PhoneVerfiied = "com.lagovista.iot.phoneverified";
         public const string IsSystemAdmin = "com.lagovista.iot.issystemadmin";
@@ -175,6 +176,16 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public List<Claim> GetClaimsForAnonymousVisitor(AppUser user, string actorId)
         {
+            return GetClaimsForRestrictedIdentity(user, actorId, VisitorIdentityStage);
+        }
+
+        public List<Claim> GetClaimsForProvisionalIdentity(AppUser user, string actorId)
+        {
+            return GetClaimsForRestrictedIdentity(user, actorId, ProvisionalIdentityStage);
+        }
+
+        private static List<Claim> GetClaimsForRestrictedIdentity(AppUser user, string actorId, string identityStage)
+        {
             if (user == null) throw new ArgumentNullException(nameof(user));
             if (String.IsNullOrWhiteSpace(user.Id)) throw new ArgumentException("The shared anonymous AppUser must have an id.", nameof(user));
             if (String.IsNullOrWhiteSpace(actorId)) throw new ArgumentNullException(nameof(actorId));
@@ -197,7 +208,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 new Claim(CurrentOrgId, user.CurrentOrganization.Id),
                 new Claim(Anonymous, Boolean.TrueString),
                 new Claim(ActorId, actorId),
-                new Claim(IdentityStage, VisitorIdentityStage),
+                new Claim(IdentityStage, identityStage),
                 new Claim(IsPreviewUser, Boolean.FalseString),
                 new Claim(ExternalAccountVerified, Boolean.FalseString),
                 new Claim(EmailVerified, Boolean.FalseString),

@@ -14,11 +14,9 @@ namespace LagoVista.AspNetCore.Identity.Authorization
             if (context == null) throw new ArgumentNullException(nameof(context));
 
             var identityStage = context.HttpContext.User?.FindFirst(ClaimsFactory.IdentityStage)?.Value;
-            if (!String.Equals(identityStage, ClaimsFactory.VisitorIdentityStage, StringComparison.Ordinal))
-                return Task.CompletedTask;
-
-            var allowsAnonymousVisitor = context.Filters.OfType<AllowAnonymousVisitorAttribute>().Any();
-            if (!allowsAnonymousVisitor)
+            var visitorDenied = String.Equals(identityStage, ClaimsFactory.VisitorIdentityStage, StringComparison.Ordinal) && !context.Filters.OfType<AllowAnonymousVisitorAttribute>().Any();
+            var provisionalDenied = String.Equals(identityStage, ClaimsFactory.ProvisionalIdentityStage, StringComparison.Ordinal) && !context.Filters.OfType<AllowProvisionalIdentityAttribute>().Any();
+            if (visitorDenied || provisionalDenied)
                 context.Result = new ForbidResult();
 
             return Task.CompletedTask;

@@ -51,7 +51,6 @@ namespace LagoVista.UserAdmin.Auth.Tests
         public async Task BootstrapAsync_Should_Create_Visitor_And_Issue_Access_Token()
         {
             AnonymousVisitor createdVisitor = null;
-            _visitorRepo.Setup(repo => repo.FindByInstallationIdHashAsync(It.IsAny<string>())).ReturnsAsync((AnonymousVisitor)null);
             _visitorRepo.Setup(repo => repo.CreateAsync(It.IsAny<AnonymousVisitor>())).Callback<AnonymousVisitor>(visitor => createdVisitor = visitor).Returns(Task.CompletedTask);
 
             var result = await CreateManager().BootstrapAsync(new AnonymousVisitorBootstrapRequest { InstallationId = "installation-id", BootstrapContext = "initial context", AgentKey = "sales-agent" });
@@ -60,7 +59,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(createdVisitor, Is.Not.Null);
             Assert.That(createdVisitor.ActorId, Is.EqualTo(result.Result.ActorId));
             Assert.That(createdVisitor.ContinuityTokenHash, Is.EqualTo(Hash(result.Result.ContinuityToken)));
-            Assert.That(createdVisitor.InstallationIdHash, Is.EqualTo(Hash("installation-id")));
+            Assert.That(createdVisitor.InstallationIdHash, Is.Null);
             Assert.That(createdVisitor.BootstrapContext, Is.EqualTo("initial context"));
             Assert.That(createdVisitor.AgentKey, Is.EqualTo("sales-agent"));
             Assert.That(result.Result.IdentityStage, Is.EqualTo("visitor"));
@@ -93,14 +92,12 @@ namespace LagoVista.UserAdmin.Auth.Tests
         }
 
         [Test]
-        public async Task RestoreAsync_Should_Reject_Mismatched_Credentials()
+        public async Task RestoreAsync_Should_Reject_InstallationId_Without_ContinuityToken()
         {
-            _visitorRepo.Setup(repo => repo.FindByContinuityTokenHashAsync(Hash("continuity-token"))).ReturnsAsync(CreateActiveVisitor(Hash("continuity-token"), "actor-one"));
-            _visitorRepo.Setup(repo => repo.FindByInstallationIdHashAsync(Hash("installation-id"))).ReturnsAsync(CreateActiveVisitor("different-token-hash", "actor-two"));
-
-            var result = await CreateManager().RestoreAsync(new AnonymousVisitorRestoreRequest { ContinuityToken = "continuity-token", InstallationId = "installation-id" });
+            var result = await CreateManager().RestoreAsync(new AnonymousVisitorRestoreRequest { InstallationId = "installation-id" });
 
             Assert.That(result.Successful, Is.False);
+            _visitorRepo.Verify(repo => repo.FindByInstallationIdHashAsync(It.IsAny<string>()), Times.Never);
             _tokenHelper.Verify(helper => helper.GetAnonymousVisitorJWToken(It.IsAny<AppUser>(), It.IsAny<string>(), It.IsAny<DateTime>()), Times.Never);
         }
 
