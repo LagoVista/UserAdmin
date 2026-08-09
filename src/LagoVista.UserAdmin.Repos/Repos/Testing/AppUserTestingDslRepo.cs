@@ -70,7 +70,7 @@ namespace LagoVista.UserAdmin.Repos.Testing
             var result = new Dictionary<string, EntityHeader>(StringComparer.OrdinalIgnoreCase);
             foreach (var path in Directory.GetFiles(viewRoot, "*.json", SearchOption.TopDirectoryOnly))
             {
-                var json = JObject.Parse(File.ReadAllText(path));
+                var json = JObject.Parse(System.IO.File.ReadAllText(path));
                 var viewId = json.Value<string>("viewId");
                 if (String.IsNullOrWhiteSpace(viewId))
                     continue;
@@ -85,7 +85,7 @@ namespace LagoVista.UserAdmin.Repos.Testing
 
         private static AppUserTestScenario HydrateScenario(string path, IReadOnlyDictionary<string, EntityHeader> viewMap)
         {
-            var json = JObject.Parse(File.ReadAllText(path));
+            var json = JObject.Parse(System.IO.File.ReadAllText(path));
             var key = RequiredString(json, "key", path);
             var action = json["action"] as JObject;
             var actionId = action?.Value<string>("id");
