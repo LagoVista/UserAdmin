@@ -17,7 +17,7 @@ namespace LagoVista.UserAdmin.Managers
             var scenario = await _testScenarioRepo.GetByIdAsync(scenarioId);
             if (scenario == null) return InvokeResult<AuthRunnerPlan>.FromError("ScenarioNotFound", $"Scenario '{scenarioId}' not found.");
 
-            await AuthorizeAsync(scenario, AuthorizeResult.AuthorizeActions.Read, user, org);
+            await AuthorizeOrgAccessAsync(user, org, typeof(AppUserTestScenario), Actions.Read);
 
             if (scenario.AuthView == null || String.IsNullOrEmpty(scenario.AuthView.Id))
                 return InvokeResult<AuthRunnerPlan>.FromError("MissingAuthView", "Scenario.AuthView is required.");
@@ -25,21 +25,22 @@ namespace LagoVista.UserAdmin.Managers
             var authView = await _authViewRepo.GetByIdAsync(scenario.AuthView.Id);
             if (authView == null) return InvokeResult<AuthRunnerPlan>.FromError("AuthViewNotFound", $"AuthView '{scenario.AuthView.Id}' not found.");
 
-            var expectedView = await _authViewRepo.GetByIdAsync(scenario.ExpectedView.Id);
-            if (expectedView == null) return InvokeResult<AuthRunnerPlan>.FromError("AuthViewNotFound", $"Expected View '{scenario.ExpectedView.Id}' not found.");
+            AuthView expectedView = null;
+            var expectedViewId = scenario.ExpectedView?.Id;
+            if (!String.IsNullOrWhiteSpace(expectedViewId) && !expectedViewId.StartsWith("app.", StringComparison.OrdinalIgnoreCase))
+            {
+                expectedView = await _authViewRepo.GetByIdAsync(expectedViewId);
+                if (expectedView == null) return InvokeResult<AuthRunnerPlan>.FromError("AuthViewNotFound", $"Expected View '{expectedViewId}' not found.");
+            }
 
             await AuthorizeAsync(authView, AuthorizeResult.AuthorizeActions.Read, user, org);
 
-            // Resolve action (prefer exact id match; fall back to name/key/text comparisons).
             var selectedAction = ResolveAction(authView, scenario.Action);
-            if (selectedAction == null)
-                return InvokeResult<AuthRunnerPlan>.FromError("ActionNotFound",
-                    $"Could not resolve Scenario.Action '{scenario.Action?.Text ?? scenario.Action?.Id ?? "(null)"}' on view '{authView.ViewId}'.");
+            var actionFinder = selectedAction?.Finder ?? ToTestIdFinder(scenario.Action?.Text);
 
-            // Validate finders are present (minimum viable checks; more can be added later).
             if (String.IsNullOrEmpty(authView.Route)) return InvokeResult<AuthRunnerPlan>.FromError("MissingRoute", "AuthView.Route is required.");
             if (String.IsNullOrEmpty(authView.ViewId)) return InvokeResult<AuthRunnerPlan>.FromError("MissingViewId", "AuthView.ViewId is required.");
-            if (String.IsNullOrEmpty(selectedAction.Finder)) return InvokeResult<AuthRunnerPlan>.FromError("MissingActionFinder", "Selected action Finder is required.");
+            if (String.IsNullOrEmpty(actionFinder)) return InvokeResult<AuthRunnerPlan>.FromError("MissingActionFinder", $"Scenario.Action '{scenario.Action?.Text ?? scenario.Action?.Id ?? "(null)"}' does not provide a usable finder.");
 
             foreach (var input in scenario.Inputs ?? new List<AppUserTestSettingsValue>())
             {
@@ -58,17 +59,17 @@ namespace LagoVista.UserAdmin.Managers
                     Name = i.Name,
                     Finder = i.Finder,
                     Value = i.Value,
-                    Kind = authView.Fields?.FirstOrDefault(f => String.Equals(f.Finder, i.Finder, StringComparison.OrdinalIgnoreCase)).FieldType ?? "unknown"   
+                    Kind = authView.Fields?.FirstOrDefault(f => String.Equals(f.Finder, i.Finder, StringComparison.OrdinalIgnoreCase))?.FieldType ?? "unknown"
                 }).ToList(),
                 Action = new AuthRunnerAction()
                 {
-                    Name = selectedAction.Name,
-                    Finder = selectedAction.Finder
+                    Name = selectedAction?.Name ?? scenario.Action?.Id,
+                    Finder = actionFinder
                 },
                 Observations = new AuthRunnerObservations()
                 {
-                    ExpectedEndViewId = expectedView.ViewId,  // optional hint (or Id if you store it that way)
-                    ExpectedEndRoute = expectedView.Route,
+                    ExpectedEndViewId = expectedView?.ViewId ?? expectedViewId,
+                    ExpectedEndRoute = expectedView?.Route,
                     BusyStateFinder = "[data-testid=\"state:busy\"]"
                 },
                 Options = new AuthRunnerOptions()
@@ -91,23 +92,28 @@ namespace LagoVista.UserAdmin.Managers
         {
             if (scenarioAction == null || view?.Actions == null) return null;
 
-            // 1) exact id match (best)
             var byId = view.Actions.FirstOrDefault(a => String.Equals(a.Id, scenarioAction.Id, StringComparison.OrdinalIgnoreCase));
             if (byId != null) return byId;
 
-            // 2) match on Name vs EntityHeader.Text/Key/Id
             var token = (scenarioAction.Text ?? scenarioAction.Id ?? String.Empty).Trim();
             if (String.IsNullOrEmpty(token)) return null;
 
             var byName = view.Actions.FirstOrDefault(a => String.Equals(a.Name, token, StringComparison.OrdinalIgnoreCase));
             if (byName != null) return byName;
 
-            // 3) allow "action:next" style values (strip prefix)
             var normalized = token.StartsWith("action:", StringComparison.OrdinalIgnoreCase) ? token.Substring(7) : token;
             var byNormalizedName = view.Actions.FirstOrDefault(a => String.Equals(a.Name, normalized, StringComparison.OrdinalIgnoreCase));
             if (byNormalizedName != null) return byNormalizedName;
 
             return null;
+        }
+
+        private static string ToTestIdFinder(string finder)
+        {
+            if (String.IsNullOrWhiteSpace(finder) || finder.StartsWith("[", StringComparison.Ordinal))
+                return finder;
+
+            return $"[data-testid=\"{finder}\"]";
         }
 
         private static string NormalizeRoute(string route)
