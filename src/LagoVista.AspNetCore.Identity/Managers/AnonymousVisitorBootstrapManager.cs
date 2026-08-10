@@ -2,7 +2,6 @@ using LagoVista.AspNetCore.Identity.Interfaces;
 using LagoVista.Core;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin;
-using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Users;
 using System;
@@ -17,20 +16,16 @@ namespace LagoVista.AspNetCore.Identity.Managers
         private const int ContinuityTokenBytes = 32;
 
         private readonly IAnonymousVisitorRepo _visitorRepo;
-        private readonly IAppUserLoaderRepo _appUserRepo;
-        private readonly IOrganizationLoaderRepo _organizationRepo;
         private readonly IAnonymousVisitorBootstrapOptions _options;
         private readonly ITokenAuthOptions _tokenOptions;
-        private readonly ITokenHelper _tokenHelper;
+        private readonly IAnonymousVisitorTokenService _tokenService;
 
-        public AnonymousVisitorBootstrapManager(IAnonymousVisitorRepo visitorRepo, IAppUserLoaderRepo appUserRepo, IOrganizationLoaderRepo organizationRepo, IAnonymousVisitorBootstrapOptions options, ITokenAuthOptions tokenOptions, ITokenHelper tokenHelper)
+        public AnonymousVisitorBootstrapManager(IAnonymousVisitorRepo visitorRepo, IAnonymousVisitorBootstrapOptions options, ITokenAuthOptions tokenOptions, IAnonymousVisitorTokenService tokenService)
         {
             _visitorRepo = visitorRepo ?? throw new ArgumentNullException(nameof(visitorRepo));
-            _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
-            _organizationRepo = organizationRepo ?? throw new ArgumentNullException(nameof(organizationRepo));
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _tokenOptions = tokenOptions ?? throw new ArgumentNullException(nameof(tokenOptions));
-            _tokenHelper = tokenHelper ?? throw new ArgumentNullException(nameof(tokenHelper));
+            _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
         }
 
         public async Task<InvokeResult<AnonymousVisitorBootstrapResponse>> BootstrapAsync(AnonymousVisitorBootstrapRequest request)
@@ -67,7 +62,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             await _visitorRepo.CreateAsync(visitor);
 
-            return await CreateResponseAsync(visitor, continuityToken, false);
+            return CreateResponse(visitor, continuityToken, false);
         }
 
         public async Task<InvokeResult<AnonymousVisitorBootstrapResponse>> RestoreAsync(AnonymousVisitorRestoreRequest request)
@@ -101,26 +96,19 @@ namespace LagoVista.AspNetCore.Identity.Managers
             visitor.LastActivityUtc = now;
             visitor.ExpiresUtc = now.Add(_options.ActiveLifetime);
             await _visitorRepo.UpdateAsync(visitor);
-            return await CreateResponseAsync(visitor, continuityToken, wasRestored);
+            return CreateResponse(visitor, continuityToken, wasRestored);
         }
 
-        private async Task<InvokeResult<AnonymousVisitorBootstrapResponse>> CreateResponseAsync(AnonymousVisitor visitor, string continuityToken, bool wasRestored)
+        private InvokeResult<AnonymousVisitorBootstrapResponse> CreateResponse(AnonymousVisitor visitor, string continuityToken, bool wasRestored)
         {
-            var appUser = await _appUserRepo.FindByIdAsync(_options.AppUserId);
-            if (appUser == null) return InvokeResult<AnonymousVisitorBootstrapResponse>.FromError("The shared anonymous AppUser was not found.");
-
-            var organization = await _organizationRepo.GetOrganizationAsync(_options.OrganizationId);
-            if (organization == null) return InvokeResult<AnonymousVisitorBootstrapResponse>.FromError("The shared anonymous organization was not found.");
-
-            appUser.CurrentOrganization = organization.CreateSummary();
             var accessTokenExpiresUtc = DateTime.UtcNow.Add(_tokenOptions.AccessExpiration);
             if (accessTokenExpiresUtc > visitor.ExpiresUtc) accessTokenExpiresUtc = visitor.ExpiresUtc;
-            var accessToken = _tokenHelper.GetAnonymousVisitorJWToken(appUser, visitor.ActorId, accessTokenExpiresUtc);
+            var accessToken = _tokenService.CreateToken(visitor.ActorId, accessTokenExpiresUtc);
 
             return InvokeResult<AnonymousVisitorBootstrapResponse>.Create(new AnonymousVisitorBootstrapResponse
             {
                 ActorId = visitor.ActorId,
-                IdentityStage = "visitor",
+                IdentityStage = ClaimsFactory.VisitorIdentityStage,
                 AccessToken = accessToken,
                 AccessTokenExpiresUtc = accessTokenExpiresUtc,
                 ContinuityToken = continuityToken,
@@ -142,8 +130,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         private InvokeResult ValidateConfiguration()
         {
-            if (String.IsNullOrWhiteSpace(_options.AppUserId)) return InvokeResult.FromError("AnonymousVisitor:AppUserId is not configured.");
-            if (String.IsNullOrWhiteSpace(_options.OrganizationId)) return InvokeResult.FromError("AnonymousVisitor:OrganizationId is not configured.");
             if (_options.ActiveLifetime <= TimeSpan.Zero) return InvokeResult.FromError("AnonymousVisitor:ActiveLifetimeHours must be greater than zero.");
             if (_tokenOptions.AccessExpiration <= TimeSpan.Zero) return InvokeResult.FromError("TokenAuth:AccessTokenExpirationMinutes must be greater than zero.");
             return InvokeResult.Success;

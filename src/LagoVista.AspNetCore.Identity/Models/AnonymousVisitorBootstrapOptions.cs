@@ -13,16 +13,11 @@ namespace LagoVista.AspNetCore.Identity.Models
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
 
             var section = configuration.GetSection("AnonymousVisitor");
-            AppUserId = section["AppUserId"];
-            OrganizationId = section["OrganizationId"];
-
             ActiveLifetime = Int32.TryParse(section["ActiveLifetimeHours"], out var lifetimeHours) && lifetimeHours > 0
                 ? TimeSpan.FromHours(lifetimeHours)
                 : TimeSpan.FromHours(DefaultLifetimeHours);
         }
 
-        public string AppUserId { get; }
-        public string OrganizationId { get; }
         public TimeSpan ActiveLifetime { get; }
     }
 }

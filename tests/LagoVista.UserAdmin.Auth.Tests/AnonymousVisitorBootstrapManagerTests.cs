@@ -1,9 +1,7 @@
 using LagoVista.AspNetCore.Identity.Interfaces;
 using LagoVista.AspNetCore.Identity.Managers;
 using LagoVista.UserAdmin;
-using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
-using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Users;
 using Moq;
 using NUnit.Framework;
@@ -17,34 +15,22 @@ namespace LagoVista.UserAdmin.Auth.Tests
     [TestFixture]
     public class AnonymousVisitorBootstrapManagerTests
     {
-        private const string SharedAppUserId = "shared-app-user";
-        private const string SharedOrganizationId = "shared-organization";
-
         private Mock<IAnonymousVisitorRepo> _visitorRepo;
-        private Mock<IAppUserLoaderRepo> _appUserRepo;
-        private Mock<IOrganizationLoaderRepo> _organizationRepo;
         private Mock<IAnonymousVisitorBootstrapOptions> _options;
         private Mock<ITokenAuthOptions> _tokenOptions;
-        private Mock<ITokenHelper> _tokenHelper;
+        private Mock<IAnonymousVisitorTokenService> _tokenService;
 
         [SetUp]
         public void Setup()
         {
             _visitorRepo = new Mock<IAnonymousVisitorRepo>();
-            _appUserRepo = new Mock<IAppUserLoaderRepo>();
-            _organizationRepo = new Mock<IOrganizationLoaderRepo>();
             _options = new Mock<IAnonymousVisitorBootstrapOptions>();
             _tokenOptions = new Mock<ITokenAuthOptions>();
-            _tokenHelper = new Mock<ITokenHelper>();
+            _tokenService = new Mock<IAnonymousVisitorTokenService>();
 
-            _options.SetupGet(item => item.AppUserId).Returns(SharedAppUserId);
-            _options.SetupGet(item => item.OrganizationId).Returns(SharedOrganizationId);
             _options.SetupGet(item => item.ActiveLifetime).Returns(TimeSpan.FromHours(24));
             _tokenOptions.SetupGet(item => item.AccessExpiration).Returns(TimeSpan.FromMinutes(15));
-
-            _appUserRepo.Setup(repo => repo.FindByIdAsync(SharedAppUserId)).ReturnsAsync(new AppUser("anonymous@system.local", "anonymous") { Id = SharedAppUserId });
-            _organizationRepo.Setup(repo => repo.GetOrganizationAsync(SharedOrganizationId)).ReturnsAsync(new Organization { Id = SharedOrganizationId, Name = "Anonymous Visitors", Namespace = "anonymousvisitors" });
-            _tokenHelper.Setup(helper => helper.GetAnonymousVisitorJWToken(It.IsAny<AppUser>(), It.IsAny<string>(), It.IsAny<DateTime>())).Returns("visitor-access-token");
+            _tokenService.Setup(service => service.CreateToken(It.IsAny<string>(), It.IsAny<DateTime>())).Returns("visitor-access-token");
         }
 
         [Test]
@@ -62,12 +48,12 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(createdVisitor.InstallationIdHash, Is.Null);
             Assert.That(createdVisitor.BootstrapContext, Is.EqualTo("initial context"));
             Assert.That(createdVisitor.AgentKey, Is.EqualTo("sales-agent"));
-            Assert.That(result.Result.IdentityStage, Is.EqualTo("visitor"));
+            Assert.That(result.Result.IdentityStage, Is.EqualTo(ClaimsFactory.VisitorIdentityStage));
             Assert.That(result.Result.AccessToken, Is.EqualTo("visitor-access-token"));
             Assert.That(result.Result.WasRestored, Is.False);
             Assert.That(result.Result.VisitorExpiresUtc, Is.GreaterThan(DateTime.UtcNow.AddHours(23)));
 
-            _tokenHelper.Verify(helper => helper.GetAnonymousVisitorJWToken(It.Is<AppUser>(user => user.Id == SharedAppUserId && user.CurrentOrganization.Id == SharedOrganizationId), createdVisitor.ActorId, It.IsAny<DateTime>()), Times.Once);
+            _tokenService.Verify(service => service.CreateToken(createdVisitor.ActorId, It.IsAny<DateTime>()), Times.Once);
         }
 
         [Test]
@@ -98,7 +84,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
 
             Assert.That(result.Successful, Is.False);
             _visitorRepo.Verify(repo => repo.FindByInstallationIdHashAsync(It.IsAny<string>()), Times.Never);
-            _tokenHelper.Verify(helper => helper.GetAnonymousVisitorJWToken(It.IsAny<AppUser>(), It.IsAny<string>(), It.IsAny<DateTime>()), Times.Never);
+            _tokenService.Verify(service => service.CreateToken(It.IsAny<string>(), It.IsAny<DateTime>()), Times.Never);
         }
 
         [Test]
@@ -114,12 +100,12 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(result.Successful, Is.False);
             Assert.That(visitor.State, Is.EqualTo(AnonymousVisitorState.Expired));
             Assert.That(visitor.ExpiredUtc.HasValue, Is.True);
-            _tokenHelper.Verify(helper => helper.GetAnonymousVisitorJWToken(It.IsAny<AppUser>(), It.IsAny<string>(), It.IsAny<DateTime>()), Times.Never);
+            _tokenService.Verify(service => service.CreateToken(It.IsAny<string>(), It.IsAny<DateTime>()), Times.Never);
         }
 
         private AnonymousVisitorBootstrapManager CreateManager()
         {
-            return new AnonymousVisitorBootstrapManager(_visitorRepo.Object, _appUserRepo.Object, _organizationRepo.Object, _options.Object, _tokenOptions.Object, _tokenHelper.Object);
+            return new AnonymousVisitorBootstrapManager(_visitorRepo.Object, _options.Object, _tokenOptions.Object, _tokenService.Object);
         }
 
         private static AnonymousVisitor CreateActiveVisitor(string continuityTokenHash, string actorId = "visitor-actor")
