@@ -33,6 +33,8 @@ namespace LagoVista.UserAdmin.Repos.Testing
             _ = userAdminSettings ?? throw new ArgumentNullException(nameof(userAdminSettings));
             _adminLogger = adminLogger ?? throw new ArgumentNullException(nameof(adminLogger));
             _authModelRoot = Path.Combine(AppContext.BaseDirectory, "auth-model");
+
+            _adminLogger.Trace($"[AppUserTestingDslRepo__Ctor] BaseDirectory='{AppContext.BaseDirectory}', AuthModelRoot='{_authModelRoot}', GitArchiveUrl='{GitArchiveUrl}'.");
         }
 
         public Task AddDSLAsync(AppUserTestScenario dsl) => ReadOnlyAsync();
@@ -46,8 +48,11 @@ namespace LagoVista.UserAdmin.Repos.Testing
             if (String.IsNullOrWhiteSpace(id))
                 return null;
 
+            _adminLogger.Trace($"[AppUserTestingDslRepo__GetById] Loading canonical scenario '{id}'.");
             var scenarios = await LoadScenariosAsync(false);
-            return scenarios.FirstOrDefault(item => String.Equals(item.Id, id, StringComparison.OrdinalIgnoreCase) || String.Equals(item.Key, id, StringComparison.OrdinalIgnoreCase));
+            var scenario = scenarios.FirstOrDefault(item => String.Equals(item.Id, id, StringComparison.OrdinalIgnoreCase) || String.Equals(item.Key, id, StringComparison.OrdinalIgnoreCase));
+            _adminLogger.Trace($"[AppUserTestingDslRepo__GetById] Scenario '{id}' {(scenario == null ? "was not found" : $"resolved to key '{scenario.Key}' and runtime id '{scenario.Id}'")}.");
+            return scenario;
         }
 
         public async Task<ListResponse<AppUserTestScenarioSummary>> ListAsync(string orgId, ListRequest request)
@@ -55,34 +60,55 @@ namespace LagoVista.UserAdmin.Repos.Testing
             _ = orgId;
             request ??= ListRequest.CreateForAll();
 
+            _adminLogger.Trace($"[AppUserTestingDslRepo__List] Refresh requested. PageIndex={request.PageIndex}, PageSize={request.PageSize}.");
+
             // Refresh is the explicit signal to pull the latest canonical definitions from Git.
             var scenarios = await LoadScenariosAsync(true);
             var summaries = scenarios.Select(item => item.CreateSummary()).OrderBy(item => item.Name).ToList();
             var page = summaries.Skip(request.PageSize * (request.PageIndex - 1)).Take(request.PageSize);
+            _adminLogger.Trace($"[AppUserTestingDslRepo__List] Returning {summaries.Count} hydrated canonical scenario summaries before paging.");
             return ListResponse<AppUserTestScenarioSummary>.Create(request, page);
         }
 
         private async Task<List<AppUserTestScenario>> LoadScenariosAsync(bool forceGitRefresh)
         {
+            _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] Begin. ForceGitRefresh={forceGitRefresh}, CacheAvailable={_gitScenarioCache != null}.");
+
             if (!forceGitRefresh && _gitScenarioCache != null)
+            {
+                _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] Returning cached canonical scenarios. Count={_gitScenarioCache.Count}.");
                 return _gitScenarioCache;
+            }
 
             await _gitLoadLock.WaitAsync();
             try
             {
                 if (!forceGitRefresh && _gitScenarioCache != null)
+                {
+                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] Cache populated while waiting for lock. Count={_gitScenarioCache.Count}.");
                     return _gitScenarioCache;
+                }
 
                 try
                 {
+                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] Attempting Git load from '{GitArchiveUrl}'.");
                     _gitScenarioCache = await LoadScenariosFromGitAsync();
-                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] Loaded {_gitScenarioCache.Count} canonical auth scenarios from Git master.");
+                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] SUCCESS. Loaded {_gitScenarioCache.Count} canonical auth scenarios from Git master.");
                     return _gitScenarioCache;
                 }
                 catch (Exception ex)
                 {
-                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] Could not load canonical auth scenarios from Git; falling back to published JSON. {ex.Message}");
-                    return LoadScenariosFromPublishedJson();
+                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] GIT LOAD FAILED. ExceptionType='{ex.GetType().FullName}', Message='{ex.Message}', Stack='{ex.StackTrace}'. Falling back to published JSON.");
+
+                    try
+                    {
+                        return LoadScenariosFromPublishedJson();
+                    }
+                    catch (Exception fallbackEx)
+                    {
+                        _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] PUBLISHED JSON FALLBACK FAILED. ExceptionType='{fallbackEx.GetType().FullName}', Message='{fallbackEx.Message}', Stack='{fallbackEx.StackTrace}', BaseDirectory='{AppContext.BaseDirectory}', AuthModelRoot='{_authModelRoot}'.");
+                        throw;
+                    }
                 }
             }
             finally
@@ -93,33 +119,109 @@ namespace LagoVista.UserAdmin.Repos.Testing
 
         private async Task<List<AppUserTestScenario>> LoadScenariosFromGitAsync()
         {
-            var archiveBytes = await _httpClient.GetByteArrayAsync(GitArchiveUrl);
+            _adminLogger.Trace($"[AppUserTestingDslRepo__LoadFromGit] Sending GET '{GitArchiveUrl}'. TimeoutSeconds={_httpClient.Timeout.TotalSeconds}.");
+
+            using var response = await _httpClient.GetAsync(GitArchiveUrl);
+            _adminLogger.Trace($"[AppUserTestingDslRepo__LoadFromGit] Git response StatusCode={(int)response.StatusCode} ({response.StatusCode}), ContentType='{response.Content.Headers.ContentType}', ContentLength={response.Content.Headers.ContentLength?.ToString() ?? "unknown"}.");
+            response.EnsureSuccessStatusCode();
+
+            var archiveBytes = await response.Content.ReadAsByteArrayAsync();
+            _adminLogger.Trace($"[AppUserTestingDslRepo__LoadFromGit] Downloaded Git archive. Bytes={archiveBytes.Length}.");
+
             using var stream = new MemoryStream(archiveBytes, false);
             using var archive = new ZipArchive(stream, ZipArchiveMode.Read, false);
 
-            var viewMap = LoadAuthViewMap(archive.Entries.Where(IsAuthViewEntry).Select(entry => ReadJson(entry)));
-            return archive.Entries.Where(IsScenarioEntry).Select(entry => HydrateScenario(ReadJson(entry), entry.FullName, viewMap)).OrderBy(item => item.Name).ToList();
+            var authViewEntries = archive.Entries.Where(IsAuthViewEntry).ToList();
+            var scenarioEntries = archive.Entries.Where(IsScenarioEntry).ToList();
+            _adminLogger.Trace($"[AppUserTestingDslRepo__LoadFromGit] ZIP opened. TotalEntries={archive.Entries.Count}, AuthViewEntries={authViewEntries.Count}, ScenarioEntries={scenarioEntries.Count}.");
+
+            var authViewJson = new List<JObject>();
+            foreach (var entry in authViewEntries)
+            {
+                try
+                {
+                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadFromGit] Reading AuthView '{entry.FullName}'.");
+                    authViewJson.Add(ReadJson(entry));
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidDataException($"Failed reading canonical AuthView JSON '{entry.FullName}'.", ex);
+                }
+            }
+
+            var viewMap = LoadAuthViewMap(authViewJson);
+            _adminLogger.Trace($"[AppUserTestingDslRepo__LoadFromGit] Built AuthView map. Count={viewMap.Count}.");
+
+            var scenarios = new List<AppUserTestScenario>();
+            foreach (var entry in scenarioEntries)
+            {
+                try
+                {
+                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadFromGit] Reading scenario '{entry.FullName}'.");
+                    var json = ReadJson(entry);
+                    var key = json.Value<string>("key") ?? "<missing>";
+                    var runtimeEntityId = json.Value<string>("runtimeEntityId") ?? "<missing>";
+                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadFromGit] Hydrating scenario Source='{entry.FullName}', Key='{key}', RuntimeEntityId='{runtimeEntityId}'.");
+                    scenarios.Add(HydrateScenario(json, entry.FullName, viewMap));
+                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadFromGit] Hydrated scenario Key='{key}', RuntimeEntityId='{runtimeEntityId}'.");
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidDataException($"Failed hydrating canonical auth scenario '{entry.FullName}'.", ex);
+                }
+            }
+
+            var ordered = scenarios.OrderBy(item => item.Name).ToList();
+            _adminLogger.Trace($"[AppUserTestingDslRepo__LoadFromGit] Completed Git hydration successfully. ScenarioCount={ordered.Count}.");
+            return ordered;
         }
 
         private List<AppUserTestScenario> LoadScenariosFromPublishedJson()
         {
             var scenarioRoot = Path.Combine(_authModelRoot, "scenarios-v2");
+            _adminLogger.Trace($"[AppUserTestingDslRepo__LoadPublished] Attempting published fallback. ScenarioRoot='{scenarioRoot}', Exists={Directory.Exists(scenarioRoot)}, AuthModelRoot='{_authModelRoot}', BaseDirectory='{AppContext.BaseDirectory}'.");
+
             if (!Directory.Exists(scenarioRoot))
+            {
+                var authModelRootExists = Directory.Exists(_authModelRoot);
+                var visibleEntries = authModelRootExists ? String.Join(", ", Directory.GetFileSystemEntries(_authModelRoot).Select(Path.GetFileName).Take(25)) : "<auth-model-root-missing>";
+                _adminLogger.Trace($"[AppUserTestingDslRepo__LoadPublished] Published scenario directory missing. AuthModelRootExists={authModelRootExists}, VisibleEntries='{visibleEntries}'.");
                 throw new DirectoryNotFoundException($"Published auth scenario directory was not found: '{scenarioRoot}'.");
+            }
 
             var viewMap = LoadPublishedAuthViewMap();
-            var scenarios = Directory.GetFiles(scenarioRoot, "*.json", SearchOption.AllDirectories).Select(path => HydrateScenario(JObject.Parse(System.IO.File.ReadAllText(path)), path, viewMap)).OrderBy(item => item.Name).ToList();
-            _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] Loaded {scenarios.Count} canonical auth scenarios from published JSON fallback.");
+            var scenarioFiles = Directory.GetFiles(scenarioRoot, "*.json", SearchOption.AllDirectories);
+            _adminLogger.Trace($"[AppUserTestingDslRepo__LoadPublished] Found {scenarioFiles.Length} published scenario JSON files.");
+
+            var scenarios = new List<AppUserTestScenario>();
+            foreach (var path in scenarioFiles)
+            {
+                try
+                {
+                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadPublished] Hydrating published scenario '{path}'.");
+                    scenarios.Add(HydrateScenario(JObject.Parse(System.IO.File.ReadAllText(path)), path, viewMap));
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidDataException($"Failed hydrating published auth scenario '{path}'.", ex);
+                }
+            }
+
+            scenarios = scenarios.OrderBy(item => item.Name).ToList();
+            _adminLogger.Trace($"[AppUserTestingDslRepo__LoadPublished] Loaded {scenarios.Count} canonical auth scenarios from published JSON fallback.");
             return scenarios;
         }
 
         private Dictionary<string, EntityHeader> LoadPublishedAuthViewMap()
         {
             var viewRoot = Path.Combine(_authModelRoot, "auth-views");
+            _adminLogger.Trace($"[AppUserTestingDslRepo__LoadPublishedAuthViews] ViewRoot='{viewRoot}', Exists={Directory.Exists(viewRoot)}.");
             if (!Directory.Exists(viewRoot))
                 throw new DirectoryNotFoundException($"Published auth view directory was not found: '{viewRoot}'.");
 
-            return LoadAuthViewMap(Directory.GetFiles(viewRoot, "*.json", SearchOption.TopDirectoryOnly).Select(path => JObject.Parse(System.IO.File.ReadAllText(path))));
+            var files = Directory.GetFiles(viewRoot, "*.json", SearchOption.TopDirectoryOnly);
+            _adminLogger.Trace($"[AppUserTestingDslRepo__LoadPublishedAuthViews] Found {files.Length} published AuthView JSON files.");
+            return LoadAuthViewMap(files.Select(path => JObject.Parse(System.IO.File.ReadAllText(path))));
         }
 
         private static Dictionary<string, EntityHeader> LoadAuthViewMap(IEnumerable<JObject> authViews)
