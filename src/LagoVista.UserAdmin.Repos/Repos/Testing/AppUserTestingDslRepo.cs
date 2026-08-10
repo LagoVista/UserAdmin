@@ -10,6 +10,8 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -98,7 +100,7 @@ namespace LagoVista.UserAdmin.Repos.Testing
                 }
                 catch (Exception ex)
                 {
-                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] GIT LOAD FAILED. ExceptionType='{ex.GetType().FullName}', Message='{ex.Message}', Stack='{ex.StackTrace}'. Falling back to published JSON.");
+                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] GIT LOAD FAILED. Exception='{ex}'. Falling back to published JSON.");
 
                     try
                     {
@@ -106,7 +108,7 @@ namespace LagoVista.UserAdmin.Repos.Testing
                     }
                     catch (Exception fallbackEx)
                     {
-                        _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] PUBLISHED JSON FALLBACK FAILED. ExceptionType='{fallbackEx.GetType().FullName}', Message='{fallbackEx.Message}', Stack='{fallbackEx.StackTrace}', BaseDirectory='{AppContext.BaseDirectory}', AuthModelRoot='{_authModelRoot}'.");
+                        _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] PUBLISHED JSON FALLBACK FAILED. Exception='{fallbackEx}', BaseDirectory='{AppContext.BaseDirectory}', AuthModelRoot='{_authModelRoot}'.");
                         throw;
                     }
                 }
@@ -235,7 +237,7 @@ namespace LagoVista.UserAdmin.Repos.Testing
 
                 var runtimeEntityId = json["source"]?.Value<string>("runtimeEntityId");
                 var name = json.Value<string>("name") ?? viewId;
-                result[viewId] = EntityHeader.Create(String.IsNullOrWhiteSpace(runtimeEntityId) ? viewId : runtimeEntityId, name);
+                result[viewId] = EntityHeader.Create(String.IsNullOrWhiteSpace(runtimeEntityId) ? ToRuntimeEntityId(viewId) : runtimeEntityId, name);
             }
 
             return result;
@@ -275,7 +277,7 @@ namespace LagoVista.UserAdmin.Repos.Testing
                 Description = json.Value<string>("summary"),
                 AuthView = ResolveView(json.Value<string>("startViewKey"), viewMap),
                 ExpectedView = ResolveView(json.Value<string>("expectedViewKey"), viewMap),
-                Action = EntityHeader.Create(actionId, actionFinder ?? actionId),
+                Action = String.IsNullOrWhiteSpace(actionId) ? null : EntityHeader.Create(ToRuntimeEntityId($"{key}:action:{actionId}"), actionFinder ?? actionId),
                 Inputs = HydrateInputs(json["inputs"] as JArray),
                 PreConditions = HydrateState(json["preconditions"]?["state"] as JObject),
                 PostConditions = HydrateState(json["postconditions"]?["state"] as JObject),
@@ -347,7 +349,19 @@ namespace LagoVista.UserAdmin.Repos.Testing
             if (viewMap.TryGetValue(viewKey, out var view))
                 return EntityHeader.Create(view.Id, view.Text);
 
-            return EntityHeader.Create(viewKey, viewKey);
+            return EntityHeader.Create(ToRuntimeEntityId(viewKey), viewKey);
+        }
+
+        private static string ToRuntimeEntityId(string canonicalValue)
+        {
+            if (String.IsNullOrWhiteSpace(canonicalValue))
+                throw new ArgumentNullException(nameof(canonicalValue));
+
+            using var sha256 = SHA256.Create();
+            var hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(canonicalValue));
+            var builder = new StringBuilder(32);
+            for (var index = 0; index < 16; index++) builder.Append(hash[index].ToString("X2"));
+            return builder.ToString();
         }
 
         private static string ToTestIdFinder(string finder)
