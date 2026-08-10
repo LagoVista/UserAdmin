@@ -30,7 +30,12 @@ namespace LagoVista.UserAdmin.Repos.Testing
 
         public Task<ListResponse<AppUserTestRunSummary>> GetRunsFoOrgAsync(string orgId, ListRequest request)
         {
-            return QuerySummaryAsync< AppUserTestRunSummary, AppUserTestRun>(qry => qry.OwnerOrganization.Id == orgId, qry=>qry.LastUpdatedDate, request);
+            return QuerySummaryAsync<AppUserTestRunSummary, AppUserTestRun>(qry => qry.OwnerOrganization.Id == orgId, qry => qry.LastUpdatedDate, request);
+        }
+
+        public Task<ListResponse<AppUserTestRunSummary>> GetRunsAsync(ListRequest request)
+        {
+            return QuerySummaryAsync<AppUserTestRunSummary, AppUserTestRun>(qry => true, qry => qry.LastUpdatedDate, request);
         }
 
         public Task UpdateRunAsync(AppUserTestRun run)
