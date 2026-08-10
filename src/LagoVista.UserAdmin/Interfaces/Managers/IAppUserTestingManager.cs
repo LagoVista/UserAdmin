@@ -55,6 +55,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult> UpdateTestScenarioAsync(AppUserTestScenario testSceenario, EntityHeader org, EntityHeader user);
         Task<AppUserTestScenario> GetTestScenarioAsync(string id, EntityHeader org, EntityHeader user);
         Task<ListResponse<AppUserTestScenarioSummary>> GetTestScenariosForOrganizationAsync(ListRequest request, EntityHeader org, EntityHeader user);
+        Task<ListResponse<AppUserTestScenarioSummary>> GetPublicTestScenarioDashboardAsync(ListRequest request);
         Task<InvokeResult> DeleteTestScenarioAsync(string id, EntityHeader org, EntityHeader user);
 
         Task<InvokeResult> AddAuthViewAsync(AuthView testSceenario, EntityHeader org, EntityHeader user);
