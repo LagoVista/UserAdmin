@@ -198,7 +198,9 @@ namespace LagoVista.UserAdmin.Managers
             if (String.IsNullOrEmpty(organizationId)) throw new ArgumentNullException(nameof(organizationId));
 
             var user = EntityHeader.Create(appUser.Id, appUser.UserName);
-            var organization = await _organizationRepo.GetOrganizationAsync(organizationId);
+            var organization = await _organizationRepo.QueryOrganizationExistAsync(organizationId)
+                ? await _organizationRepo.GetOrganizationAsync(organizationId)
+                : null;
             if (organization == null)
             {
                 organization = new Organization

@@ -9,7 +9,7 @@ namespace LagoVista.UserAdmin.Managers
         public AnonymousVisitorPromotionOptions(IConfiguration configuration)
         {
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
-            TermsAndConditionsVersion = configuration.GetSection("AnonymousVisitor")["TermsAndConditionsVersion"];
+            TermsAndConditionsVersion = configuration.GetSection("AnonymousVisitor")["TermsAndConditionsVersion"] ?? "1.0";
         }
 
         public string TermsAndConditionsVersion { get; }
