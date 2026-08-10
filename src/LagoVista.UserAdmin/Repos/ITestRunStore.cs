@@ -19,6 +19,8 @@ namespace LagoVista.UserAdmin.Models.Testing
 
         Task<ListResponse<AppUserTestRunSummary>> GetRunsFoOrgAsync(string orgId, ListRequest request);
 
+        Task<ListResponse<AppUserTestRunSummary>> GetRunsAsync(ListRequest request);
+
         Task UpdateRunAsync(AppUserTestRun run);
     }
 }
