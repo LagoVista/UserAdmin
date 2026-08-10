@@ -2,6 +2,7 @@
   "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
   "schemaVersion": "2.0",
   "key": "auth.scenario.password-sign-in.welcome-to-email-entry",
+  "runtimeEntityId": "43B71E3D369AFF766676EA82E3FFA173",
   "name": "Welcome to Email Entry",
   "summary": "The user chooses email authentication from the Welcome view and the client opens the email-entry view.",
   "version": 1,

@@ -160,13 +160,14 @@ namespace LagoVista.UserAdmin.Repos.Testing
         private static AppUserTestScenario HydrateScenario(JObject json, string source, IReadOnlyDictionary<string, EntityHeader> viewMap)
         {
             var key = RequiredString(json, "key", source);
+            var runtimeEntityId = RequiredString(json, "runtimeEntityId", source);
             var action = json["action"] as JObject;
             var actionId = action?.Value<string>("id");
             var actionFinder = action?.Value<string>("finder");
 
             var scenario = new AppUserTestScenario
             {
-                Id = key,
+                Id = runtimeEntityId,
                 Key = key,
                 Name = RequiredString(json, "name", source),
                 Description = json.Value<string>("summary"),

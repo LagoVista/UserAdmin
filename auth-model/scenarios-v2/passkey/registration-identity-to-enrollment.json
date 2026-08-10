@@ -2,6 +2,7 @@
   "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
   "schemaVersion": "2.0",
   "key": "auth.scenario.passkey.registration-identity-to-enrollment",
+  "runtimeEntityId": "8964C0E4C1B2A7A840EBC9BE9B02D819",
   "name": "Submit Passkey Registration Details",
   "summary": "The user submits first name, last name, email, and optional company details; the server establishes a pending passkey identity and returns creation options for the platform authenticator ceremony.",
   "version": 1,

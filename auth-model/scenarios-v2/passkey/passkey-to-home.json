@@ -2,6 +2,7 @@
   "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
   "schemaVersion": "2.0",
   "key": "auth.scenario.passkey.passkey-to-home",
+  "runtimeEntityId": "1E4062BEFB7CE59560CC3F5F5EAE8AAD",
   "name": "Passkey Authentication to Home",
   "summary": "The user completes a valid passkey assertion, the server resolves the existing durable user, and the client opens the application home view.",
   "version": 1,

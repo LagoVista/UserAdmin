@@ -2,6 +2,7 @@
   "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
   "schemaVersion": "2.0",
   "key": "auth.scenario.passkey.welcome-to-passkey",
+  "runtimeEntityId": "51D3C9206FDC7D91B4027AC01B91D56C",
   "name": "Welcome to Passkey",
   "summary": "The user chooses passkey authentication from Welcome and the client opens the passkey continuation view.",
   "version": 1,

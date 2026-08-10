@@ -2,6 +2,7 @@
   "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
   "schemaVersion": "2.0",
   "key": "auth.scenario.passkey.passkey-registration-to-home",
+  "runtimeEntityId": "9F44A0C140CC7E9DC94AEC7F256668B9",
   "name": "Passkey Registration to Home",
   "summary": "The user confirms enrollment, the server creates exactly one durable user, binds the proved passkey credential, establishes the home workspace, and opens the application home view.",
   "version": 1,

@@ -2,6 +2,7 @@
   "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
   "schemaVersion": "2.0",
   "key": "auth.scenario.password-recovery.code-sent-code-rejected",
+  "runtimeEntityId": "F77E39B5553A5499A48B4B15C0D85D8F",
   "name": "Recovery Code Rejected",
   "summary": "The anonymous user submits recovery proof that cannot be accepted, no reset authority is established, and the client remains in the recovery-code state with a neutral invalid-or-expired result.",
   "version": 1,

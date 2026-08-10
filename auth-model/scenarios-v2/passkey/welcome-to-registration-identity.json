@@ -2,6 +2,7 @@
   "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
   "schemaVersion": "2.0",
   "key": "auth.scenario.passkey.welcome-to-registration-identity",
+  "runtimeEntityId": "980E4EDB0542F79CCC246C246F5B7E20",
   "name": "Choose Passkey To Confirm",
   "summary": "A new user chooses passkey registration from Welcome and reaches the identity-details view.",
   "version": 1,

@@ -2,6 +2,7 @@
   "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
   "schemaVersion": "2.0",
   "key": "auth.scenario.passkey.passkey-begin-registration",
+  "runtimeEntityId": "4AC4904775E30A20D5B9E2930E97C7C1",
   "name": "Begin Passkey Registration",
   "summary": "A user without a durable account begins a passkey registration ceremony and the client opens the passkey enrollment view.",
   "version": 1,

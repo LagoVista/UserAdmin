@@ -2,6 +2,7 @@
   "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
   "schemaVersion": "2.0",
   "key": "auth.scenario.passkey.enrollment-to-confirmation",
+  "runtimeEntityId": "3B22EFA0A1D7ECFC6DAAC3DB7C9FDD37",
   "name": "Complete Passkey Account Registration",
   "summary": "The user completes the native passkey ceremony; the server validates the credential and performs the complete new-account bootstrap before showing enrollment confirmation.",
   "version": 1,

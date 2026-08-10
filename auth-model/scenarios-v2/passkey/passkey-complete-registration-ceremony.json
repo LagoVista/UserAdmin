@@ -2,6 +2,7 @@
   "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
   "schemaVersion": "2.0",
   "key": "auth.scenario.passkey.passkey-complete-registration-ceremony",
+  "runtimeEntityId": "DA91173657FDE1EC693BEB499DB08F65",
   "name": "Complete Passkey Registration Ceremony",
   "summary": "The user completes the platform authenticator ceremony and the server records the proved pending passkey credential.",
   "version": 1,

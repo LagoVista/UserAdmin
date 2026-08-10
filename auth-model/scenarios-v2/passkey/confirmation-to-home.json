@@ -2,6 +2,7 @@
   "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
   "schemaVersion": "2.0",
   "key": "auth.scenario.passkey.confirmation-to-home",
+  "runtimeEntityId": "660F546362D858AAE41DB65794A681FC",
   "name": "Enter Application After Passkey Registration",
   "summary": "The newly registered user continues from enrollment confirmation into the application home view using the authenticated session already issued by the registration ceremony.",
   "version": 1,

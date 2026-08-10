@@ -2,6 +2,7 @@
   "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
   "schemaVersion": "2.0",
   "key": "auth.scenario.password-recovery.reset-request-to-reset-sent",
+  "runtimeEntityId": "28BF2DF2D49FB2756E02567A5835F6F0",
   "name": "Recovery Request to Code Sent",
   "summary": "The anonymous user submits an email address, the server processes a non-enumerating password-recovery request, and the client shows the same recovery-code entry state whether or not the account exists.",
   "version": 2,

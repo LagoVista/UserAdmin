@@ -2,6 +2,7 @@
   "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
   "schemaVersion": "2.0",
   "key": "auth.scenario.passkey-registration.new-scenario",
+  "runtimeEntityId": "C5DEA427CA51563993309C388F12127E",
   "version": 1,
   "maturity": "proposed",
   "categoryKey": "passkey-registration",

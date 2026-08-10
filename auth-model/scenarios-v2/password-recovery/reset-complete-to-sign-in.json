@@ -2,6 +2,7 @@
   "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
   "schemaVersion": "2.0",
   "key": "auth.scenario.password-recovery.reset-complete-to-sign-in",
+  "runtimeEntityId": "B28A50398370E605F77DFBD43D8CA5D8",
   "name": "Reset Password to Sign In",
   "summary": "Deprecated. This scenario modeled the legacy reset-link completion path and is superseded by the six-digit-code Password Recovery scenarios.",
   "version": 2,
