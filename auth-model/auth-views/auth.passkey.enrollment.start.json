@@ -13,7 +13,19 @@
     { "id": "cancel", "name": "Cancel", "actionType": "button", "finder": "action:cancel" }
   ],
   "platforms": {
-    "web": { "status": "implemented" },
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "user/passkey-enroll-start/passkey-enroll-start.component.html",
+      "component": "PasskeyEnrollStartComponent",
+      "implementation": "PasskeyEnrollStartComponent with passkey-enroll-start.component.html",
+      "conformance": {
+        "status": "mismatch",
+        "checkedUtc": "2026-08-11T20:51:00Z",
+        "checkedAgainst": ["view-identity", "actions", "finders", "behavior"],
+        "notes": "The Web surface matches the canonical screen identity and start-enrollment/cancel finders, but its supporting component executes authenticated existing-user passkey registration. The passkey-registration category requires pending anonymous account registration whose completion creates and binds the durable user and home organization."
+      }
+    },
     "mobile": { "status": "planned" }
   },
   "source": {
