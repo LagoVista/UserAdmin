@@ -16,8 +16,32 @@
     { "id": "start-over", "name": "Start Over", "actionType": "link", "finder": "action:start-over" }
   ],
   "platforms": {
-    "web": { "status": "implemented", "implementation": "ContinuePasskeyComponent" },
-    "mobile": { "status": "implemented", "implementation": "app/auth/continue/passkey.tsx" }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "user/continue-passkey/continue-passkey.component.html",
+      "component": "ContinuePasskeyComponent",
+      "implementation": "ContinuePasskeyComponent with continue-passkey.component.html",
+      "conformance": {
+        "status": "verified",
+        "checkedUtc": "2026-08-11T20:27:00Z",
+        "checkedAgainst": ["view-identity", "controls", "actions", "finders", "navigation"],
+        "notes": "Verified auth.continue.passkey identity, status:passkey-error, use-passkey, back, and start-over selectors against the Angular template and navigation handlers."
+      }
+    },
+    "mobile": {
+      "status": "implemented",
+      "repository": "nuviot/vtm-client",
+      "path": "src/features/authentication/nuviot-account/screens/continue-passkey-screen.tsx",
+      "component": "ContinuePasskeyScreen",
+      "implementation": "app/auth/continue/passkey.tsx -> ContinuePasskeyScreen",
+      "conformance": {
+        "status": "verified",
+        "checkedUtc": "2026-08-11T20:27:00Z",
+        "checkedAgainst": ["view-identity", "controls", "actions", "finders", "navigation"],
+        "notes": "Verified auth.continue.passkey identity and canonical use-passkey, back, start-over, and passkey-error selectors after aligning the mobile status test ID."
+      }
+    }
   },
   "source": {
     "runtimeEntityId": "05B1F7DE697D427A8FCCC0CC718E0164",
