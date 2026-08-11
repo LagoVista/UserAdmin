@@ -123,7 +123,7 @@
     {
       "fromDimensionKey": "auth.dimension.entry-intent-status",
       "toDimensionKey": "auth.dimension.presentation-context",
-      "relationship": "informs",
+      "relationship": "selects",
       "summary": "A validated entry intent may inform presentation routing only after explicit consumption; it does not alter identity authorization."
     },
     {
