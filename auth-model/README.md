@@ -77,11 +77,12 @@ Use these documents in this order for current work:
 3. `AUTH-CATEGORY-BEHAVIOR-SCENARIO-FIELD-REVIEW.md` - field-by-field semantics and tightening candidates for the existing category, Behavior V2, and Scenario V2 contracts
 4. `AUTH-VIEW-ROUTE-FIELD-REVIEW.md` - field-by-field semantics and Keep / Clarify / Validate / Consolidate / Migrate classifications for the existing AuthView/AuthRoute contracts
 5. `AUTH-IMPLEMENTATION-PROOF-FIELD-REVIEW.md` - field semantics and cross-layer conformance rules for Action, Transition, Flow, Handler, Endpoint, and Test Binding contracts
-6. `AUTH-MODEL-MIGRATION-PLAN.md` - current-state inventory, normalization decisions, Password Sign-In specimen, and incremental migration phases
-7. `CATEGORY-TO-GREEN.md` - current operating process
-8. `CONVENTIONS.md` - durable model rules
-9. `AUTH-VIEW-ROUTE-CONTRACT.md` - detailed canonical presentation/routing contract
-10. `AUTH-BEHAVIOR-RECONCILIATION-RUNBOOK.md` - detailed implementation and evidence lessons, including Password Management
-11. dated evidence handoffs, `AUTH-IMPLEMENTATION-PLAN.md`, and `SECTION-*.md` - historical context
+6. `AUTH-STATE-INVARIANT-FIELD-REVIEW.md` - field semantics and tightening candidates for State Dimensions, the composite state catalog, Invariants, and their Action/Transition relationships
+7. `AUTH-MODEL-MIGRATION-PLAN.md` - current-state inventory, normalization decisions, Password Sign-In specimen, and incremental migration phases
+8. `CATEGORY-TO-GREEN.md` - current operating process
+9. `CONVENTIONS.md` - durable model rules
+10. `AUTH-VIEW-ROUTE-CONTRACT.md` - detailed canonical presentation/routing contract
+11. `AUTH-BEHAVIOR-RECONCILIATION-RUNBOOK.md` - detailed implementation and evidence lessons, including Password Management
+12. dated evidence handoffs, `AUTH-IMPLEMENTATION-PLAN.md`, and `SECTION-*.md` - historical context
 
 Historical documents are useful provenance, but they may describe older Cosmos projection or evidence workflows that are no longer the active authoring/runtime boundary.
