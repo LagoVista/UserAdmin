@@ -17,13 +17,5 @@
     "auth.scenario.invitation.accept-membership",
     "auth.scenario.invitation.reject-consumed"
   ],
-  "invariantKeys": [
-    "auth.invariant.invitation.not-identity-proof",
-    "auth.invariant.invitation.requires-selected-identity",
-    "auth.invariant.invitation.accept-does-not-change-home",
-    "auth.invariant.invitation.consumed-once",
-    "auth.invariant.email-identities.not-conflated"
-  ],
-  "supportedPlatforms": ["server", "web", "android", "ios", "vtm"],
   "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.10" }]
 }
