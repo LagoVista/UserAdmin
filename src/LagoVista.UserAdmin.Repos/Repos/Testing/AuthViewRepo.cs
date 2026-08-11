@@ -36,7 +36,6 @@ namespace LagoVista.UserAdmin.Repos.Repos.Testing
         }
 
         public Task AddAuthViewAsync(AuthView dsl) => ReadOnlyAsync();
-
         public Task DeleteByIdAsync(string id) => ReadOnlyAsync();
 
         public async Task<AuthView> GetByIdAsync(string id)
@@ -45,7 +44,10 @@ namespace LagoVista.UserAdmin.Repos.Repos.Testing
 
             var views = await LoadAuthViewsAsync(false);
             var compatibleKey = ToLagoVistaKey(id);
-            return views.FirstOrDefault(view => String.Equals(view.Id, id, StringComparison.OrdinalIgnoreCase) || String.Equals(view.ViewId, id, StringComparison.OrdinalIgnoreCase) || String.Equals(view.Key, compatibleKey, StringComparison.OrdinalIgnoreCase));
+            return views.FirstOrDefault(view =>
+                String.Equals(view.Id, id, StringComparison.OrdinalIgnoreCase) ||
+                String.Equals(view.ViewId, id, StringComparison.OrdinalIgnoreCase) ||
+                String.Equals(view.Key, compatibleKey, StringComparison.OrdinalIgnoreCase));
         }
 
         public async Task<ListResponse<AuthViewSummary>> ListAsync(string orgId, ListRequest request)
@@ -103,13 +105,20 @@ namespace LagoVista.UserAdmin.Repos.Repos.Testing
             var viewEntries = archive.Entries.Where(IsAuthViewEntry).ToList();
             _adminLogger.Trace($"[AuthViewRepo__LoadFromGit] ZIP opened. AuthRouteEntries={routeEntries.Count}, AuthViewEntries={viewEntries.Count}.");
 
-            var routeMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var routeMap = new Dictionary<string, CanonicalRoute>(StringComparer.OrdinalIgnoreCase);
             foreach (var entry in routeEntries)
             {
                 var json = ReadJson(entry);
-                var routeId = json.Value<string>("routeId");
-                var path = json.Value<string>("path");
-                if (!String.IsNullOrWhiteSpace(routeId) && !String.IsNullOrWhiteSpace(path)) routeMap[routeId] = path;
+                var routeId = RequiredString(json, "routeId", entry.FullName, "AuthRoute");
+                var path = RequiredString(json, "path", entry.FullName, "AuthRoute");
+                routeMap[routeId] = new CanonicalRoute
+                {
+                    RouteId = routeId,
+                    Path = path,
+                    RouteType = RequiredString(json, "routeType", entry.FullName, "AuthRoute"),
+                    ViewId = json.Value<string>("viewId"),
+                    Status = RequiredString(json, "status", entry.FullName, "AuthRoute")
+                };
             }
 
             var views = new List<AuthView>();
@@ -128,21 +137,26 @@ namespace LagoVista.UserAdmin.Repos.Repos.Testing
             return views.OrderBy(view => view.Name).ToList();
         }
 
-        private static AuthView HydrateAuthView(JObject json, string source, IReadOnlyDictionary<string, string> routeMap)
+        private static AuthView HydrateAuthView(JObject json, string source, IReadOnlyDictionary<string, CanonicalRoute> routeMap)
         {
-            var viewId = RequiredString(json, "viewId", source);
+            var viewId = RequiredString(json, "viewId", source, "AuthView");
             var runtimeEntityId = json["source"]?.Value<string>("runtimeEntityId");
-            var routeId = RequiredString(json, "routeId", source);
+            var routeId = RequiredString(json, "routeId", source, "AuthView");
             if (!routeMap.TryGetValue(routeId, out var route)) throw new InvalidDataException($"Canonical AuthView '{viewId}' references missing route '{routeId}'.");
+            if (!String.IsNullOrWhiteSpace(route.ViewId) && !String.Equals(route.ViewId, viewId, StringComparison.OrdinalIgnoreCase))
+                throw new InvalidDataException($"Canonical AuthView '{viewId}' references route '{routeId}', but that route is bound to view '{route.ViewId}'.");
 
             return new AuthView
             {
                 Id = String.IsNullOrWhiteSpace(runtimeEntityId) ? ToRuntimeEntityId(viewId) : runtimeEntityId,
                 Key = ToLagoVistaKey(viewId),
-                Name = RequiredString(json, "name", source),
+                Name = RequiredString(json, "name", source, "AuthView"),
                 Description = json.Value<string>("description"),
                 ViewId = viewId,
-                Route = route,
+                RouteId = routeId,
+                Route = route.Path,
+                AuthCategory = RequiredString(json, "category", source, "AuthView"),
+                Status = RequiredString(json, "status", source, "AuthView"),
                 Actions = HydrateActions(viewId, json["actions"] as JArray),
                 Fields = HydrateFields(viewId, json["controls"] as JArray)
             };
@@ -158,8 +172,11 @@ namespace LagoVista.UserAdmin.Repos.Repos.Testing
                 return new AuthFieldAction
                 {
                     Id = ToRuntimeEntityId($"{viewId}:action:{actionId}"),
+                    ActionId = actionId,
                     Name = action.Value<string>("name") ?? actionId,
-                    Finder = ToTestIdFinder(action.Value<string>("finder"))
+                    Finder = ToTestIdFinder(action.Value<string>("finder")),
+                    ActionType = action.Value<string>("actionType"),
+                    VisibilityCondition = action.Value<string>("visibilityCondition")
                 };
             }).ToList();
         }
@@ -174,9 +191,13 @@ namespace LagoVista.UserAdmin.Repos.Repos.Testing
                 return new AuthViewField
                 {
                     Id = ToRuntimeEntityId($"{viewId}:control:{controlId}"),
+                    ControlId = controlId,
                     Name = control.Value<string>("name") ?? controlId,
                     FieldType = control.Value<string>("controlType") ?? "unknown",
-                    Finder = ToTestIdFinder(control.Value<string>("finder"))
+                    Finder = ToTestIdFinder(control.Value<string>("finder")),
+                    Required = control.Value<bool?>("required"),
+                    Sensitivity = control.Value<string>("sensitivity"),
+                    VisibilityCondition = control.Value<string>("visibilityCondition")
                 };
             }).ToList();
         }
@@ -226,13 +247,22 @@ namespace LagoVista.UserAdmin.Repos.Repos.Testing
             return $"[data-testid=\"{finder}\"]";
         }
 
-        private static string RequiredString(JObject json, string propertyName, string source)
+        private static string RequiredString(JObject json, string propertyName, string source, string kind)
         {
-            var value = json.Value<string>(propertyName);
-            if (String.IsNullOrWhiteSpace(value)) throw new InvalidDataException($"Canonical AuthView '{source}' is missing required property '{propertyName}'.");
+            var value = json?.Value<string>(propertyName);
+            if (String.IsNullOrWhiteSpace(value)) throw new InvalidDataException($"Canonical {kind} '{source}' is missing required property '{propertyName}'.");
             return value;
         }
 
         private static Task ReadOnlyAsync() => Task.FromException(new NotSupportedException("Canonical AuthViews are read-only and must be changed in auth-model JSON."));
+
+        private sealed class CanonicalRoute
+        {
+            public string RouteId { get; set; }
+            public string Path { get; set; }
+            public string RouteType { get; set; }
+            public string ViewId { get; set; }
+            public string Status { get; set; }
+        }
     }
 }
