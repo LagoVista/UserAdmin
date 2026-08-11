@@ -14,10 +14,10 @@
     "repository": "LagoVista/UserAdmin",
     "path": "src/LagoVista.UserAdmin/CommonLinks.cs",
     "member": "AuthSignInLockedOut",
-    "route": "/auth/sign-in/locked-out",
+    "value": "/auth/sign-in/locked-out",
     "conformance": {
       "status": "verified",
-      "checkedAgainst": ["canonical-path", "member-value", "parameters"],
+      "checkedAgainst": ["canonical-path", "parameters"],
       "notes": "CommonLinks.AuthSignInLockedOut exactly matches the canonical sign-in locked-out route."
     }
   },
