@@ -32,10 +32,15 @@
       "sourceType": "discussion",
       "reference": "ChatGPT conversation 2026-07-31",
       "note": "Happy path revised around user-visible action boundaries and automatic home-organization creation."
+    },
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-11",
+      "note": "Scenario reconciliation confirmed the five-step new-account chain from Welcome through Continue Passkey, Registration Identity, Enrollment, Confirmation, and Home. Presentation remains open because required registration surfaces are planned or behaviorally mismatched."
     }
   ],
   "progress": {
-    "scenarios": "not-started",
+    "scenarios": "complete",
     "presentation": "not-started",
     "implementation": "not-started",
     "tests": "not-started"
