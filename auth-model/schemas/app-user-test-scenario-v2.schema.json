@@ -178,7 +178,7 @@
       "additionalProperties": false,
       "required": ["sourceType", "reference"],
       "properties": {
-        "sourceType": { "enum": ["ddr", "code", "test", "discussion", "decision", "auth-view", "behavior", "external"] },
+        "sourceType": { "enum": ["ddr", "code", "test", "discussion", "decision", "auth-view", "behavior", "journey", "external"] },
         "reference": { "type": "string", "minLength": 1 },
         "section": { "type": "string" },
         "commit": { "type": "string" },
