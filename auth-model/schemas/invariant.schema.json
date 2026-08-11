@@ -18,13 +18,13 @@
     "appliesWhen": { "$ref": "#/$defs/predicate" },
     "rule": { "type": "string", "minLength": 1 },
     "failureMeaning": { "type": "string", "minLength": 1 },
-    "relatedDimensionKeys": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/keyReference" } },
+    "relatedDimensionKeys": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/dimensionKeyReference" } },
     "sourceReferences": { "type": "array", "items": { "$ref": "#/$defs/sourceReference" } },
     "definitionHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
   },
   "$defs": {
     "maturity": { "enum": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"] },
-    "keyReference": { "type": "string", "pattern": "^auth\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})+$" },
+    "dimensionKeyReference": { "type": "string", "pattern": "^auth\\.dimension\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$" },
     "predicate": {
       "type": "object",
       "additionalProperties": false,
