@@ -24,7 +24,7 @@
       "conformance": {
         "status": "mismatch",
         "checkedUtc": "2026-08-11T20:51:00Z",
-        "checkedAgainst": ["view-identity", "actions", "finders", "navigation", "behavior"],
+        "checkedAgainst": ["view-identity", "actions", "finders", "navigation"],
         "notes": "The Web surface matches the canonical screen identity and complete-enrollment/back finders, but complete-enrollment starts a second authenticated passkey authentication ceremony and does not navigate to application home on success. The canonical passkey-registration flow expects the authenticated session to already exist and complete-enrollment to perform client navigation to app.home."
       }
     },
