@@ -72,19 +72,20 @@ See [`CONVENTIONS.md`](./CONVENTIONS.md) for canonical key, versioning, normaliz
 
 Use these documents in this order for current work:
 
-1. `AUTH-MODEL-CONTRACT.md` - semantic graph, canonical identities, controls/actions/finders, platform reconciliation, validation layers, and migration policy
-2. `AUTH-MODEL-COMPATIBILITY-MAP.md` - consumer dependencies, minimal-change review rules, and compatibility guardrails for C#, Aptix, Angular, React Native, schemas, and authored JSON
-3. `AUTH-CATEGORY-BEHAVIOR-SCENARIO-FIELD-REVIEW.md` - field-by-field semantics and tightening candidates for the existing category, Behavior V2, and Scenario V2 contracts
-4. `AUTH-VIEW-ROUTE-FIELD-REVIEW.md` - field-by-field semantics and Keep / Clarify / Validate / Consolidate / Migrate classifications for the existing AuthView/AuthRoute contracts
-5. `AUTH-IMPLEMENTATION-PROOF-FIELD-REVIEW.md` - field semantics and cross-layer conformance rules for Action, Transition, Flow, Handler, Endpoint, and Test Binding contracts
-6. `AUTH-STATE-INVARIANT-FIELD-REVIEW.md` - field semantics and tightening candidates for State Dimensions, the composite state catalog, Invariants, and their Action/Transition relationships
-7. `AUTH-ORCHESTRATION-PRESENTATION-FIELD-REVIEW.md` - field semantics and legacy/V2 boundaries for Journeys, Conversations, and Presentation Bindings
-8. `AUTH-MODEL-TIGHTENING-BACKLOG.md` - ordered minimal-change implementation backlog derived from the completed semantic reviews
-9. `AUTH-MODEL-MIGRATION-PLAN.md` - current-state inventory, normalization decisions, Password Sign-In specimen, and incremental migration phases
-10. `CATEGORY-TO-GREEN.md` - current operating process
-11. `CONVENTIONS.md` - durable model rules
-12. `AUTH-VIEW-ROUTE-CONTRACT.md` - detailed canonical presentation/routing contract
-13. `AUTH-BEHAVIOR-RECONCILIATION-RUNBOOK.md` - detailed implementation and evidence lessons, including Password Management
-14. dated evidence handoffs, `AUTH-IMPLEMENTATION-PLAN.md`, and `SECTION-*.md` - historical context
+1. `AUTH-MODEL-SCHEMA-CONTRACT.md` - locked human-readable master contract for every schema family, schema-change governance, identity rules, graph validation, and the JSON cleanup policy
+2. `AUTH-MODEL-CONTRACT.md` - semantic graph, canonical identities, controls/actions/finders, platform reconciliation, validation layers, and migration policy
+3. `AUTH-MODEL-COMPATIBILITY-MAP.md` - consumer dependencies, minimal-change review rules, and compatibility guardrails for C#, Aptix, Angular, React Native, schemas, and authored JSON
+4. `AUTH-CATEGORY-BEHAVIOR-SCENARIO-FIELD-REVIEW.md` - field-by-field semantics and tightening candidates for the existing category, Behavior V2, and Scenario V2 contracts
+5. `AUTH-VIEW-ROUTE-FIELD-REVIEW.md` - field-by-field semantics and Keep / Clarify / Validate / Consolidate / Migrate classifications for the existing AuthView/AuthRoute contracts
+6. `AUTH-IMPLEMENTATION-PROOF-FIELD-REVIEW.md` - field semantics and cross-layer conformance rules for Action, Transition, Flow, Handler, Endpoint, and Test Binding contracts
+7. `AUTH-STATE-INVARIANT-FIELD-REVIEW.md` - field semantics and tightening candidates for State Dimensions, the composite state catalog, Invariants, and their Action/Transition relationships
+8. `AUTH-ORCHESTRATION-PRESENTATION-FIELD-REVIEW.md` - field semantics and legacy/V2 boundaries for Journeys, Conversations, and Presentation Bindings
+9. `AUTH-MODEL-TIGHTENING-BACKLOG.md` - ordered minimal-change implementation backlog derived from the completed semantic reviews
+10. `AUTH-MODEL-MIGRATION-PLAN.md` - current-state inventory, normalization decisions, Password Sign-In specimen, and incremental migration phases
+11. `CATEGORY-TO-GREEN.md` - current operating process
+12. `CONVENTIONS.md` - durable model rules
+13. `AUTH-VIEW-ROUTE-CONTRACT.md` - detailed canonical presentation/routing contract
+14. `AUTH-BEHAVIOR-RECONCILIATION-RUNBOOK.md` - detailed implementation and evidence lessons, including Password Management
+15. dated evidence handoffs, `AUTH-IMPLEMENTATION-PLAN.md`, and `SECTION-*.md` - historical context
 
 Historical documents are useful provenance, but they may describe older Cosmos projection or evidence workflows that are no longer the active authoring/runtime boundary.
