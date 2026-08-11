@@ -6,6 +6,36 @@ The governing rule is simple:
 
 > Prefer validation and clarification over contract changes. Prefer compatibility-preserving fixes over migrations. Change JSON shape only when the existing shape cannot express one unambiguous meaning.
 
+## 2026-08-11 checkpoint
+
+The foundational tightening pass is complete enough to move on from model auditing.
+
+Completed:
+
+- Aptix loads canonical identity by document type rather than guessing among `key`, `viewId`, and `routeId`.
+- Deprecated scenarios are excluded from active readiness/proof rollups while remaining available as historical definitions.
+- Aptix performs typed graph validation across Category -> Behavior -> Scenario -> AuthView/AuthRoute presentation relationships.
+- Behavior scenario references are schema-enforced as unique.
+- Behavior and Scenario `categoryKey` syntax is aligned to the catalog contract.
+- Scenario input/visible finder syntax is tightened to the established presentation vocabulary.
+- Invariant `relatedDimensionKeys[]` is typed to `auth.dimension.*`.
+- Canonical AuthView `routeId` is required, matching the C# Git loader and current authored inventory.
+- Password Sign-In authored Test progress is reconciled independently from execution status.
+- Password Sign-In AuthViews were checked against Angular and React Native implementations, and confirmed implementation drift was corrected where semantics were unambiguous.
+- Welcome and Continue Email now carry concrete Web/Mobile conformance receipts.
+- Password Entry accurately records remaining conformance uncertainty instead of claiming false green status.
+
+Intentionally unresolved on `auth.continue.email.password`:
+
+1. whether the canonical `email` control is intended to remain editable on the password-entry surface or represents carried/read-only identity context;
+2. the exact navigation semantics of the canonical `cancel` action versus platform Back behavior.
+
+The retained runtime inventory confirms that both the email field and cancel action historically existed, but does not define their intended semantics. They must not be guessed or silently reconciled from one platform implementation.
+
+These two questions do not justify additional model redesign. Resolve them when the generated-screen/editing boundary is defined or when an explicit authored behavior requires them.
+
+The remaining backlog below is retained as the broader hardening inventory. Items outside the completed Password Sign-In specimen should be addressed incrementally as each category or subsystem is reconciled, rather than delaying the next architectural step.
+
 ## Priority 0 - Fix validator identity handling
 
 These are correctness bugs in tooling, not model redesign.
