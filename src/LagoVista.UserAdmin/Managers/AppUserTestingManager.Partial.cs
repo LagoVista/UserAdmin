@@ -95,6 +95,10 @@ namespace LagoVista.UserAdmin.Managers
             var token = (scenarioAction.Text ?? scenarioAction.Id ?? String.Empty).Trim();
             if (String.IsNullOrEmpty(token)) return null;
 
+            var finder = ToTestIdFinder(token);
+            var byFinder = view.Actions.FirstOrDefault(a => String.Equals(a.Finder, finder, StringComparison.OrdinalIgnoreCase));
+            if (byFinder != null) return byFinder;
+
             var byName = view.Actions.FirstOrDefault(a => String.Equals(a.Name, token, StringComparison.OrdinalIgnoreCase));
             if (byName != null) return byName;
 
