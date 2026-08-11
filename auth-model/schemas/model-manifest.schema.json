@@ -4,7 +4,7 @@
   "title": "Authentication Model Manifest",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "modelKey", "name", "version", "maturity", "authority", "definitionRoots", "schemas", "validation", "maturityValues", "inventory", "currentWork", "sourceReferences"],
+  "required": ["schemaVersion", "modelKey", "name", "version", "maturity", "authority", "metadataPolicy", "definitionRoots", "schemas", "validation", "maturityValues", "inventory", "currentWork", "sourceReferences"],
   "properties": {
     "$schema": { "type": "string" },
     "schemaVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+$" },
@@ -20,6 +20,17 @@
         "definitions": { "const": "git" },
         "runtimeEvidence": { "type": "string", "minLength": 1 },
         "guide": { "type": "string", "minLength": 1 }
+      }
+    },
+    "metadataPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["purpose", "inventoryAuthoritative", "currentWorkAuthoritative", "futureDirection"],
+      "properties": {
+        "purpose": { "type": "string", "minLength": 1 },
+        "inventoryAuthoritative": { "const": false },
+        "currentWorkAuthoritative": { "const": false },
+        "futureDirection": { "type": "string", "minLength": 1 }
       }
     },
     "definitionRoots": { "type": "object", "minProperties": 1, "additionalProperties": { "type": "string", "minLength": 1 } },
