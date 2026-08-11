@@ -8,7 +8,7 @@
   "maturity": "proposed",
   "requiredInputs": [{ "key": "challenge-id", "valueType": "reference", "required": true, "description": "Single-use passkey challenge." }, { "key": "attestation", "valueType": "object", "required": true, "description": "WebAuthn attestation returned by the secure component." }],
   "guards": [{ "expression": "challenge is unexpired, unconsumed, origin-bound, rp-bound, and pending-identity-bound", "failureCode": "invalid-passkey-challenge" }],
-  "permittedMutations": ["credential-proof", "pending-identity-status"],
+  "permittedMutations": ["auth.dimension.credential-proof", "auth.dimension.pending-identity-status"],
   "requiredEffects": ["consume-passkey-challenge", "validate-attestation", "persist-pending-passkey-credential"],
   "forbiddenEffects": ["create-durable-user", "bind-credential-to-unresolved-durable-user", "grant-normal-application-authorization"],
   "invariantKeys": ["auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
