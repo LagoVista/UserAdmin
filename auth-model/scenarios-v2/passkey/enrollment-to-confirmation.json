@@ -16,18 +16,10 @@
   "preconditions": {
     "expression": "pending-identity-status == pending and pending-identity-flow == passkey and passkey-creation-challenge == issued"
   },
-  "inputs": [
-    {
-      "finder": "native:passkey-credential",
-      "name": "Passkey Credential",
-      "valueType": "object",
-      "required": true,
-      "description": "Credential response returned by the platform authenticator."
-    }
-  ],
+  "inputs": [],
   "serverInteraction": {
     "required": true,
-    "intent": "Validate the WebAuthn challenge, origin, and credential response; prevent duplicate credential binding; create exactly one durable user; create the user's home organization; derive and reserve its namespace from company or personal name; create the owner membership; set home and current organization; bind the passkey; resolve the pending identity; and issue the authenticated session.",
+    "intent": "Validate the WebAuthn challenge, origin, and credential response returned by the platform authenticator; prevent duplicate credential binding; create exactly one durable user; create the user's home organization; derive and reserve its namespace from company or personal name; create the owner membership; set home and current organization; bind the passkey; resolve the pending identity; and issue the authenticated session.",
     "transitionKeys": [
       "auth.transition.passkey.complete-pending-registration",
       "auth.transition.passkey.create-durable-user",
