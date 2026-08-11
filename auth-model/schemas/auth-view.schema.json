@@ -78,7 +78,7 @@
   "$defs": {
     "authKey": {
       "type": "string",
-      "pattern": "^auth\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})+$"
+      "pattern": "^auth\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$"
     },
     "identifier": {
       "type": "string",
