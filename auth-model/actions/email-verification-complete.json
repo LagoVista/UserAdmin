@@ -13,7 +13,7 @@
     { "expression": "durable-identity == resolved", "failureCode": "email-verification-user-not-found" },
     { "expression": "verification-code-valid == true", "failureCode": "email-verification-invalid" }
   ],
-  "permittedMutations": [],
+  "permittedMutations": ["auth.dimension.email-ownership"],
   "requiredEffects": ["confirm-email-once", "record-email-verification-result"],
   "forbiddenEffects": ["create-durable-user", "change-home-workspace", "switch-current-workspace"],
   "invariantKeys": ["auth.invariant.transition.deterministic-post-state"],
