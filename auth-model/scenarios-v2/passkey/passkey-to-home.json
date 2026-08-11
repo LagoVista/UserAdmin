@@ -7,7 +7,7 @@
   "summary": "The user completes a valid passkey assertion, the server resolves the existing durable user, and the client opens the application home view.",
   "version": 1,
   "maturity": "proposed",
-  "categoryKey": "passkey",
+  "categoryKey": "passkey-sign-in",
   "startViewKey": "auth.continue.passkey",
   "action": {
     "id": "use-passkey",
