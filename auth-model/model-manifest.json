@@ -10,6 +10,12 @@
     "runtimeEvidence": "cosmos-db",
     "guide": "../AUTH-MODEL-GUIDE.md"
   },
+  "metadataPolicy": {
+    "purpose": "This manifest describes model structure, schema roots, validation rules, and historical snapshot metadata. The detailed JSON definitions under the declared roots are the authored source of truth.",
+    "inventoryAuthoritative": false,
+    "currentWorkAuthoritative": false,
+    "futureDirection": "Inventory and operational rollups may be regenerated or validated from repository contents by CI once the model shape stabilizes. Do not use the current inventory or currentWork values as dashboard or execution truth."
+  },
   "definitionRoots": {
     "stateDimensions": "state",
     "invariants": "invariants",
@@ -102,7 +108,7 @@
   "currentWork": {
     "guideSection": "4.17",
     "status": "in-progress",
-    "summary": "Password Management reconciliation is complete. The shared generated proxy and REST route enter through AuthenticationFlowService and PasswordChangeFlowHandler, both canonical success and failure transitions are implemented, and the AdminAuth integration suite proves the real PasswordManager and LagoVista Identity adapter paths with generated Aptix runtime evidence."
+    "summary": "Historical snapshot only. Password Management reconciliation was the active work when this value was last maintained. Current operational work is determined from the repository and CATEGORY-TO-GREEN.md, not from this field."
   },
   "sourceReferences": [
     {
