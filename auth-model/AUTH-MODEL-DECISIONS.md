@@ -84,12 +84,96 @@ A normalized view may conceptually show:
 
 The runtime row does not imply three independent client implementations.
 
+## D003 - Maturity, reconciliation progress, and execution evidence are independent axes
+
+**Status:** Accepted
+
+The model keeps three concepts separate:
+
+1. **Maturity** describes the lifecycle/acceptance state of the authored definition itself.
+2. **Reconciliation progress** describes whether dependent authored layers have been reviewed and agreed as canonical.
+3. **Execution evidence** reports whether the current implementation passes C# Flow or UI Runtime proof.
+
+None of these statuses silently updates another.
+
+### Rules
+
+1. `proposed` and `reviewed` definitions may be worked on and reconciled, but they are not yet accepted canonical truth.
+2. `approved`, `implemented`, and `verified` all represent an accepted semantic definition for compatibility with the current vocabulary.
+3. `implemented` does not imply `progress.implementation == complete`.
+4. `verified` does not imply current C# Flow or UI Runtime evidence is passing or fresh.
+5. Reconciliation progress never promotes maturity automatically.
+6. Test execution never promotes maturity or authored progress automatically.
+7. A definition materially changed after approval must be deliberately moved back to an appropriate maturity and its dependent proof considered stale.
+8. A definition with `maturity: deprecated` is governed by D005.
+
+### Authored-green implication
+
+An active definition can contribute to an Authored-green roll-up only when:
+
+- its semantic definition is accepted (`approved`, `implemented`, or `verified` under the current vocabulary); and
+- every authored reconciliation phase required at that level is `complete`.
+
+This means a definition may have all reconciliation phases complete while still requiring a deliberate maturity promotion from `proposed` or `reviewed` before it is considered fully canonical.
+
+The existing `implemented` and `verified` maturity values are retained during normalization. A later schema decision may simplify the maturity vocabulary, but no mass rewrite is required now.
+
+## D004 - Authored Tests specify proof; C# Flow and UI Runtime execute proof
+
+**Status:** Accepted
+
+The authored `tests` reconciliation phase means **the required test specification and proof obligations have been reviewed and agreed as canonical**. It does not mean the latest test run passed.
+
+### Scenario-level Tests complete
+
+For an active scenario, `progress.tests` may be `complete` when all required proof specifications for that scenario are reconciled.
+
+At minimum:
+
+1. the scenario itself is sufficiently deterministic to be runnable: starting view, action, inputs, expected outcome, state expectations, and evidence requirements are defined where applicable;
+2. required UI execution surfaces are declared in `evidenceRequirements`;
+3. when `serverInteraction.required == true`, required C# proof obligations are represented by a reconciled test binding that can be associated to the scenario through its canonical handler/endpoint/transition relationships;
+4. client-only scenarios do not require an artificial C# test binding merely to make authored Tests complete;
+5. any additional category-specific proof obligation is explicitly captured rather than inferred from a passing run.
+
+### Roll-up
+
+- Behavior `tests` is complete when the authored Tests phase is complete for every active scenario used by that behavior.
+- Category `tests` is complete when the authored Tests phase is complete for every active behavior/scenario in that category.
+
+### Execution remains separate
+
+- **C# Flow** answers whether the required server integration/flow proof currently passes.
+- **UI Runtime** answers whether the required UI executions currently pass on Web, iOS, and/or Android.
+- A test run may fail tomorrow without changing authored `tests: complete`.
+- A definition change may make prior execution evidence stale without changing authored Tests unless the proof specification itself must be reconciled again.
+
+### Schema/tooling follow-up
+
+The current Password Sign-In test binding is transition/handler/endpoint oriented and does not contain explicit `scenarioKeys`. During schema alignment we should decide whether to add explicit scenario references to test bindings or retain typed graph resolution through canonical transitions. Tooling must not use test execution success as a shortcut for this authored reconciliation decision.
+
+## D005 - Deprecated definitions are historical, not active graph members
+
+**Status:** Accepted
+
+Deprecated authored definitions remain in Git as provenance and historical evidence but do not participate in active readiness, runnable inventories, or status roll-ups.
+
+### Rules
+
+1. Validators may load deprecated definitions so they can be inspected and historically resolved.
+2. Deprecated scenarios are excluded from active behavior/category scenario inventory unless explicitly requested for historical analysis.
+3. Deprecated definitions are not offered as normal runnable scenarios.
+4. Active accepted definitions must not depend on deprecated definitions unless an explicit compatibility exception documents why.
+5. A dangling reference inside an entirely deprecated historical subgraph may be reported as historical debt rather than blocking active authored green.
+6. A reference from an active definition to a missing or deprecated required definition is an active graph defect.
+
+This decision directly removes deprecated Password Sign-In pilot scenarios from the active runnable/status inventory without deleting their authored history.
+
 ## Next decisions
 
-The next contract decisions should be resolved before schema or authored-data mutation:
+The next contract decisions should be resolved before broad authored-data mutation:
 
-1. relationship between definition `maturity` and authored reconciliation progress;
-2. precise meaning of authored `tests: complete` versus C# Flow execution evidence;
-3. active versus deprecated definition participation in graph validation and roll-ups;
-4. schema strategy for the `mobile` -> `reactNative` projection rename;
-5. whether implementation reconciliation needs an authored definition/version/hash receipt per projection.
+1. schema strategy for the `mobile` -> `reactNative` projection rename;
+2. whether implementation reconciliation needs an authored definition/version/hash receipt per projection;
+3. whether test bindings should gain explicit `scenarioKeys` for direct proof ownership;
+4. exact schema/validator mechanism for document-type-aware identity and typed graph validation.
