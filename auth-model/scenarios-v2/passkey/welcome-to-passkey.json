@@ -7,7 +7,7 @@
   "summary": "The user chooses passkey authentication from Welcome and the client opens the passkey continuation view.",
   "version": 1,
   "maturity": "proposed",
-  "categoryKey": "passkey",
+  "categoryKey": "passkey-sign-in",
   "startViewKey": "auth.welcome",
   "action": {
     "id": "continue-passkey",
