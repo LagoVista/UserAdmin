@@ -1,0 +1,59 @@
+name: Reconcile Passkey Sign-In ledger
+on:
+  push:
+    paths:
+      - '.github/workflows/reconcile-passkey-signin-ledger.yml'
+permissions:
+  contents: write
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update authored progress
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          def load(path):
+              return json.loads(Path(path).read_text())
+
+          def save(path, data):
+              Path(path).write_text(json.dumps(data, indent=2) + '\n')
+
+          category_path = 'auth-model/behavior-category-catalog.json'
+          category = load(category_path)
+          item = next(x for x in category['categories'] if x['key'] == 'passkey-sign-in')
+          item['progress']['behaviors'] = 'complete'
+          item['progress']['scenarios'] = 'complete'
+          item['progress']['presentation'] = 'complete'
+          category.setdefault('sourceReferences', []).append({
+              'sourceType': 'decision',
+              'reference': 'ChatGPT conversation 2026-08-11',
+              'note': 'Passkey Sign In reconciled to one canonical behavior with Welcome-to-Passkey and Passkey-to-Home scenarios. Welcome and Continue with Passkey presentation surfaces are conformance-verified on web and mobile; implementation and tests remain separate follow-on phases.'
+          })
+          save(category_path, category)
+
+          behavior_path = 'auth-model/behaviors-v2/passkey-sign-in.json'
+          behavior = load(behavior_path)
+          behavior['progress']['scenarios'] = 'complete'
+          behavior['progress']['presentation'] = 'complete'
+          save(behavior_path, behavior)
+
+          for scenario_path in [
+              'auth-model/scenarios-v2/passkey/welcome-to-passkey.json',
+              'auth-model/scenarios-v2/passkey/passkey-to-home.json'
+          ]:
+              scenario = load(scenario_path)
+              scenario['progress']['presentation'] = 'complete'
+              save(scenario_path, scenario)
+          PY
+      - name: Commit ledger reconciliation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add auth-model/behavior-category-catalog.json auth-model/behaviors-v2/passkey-sign-in.json auth-model/scenarios-v2/passkey/welcome-to-passkey.json auth-model/scenarios-v2/passkey/passkey-to-home.json
+          git rm .github/workflows/reconcile-passkey-signin-ledger.yml
+          git commit -m "reconcile passkey sign-in authored ledger"
+          git push
