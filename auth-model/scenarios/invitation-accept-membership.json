@@ -6,7 +6,7 @@
   "summary": "Adds one external workspace membership to the explicitly selected durable identity and consumes the invitation without changing home or current workspace.",
   "version": 1,
   "maturity": "proposed",
-  "scenarioType": "transition",
+  "scenarioType": "server",
   "journeyKeys": ["auth.journey.invitation.resolve"],
   "transitionKey": "auth.transition.invitation.accept",
   "preconditions": { "expression": "invitation-status == acceptance-pending and durable-identity == resolved and home-workspace == established" },
