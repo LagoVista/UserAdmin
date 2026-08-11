@@ -6,7 +6,7 @@
   "summary": "Registers executed NUnit evidence for the canonical invitation acceptance transition.",
   "version": 1,
   "maturity": "implemented",
-  "testLevel": "integration",
+  "testLevel": "handler-integration",
   "repository": "LagoVista/UserAdmin",
   "projectPath": "tests/LagoVista.UserAdmin.Auth.Tests",
   "sourcePath": "tests/LagoVista.UserAdmin.Auth.Tests/InvitationAcceptanceFlowIntegrationTests.cs",
