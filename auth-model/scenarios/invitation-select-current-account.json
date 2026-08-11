@@ -6,7 +6,7 @@
   "summary": "Uses the currently authenticated durable identity after explicit confirmation.",
   "version": 1,
   "maturity": "proposed",
-  "scenarioType": "transition",
+  "scenarioType": "server",
   "journeyKeys": ["auth.journey.invitation.resolve"],
   "transitionKey": "auth.transition.invitation.select-identity",
   "preconditions": { "expression": "invitation-status == valid and durable-identity == resolved and session-capability == authenticated-normal" },
