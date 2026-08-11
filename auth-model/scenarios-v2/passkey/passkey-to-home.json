@@ -29,8 +29,8 @@
     "expression": "credential-proof == passkey-proved and session-capability in [authenticated-limited,authenticated-normal]"
   },
   "expectedAuthLogEvents": [
-    "passkey-authentication-challenge-issued",
-    "passkey-authentication-succeeded"
+    "PasskeyBeginPasswordlessAuthenticationSuccess",
+    "PasskeyCompletePasswordlessAuthenticationSuccess"
   ],
   "evidenceRequirements": [
     "server",
@@ -46,11 +46,21 @@
     {
       "sourceType": "decision",
       "reference": "auth-model/transitions/passkey-complete-authentication.json"
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs",
+      "note": "Anonymous passwordless begin and complete endpoints delegate directly to IAppUserPasskeyManager."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs",
+      "note": "Passwordless authentication consumes and validates the challenge, resolves the stored credential to one durable user, validates the WebAuthn assertion, advances the signature counter, emits the canonical runtime audit events, and resolves the landing destination."
     }
   ],
   "progress": {
     "presentation": "complete",
-    "implementation": "not-started",
+    "implementation": "complete",
     "tests": "not-started"
   }
 }
