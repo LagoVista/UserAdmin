@@ -4,7 +4,7 @@
   "key": "auth.scenario.passkey.welcome-to-registration-identity",
   "runtimeEntityId": "980E4EDB0542F79CCC246C246F5B7E20",
   "name": "Choose Passkey To Confirm",
-  "summary": "A new user chooses passkey registration from Welcome and reaches the identity-details view.",
+  "summary": "A new user chooses passkey from Welcome and reaches the passkey continuation view, where an existing credential can be attempted before new-user registration begins.",
   "version": 1,
   "maturity": "proposed",
   "categoryKey": "passkey-registration",
@@ -22,7 +22,7 @@
   },
   "expectedViewKey": "auth.continue.passkey",
   "postconditions": {
-    "expression": "session-capability == anonymous and auth.passkey.registration.identity is visible"
+    "expression": "session-capability == anonymous and auth.continue.passkey is visible"
   },
   "expectedAuthLogEvents": [],
   "evidenceRequirements": [
@@ -37,7 +37,7 @@
     },
     {
       "sourceType": "auth-view",
-      "reference": "auth.passkey.registration.identity"
+      "reference": "auth.continue.passkey"
     },
     {
       "sourceType": "discussion",
