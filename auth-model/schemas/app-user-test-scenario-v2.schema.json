@@ -35,7 +35,12 @@
     "summary": { "type": "string", "minLength": 1 },
     "version": { "type": "integer", "minimum": 1 },
     "maturity": { "enum": ["proposed", "reviewed", "approved", "implemented", "verified", "deprecated"] },
-    "categoryKey": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$" },
+    "categoryKey": {
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)+$",
+      "description": "Behavior category key from behavior-category-catalog.json."
+    },
     "startViewKey": { "$ref": "#/$defs/viewKey" },
     "action": {
       "type": "object",
@@ -66,10 +71,10 @@
     "expectedVisibleFinders": {
       "type": "array",
       "uniqueItems": true,
-      "items": { "type": "string", "minLength": 1 }
+      "items": { "$ref": "#/$defs/presentationFinder" }
     },
     "postconditions": { "$ref": "#/$defs/stateAssertion" },
-    "expectedAuthLogEvents": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "expectedAuthLogEvents": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
     "evidenceRequirements": {
       "type": "array",
       "uniqueItems": true,
@@ -86,6 +91,10 @@
     "viewKey": {
       "type": "string",
       "pattern": "^(auth|app)\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$"
+    },
+    "presentationFinder": {
+      "type": "string",
+      "pattern": "^(field|label|status|display|action):[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
     },
     "stateAssertion": {
       "type": "object",
@@ -155,7 +164,7 @@
       "additionalProperties": false,
       "required": ["finder", "name", "valueType", "required"],
       "properties": {
-        "finder": { "type": "string", "pattern": "^(field|control):[a-z][a-z0-9]*(?:-[a-z0-9]+)*$" },
+        "finder": { "type": "string", "pattern": "^field:[a-z][a-z0-9]*(?:-[a-z0-9]+)*$" },
         "name": { "type": "string", "minLength": 1 },
         "valueType": { "enum": ["string", "boolean", "integer", "timestamp", "reference", "secret-reference"] },
         "required": { "type": "boolean" },
