@@ -150,7 +150,7 @@ At minimum:
 
 ### Schema/tooling follow-up
 
-The current Password Sign-In test binding is transition/handler/endpoint oriented and does not contain explicit `scenarioKeys`. During schema alignment we should decide whether to add explicit scenario references to test bindings or retain typed graph resolution through canonical transitions. Tooling must not use test execution success as a shortcut for this authored reconciliation decision.
+The current Password Sign-In test binding is transition/handler/endpoint oriented and does not contain explicit `scenarioKeys`. D007 defines the normalized ownership rule. Tooling must not use test execution success as a shortcut for this authored reconciliation decision.
 
 ## D005 - Deprecated definitions are historical, not active graph members
 
@@ -169,11 +169,55 @@ Deprecated authored definitions remain in Git as provenance and historical evide
 
 This decision directly removes deprecated Password Sign-In pilot scenarios from the active runnable/status inventory without deleting their authored history.
 
+## D006 - Breaking presentation-projection cleanup uses versioned schemas
+
+**Status:** Accepted
+
+We will not mutate the existing AuthView/AuthRoute v1 schema semantics in place when normalizing the ambiguous `web`/`mobile` projection vocabulary.
+
+### Rules
+
+1. Existing `auth-view.schema.json` and `auth-route.schema.json` v1 documents remain understandable and valid during migration.
+2. A normalized v2 AuthView/AuthRoute schema family will explicitly describe implementation projection targets such as Angular and React Native rather than using runtime-platform language accidentally.
+3. The exact v2 property layout will be reviewed before the schema is committed; the semantic requirement is explicit projection ownership, not a particular JSON nesting choice.
+4. Password Sign-In will be the first category migrated to the v2 presentation/routing schemas.
+5. Tooling must support v1 and v2 concurrently during the migration window.
+6. Once all active AuthViews/AuthRoutes migrate, v1 support may be removed in a deliberate cleanup.
+7. Runtime evidence continues to use Web/iOS/Android independently of the AuthView/AuthRoute schema version.
+
+This gives us category-by-category migration without making every existing presentation definition change atomically.
+
+## D007 - Test bindings explicitly identify the scenarios whose proof they satisfy
+
+**Status:** Accepted
+
+Normalized test bindings will carry explicit `scenarioKeys[]` in addition to their handler, endpoint, and transition relationships.
+
+### Rationale
+
+Transitions and handlers describe what server behavior a test exercises. `scenarioKeys[]` describes **which authored scenario proof obligation the test binding satisfies**. Those are related facts but not the same relationship.
+
+Requiring tooling to reconstruct scenario ownership indirectly through transitions makes proof coverage harder to reason about and can become ambiguous when multiple scenarios share a transition or one test binding covers several outcome permutations.
+
+### Rules
+
+1. `scenarioKeys[]` contains typed references to canonical active scenarios covered by the test binding.
+2. The references describe authored proof ownership, not the latest execution result.
+3. Handler, endpoint, and transition references remain because they prove what implementation path the tests exercise.
+4. A single test binding may cover multiple scenarios.
+5. Multiple test bindings may contribute proof to one scenario when its proof obligations require them.
+6. Deprecated scenarios should not remain in active test-binding ownership unless the binding is explicitly historical.
+7. Password Sign-In is the first test binding to gain explicit scenario ownership.
+
+### Migration strategy
+
+Adding optional `scenarioKeys[]` to the current test-binding schema is backward-compatible for existing authored files. During migration, normalized active test bindings should populate it. A future schema version may require it once active bindings have been migrated.
+
 ## Next decisions
 
 The next contract decisions should be resolved before broad authored-data mutation:
 
-1. schema strategy for the `mobile` -> `reactNative` projection rename;
-2. whether implementation reconciliation needs an authored definition/version/hash receipt per projection;
-3. whether test bindings should gain explicit `scenarioKeys` for direct proof ownership;
-4. exact schema/validator mechanism for document-type-aware identity and typed graph validation.
+1. whether implementation reconciliation needs an authored definition/version/hash receipt per projection;
+2. exact v2 AuthView/AuthRoute projection shape;
+3. exact schema/validator mechanism for document-type-aware identity and typed graph validation;
+4. AuthView/AuthRoute semantic version and maturity/status consistency with the broader authored-definition contract.
