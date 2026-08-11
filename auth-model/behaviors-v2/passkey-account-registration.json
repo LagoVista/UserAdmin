@@ -9,7 +9,7 @@
   "categoryKey": "passkey-registration",
   "scenarioKeys": [
     "auth.scenario.passkey.welcome-to-registration-identity",
-    "auth.scenario.passkey-registration.new-scenario",
+    "auth.scenario.passkey.continue-passkey-to-registration-identity",
     "auth.scenario.passkey.registration-identity-to-enrollment",
     "auth.scenario.passkey.enrollment-to-confirmation",
     "auth.scenario.passkey.confirmation-to-home"
