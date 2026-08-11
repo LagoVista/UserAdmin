@@ -74,11 +74,12 @@ Use these documents in this order for current work:
 
 1. `AUTH-MODEL-CONTRACT.md` - semantic graph, canonical identities, controls/actions/finders, platform reconciliation, validation layers, and migration policy
 2. `AUTH-MODEL-COMPATIBILITY-MAP.md` - consumer dependencies, minimal-change review rules, and compatibility guardrails for C#, Aptix, Angular, React Native, schemas, and authored JSON
-3. `AUTH-MODEL-MIGRATION-PLAN.md` - current-state inventory, normalization decisions, Password Sign-In specimen, and incremental migration phases
-4. `CATEGORY-TO-GREEN.md` - current operating process
-5. `CONVENTIONS.md` - durable model rules
-6. `AUTH-VIEW-ROUTE-CONTRACT.md` - detailed canonical presentation/routing contract
-7. `AUTH-BEHAVIOR-RECONCILIATION-RUNBOOK.md` - detailed implementation and evidence lessons, including Password Management
-8. dated evidence handoffs, `AUTH-IMPLEMENTATION-PLAN.md`, and `SECTION-*.md` - historical context
+3. `AUTH-VIEW-ROUTE-FIELD-REVIEW.md` - field-by-field semantics and Keep / Clarify / Validate / Consolidate / Migrate classifications for the existing AuthView/AuthRoute contracts
+4. `AUTH-MODEL-MIGRATION-PLAN.md` - current-state inventory, normalization decisions, Password Sign-In specimen, and incremental migration phases
+5. `CATEGORY-TO-GREEN.md` - current operating process
+6. `CONVENTIONS.md` - durable model rules
+7. `AUTH-VIEW-ROUTE-CONTRACT.md` - detailed canonical presentation/routing contract
+8. `AUTH-BEHAVIOR-RECONCILIATION-RUNBOOK.md` - detailed implementation and evidence lessons, including Password Management
+9. dated evidence handoffs, `AUTH-IMPLEMENTATION-PLAN.md`, and `SECTION-*.md` - historical context
 
 Historical documents are useful provenance, but they may describe older Cosmos projection or evidence workflows that are no longer the active authoring/runtime boundary.
