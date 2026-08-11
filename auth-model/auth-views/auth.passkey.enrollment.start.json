@@ -22,7 +22,7 @@
       "conformance": {
         "status": "mismatch",
         "checkedUtc": "2026-08-11T20:51:00Z",
-        "checkedAgainst": ["view-identity", "actions", "finders", "behavior"],
+        "checkedAgainst": ["view-identity", "actions", "finders"],
         "notes": "The Web surface matches the canonical screen identity and start-enrollment/cancel finders, but its supporting component executes authenticated existing-user passkey registration. The passkey-registration category requires pending anonymous account registration whose completion creates and binds the durable user and home organization."
       }
     },
