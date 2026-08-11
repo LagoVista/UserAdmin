@@ -10,7 +10,9 @@
   "sourceState": { "expression": "durable-identity == resolved and email-confirmed == false" },
   "actionKey": "auth.action.email-verification.complete",
   "guards": [{ "expression": "verification-code-valid == true", "failureCode": "email-verification-invalid" }],
-  "destinationTransform": [],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.email-ownership", "operation": "set", "valueExpression": "verified" }
+  ],
   "requiredEffects": ["confirm-email-once", "record-email-verification-result"],
   "forbiddenEffects": ["create-durable-user", "change-home-workspace", "switch-current-workspace"],
   "invariantKeys": ["auth.invariant.transition.deterministic-post-state"],
