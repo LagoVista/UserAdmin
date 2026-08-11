@@ -15,7 +15,7 @@
     "maturity": { "$ref": "#/$defs/maturity" },
     "requiredInputs": { "type": "array", "items": { "$ref": "#/$defs/input" } },
     "guards": { "type": "array", "items": { "$ref": "#/$defs/predicate" } },
-    "permittedMutations": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/keyReference" } },
+    "permittedMutations": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/keyReference" } },
     "requiredEffects": { "type": "array", "items": { "type": "string", "minLength": 1 } },
     "forbiddenEffects": { "type": "array", "items": { "type": "string", "minLength": 1 } },
     "invariantKeys": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^auth\\.invariant\\." } },
