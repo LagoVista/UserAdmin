@@ -8,7 +8,7 @@
   "maturity": "proposed",
   "requiredInputs": [{ "key": "durable-user-id", "valueType": "reference", "required": true, "description": "Authenticated durable identity requesting elevated proof." }],
   "guards": [{ "expression": "session-capability in [authenticated-limited,authenticated-normal] and durable-identity == resolved", "failureCode": "authenticated-durable-identity-required" }],
-  "permittedMutations": ["credential-proof"],
+  "permittedMutations": ["auth.dimension.credential-proof"],
   "requiredEffects": ["create-short-lived-passkey-step-up-challenge", "require-user-verification"],
   "forbiddenEffects": ["grant-step-up-before-assertion", "change-durable-identity", "create-durable-user"],
   "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
