@@ -8,7 +8,7 @@
   "maturity": "proposed",
   "requiredInputs": [{ "key": "pending-identity-reference", "valueType": "reference", "required": true, "description": "PendingIdentity receiving the registration challenge." }],
   "guards": [{ "expression": "pending-identity-flow == passkey", "failureCode": "passkey-flow-required" }],
-  "permittedMutations": ["credential-proof"],
+  "permittedMutations": ["auth.dimension.credential-proof"],
   "requiredEffects": ["create-short-lived-passkey-challenge", "bind-challenge-to-pending-identity"],
   "forbiddenEffects": ["create-durable-user", "persist-passkey-credential", "grant-normal-application-authorization"],
   "invariantKeys": ["auth.invariant.pending-identity.no-normal-authorization", "auth.invariant.pending-identity.exactly-one-flow", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
