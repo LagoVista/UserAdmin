@@ -14,10 +14,10 @@
     "repository": "LagoVista/UserAdmin",
     "path": "src/LagoVista.UserAdmin/CommonLinks.cs",
     "member": "AuthSignInUnable",
-    "route": "/auth/sign-in/unable",
+    "value": "/auth/sign-in/unable",
     "conformance": {
       "status": "verified",
-      "checkedAgainst": ["canonical-path", "member-value", "parameters"],
+      "checkedAgainst": ["canonical-path", "parameters"],
       "notes": "CommonLinks.AuthSignInUnable exactly matches the canonical sign-in unable route."
     }
   },
