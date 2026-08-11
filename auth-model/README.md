@@ -1,37 +1,66 @@
 # Authentication Model
 
-This directory contains the Git-authoritative authentication model described by `AUTH-MODEL-GUIDE.md`.
+This directory contains the Git-authoritative authentication model.
+
+For active category reconciliation, start with [`CATEGORY-TO-GREEN.md`](./CATEGORY-TO-GREEN.md).
 
 ## Ownership
 
-- Git owns authored definitions and their review history.
-- Cosmos DB owns runtime projections, execution records, evidence, and current operational status.
-- Existing code and DDR text are inputs to reconciliation, not automatic authority.
+- **Git owns authored truth**: categories, V2 behaviors, V2 scenarios, AuthViews, AuthRoutes, actions, transitions, implementation bindings, schemas, review history, and authored reconciliation progress.
+- **Runtime execution status is separate from Git**. Test execution may currently be persisted in Cosmos DB, but running a test must never require changing an authored definition or committing pass/fail state.
+- Existing code, generated contracts, DDR material, historical handoffs, and runtime results are evidence used to reconcile the canonical model. They do not silently override it.
 
-## Directory layout
+## Current working set
 
-- `state/` composite-state dimensions and value vocabularies
-- `invariants/` state, transition, and side-effect invariants
-- `actions/` logical atomic actions
-- `transitions/` deterministic transition rules
-- `journeys/` ordered human-recognizable journeys
-- `scenarios/` concrete `AppUserTestScenario`-aligned requirements
-- `conversations/` guided interaction definitions that select and orchestrate canonical journeys without directly mutating authentication state
-- `presentation/` platform and channel bindings, including AuthView mappings and guided-conversation presentation bindings
-- `schemas/` JSON Schema 2020-12 contracts
-- `decisions/` reconciliation decisions and durable rationale
-- `unresolved/` explicit open questions and conflicts
+The current category-to-green process uses:
+
+- `behavior-category-catalog.json` - category inventory and authored roll-up progress
+- `behaviors-v2/` - current linear outcome-specific behaviors
+- `scenarios-v2/` - current independently runnable UI/auth scenarios
+- `auth-views/` - canonical authentication surfaces
+- `auth-routes/` - canonical authentication routes
+- `actions/` - logical atomic actions
+- `transitions/` - deterministic state transitions
+- `implementation/` - proxy, endpoint, flow, handler, and test bindings
+- `schemas/` - JSON Schema contracts
+- `state/` and `invariants/` - canonical authentication state and invariant vocabulary
+
+Legacy `behaviors/` and `scenarios/` remain reference material. New category reconciliation uses the V2 roots declared by `model-manifest.json`.
+
+## Green means two things
+
+Authored progress and runtime execution are deliberately separate.
+
+**Authored green** means the canonical category/behavior/scenario/presentation/implementation/test specification is complete and reconciled.
+
+**Runtime green** means the required current scenario executions pass on the required platform(s), including the expected UI outcome and server-side receipt.
+
+A category is fully green only when both are true.
+
+See [`CATEGORY-TO-GREEN.md`](./CATEGORY-TO-GREEN.md) for the full process.
 
 ## Authoring rules
 
-1. Every authored definition has a stable key, schema version, maturity, version, summary, and source references.
+1. Every authored definition has a stable key, schema version, maturity, version, summary, and source references where evidence exists.
 2. Keys are permanent identifiers. Rename display names freely, but do not reuse or casually rename keys.
-3. Each scenario executes exactly one logical state-changing action.
+3. Each V2 scenario represents one deterministic UI action from one known starting surface/state to one resulting surface/state.
 4. Definitions reference other definitions by stable key, never by display name.
-5. Runtime evidence records the exact definition hash it evaluated.
-6. A changed definition makes older evidence stale until reverified.
+5. Runtime evidence should identify the definition version/hash or Git revision it evaluated.
+6. A materially changed definition makes older runtime proof stale until reverified.
 7. Conversation definitions may select and orchestrate journeys, but cannot redefine authentication guards, transitions, or postconditions.
-8. Secrets and credential proofs are collected only through deterministic secure components, never through the conversational context.
+8. Secrets and credential proofs are collected only through deterministic secure components, never through conversational context or authored JSON.
 9. Uncertainty must be recorded as proposed material or an unresolved item, never silently promoted to approved truth.
 
-See `CONVENTIONS.md` for canonical key, versioning, normalization, hashing, reference, and validation rules.
+See [`CONVENTIONS.md`](./CONVENTIONS.md) for canonical key, versioning, normalization, hashing, reference, and validation rules.
+
+## Documentation map
+
+Use these documents in this order for current work:
+
+1. `CATEGORY-TO-GREEN.md` - current operating process
+2. `CONVENTIONS.md` - durable model rules
+3. `AUTH-VIEW-ROUTE-CONTRACT.md` - canonical presentation/routing contract
+4. `AUTH-BEHAVIOR-RECONCILIATION-RUNBOOK.md` - detailed implementation and evidence lessons, including Password Management
+5. dated evidence handoffs, `AUTH-IMPLEMENTATION-PLAN.md`, and `SECTION-*.md` - historical context
+
+Historical documents are useful provenance, but they may describe older Cosmos projection or evidence workflows that are no longer the active authoring/runtime boundary.
