@@ -6,7 +6,7 @@
   "summary": "Validates an attached, unexpired, unconsumed invitation without resolving identity or granting membership.",
   "version": 1,
   "maturity": "proposed",
-  "scenarioType": "transition",
+  "scenarioType": "server",
   "journeyKeys": ["auth.journey.invitation.resolve"],
   "transitionKey": "auth.transition.invitation.validate-valid",
   "preconditions": { "expression": "invitation-status == attached" },
