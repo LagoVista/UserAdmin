@@ -32,44 +32,52 @@ namespace LagoVista.UserAdmin.Managers
 
             await AuthorizeAsync(authView, AuthorizeResult.AuthorizeActions.Read, user, org);
 
-            var selectedAction = ResolveAction(authView, scenario.Action);
-            var actionFinder = selectedAction?.Finder ?? ToTestIdFinder(scenario.Action?.Text);
+            var selectedAction = ResolveAction(authView, scenario.ActionId, scenario.ActionFinder, scenario.Action);
+            var actionFinder = selectedAction?.Finder ?? ToTestIdFinder(scenario.ActionFinder ?? scenario.Action?.Text);
 
             if (String.IsNullOrEmpty(authView.Route)) return InvokeResult<AuthRunnerPlan>.FromError("MissingRoute", "AuthView.Route is required.");
+            if (String.IsNullOrEmpty(authView.RouteId)) return InvokeResult<AuthRunnerPlan>.FromError("MissingRouteId", "AuthView.RouteId is required.");
             if (String.IsNullOrEmpty(authView.ViewId)) return InvokeResult<AuthRunnerPlan>.FromError("MissingViewId", "AuthView.ViewId is required.");
-            if (String.IsNullOrEmpty(actionFinder)) return InvokeResult<AuthRunnerPlan>.FromError("MissingActionFinder", $"Scenario.Action '{scenario.Action?.Text ?? scenario.Action?.Id ?? "(null)"}' does not provide a usable finder.");
+            if (String.IsNullOrEmpty(actionFinder)) return InvokeResult<AuthRunnerPlan>.FromError("MissingActionFinder", $"Scenario action '{scenario.ActionId ?? scenario.Action?.Text ?? scenario.Action?.Id ?? "(null)"}' does not provide a usable finder.");
 
             foreach (var input in scenario.Inputs ?? new List<AppUserTestSettingsValue>())
             {
-                if (String.IsNullOrEmpty(input.Finder))
-                    return InvokeResult<AuthRunnerPlan>.FromError("MissingInputFinder", $"Input '{input.Name}' is missing Finder.");
+                if (String.IsNullOrEmpty(input.Finder)) return InvokeResult<AuthRunnerPlan>.FromError("MissingInputFinder", $"Input '{input.Name}' is missing Finder.");
             }
 
-            var plan = new AuthRunnerPlan()
+            var plan = new AuthRunnerPlan
             {
                 RunId = Guid.NewGuid().ToString("N"),
                 Scenario = scenario.ToEntityHeader(),
+                ScenarioCanonicalKey = scenario.CanonicalKey,
+                ScenarioDefinitionVersion = scenario.DefinitionVersion,
+                ScenarioDefinitionHash = scenario.DefinitionHash,
                 StartRoute = NormalizeRoute(authView.Route),
                 StartViewId = authView.ViewId,
-                Inputs = (scenario.Inputs ?? new List<AppUserTestSettingsValue>()).Select(i => new AuthRunnerInput()
+                Inputs = (scenario.Inputs ?? new List<AppUserTestSettingsValue>()).Select(input => new AuthRunnerInput
                 {
-                    Name = i.Name,
-                    Finder = i.Finder,
-                    Value = i.Value,
-                    Kind = authView.Fields?.FirstOrDefault(f => String.Equals(f.Finder, i.Finder, StringComparison.OrdinalIgnoreCase))?.FieldType ?? "unknown"
+                    Name = input.Name,
+                    Finder = input.Finder,
+                    Value = input.Value,
+                    ValueType = input.ValueType,
+                    Required = input.Required,
+                    Kind = authView.Fields?.FirstOrDefault(field => String.Equals(field.Finder, input.Finder, StringComparison.OrdinalIgnoreCase))?.FieldType ?? "unknown"
                 }).ToList(),
-                Action = new AuthRunnerAction()
+                Action = new AuthRunnerAction
                 {
-                    Name = selectedAction?.Name ?? scenario.Action?.Id,
-                    Finder = actionFinder
+                    Id = selectedAction?.ActionId ?? scenario.ActionId,
+                    Name = selectedAction?.Name ?? scenario.ActionId ?? scenario.Action?.Id,
+                    Finder = actionFinder,
+                    ActionType = selectedAction?.ActionType
                 },
-                Observations = new AuthRunnerObservations()
+                Observations = new AuthRunnerObservations
                 {
                     ExpectedEndViewId = expectedView?.ViewId ?? expectedViewId,
                     ExpectedEndRoute = expectedView?.Route,
+                    ExpectedVisibleFinders = (scenario.ExpectedVisibleFinders ?? new List<string>()).Select(ToTestIdFinder).ToList(),
                     BusyStateFinder = "[data-testid=\"state:busy\"]"
                 },
-                Options = new AuthRunnerOptions()
+                Options = new AuthRunnerOptions
                 {
                     Headless = headless,
                     SlowMoMs = headless ? 0 : 50,
@@ -78,42 +86,47 @@ namespace LagoVista.UserAdmin.Managers
                 }
             };
 
-            var credenentialsResult = await ApplySetupAsync(scenarioId, org, user);
-            if (!credenentialsResult.Successful) return credenentialsResult.ToInvokeResult<AuthRunnerPlan>();
-            plan.UserCredentials = credenentialsResult.Result;
+            var credentialsResult = await ApplySetupAsync(scenarioId, org, user);
+            if (!credentialsResult.Successful) return credentialsResult.ToInvokeResult<AuthRunnerPlan>();
+            plan.UserCredentials = credentialsResult.Result;
 
             return InvokeResult<AuthRunnerPlan>.Create(plan);
         }
 
-        private static AuthFieldAction ResolveAction(AuthView view, EntityHeader scenarioAction)
+        private static AuthFieldAction ResolveAction(AuthView view, string actionId, string actionFinder, EntityHeader legacyScenarioAction)
         {
-            if (scenarioAction == null || view?.Actions == null) return null;
+            if (view?.Actions == null) return null;
 
-            var byId = view.Actions.FirstOrDefault(a => String.Equals(a.Id, scenarioAction.Id, StringComparison.OrdinalIgnoreCase));
+            if (!String.IsNullOrWhiteSpace(actionId))
+            {
+                var byCanonicalId = view.Actions.FirstOrDefault(action => String.Equals(action.ActionId, actionId, StringComparison.OrdinalIgnoreCase));
+                if (byCanonicalId != null) return byCanonicalId;
+            }
+
+            if (!String.IsNullOrWhiteSpace(actionFinder))
+            {
+                var byCanonicalFinder = view.Actions.FirstOrDefault(action => String.Equals(action.Finder, ToTestIdFinder(actionFinder), StringComparison.OrdinalIgnoreCase));
+                if (byCanonicalFinder != null) return byCanonicalFinder;
+            }
+
+            if (legacyScenarioAction == null) return null;
+
+            var byId = view.Actions.FirstOrDefault(action => String.Equals(action.Id, legacyScenarioAction.Id, StringComparison.OrdinalIgnoreCase));
             if (byId != null) return byId;
 
-            var token = (scenarioAction.Text ?? scenarioAction.Id ?? String.Empty).Trim();
+            var token = (legacyScenarioAction.Text ?? legacyScenarioAction.Id ?? String.Empty).Trim();
             if (String.IsNullOrEmpty(token)) return null;
 
             var finder = ToTestIdFinder(token);
-            var byFinder = view.Actions.FirstOrDefault(a => String.Equals(a.Finder, finder, StringComparison.OrdinalIgnoreCase));
+            var byFinder = view.Actions.FirstOrDefault(action => String.Equals(action.Finder, finder, StringComparison.OrdinalIgnoreCase));
             if (byFinder != null) return byFinder;
 
-            var byName = view.Actions.FirstOrDefault(a => String.Equals(a.Name, token, StringComparison.OrdinalIgnoreCase));
-            if (byName != null) return byName;
-
-            var normalized = token.StartsWith("action:", StringComparison.OrdinalIgnoreCase) ? token.Substring(7) : token;
-            var byNormalizedName = view.Actions.FirstOrDefault(a => String.Equals(a.Name, normalized, StringComparison.OrdinalIgnoreCase));
-            if (byNormalizedName != null) return byNormalizedName;
-
-            return null;
+            return view.Actions.FirstOrDefault(action => String.Equals(action.Name, token, StringComparison.OrdinalIgnoreCase));
         }
 
         private static string ToTestIdFinder(string finder)
         {
-            if (String.IsNullOrWhiteSpace(finder) || finder.StartsWith("[", StringComparison.Ordinal))
-                return finder;
-
+            if (String.IsNullOrWhiteSpace(finder) || finder.StartsWith("[", StringComparison.Ordinal)) return finder;
             return $"[data-testid=\"{finder}\"]";
         }
 
