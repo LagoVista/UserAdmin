@@ -8,7 +8,7 @@
   "maturity": "proposed",
   "requiredInputs": [{ "key": "return-location", "valueType": "string", "required": false, "description": "Validated post-authentication return location." }],
   "guards": [{ "expression": "account-status != disabled and account-status != closed", "failureCode": "account-not-eligible" }],
-  "permittedMutations": ["credential-proof"],
+  "permittedMutations": ["auth.dimension.credential-proof"],
   "requiredEffects": ["create-short-lived-passkey-authentication-challenge"],
   "forbiddenEffects": ["authenticate-before-assertion", "grant-step-up", "expose-credential-material"],
   "invariantKeys": ["auth.invariant.disabled-user.no-normal-session", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
