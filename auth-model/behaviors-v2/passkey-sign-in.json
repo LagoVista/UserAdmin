@@ -27,8 +27,8 @@
     }
   ],
   "progress": {
-    "scenarios": "not-started",
-    "presentation": "not-started",
+    "scenarios": "complete",
+    "presentation": "complete",
     "implementation": "not-started",
     "tests": "not-started"
   }
