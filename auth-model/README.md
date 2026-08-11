@@ -27,6 +27,21 @@ The current category-to-green process uses:
 
 Legacy `behaviors/` and `scenarios/` remain reference material. New category reconciliation uses the V2 roots declared by `model-manifest.json`.
 
+## `model-manifest.json`
+
+`model-manifest.json` is **structural metadata, not operational status truth**.
+
+Use it for:
+
+- definition-root locations
+- schema locations
+- validation policy
+- model-level conventions and provenance
+
+Do **not** use its `inventory` or `currentWork` values as a dashboard, readiness calculation, or current execution status. Those fields are retained as historical snapshot metadata and may be stale. The manifest carries a machine-readable `metadataPolicy` that states this explicitly.
+
+Once the model shape stabilizes, CI may derive or validate inventory and roll-up metadata directly from the repository. Until then, detailed JSON definitions and current runtime execution evidence remain authoritative for their respective concerns.
+
 ## Green means two things
 
 Authored progress and runtime execution are deliberately separate.
