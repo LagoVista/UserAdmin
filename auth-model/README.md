@@ -72,10 +72,11 @@ See [`CONVENTIONS.md`](./CONVENTIONS.md) for canonical key, versioning, normaliz
 
 Use these documents in this order for current work:
 
-1. `CATEGORY-TO-GREEN.md` - current operating process
-2. `CONVENTIONS.md` - durable model rules
-3. `AUTH-VIEW-ROUTE-CONTRACT.md` - canonical presentation/routing contract
-4. `AUTH-BEHAVIOR-RECONCILIATION-RUNBOOK.md` - detailed implementation and evidence lessons, including Password Management
-5. dated evidence handoffs, `AUTH-IMPLEMENTATION-PLAN.md`, and `SECTION-*.md` - historical context
+1. `AUTH-MODEL-CONTRACT.md` - semantic graph, canonical identities, controls/actions/finders, platform reconciliation, validation layers, and migration policy
+2. `CATEGORY-TO-GREEN.md` - current operating process
+3. `CONVENTIONS.md` - durable model rules
+4. `AUTH-VIEW-ROUTE-CONTRACT.md` - detailed canonical presentation/routing contract
+5. `AUTH-BEHAVIOR-RECONCILIATION-RUNBOOK.md` - detailed implementation and evidence lessons, including Password Management
+6. dated evidence handoffs, `AUTH-IMPLEMENTATION-PLAN.md`, and `SECTION-*.md` - historical context
 
 Historical documents are useful provenance, but they may describe older Cosmos projection or evidence workflows that are no longer the active authoring/runtime boundary.
