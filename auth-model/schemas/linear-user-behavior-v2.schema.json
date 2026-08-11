@@ -60,6 +60,7 @@
     },
     "scenarioKeys": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "string",
         "pattern": "^auth\\.scenario\\."
