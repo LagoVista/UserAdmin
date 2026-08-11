@@ -31,11 +31,29 @@
   "platforms": {
     "web": {
       "status": "implemented",
-      "implementation": "AuthWelcomeComponent"
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "user/auth-welcome/auth-welcome.component.html",
+      "component": "AuthWelcomeComponent",
+      "implementation": "AuthWelcomeComponent with auth-welcome.component.html",
+      "conformance": {
+        "status": "verified",
+        "checkedUtc": "2026-08-11T18:38:00Z",
+        "checkedAgainst": ["view-identity", "actions", "finders", "navigation"],
+        "notes": "Verified the canonical auth.welcome screen identity and continue-email, continue-provider, and continue-passkey actions/finders against the Angular template and navigation handlers."
+      }
     },
     "mobile": {
       "status": "implemented",
-      "implementation": "app/auth/welcome.tsx"
+      "repository": "nuviot/vtm-client",
+      "path": "src/features/authentication/nuviot-account/screens/auth-welcome-screen.tsx",
+      "component": "AuthWelcomeScreen",
+      "implementation": "app/auth/welcome.tsx -> AuthWelcomeScreen",
+      "conformance": {
+        "status": "verified",
+        "checkedUtc": "2026-08-11T18:38:00Z",
+        "checkedAgainst": ["view-identity", "actions", "finders", "navigation"],
+        "notes": "Verified the canonical auth.welcome screen identity and all three canonical actions/finders against AuthWelcomeScreen."
+      }
     }
   },
   "source": {
