@@ -7,7 +7,7 @@
   "version": 1,
   "maturity": "proposed",
   "requiredInputs": [
-    { "key": "verification-code", "valueType": "secret", "required": true, "description": "Email verification challenge supplied by the user." }
+    { "key": "verification-code", "valueType": "secret-reference", "required": true, "description": "Email verification challenge supplied by the user." }
   ],
   "guards": [
     { "expression": "durable-identity == resolved", "failureCode": "email-verification-user-not-found" },
