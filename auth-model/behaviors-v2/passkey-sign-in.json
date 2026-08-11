@@ -24,12 +24,17 @@
     {
       "sourceType": "journey",
       "reference": "auth.journey.passkey.authentication"
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs",
+      "note": "Existing passwordless passkey implementation satisfies the canonical challenge, assertion, durable-user resolution, signature-counter and redirect responsibilities."
     }
   ],
   "progress": {
     "scenarios": "complete",
     "presentation": "complete",
-    "implementation": "not-started",
+    "implementation": "complete",
     "tests": "not-started"
   }
 }
