@@ -1,0 +1,17 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.passkey.registration.identity",
+  "name": "Passkey Registration Details",
+  "path": "/auth/passkey/registration/identity",
+  "routeType": "view",
+  "viewId": "auth.passkey.registration.identity",
+  "status": "active",
+  "platforms": {
+    "web": { "status": "planned" },
+    "mobile": { "status": "planned" }
+  },
+  "notes": [
+    "Canonical route for the passkey registration identity-details view."
+  ]
+}
