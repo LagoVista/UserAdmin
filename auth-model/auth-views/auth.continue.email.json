@@ -16,8 +16,32 @@
     { "id": "start-over", "name": "Start Over", "actionType": "link", "finder": "action:start-over" }
   ],
   "platforms": {
-    "web": { "status": "implemented", "implementation": "ContinueEmailComponent" },
-    "mobile": { "status": "implemented", "implementation": "app/auth/continue/email.tsx" }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "user/continue-email/continue-email.component.ts",
+      "component": "ContinueEmailComponent",
+      "implementation": "ContinueEmailComponent with continue-email.component.html",
+      "conformance": {
+        "status": "verified",
+        "checkedUtc": "2026-08-11T18:38:00Z",
+        "checkedAgainst": ["view-identity", "controls", "actions", "finders", "navigation"],
+        "notes": "Verified auth.continue.email, field:email, and the continue, back, and start-over actions/finders against the Angular component and template."
+      }
+    },
+    "mobile": {
+      "status": "implemented",
+      "repository": "nuviot/vtm-client",
+      "path": "src/features/authentication/nuviot-account/screens/continue-email-screen.tsx",
+      "component": "ContinueEmailScreen",
+      "implementation": "app/auth/continue/email.tsx -> ContinueEmailScreen",
+      "conformance": {
+        "status": "verified",
+        "checkedUtc": "2026-08-11T18:38:00Z",
+        "checkedAgainst": ["view-identity", "controls", "actions", "finders", "navigation"],
+        "notes": "Verified auth.continue.email, field:email, and all three canonical actions after aligning the mobile submit finder to action:continue."
+      }
+    }
   },
   "source": {
     "runtimeEntityId": "F1C70E673FC3405E8217F1D615A580AA",
@@ -25,5 +49,5 @@
     "webComponent": "ContinueEmailComponent",
     "mobileComponent": "app/auth/continue/email.tsx"
   },
-  "notes": ["The legacy next action is normalized to continue.", "The web implementation must replace input#email with the semantic finder field:email."]
+  "notes": ["The legacy next action is normalized to continue."]
 }
