@@ -1,0 +1,48 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.passkey.continue-passkey-to-registration-identity",
+  "runtimeEntityId": "C5DEA427CA51563993309C388F12127E",
+  "name": "Continue Passkey to Registration Identity",
+  "summary": "When no existing passkey authentication completes, the user continues into new-user passkey registration and reaches the identity-details view.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "passkey-registration",
+  "startViewKey": "auth.continue.passkey",
+  "action": {
+    "id": "use-passkey",
+    "finder": "action:use-passkey"
+  },
+  "preconditions": {
+    "expression": "session-capability == anonymous and auth.continue.passkey is visible"
+  },
+  "inputs": [],
+  "serverInteraction": {
+    "required": false
+  },
+  "expectedViewKey": "auth.passkey.registration.identity",
+  "postconditions": {
+    "expression": "session-capability == anonymous and auth.passkey.registration.identity is visible"
+  },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": [
+    "web",
+    "android",
+    "ios"
+  ],
+  "sourceReferences": [
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.continue.passkey"
+    },
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.passkey.registration.identity"
+    }
+  ],
+  "progress": {
+    "presentation": "not-started",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
+}
