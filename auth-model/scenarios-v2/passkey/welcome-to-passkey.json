@@ -38,11 +38,21 @@
     {
       "sourceType": "auth-view",
       "reference": "auth.continue.passkey"
+    },
+    {
+      "sourceType": "code",
+      "reference": "softwarelogistics/nuviot-ui-shared:user/auth-welcome/auth-welcome.component.ts",
+      "note": "Web continue-passkey navigation opens the canonical passkey continuation route."
+    },
+    {
+      "sourceType": "code",
+      "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/auth-welcome-screen.tsx",
+      "note": "Mobile continue-passkey navigation opens the canonical passkey continuation route."
     }
   ],
   "progress": {
     "presentation": "complete",
-    "implementation": "not-started",
+    "implementation": "complete",
     "tests": "not-started"
   }
 }
