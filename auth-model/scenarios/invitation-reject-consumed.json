@@ -6,7 +6,7 @@
   "summary": "Rejects reuse of an invitation that has already been consumed.",
   "version": 1,
   "maturity": "proposed",
-  "scenarioType": "negative",
+  "scenarioType": "security-invariant",
   "journeyKeys": ["auth.journey.invitation.resolve"],
   "transitionKey": "auth.transition.invitation.validate-invalid",
   "preconditions": { "expression": "invitation-status == attached and invitation-consumed == true" },
