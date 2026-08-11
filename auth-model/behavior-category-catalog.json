@@ -141,7 +141,7 @@
         "behaviors": "complete",
         "scenarios": "complete",
         "presentation": "complete",
-        "implementation": "not-started",
+        "implementation": "complete",
         "tests": "not-started"
       }
     },
@@ -362,6 +362,11 @@
       "sourceType": "decision",
       "reference": "ChatGPT conversation 2026-08-11",
       "note": "Passkey Sign In reconciled to one canonical behavior with Welcome-to-Passkey and Passkey-to-Home scenarios. Welcome and Continue with Passkey presentation surfaces are conformance-verified on web and mobile; implementation and tests remain separate follow-on phases."
+    },
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-11",
+      "note": "Passkey Sign In implementation reconciliation confirmed the existing anonymous passwordless PasskeyController and AppUserPasskeyManager path consumes and validates challenges, resolves exactly one durable user from the credential, validates the WebAuthn assertion, advances the signature counter, emits concrete AuthLogTypes events, and resolves the landing destination."
     }
   ]
 }
