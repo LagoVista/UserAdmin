@@ -37,9 +37,7 @@ namespace LagoVista.UserAdmin.Repos.Testing
         }
 
         public Task AddDSLAsync(AppUserTestScenario dsl) => ReadOnlyAsync();
-
         public Task DeleteByIdAsync(string id) => ReadOnlyAsync();
-
         public Task UpdateTestScenarioAsync(AppUserTestScenario dsl) => ReadOnlyAsync();
 
         public async Task<AppUserTestScenario> GetByIdAsync(string id)
@@ -49,8 +47,11 @@ namespace LagoVista.UserAdmin.Repos.Testing
             _adminLogger.Trace($"[AppUserTestingDslRepo__GetById] Loading canonical scenario '{id}'.");
             var scenarios = await LoadScenariosAsync(false);
             var compatibleKey = ToLagoVistaKey(id);
-            var scenario = scenarios.FirstOrDefault(item => String.Equals(item.Id, id, StringComparison.OrdinalIgnoreCase) || String.Equals(item.Key, compatibleKey, StringComparison.OrdinalIgnoreCase));
-            _adminLogger.Trace($"[AppUserTestingDslRepo__GetById] Scenario '{id}' {(scenario == null ? "was not found" : $"resolved to runtime key '{scenario.Key}' and runtime id '{scenario.Id}'")}.");
+            var scenario = scenarios.FirstOrDefault(item =>
+                String.Equals(item.Id, id, StringComparison.OrdinalIgnoreCase) ||
+                String.Equals(item.CanonicalKey, id, StringComparison.OrdinalIgnoreCase) ||
+                String.Equals(item.Key, compatibleKey, StringComparison.OrdinalIgnoreCase));
+            _adminLogger.Trace($"[AppUserTestingDslRepo__GetById] Scenario '{id}' {(scenario == null ? "was not found" : $"resolved to canonical key '{scenario.CanonicalKey}', runtime key '{scenario.Key}' and runtime id '{scenario.Id}'")}.");
             return scenario;
         }
 
@@ -71,20 +72,12 @@ namespace LagoVista.UserAdmin.Repos.Testing
         {
             _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] Begin. ForceGitRefresh={forceGitRefresh}, CacheAvailable={_gitScenarioCache != null}.");
 
-            if (!forceGitRefresh && _gitScenarioCache != null)
-            {
-                _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] Returning cached canonical scenarios. Count={_gitScenarioCache.Count}.");
-                return _gitScenarioCache;
-            }
+            if (!forceGitRefresh && _gitScenarioCache != null) return _gitScenarioCache;
 
             await _gitLoadLock.WaitAsync();
             try
             {
-                if (!forceGitRefresh && _gitScenarioCache != null)
-                {
-                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] Cache populated while waiting for lock. Count={_gitScenarioCache.Count}.");
-                    return _gitScenarioCache;
-                }
+                if (!forceGitRefresh && _gitScenarioCache != null) return _gitScenarioCache;
 
                 _adminLogger.Trace($"[AppUserTestingDslRepo__LoadScenarios] Attempting authoritative Git load from '{GitArchiveUrl}'.");
                 try
@@ -128,7 +121,6 @@ namespace LagoVista.UserAdmin.Repos.Testing
             {
                 try
                 {
-                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadFromGit] Reading AuthView '{entry.FullName}'.");
                     authViewJson.Add(ReadJson(entry));
                 }
                 catch (Exception ex)
@@ -138,20 +130,13 @@ namespace LagoVista.UserAdmin.Repos.Testing
             }
 
             var viewMap = LoadAuthViewMap(authViewJson);
-            _adminLogger.Trace($"[AppUserTestingDslRepo__LoadFromGit] Built AuthView map. Count={viewMap.Count}.");
-
             var scenarios = new List<AppUserTestScenario>();
             foreach (var entry in scenarioEntries)
             {
                 try
                 {
-                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadFromGit] Reading scenario '{entry.FullName}'.");
                     var json = ReadJson(entry);
-                    var key = json.Value<string>("key") ?? "<missing>";
-                    var runtimeEntityId = json.Value<string>("runtimeEntityId") ?? "<missing>";
-                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadFromGit] Hydrating scenario Source='{entry.FullName}', Key='{key}', RuntimeEntityId='{runtimeEntityId}'.");
                     scenarios.Add(HydrateScenario(json, entry.FullName, viewMap));
-                    _adminLogger.Trace($"[AppUserTestingDslRepo__LoadFromGit] Hydrated scenario Key='{key}', RuntimeEntityId='{runtimeEntityId}'.");
                 }
                 catch (Exception ex)
                 {
@@ -159,9 +144,7 @@ namespace LagoVista.UserAdmin.Repos.Testing
                 }
             }
 
-            var ordered = scenarios.OrderBy(item => item.Name).ToList();
-            _adminLogger.Trace($"[AppUserTestingDslRepo__LoadFromGit] Completed Git hydration successfully. ScenarioCount={ordered.Count}.");
-            return ordered;
+            return scenarios.OrderBy(item => item.Name).ToList();
         }
 
         private static Dictionary<string, EntityHeader> LoadAuthViewMap(IEnumerable<JObject> authViews)
@@ -186,7 +169,6 @@ namespace LagoVista.UserAdmin.Repos.Testing
         {
             var markerIndex = entry.FullName.IndexOf(AuthViewPathMarker, StringComparison.OrdinalIgnoreCase);
             if (markerIndex < 0 || !entry.FullName.EndsWith(".json", StringComparison.OrdinalIgnoreCase)) return false;
-
             var relativePath = entry.FullName.Substring(markerIndex + AuthViewPathMarker.Length);
             return !relativePath.Contains("/");
         }
@@ -202,22 +184,38 @@ namespace LagoVista.UserAdmin.Repos.Testing
             var key = RequiredString(json, "key", source);
             var runtimeEntityId = RequiredString(json, "runtimeEntityId", source);
             var action = json["action"] as JObject;
-            var actionId = action?.Value<string>("id");
-            var actionFinder = action?.Value<string>("finder");
+            var actionId = RequiredString(action, "id", source, "action");
+            var actionFinder = RequiredString(action, "finder", source, "action");
+            var serverInteraction = json["serverInteraction"] as JObject;
 
             return new AppUserTestScenario
             {
                 Id = runtimeEntityId,
                 Key = ToLagoVistaKey(key),
+                CanonicalKey = key,
+                SchemaVersion = RequiredString(json, "schemaVersion", source),
+                DefinitionVersion = json.Value<int?>("version") ?? 0,
+                Maturity = RequiredString(json, "maturity", source),
+                CategoryKey = RequiredString(json, "categoryKey", source),
+                DefinitionHash = json.Value<string>("definitionHash"),
                 Name = RequiredString(json, "name", source),
-                Description = json.Value<string>("summary"),
-                AuthView = ResolveView(json.Value<string>("startViewKey"), viewMap),
-                ExpectedView = ResolveView(json.Value<string>("expectedViewKey"), viewMap),
-                Action = String.IsNullOrWhiteSpace(actionId) ? null : EntityHeader.Create(ToRuntimeEntityId($"{key}:action:{actionId}"), actionFinder ?? actionId),
+                Description = RequiredString(json, "summary", source),
+                AuthView = ResolveView(RequiredString(json, "startViewKey", source), viewMap),
+                ExpectedView = ResolveView(RequiredString(json, "expectedViewKey", source), viewMap),
+                ActionId = actionId,
+                ActionFinder = actionFinder,
+                Action = EntityHeader.Create(ToRuntimeEntityId($"{key}:action:{actionId}"), actionFinder),
                 Inputs = HydrateInputs(json["inputs"] as JArray),
+                PreconditionExpression = json["preconditions"]?.Value<string>("expression"),
+                PostconditionExpression = json["postconditions"]?.Value<string>("expression"),
                 PreConditions = HydrateState(json["preconditions"]?["state"] as JObject),
                 PostConditions = HydrateState(json["postconditions"]?["state"] as JObject),
-                ExpectedAuthLogEvents = json["expectedAuthLogEvents"]?.Values<string>().Where(value => !String.IsNullOrWhiteSpace(value)).ToList() ?? new List<string>()
+                ServerInteractionRequired = serverInteraction?.Value<bool?>("required") ?? false,
+                ServerInteractionIntent = serverInteraction?.Value<string>("intent"),
+                TransitionKeys = ReadStringList(serverInteraction?["transitionKeys"] as JArray),
+                ExpectedVisibleFinders = ReadStringList(json["expectedVisibleFinders"] as JArray),
+                ExpectedAuthLogEvents = ReadStringList(json["expectedAuthLogEvents"] as JArray),
+                EvidenceRequirements = ReadStringList(json["evidenceRequirements"] as JArray)
             };
         }
 
@@ -229,8 +227,16 @@ namespace LagoVista.UserAdmin.Repos.Testing
             {
                 Finder = ToTestIdFinder(input.Value<string>("finder")),
                 Name = input.Value<string>("name"),
-                Value = input.Value<string>("value")
+                ValueType = input.Value<string>("valueType"),
+                Required = input.Value<bool?>("required") ?? false,
+                Value = input.Value<string>("value"),
+                Description = input.Value<string>("description")
             }).ToList();
+        }
+
+        private static List<string> ReadStringList(JArray values)
+        {
+            return values?.Values<string>().Where(value => !String.IsNullOrWhiteSpace(value)).ToList() ?? new List<string>();
         }
 
         private static AuthTenantStateSnapshot HydrateState(JObject state)
@@ -265,7 +271,8 @@ namespace LagoVista.UserAdmin.Repos.Testing
         {
             if (String.IsNullOrWhiteSpace(viewKey)) return null;
             if (viewMap.TryGetValue(viewKey, out var view)) return EntityHeader.Create(view.Id, view.Text);
-            return EntityHeader.Create(ToRuntimeEntityId(viewKey), viewKey);
+            if (viewKey.StartsWith("app.", StringComparison.OrdinalIgnoreCase)) return EntityHeader.Create(ToRuntimeEntityId(viewKey), viewKey);
+            throw new InvalidDataException($"Canonical scenario references missing AuthView '{viewKey}'.");
         }
 
         private static string ToRuntimeEntityId(string canonicalValue)
@@ -291,10 +298,11 @@ namespace LagoVista.UserAdmin.Repos.Testing
             return $"[data-testid=\"{finder}\"]";
         }
 
-        private static string RequiredString(JObject json, string propertyName, string source)
+        private static string RequiredString(JObject json, string propertyName, string source, string parent = null)
         {
+            if (json == null) throw new InvalidDataException($"Canonical auth scenario '{source}' is missing required object '{parent ?? propertyName}'.");
             var value = json.Value<string>(propertyName);
-            if (String.IsNullOrWhiteSpace(value)) throw new InvalidDataException($"Canonical auth scenario '{source}' is missing required property '{propertyName}'.");
+            if (String.IsNullOrWhiteSpace(value)) throw new InvalidDataException($"Canonical auth scenario '{source}' is missing required property '{(String.IsNullOrWhiteSpace(parent) ? propertyName : parent + "." + propertyName)}'.");
             return value;
         }
 
