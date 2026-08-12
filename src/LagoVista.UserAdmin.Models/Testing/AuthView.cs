@@ -23,9 +23,15 @@ namespace LagoVista.UserAdmin.Models.Testing
         /// <summary>Canonical auth-model route identity referenced by this view.</summary>
         public string RouteId { get; set; }
 
-        /// <summary>Resolved canonical route path used by the runner.</summary>
+        /// <summary>Compatibility route retained for existing clients. Mirrors WebRoute.</summary>
         [FormField(LabelResource: UserAdminResources.Names.AuthView_Route, HelpResource: UserAdminResources.Names.AuthView_Route_Help, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string Route { get; set; }
+
+        /// <summary>Resolved web navigation path for this view.</summary>
+        public string WebRoute { get; set; }
+
+        /// <summary>Resolved mobile navigation route for this view.</summary>
+        public string MobileRoute { get; set; }
 
         public string AuthCategory { get; set; }
         public string Status { get; set; }
@@ -43,6 +49,8 @@ namespace LagoVista.UserAdmin.Models.Testing
             summary.ViewId = ViewId;
             summary.RouteId = RouteId;
             summary.Route = Route;
+            summary.WebRoute = WebRoute;
+            summary.MobileRoute = MobileRoute;
             summary.AuthCategory = AuthCategory;
             summary.Status = Status;
             return summary;
@@ -112,7 +120,7 @@ namespace LagoVista.UserAdmin.Models.Testing
         [FormField(LabelResource: UserAdminResources.Names.AuthFieldAction_Name, HelpResource: UserAdminResources.Names.AuthFieldAction_Help, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string Name { get; set; }
 
-        [FormField(LabelResource: UserAdminResources.Names.AuthFieldAction_Finder, HelpResource: UserAdminResources.Names.AuthFieldAction_Finder_Help, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [FormField(LabelResource: UserAdminResources.Names.AuthFieldAction_Finder, HelpResource: UserAdminResources.Names.AuthFieldAction_Help, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string Finder { get; set; }
 
         public string ActionType { get; set; }
@@ -131,6 +139,8 @@ namespace LagoVista.UserAdmin.Models.Testing
     public class AuthViewSummary : SummaryData
     {
         public string Route { get; set; }
+        public string WebRoute { get; set; }
+        public string MobileRoute { get; set; }
         public string RouteId { get; set; }
         public string ViewId { get; set; }
         public string AuthCategory { get; set; }
