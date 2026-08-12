@@ -48,6 +48,12 @@ namespace LagoVista.UserAdmin.Managers
                 var matches = (authView.Fields ?? new List<AuthViewField>()).Where(field => String.Equals(field.Finder, input.Finder, StringComparison.OrdinalIgnoreCase)).ToList();
                 if (matches.Count == 0) return InvokeResult<AuthRunnerPlan>.FromError("InputFinderNotFound", $"Input finder '{input.Finder}' does not match a control on starting AuthView '{authView.ViewId}'.");
                 if (matches.Count > 1) return InvokeResult<AuthRunnerPlan>.FromError("InputFinderAmbiguous", $"Input finder '{input.Finder}' matches {matches.Count} controls on starting AuthView '{authView.ViewId}'. Exactly one match is required.");
+
+                var matchedField = matches[0];
+                if (String.Equals(matchedField.FieldType, "checkbox", StringComparison.OrdinalIgnoreCase) && !String.Equals(input.ValueType, "boolean", StringComparison.OrdinalIgnoreCase))
+                    return InvokeResult<AuthRunnerPlan>.FromError("InputValueTypeMismatch", $"Input finder '{input.Finder}' targets a checkbox and must use valueType 'boolean'.");
+                if (String.Equals(input.ValueType, "boolean", StringComparison.OrdinalIgnoreCase) && !String.Equals(matchedField.FieldType, "checkbox", StringComparison.OrdinalIgnoreCase))
+                    return InvokeResult<AuthRunnerPlan>.FromError("InputValueTypeMismatch", $"Input finder '{input.Finder}' uses valueType 'boolean', but matched control type is '{matchedField.FieldType}'.");
             }
 
             // State setup is a server responsibility. Do it before constructing inputs so every
@@ -75,7 +81,7 @@ namespace LagoVista.UserAdmin.Managers
                     Finder = input.Finder,
                     Value = preparedValue,
                     ValueType = input.ValueType,
-                    Required = input.Required,
+                    Required = matchedField.Required ?? input.Required,
                     Kind = matchedField.FieldType
                 });
             }
