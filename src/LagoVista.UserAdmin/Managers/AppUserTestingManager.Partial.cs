@@ -44,6 +44,10 @@ namespace LagoVista.UserAdmin.Managers
             foreach (var input in scenario.Inputs ?? new List<AppUserTestSettingsValue>())
             {
                 if (String.IsNullOrEmpty(input.Finder)) return InvokeResult<AuthRunnerPlan>.FromError("MissingInputFinder", $"Input '{input.Name}' is missing Finder.");
+
+                var matches = (authView.Fields ?? new List<AuthViewField>()).Where(field => String.Equals(field.Finder, input.Finder, StringComparison.OrdinalIgnoreCase)).ToList();
+                if (matches.Count == 0) return InvokeResult<AuthRunnerPlan>.FromError("InputFinderNotFound", $"Input finder '{input.Finder}' does not match a control on starting AuthView '{authView.ViewId}'.");
+                if (matches.Count > 1) return InvokeResult<AuthRunnerPlan>.FromError("InputFinderAmbiguous", $"Input finder '{input.Finder}' matches {matches.Count} controls on starting AuthView '{authView.ViewId}'. Exactly one match is required.");
             }
 
             // State setup is a server responsibility. Do it before constructing inputs so every
@@ -64,6 +68,7 @@ namespace LagoVista.UserAdmin.Managers
                 if (!String.IsNullOrWhiteSpace(preparedValue) && preparedValue.IndexOf("user.", StringComparison.OrdinalIgnoreCase) >= 0)
                     return InvokeResult<AuthRunnerPlan>.FromError("UnresolvedInputValue", $"Input '{input.Name}' contains unresolved symbolic value '{preparedValue}'.");
 
+                var matchedField = authView.Fields.First(field => String.Equals(field.Finder, input.Finder, StringComparison.OrdinalIgnoreCase));
                 preparedInputs.Add(new AuthRunnerInput
                 {
                     Name = input.Name,
@@ -71,7 +76,7 @@ namespace LagoVista.UserAdmin.Managers
                     Value = preparedValue,
                     ValueType = input.ValueType,
                     Required = input.Required,
-                    Kind = authView.Fields?.FirstOrDefault(field => String.Equals(field.Finder, input.Finder, StringComparison.OrdinalIgnoreCase))?.FieldType ?? "unknown"
+                    Kind = matchedField.FieldType
                 });
             }
 
