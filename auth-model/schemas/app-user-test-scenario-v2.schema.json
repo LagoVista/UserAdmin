@@ -162,13 +162,23 @@
     "input": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["finder", "name", "valueType", "required"],
+      "required": ["finder", "name", "valueType"],
       "properties": {
         "finder": { "type": "string", "pattern": "^field:[a-z][a-z0-9]*(?:-[a-z0-9]+)*$" },
         "name": { "type": "string", "minLength": 1 },
         "valueType": { "enum": ["string", "boolean", "integer", "timestamp", "reference", "secret-reference"] },
-        "required": { "type": "boolean" },
-        "value": { "type": "string", "minLength": 1 },
+        "required": {
+          "type": "boolean",
+          "description": "Optional authored assertion. The matched AuthView control is authoritative; validation fails when this value is supplied and disagrees with the control."
+        },
+        "value": {
+          "anyOf": [
+            { "type": "string", "minLength": 1 },
+            { "type": "boolean" },
+            { "type": "integer" }
+          ],
+          "description": "Literal value to provide to the UI or a supported server-resolved symbolic reference."
+        },
         "example": {},
         "description": { "type": "string" }
       }
