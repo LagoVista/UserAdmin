@@ -25,17 +25,18 @@ namespace LagoVista.UserAdmin.Managers
             var authView = await _authViewRepo.GetByIdAsync(scenario.AuthView.Id);
             if (authView == null) return InvokeResult<AuthRunnerPlan>.FromError("AuthViewNotFound", $"AuthView '{scenario.AuthView.Id}' not found.");
 
+            var expectedCanonicalViewId = scenario.ExpectedView?.Text?.StartsWith("app.", StringComparison.OrdinalIgnoreCase) == true ? scenario.ExpectedView.Text : null;
             AuthView expectedView = null;
-            var expectedViewId = scenario.ExpectedView?.Id;
-            if (!String.IsNullOrWhiteSpace(expectedViewId) && !expectedViewId.StartsWith("app.", StringComparison.OrdinalIgnoreCase))
-                expectedView = await _authViewRepo.GetByIdAsync(expectedViewId);
-
-            await AuthorizeAsync(authView, AuthorizeResult.AuthorizeActions.Read, user, org);
+            if (String.IsNullOrWhiteSpace(expectedCanonicalViewId) && !String.IsNullOrWhiteSpace(scenario.ExpectedView?.Id))
+            {
+                expectedView = await _authViewRepo.GetByIdAsync(scenario.ExpectedView.Id);
+                expectedCanonicalViewId = expectedView?.ViewId;
+            }
 
             var selectedAction = ResolveAction(authView, scenario.ActionId, scenario.ActionFinder, scenario.Action);
             var actionFinder = selectedAction?.Finder ?? ToTestIdFinder(scenario.ActionFinder ?? scenario.Action?.Text);
 
-            if (String.IsNullOrEmpty(authView.Route)) return InvokeResult<AuthRunnerPlan>.FromError("MissingRoute", "AuthView.Route is required.");
+            if (String.IsNullOrEmpty(authView.WebRoute ?? authView.Route)) return InvokeResult<AuthRunnerPlan>.FromError("MissingRoute", "AuthView web route is required.");
             if (String.IsNullOrEmpty(authView.RouteId)) return InvokeResult<AuthRunnerPlan>.FromError("MissingRouteId", "AuthView.RouteId is required.");
             if (String.IsNullOrEmpty(authView.ViewId)) return InvokeResult<AuthRunnerPlan>.FromError("MissingViewId", "AuthView.ViewId is required.");
             if (String.IsNullOrEmpty(actionFinder)) return InvokeResult<AuthRunnerPlan>.FromError("MissingActionFinder", $"Scenario action '{scenario.ActionId ?? scenario.Action?.Text ?? scenario.Action?.Id ?? "(null)"}' does not provide a usable finder.");
@@ -45,24 +46,57 @@ namespace LagoVista.UserAdmin.Managers
                 if (String.IsNullOrEmpty(input.Finder)) return InvokeResult<AuthRunnerPlan>.FromError("MissingInputFinder", $"Input '{input.Name}' is missing Finder.");
             }
 
+            // State setup is a server responsibility. Do it before constructing inputs so every
+            // symbolic canonical value can be converted into a concrete value for the runner.
+            var credentialsResult = await ApplySetupAsync(scenarioId, org, user);
+            if (!credentialsResult.Successful) return credentialsResult.ToInvokeResult<AuthRunnerPlan>();
+            var credentials = credentialsResult.Result ?? new TestUserCredentials();
+
+            var preparedInputs = new List<AuthRunnerInput>();
+            foreach (var input in scenario.Inputs ?? new List<AppUserTestSettingsValue>())
+            {
+                var preparedValue = ResolvePreparedInputValue(input.Value, credentials);
+                if (!String.IsNullOrWhiteSpace(preparedValue) && preparedValue.StartsWith("user.", StringComparison.OrdinalIgnoreCase))
+                    return InvokeResult<AuthRunnerPlan>.FromError("UnresolvedInputValue", $"Input '{input.Name}' contains unresolved symbolic value '{preparedValue}'.");
+
+                preparedInputs.Add(new AuthRunnerInput
+                {
+                    Name = input.Name,
+                    Finder = input.Finder,
+                    Value = preparedValue,
+                    ValueType = input.ValueType,
+                    Required = input.Required,
+                    Kind = authView.Fields?.FirstOrDefault(field => String.Equals(field.Finder, input.Finder, StringComparison.OrdinalIgnoreCase))?.FieldType ?? "unknown"
+                });
+            }
+
+            var start = new AuthRunnerViewTarget
+            {
+                ViewId = authView.ViewId,
+                WebRoute = NormalizeRoute(authView.WebRoute ?? authView.Route),
+                MobileRoute = authView.MobileRoute
+            };
+
+            var expected = new AuthRunnerViewTarget
+            {
+                ViewId = expectedView?.ViewId ?? expectedCanonicalViewId,
+                WebRoute = expectedView == null ? null : NormalizeRoute(expectedView.WebRoute ?? expectedView.Route),
+                MobileRoute = expectedView?.MobileRoute
+            };
+
             var plan = new AuthRunnerPlan
             {
                 RunId = Guid.NewGuid().ToString("N"),
                 Scenario = scenario.ToEntityHeader(),
                 ScenarioCanonicalKey = scenario.CanonicalKey,
+                ScenarioName = scenario.Name,
                 ScenarioDefinitionVersion = scenario.DefinitionVersion,
                 ScenarioDefinitionHash = scenario.DefinitionHash,
-                StartRoute = NormalizeRoute(authView.Route),
-                StartViewId = authView.ViewId,
-                Inputs = (scenario.Inputs ?? new List<AppUserTestSettingsValue>()).Select(input => new AuthRunnerInput
-                {
-                    Name = input.Name,
-                    Finder = input.Finder,
-                    Value = input.Value,
-                    ValueType = input.ValueType,
-                    Required = input.Required,
-                    Kind = authView.Fields?.FirstOrDefault(field => String.Equals(field.Finder, input.Finder, StringComparison.OrdinalIgnoreCase))?.FieldType ?? "unknown"
-                }).ToList(),
+                Start = start,
+                Expected = expected,
+                StartRoute = start.WebRoute,
+                StartViewId = start.ViewId,
+                Inputs = preparedInputs,
                 Action = new AuthRunnerAction
                 {
                     Id = selectedAction?.ActionId ?? scenario.ActionId,
@@ -72,8 +106,8 @@ namespace LagoVista.UserAdmin.Managers
                 },
                 Observations = new AuthRunnerObservations
                 {
-                    ExpectedEndViewId = expectedView?.ViewId ?? expectedViewId,
-                    ExpectedEndRoute = expectedView?.Route,
+                    ExpectedEndViewId = expected.ViewId,
+                    ExpectedEndRoute = expected.WebRoute,
                     ExpectedVisibleFinders = (scenario.ExpectedVisibleFinders ?? new List<string>()).Select(ToTestIdFinder).ToList(),
                     BusyStateFinder = "[data-testid=\"state:busy\"]"
                 },
@@ -83,14 +117,43 @@ namespace LagoVista.UserAdmin.Managers
                     SlowMoMs = headless ? 0 : 50,
                     TimeoutMs = 30000,
                     EnableTracing = false
-                }
+                },
+                UserCredentials = credentials
             };
 
-            var credentialsResult = await ApplySetupAsync(scenarioId, org, user);
-            if (!credentialsResult.Successful) return credentialsResult.ToInvokeResult<AuthRunnerPlan>();
-            plan.UserCredentials = credentialsResult.Result;
-
             return InvokeResult<AuthRunnerPlan>.Create(plan);
+        }
+
+        private static string ResolvePreparedInputValue(string value, TestUserCredentials credentials)
+        {
+            if (String.IsNullOrEmpty(value)) return value;
+
+            var result = value;
+            result = ReplaceToken(result, "user.email", credentials?.EmailAddress);
+            result = ReplaceToken(result, "user.invalid-password", credentials?.InvalidPassword);
+            result = ReplaceToken(result, "user.password", credentials?.Password);
+            result = ReplaceToken(result, "user.password-recovery-code", credentials?.PasswordRecoveryCode);
+            result = ReplaceToken(result, "user.email-verification-code", credentials?.EmailVerificationCode);
+            result = ReplaceToken(result, "user.password-reset-token", credentials?.PasswordResetToken);
+            result = ReplaceToken(result, "user.email-confirmation-token", credentials?.EmailConfirmationToken);
+            result = ReplaceToken(result, "user.magic-link-token", credentials?.MagicLinkToken);
+            result = ReplaceToken(result, "user.prelogin-link", credentials?.PreloginLink);
+            result = ReplaceToken(result, "user.passkey-credentials-id", credentials?.PasskeyCredentialsId);
+            result = ReplaceToken(result, "user.user-id", credentials?.UserId);
+            result = ReplaceToken(result, "user.invite-id", credentials?.InviteId);
+            return result;
+        }
+
+        private static string ReplaceToken(string value, string token, string replacement)
+        {
+            if (String.IsNullOrEmpty(value) || String.IsNullOrEmpty(replacement) || value.IndexOf(token, StringComparison.OrdinalIgnoreCase) < 0) return value;
+            var index = value.IndexOf(token, StringComparison.OrdinalIgnoreCase);
+            while (index >= 0)
+            {
+                value = value.Substring(0, index) + replacement + value.Substring(index + token.Length);
+                index = value.IndexOf(token, index + replacement.Length, StringComparison.OrdinalIgnoreCase);
+            }
+            return value;
         }
 
         private static AuthFieldAction ResolveAction(AuthView view, string actionId, string actionFinder, EntityHeader legacyScenarioAction)
