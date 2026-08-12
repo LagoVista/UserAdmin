@@ -5,6 +5,7 @@ using LagoVista.UserAdmin.Models.Testing;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -229,9 +230,17 @@ namespace LagoVista.UserAdmin.Repos.Testing
                 Name = input.Value<string>("name"),
                 ValueType = input.Value<string>("valueType"),
                 Required = input.Value<bool?>("required") ?? false,
-                Value = input.Value<string>("value"),
+                Value = ReadInputValue(input["value"]),
                 Description = input.Value<string>("description")
             }).ToList();
+        }
+
+        private static string ReadInputValue(JToken value)
+        {
+            if (value == null || value.Type == JTokenType.Null) return null;
+            if (value.Type == JTokenType.Boolean) return value.Value<bool>() ? "true" : "false";
+            if (value.Type == JTokenType.Integer) return value.Value<long>().ToString(CultureInfo.InvariantCulture);
+            return value.Value<string>();
         }
 
         private static List<string> ReadStringList(JArray values)
