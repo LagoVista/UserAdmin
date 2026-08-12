@@ -111,10 +111,14 @@ namespace LagoVista.UserAdmin.Repos.Repos.Testing
                 var json = ReadJson(entry);
                 var routeId = RequiredString(json, "routeId", entry.FullName, "AuthRoute");
                 var path = RequiredString(json, "path", entry.FullName, "AuthRoute");
+                var webRoute = json["platforms"]?["web"]?.Value<string>("route") ?? path;
+                var mobileRoute = json["platforms"]?["mobile"]?.Value<string>("route") ?? json["source"]?.Value<string>("mobileRoute") ?? path;
                 routeMap[routeId] = new CanonicalRoute
                 {
                     RouteId = routeId,
                     Path = path,
+                    WebRoute = webRoute,
+                    MobileRoute = mobileRoute,
                     RouteType = RequiredString(json, "routeType", entry.FullName, "AuthRoute"),
                     ViewId = json.Value<string>("viewId"),
                     Status = RequiredString(json, "status", entry.FullName, "AuthRoute")
@@ -154,7 +158,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Testing
                 Description = json.Value<string>("description"),
                 ViewId = viewId,
                 RouteId = routeId,
-                Route = route.Path,
+                Route = route.WebRoute,
+                WebRoute = route.WebRoute,
+                MobileRoute = route.MobileRoute,
                 AuthCategory = RequiredString(json, "category", source, "AuthView"),
                 Status = RequiredString(json, "status", source, "AuthView"),
                 Actions = HydrateActions(viewId, json["actions"] as JArray),
@@ -260,6 +266,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Testing
         {
             public string RouteId { get; set; }
             public string Path { get; set; }
+            public string WebRoute { get; set; }
+            public string MobileRoute { get; set; }
             public string RouteType { get; set; }
             public string ViewId { get; set; }
             public string Status { get; set; }
