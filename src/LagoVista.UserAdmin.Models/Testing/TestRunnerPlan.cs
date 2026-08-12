@@ -6,8 +6,9 @@ using System.Collections.Generic;
 namespace LagoVista.UserAdmin.Models.Testing
 {
     /// <summary>
-    /// Runtime execution plan projected from one canonical auth scenario.
-    /// The runner executes this plan and reports observations; the server owns verification.
+    /// Prepared runtime execution plan projected from one canonical auth scenario.
+    /// UserAdmin owns state setup and value resolution; clients only navigate, populate,
+    /// invoke one action, and verify the expected destination.
     /// </summary>
     [EntityDescription(
         Domains.AuthTesting, UserAdminResources.Names.AuthRunnerPlan_Name, UserAdminResources.Names.AuthRunnerPlan_Help,
@@ -18,20 +19,45 @@ namespace LagoVista.UserAdmin.Models.Testing
     public class AuthRunnerPlan
     {
         public string RunId { get; set; }
+
+        /// <summary>Compatibility header retained while DevTools migrates to the explicit scenario fields.</summary>
         public EntityHeader Scenario { get; set; }
         public string ScenarioCanonicalKey { get; set; }
+        public string ScenarioName { get; set; }
         public int ScenarioDefinitionVersion { get; set; }
         public string ScenarioDefinitionHash { get; set; }
+
+        /// <summary>Resolved start target for both supported UI runners.</summary>
+        public AuthRunnerViewTarget Start { get; set; } = new AuthRunnerViewTarget();
+
+        /// <summary>Expected destination after the single configured action is invoked.</summary>
+        public AuthRunnerViewTarget Expected { get; set; } = new AuthRunnerViewTarget();
+
         public string BaseUrl { get; set; }
+
+        /// <summary>Compatibility fields retained until DevTools consumes Start directly.</summary>
         public string StartRoute { get; set; }
         public string StartViewId { get; set; }
+
         public string EmailConfirmToken { get; set; }
         public string OrgInvitationId { get; set; }
         public List<AuthRunnerInput> Inputs { get; set; } = new List<AuthRunnerInput>();
         public AuthRunnerAction Action { get; set; } = new AuthRunnerAction();
         public AuthRunnerObservations Observations { get; set; } = new AuthRunnerObservations();
         public AuthRunnerOptions Options { get; set; } = new AuthRunnerOptions();
+
+        /// <summary>
+        /// Retained for provider/OAuth automation and compatibility. Normal scenario input
+        /// values are resolved by UserAdmin before the plan is returned.
+        /// </summary>
         public TestUserCredentials UserCredentials { get; set; }
+    }
+
+    public class AuthRunnerViewTarget
+    {
+        public string ViewId { get; set; }
+        public string WebRoute { get; set; }
+        public string MobileRoute { get; set; }
     }
 
     [EntityDescription(
@@ -68,6 +94,8 @@ namespace LagoVista.UserAdmin.Models.Testing
     {
         public string Name { get; set; }
         public string Finder { get; set; }
+
+        /// <summary>Concrete value prepared by UserAdmin. DevTools should not resolve symbolic auth-model values.</summary>
         public string Value { get; set; }
         public string ValueType { get; set; }
         public bool Required { get; set; }
@@ -100,8 +128,11 @@ namespace LagoVista.UserAdmin.Models.Testing
     {
         public string ScreenRootFinder { get; set; } = "[data-testid=\"auth-screen\"]";
         public string ScreenIdAttribute { get; set; } = "data-screen-id";
+
+        /// <summary>Compatibility fields retained until DevTools consumes Expected directly.</summary>
         public string ExpectedEndViewId { get; set; }
         public string ExpectedEndRoute { get; set; }
+
         public List<string> ExpectedVisibleFinders { get; set; } = new List<string>();
         public string BusyStateFinder { get; set; }
     }
