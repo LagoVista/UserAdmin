@@ -92,6 +92,18 @@ The resulting lowercase hexadecimal digest is stored as `definitionHash` in gene
 - Conversation types may reference journeys, scenarios, actions, and routed conversation types, but cannot redefine their guards, mutations, effects, or postconditions.
 - Presentation bindings reference logical actions, scenarios, conversations, views, and platforms without redefining behavioral truth.
 
+## AuthView presentation state
+
+- An AuthView may declare no view-state contract or one presentation-only view-state variable with a finite set of allowed kebab-case values.
+- Exactly one declared view-state value is active when a stateful AuthView is rendered.
+- The AuthView declares one `defaultState` and the complete allowed `states` set.
+- Control and action visibility and enabled state may be projected from the active view state.
+- A scenario may declare `startViewState` and/or `expectedViewState` to assert the presentation mode before or after its action.
+- `startViewKey` and `expectedViewKey` may be identical. A changed `expectedViewState` is a valid observable presentation outcome for a same-view scenario.
+- The active view-state value must be observable through the platform test/semantic surface when the AuthView declares view states.
+- View state is presentation-only and never replaces tenant, domain, or server state.
+- Server/domain state remains authoritative. View state is only a deterministic rendering input and runner-observable presentation receipt.
+
 ## Conversation definitions
 
 - A conversation type is a guided orchestration contract, not a source of authentication truth.
@@ -123,6 +135,13 @@ Every file validates against its declared JSON schema.
 
 Every internal key reference resolves to exactly one authored definition of the expected type.
 
+For view state:
+
+- an AuthView `defaultState` must be present in its declared `states`
+- any `visibleInViewStates` or `enabledInViewStates` entry must resolve to a state declared by that AuthView
+- a scenario `startViewState` must resolve against its `startViewKey`
+- a scenario `expectedViewState` must resolve against its `expectedViewKey`
+
 ### Semantic validation
 
 At minimum:
@@ -133,7 +152,7 @@ At minimum:
 - an action declares at least one permitted state mutation or required side effect
 - a transition references exactly one action
 - a scenario references exactly one action
-- a scenario changes at least one state variable or produces at least one required effect
+- a scenario changes at least one state variable, produces at least one required effect, navigates to a different view, or declares an observable presentation outcome such as `expectedViewState`
 - a journey contains at least one scenario
 - a conversation type does not directly define state mutations, transition guards, or authentication postconditions
 - secure information requirements use secure-component collection rather than conversation collection
