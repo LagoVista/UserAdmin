@@ -42,6 +42,10 @@
       "description": "Behavior category key from behavior-category-catalog.json."
     },
     "startViewKey": { "$ref": "#/$defs/viewKey" },
+    "startViewState": {
+      "$ref": "#/$defs/viewStateKey",
+      "description": "Optional presentation-only state expected on the starting AuthView. It does not express authentication or domain state."
+    },
     "action": {
       "type": "object",
       "additionalProperties": false,
@@ -68,6 +72,10 @@
       }
     },
     "expectedViewKey": { "$ref": "#/$defs/viewKey" },
+    "expectedViewState": {
+      "$ref": "#/$defs/viewStateKey",
+      "description": "Optional presentation-only state that must be observable after the action. This allows a scenario to prove a deterministic UI outcome even when startViewKey and expectedViewKey are identical."
+    },
     "expectedVisibleFinders": {
       "type": "array",
       "uniqueItems": true,
@@ -91,6 +99,12 @@
     "viewKey": {
       "type": "string",
       "pattern": "^(auth|app)\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$"
+    },
+    "viewStateKey": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "minLength": 2,
+      "maxLength": 96
     },
     "presentationFinder": {
       "type": "string",
