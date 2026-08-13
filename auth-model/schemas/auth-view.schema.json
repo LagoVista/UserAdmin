@@ -43,6 +43,21 @@
       "type": "string",
       "enum": ["proposed", "active", "deprecated", "retired"]
     },
+    "viewStates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["defaultState", "states"],
+      "properties": {
+        "defaultState": { "$ref": "#/$defs/viewStateKey" },
+        "states": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/viewStateKey" }
+        }
+      },
+      "description": "Optional presentation-only state contract. Exactly one listed state is active when the view is rendered. It controls deterministic UI presentation and runner-observable state only; it must never define or replace authentication, authorization, tenant, or domain state."
+    },
     "controls": {
       "type": "array",
       "items": { "$ref": "#/$defs/control" }
@@ -86,6 +101,18 @@
       "minLength": 2,
       "maxLength": 96
     },
+    "viewStateKey": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "minLength": 2,
+      "maxLength": 96
+    },
+    "viewStateKeys": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/viewStateKey" }
+    },
     "finder": {
       "type": "string",
       "pattern": "^(screen|field|label|status|display|action):[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
@@ -120,7 +147,15 @@
           "type": "string",
           "enum": ["public", "personal", "credential", "secret"]
         },
-        "visibilityCondition": { "type": "string", "minLength": 1 }
+        "visibilityCondition": { "type": "string", "minLength": 1 },
+        "visibleInViewStates": {
+          "$ref": "#/$defs/viewStateKeys",
+          "description": "When present, the control is visible only while the AuthView is in one of these presentation states."
+        },
+        "enabledInViewStates": {
+          "$ref": "#/$defs/viewStateKeys",
+          "description": "When present, the control is enabled only while the AuthView is in one of these presentation states."
+        }
       }
     },
     "action": {
@@ -135,7 +170,15 @@
           "enum": ["button", "link", "native-capability"]
         },
         "finder": { "$ref": "#/$defs/finder" },
-        "visibilityCondition": { "type": "string", "minLength": 1 }
+        "visibilityCondition": { "type": "string", "minLength": 1 },
+        "visibleInViewStates": {
+          "$ref": "#/$defs/viewStateKeys",
+          "description": "When present, the action is visible only while the AuthView is in one of these presentation states."
+        },
+        "enabledInViewStates": {
+          "$ref": "#/$defs/viewStateKeys",
+          "description": "When present, the action is enabled only while the AuthView is in one of these presentation states."
+        }
       }
     },
     "platformConformance": {
@@ -152,7 +195,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["view-identity", "controls", "actions", "finders", "navigation"]
+            "enum": ["view-identity", "view-state", "controls", "actions", "finders", "navigation"]
           },
           "uniqueItems": true
         },
