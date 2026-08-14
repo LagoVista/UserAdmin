@@ -12,6 +12,7 @@ namespace LagoVista.UserAdmin.Authentication.Flows
     public class EmailVerificationSendFlowHandler : IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult>
     {
         public const string SentTransitionKey = "auth.transition.email-verification.code-sent";
+        public const string ResentTransitionKey = "auth.transition.email-verification.code-resent";
         public const string ThrottledTransitionKey = "auth.transition.email-verification.resend-throttled";
         private const string DeliveryFailedTransitionKey = "auth.transition.email-verification.send-failed";
         private const int ResendCooldownSeconds = 60;
@@ -50,11 +51,12 @@ namespace LagoVista.UserAdmin.Authentication.Flows
             if (!sendResult.Successful)
                 return new AuthenticationFlowResult<EmailVerificationSendResult>(DeliveryFailedTransitionKey, InvokeResult<EmailVerificationSendResult>.FromInvokeResult(sendResult));
 
+            var isResend = latest != null;
             return new AuthenticationFlowResult<EmailVerificationSendResult>(
-                SentTransitionKey,
+                isResend ? ResentTransitionKey : SentTransitionKey,
                 InvokeResult<EmailVerificationSendResult>.Create(new EmailVerificationSendResult
                 {
-                    Outcome = EmailVerificationSendOutcome.Sent,
+                    Outcome = isResend ? EmailVerificationSendOutcome.Resent : EmailVerificationSendOutcome.Sent,
                     VerificationCode = sendResult.Result,
                     RetryAfterSeconds = 0
                 }));
