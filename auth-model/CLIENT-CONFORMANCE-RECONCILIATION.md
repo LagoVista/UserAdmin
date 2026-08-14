@@ -128,11 +128,15 @@ If the inspector has only found a route or component but has not yet checked its
 
 ### `route`
 
-Record the actual route, navigation key, or equivalent client destination found in code.
+Record the actual route, navigation key, or equivalent client destination found in code, but normalize framework-specific route syntax into the canonical URL-shaped form used by AuthViews before writing the manifest.
+
+For routable AuthViews, the manifest route should begin with `/`. For example, an Angular route declaration of `auth/continue/email` is observed from source but recorded as `/auth/continue/email`. This preserves the implementation evidence while avoiding false drift caused only by framework syntax.
+
+Do not otherwise rewrite route semantics. Preserve meaningful path segments, route parameters, and aliases exactly as implemented. Normalization is limited to representation differences that do not change the destination.
 
 Use `null` when there is no routable destination or the route cannot be determined.
 
-Do not copy the canonical route merely because it is expected.
+Do not copy the canonical route merely because it is expected. The route must still be traced from client source, then normalized for comparison.
 
 ### `component`
 
@@ -230,6 +234,7 @@ Before committing the manifests, verify:
 - there are no unknown or invented AuthView IDs
 - platform applicability follows the canonical AuthView definition
 - route/component values came from client source, not copied expectations
+- routable manifest routes are normalized to canonical URL-shaped form, including a leading `/`, so framework-only syntax differences do not create false drift
 - view states came from observable implementation branches
 - control/action finders came from real client source
 - API operations were traced from the client when the view performs a server operation; a verified client-only view may legitimately have none
