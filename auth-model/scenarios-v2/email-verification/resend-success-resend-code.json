@@ -28,7 +28,9 @@
   "evidenceRequirements": ["server", "web", "android", "ios"],
   "sourceReferences": [
     { "sourceType": "auth-view", "reference": "auth.email-verification.enter" },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationSendFlowHandler.cs" },
+    { "sourceType": "test", "reference": "tests/LagoVista.UserAdmin.Auth.Tests/EmailVerificationSendFlowTests.cs" },
     { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Accepted resend is one independently runnable scenario; it does not require the runner to understand the enclosing behavior." }
   ],
-  "progress": { "presentation": "complete", "implementation": "not-started", "tests": "not-started" }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "not-started" }
 }
