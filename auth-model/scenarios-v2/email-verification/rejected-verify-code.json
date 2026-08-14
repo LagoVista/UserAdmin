@@ -1,0 +1,54 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.email-verification.rejected.verify-code",
+  "runtimeEntityId": "D132E233F334A435B536C637D738E839",
+  "name": "Email Verification Rejected Verify Code",
+  "summary": "The rejected behavior submits unacceptable verification proof, leaves email ownership unverified, and keeps the user on code entry in the code-rejected presentation state.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "email-verification",
+  "startViewKey": "auth.email-verification.enter",
+  "startViewState": "ready",
+  "action": { "id": "verify-verification-code", "finder": "action:verify-verification-code" },
+  "preconditions": {
+    "expression": "durable identity is unverified and a valid verification challenge exists",
+    "state": {
+      "ensureUserExists": "set",
+      "userHasEmail": "set",
+      "emailConfirmed": "notset",
+      "emailVerificationCode": { "status": "valid", "attemptCount": 0 }
+    }
+  },
+  "inputs": [
+    {
+      "finder": "field:verification-code",
+      "name": "Verification Code",
+      "valueType": "secret-reference",
+      "required": true,
+      "value": "user.invalidEmailVerificationCode"
+    }
+  ],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Reject unacceptable verification proof without verifying email ownership or exposing the internal rejection reason.",
+    "transitionKeys": ["auth.transition.email-verification.code-rejected"]
+  },
+  "expectedViewKey": "auth.email-verification.enter",
+  "expectedViewState": "code-rejected",
+  "expectedVisibleFinders": ["field:verification-code", "status:verification-error", "action:verify-verification-code", "action:resend-verification-code"],
+  "postconditions": {
+    "expression": "email remains unconfirmed and the verification challenge records one failed attempt",
+    "state": {
+      "emailConfirmed": "notset",
+      "emailVerificationCode": { "status": "valid", "attemptCount": 1 }
+    }
+  },
+  "expectedAuthLogEvents": ["EmailConfirmFailed"],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.email-verification.enter" },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Rejected proof remains on the same AuthView and is verified through the code-rejected View State." }
+  ],
+  "progress": { "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+}
