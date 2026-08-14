@@ -9,59 +9,24 @@
   "maturity": "proposed",
   "categoryKey": "password-recovery",
   "startViewKey": "auth.password.reset.sent",
-  "action": {
-    "id": "verify-recovery-code",
-    "finder": "action:verify-recovery-code"
-  },
-  "preconditions": {
-    "expression": "session-capability == anonymous and auth.password.reset.sent is visible"
-  },
+  "action": { "id": "verify-recovery-code", "finder": "action:verify-recovery-code" },
+  "preconditions": { "expression": "session-capability == anonymous and auth.password.reset.sent is visible" },
   "inputs": [
-    {
-      "finder": "field:recovery-code",
-      "name": "Recovery Code",
-      "valueType": "secret-reference",
-      "required": true,
-      "description": "Recovery code that is malformed, expired, consumed, exhausted, mismatched, or otherwise ineligible."
-    }
+    { "finder": "field:recovery-code", "name": "Recovery Code", "valueType": "secret-reference", "required": true, "description": "Recovery code that is malformed, expired, consumed, exhausted, mismatched, or otherwise ineligible." }
   ],
   "serverInteraction": {
     "required": true,
     "intent": "Reject invalid or ineligible recovery proof without establishing password-reset authority and without exposing the internal rejection reason.",
-    "transitionKeys": [
-      "auth.transition.password-recovery.rejected"
-    ]
+    "transitionKeys": ["auth.transition.password-recovery.rejected"]
   },
   "expectedViewKey": "auth.password.reset.sent",
-  "expectedVisibleFinders": [
-    "field:recovery-code",
-    "action:verify-recovery-code"
-  ],
-  "postconditions": {
-    "expression": "session-capability == anonymous and auth.password.reset.sent remains visible and no password-reset authority is established"
-  },
+  "expectedVisibleFinders": ["field:recovery-code", "action:verify-recovery-code"],
+  "postconditions": { "expression": "session-capability == anonymous and auth.password.reset.sent remains visible and no password-reset authority is established" },
   "expectedAuthLogEvents": [],
-  "evidenceRequirements": [
-    "server",
-    "web",
-    "android",
-    "ios"
-  ],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
   "sourceReferences": [
-    {
-      "sourceType": "code",
-      "reference": "src/LagoVista.UserAdmin/Managers/PasswordManager.cs",
-      "note": "VerifyPasswordResetCodeAsync collapses malformed, unknown-user, expired, consumed, attempt-exhausted, and mismatched proof into the same public rejection."
-    },
-    {
-      "sourceType": "decision",
-      "reference": "ChatGPT conversation 2026-08-09",
-      "note": "Internal recovery-proof rejection reasons are runtime/test permutations beneath one canonical Password Recovery Rejected scenario."
-    }
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/PasswordManager.cs", "note": "VerifyPasswordResetCodeAsync collapses malformed, unknown-user, expired, consumed, attempt-exhausted, and mismatched proof into the same public rejection." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-09", "note": "Internal recovery-proof rejection reasons are runtime/test permutations beneath one canonical Password Recovery Rejected scenario." }
   ],
-  "progress": {
-    "presentation": "complete",
-    "implementation": "complete",
-    "tests": "not-started"
-  }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "complete" }
 }
