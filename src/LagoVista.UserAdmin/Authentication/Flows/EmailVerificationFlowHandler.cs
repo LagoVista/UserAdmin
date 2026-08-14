@@ -8,7 +8,8 @@ namespace LagoVista.UserAdmin.Authentication.Flows
     [CriticalCoverage]
     public class EmailVerificationFlowHandler : IAuthenticationFlowHandler<EmailVerificationFlowRequest>
     {
-        public const string TransitionKey = "auth.transition.email-verification.complete";
+        public const string AcceptedTransitionKey = "auth.transition.email-verification.code-accepted";
+        public const string RejectedTransitionKey = "auth.transition.email-verification.code-rejected";
 
         private readonly IUserVerficationManager _userVerificationManager;
 
@@ -22,7 +23,7 @@ namespace LagoVista.UserAdmin.Authentication.Flows
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             var result = await _userVerificationManager.ValidateEmailAsync(request.Request, request.User);
-            return new AuthenticationFlowResult(TransitionKey, result);
+            return new AuthenticationFlowResult(result.Successful ? AcceptedTransitionKey : RejectedTransitionKey, result);
         }
     }
 }
