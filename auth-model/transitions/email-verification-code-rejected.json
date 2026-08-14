@@ -1,0 +1,19 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.email-verification.code-rejected",
+  "name": "Email Verification Code Rejected",
+  "summary": "Rejects verification proof that cannot be accepted while leaving email ownership unverified.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "email-verification",
+  "priority": 90,
+  "sourceState": { "expression": "durable-identity == resolved and email-confirmed == false" },
+  "actionKey": "auth.action.email-verification.verify-code",
+  "guards": [{ "expression": "verification-code-valid == false", "failureCode": "email-verification-invalid" }],
+  "destinationTransform": [{ "dimensionKey": "auth.dimension.email-ownership", "operation": "set", "valueExpression": "unverified" }],
+  "requiredEffects": ["record-email-verification-result"],
+  "forbiddenEffects": ["confirm-email", "create-durable-user", "change-home-workspace", "switch-current-workspace"],
+  "invariantKeys": ["auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/UserVerficationManager.cs" }]
+}
