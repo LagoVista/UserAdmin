@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.email-verification.resend-success.accept-code",
+  "runtimeEntityId": "E1A2F2A3B3A4C4A5D5A6E6A7F7A8B9A0",
+  "name": "Email Verification Resend Success Accept Code",
+  "summary": "The user submits the newly issued verification code after a successful resend and completes email verification.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "email-verification",
+  "startViewKey": "auth.email-verification.enter",
+  "startViewState": "ready",
+  "action": { "id": "verify-verification-code", "finder": "action:verify-verification-code" },
+  "preconditions": {
+    "expression": "email is unverified and the newly issued verification challenge is valid",
+    "state": { "emailConfirmed": "notset", "emailVerificationCode": { "status": "valid", "attemptCount": 0 } }
+  },
+  "inputs": [{ "finder": "field:verification-code", "name": "Verification Code", "valueType": "secret-reference", "required": true, "value": "user.emailVerificationCode" }],
+  "serverInteraction": { "required": true, "intent": "Accept the newly issued verification proof, verify email ownership, and consume the proof.", "transitionKeys": ["auth.transition.email-verification.code-accepted"] },
+  "expectedViewKey": "auth.email-verification.confirmed",
+  "postconditions": {
+    "expression": "email ownership is verified and the replacement proof is consumed",
+    "state": { "emailConfirmed": "set", "emailVerificationCode": { "status": "consumed" } }
+  },
+  "expectedAuthLogEvents": ["ConfirmEmailSuccess"],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [{ "sourceType": "auth-view", "reference": "auth.email-verification.confirmed" }],
+  "progress": { "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+}
