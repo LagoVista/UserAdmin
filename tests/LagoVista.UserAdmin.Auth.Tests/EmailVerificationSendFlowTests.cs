@@ -66,5 +66,35 @@ namespace LagoVista.UserAdmin.Auth.Tests
             manager.Verify(x => x.SendConfirmationEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             repo.VerifyAll();
         }
+
+        [Test]
+        public async Task ExistingCodeAfterCooldown_Should_Resend_And_ReturnCodeResentTransition()
+        {
+            var manager = new Mock<IUserVerficationManager>(MockBehavior.Strict);
+            var repo = new Mock<IEmailVerificationCodeRepo>(MockBehavior.Strict);
+            var user = EntityHeader.Create(UserId, "Test User");
+            var latest = new EmailVerificationCode
+            {
+                Id = "verification-code-id",
+                UserId = UserId,
+                CreatedUtc = DateTime.UtcNow.AddSeconds(-90),
+                ExpiresUtc = DateTime.UtcNow.AddMinutes(8),
+                CodeHash = "hash"
+            };
+
+            repo.Setup(x => x.GetLatestAsync(UserId)).ReturnsAsync(latest);
+            manager.Setup(x => x.SendConfirmationEmailAsync(UserId, "", "", "", "")).ReturnsAsync(InvokeResult<string>.Create("654321"));
+
+            var handler = new EmailVerificationSendFlowHandler(manager.Object, repo.Object);
+            var result = await handler.HandleAsync(new EmailVerificationSendFlowRequest(user));
+
+            Assert.That(result.TransitionKey, Is.EqualTo(EmailVerificationSendFlowHandler.ResentTransitionKey));
+            Assert.That(result.PublicResult.Successful, Is.True);
+            Assert.That(result.PublicResult.Result.Outcome, Is.EqualTo(EmailVerificationSendOutcome.Resent));
+            Assert.That(result.PublicResult.Result.VerificationCode, Is.EqualTo("654321"));
+            Assert.That(result.PublicResult.Result.RetryAfterSeconds, Is.EqualTo(0));
+            manager.VerifyAll();
+            repo.VerifyAll();
+        }
     }
 }
