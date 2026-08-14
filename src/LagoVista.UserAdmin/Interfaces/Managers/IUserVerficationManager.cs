@@ -4,7 +4,6 @@
 // --- END CODE INDEX META ---
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
-using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Models.Users;
 using System.Threading.Tasks;
@@ -14,7 +13,6 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
     public interface IUserVerficationManager
     {
         Task<InvokeResult> CheckConfirmedAsync(EntityHeader userHeader);
-        Task<InvokeResult<EmailVerificationSendResult>> SendEmailVerificationCodeAsync(string userId);
         Task<InvokeResult<string>> SendConfirmationEmailAsync(string userId, string confirmSubject = "", string confirmBody = "", string appName = "", string logoFile = "");
         Task<InvokeResult<string>> SendConfirmationEmailAsync(AppUser appUser, string confirmSubject = "", string confirmBody = "", string appName = "", string logoFile = "");
         Task<InvokeResult<string>> SendSMSCodeAsync(VerfiyPhoneNumber sendSMSCode, EntityHeader userHeader);
