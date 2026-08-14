@@ -2,24 +2,20 @@
   "$schema": "../schemas/auth-route.schema.json",
   "schemaVersion": "1.0",
   "routeId": "auth.route.email-verification.failed",
-  "name": "Email Verification Failed",
-  "description": "Displays the unsuccessful email verification outcome.",
+  "name": "Email Verification Failed Route",
+  "description": "Legacy link-failure route retained for historical implementation mapping; canonical V2 rejection remains on code entry.",
   "path": "/auth/email-verification/failed",
   "routeType": "view",
   "viewId": "auth.email-verification.failed",
   "parameters": [],
-  "status": "active",
+  "status": "deprecated",
   "platforms": {
-    "web": {
-      "status": "implemented",
-      "implementation": "EmailCouldNotConfirmComponent"
-    },
-    "mobile": {
-      "status": "planned"
-    }
+    "web": { "status": "implemented", "implementation": "EmailCouldNotConfirmComponent" },
+    "mobile": { "status": "planned" }
   },
   "source": {
     "commonLinksMember": "EmailVerificationFailed",
     "angularComponent": "EmailCouldNotConfirmComponent"
-  }
+  },
+  "notes": ["Deprecated in favor of auth.route.email-verification.enter with view state code-rejected."]
 }
