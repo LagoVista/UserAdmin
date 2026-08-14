@@ -20,5 +20,5 @@
     { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/UserVerficationManager.cs" },
     { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Representative retry behavior proves that a rejected attempt can remain on the same AuthView and later succeed without enumerating arbitrary retry combinations." }
   ],
-  "progress": { "scenarios": "complete", "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+  "progress": { "scenarios": "complete", "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
 }
