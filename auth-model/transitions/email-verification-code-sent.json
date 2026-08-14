@@ -1,0 +1,19 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.email-verification.code-sent",
+  "name": "Email Verification Code Sent",
+  "summary": "Issues a fresh verification challenge while leaving email ownership unverified.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "email-verification",
+  "priority": 100,
+  "sourceState": { "expression": "durable-identity == resolved and email-confirmed == false" },
+  "actionKey": "auth.action.email-verification.send-code",
+  "guards": [{ "expression": "email-verification-send-allowed == true", "failureCode": "email-verification-send-throttled" }],
+  "destinationTransform": [{ "dimensionKey": "auth.dimension.email-ownership", "operation": "set", "valueExpression": "unverified" }],
+  "requiredEffects": ["issue-email-verification-code", "send-email-verification-code"],
+  "forbiddenEffects": ["confirm-email"],
+  "invariantKeys": ["auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [{ "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/UserVerficationManager.cs" }]
+}
