@@ -30,7 +30,7 @@
         "auth.behavior.enterprise-sso.sign-in-success"
       ],
       "progress": {
-        "behaviors": "not-started",
+        "behaviors": "complete",
         "scenarios": "not-started",
         "presentation": "not-started",
         "implementation": "not-started",
@@ -44,7 +44,7 @@
         "auth.behavior.external-identity-provider.management-success"
       ],
       "progress": {
-        "behaviors": "not-started",
+        "behaviors": "complete",
         "scenarios": "not-started",
         "presentation": "not-started",
         "implementation": "not-started",
@@ -58,7 +58,7 @@
         "auth.behavior.external-identity-provider.registration-success"
       ],
       "progress": {
-        "behaviors": "not-started",
+        "behaviors": "complete",
         "scenarios": "not-started",
         "presentation": "not-started",
         "implementation": "not-started",
@@ -72,7 +72,7 @@
         "auth.behavior.external-identity-provider.sign-in-success"
       ],
       "progress": {
-        "behaviors": "not-started",
+        "behaviors": "complete",
         "scenarios": "not-started",
         "presentation": "not-started",
         "implementation": "not-started",
@@ -86,7 +86,7 @@
         "auth.behavior.guest.claim-value-success"
       ],
       "progress": {
-        "behaviors": "not-started",
+        "behaviors": "complete",
         "scenarios": "not-started",
         "presentation": "not-started",
         "implementation": "not-started",
@@ -100,7 +100,7 @@
         "auth.behavior.invitation.acceptance-success"
       ],
       "progress": {
-        "behaviors": "not-started",
+        "behaviors": "complete",
         "scenarios": "not-started",
         "presentation": "not-started",
         "implementation": "not-started",
@@ -114,7 +114,7 @@
         "auth.behavior.passkey.add-success"
       ],
       "progress": {
-        "behaviors": "not-started",
+        "behaviors": "complete",
         "scenarios": "not-started",
         "presentation": "not-started",
         "implementation": "not-started",
@@ -177,7 +177,7 @@
         "scenarios": "complete",
         "presentation": "complete",
         "implementation": "complete",
-        "tests": "not-started"
+        "tests": "complete"
       }
     },
     {
@@ -187,7 +187,7 @@
         "auth.behavior.password.registration-success"
       ],
       "progress": {
-        "behaviors": "not-started",
+        "behaviors": "complete",
         "scenarios": "not-started",
         "presentation": "not-started",
         "implementation": "not-started",
@@ -217,7 +217,7 @@
         "auth.behavior.step-up-security.success"
       ],
       "progress": {
-        "behaviors": "not-started",
+        "behaviors": "complete",
         "scenarios": "not-started",
         "presentation": "not-started",
         "implementation": "not-started",
@@ -231,7 +231,7 @@
         "auth.behavior.session.sign-out"
       ],
       "progress": {
-        "behaviors": "not-started",
+        "behaviors": "complete",
         "scenarios": "not-started",
         "presentation": "not-started",
         "implementation": "not-started",
@@ -245,7 +245,7 @@
         "auth.behavior.totp.enrollment-success"
       ],
       "progress": {
-        "behaviors": "not-started",
+        "behaviors": "complete",
         "scenarios": "not-started",
         "presentation": "not-started",
         "implementation": "not-started",
@@ -259,7 +259,7 @@
         "auth.behavior.totp.management-success"
       ],
       "progress": {
-        "behaviors": "not-started",
+        "behaviors": "complete",
         "scenarios": "not-started",
         "presentation": "not-started",
         "implementation": "not-started",
@@ -273,7 +273,7 @@
         "auth.behavior.totp.sign-in-success"
       ],
       "progress": {
-        "behaviors": "not-started",
+        "behaviors": "complete",
         "scenarios": "not-started",
         "presentation": "not-started",
         "implementation": "not-started",
