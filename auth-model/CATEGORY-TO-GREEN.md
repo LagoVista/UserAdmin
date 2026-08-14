@@ -169,6 +169,14 @@ Do **not** mock the manager/domain/security operation whose behavior the scenari
 
 One canonical server test binding may cover several behavior-owned scenarios when those scenarios exercise the same underlying transition family. Every scenario must still be explicitly named by `scenarioKeys`, and the binding must prove every canonical transition required by those scenarios.
 
+#### Test fixture identifiers
+
+Auth tests must use identifiers that satisfy the production identifier contracts they exercise. In particular, whenever a fixture value is used as a `NormalizedId32`, it must be exactly 32 characters and contain only uppercase `A-Z` and digits `0-9`.
+
+Use realistic valid IDs in fixtures instead of descriptive placeholders such as `app-user-id`. A malformed fixture ID can fail deep in setup or model construction with an error such as `Invalid NormalizedId32`, obscuring the behavior the test was intended to prove.
+
+Apply the same principle to other strongly typed identifiers: test data should satisfy the real contract unless the test is specifically proving invalid-input handling.
+
 ## Category → Green workflow
 
 Work one category at a time. Within the category, work behavior-by-behavior and scenario-by-scenario. Avoid broad auth-system rewrites while reconciling one lane.
