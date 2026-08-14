@@ -103,7 +103,7 @@ namespace LagoVista.UserAdmin.Authentication
                 throw new InvalidOperationException("Email verification flow handler is not configured.");
 
             var result = await _emailVerificationHandler.HandleAsync(new EmailVerificationFlowRequest(request, user));
-            if (result.TransitionKey != EmailVerificationFlowHandler.TransitionKey)
+            if (result.TransitionKey != EmailVerificationFlowHandler.AcceptedTransitionKey && result.TransitionKey != EmailVerificationFlowHandler.RejectedTransitionKey)
                 throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
 
             return result.PublicResult;
