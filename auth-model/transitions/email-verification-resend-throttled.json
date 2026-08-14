@@ -1,0 +1,38 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.email-verification.resend-throttled",
+  "name": "Email Verification Resend Throttled",
+  "summary": "A resend request arrives during the resend cooldown, no replacement proof is issued, and email ownership remains unverified.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "email-verification",
+  "priority": 20,
+  "sourceState": { "expression": "durable identity exists and email ownership is unverified" },
+  "actionKey": "auth.action.email-verification.resend-code",
+  "guards": [
+    { "expression": "resend cooldown has not elapsed" }
+  ],
+  "destinationTransform": [
+    {
+      "dimensionKey": "auth.dimension.email-verification-code",
+      "operation": "derive",
+      "valueExpression": "preserve the current verification proof unchanged"
+    }
+  ],
+  "requiredEffects": [
+    "Do not issue a replacement verification proof while the cooldown is active."
+  ],
+  "forbiddenEffects": [
+    "Do not verify email ownership.",
+    "Do not consume the current verification proof solely because resend was throttled."
+  ],
+  "invariantKeys": [],
+  "sourceReferences": [
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-13",
+      "note": "Cooldown is authoritative server state; resend-throttled is only the presentation state used to render and verify the result."
+    }
+  ]
+}
