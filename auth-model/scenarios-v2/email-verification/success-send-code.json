@@ -1,0 +1,45 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.email-verification.success.send-code",
+  "runtimeEntityId": "A102B203C304D405E506F607A708B809",
+  "name": "Email Verification Success Send Code",
+  "summary": "The direct-success behavior begins by issuing a fresh verification code and moving from the send surface to code entry.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "email-verification",
+  "startViewKey": "auth.email-verification.send",
+  "action": { "id": "send-verification-code", "finder": "action:send-verification-code" },
+  "preconditions": {
+    "expression": "durable identity exists with an email address and email is not confirmed",
+    "state": {
+      "ensureUserExists": "set",
+      "userHasEmail": "set",
+      "emailConfirmed": "notset",
+      "emailVerificationCode": { "status": "notset" }
+    }
+  },
+  "inputs": [],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Issue and send a fresh email-verification code without changing email ownership.",
+    "transitionKeys": ["auth.transition.email-verification.code-sent"]
+  },
+  "expectedViewKey": "auth.email-verification.enter",
+  "expectedViewState": "ready",
+  "expectedVisibleFinders": ["field:verification-code", "action:verify-verification-code", "action:resend-verification-code"],
+  "postconditions": {
+    "expression": "email remains unconfirmed and a valid email-verification code exists",
+    "state": {
+      "emailConfirmed": "notset",
+      "emailVerificationCode": { "status": "valid", "attemptCount": 0 }
+    }
+  },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.email-verification.send" },
+    { "sourceType": "auth-view", "reference": "auth.email-verification.enter" }
+  ],
+  "progress": { "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+}
