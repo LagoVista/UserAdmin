@@ -1,0 +1,34 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.email-verification.resend-success.resend-code",
+  "runtimeEntityId": "D192E293F394A495B596C697D798E899",
+  "name": "Email Verification Resend Success Resend Code",
+  "summary": "After a rejected attempt, the user requests a replacement verification code; the resend is accepted and the same code-entry view returns to the ready presentation state.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "email-verification",
+  "startViewKey": "auth.email-verification.enter",
+  "startViewState": "code-rejected",
+  "action": { "id": "resend-verification-code", "finder": "action:resend-verification-code" },
+  "preconditions": {
+    "expression": "email is unverified, the current challenge has one failed attempt, and resend cooldown has elapsed",
+    "state": { "emailConfirmed": "notset", "emailVerificationCode": { "status": "valid", "attemptCount": 1 } }
+  },
+  "inputs": [],
+  "serverInteraction": { "required": true, "intent": "Issue a fresh replacement verification code and make it authoritative.", "transitionKeys": ["auth.transition.email-verification.code-resent"] },
+  "expectedViewKey": "auth.email-verification.enter",
+  "expectedViewState": "ready",
+  "expectedVisibleFinders": ["field:verification-code", "action:verify-verification-code", "action:resend-verification-code"],
+  "postconditions": {
+    "expression": "email remains unconfirmed and a new authoritative verification proof exists with attempts reset",
+    "state": { "emailConfirmed": "notset", "emailVerificationCode": { "status": "valid", "attemptCount": 0 } }
+  },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.email-verification.enter" },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Accepted resend is one independently runnable scenario; it does not require the runner to understand the enclosing behavior." }
+  ],
+  "progress": { "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+}
