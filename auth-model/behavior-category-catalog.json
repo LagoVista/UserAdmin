@@ -20,7 +20,7 @@
         "scenarios": "complete",
         "presentation": "complete",
         "implementation": "complete",
-        "tests": "not-started"
+        "tests": "complete"
       }
     },
     {
@@ -152,6 +152,7 @@
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-11","note":"Passkey Sign In reconciled to one canonical behavior with Welcome-to-Passkey and Passkey-to-Home scenarios. Welcome and Continue with Passkey presentation surfaces are conformance-verified on web and mobile; implementation and tests remain separate follow-on phases."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-11","note":"Passkey Sign In implementation reconciliation confirmed the existing anonymous passwordless PasskeyController and AppUserPasskeyManager path consumes and validates challenges, resolves exactly one durable user from the credential, validates the WebAuthn assertion, advances the signature counter, emits concrete AuthLogTypes events, and resolves the landing destination."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-13","note":"Email Verification is represented by five lightweight start-to-end behaviors with behavior-owned atomic scenarios: direct success, rejection, retry success, resend success, and resend throttled. Presentation uses Send, Enter with deterministic View State, and Confirmed surfaces."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-14","note":"Email Verification implementation is complete after the canonical send flow was normalized to distinguish initial code-sent, accepted code-resent, and resend-throttled outcomes from durable proof state and cooldown timing."}
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-14","note":"Email Verification implementation is complete after the canonical send flow was normalized to distinguish initial code-sent, accepted code-resent, and resend-throttled outcomes from durable proof state and cooldown timing."},
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-14","note":"Email Verification authored test obligations are complete. Seven send/resend scenarios are bound to EmailVerificationSendFlowTests and six accepted/rejected verification scenarios are bound to EmailVerificationFlowIntegrationTests; runtime execution evidence remains separate."}
   ]
 }
