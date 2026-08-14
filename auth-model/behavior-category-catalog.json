@@ -128,8 +128,8 @@
         "auth.behavior.passkey.account-registration"
       ],
       "progress": {
-        "behaviors": "not-started",
-        "scenarios": "not-started",
+        "behaviors": "complete",
+        "scenarios": "complete",
         "presentation": "not-started",
         "implementation": "not-started",
         "tests": "not-started"
