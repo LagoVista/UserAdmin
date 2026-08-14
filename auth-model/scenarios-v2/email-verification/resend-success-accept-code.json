@@ -25,5 +25,5 @@
   "expectedAuthLogEvents": ["ConfirmEmailSuccess"],
   "evidenceRequirements": ["server", "web", "android", "ios"],
   "sourceReferences": [{ "sourceType": "auth-view", "reference": "auth.email-verification.confirmed" }],
-  "progress": { "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "not-started" }
 }
