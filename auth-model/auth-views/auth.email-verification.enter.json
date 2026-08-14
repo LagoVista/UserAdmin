@@ -1,0 +1,29 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.email-verification.enter",
+  "name": "Enter Email Verification Code",
+  "description": "Accepts a six-digit email-verification code and exposes a deterministic presentation state after verify or resend actions.",
+  "category": "email-verification",
+  "routeId": "auth.route.email-verification.enter",
+  "status": "proposed",
+  "viewStates": {
+    "defaultState": "ready",
+    "states": ["ready", "code-rejected", "resend-throttled"]
+  },
+  "controls": [
+    { "id": "verification-code", "name": "Verification Code", "controlType": "code-input", "finder": "field:verification-code", "required": true, "sensitivity": "secret" },
+    { "id": "verification-error", "name": "Verification Error", "controlType": "status", "finder": "status:verification-error", "sensitivity": "public", "visibleInViewStates": ["code-rejected"] },
+    { "id": "resend-throttled", "name": "Resend Temporarily Unavailable", "controlType": "status", "finder": "status:resend-throttled", "sensitivity": "public", "visibleInViewStates": ["resend-throttled"] }
+  ],
+  "actions": [
+    { "id": "verify-verification-code", "name": "Verify Code", "actionType": "button", "finder": "action:verify-verification-code", "enabledInViewStates": ["ready", "code-rejected"] },
+    { "id": "resend-verification-code", "name": "Resend Code", "actionType": "button", "finder": "action:resend-verification-code", "enabledInViewStates": ["ready", "code-rejected"] },
+    { "id": "sign-out", "name": "Sign Out", "actionType": "button", "finder": "action:sign-out" }
+  ],
+  "platforms": {
+    "web": { "status": "planned" },
+    "mobile": { "status": "planned" }
+  },
+  "notes": ["View State is presentation-only and is used only to render and verify the UI state."]
+}
