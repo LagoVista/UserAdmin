@@ -3,17 +3,18 @@
   "schemaVersion": "1.0",
   "key": "auth.flow.email-verification.complete",
   "name": "Email Verification Completion",
-  "summary": "Validates an email confirmation challenge for the selected durable identity and reports the canonical completion transition.",
-  "version": 1,
-  "maturity": "implemented",
+  "summary": "Legacy email-verification flow mapping that collapsed accepted and rejected proof into one completion transition.",
+  "version": 2,
+  "maturity": "deprecated",
   "requestContract": "EmailVerificationFlowRequest",
   "resultContract": "AuthenticationFlowResult",
   "handlerKeys": ["auth.handler.email-verification.complete"],
   "transitionKeys": ["auth.transition.email-verification.complete"],
   "entryActionKeys": ["auth.action.email-verification.complete"],
   "supportedAudiences": ["platform-user", "tenant-user", "customer-end-user"],
+  "notes": ["Deprecated after verification was normalized to outcome-specific code-accepted and code-rejected transitions."],
   "sourceReferences": [
-    { "sourceType": "decision", "reference": "auth-model/transitions/email-verification-complete.json" },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "The canonical verify-code flow now distinguishes accepted and rejected proof." },
     { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationFlowHandler.cs" }
   ]
 }
