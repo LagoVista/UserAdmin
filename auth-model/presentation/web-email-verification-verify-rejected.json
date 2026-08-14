@@ -1,0 +1,36 @@
+{
+  "$schema": "../schemas/presentation-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.presentation.web.email-verification.verify-rejected",
+  "name": "Web Email Verification Verify Rejected",
+  "summary": "Binds rejected code verification on the canonical code-entry surface to behavior-owned rejection scenarios that remain on the same AuthView.",
+  "version": 1,
+  "maturity": "reviewed",
+  "bindingKind": "canonical-action",
+  "channel": "web-ui",
+  "platform": "web",
+  "scenarioKeys": [
+    "auth.scenario.email-verification.rejected.verify-code",
+    "auth.scenario.email-verification.retry-success.reject-code",
+    "auth.scenario.email-verification.resend-success.reject-code"
+  ],
+  "actionKey": "auth.action.email-verification.verify-code",
+  "navigationKey": null,
+  "authViewKey": "auth.email-verification.enter",
+  "route": "/auth/email-verification/enter",
+  "viewId": "auth.email-verification.enter",
+  "fieldBindings": [
+    { "inputKey": "verification-code", "authViewFieldId": "verification-code", "finder": "field:verification-code", "bindingType": "field", "valueSource": null }
+  ],
+  "actionBinding": {
+    "authFieldActionId": "verify-verification-code",
+    "finder": "action:verify-verification-code",
+    "bindingType": "click",
+    "operationReference": null
+  },
+  "expectedViewId": "auth.email-verification.enter",
+  "expectedRoute": "/auth/email-verification/enter",
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "The scenario owns the expectedViewState code-rejected assertion; this binding records the shared presentation action and same-view destination." }
+  ]
+}
