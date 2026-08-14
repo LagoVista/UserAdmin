@@ -3,31 +3,25 @@
   "schemaVersion": "2.0",
   "key": "auth.behavior.email-verification.success",
   "name": "Email Verification Success",
-  "summary": "A user receives an email verification code, submits the six-digit code through a deterministic secure UI, and proves control of the email address.",
-  "version": 1,
+  "summary": "An unverified durable user requests an email-verification code, submits valid current proof, and proves control of the email address.",
+  "version": 2,
   "maturity": "proposed",
   "categoryKey": "email-verification",
-  "scenarioKeys": [],
-  "finalOutcome": "Email ownership is verified for the current durable identity and the verification proof cannot be reused.",
-  "supportedPlatforms": [
-    "server",
-    "web",
-    "android",
-    "ios"
+  "scenarioKeys": [
+    "auth.scenario.email-verification.send-code-to-entry",
+    "auth.scenario.email-verification.code-entry-success"
   ],
+  "entryViewKey": "auth.email-verification.send",
+  "finalViewKey": "auth.email-verification.confirmed",
+  "finalOutcome": "Email ownership is verified for the current durable identity and the verification proof cannot be reused.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
   "sourceReferences": [
-    {
-      "sourceType": "code",
-      "reference": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationFlowHandler.cs"
-    },
-    {
-      "sourceType": "code",
-      "reference": "auth-model/actions/email-verification-complete.json"
-    }
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/UserVerficationManager.cs" },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Success uses a dedicated send-code surface followed by code entry and successful verification." }
   ],
   "progress": {
-    "scenarios": "not-started",
-    "presentation": "not-started",
+    "scenarios": "needs-review",
+    "presentation": "in-progress",
     "implementation": "not-started",
     "tests": "not-started"
   }
