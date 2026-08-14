@@ -1,0 +1,30 @@
+{
+  "$schema": "../schemas/presentation-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.presentation.web.email-verification.resend-accepted",
+  "name": "Web Email Verification Resend Accepted",
+  "summary": "Binds accepted resend from the canonical code-entry surface to the behavior-owned resend-success scenario.",
+  "version": 1,
+  "maturity": "reviewed",
+  "bindingKind": "canonical-action",
+  "channel": "web-ui",
+  "platform": "web",
+  "scenarioKeys": ["auth.scenario.email-verification.resend-success.resend-code"],
+  "actionKey": "auth.action.email-verification.resend-code",
+  "navigationKey": null,
+  "authViewKey": "auth.email-verification.enter",
+  "route": "/auth/email-verification/enter",
+  "viewId": "auth.email-verification.enter",
+  "fieldBindings": [],
+  "actionBinding": {
+    "authFieldActionId": "resend-verification-code",
+    "finder": "action:resend-verification-code",
+    "bindingType": "click",
+    "operationReference": null
+  },
+  "expectedViewId": "auth.email-verification.enter",
+  "expectedRoute": "/auth/email-verification/enter",
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "The accepted resend scenario asserts expectedViewState ready after the fresh proof is issued." }
+  ]
+}
