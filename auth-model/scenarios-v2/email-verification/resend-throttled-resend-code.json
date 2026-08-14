@@ -1,0 +1,34 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.email-verification.resend-throttled.resend-code",
+  "runtimeEntityId": "A2B3C4D5E6F7A8B9C0D1E2F3A4B5C6D7",
+  "name": "Email Verification Resend Throttled",
+  "summary": "The user requests another verification code during the cooldown; no replacement proof is issued and the same code-entry view renders in the resend-throttled presentation state.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "email-verification",
+  "startViewKey": "auth.email-verification.enter",
+  "startViewState": "ready",
+  "action": { "id": "resend-verification-code", "finder": "action:resend-verification-code" },
+  "preconditions": {
+    "expression": "email is unverified, a valid verification challenge exists, and resend cooldown is active",
+    "state": { "emailConfirmed": "notset", "emailVerificationCode": { "status": "valid", "attemptCount": 0 } }
+  },
+  "inputs": [],
+  "serverInteraction": { "required": true, "intent": "Reject replacement-code issuance while the cooldown is active and preserve the current proof.", "transitionKeys": ["auth.transition.email-verification.resend-throttled"] },
+  "expectedViewKey": "auth.email-verification.enter",
+  "expectedViewState": "resend-throttled",
+  "expectedVisibleFinders": ["field:verification-code", "status:resend-throttled"],
+  "postconditions": {
+    "expression": "email remains unconfirmed and the existing verification proof remains valid and unchanged",
+    "state": { "emailConfirmed": "notset", "emailVerificationCode": { "status": "valid", "attemptCount": 0 } }
+  },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.email-verification.enter" },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "The throttle is authoritative server state; resend-throttled is the observable presentation result for UI verification." }
+  ],
+  "progress": { "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+}
