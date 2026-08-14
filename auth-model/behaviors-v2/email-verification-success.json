@@ -23,6 +23,6 @@
     "scenarios": "complete",
     "presentation": "complete",
     "implementation": "complete",
-    "tests": "not-started"
+    "tests": "complete"
   }
 }
