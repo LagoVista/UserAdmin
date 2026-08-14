@@ -18,5 +18,5 @@
   "sourceReferences": [
     { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Cooldown is modeled as one representative behavior rather than enumerating every timing combination." }
   ],
-  "progress": { "scenarios": "complete", "presentation": "complete", "implementation": "complete", "tests": "not-started" }
+  "progress": { "scenarios": "complete", "presentation": "complete", "implementation": "complete", "tests": "complete" }
 }
