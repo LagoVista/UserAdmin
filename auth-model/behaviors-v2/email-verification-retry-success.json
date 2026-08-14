@@ -1,0 +1,24 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.email-verification.retry-success",
+  "name": "Email Verification Retry Success",
+  "summary": "An unverified durable user receives a verification code, enters an incorrect code once, then submits the correct current code and successfully verifies the email address.",
+  "version": 1,
+  "maturity": "reviewed",
+  "categoryKey": "email-verification",
+  "scenarioKeys": [
+    "auth.scenario.email-verification.retry-success.send-code",
+    "auth.scenario.email-verification.retry-success.reject-code",
+    "auth.scenario.email-verification.retry-success.accept-code"
+  ],
+  "entryViewKey": "auth.email-verification.send",
+  "finalViewKey": "auth.email-verification.confirmed",
+  "finalOutcome": "Email ownership is verified after a recoverable rejected attempt using the still-current verification proof.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/UserVerficationManager.cs" },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Representative retry behavior proves that a rejected attempt can remain on the same AuthView and later succeed without enumerating arbitrary retry combinations." }
+  ],
+  "progress": { "scenarios": "complete", "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+}
