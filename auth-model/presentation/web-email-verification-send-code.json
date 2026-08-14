@@ -1,0 +1,36 @@
+{
+  "$schema": "../schemas/presentation-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.presentation.web.email-verification.send-code",
+  "name": "Web Email Verification Send Code",
+  "summary": "Binds the canonical Send Email Verification Code surface action to every behavior-owned send-code scenario in the email-verification category.",
+  "version": 1,
+  "maturity": "reviewed",
+  "bindingKind": "canonical-action",
+  "channel": "web-ui",
+  "platform": "web",
+  "scenarioKeys": [
+    "auth.scenario.email-verification.success.send-code",
+    "auth.scenario.email-verification.rejected.send-code",
+    "auth.scenario.email-verification.retry-success.send-code",
+    "auth.scenario.email-verification.resend-success.send-code",
+    "auth.scenario.email-verification.resend-throttled.send-code"
+  ],
+  "actionKey": "auth.action.email-verification.send-code",
+  "navigationKey": null,
+  "authViewKey": "auth.email-verification.send",
+  "route": "/auth/email-verification/send",
+  "viewId": "auth.email-verification.send",
+  "fieldBindings": [],
+  "actionBinding": {
+    "authFieldActionId": "send-verification-code",
+    "finder": "action:send-verification-code",
+    "bindingType": "click",
+    "operationReference": null
+  },
+  "expectedViewId": "auth.email-verification.enter",
+  "expectedRoute": "/auth/email-verification/enter",
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Scenario files are behavior-owned; the presentation binding may map one canonical UI action to all scenarios that exercise it." }
+  ]
+}
