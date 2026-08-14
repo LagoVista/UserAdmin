@@ -3,6 +3,7 @@ namespace LagoVista.UserAdmin.Models.Auth
     public enum EmailVerificationSendOutcome
     {
         Sent,
+        Resent,
         Throttled
     }
 
