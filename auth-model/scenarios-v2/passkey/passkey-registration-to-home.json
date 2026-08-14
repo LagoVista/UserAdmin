@@ -4,9 +4,9 @@
   "key": "auth.scenario.passkey.passkey-registration-to-home",
   "runtimeEntityId": "9F44A0C140CC7E9DC94AEC7F256668B9",
   "name": "Passkey Registration to Home",
-  "summary": "The user confirms enrollment, the server creates exactly one durable user, binds the proved passkey credential, establishes the home workspace, and opens the application home view.",
-  "version": 1,
-  "maturity": "proposed",
+  "summary": "Deprecated. Superseded by auth.scenario.passkey.enrollment-to-confirmation followed by auth.scenario.passkey.confirmation-to-home, which match the current user-visible action boundaries.",
+  "version": 2,
+  "maturity": "deprecated",
   "categoryKey": "passkey-registration",
   "startViewKey": "auth.passkey.enrollment.confirm",
   "action": {
@@ -19,7 +19,7 @@
   "inputs": [],
   "serverInteraction": {
     "required": true,
-    "intent": "Create one durable user, bind the proved pending passkey credential, establish the required home workspace, and issue the authenticated session.",
+    "intent": "Historical draft that combined durable-user creation, credential binding, workspace setup, and final navigation.",
     "transitionKeys": [
       "auth.transition.passkey.create-durable-user",
       "auth.transition.passkey.bind-pending-credential"
@@ -30,20 +30,17 @@
     "expression": "pending-identity-status == resolved and durable-identity == resolved and credential-proof == passkey-proved and home-workspace == established"
   },
   "expectedAuthLogEvents": [],
-  "evidenceRequirements": [
-    "server",
-    "web",
-    "android",
-    "ios"
-  ],
+  "evidenceRequirements": [],
   "sourceReferences": [
     {
-      "sourceType": "auth-view",
-      "reference": "auth.passkey.enrollment.confirm"
+      "sourceType": "decision",
+      "reference": "auth.scenario.passkey.enrollment-to-confirmation",
+      "note": "Canonical server-side replacement boundary."
     },
     {
-      "sourceType": "journey",
-      "reference": "auth.journey.passkey.new-user-registration"
+      "sourceType": "decision",
+      "reference": "auth.scenario.passkey.confirmation-to-home",
+      "note": "Canonical final client-navigation boundary."
     }
   ],
   "progress": {
