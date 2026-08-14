@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lagovista.com/auth/client-auth-view-conformance-manifest.schema.json",
+  "title": "Client AuthView Conformance Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "clientKey",
+    "platform",
+    "repository",
+    "inspectedCommit",
+    "generatedUtc",
+    "views"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "1.0" },
+    "clientKey": {
+      "type": "string",
+      "enum": ["angular-web", "react-native"]
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["web", "mobile"]
+    },
+    "repository": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+    },
+    "inspectedCommit": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "generatedUtc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "views": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/viewObservation" }
+    }
+  },
+  "$defs": {
+    "authKey": {
+      "type": "string",
+      "pattern": "^auth\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})*$"
+    },
+    "finder": {
+      "type": "string",
+      "pattern": "^(screen|field|label|status|display|action):[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "viewStateKey": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "sourceEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "symbol": { "type": "string", "minLength": 1 },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "viewObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "viewId",
+        "status",
+        "route",
+        "component",
+        "viewStates",
+        "controlFinders",
+        "actionFinders",
+        "apiOperations",
+        "sourceEvidence"
+      ],
+      "properties": {
+        "viewId": { "$ref": "#/$defs/authKey" },
+        "status": {
+          "type": "string",
+          "enum": ["implemented", "partial", "missing", "unknown", "not-applicable"]
+        },
+        "route": {
+          "type": ["string", "null"]
+        },
+        "component": {
+          "type": ["string", "null"]
+        },
+        "viewStates": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/viewStateKey" }
+        },
+        "controlFinders": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/finder" }
+        },
+        "actionFinders": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/finder" }
+        },
+        "apiOperations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "sourceEvidence": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/sourceEvidence" }
+        },
+        "notes": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}
