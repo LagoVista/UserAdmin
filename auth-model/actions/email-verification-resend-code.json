@@ -1,0 +1,33 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.email-verification.resend-code",
+  "name": "Resend Email Verification Code",
+  "summary": "Request a fresh email-verification code while email ownership remains unverified.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [],
+  "guards": [
+    { "expression": "durable identity is resolved" },
+    { "expression": "email ownership is not yet verified" }
+  ],
+  "permittedMutations": ["auth.dimension.email-verification-code"],
+  "requiredEffects": [],
+  "forbiddenEffects": [
+    "Do not verify email ownership.",
+    "Do not create a new durable identity.",
+    "Do not change tenant or workspace membership."
+  ],
+  "invariantKeys": [],
+  "sourceReferences": [
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-13",
+      "note": "Resend is an atomic user action within existing email-verification behaviors. Acceptance and cooldown throttling are scenario/transition outcomes rather than separate action types."
+    },
+    {
+      "sourceType": "code",
+      "reference": "src/LagoVista.UserAdmin/Managers/UserVerficationManager.cs"
+    }
+  ]
+}
