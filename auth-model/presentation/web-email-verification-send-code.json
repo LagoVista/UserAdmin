@@ -4,8 +4,8 @@
   "key": "auth.presentation.web.email-verification.send-code",
   "name": "Web Email Verification Send Code",
   "summary": "Binds the canonical Send Email Verification Code surface action to every behavior-owned send-code scenario in the email-verification category.",
-  "version": 1,
-  "maturity": "reviewed",
+  "version": 2,
+  "maturity": "implemented",
   "bindingKind": "canonical-action",
   "channel": "web-ui",
   "platform": "web",
@@ -25,12 +25,13 @@
   "actionBinding": {
     "authFieldActionId": "send-verification-code",
     "finder": "action:send-verification-code",
-    "bindingType": "click",
-    "operationReference": null
+    "bindingType": "api-call",
+    "operationReference": "POST /api/verify/email/confirmationcode/send"
   },
   "expectedViewId": "auth.email-verification.enter",
   "expectedRoute": "/auth/email-verification/enter",
   "sourceReferences": [
-    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Scenario files are behavior-owned; the presentation binding may map one canonical UI action to all scenarios that exercise it." }
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Scenario files are behavior-owned; the presentation binding may map one canonical UI action to all scenarios that exercise it." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest src/LagoVista.UserAdmin.Rest/Rest/UserVerifyController.cs", "note": "Canonical POST send/resend endpoint routes through AuthenticationFlowService and returns typed Sent or Throttled outcome." }
   ]
 }
