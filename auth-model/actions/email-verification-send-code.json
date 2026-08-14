@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.email-verification.send-code",
+  "name": "Send Email Verification Code",
+  "summary": "Issues and sends a fresh email-verification code for the resolved durable identity without changing email ownership state.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [],
+  "guards": [
+    { "expression": "durable-identity == resolved", "failureCode": "email-verification-user-not-found" },
+    { "expression": "email-confirmed == false", "failureCode": "email-already-verified" },
+    { "expression": "email-verification-send-allowed == true", "failureCode": "email-verification-send-throttled" }
+  ],
+  "permittedMutations": [],
+  "requiredEffects": ["issue-email-verification-code", "send-email-verification-code"],
+  "forbiddenEffects": ["confirm-email", "create-durable-user", "change-home-workspace", "switch-current-workspace"],
+  "invariantKeys": ["auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/UserVerficationManager.cs" },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Email verification uses a dedicated single-purpose send-code action; resend uses the same server semantics subject to resend throttling." }
+  ]
+}
