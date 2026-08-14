@@ -1,3 +1,4 @@
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
