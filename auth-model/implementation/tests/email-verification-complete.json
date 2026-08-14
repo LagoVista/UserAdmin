@@ -3,9 +3,9 @@
   "schemaVersion": "1.0",
   "key": "auth.test-binding.email-verification.complete",
   "name": "Email Verification Completion Flow Proof",
-  "summary": "Registers executed NUnit evidence for the canonical email verification completion transition.",
-  "version": 1,
-  "maturity": "implemented",
+  "summary": "Legacy test binding retained for history after email verification was normalized to explicit accepted and rejected proof transitions.",
+  "version": 2,
+  "maturity": "deprecated",
   "testLevel": "handler-integration",
   "repository": "LagoVista/UserAdmin",
   "projectPath": "tests/LagoVista.UserAdmin.Auth.Tests",
@@ -13,25 +13,24 @@
   "framework": "NUnit",
   "testTypeName": "EmailVerificationFlowIntegrationTests",
   "testMethodNames": [
-    "ValidToken_Should_CompleteVerification_And_ReturnRedirect",
-    "InvalidToken_Should_ReturnFailure_WithoutSuccessfulTransitionResult",
-    "AlreadyConfirmedUser_Should_ReturnIdempotentSuccess"
+    "ValidCode_Should_ConfirmEmail_ConsumeCode_SignIn_And_ReturnRedirect",
+    "InvalidCode_Should_IncrementAttemptCount_And_ReturnFailure",
+    "AlreadyConfirmedUser_Should_ReturnIdempotentSuccess_WithoutReadingCode"
   ],
   "handlerKeys": ["auth.handler.email-verification.complete"],
   "endpointBindingKeys": [],
   "transitionKeys": ["auth.transition.email-verification.complete"],
   "proofObligations": [
-    "transition-key",
-    "valid-token-success",
-    "invalid-token-failure",
-    "idempotent-confirmation",
-    "redirect-preserved"
+    "legacy-transition-key",
+    "legacy-valid-token-success",
+    "legacy-invalid-token-failure",
+    "legacy-idempotent-confirmation"
   ],
   "notes": [
-    "NUnit tests carry AptixEvidence references for this test binding, the email verification flow, and the canonical completion transition.",
-    "Controller routing is intentionally deferred to a later controller-focused session."
+    "Superseded by auth.test-binding.email-verification.verify-code and auth.test-binding.email-verification.send-code.",
+    "The canonical V2 model now uses code-accepted, code-rejected, code-sent, code-resent, and resend-throttled transitions."
   ],
   "sourceReferences": [
-    { "sourceType": "decision", "reference": "auth-model/transitions/email-verification-complete.json" }
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-14", "note": "Deprecated after test evidence was reconciled to the current email-verification transition vocabulary." }
   ]
 }
