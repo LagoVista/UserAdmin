@@ -146,6 +146,29 @@ This means the category has enough declared tests/scenarios to prove the intende
 
 Runtime execution status is tracked separately.
 
+#### Test architecture and mocking boundary
+
+For a server-backed authentication scenario, the authored proof test must exercise the real application path far enough to prove the behavior being claimed. The preferred boundary is:
+
+```text
+AuthenticationFlowService
+  -> real typed flow handler
+  -> real manager/domain/security operation
+  -> mocked infrastructure boundaries only
+```
+
+Mocks are appropriate for infrastructure seams that are not themselves the authentication behavior under proof, such as:
+
+- persistence repositories / storage adapters
+- email or SMS delivery
+- external identity providers and remote services
+- framework adapters where the framework itself is not the behavior under proof
+- clocks or other environmental dependencies when deterministic control is required
+
+Do **not** mock the manager/domain/security operation whose behavior the scenario claims to prove. A handler test that returns a prearranged result from a mocked underlying manager proves handler branching only; it does not prove the underlying authentication behavior and is insufficient by itself for authored test completeness.
+
+One canonical server test binding may cover several behavior-owned scenarios when those scenarios exercise the same underlying transition family. Every scenario must still be explicitly named by `scenarioKeys`, and the binding must prove every canonical transition required by those scenarios.
+
 ## Category → Green workflow
 
 Work one category at a time. Within the category, work behavior-by-behavior and scenario-by-scenario. Avoid broad auth-system rewrites while reconciling one lane.
@@ -254,6 +277,8 @@ The runner must establish:
 - expected UI destination / visible outcome
 - expected server-side identity post-state
 - expected auth-log event evidence where declared
+
+For server-backed scenarios, the server proof should exercise the real flow handler and the real manager/domain/security behavior. Mock only infrastructure seams outside the behavior being proved. If the manager/domain operation itself is mocked, treat that result as component-level coverage rather than sufficient authentication proof.
 
 A browser landing on the right page while the server receipt is wrong is a failed scenario.
 
