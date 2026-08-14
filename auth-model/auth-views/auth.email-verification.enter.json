@@ -6,7 +6,7 @@
   "description": "Accepts a six-digit email-verification code and exposes a deterministic presentation state after verify or resend actions.",
   "category": "email-verification",
   "routeId": "auth.route.email-verification.enter",
-  "status": "proposed",
+  "status": "active",
   "viewStates": {
     "defaultState": "ready",
     "states": ["ready", "code-rejected", "resend-throttled"]
@@ -25,5 +25,8 @@
     "web": { "status": "planned" },
     "mobile": { "status": "planned" }
   },
-  "notes": ["View State is presentation-only and is used only to render and verify the UI state."]
+  "notes": [
+    "View State is presentation-only and is used only to render and verify the UI state.",
+    "Rejected verification and resend cooldown remain on this same single-purpose surface."
+  ]
 }
