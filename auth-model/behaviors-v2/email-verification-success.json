@@ -3,13 +3,13 @@
   "schemaVersion": "2.0",
   "key": "auth.behavior.email-verification.success",
   "name": "Email Verification Success",
-  "summary": "An unverified durable user requests an email-verification code, submits valid current proof, and proves control of the email address.",
-  "version": 2,
-  "maturity": "proposed",
+  "summary": "An unverified durable user requests an email-verification code, submits the valid current proof, and proves control of the email address.",
+  "version": 3,
+  "maturity": "reviewed",
   "categoryKey": "email-verification",
   "scenarioKeys": [
-    "auth.scenario.email-verification.send-code-to-entry",
-    "auth.scenario.email-verification.code-entry-success"
+    "auth.scenario.email-verification.success.send-code",
+    "auth.scenario.email-verification.success.verify-code"
   ],
   "entryViewKey": "auth.email-verification.send",
   "finalViewKey": "auth.email-verification.confirmed",
@@ -17,10 +17,10 @@
   "supportedPlatforms": ["server", "web", "android", "ios"],
   "sourceReferences": [
     { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/UserVerficationManager.cs" },
-    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Success uses a dedicated send-code surface followed by code entry and successful verification." }
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Behaviors are lightweight start-to-end documentation constructs. Scenarios are behavior-owned atomic UI-test steps and are not reused across behaviors." }
   ],
   "progress": {
-    "scenarios": "needs-review",
+    "scenarios": "complete",
     "presentation": "in-progress",
     "implementation": "not-started",
     "tests": "not-started"
