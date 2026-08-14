@@ -17,10 +17,11 @@ namespace LagoVista.UserAdmin.Authentication
         private readonly IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> _passwordRecoveryCompletionHandler;
         private readonly IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> _invitationAcceptanceHandler;
         private readonly IAuthenticationFlowHandler<EmailVerificationFlowRequest> _emailVerificationHandler;
+        private readonly IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult> _emailVerificationSendHandler;
         private readonly IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> _passwordRecoveryVerificationHandler;
         private readonly IAuthenticationFlowHandler<PasswordChangeFlowRequest> _passwordChangeHandler;
 
-        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> invitationAcceptanceHandler = null, IAuthenticationFlowHandler<EmailVerificationFlowRequest> emailVerificationHandler = null, IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> passwordRecoveryVerificationHandler = null, IAuthenticationFlowHandler<PasswordChangeFlowRequest> passwordChangeHandler = null)
+        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> invitationAcceptanceHandler = null, IAuthenticationFlowHandler<EmailVerificationFlowRequest> emailVerificationHandler = null, IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> passwordRecoveryVerificationHandler = null, IAuthenticationFlowHandler<PasswordChangeFlowRequest> passwordChangeHandler = null, IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult> emailVerificationSendHandler = null)
         {
             _passwordLoginHandler = passwordLoginHandler ?? throw new ArgumentNullException(nameof(passwordLoginHandler));
             _passwordRecoveryRequestHandler = passwordRecoveryRequestHandler ?? throw new ArgumentNullException(nameof(passwordRecoveryRequestHandler));
@@ -29,6 +30,7 @@ namespace LagoVista.UserAdmin.Authentication
             _emailVerificationHandler = emailVerificationHandler;
             _passwordRecoveryVerificationHandler = passwordRecoveryVerificationHandler;
             _passwordChangeHandler = passwordChangeHandler;
+            _emailVerificationSendHandler = emailVerificationSendHandler;
         }
 
         public async Task<InvokeResult<AuthenticationResponse>> LoginWithPasswordAsync(AuthLoginRequest request)
@@ -92,6 +94,21 @@ namespace LagoVista.UserAdmin.Authentication
 
             var result = await _invitationAcceptanceHandler.HandleAsync(new InvitationAcceptanceFlowRequest(inviteId, userId));
             if (result.TransitionKey != InvitationAcceptanceFlowHandler.TransitionKey)
+                throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
+
+            return result.PublicResult;
+        }
+
+        public async Task<InvokeResult<EmailVerificationSendResult>> SendEmailVerificationCodeAsync(EntityHeader user)
+        {
+            if (_emailVerificationSendHandler == null)
+                throw new InvalidOperationException("Email verification send flow handler is not configured.");
+
+            var result = await _emailVerificationSendHandler.HandleAsync(new EmailVerificationSendFlowRequest(user));
+            if (!result.PublicResult.Successful)
+                return result.PublicResult;
+
+            if (result.TransitionKey != EmailVerificationSendFlowHandler.SentTransitionKey && result.TransitionKey != EmailVerificationSendFlowHandler.ThrottledTransitionKey)
                 throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
 
             return result.PublicResult;
