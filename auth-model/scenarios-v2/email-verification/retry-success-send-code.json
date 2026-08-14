@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.email-verification.retry-success.send-code",
+  "runtimeEntityId": "E142F243A344B445C546D647E748F849",
+  "name": "Email Verification Retry Success Send Code",
+  "summary": "The retry-success behavior begins by issuing a fresh verification code and moving to code entry.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "email-verification",
+  "startViewKey": "auth.email-verification.send",
+  "action": { "id": "send-verification-code", "finder": "action:send-verification-code" },
+  "preconditions": {
+    "expression": "durable identity exists with an email address and email is not confirmed",
+    "state": { "ensureUserExists": "set", "userHasEmail": "set", "emailConfirmed": "notset", "emailVerificationCode": { "status": "notset" } }
+  },
+  "inputs": [],
+  "serverInteraction": { "required": true, "intent": "Issue a fresh verification code.", "transitionKeys": ["auth.transition.email-verification.code-sent"] },
+  "expectedViewKey": "auth.email-verification.enter",
+  "expectedViewState": "ready",
+  "postconditions": {
+    "expression": "email remains unconfirmed and a valid verification code exists",
+    "state": { "emailConfirmed": "notset", "emailVerificationCode": { "status": "valid", "attemptCount": 0 } }
+  },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [{ "sourceType": "auth-view", "reference": "auth.email-verification.enter" }],
+  "progress": { "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+}
