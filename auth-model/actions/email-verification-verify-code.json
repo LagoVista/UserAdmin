@@ -1,0 +1,24 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.email-verification.verify-code",
+  "name": "Verify Email Verification Code",
+  "summary": "Submits email-verification proof for evaluation without assuming whether the proof will be accepted or rejected.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "verification-code", "valueType": "secret-reference", "required": true, "description": "Six-digit email-verification code supplied by the user." }
+  ],
+  "guards": [
+    { "expression": "durable-identity == resolved", "failureCode": "email-verification-user-not-found" },
+    { "expression": "email-confirmed == false", "failureCode": "email-already-verified" }
+  ],
+  "permittedMutations": ["auth.dimension.email-ownership"],
+  "requiredEffects": ["record-email-verification-result"],
+  "forbiddenEffects": ["create-durable-user", "change-home-workspace", "switch-current-workspace"],
+  "invariantKeys": ["auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/UserVerficationManager.cs" },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "The canonical user action is verify-code rather than complete-verification so success and rejection can be deterministic outcomes of the same submitted action." }
+  ]
+}
