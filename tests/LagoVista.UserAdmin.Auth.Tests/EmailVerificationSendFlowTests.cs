@@ -15,9 +15,13 @@ namespace LagoVista.UserAdmin.Auth.Tests
     [TestFixture]
     public class EmailVerificationSendFlowTests
     {
+        private const string SentEvidence = "auth|auth.test-binding.email-verification.send-code|auth.flow.email-verification.send-code|auth.transition.email-verification.code-sent";
+        private const string ResentEvidence = "auth|auth.test-binding.email-verification.send-code|auth.flow.email-verification.send-code|auth.transition.email-verification.code-resent";
+        private const string ThrottledEvidence = "auth|auth.test-binding.email-verification.send-code|auth.flow.email-verification.send-code|auth.transition.email-verification.resend-throttled";
         private const string UserId = "7F3A91C2D8E44B6FA1029C7D5E8B34A1";
 
         [Test]
+        [Property("AptixEvidence", SentEvidence)]
         public async Task NoRecentCode_Should_Send_And_ReturnCodeSentTransition()
         {
             var manager = new Mock<IUserVerficationManager>(MockBehavior.Strict);
@@ -40,6 +44,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         }
 
         [Test]
+        [Property("AptixEvidence", ThrottledEvidence)]
         public async Task RecentCode_Should_Throttle_WithoutSendingAnotherCode()
         {
             var manager = new Mock<IUserVerficationManager>(MockBehavior.Strict);
@@ -68,6 +73,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         }
 
         [Test]
+        [Property("AptixEvidence", ResentEvidence)]
         public async Task ExistingCodeAfterCooldown_Should_Resend_And_ReturnCodeResentTransition()
         {
             var manager = new Mock<IUserVerficationManager>(MockBehavior.Strict);
