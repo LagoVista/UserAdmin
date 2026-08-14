@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schemas/auth-flow.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.flow.passkey.sign-in",
+  "name": "Passkey Sign-In",
+  "summary": "Registers the existing anonymous passwordless passkey authentication path that validates the assertion, resolves the durable user, advances the signature counter, and returns the application landing result.",
+  "version": 1,
+  "maturity": "implemented",
+  "requestContract": "PasskeyAuthenticationCompleteRequest",
+  "resultContract": "InvokeResult<PasskeySignInResult>",
+  "handlerKeys": ["auth.handler.passkey.passwordless-authentication"],
+  "transitionKeys": ["auth.transition.passkey.complete-authentication"],
+  "entryActionKeys": ["auth.action.passkey.complete-authentication"],
+  "supportedAudiences": ["platform-user", "tenant-user", "customer-end-user"],
+  "notes": [
+    "The current implementation is the established PasskeyController to IAppUserPasskeyManager boundary rather than an IAuthenticationFlowHandler adapter."
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs", "note": "Anonymous passwordless begin and complete endpoints delegate to IAppUserPasskeyManager." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "Consumes and validates challenges, resolves the credential to one durable user, validates the WebAuthn assertion, advances the signature counter, and resolves the landing destination." },
+    { "sourceType": "decision", "reference": "auth-model/transitions/passkey-complete-authentication.json" }
+  ]
+}
