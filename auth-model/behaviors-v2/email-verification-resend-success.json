@@ -20,5 +20,5 @@
   "sourceReferences": [
     { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Representative resend behavior documents the start-to-end story while every listed scenario remains a single independently runnable UI action." }
   ],
-  "progress": { "scenarios": "complete", "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+  "progress": { "scenarios": "complete", "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
 }
