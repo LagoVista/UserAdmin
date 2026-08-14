@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schemas/auth-flow.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.flow.email-verification.send-code",
+  "name": "Email Verification Send Code",
+  "summary": "Issues a fresh verification code when allowed or returns the canonical resend-throttled outcome when a proof was issued within the cooldown window.",
+  "version": 1,
+  "maturity": "implemented",
+  "requestContract": "EmailVerificationSendFlowRequest",
+  "resultContract": "AuthenticationFlowResult<EmailVerificationSendResult>",
+  "handlerKeys": ["auth.handler.email-verification.send-code"],
+  "transitionKeys": [
+    "auth.transition.email-verification.code-sent",
+    "auth.transition.email-verification.resend-throttled"
+  ],
+  "entryActionKeys": ["auth.action.email-verification.send-code"],
+  "supportedAudiences": ["platform-user", "tenant-user", "customer-end-user"],
+  "notes": [
+    "The same canonical flow serves initial send and resend. The latest durable verification proof determines whether resend is throttled."
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationSendFlowHandler.cs" },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest src/LagoVista.UserAdmin.Rest/Rest/UserVerifyController.cs" }
+  ]
+}
