@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.email-verification.resend-throttled",
+  "name": "Email Verification Resend Throttled",
+  "summary": "An unverified durable user receives a verification code and immediately requests another one while resend cooldown is active; no replacement proof is issued and the code-entry UI shows the throttled presentation state.",
+  "version": 1,
+  "maturity": "reviewed",
+  "categoryKey": "email-verification",
+  "scenarioKeys": [
+    "auth.scenario.email-verification.resend-throttled.send-code",
+    "auth.scenario.email-verification.resend-throttled.resend-code"
+  ],
+  "entryViewKey": "auth.email-verification.send",
+  "finalViewKey": "auth.email-verification.enter",
+  "finalOutcome": "Email ownership remains unverified, the current verification proof remains valid, no replacement proof is issued, and the user sees the resend-throttled presentation state.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Cooldown is modeled as one representative behavior rather than enumerating every timing combination." }
+  ],
+  "progress": { "scenarios": "complete", "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+}
