@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schemas/auth-flow-handler.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.handler.email-verification.send-code",
+  "name": "Email Verification Send Flow Handler",
+  "summary": "Provides the canonical application boundary for issuing or throttling email-verification proof while keeping delivery failure outside auth-state transition semantics.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "src/LagoVista.UserAdmin",
+  "sourcePath": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationSendFlowHandler.cs",
+  "interfaceName": "IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult>",
+  "typeName": "EmailVerificationSendFlowHandler",
+  "methodName": "HandleAsync",
+  "requestContract": "EmailVerificationSendFlowRequest",
+  "resultContract": "AuthenticationFlowResult<EmailVerificationSendResult>",
+  "transitionKeys": [
+    "auth.transition.email-verification.code-sent",
+    "auth.transition.email-verification.resend-throttled"
+  ],
+  "dependencies": ["IUserVerficationManager", "IEmailVerificationCodeRepo"],
+  "notes": [
+    "The latest durable verification proof CreatedUtc is the authoritative 60-second resend cooldown clock.",
+    "Delivery failures return a failed InvokeResult and are not treated as successful auth-state transitions."
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationSendFlowHandler.cs" },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Send and resend share one typed canonical flow with Sent and Throttled outcomes." }
+  ]
+}
