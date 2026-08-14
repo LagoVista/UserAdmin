@@ -91,7 +91,9 @@ A scenario is independently runnable from its declared setup state.
 
 ### presentation = complete
 
-Every referenced canonical AuthView and AuthRoute is coherent and reconciled with supported clients.
+The canonical presentation contract is fully defined and internally coherent.
+
+This phase answers **what the user experience must be**, not whether every client has implemented it yet.
 
 Check:
 
@@ -100,16 +102,18 @@ Check:
 - controls and semantic finders
 - actions and semantic finders
 - conditional/error surfaces
-- web/mobile semantic parity
-- declared platform implementation status
+- View State definitions and visibility/enablement rules
+- expected semantic parity across supported clients
 
 Equivalent web and mobile experiences use the same semantic view/control/action identifiers.
+
+Actual Angular / React Native conformance belongs to **implementation**, not presentation. A complete AuthView definition does not by itself prove that a supported client renders or behaves according to that contract.
 
 Client-only validation should not create fake server behaviors.
 
 ### implementation = complete
 
-The real server/client path implements the canonical behavior without contract drift.
+The real server and every declared supported client implement the canonical behavior without contract drift.
 
 For server-backed auth operations, the expected application shape is generally:
 
@@ -122,6 +126,18 @@ generated client/proxy
   -> canonical transition
 ```
 
+For client-backed presentation, implementation completeness means the real supported clients implement the canonical AuthView contract. When a behavior/scenario declares web, Android, or iOS support, verify the applicable Angular and React Native implementations actually provide:
+
+- the canonical AuthView / route destination
+- the required controls and semantic finders
+- the required actions and semantic finders
+- the required View State behavior
+- the correct generated client/API operation for server-backed actions
+- the expected success, rejection, throttling, retry, and other modeled presentation outcomes
+- no materially different client-only auth semantics that contradict the canonical model
+
+A category must not be marked implementation complete merely because the server path exists while one of its declared client platforms is missing, stale, or semantically divergent.
+
 Preserve the public HTTP/client contract unless a product/API change is explicitly intended.
 
 Implementation reconciliation includes:
@@ -130,6 +146,9 @@ Implementation reconciliation includes:
 - endpoint binding
 - flow binding
 - handler binding
+- client AuthView / route conformance
+- client control/action/finder conformance
+- generated client operation usage
 - test binding
 - canonical action/transition mappings
 - DI registration where applicable
@@ -223,9 +242,11 @@ For every `startViewKey` and auth `expectedViewKey`:
 
 - confirm the AuthView exists
 - confirm its route exists when routable
-- confirm controls/actions/finders match the real client semantics
-- confirm web/mobile implementation status
-- confirm the actual client exposes the canonical identifiers
+- confirm controls/actions/finders match the canonical semantics
+- confirm View State definitions are complete where required
+- confirm the expected web/mobile semantic contract is represented
+
+This step establishes the canonical presentation contract. Verification that the real Angular / React Native code conforms to that contract is performed during implementation reconciliation.
 
 `app.*` destinations may intentionally represent host/application landing state rather than an AuthView.
 
@@ -241,7 +262,7 @@ For each server-backed scenario:
 
 Prefer fixing architectural drift behind the stable public contract rather than changing the contract to match the model.
 
-### 6. Reconcile implementation bindings
+### 6. Reconcile implementation bindings and real clients
 
 Ensure the canonical implementation mapping resolves through:
 
@@ -253,7 +274,9 @@ implementation/handlers
 implementation/tests
 ```
 
-`model-manifest.json` requires resolved references. A broken reference cannot be considered complete.
+Then inspect every client platform declared by the behavior/scenarios and verify its real implementation conforms to the AuthView/route/action/finder/View State contract.
+
+`model-manifest.json` requires resolved references. A broken reference cannot be considered complete. Likewise, a structurally valid implementation descriptor cannot make a missing or divergent Angular / React Native implementation complete.
 
 ### 7. Make every scenario independently runnable
 
