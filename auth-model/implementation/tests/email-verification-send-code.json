@@ -3,8 +3,8 @@
   "schemaVersion": "1.0",
   "key": "auth.test-binding.email-verification.send-code",
   "name": "Email Verification Send and Resend Flow Proof",
-  "summary": "Registers NUnit coverage for initial email-verification code issuance, accepted resend after cooldown, and resend throttling.",
-  "version": 1,
+  "summary": "Registers NUnit coverage for initial email-verification code issuance, accepted resend after cooldown, and resend throttling through the real application flow and verification manager.",
+  "version": 2,
   "maturity": "implemented",
   "testLevel": "handler-integration",
   "repository": "LagoVista/UserAdmin",
@@ -34,18 +34,25 @@
     "auth.transition.email-verification.resend-throttled"
   ],
   "proofObligations": [
+    "application-flow-invokes-real-verification-manager",
     "initial-send-emits-code-sent",
+    "initial-send-persists-fresh-verification-proof",
+    "initial-send-delivers-generated-code",
     "resend-after-cooldown-emits-code-resent",
+    "resend-after-cooldown-persists-replacement-proof",
     "resend-during-cooldown-emits-resend-throttled",
     "throttled-resend-does-not-issue-new-proof",
-    "typed-outcome-matches-transition"
+    "typed-outcome-matches-transition",
+    "auth-send-events-are-recorded"
   ],
   "notes": [
+    "The proof executes AuthenticationFlowService, EmailVerificationSendFlowHandler, and the real UserVerficationManager. Only persistence, delivery, framework, and other infrastructure boundaries are mocked.",
     "Behavior-owned scenarios intentionally remain distinct even when they share the same canonical server transition.",
     "Runtime UI evidence remains separate from this authored server test binding."
   ],
   "sourceReferences": [
     { "sourceType": "test", "reference": "tests/LagoVista.UserAdmin.Auth.Tests/EmailVerificationSendFlowTests.cs" },
-    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-14", "note": "One canonical send/resend test family proves the shared server transitions underneath seven behavior-owned atomic scenarios." }
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/UserVerficationManager.cs" },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-14", "note": "Server auth proof must execute the real manager/domain behavior and mock only infrastructure boundaries." }
   ]
 }
