@@ -1,0 +1,16 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.email-verification.send",
+  "name": "Send Email Verification Code Route",
+  "description": "Displays the surface used to request an email-verification code.",
+  "path": "/auth/email-verification/send",
+  "routeType": "view",
+  "viewId": "auth.email-verification.send",
+  "parameters": [],
+  "status": "proposed",
+  "platforms": {
+    "web": { "status": "planned" },
+    "mobile": { "status": "planned" }
+  }
+}
