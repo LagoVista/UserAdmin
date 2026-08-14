@@ -1,0 +1,30 @@
+{
+  "$schema": "../schemas/presentation-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.presentation.web.email-verification.resend-throttled",
+  "name": "Web Email Verification Resend Throttled",
+  "summary": "Binds a cooldown-rejected resend on the canonical code-entry surface to the behavior-owned resend-throttled scenario.",
+  "version": 1,
+  "maturity": "reviewed",
+  "bindingKind": "canonical-action",
+  "channel": "web-ui",
+  "platform": "web",
+  "scenarioKeys": ["auth.scenario.email-verification.resend-throttled.resend-code"],
+  "actionKey": "auth.action.email-verification.resend-code",
+  "navigationKey": null,
+  "authViewKey": "auth.email-verification.enter",
+  "route": "/auth/email-verification/enter",
+  "viewId": "auth.email-verification.enter",
+  "fieldBindings": [],
+  "actionBinding": {
+    "authFieldActionId": "resend-verification-code",
+    "finder": "action:resend-verification-code",
+    "bindingType": "click",
+    "operationReference": null
+  },
+  "expectedViewId": "auth.email-verification.enter",
+  "expectedRoute": "/auth/email-verification/enter",
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "The scenario asserts expectedViewState resend-throttled; no replacement verification proof is issued." }
+  ]
+}
