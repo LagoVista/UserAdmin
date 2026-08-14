@@ -4,12 +4,12 @@
   "key": "auth.behavior.email-verification.rejected",
   "name": "Email Verification Rejected",
   "summary": "An unverified durable user receives a verification code, submits proof that cannot be accepted, and remains unverified on the code-entry surface with a deterministic rejected presentation state.",
-  "version": 1,
-  "maturity": "proposed",
+  "version": 2,
+  "maturity": "reviewed",
   "categoryKey": "email-verification",
   "scenarioKeys": [
-    "auth.scenario.email-verification.send-code-to-entry",
-    "auth.scenario.email-verification.code-entry-rejected"
+    "auth.scenario.email-verification.rejected.send-code",
+    "auth.scenario.email-verification.rejected.verify-code"
   ],
   "entryViewKey": "auth.email-verification.send",
   "finalViewKey": "auth.email-verification.enter",
@@ -17,10 +17,10 @@
   "supportedPlatforms": ["server", "web", "android", "ios"],
   "sourceReferences": [
     { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/UserVerficationManager.cs" },
-    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Mismatched, malformed, expired, consumed, and exhausted proof are rejection permutations rather than separate behaviors. The same code-entry screen may render a rejected View State." }
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "This behavior owns its Send and Verify scenarios. Similar scenarios in other behaviors are intentionally duplicated rather than shared." }
   ],
   "progress": {
-    "scenarios": "needs-review",
+    "scenarios": "complete",
     "presentation": "in-progress",
     "implementation": "not-started",
     "tests": "not-started"
