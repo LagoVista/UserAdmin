@@ -14,6 +14,7 @@ namespace LagoVista.UserAdmin.Authentication
         Task<InvokeResult<string>> VerifyPasswordRecoveryAsync(VerifyPasswordResetCode request);
         Task<InvokeResult> CompletePasswordRecoveryAsync(ResetPassword request);
         Task<InvokeResult<AcceptInviteResponse>> AcceptInvitationAsync(string inviteId, string userId);
+        Task<InvokeResult<EmailVerificationSendResult>> SendEmailVerificationCodeAsync(EntityHeader user);
         Task<InvokeResult> VerifyEmailAsync(ConfirmEmail request, EntityHeader user);
     }
 }
