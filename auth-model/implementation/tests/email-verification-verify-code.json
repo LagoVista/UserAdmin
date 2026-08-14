@@ -1,0 +1,53 @@
+{
+  "$schema": "../../schemas/auth-test-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.test-binding.email-verification.verify-code",
+  "name": "Email Verification Verify Flow Proof",
+  "summary": "Registers NUnit coverage for accepted and rejected email-verification proof, including retry, expiry, consumption, exhaustion, and idempotent confirmation semantics.",
+  "version": 1,
+  "maturity": "implemented",
+  "testLevel": "handler-integration",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "tests/LagoVista.UserAdmin.Auth.Tests",
+  "sourcePath": "tests/LagoVista.UserAdmin.Auth.Tests/EmailVerificationFlowIntegrationTests.cs",
+  "framework": "NUnit",
+  "testTypeName": "EmailVerificationFlowIntegrationTests",
+  "testMethodNames": [
+    "ValidCode_Should_ConfirmEmail_ConsumeCode_SignIn_And_ReturnRedirect",
+    "InvalidCode_Should_IncrementAttemptCount_And_ReturnFailure",
+    "ExpiredCode_Should_ReturnFailure_WithoutUpdatingCodeOrUser",
+    "ConsumedCode_Should_ReturnFailure_WithoutUpdatingCodeOrUser",
+    "FifthInvalidAttempt_Should_ConsumeCode_And_ReturnFailure",
+    "AlreadyConfirmedUser_Should_ReturnIdempotentSuccess_WithoutReadingCode"
+  ],
+  "scenarioKeys": [
+    "auth.scenario.email-verification.rejected.verify-code",
+    "auth.scenario.email-verification.resend-success.accept-code",
+    "auth.scenario.email-verification.resend-success.reject-code",
+    "auth.scenario.email-verification.retry-success.accept-code",
+    "auth.scenario.email-verification.retry-success.reject-code",
+    "auth.scenario.email-verification.success.verify-code"
+  ],
+  "handlerKeys": ["auth.handler.email-verification.verify-code"],
+  "endpointBindingKeys": [],
+  "transitionKeys": [
+    "auth.transition.email-verification.code-accepted",
+    "auth.transition.email-verification.code-rejected"
+  ],
+  "proofObligations": [
+    "valid-current-proof-emits-code-accepted",
+    "accepted-proof-confirms-email-and-consumes-proof",
+    "invalid-proof-emits-code-rejected-and-increments-attempt-count",
+    "expired-or-consumed-proof-is-rejected",
+    "attempt-exhaustion-consumes-proof",
+    "already-confirmed-user-is-idempotent"
+  ],
+  "notes": [
+    "Behavior-owned scenarios intentionally remain distinct even when they share accepted or rejected canonical transitions.",
+    "Runtime UI evidence remains separate from this authored server test binding."
+  ],
+  "sourceReferences": [
+    { "sourceType": "test", "reference": "tests/LagoVista.UserAdmin.Auth.Tests/EmailVerificationFlowIntegrationTests.cs" },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-14", "note": "One canonical verification test family proves the accepted and rejected server transitions underneath six behavior-owned atomic scenarios." }
+  ]
+}
