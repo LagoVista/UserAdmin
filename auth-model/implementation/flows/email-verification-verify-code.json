@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/auth-flow.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.flow.email-verification.verify-code",
+  "name": "Email Verification Verify Code",
+  "summary": "Processes submitted email-verification proof and reports either the canonical accepted or rejected transition.",
+  "version": 1,
+  "maturity": "implemented",
+  "requestContract": "EmailVerificationFlowRequest",
+  "resultContract": "AuthenticationFlowResult",
+  "handlerKeys": ["auth.handler.email-verification.verify-code"],
+  "transitionKeys": [
+    "auth.transition.email-verification.code-accepted",
+    "auth.transition.email-verification.code-rejected"
+  ],
+  "entryActionKeys": ["auth.action.email-verification.verify-code"],
+  "supportedAudiences": ["platform-user", "tenant-user", "customer-end-user"],
+  "notes": ["Authenticated REST verification is routed through AuthenticationFlowService and the typed EmailVerificationFlowHandler."],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/AuthenticationFlowService.cs" },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationFlowHandler.cs" },
+    { "sourceType": "external", "reference": "LagoVista/UserAdminRest/src/LagoVista.UserAdmin.Rest/Rest/UserVerifyController.cs", "note": "POST /api/verify/email now enters through IAuthenticationFlowService.VerifyEmailAsync." }
+  ]
+}
