@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.email-verification.retry-success.reject-code",
+  "runtimeEntityId": "F152A253B354C455D556E657F758A859",
+  "name": "Email Verification Retry Success Reject Code",
+  "summary": "The retry-success behavior first submits an incorrect verification code and remains on code entry in the code-rejected presentation state.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "email-verification",
+  "startViewKey": "auth.email-verification.enter",
+  "startViewState": "ready",
+  "action": { "id": "verify-verification-code", "finder": "action:verify-verification-code" },
+  "preconditions": {
+    "expression": "durable identity is unverified and a valid verification challenge exists",
+    "state": { "emailConfirmed": "notset", "emailVerificationCode": { "status": "valid", "attemptCount": 0 } }
+  },
+  "inputs": [{ "finder": "field:verification-code", "name": "Verification Code", "valueType": "secret-reference", "required": true, "value": "user.invalidEmailVerificationCode" }],
+  "serverInteraction": { "required": true, "intent": "Reject incorrect verification proof without consuming an otherwise usable challenge.", "transitionKeys": ["auth.transition.email-verification.code-rejected"] },
+  "expectedViewKey": "auth.email-verification.enter",
+  "expectedViewState": "code-rejected",
+  "expectedVisibleFinders": ["field:verification-code", "status:verification-error", "action:verify-verification-code", "action:resend-verification-code"],
+  "postconditions": {
+    "expression": "email remains unconfirmed and the challenge remains usable with one failed attempt recorded",
+    "state": { "emailConfirmed": "notset", "emailVerificationCode": { "status": "valid", "attemptCount": 1 } }
+  },
+  "expectedAuthLogEvents": ["EmailConfirmFailed"],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [{ "sourceType": "auth-view", "reference": "auth.email-verification.enter" }],
+  "progress": { "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+}
