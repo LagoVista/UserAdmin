@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.email-verification.send",
+  "name": "Send Email Verification Code",
+  "description": "Explains that email verification is required and lets the user request a verification code.",
+  "category": "email-verification",
+  "routeId": "auth.route.email-verification.send",
+  "status": "proposed",
+  "controls": [],
+  "actions": [
+    { "id": "send-verification-code", "name": "Send Verification Code", "actionType": "button", "finder": "action:send-verification-code" },
+    { "id": "sign-out", "name": "Sign Out", "actionType": "button", "finder": "action:sign-out" }
+  ],
+  "platforms": {
+    "web": { "status": "planned" },
+    "mobile": { "status": "planned" }
+  },
+  "notes": ["Single-purpose entry surface for requesting email-verification proof."]
+}
