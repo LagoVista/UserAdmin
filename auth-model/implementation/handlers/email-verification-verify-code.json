@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/auth-flow-handler.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.handler.email-verification.verify-code",
+  "name": "Email Verification Verify Code Handler",
+  "summary": "Validates submitted email-verification proof and emits an outcome-specific accepted or rejected canonical transition.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "src/LagoVista.UserAdmin",
+  "sourcePath": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationFlowHandler.cs",
+  "interfaceName": "IAuthenticationFlowHandler<EmailVerificationFlowRequest>",
+  "typeName": "EmailVerificationFlowHandler",
+  "methodName": "HandleAsync",
+  "requestContract": "EmailVerificationFlowRequest",
+  "resultContract": "AuthenticationFlowResult",
+  "transitionKeys": [
+    "auth.transition.email-verification.code-accepted",
+    "auth.transition.email-verification.code-rejected"
+  ],
+  "dependencies": ["IUserVerficationManager"],
+  "notes": ["The handler preserves the existing verification manager proof semantics and converts successful or failed validation into deterministic canonical transitions."],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationFlowHandler.cs" },
+    { "sourceType": "decision", "reference": "auth-model/transitions/email-verification-code-accepted.json" },
+    { "sourceType": "decision", "reference": "auth-model/transitions/email-verification-code-rejected.json" }
+  ]
+}
