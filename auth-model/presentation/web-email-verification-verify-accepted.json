@@ -1,0 +1,36 @@
+{
+  "$schema": "../schemas/presentation-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.presentation.web.email-verification.verify-accepted",
+  "name": "Web Email Verification Verify Accepted",
+  "summary": "Binds successful code verification from the canonical code-entry surface to behavior-owned acceptance scenarios.",
+  "version": 1,
+  "maturity": "reviewed",
+  "bindingKind": "canonical-action",
+  "channel": "web-ui",
+  "platform": "web",
+  "scenarioKeys": [
+    "auth.scenario.email-verification.success.verify-code",
+    "auth.scenario.email-verification.retry-success.accept-code",
+    "auth.scenario.email-verification.resend-success.accept-code"
+  ],
+  "actionKey": "auth.action.email-verification.verify-code",
+  "navigationKey": null,
+  "authViewKey": "auth.email-verification.enter",
+  "route": "/auth/email-verification/enter",
+  "viewId": "auth.email-verification.enter",
+  "fieldBindings": [
+    { "inputKey": "verification-code", "authViewFieldId": "verification-code", "finder": "field:verification-code", "bindingType": "field", "valueSource": null }
+  ],
+  "actionBinding": {
+    "authFieldActionId": "verify-verification-code",
+    "finder": "action:verify-verification-code",
+    "bindingType": "click",
+    "operationReference": null
+  },
+  "expectedViewId": "auth.email-verification.confirmed",
+  "expectedRoute": "/auth/email-verification/confirmed",
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13" }
+  ]
+}
