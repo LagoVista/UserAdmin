@@ -2,11 +2,15 @@
   "$schema": "../schemas/auth-route.schema.json",
   "schemaVersion": "1.0",
   "routeId": "auth.route.email-verification.enter",
-  "name": "Email Verification Entry",
+  "name": "Email Verification Entry Route",
+  "description": "Displays the canonical six-digit email-verification code-entry surface.",
   "path": "/auth/email-verification/enter",
   "routeType": "view",
   "viewId": "auth.email-verification.enter",
   "parameters": [],
-  "status": "proposed",
-  "platforms": {"web": {"status": "planned"}, "mobile": {"status": "planned"}}
+  "status": "active",
+  "platforms": {
+    "web": { "status": "planned" },
+    "mobile": { "status": "planned" }
+  }
 }
