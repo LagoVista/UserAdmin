@@ -108,7 +108,7 @@ namespace LagoVista.UserAdmin.Authentication
             if (!result.PublicResult.Successful)
                 return result.PublicResult;
 
-            if (result.TransitionKey != EmailVerificationSendFlowHandler.SentTransitionKey && result.TransitionKey != EmailVerificationSendFlowHandler.ThrottledTransitionKey)
+            if (result.TransitionKey != EmailVerificationSendFlowHandler.SentTransitionKey && result.TransitionKey != EmailVerificationSendFlowHandler.ResentTransitionKey && result.TransitionKey != EmailVerificationSendFlowHandler.ThrottledTransitionKey)
                 throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
 
             return result.PublicResult;
