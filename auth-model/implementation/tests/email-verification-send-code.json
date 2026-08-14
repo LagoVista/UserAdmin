@@ -1,0 +1,51 @@
+{
+  "$schema": "../../schemas/auth-test-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.test-binding.email-verification.send-code",
+  "name": "Email Verification Send and Resend Flow Proof",
+  "summary": "Registers NUnit coverage for initial email-verification code issuance, accepted resend after cooldown, and resend throttling.",
+  "version": 1,
+  "maturity": "implemented",
+  "testLevel": "handler-integration",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "tests/LagoVista.UserAdmin.Auth.Tests",
+  "sourcePath": "tests/LagoVista.UserAdmin.Auth.Tests/EmailVerificationSendFlowTests.cs",
+  "framework": "NUnit",
+  "testTypeName": "EmailVerificationSendFlowTests",
+  "testMethodNames": [
+    "NoRecentCode_Should_Send_And_ReturnCodeSentTransition",
+    "ExistingCodeAfterCooldown_Should_Resend_And_ReturnCodeResentTransition",
+    "RecentCode_Should_Throttle_WithoutSendingAnotherCode"
+  ],
+  "scenarioKeys": [
+    "auth.scenario.email-verification.rejected.send-code",
+    "auth.scenario.email-verification.resend-success.resend-code",
+    "auth.scenario.email-verification.resend-success.send-code",
+    "auth.scenario.email-verification.resend-throttled.resend-code",
+    "auth.scenario.email-verification.resend-throttled.send-code",
+    "auth.scenario.email-verification.retry-success.send-code",
+    "auth.scenario.email-verification.success.send-code"
+  ],
+  "handlerKeys": ["auth.handler.email-verification.send-code"],
+  "endpointBindingKeys": [],
+  "transitionKeys": [
+    "auth.transition.email-verification.code-sent",
+    "auth.transition.email-verification.code-resent",
+    "auth.transition.email-verification.resend-throttled"
+  ],
+  "proofObligations": [
+    "initial-send-emits-code-sent",
+    "resend-after-cooldown-emits-code-resent",
+    "resend-during-cooldown-emits-resend-throttled",
+    "throttled-resend-does-not-issue-new-proof",
+    "typed-outcome-matches-transition"
+  ],
+  "notes": [
+    "Behavior-owned scenarios intentionally remain distinct even when they share the same canonical server transition.",
+    "Runtime UI evidence remains separate from this authored server test binding."
+  ],
+  "sourceReferences": [
+    { "sourceType": "test", "reference": "tests/LagoVista.UserAdmin.Auth.Tests/EmailVerificationSendFlowTests.cs" },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-14", "note": "One canonical send/resend test family proves the shared server transitions underneath seven behavior-owned atomic scenarios." }
+  ]
+}
