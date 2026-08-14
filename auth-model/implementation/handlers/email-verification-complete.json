@@ -3,9 +3,9 @@
   "schemaVersion": "1.0",
   "key": "auth.handler.email-verification.complete",
   "name": "Email Verification Flow Handler",
-  "summary": "Provides the application boundary for validating an email verification challenge and reporting the canonical completion transition.",
-  "version": 1,
-  "maturity": "implemented",
+  "summary": "Legacy handler mapping that treated all verification results as a single completion transition.",
+  "version": 2,
+  "maturity": "deprecated",
   "repository": "LagoVista/UserAdmin",
   "projectPath": "src/LagoVista.UserAdmin",
   "sourcePath": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationFlowHandler.cs",
@@ -16,9 +16,9 @@
   "resultContract": "AuthenticationFlowResult",
   "transitionKeys": ["auth.transition.email-verification.complete"],
   "dependencies": ["IUserVerficationManager"],
-  "notes": ["The handler delegates verification and redirect selection to the existing user verification manager while preserving the canonical transition boundary."],
+  "notes": ["Deprecated after the handler began emitting code-accepted or code-rejected according to the manager result."],
   "sourceReferences": [
     { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationFlowHandler.cs" },
-    { "sourceType": "decision", "reference": "auth-model/transitions/email-verification-complete.json" }
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Verification outcomes are now explicit at the flow boundary." }
   ]
 }
