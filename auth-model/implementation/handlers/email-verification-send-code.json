@@ -3,8 +3,8 @@
   "schemaVersion": "1.0",
   "key": "auth.handler.email-verification.send-code",
   "name": "Email Verification Send Flow Handler",
-  "summary": "Provides the canonical application boundary for issuing or throttling email-verification proof while keeping delivery failure outside auth-state transition semantics.",
-  "version": 1,
+  "summary": "Provides the canonical application boundary for issuing an initial or replacement email-verification proof, or throttling resend while keeping delivery failure outside auth-state transition semantics.",
+  "version": 2,
   "maturity": "implemented",
   "repository": "LagoVista/UserAdmin",
   "projectPath": "src/LagoVista.UserAdmin",
@@ -16,15 +16,18 @@
   "resultContract": "AuthenticationFlowResult<EmailVerificationSendResult>",
   "transitionKeys": [
     "auth.transition.email-verification.code-sent",
+    "auth.transition.email-verification.code-resent",
     "auth.transition.email-verification.resend-throttled"
   ],
   "dependencies": ["IUserVerficationManager", "IEmailVerificationCodeRepo"],
   "notes": [
     "The latest durable verification proof CreatedUtc is the authoritative 60-second resend cooldown clock.",
+    "No previous proof produces Sent/code-sent; an elapsed previous proof produces Resent/code-resent; a recent previous proof produces Throttled/resend-throttled.",
     "Delivery failures return a failed InvokeResult and are not treated as successful auth-state transitions."
   ],
   "sourceReferences": [
     { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationSendFlowHandler.cs" },
-    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Send and resend share one typed canonical flow with Sent and Throttled outcomes." }
+    { "sourceType": "test", "reference": "tests/LagoVista.UserAdmin.Auth.Tests/EmailVerificationSendFlowTests.cs" },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-14", "note": "The presence and age of the latest durable verification proof deterministically distinguishes initial send, accepted resend, and throttled resend without adding client-supplied resend intent." }
   ]
 }
