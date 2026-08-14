@@ -1,0 +1,52 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.email-verification.success.verify-code",
+  "runtimeEntityId": "B112C213D314E415F516A617B718C819",
+  "name": "Email Verification Success Verify Code",
+  "summary": "The direct-success behavior submits the current verification code, verifies email ownership, consumes the proof, and shows the confirmed surface.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "email-verification",
+  "startViewKey": "auth.email-verification.enter",
+  "startViewState": "ready",
+  "action": { "id": "verify-verification-code", "finder": "action:verify-verification-code" },
+  "preconditions": {
+    "expression": "durable identity is unverified and has a valid current email-verification code",
+    "state": {
+      "ensureUserExists": "set",
+      "userHasEmail": "set",
+      "emailConfirmed": "notset",
+      "emailVerificationCode": { "status": "valid", "attemptCount": 0 }
+    }
+  },
+  "inputs": [
+    {
+      "finder": "field:verification-code",
+      "name": "Verification Code",
+      "valueType": "secret-reference",
+      "required": true,
+      "value": "user.emailVerificationCode"
+    }
+  ],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Accept current verification proof, verify email ownership, and consume the proof.",
+    "transitionKeys": ["auth.transition.email-verification.code-accepted"]
+  },
+  "expectedViewKey": "auth.email-verification.confirmed",
+  "postconditions": {
+    "expression": "email ownership is verified and the verification proof is consumed",
+    "state": {
+      "emailConfirmed": "set",
+      "emailVerificationCode": { "status": "consumed" }
+    }
+  },
+  "expectedAuthLogEvents": ["ConfirmEmailSuccess"],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.email-verification.enter" },
+    { "sourceType": "auth-view", "reference": "auth.email-verification.confirmed" }
+  ],
+  "progress": { "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+}
