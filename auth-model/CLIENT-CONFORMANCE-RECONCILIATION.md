@@ -107,12 +107,24 @@ Copy the canonical AuthView `viewId` exactly.
 Use:
 
 - `implemented` when a concrete client implementation was found and the required implementation facts can be observed.
-- `partial` when some meaningful portion exists but one or more expected pieces are absent or unresolved.
+- `partial` when a concrete implementation exists but, after completing the relevant source inspection, one or more expected implementation facts are actually absent, divergent, or genuinely unresolved in the client.
 - `missing` when the view is applicable but no implementation can be found after a reasonable repository search.
-- `unknown` when available source is insufficient to determine the implementation accurately.
+- `unknown` when the available client source remains insufficient to determine the implementation accurately after a reasonable inspection.
 - `not-applicable` only when the canonical platform contract explicitly makes the view inapplicable to this client.
 
 Status is an observation aid, not the final conformance verdict. Aptix may still report drift for an `implemented` entry when its observed facts differ from the canonical AuthView.
+
+### Status describes the client, not inspection effort
+
+The inspector must not use `partial` as a fallback because it has not inspected deeply enough yet. **Incomplete inspection is not a client status.**
+
+Before assigning a status, complete the reasonable source trace for that AuthView: route/navigation, owning component or screen, template/rendered controls, stable semantic finders, actions, observable View State branches, navigation outcomes, and generated-client/server operations when the view actually performs one. Follow shared controls, imports, hooks, services, and route helpers when they contain the evidence.
+
+Use `implemented` when the concrete client surface exists and the implementation facts required for that view have been observed. A legitimately empty field does not make a view partial. For example, `apiOperations: []` is correct for a client-only view that performs no server operation, and `viewStates: []` is correct when the client has no observable View State branch for that AuthView.
+
+Use `partial` only when the inspection is complete enough to identify a real implementation gap or unresolved implementation fact in the client itself. When practical, identify that specific gap or uncertainty in `notes`; do not merely say that evidence was not collected.
+
+If the inspector has only found a route or component but has not yet checked its template/screen implementation, stable finders, actions, navigation, shared helpers, or relevant service calls, the correct next step is to continue inspecting. Do not emit `partial` merely to finish the manifest pass.
 
 ### `route`
 
@@ -220,7 +232,9 @@ Before committing the manifests, verify:
 - route/component values came from client source, not copied expectations
 - view states came from observable implementation branches
 - control/action finders came from real client source
-- API operations were traced from the client
+- API operations were traced from the client when the view performs a server operation; a verified client-only view may legitimately have none
+- no entry is marked `partial` merely because the inspector stopped after finding a route/component or otherwise did not complete the relevant source trace
+- `partial` entries identify an actual client-side gap, divergence, or genuinely unresolved implementation fact after reasonable inspection
 - missing implementation is represented as `missing`, not omitted
 - ambiguity is represented as `unknown` or `partial`, not guessed away
 - source evidence paths exist in the inspected client revision
