@@ -18,7 +18,9 @@
   "finalOutcome": "Email ownership is verified using the fresh proof issued by an accepted resend request.",
   "supportedPlatforms": ["server", "web", "android", "ios"],
   "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/EmailVerificationSendFlowHandler.cs" },
+    { "sourceType": "test", "reference": "tests/LagoVista.UserAdmin.Auth.Tests/EmailVerificationSendFlowTests.cs" },
     { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Representative resend behavior documents the start-to-end story while every listed scenario remains a single independently runnable UI action." }
   ],
-  "progress": { "scenarios": "complete", "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+  "progress": { "scenarios": "complete", "presentation": "complete", "implementation": "complete", "tests": "not-started" }
 }
