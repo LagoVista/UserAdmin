@@ -1,0 +1,24 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.email-verification.resend-success",
+  "name": "Email Verification Resend Success",
+  "summary": "An unverified durable user receives a verification code, has a rejected attempt, requests a replacement code after cooldown, and successfully verifies the email address with the new proof.",
+  "version": 1,
+  "maturity": "reviewed",
+  "categoryKey": "email-verification",
+  "scenarioKeys": [
+    "auth.scenario.email-verification.resend-success.send-code",
+    "auth.scenario.email-verification.resend-success.reject-code",
+    "auth.scenario.email-verification.resend-success.resend-code",
+    "auth.scenario.email-verification.resend-success.accept-code"
+  ],
+  "entryViewKey": "auth.email-verification.send",
+  "finalViewKey": "auth.email-verification.confirmed",
+  "finalOutcome": "Email ownership is verified using the fresh proof issued by an accepted resend request.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Representative resend behavior documents the start-to-end story while every listed scenario remains a single independently runnable UI action." }
+  ],
+  "progress": { "scenarios": "complete", "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+}
