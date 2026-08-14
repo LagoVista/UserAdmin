@@ -6,7 +6,7 @@
   "description": "Explains that email verification is required and lets the user request a verification code.",
   "category": "email-verification",
   "routeId": "auth.route.email-verification.send",
-  "status": "proposed",
+  "status": "active",
   "controls": [],
   "actions": [
     { "id": "send-verification-code", "name": "Send Verification Code", "actionType": "button", "finder": "action:send-verification-code" },
@@ -16,5 +16,8 @@
     "web": { "status": "planned" },
     "mobile": { "status": "planned" }
   },
-  "notes": ["Single-purpose entry surface for requesting email-verification proof."]
+  "notes": [
+    "Single-purpose canonical entry surface for requesting email-verification proof.",
+    "This replaces the legacy sent-message-first ceremony as the authored V2 presentation contract."
+  ]
 }
