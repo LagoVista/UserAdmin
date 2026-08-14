@@ -50,5 +50,5 @@
     { "sourceType": "auth-view", "reference": "auth.email-verification.enter" },
     { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-13", "note": "Rejected proof remains on the same AuthView and is verified through the code-rejected View State." }
   ],
-  "progress": { "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "not-started" }
 }
