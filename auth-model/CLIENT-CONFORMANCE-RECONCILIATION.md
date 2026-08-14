@@ -2,22 +2,35 @@
 
 ## Purpose
 
-This playbook defines the manual process for inspecting a real authentication client and producing a machine-readable manifest of what that client actually implements.
+This playbook defines the manual process for inspecting the real authentication clients and producing machine-readable manifests of what those clients actually implement.
 
-The manifest is implementation evidence. It does not replace canonical AuthViews and it does not declare conformance by itself.
+The manifests are implementation evidence. They do not replace canonical AuthViews and they do not declare conformance by themselves.
 
 The intended flow is:
 
 ```text
 canonical AuthViews in LagoVista/UserAdmin
-  -> inspect one real client repository
+  -> inspect both stable client repositories
   -> record observable implementation facts
-  -> write one client manifest in auth-model/implementation/client-conformance
+  -> write both client manifests in auth-model/implementation/client-conformance
   -> Aptix compares manifest facts to canonical AuthViews
   -> implementation drift becomes visible
 ```
 
-Use this playbook when reconciling Angular/web or React Native/mobile implementation status.
+Use this playbook when reconciling client implementation status.
+
+## Stable client repositories
+
+The authentication client repositories are stable project configuration:
+
+```text
+Angular Web:  softwarelogistics/nuviot-ui-shared
+React Native: nuviot/vtm-client
+```
+
+Do not ask the user to supply these repositories during normal reconciliation. Do not substitute another client repository unless the project explicitly changes this contract.
+
+A normal reconciliation run inspects **both** repositories and regenerates **both** manifests in one pass.
 
 ## Authority
 
@@ -27,15 +40,15 @@ Canonical presentation truth remains in:
 - `auth-model/auth-routes/`
 - related scenario/presentation definitions
 
-The client repository is authoritative for what the client currently implements.
+Each client repository is authoritative for what that client currently implements.
 
-The generated client conformance manifest is a checked-in observation of that implementation at one specific Git commit.
+The generated client conformance manifests are checked-in observations of those implementations at specific Git commits.
 
-Aptix is responsible for comparing the observation to the canonical model. The inspecting model must not silently change canonical AuthViews to match the client and must not mark authored progress complete merely because a manifest was generated.
+Aptix is responsible for comparing the observations to the canonical model. The inspecting model must not silently change canonical AuthViews to match a client and must not mark authored progress complete merely because manifests were generated.
 
 ## Output
 
-Generate exactly one manifest for the inspected client:
+Generate both manifests on every normal reconciliation run:
 
 ```text
 auth-model/implementation/client-conformance/angular-web.json
@@ -48,23 +61,25 @@ Each manifest must validate against:
 auth-model/schemas/client-auth-view-conformance-manifest.schema.json
 ```
 
-The manifest must record the exact inspected repository and commit SHA.
+Each manifest must record the exact inspected repository and commit SHA.
 
-## Core rule: one canonical AuthView, one manifest entry
+## Core rule: one canonical AuthView, one manifest entry per client
 
 Read the complete active canonical AuthView inventory from `auth-model/auth-views/`.
 
-For every canonical AuthView, emit exactly one `views[]` entry in the client manifest, even when the client implementation is missing, partial, unsupported, or unclear.
+For every canonical AuthView, emit exactly one `views[]` entry in each applicable client manifest, even when the client implementation is missing, partial, unsupported, or unclear.
 
 Do not omit difficult views. Do not emit extra invented AuthView IDs. Do not collapse several canonical AuthViews into one manifest entry.
 
-The manifest should therefore form a 1:1 inventory projection of canonical AuthViews for that client.
+Each manifest should therefore form a 1:1 inventory projection of canonical AuthViews for that client.
 
 Deprecated or retired AuthViews may be excluded from the required active inventory unless the reconciliation task explicitly asks to inspect legacy coverage.
 
 ## What the inspecting model must do
 
-For each canonical AuthView:
+Perform this process for **Angular Web first, then React Native**, using the stable repositories above.
+
+For each canonical AuthView and each applicable client:
 
 1. Read the canonical AuthView definition.
 2. Identify whether that AuthView is applicable to the inspected client platform.
@@ -73,6 +88,9 @@ For each canonical AuthView:
 5. Record only facts supported by source in the inspected repository.
 6. Include source paths sufficient for a human or later model to re-check the observation.
 7. Emit the entry even when evidence is missing or ambiguous.
+8. Record the exact 40-character commit SHA inspected for that client.
+9. Write/update the corresponding manifest in `LagoVista/UserAdmin`.
+10. Validate both completed manifests against the client conformance schema before finishing.
 
 This is repository inspection, not visual inference. Source code is the evidence source.
 
@@ -166,9 +184,9 @@ Still emit one manifest record per canonical AuthView. Reuse the same `component
 
 ## Platform applicability
 
-For `angular-web.json`, inspect the canonical AuthView `platforms.web` contract.
+For `angular-web.json`, inspect the canonical AuthView `platforms.web` contract against `softwarelogistics/nuviot-ui-shared`.
 
-For `react-native.json`, inspect the canonical AuthView `platforms.mobile` contract. The React Native manifest represents the shared mobile implementation used by Android and iOS unless the code genuinely differs by platform. Platform-specific differences should be called out in source evidence or notes and should eventually be represented explicitly if they become materially different auth behavior.
+For `react-native.json`, inspect the canonical AuthView `platforms.mobile` contract against `nuviot/vtm-client`. The React Native manifest represents the shared mobile implementation used by Android and iOS unless the code genuinely differs by platform. Platform-specific differences should be called out in source evidence or notes and should eventually be represented explicitly if they become materially different auth behavior.
 
 Do not label an applicable but unimplemented view as `not-applicable`. Use `missing`.
 
@@ -182,28 +200,21 @@ Do not update only `inspectedCommit` without re-inspecting the client.
 
 ## Recommended model prompt
 
-A user should be able to hand a model this playbook and say, in substance:
+The normal prompt is intentionally short because this playbook contains the stable repositories and complete process:
 
 ```text
-Follow auth-model/CLIENT-CONFORMANCE-RECONCILIATION.md.
-Reconcile the Angular client at <repository> against the canonical AuthViews in LagoVista/UserAdmin and update auth-model/implementation/client-conformance/angular-web.json.
+Follow auth-model/CLIENT-CONFORMANCE-RECONCILIATION.md in LagoVista/UserAdmin. Reconcile both stable authentication client repositories against every active canonical AuthView, regenerate both client conformance manifests, validate them, and commit the results to LagoVista/UserAdmin. Do not change client source code or canonical AuthViews during this reconciliation pass.
 ```
 
-or:
-
-```text
-Follow auth-model/CLIENT-CONFORMANCE-RECONCILIATION.md.
-Reconcile the React Native client at <repository> against the canonical AuthViews in LagoVista/UserAdmin and update auth-model/implementation/client-conformance/react-native.json.
-```
-
-The model should inspect current source rather than asking the user to manually enumerate views or components.
+The model should inspect current source rather than asking the user to manually enumerate views, components, or repositories.
 
 ## Completion checklist for the inspecting model
 
-Before committing a manifest, verify:
+Before committing the manifests, verify:
 
-- the client repository and exact commit SHA are recorded
-- every active canonical AuthView has exactly one entry
+- both stable client repositories were inspected
+- each client repository and exact commit SHA are recorded
+- every active canonical AuthView has exactly one entry in each applicable manifest
 - there are no unknown or invented AuthView IDs
 - platform applicability follows the canonical AuthView definition
 - route/component values came from client source, not copied expectations
@@ -213,7 +224,8 @@ Before committing a manifest, verify:
 - missing implementation is represented as `missing`, not omitted
 - ambiguity is represented as `unknown` or `partial`, not guessed away
 - source evidence paths exist in the inspected client revision
-- the manifest validates against the client conformance schema
+- both manifests validate against the client conformance schema
+- only the two manifest files are changed unless a genuine reconciliation-contract defect is discovered and explicitly called out
 
 ## Aptix responsibility
 
@@ -231,4 +243,4 @@ Aptix should perform mechanical comparison only. At minimum it can validate:
 
 Aptix should report drift rather than rewriting either the canonical AuthView or client manifest.
 
-The manifest is evidence. Canonical AuthViews remain the contract. The real client remains the implementation.
+The manifests are evidence. Canonical AuthViews remain the contract. The real clients remain the implementation.
