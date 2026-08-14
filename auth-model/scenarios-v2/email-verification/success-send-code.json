@@ -41,5 +41,5 @@
     { "sourceType": "auth-view", "reference": "auth.email-verification.send" },
     { "sourceType": "auth-view", "reference": "auth.email-verification.enter" }
   ],
-  "progress": { "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "not-started" }
 }
