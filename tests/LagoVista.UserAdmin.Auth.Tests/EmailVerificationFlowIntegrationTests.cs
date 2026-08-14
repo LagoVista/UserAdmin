@@ -25,7 +25,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
     [TestFixture]
     public class EmailVerificationFlowIntegrationTests
     {
-        private const string EmailVerificationEvidence = "auth|auth.test-binding.email-verification.complete|auth.flow.email-verification.complete|auth.transition.email-verification.complete";
+        private const string AcceptedVerificationEvidence = "auth|auth.test-binding.email-verification.verify-code|auth.flow.email-verification.verify-code|auth.transition.email-verification.code-accepted";
+        private const string RejectedVerificationEvidence = "auth|auth.test-binding.email-verification.verify-code|auth.flow.email-verification.verify-code|auth.transition.email-verification.code-rejected";
         private const string SuccessfulVerificationEvents = "ConfirmEmailSuccess";
         private const string FailedVerificationEvents = "EmailConfirmFailed";
         private const string UserId = "7F3A91C2D8E44B6FA1029C7D5E8B34A1";
@@ -34,7 +35,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         private const string SecurityStamp = "email-verification-security-stamp";
 
         [Test]
-        [Property("AptixEvidence", EmailVerificationEvidence)]
+        [Property("AptixEvidence", AcceptedVerificationEvidence)]
         [Property("AptixAuthEvents", SuccessfulVerificationEvents)]
         public async Task ValidCode_Should_ConfirmEmail_ConsumeCode_SignIn_And_ReturnRedirect()
         {
@@ -62,7 +63,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         }
 
         [Test]
-        [Property("AptixEvidence", EmailVerificationEvidence)]
+        [Property("AptixEvidence", RejectedVerificationEvidence)]
         [Property("AptixAuthEvents", FailedVerificationEvents)]
         public async Task InvalidCode_Should_IncrementAttemptCount_And_ReturnFailure()
         {
@@ -89,7 +90,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         }
 
         [Test]
-        [Property("AptixEvidence", EmailVerificationEvidence)]
+        [Property("AptixEvidence", RejectedVerificationEvidence)]
         [Property("AptixAuthEvents", FailedVerificationEvents)]
         public async Task ExpiredCode_Should_ReturnFailure_WithoutUpdatingCodeOrUser()
         {
@@ -115,7 +116,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         }
 
         [Test]
-        [Property("AptixEvidence", EmailVerificationEvidence)]
+        [Property("AptixEvidence", RejectedVerificationEvidence)]
         [Property("AptixAuthEvents", FailedVerificationEvents)]
         public async Task ConsumedCode_Should_ReturnFailure_WithoutUpdatingCodeOrUser()
         {
@@ -141,7 +142,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         }
 
         [Test]
-        [Property("AptixEvidence", EmailVerificationEvidence)]
+        [Property("AptixEvidence", RejectedVerificationEvidence)]
         [Property("AptixAuthEvents", FailedVerificationEvents)]
         public async Task FifthInvalidAttempt_Should_ConsumeCode_And_ReturnFailure()
         {
@@ -169,7 +170,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         }
 
         [Test]
-        [Property("AptixEvidence", EmailVerificationEvidence)]
+        [Property("AptixEvidence", AcceptedVerificationEvidence)]
         public async Task AlreadyConfirmedUser_Should_ReturnIdempotentSuccess_WithoutReadingCode()
         {
             var harness = CreateHarness();
