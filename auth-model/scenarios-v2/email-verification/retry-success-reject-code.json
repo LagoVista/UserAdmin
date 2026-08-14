@@ -27,5 +27,5 @@
   "expectedAuthLogEvents": ["EmailConfirmFailed"],
   "evidenceRequirements": ["server", "web", "android", "ios"],
   "sourceReferences": [{ "sourceType": "auth-view", "reference": "auth.email-verification.enter" }],
-  "progress": { "presentation": "complete", "implementation": "complete", "tests": "not-started" }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "complete" }
 }
