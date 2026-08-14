@@ -3,26 +3,19 @@
   "schemaVersion": "1.0",
   "routeId": "auth.route.email-verification.sent",
   "name": "Email Verification Sent Route",
-  "description": "Displays the confirmation that an email verification message was sent.",
+  "description": "Legacy route retained for historical implementation mapping; canonical V2 email verification now advances to code entry.",
   "path": "/auth/email-verification/sent",
   "routeType": "view",
   "viewId": "auth.email-verification.sent",
   "parameters": [],
-  "status": "active",
+  "status": "deprecated",
   "platforms": {
-    "web": {
-      "status": "implemented",
-      "implementation": "ConfirmEmailSentComponent"
-    },
-    "mobile": {
-      "status": "planned"
-    }
+    "web": { "status": "implemented", "implementation": "ConfirmEmailSentComponent" },
+    "mobile": { "status": "planned" }
   },
   "source": {
     "commonLinksMember": "EmailVerificationSent",
     "angularComponent": "ConfirmEmailSentComponent"
   },
-  "notes": [
-    "Canonical replacement for /auth/email/confirm/sent."
-  ]
+  "notes": ["Deprecated in favor of auth.route.email-verification.enter."]
 }
