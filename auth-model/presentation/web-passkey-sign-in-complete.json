@@ -1,0 +1,32 @@
+{
+  "$schema": "../schemas/presentation-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.presentation.web.passkey-sign-in-complete",
+  "name": "Web Passkey Sign-In Completion",
+  "summary": "Binds the canonical Use Passkey action on the passkey continuation surface to passwordless passkey authentication and the resolved application landing destination.",
+  "version": 1,
+  "maturity": "reviewed",
+  "bindingKind": "canonical-action",
+  "channel": "traditional-form",
+  "platform": "web",
+  "scenarioKeys": ["auth.scenario.passkey.passkey-to-home"],
+  "actionKey": "auth.action.passkey.complete-authentication",
+  "navigationKey": null,
+  "authViewKey": "auth.continue.passkey",
+  "route": "/auth/continue/passkey",
+  "viewId": "auth.continue.passkey",
+  "fieldBindings": [],
+  "actionBinding": {
+    "authFieldActionId": "use-passkey",
+    "finder": "action:use-passkey",
+    "bindingType": "api-call",
+    "operationReference": "passwordless passkey authentication begin/complete"
+  },
+  "expectedViewId": "app.home",
+  "expectedRoute": null,
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared/user/continue-passkey/continue-passkey.component.html", "note": "Canonical Use Passkey action and semantic finder." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs", "note": "Anonymous passwordless authentication begin and complete endpoints." },
+    { "sourceType": "auth-view", "reference": "auth.continue.passkey" }
+  ]
+}
