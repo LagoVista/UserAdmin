@@ -1,0 +1,37 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.email-verification.code-resent",
+  "name": "Email Verification Code Resent",
+  "summary": "A resend request is accepted, a fresh verification proof becomes authoritative, and email ownership remains unverified.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "email-verification",
+  "priority": 10,
+  "sourceState": { "expression": "durable identity exists and email ownership is unverified" },
+  "actionKey": "auth.action.email-verification.resend-code",
+  "guards": [
+    { "expression": "resend cooldown has elapsed" }
+  ],
+  "destinationTransform": [
+    {
+      "dimensionKey": "auth.dimension.email-verification-code",
+      "operation": "set",
+      "valueExpression": "fresh valid verification proof with attempt count reset to zero"
+    }
+  ],
+  "requiredEffects": [
+    "Make the newly issued verification proof authoritative for subsequent verification attempts."
+  ],
+  "forbiddenEffects": [
+    "Do not verify email ownership."
+  ],
+  "invariantKeys": [],
+  "sourceReferences": [
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-13",
+      "note": "Accepted resend is modeled as one atomic scenario step and returns the code-entry view to its ready presentation state."
+    }
+  ]
+}
