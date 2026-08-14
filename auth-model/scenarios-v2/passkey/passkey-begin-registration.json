@@ -4,9 +4,9 @@
   "key": "auth.scenario.passkey.passkey-begin-registration",
   "runtimeEntityId": "4AC4904775E30A20D5B9E2930E97C7C1",
   "name": "Begin Passkey Registration",
-  "summary": "A user without a durable account begins a passkey registration ceremony and the client opens the passkey enrollment view.",
-  "version": 1,
-  "maturity": "proposed",
+  "summary": "Deprecated. Superseded by the behavior-owned auth.scenario.passkey.registration-identity-to-enrollment scenario, which captures the current user-visible registration boundary and pending-identity setup.",
+  "version": 2,
+  "maturity": "deprecated",
   "categoryKey": "passkey-registration",
   "startViewKey": "auth.continue.passkey",
   "action": {
@@ -19,7 +19,7 @@
   "inputs": [],
   "serverInteraction": {
     "required": true,
-    "intent": "Begin pending passkey registration without creating or authorizing a durable user prematurely.",
+    "intent": "Historical draft for beginning pending passkey registration.",
     "transitionKeys": [
       "auth.transition.passkey.begin-pending-registration"
     ]
@@ -29,20 +29,12 @@
     "expression": "pending-identity-status == pending and pending-identity-flow == passkey"
   },
   "expectedAuthLogEvents": [],
-  "evidenceRequirements": [
-    "server",
-    "web",
-    "android",
-    "ios"
-  ],
+  "evidenceRequirements": [],
   "sourceReferences": [
     {
-      "sourceType": "auth-view",
-      "reference": "auth.continue.passkey"
-    },
-    {
       "sourceType": "decision",
-      "reference": "auth-model/transitions/passkey-begin-pending-registration.json"
+      "reference": "auth.scenario.passkey.registration-identity-to-enrollment",
+      "note": "Canonical behavior-owned replacement."
     }
   ],
   "progress": {
