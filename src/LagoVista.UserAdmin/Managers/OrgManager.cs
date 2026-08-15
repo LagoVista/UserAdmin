@@ -143,6 +143,7 @@ namespace LagoVista.UserAdmin.Managers
             organization.DefaultQAResource = user;
             organization.Owner = user;
             organization.IsForProductLine = false;
+            organization.DefaultVectorCollectionName = $"{organization}vectors";
 
             /* Create the Organization in Storage */
             await _organizationRepo.AddOrganizationAsync(organization);

@@ -49,7 +49,7 @@ namespace LagoVista.UserAdmin.Authentication.Flows
 
             var sendResult = await _userVerificationManager.SendConfirmationEmailAsync(request.User.Id);
             if (!sendResult.Successful)
-                return new AuthenticationFlowResult<EmailVerificationSendResult>(DeliveryFailedTransitionKey, InvokeResult<EmailVerificationSendResult>.FromInvokeResult(sendResult));
+                return new AuthenticationFlowResult<EmailVerificationSendResult>(DeliveryFailedTransitionKey, sendResult.ToInvokeResult<EmailVerificationSendResult>());
 
             var isResend = latest != null;
             return new AuthenticationFlowResult<EmailVerificationSendResult>(

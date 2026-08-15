@@ -19,10 +19,10 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var user = CreateSharedUser();
             var claims = new ClaimsFactory(new Mock<IAdminLogger>().Object).GetClaimsForAnonymousVisitor(user, "visitor-actor-id");
 
-            Assert.That(claims.Single(claim => claim.Type == ClaimTypes.NameIdentifier).Value, Is.EqualTo(user.Id));
-            Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.CurrentUserId).Value, Is.EqualTo(user.Id));
+            Assert.That(claims.Single(claim => claim.Type == ClaimTypes.NameIdentifier).Value, Is.EqualTo(user.Id.Value));
+            Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.CurrentUserId).Value, Is.EqualTo(user.Id.Value));
             Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.CurrentUserName).Value, Is.EqualTo(user.UserName));
-            Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.CurrentOrgId).Value, Is.EqualTo(user.CurrentOrganization.Id));
+            Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.CurrentOrgId).Value, Is.EqualTo(user.CurrentOrganization.Id.Value));
             Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.CurrentOrgName).Value, Is.EqualTo(user.CurrentOrganization.Text));
             Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.CurrentOrgNamespace).Value, Is.EqualTo(user.CurrentOrganization.Namespace.ToString()));
             Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.Logintype).Value, Is.EqualTo(user.LoginType.ToString()));
@@ -81,8 +81,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var user = CreateSharedUser();
             var claims = new ClaimsFactory(new Mock<IAdminLogger>().Object).GetClaimsForProvisionalIdentity(user, "journey-actor-id");
 
-            Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.CurrentUserId).Value, Is.EqualTo(user.Id));
-            Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.CurrentOrgId).Value, Is.EqualTo(user.CurrentOrganization.Id));
+            Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.CurrentUserId).Value, Is.EqualTo(user.Id.Value));
+            Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.CurrentOrgId).Value, Is.EqualTo(user.CurrentOrganization.Id.Value));
             Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.ActorId).Value, Is.EqualTo("journey-actor-id"));
             Assert.That(claims.Single(claim => claim.Type == ClaimsFactory.IdentityStage).Value, Is.EqualTo(ClaimsFactory.ProvisionalIdentityStage));
             Assert.That(claims.Any(claim => claim.Type == ClaimTypes.Role), Is.False);
@@ -92,11 +92,11 @@ namespace LagoVista.UserAdmin.Auth.Tests
         {
             return new AppUser("anonymous@system.local", "anonymous-system-user", "system")
             {
-                Id = "shared-anonymous-user-id",
+                Id = "185B3AA7D5244C0D98EA60F77A13ACDC",
                 LoginType = LoginTypes.AppUser,
                 CurrentOrganization = new OrganizationSummary
                 {
-                    Id = "shared-anonymous-org-id",
+                    Id = "ACDC3AA7D5244C0D98EA60F77A131CA8",
                     Text = "Anonymous Visitors",
                     Namespace = "anonymousvisitors",
                 },

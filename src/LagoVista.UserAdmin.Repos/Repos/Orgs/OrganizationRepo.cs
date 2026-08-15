@@ -76,8 +76,8 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         public async Task AddOrganizationAsync(Organization org)
         {
             var dto = await _autoMapper.CreateAsync<Organization, OrganizationDTO>(org, _systemUsers.SystemOrg, _systemUsers.HostUser);
-            await _relationalRepo.AddOrganizationAsync(dto, _systemUsers.SystemOrg, _systemUsers.HostUser);
             await CreateDocumentAsync(org);
+            await _relationalRepo.AddOrganizationAsync(dto, _systemUsers.SystemOrg, _systemUsers.HostUser);
         }
 
         public async Task DeleteOrgAsync(string orgId)

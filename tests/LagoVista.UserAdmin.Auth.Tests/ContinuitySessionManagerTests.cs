@@ -49,8 +49,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 ExpiresUtc = expiresUtc,
                 BootstrapContext = "preserved context"
             }));
-            harness.AppUserRepo.Setup(repo => repo.FindByIdAsync("app-user-id")).ReturnsAsync(new AppUser(null, "provisional-user", "test") { Id = "app-user-id" });
-            harness.OrganizationRepo.Setup(repo => repo.GetOrganizationAsync("organization-id")).ReturnsAsync(new Organization { Id = "organization-id", Name = "Provisional", Namespace = "provisional" });
+            harness.AppUserRepo.Setup(repo => repo.FindByIdAsync("app-user-id")).ReturnsAsync(new AppUser(null, "provisional-user", "test") { Id = "185B3AA7D5244C0D98EA60F77A131CA8" });
+            harness.OrganizationRepo.Setup(repo => repo.GetOrganizationAsync("organization-id")).ReturnsAsync(new Organization { Id = "185B3AA7D5244C0D98EA60F77A13ACDC", Name = "Provisional", Namespace = "provisional" });
             harness.TokenOptions.SetupGet(options => options.AccessExpiration).Returns(TimeSpan.FromMinutes(15));
             harness.TokenHelper.Setup(helper => helper.GetProvisionalJWToken(It.IsAny<AppUser>(), "journey-actor", It.IsAny<DateTime>())).Returns("provisional-access-token");
 
