@@ -168,14 +168,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 
         public async Task<bool> QueryOrganizationExistAsync(string id)
         {
-            try
-            {
-                return (await GetOrganizationAsync(id)) != null;
-            }
-            catch (RecordNotFoundException)
-            {
-                return false;
-            }
+            return await GetDocumentAsync(id, false) != null;
         }
 
         public async Task UpdateOrganizationAsync(Organization org)
