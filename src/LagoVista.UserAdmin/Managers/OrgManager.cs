@@ -228,11 +228,8 @@ namespace LagoVista.UserAdmin.Managers
             var ownerRoleId = _defaultRoleList.GetStandardRoles().Single(role => role.Key == DefaultRoleList.OWNER).Id;
             if (!await _userRoleManager.UserHasRoleAsync(ownerRoleId, appUser.Id, organization.Id)) await _userRoleManager.GrantUserRoleAsync(appUser.Id, ownerRoleId, organization.ToEntityHeader(), user);
 
-            if (!await _orgUserRepo.QueryOrgHasUserAsync(organization.Id, appUser.Id))
-            {
-                var addUserResult = await AddUserToOrgAsync(appUser, organization.ToEntityHeader(), user, true, true);
-                if (!addUserResult.Successful) return InvokeResult<Organization>.FromInvokeResult(addUserResult);
-            }
+            var addUserResult = await EnsureProvisionalUserMembershipAsync(appUser, organization, user);
+            if (!addUserResult.Successful) return InvokeResult<Organization>.FromInvokeResult(addUserResult);
 
             if (appUser.Organizations == null) appUser.Organizations = new List<EntityHeader>();
             if (!appUser.Organizations.Any(org => org.Id == organization.Id)) appUser.Organizations.Add(organization.ToEntityHeader());
@@ -242,6 +239,50 @@ namespace LagoVista.UserAdmin.Managers
             await _appUserRepo.UpdateAsync(appUser);
 
             return InvokeResult<Organization>.Create(organization);
+        }
+
+        private async Task<InvokeResult> EnsureProvisionalUserMembershipAsync(AppUser appUser, Organization organization, EntityHeader addedBy)
+        {
+            if (await _orgUserRepo.QueryOrgHasUserAsync(organization.Id, appUser.Id)) return InvokeResult.Success;
+
+            var timeStamp = UtcTimestamp.Now;
+            var orgUser = new OrgUser(organization.Id, appUser.Id)
+            {
+                Email = appUser.Email,
+                OrganizationName = organization.Name,
+                UserName = appUser.Name,
+                IsOrgAdmin = true,
+                IsAppBuilder = true,
+                ProfileImageUrl = appUser.ProfileImage.ImageUrl,
+                CreatedBy = appUser.Name,
+                CreatedById = appUser.Id,
+                CreationDate = timeStamp,
+                LastUpdatedBy = appUser.Name,
+                LastUpdatedById = appUser.Id,
+                LastUpdatedDate = timeStamp
+            };
+
+            try
+            {
+                await _orgUserRepo.AddOrgUserAsync(orgUser);
+            }
+            catch
+            {
+                if (!await _orgUserRepo.QueryOrgHasUserAsync(organization.Id, appUser.Id)) throw;
+                return InvokeResult.Success;
+            }
+
+            await _authLogMgr.AddAsync(AuthLogTypes.AddUserToOrg, appUser.Id, appUser.Name, organization.Id, organization.Name, extras: $"added by id: {addedBy.Id}, name: {addedBy.Text}");
+
+            if (appUser.CurrentOrganization == null)
+            {
+                appUser.CurrentOrganization = organization.CreateSummary();
+                appUser.LastUpdatedBy = addedBy;
+                appUser.LastUpdatedDate = timeStamp;
+                appUser.AddChange(nameof(AppUser.CurrentOrganization), "none", appUser.CurrentOrganization.Text);
+            }
+
+            return InvokeResult.Success;
         }
 
         public async Task<InvokeResult> CreateOrganizationAsync(Organization newOrg, EntityHeader userOrg, EntityHeader user)
