@@ -43,6 +43,9 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> AddSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user)
         {
+            if (subscription == null) throw new ArgumentNullException(nameof(subscription));
+            subscription.SetCreationUpdatedFields(user);
+
             if (subscription.Key == Subscription.SubscriptionKey_Trial)
             {
                 var subscriptions = await GetTrialSubscriptionAsync(org, user);
