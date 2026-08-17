@@ -42,6 +42,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var result = await harness.Manager.CreateAsync(new CreateProvisionalEnvironmentRequest { CreationRequestId = "creation-request" });
 
             Assert.That(result.Successful, Is.True);
+            Assert.That(Guid.TryParse(result.Result.SubscriptionId, out var parsedSubscriptionId), Is.True);
+            Assert.That(result.Result.SubscriptionId, Is.EqualTo(parsedSubscriptionId.ToString("D")));
             harness.AppUserRepo.Verify(repo => repo.EnsureRelationalUserAsync(It.Is<AppUser>(user => user.Id == result.Result.AppUserId)), Times.Once);
             harness.SubscriptionLevelManager.Verify(manager => manager.EnsureSystemSubscriptionLevelAsync(It.IsAny<SubscriptionLevel>()), Times.Once);
             harness.SubscriptionManager.Verify(manager => manager.EnsureProvisionalSubscriptionAsync(
@@ -49,6 +51,48 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 It.Is<LagoVista.Core.Models.EntityHeader>(org => org.Id == organization.Id),
                 It.IsAny<LagoVista.Core.Models.EntityHeader>()), Times.Once);
             harness.SubscriptionManager.Verify(manager => manager.GetSubscriptionAsync(It.IsAny<GuidString36>(), It.IsAny<LagoVista.Core.Models.EntityHeader>(), It.IsAny<LagoVista.Core.Models.EntityHeader>()), Times.Never);
+        }
+
+        [Test]
+        public async Task CreateAsync_Should_NormalizeResumedLegacySubscriptionId()
+        {
+            var harness = CreateHarness();
+            var legacySubscriptionId = Guid.NewGuid().ToId();
+            var expectedSubscriptionId = Guid.Parse(legacySubscriptionId).ToString("D");
+            var environment = new ProvisionalEnvironment
+            {
+                Id = Guid.NewGuid().ToId(),
+                State = ProvisionalEnvironmentState.Provisioning,
+                CreationRequestId = "creation-request",
+                AppUserId = Guid.NewGuid().ToId(),
+                OrganizationId = Guid.NewGuid().ToId(),
+                SubscriptionId = legacySubscriptionId,
+                CreatedUtc = DateTime.UtcNow,
+                LastActivityUtc = DateTime.UtcNow,
+                ExpiresUtc = DateTime.UtcNow.AddDays(1),
+                StateChangedUtc = DateTime.UtcNow
+            };
+            var appUser = new AppUser(null, $"provisional-{environment.AppUserId}", "Provisional Environment") { Id = environment.AppUserId };
+            var organization = new Organization { Id = environment.OrganizationId, Name = "Provisional Workspace" };
+            var subscriptionLevel = SystemSubscriptionLevels.CreateProvisional();
+
+            harness.EnvironmentRepo.Setup(repo => repo.FindByCreationRequestIdAsync(environment.CreationRequestId)).ReturnsAsync(environment);
+            harness.EnvironmentRepo.Setup(repo => repo.UpdateAsync(environment)).Returns(Task.CompletedTask);
+            harness.UserManager.Setup(manager => manager.FindByIdAsync(environment.AppUserId)).ReturnsAsync(appUser);
+            harness.AppUserRepo.Setup(repo => repo.EnsureRelationalUserAsync(appUser)).Returns(Task.CompletedTask);
+            harness.OrganizationManager.Setup(manager => manager.CreateProvisionalOrganizationAsync(appUser, environment.OrganizationId)).ReturnsAsync(InvokeResult<Organization>.Create(organization));
+            harness.SubscriptionLevelManager.Setup(manager => manager.EnsureSystemSubscriptionLevelAsync(It.IsAny<SubscriptionLevel>())).ReturnsAsync(InvokeResult<SubscriptionLevel>.Create(subscriptionLevel));
+            harness.SubscriptionManager.Setup(manager => manager.EnsureProvisionalSubscriptionAsync(
+                It.Is<Subscription>(subscription => subscription.Id.ToString() == expectedSubscriptionId),
+                It.IsAny<LagoVista.Core.Models.EntityHeader>(),
+                It.IsAny<LagoVista.Core.Models.EntityHeader>())).ReturnsAsync(InvokeResult.Success);
+
+            var result = await harness.Manager.CreateAsync(new CreateProvisionalEnvironmentRequest { CreationRequestId = environment.CreationRequestId });
+
+            Assert.That(result.Successful, Is.True);
+            Assert.That(result.Result.SubscriptionId, Is.EqualTo(expectedSubscriptionId));
+            Assert.That(environment.SubscriptionId, Is.EqualTo(expectedSubscriptionId));
+            harness.EnvironmentRepo.Verify(repo => repo.UpdateAsync(environment), Times.Exactly(2));
         }
 
         [Test]
