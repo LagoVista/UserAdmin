@@ -226,6 +226,10 @@ namespace LagoVista.UserAdmin.Managers
                 organization.SetCreationUpdatedFields(user);
                 await _organizationRepo.AddOrganizationAsync(organization);
             }
+            else
+            {
+                await _organizationRepo.EnsureRelationalOrganizationAsync(organization);
+            }
 
             var ownerRoleId = _defaultRoleList.GetStandardRoles().Single(role => role.Key == DefaultRoleList.OWNER).Id;
             if (!await _userRoleManager.UserHasRoleAsync(ownerRoleId, appUser.Id, organization.Id)) await _userRoleManager.GrantUserRoleAsync(appUser.Id, ownerRoleId, organization.ToEntityHeader(), user);
