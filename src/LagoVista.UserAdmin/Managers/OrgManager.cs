@@ -208,7 +208,7 @@ namespace LagoVista.UserAdmin.Managers
                 {
                     Id = organizationId,
                     Name = "Provisional Workspace",
-                    Namespace = $"provisional{organizationId}",
+                    Namespace = $"provisional{organizationId.ToLowerInvariant()}",
                     Status = UserAdminResources.Organization_Status_Active,
                     TechnicalContact = user,
                     AdminContact = user,
@@ -1460,7 +1460,7 @@ namespace LagoVista.UserAdmin.Managers
             var organization = await _organizationRepo.GetOrganizationAsync(orgId);
             if (organization != null)
             {
-                if (organization.Owner == null || organization.Owner.Id != appUserId || organization.Namespace != $"provisional{orgId}") return InvokeResult.FromError("The organization is no longer a provisional workspace.");
+                if (organization.Owner == null || organization.Owner.Id != appUserId || organization.Namespace != $"provisional{orgId.ToLowerInvariant()}") return InvokeResult.FromError("The organization is no longer a provisional workspace.");
 
                 var users = (await _orgUserRepo.GetUsersForOrgAsync(orgId)).ToList();
                 if (users.Any(orgUser => orgUser.UserId != appUserId)) return InvokeResult.FromError("The provisional organization contains another user.");
