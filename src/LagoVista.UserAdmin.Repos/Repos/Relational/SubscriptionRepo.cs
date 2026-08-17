@@ -66,16 +66,17 @@ namespace LagoVista.UserAdmin.Repos.Relational
 
         public Task<Subscription> GetSubscriptionAsync(GuidString36 id, EntityHeader org, EntityHeader user)
         {
-            return WithContextAsync(org, user, ctx =>
+            return WithContextAsync(org, user, async ctx =>
             {
-                return  ctx.Subscription
-                .ReadonlyQuery()
-                .Include(usr => usr.Organization)
-                .Include(usr => usr.CreatedByUser)
-                .Include(usr => usr.LastUpdatedByUser)
-                .Include(usr => usr.Customer)
-                .Where(usr => usr.Id == id.DbId)
-                .SingleMapAsync(async dto => await _autoMapper.CreateAsync<SubscriptionDTO, Subscription>(dto,org, user));
+                var dto = await ctx.Subscription
+                    .ReadonlyQuery()
+                    .Include(usr => usr.Organization)
+                    .Include(usr => usr.CreatedByUser)
+                    .Include(usr => usr.LastUpdatedByUser)
+                    .Include(usr => usr.Customer)
+                    .SingleOrDefaultAsync(usr => usr.Id == id.DbId);
+
+                return dto == null ? null : await _autoMapper.CreateAsync<SubscriptionDTO, Subscription>(dto, org, user);
             });
         }
 
@@ -111,19 +112,18 @@ namespace LagoVista.UserAdmin.Repos.Relational
 
         public Task<Subscription> GetTrialSubscriptionAsync(string orgId, EntityHeader org, EntityHeader user)
         {
-            return WithContextAsync(org, user, ctx =>
+            return WithContextAsync(org, user, async ctx =>
             {
-                return ctx.Subscription
-                .ReadonlyQuery()
-                .Include(usr => usr.Organization)
-                .Include(usr => usr.CreatedByUser)
-                .Include(usr => usr.LastUpdatedByUser)
-                .Include(usr => usr.Customer)
-                .Where(usr => usr.OrganizationId == orgId && usr.Key == SubscriptionDTO.SubscriptionKey_Trial)
-                .SingleMapAsync(async dto => await _autoMapper.CreateAsync<SubscriptionDTO, Subscription>(dto, org, user));
-            });
+                var dto = await ctx.Subscription
+                    .ReadonlyQuery()
+                    .Include(usr => usr.Organization)
+                    .Include(usr => usr.CreatedByUser)
+                    .Include(usr => usr.LastUpdatedByUser)
+                    .Include(usr => usr.Customer)
+                    .SingleOrDefaultAsync(usr => usr.OrganizationId == orgId && usr.Key == SubscriptionDTO.SubscriptionKey_Trial);
 
-            throw new NotImplementedException();
+                return dto == null ? null : await _autoMapper.CreateAsync<SubscriptionDTO, Subscription>(dto, org, user);
+            });
         }
 
         public Task UpdateSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user)
