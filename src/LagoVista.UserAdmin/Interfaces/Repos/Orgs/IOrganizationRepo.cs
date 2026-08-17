@@ -24,6 +24,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Orgs
     public interface IOrganizationRepo
     {
         Task AddOrganizationAsync(Organization org);
+        Task EnsureRelationalOrganizationAsync(Organization org);
         Task<Organization> GetOrganizationAsync(string orgId);
         Task<Organization> GetOrganizationFromNamespaceAsync(string orgNs);
         Task<string> GetOrganizationIdForNamespaceAsync(string orgId);
