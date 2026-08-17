@@ -22,7 +22,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         {
             var harness = CreateHarness();
             var organization = new Organization { Id = Guid.NewGuid().ToId(), Name = "Provisional Workspace" };
-            var subscriptionLevel = new SubscriptionLevel { Id = Guid.NewGuid(), Name = "Provisional" };
+            var subscriptionLevel = SystemSubscriptionLevels.CreateProvisional();
 
             harness.EnvironmentRepo.Setup(repo => repo.FindByCreationRequestIdAsync("creation-request")).ReturnsAsync((ProvisionalEnvironment)null);
             harness.EnvironmentRepo.Setup(repo => repo.CreateAsync(It.IsAny<ProvisionalEnvironment>())).Returns(Task.CompletedTask);
@@ -31,13 +31,19 @@ namespace LagoVista.UserAdmin.Auth.Tests
             harness.UserManager.Setup(manager => manager.CreateAsync(It.IsAny<AppUser>())).ReturnsAsync(InvokeResult.Success);
             harness.AppUserRepo.Setup(repo => repo.EnsureRelationalUserAsync(It.IsAny<AppUser>())).Returns(Task.CompletedTask);
             harness.OrganizationManager.Setup(manager => manager.CreateProvisionalOrganizationAsync(It.IsAny<AppUser>(), It.IsAny<string>())).ReturnsAsync(InvokeResult<Organization>.Create(organization));
-            harness.SubscriptionLevelManager.Setup(manager => manager.GetSubscriptionLevelByKeyAsync(Subscription.SubscriptionKey_Provisional)).ReturnsAsync(subscriptionLevel);
+            harness.SubscriptionLevelManager.Setup(manager => manager.EnsureSystemSubscriptionLevelAsync(It.Is<SubscriptionLevel>(level =>
+                level.Id == SystemSubscriptionLevels.ProvisionalId &&
+                level.Key == Subscription.SubscriptionKey_Provisional &&
+                level.IncludedWorkUnits == 100m &&
+                !level.AllowsOverage &&
+                level.IsActive))).ReturnsAsync(InvokeResult<SubscriptionLevel>.Create(subscriptionLevel));
             harness.SubscriptionManager.Setup(manager => manager.EnsureProvisionalSubscriptionAsync(It.IsAny<Subscription>(), It.IsAny<LagoVista.Core.Models.EntityHeader>(), It.IsAny<LagoVista.Core.Models.EntityHeader>())).ReturnsAsync(InvokeResult.Success);
 
             var result = await harness.Manager.CreateAsync(new CreateProvisionalEnvironmentRequest { CreationRequestId = "creation-request" });
 
             Assert.That(result.Successful, Is.True);
             harness.AppUserRepo.Verify(repo => repo.EnsureRelationalUserAsync(It.Is<AppUser>(user => user.Id == result.Result.AppUserId)), Times.Once);
+            harness.SubscriptionLevelManager.Verify(manager => manager.EnsureSystemSubscriptionLevelAsync(It.IsAny<SubscriptionLevel>()), Times.Once);
             harness.SubscriptionManager.Verify(manager => manager.EnsureProvisionalSubscriptionAsync(
                 It.Is<Subscription>(subscription => subscription.Id == result.Result.SubscriptionId && subscription.Key == Subscription.SubscriptionKey_Provisional),
                 It.Is<LagoVista.Core.Models.EntityHeader>(org => org.Id == organization.Id),
