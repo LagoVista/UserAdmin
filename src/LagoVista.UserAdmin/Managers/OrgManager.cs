@@ -143,7 +143,7 @@ namespace LagoVista.UserAdmin.Managers
             organization.DefaultQAResource = user;
             organization.Owner = user;
             organization.IsForProductLine = false;
-            organization.DefaultVectorCollectionName = $"{organization}vectors";
+            organization.DefaultVectorCollectionName = $"{organization.Namespace}-indexes";
 
             /* Create the Organization in Storage */
             await _organizationRepo.AddOrganizationAsync(organization);
@@ -204,11 +204,13 @@ namespace LagoVista.UserAdmin.Managers
                 : null;
             if (organization == null)
             {
+                var provisionalNamespace = $"provisional{organizationId.ToLowerInvariant()}";
                 organization = new Organization
                 {
                     Id = organizationId,
                     Name = "Provisional Workspace",
-                    Namespace = $"provisional{organizationId.ToLowerInvariant()}",
+                    Namespace = provisionalNamespace,
+                    DefaultVectorCollectionName = $"{provisionalNamespace}-indexes",
                     Status = UserAdminResources.Organization_Status_Active,
                     TechnicalContact = user,
                     AdminContact = user,
