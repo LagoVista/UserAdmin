@@ -456,8 +456,9 @@ namespace LagoVista.UserAdmin.Managers
             var org = organization.ToEntityHeader();
             var user = EntityHeader.Create(appUser.Id, appUser.UserName);
 
-            var subscriptionLevel = await _subscriptionLevelManager.GetSubscriptionLevelByKeyAsync(Subscription.SubscriptionKey_Provisional);
-            if (subscriptionLevel == null) return InvokeResult.FromError("The provisional subscription level is not configured.");
+            var subscriptionLevelResult = await _subscriptionLevelManager.EnsureSystemSubscriptionLevelAsync(SystemSubscriptionLevels.CreateProvisional());
+            if (!subscriptionLevelResult.Successful) return subscriptionLevelResult.ToInvokeResult();
+            var subscriptionLevel = subscriptionLevelResult.Result;
 
             var subscription = new Subscription
             {
