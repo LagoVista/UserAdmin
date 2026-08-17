@@ -66,7 +66,7 @@ namespace LagoVista.UserAdmin.Managers
                     OriginActorId = request.OriginActorId,
                     AppUserId = Guid.NewGuid().ToId(),
                     OrganizationId = Guid.NewGuid().ToId(),
-                    SubscriptionId = Guid.NewGuid().ToId(),
+                    SubscriptionId = Guid.NewGuid().ToString("D"),
                     RecoveryTokenHash = Hash(recoveryToken),
                     InstallationIdHash = HashOptional(request.InstallationId),
                     BootstrapContext = request.BootstrapContext,
@@ -107,6 +107,15 @@ namespace LagoVista.UserAdmin.Managers
 
             if (wasResumed)
             {
+                if (environment.State == ProvisionalEnvironmentState.Provisioning)
+                {
+                    var normalizedSubscriptionId = NormalizeSubscriptionId(environment.SubscriptionId);
+                    if (normalizedSubscriptionId == null)
+                        return InvokeResult<CreateProvisionalEnvironmentResponse>.FromError("The provisional environment subscription ID is invalid.");
+
+                    environment.SubscriptionId = normalizedSubscriptionId;
+                }
+
                 if (String.IsNullOrWhiteSpace(environment.OriginActorId)) environment.OriginActorId = request.OriginActorId;
                 environment.RecoveryTokenHash = Hash(recoveryToken);
                 if (!String.IsNullOrWhiteSpace(request.InstallationId)) environment.InstallationIdHash = Hash(request.InstallationId);
@@ -474,6 +483,12 @@ namespace LagoVista.UserAdmin.Managers
             };
 
             return await _subscriptionManager.EnsureProvisionalSubscriptionAsync(subscription, org, user);
+        }
+
+        private static string NormalizeSubscriptionId(string subscriptionId)
+        {
+            if (String.IsNullOrWhiteSpace(subscriptionId)) return Guid.NewGuid().ToString("D");
+            return Guid.TryParse(subscriptionId, out var parsed) ? parsed.ToString("D") : null;
         }
 
         private static string CreateRecoveryToken()
