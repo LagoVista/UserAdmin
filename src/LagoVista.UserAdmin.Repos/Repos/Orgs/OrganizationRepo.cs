@@ -142,7 +142,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         {
             var org = await GetDocumentAsync(id);
             if(!String.IsNullOrEmpty(org.Key)) org.Key = org.Key.Value.ToLower();
-            if(string.IsNullOrEmpty(org.DefaultVectorCollectionName)) org.DefaultVectorCollectionName = $"{org.Namespace}-vectors";
+            if(string.IsNullOrEmpty(org.DefaultVectorCollectionName)) org.DefaultVectorCollectionName = $"{org.Namespace}-indexes";
             return org;
         }
 
