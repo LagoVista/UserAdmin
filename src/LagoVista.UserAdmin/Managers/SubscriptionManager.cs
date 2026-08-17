@@ -91,6 +91,24 @@ namespace LagoVista.UserAdmin.Managers
             return new InvokeResult();
         }
 
+        public async Task<InvokeResult> EnsureProvisionalSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user)
+        {
+            if (subscription == null) throw new ArgumentNullException(nameof(subscription));
+            if (org == null || String.IsNullOrWhiteSpace(org.Id)) return InvokeResult.FromError("Organization is required.");
+            if (user == null || String.IsNullOrWhiteSpace(user.Id)) return InvokeResult.FromError("User is required.");
+            if (subscription.Key != Subscription.SubscriptionKey_Provisional) return InvokeResult.FromError("Only provisional subscriptions can use the provisional bootstrap path.");
+
+            var existing = await _subscriptionRepo.GetSubscriptionAsync(subscription.Id, org, user);
+            if (existing != null)
+            {
+                if (existing.Key != Subscription.SubscriptionKey_Provisional) return InvokeResult.FromError("The subscription ID is already in use by a non-provisional subscription.");
+                if (existing.OwnerOrganization != null && existing.OwnerOrganization.Id != org.Id) return InvokeResult.FromError("The provisional subscription belongs to a different organization.");
+                return InvokeResult.Success;
+            }
+
+            return await AddSubscriptionAsync(subscription, org, user);
+        }
+
         public async Task<Subscription> GetTrialSubscriptionAsync(EntityHeader org, EntityHeader user)
         {
             var subscription = await _subscriptionRepo.GetTrialSubscriptionAsync(org.Id, org, user);
@@ -105,6 +123,8 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<Subscription> GetSubscriptionAsync(GuidString36 id, EntityHeader org, EntityHeader user)
         {
             var subscription = await _subscriptionRepo.GetSubscriptionAsync(id, org, user);
+            if (subscription == null) return null;
+
             await AuthorizeAsync(user, org, "getSubscription", subscription);
             if(subscription.PaymentTokenSecretId != null && subscription.PaymentTokenSecretId.StartsWith("src_"))
             {

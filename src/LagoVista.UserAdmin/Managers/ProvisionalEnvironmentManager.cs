@@ -446,8 +446,6 @@ namespace LagoVista.UserAdmin.Managers
         {
             var org = organization.ToEntityHeader();
             var user = EntityHeader.Create(appUser.Id, appUser.UserName);
-            var existing = await _subscriptionManager.GetSubscriptionAsync(environment.SubscriptionId, org, user);
-            if (existing != null) return InvokeResult.Success;
 
             var subscriptionLevel = await _subscriptionLevelManager.GetSubscriptionLevelByKeyAsync(Subscription.SubscriptionKey_Provisional);
             if (subscriptionLevel == null) return InvokeResult.FromError("The provisional subscription level is not configured.");
@@ -465,7 +463,7 @@ namespace LagoVista.UserAdmin.Managers
                 IsTrial = false
             };
 
-            return await _subscriptionManager.AddSubscriptionAsync(subscription, org, user);
+            return await _subscriptionManager.EnsureProvisionalSubscriptionAsync(subscription, org, user);
         }
 
         private static string CreateRecoveryToken()

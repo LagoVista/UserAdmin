@@ -3,6 +3,7 @@ using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Managers;
+using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Users;
 using Moq;
 using NUnit.Framework;
@@ -16,6 +17,32 @@ namespace LagoVista.UserAdmin.Auth.Tests
     [TestFixture]
     public class ProvisionalEnvironmentManagerTests
     {
+        [Test]
+        public async Task CreateAsync_Should_UseTrustedProvisionalSubscriptionBootstrap()
+        {
+            var harness = CreateHarness();
+            var organization = new Organization { Id = Guid.NewGuid().ToId(), Name = "Provisional Workspace" };
+            var subscriptionLevel = new SubscriptionLevel { Id = Guid.NewGuid().ToId(), Name = "Provisional" };
+
+            harness.EnvironmentRepo.Setup(repo => repo.FindByCreationRequestIdAsync("creation-request")).ReturnsAsync((ProvisionalEnvironment)null);
+            harness.EnvironmentRepo.Setup(repo => repo.CreateAsync(It.IsAny<ProvisionalEnvironment>())).Returns(Task.CompletedTask);
+            harness.EnvironmentRepo.Setup(repo => repo.UpdateAsync(It.IsAny<ProvisionalEnvironment>())).Returns(Task.CompletedTask);
+            harness.UserManager.Setup(manager => manager.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((AppUser)null);
+            harness.UserManager.Setup(manager => manager.CreateAsync(It.IsAny<AppUser>())).ReturnsAsync(InvokeResult.Success);
+            harness.OrganizationManager.Setup(manager => manager.CreateProvisionalOrganizationAsync(It.IsAny<AppUser>(), It.IsAny<string>())).ReturnsAsync(InvokeResult<Organization>.Create(organization));
+            harness.SubscriptionLevelManager.Setup(manager => manager.GetSubscriptionLevelByKeyAsync(Subscription.SubscriptionKey_Provisional)).ReturnsAsync(subscriptionLevel);
+            harness.SubscriptionManager.Setup(manager => manager.EnsureProvisionalSubscriptionAsync(It.IsAny<Subscription>(), It.IsAny<LagoVista.Core.Models.EntityHeader>(), It.IsAny<LagoVista.Core.Models.EntityHeader>())).ReturnsAsync(InvokeResult.Success);
+
+            var result = await harness.Manager.CreateAsync(new CreateProvisionalEnvironmentRequest { CreationRequestId = "creation-request" });
+
+            Assert.That(result.Successful, Is.True);
+            harness.SubscriptionManager.Verify(manager => manager.EnsureProvisionalSubscriptionAsync(
+                It.Is<Subscription>(subscription => subscription.Id == result.Result.SubscriptionId && subscription.Key == Subscription.SubscriptionKey_Provisional),
+                It.Is<LagoVista.Core.Models.EntityHeader>(org => org.Id == organization.Id),
+                It.IsAny<LagoVista.Core.Models.EntityHeader>()), Times.Once);
+            harness.SubscriptionManager.Verify(manager => manager.GetSubscriptionAsync(It.IsAny<LagoVista.Core.Models.GuidString36>(), It.IsAny<LagoVista.Core.Models.EntityHeader>(), It.IsAny<LagoVista.Core.Models.EntityHeader>()), Times.Never);
+        }
+
         [Test]
         public async Task RestoreAsync_Should_RotateCredential_RecordActivity_And_SlideExpiration()
         {
@@ -187,7 +214,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var archiveStore = new Mock<IProvisionalEnvironmentArchiveStore>(MockBehavior.Strict);
             var archiveAccountingService = new Mock<IProvisionalEnvironmentArchiveAccountingService>(MockBehavior.Strict);
             var manager = new ProvisionalEnvironmentManager(environmentRepo.Object, userManager.Object, organizationManager.Object, subscriptionManager.Object, subscriptionLevelManager.Object, billingArchiveRepo.Object, archiveStore.Object, archiveAccountingService.Object);
-            return new Harness(manager, environmentRepo, userManager, organizationManager, billingArchiveRepo, archiveStore, archiveAccountingService);
+            return new Harness(manager, environmentRepo, userManager, organizationManager, subscriptionManager, subscriptionLevelManager, billingArchiveRepo, archiveStore, archiveAccountingService);
         }
 
         private static string Hash(string value)
@@ -203,12 +230,14 @@ namespace LagoVista.UserAdmin.Auth.Tests
 
         private sealed class Harness
         {
-            public Harness(ProvisionalEnvironmentManager manager, Mock<IProvisionalEnvironmentRepo> environmentRepo, Mock<IUserManager> userManager, Mock<IOrganizationManager> organizationManager, Mock<IProvisionalEnvironmentBillingArchiveRepo> billingArchiveRepo, Mock<IProvisionalEnvironmentArchiveStore> archiveStore, Mock<IProvisionalEnvironmentArchiveAccountingService> archiveAccountingService)
+            public Harness(ProvisionalEnvironmentManager manager, Mock<IProvisionalEnvironmentRepo> environmentRepo, Mock<IUserManager> userManager, Mock<IOrganizationManager> organizationManager, Mock<ISubscriptionManager> subscriptionManager, Mock<ISubscriptionLevelManager> subscriptionLevelManager, Mock<IProvisionalEnvironmentBillingArchiveRepo> billingArchiveRepo, Mock<IProvisionalEnvironmentArchiveStore> archiveStore, Mock<IProvisionalEnvironmentArchiveAccountingService> archiveAccountingService)
             {
                 Manager = manager;
                 EnvironmentRepo = environmentRepo;
                 UserManager = userManager;
                 OrganizationManager = organizationManager;
+                SubscriptionManager = subscriptionManager;
+                SubscriptionLevelManager = subscriptionLevelManager;
                 BillingArchiveRepo = billingArchiveRepo;
                 ArchiveStore = archiveStore;
                 ArchiveAccountingService = archiveAccountingService;
@@ -218,6 +247,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
             public Mock<IProvisionalEnvironmentRepo> EnvironmentRepo { get; }
             public Mock<IUserManager> UserManager { get; }
             public Mock<IOrganizationManager> OrganizationManager { get; }
+            public Mock<ISubscriptionManager> SubscriptionManager { get; }
+            public Mock<ISubscriptionLevelManager> SubscriptionLevelManager { get; }
             public Mock<IProvisionalEnvironmentBillingArchiveRepo> BillingArchiveRepo { get; }
             public Mock<IProvisionalEnvironmentArchiveStore> ArchiveStore { get; }
             public Mock<IProvisionalEnvironmentArchiveAccountingService> ArchiveAccountingService { get; }

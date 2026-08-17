@@ -15,6 +15,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
     public interface ISubscriptionManager
     {
         Task<InvokeResult> AddSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> EnsureProvisionalSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user);
         Task<InvokeResult> DeleteSubscriptionsForOrgAsync(string id, EntityHeader org, EntityHeader user);
         Task<InvokeResult> ValidateProvisionalSubscriptionForPurgeAsync(string subscriptionId, string orgId, string appUserId);
