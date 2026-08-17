@@ -21,8 +21,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
         [Test]
         public async Task CreateProvisionalOrganizationAsync_Should_Bootstrap_First_User_Without_Rereading_Organization()
         {
-            const string appUserId = "provisional-user-id";
-            const string organizationId = "provisional-organization-id";
+            const string appUserId = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+            const string organizationId = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB";
 
             var organizationRepo = new Mock<IOrganizationRepo>();
             var orgUserRepo = new Mock<IOrgUserRepo>();
@@ -84,15 +84,15 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var result = await manager.CreateProvisionalOrganizationAsync(appUser, organizationId);
 
             Assert.That(result.Successful, Is.True);
-            Assert.That(result.Result.Id, Is.EqualTo(organizationId));
-            Assert.That(appUser.CurrentOrganization.Id, Is.EqualTo(organizationId));
-            Assert.That(appUser.Organizations, Has.One.Matches<LagoVista.Core.Models.EntityHeader>(org => org.Id == organizationId));
+            Assert.That(result.Result.Id.ToString(), Is.EqualTo(organizationId));
+            Assert.That(appUser.CurrentOrganization.Id.ToString(), Is.EqualTo(organizationId));
+            Assert.That(appUser.Organizations, Has.One.Matches<LagoVista.Core.Models.EntityHeader>(org => org.Id.ToString() == organizationId));
 
             organizationRepo.Verify(repo => repo.AddOrganizationAsync(It.Is<Organization>(org => org.Id == organizationId)), Times.Once);
             organizationRepo.Verify(repo => repo.GetOrganizationAsync(It.IsAny<string>()), Times.Never);
             orgUserRepo.Verify(repo => repo.AddOrgUserAsync(It.Is<OrgUser>(orgUser =>
-                orgUser.OrganizationId == organizationId &&
-                orgUser.UserId == appUserId &&
+                orgUser.OrgId.ToString() == organizationId &&
+                orgUser.UserId.ToString() == appUserId &&
                 orgUser.IsOrgAdmin &&
                 orgUser.IsAppBuilder)), Times.Once);
         }
