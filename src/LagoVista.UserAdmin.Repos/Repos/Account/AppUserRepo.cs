@@ -94,12 +94,14 @@ namespace LagoVista.UserAdmin.Repos.Users
             var existing = await _userRelationalRepo.GetAppUserAsync(user.Id, _systemUsers.SystemOrg, _systemUsers.HostUser);
             if (existing != null) return;
 
+            var now = DateTime.UtcNow;
             var dto = new AppUserDTO
             {
                 AppUserId = user.Id,
                 FullName = user.Name,
-                Email = user.Email,
-                LastUpdatedDate = DateTime.UtcNow
+                Email = String.IsNullOrWhiteSpace(user.Email) ? $"{user.Id.ToLowerInvariant()}@provisional.invalid" : user.Email,
+                CreationDate = now,
+                LastUpdatedDate = now
             };
 
             try
