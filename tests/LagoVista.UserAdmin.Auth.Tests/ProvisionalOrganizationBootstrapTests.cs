@@ -87,6 +87,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(result.Successful, Is.True);
             Assert.That(result.Result.Id.ToString(), Is.EqualTo(organizationId));
             Assert.That(result.Result.Namespace, Is.EqualTo($"provisional{organizationId.ToLowerInvariant()}"));
+            Assert.That(result.Result.DefaultVectorCollectionName, Is.EqualTo($"{result.Result.Namespace}-indexes"));
             Assert.That(appUser.CurrentOrganization.Id.ToString(), Is.EqualTo(organizationId));
             Assert.That(appUser.Organizations, Has.Count.EqualTo(1));
             Assert.That(appUser.Organizations[0].Id.ToString(), Is.EqualTo(organizationId));
