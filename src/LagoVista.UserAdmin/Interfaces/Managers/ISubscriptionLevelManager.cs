@@ -8,6 +8,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 {
     public interface ISubscriptionLevelManager
     {
+        Task<InvokeResult<SubscriptionLevel>> EnsureSystemSubscriptionLevelAsync(SubscriptionLevel defaultLevel);
         Task<InvokeResult> AddSubscriptionLevelAsync(SubscriptionLevel subscriptionLevel);
         Task<InvokeResult> UpdateSubscriptionLevelAsync(SubscriptionLevel subscriptionLevel);
         Task<InvokeResult> DeleteSubscriptionLevelAsync(Guid id);
