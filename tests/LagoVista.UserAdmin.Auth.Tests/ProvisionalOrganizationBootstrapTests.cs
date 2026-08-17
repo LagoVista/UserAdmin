@@ -1,4 +1,5 @@
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Managers;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
@@ -86,9 +87,10 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(result.Successful, Is.True);
             Assert.That(result.Result.Id.ToString(), Is.EqualTo(organizationId));
             Assert.That(appUser.CurrentOrganization.Id.ToString(), Is.EqualTo(organizationId));
-            Assert.That(appUser.Organizations, Has.One.Matches<LagoVista.Core.Models.EntityHeader>(org => org.Id.ToString() == organizationId));
+            Assert.That(appUser.Organizations, Has.Count.EqualTo(1));
+            Assert.That(appUser.Organizations[0].Id.ToString(), Is.EqualTo(organizationId));
 
-            organizationRepo.Verify(repo => repo.AddOrganizationAsync(It.Is<Organization>(org => org.Id == organizationId)), Times.Once);
+            organizationRepo.Verify(repo => repo.AddOrganizationAsync(It.Is<Organization>(org => org.Id.ToString() == organizationId)), Times.Once);
             organizationRepo.Verify(repo => repo.GetOrganizationAsync(It.IsAny<string>()), Times.Never);
             orgUserRepo.Verify(repo => repo.AddOrgUserAsync(It.Is<OrgUser>(orgUser =>
                 orgUser.OrgId.ToString() == organizationId &&
