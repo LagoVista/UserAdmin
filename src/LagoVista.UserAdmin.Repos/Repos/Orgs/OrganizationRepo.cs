@@ -80,6 +80,25 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             await _relationalRepo.AddOrganizationAsync(dto, _systemUsers.SystemOrg, _systemUsers.HostUser);
         }
 
+        public async Task EnsureRelationalOrganizationAsync(Organization org)
+        {
+            if (org == null) throw new ArgumentNullException(nameof(org));
+
+            var existing = await _relationalRepo.GetOrganizationAsync(org.Id, _systemUsers.SystemOrg, _systemUsers.HostUser);
+            if (existing != null) return;
+
+            var dto = await _autoMapper.CreateAsync<Organization, OrganizationDTO>(org, _systemUsers.SystemOrg, _systemUsers.HostUser);
+            try
+            {
+                await _relationalRepo.AddOrganizationAsync(dto, _systemUsers.SystemOrg, _systemUsers.HostUser);
+            }
+            catch
+            {
+                existing = await _relationalRepo.GetOrganizationAsync(org.Id, _systemUsers.SystemOrg, _systemUsers.HostUser);
+                if (existing == null) throw;
+            }
+        }
+
         public async Task DeleteOrgAsync(string orgId)
         {
             await _relationalRepo.DeleteOrganizationAsync(orgId, _systemUsers.SystemOrg, _systemUsers.HostUser);
