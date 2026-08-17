@@ -87,6 +87,32 @@ namespace LagoVista.UserAdmin.Repos.Users
             await CreateDocumentAsync(user);
         }
 
+        public async Task EnsureRelationalUserAsync(AppUser user)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+
+            var existing = await _userRelationalRepo.GetAppUserAsync(user.Id, _systemUsers.SystemOrg, _systemUsers.HostUser);
+            if (existing != null) return;
+
+            var dto = new AppUserDTO
+            {
+                AppUserId = user.Id,
+                FullName = user.Name,
+                Email = user.Email,
+                LastUpdatedDate = DateTime.UtcNow
+            };
+
+            try
+            {
+                await _userRelationalRepo.AddAppUserAsync(dto, _systemUsers.SystemOrg, _systemUsers.HostUser);
+            }
+            catch
+            {
+                existing = await _userRelationalRepo.GetAppUserAsync(user.Id, _systemUsers.SystemOrg, _systemUsers.HostUser);
+                if (existing == null) throw;
+            }
+        }
+
         public async Task DeleteAsync(AppUser user, bool softDelete = true)
         {
             try
