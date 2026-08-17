@@ -17,6 +17,40 @@ namespace LagoVista.UserAdmin.Managers
             _subscriptionLevelRepo = subscriptionLevelRepo ?? throw new ArgumentNullException(nameof(subscriptionLevelRepo));
         }
 
+        public async Task<InvokeResult<SubscriptionLevel>> EnsureSystemSubscriptionLevelAsync(SubscriptionLevel defaultLevel)
+        {
+            if (defaultLevel == null) throw new ArgumentNullException(nameof(defaultLevel));
+            if (defaultLevel.Id == Guid.Empty) return InvokeResult<SubscriptionLevel>.FromError("A canonical ID is required for a system subscription level.");
+            if (String.IsNullOrWhiteSpace(defaultLevel.Key)) return InvokeResult<SubscriptionLevel>.FromError("Key is required for a system subscription level.");
+            if (String.IsNullOrWhiteSpace(defaultLevel.Name)) return InvokeResult<SubscriptionLevel>.FromError("Name is required for a system subscription level.");
+
+            var existingByKey = await _subscriptionLevelRepo.GetSubscriptionLevelByKeyAsync(defaultLevel.Key);
+            if (existingByKey != null) return InvokeResult<SubscriptionLevel>.Create(existingByKey);
+
+            var existingById = await _subscriptionLevelRepo.GetSubscriptionLevelAsync(defaultLevel.Id);
+            if (existingById != null)
+            {
+                return InvokeResult<SubscriptionLevel>.FromError($"The canonical subscription level ID for '{defaultLevel.Key}' is already used by subscription level '{existingById.Key}'.");
+            }
+
+            try
+            {
+                await _subscriptionLevelRepo.AddSubscriptionLevelAsync(defaultLevel);
+                return InvokeResult<SubscriptionLevel>.Create(defaultLevel);
+            }
+            catch
+            {
+                existingByKey = await _subscriptionLevelRepo.GetSubscriptionLevelByKeyAsync(defaultLevel.Key);
+                if (existingByKey != null) return InvokeResult<SubscriptionLevel>.Create(existingByKey);
+
+                existingById = await _subscriptionLevelRepo.GetSubscriptionLevelAsync(defaultLevel.Id);
+                if (existingById != null && String.Equals(existingById.Key, defaultLevel.Key, StringComparison.Ordinal))
+                    return InvokeResult<SubscriptionLevel>.Create(existingById);
+
+                throw;
+            }
+        }
+
         public async Task<InvokeResult> AddSubscriptionLevelAsync(SubscriptionLevel subscriptionLevel)
         {
             if (subscriptionLevel == null)
