@@ -23,6 +23,7 @@ namespace LagoVista.UserAdmin.Managers
 
         private readonly IProvisionalEnvironmentRepo _environmentRepo;
         private readonly IUserManager _userManager;
+        private readonly IAppUserRepo _appUserRepo;
         private readonly IOrganizationManager _organizationManager;
         private readonly ISubscriptionManager _subscriptionManager;
         private readonly ISubscriptionLevelManager _subscriptionLevelManager;
@@ -30,10 +31,11 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IProvisionalEnvironmentArchiveStore _archiveStore;
         private readonly IProvisionalEnvironmentArchiveAccountingService _archiveAccountingService;
 
-        public ProvisionalEnvironmentManager(IProvisionalEnvironmentRepo environmentRepo, IUserManager userManager, IOrganizationManager organizationManager, ISubscriptionManager subscriptionManager, ISubscriptionLevelManager subscriptionLevelManager, IProvisionalEnvironmentBillingArchiveRepo billingArchiveRepo, IProvisionalEnvironmentArchiveStore archiveStore, IProvisionalEnvironmentArchiveAccountingService archiveAccountingService)
+        public ProvisionalEnvironmentManager(IProvisionalEnvironmentRepo environmentRepo, IUserManager userManager, IAppUserRepo appUserRepo, IOrganizationManager organizationManager, ISubscriptionManager subscriptionManager, ISubscriptionLevelManager subscriptionLevelManager, IProvisionalEnvironmentBillingArchiveRepo billingArchiveRepo, IProvisionalEnvironmentArchiveStore archiveStore, IProvisionalEnvironmentArchiveAccountingService archiveAccountingService)
         {
             _environmentRepo = environmentRepo ?? throw new ArgumentNullException(nameof(environmentRepo));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
             _organizationManager = organizationManager ?? throw new ArgumentNullException(nameof(organizationManager));
             _subscriptionManager = subscriptionManager ?? throw new ArgumentNullException(nameof(subscriptionManager));
             _subscriptionLevelManager = subscriptionLevelManager ?? throw new ArgumentNullException(nameof(subscriptionLevelManager));
@@ -424,7 +426,11 @@ namespace LagoVista.UserAdmin.Managers
         private async Task<InvokeResult<AppUser>> EnsureUserAsync(ProvisionalEnvironment environment)
         {
             var appUser = await _userManager.FindByIdAsync(environment.AppUserId);
-            if (appUser != null) return InvokeResult<AppUser>.Create(appUser);
+            if (appUser != null)
+            {
+                await _appUserRepo.EnsureRelationalUserAsync(appUser);
+                return InvokeResult<AppUser>.Create(appUser);
+            }
 
             appUser = new AppUser(null, $"provisional-{environment.AppUserId}", "Provisional Environment")
             {
@@ -439,7 +445,10 @@ namespace LagoVista.UserAdmin.Managers
             };
 
             var createResult = await _userManager.CreateAsync(appUser);
-            return createResult.Successful ? InvokeResult<AppUser>.Create(appUser) : InvokeResult<AppUser>.FromInvokeResult(createResult);
+            if (!createResult.Successful) return InvokeResult<AppUser>.FromInvokeResult(createResult);
+
+            await _appUserRepo.EnsureRelationalUserAsync(appUser);
+            return InvokeResult<AppUser>.Create(appUser);
         }
 
         private async Task<InvokeResult> EnsureSubscriptionAsync(ProvisionalEnvironment environment, Organization organization, AppUser appUser)
