@@ -99,7 +99,7 @@ namespace LagoVista.UserAdmin.Repos.Users
             {
                 AppUserId = user.Id,
                 FullName = user.Name,
-                Email = String.IsNullOrWhiteSpace(user.Email) ? $"{user.Id.ToLowerInvariant()}@provisional.invalid" : user.Email,
+                Email = String.IsNullOrWhiteSpace(user.Email) ? $"{user.Id.Value.ToLowerInvariant()}@provisional.invalid" : user.Email,
                 CreationDate = now,
                 LastUpdatedDate = now
             };

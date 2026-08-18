@@ -44,13 +44,14 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<InvokeResult> AddSubscriptionAsync(Subscription subscription, EntityHeader org, EntityHeader user)
         {
             if (subscription == null) throw new ArgumentNullException(nameof(subscription));
-
+            
             var timeStamp = UtcTimestamp.Now;
-            if (EntityHeader.IsNullOrEmpty(subscription.OwnerOrganization)) subscription.OwnerOrganization = org;
-            if (EntityHeader.IsNullOrEmpty(subscription.CreatedBy)) subscription.CreatedBy = user;
-            if (EntityHeader.IsNullOrEmpty(subscription.LastUpdatedBy)) subscription.LastUpdatedBy = user;
-            if (String.IsNullOrEmpty(subscription.CreationDate)) subscription.CreationDate = timeStamp;
-            if (String.IsNullOrEmpty(subscription.LastUpdatedDate)) subscription.LastUpdatedDate = timeStamp;
+            if(EntityHeader.IsNullOrEmpty(subscription.OwnerOrganization)) subscription.OwnerOrganization = org;
+            if(EntityHeader.IsNullOrEmpty(subscription.CreatedBy)) subscription.CreatedBy = user;
+            if(EntityHeader.IsNullOrEmpty(subscription.LastUpdatedBy)) subscription.LastUpdatedBy = user;
+            if(String.IsNullOrEmpty(subscription.CreationDate)) subscription.CreationDate = timeStamp;
+            if(String.IsNullOrEmpty(subscription.LastUpdatedDate)) subscription.LastUpdatedDate = timeStamp;
+
 
             if (subscription.Key == Subscription.SubscriptionKey_Trial)
             {
