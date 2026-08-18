@@ -7,6 +7,7 @@ namespace LagoVista.AspNetCore.Identity.Interfaces
     public interface IContinuitySessionManager
     {
         Task<InvokeResult<ContinuitySessionResponse>> ResolveAsync(string continuityToken, string appUserId = null);
+        Task<InvokeResult<ContinuitySessionResponse>> CreatePromotedProvisionalSessionAsync(AnonymousVisitorPromotionResponse promotion);
         Task<InvokeResult<ContinuitySessionResponse>> GetClaimedSessionAsync(string provisionalEnvironmentId, string appUserId, bool wasRestored = true);
         Task<InvokeResult<ContinuitySessionResponse>> ResetAsync(string actorId, string identityStage, string continuityToken);
     }
