@@ -74,7 +74,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             {
                 Id = "4A4A2B1C4D6E48769A35C8B53462F0A1",
                 Text = "Provisional Workspace",
-                Namespace = "provisionalworkspace",
+                Namespace = OrgNamespace.Parse("provisionalworkspace"),
                 IsForProductLine = false
             };
 
