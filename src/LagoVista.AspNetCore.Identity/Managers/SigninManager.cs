@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace LagoVista.AspNetCore.Identity.Managers
@@ -73,6 +74,20 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public Task SignInAsync(AppUser user, bool isPersistent = false)
         {
             return _signinManager.SignInAsync(user, isPersistent);
+        }
+
+        public Task SignInProvisionalAsync(AppUser user, string actorId, bool isPersistent = false)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            if (String.IsNullOrWhiteSpace(actorId)) throw new ArgumentNullException(nameof(actorId));
+
+            var claims = new[]
+            {
+                new Claim(ClaimsFactory.ActorId, actorId),
+                new Claim(ClaimsFactory.IdentityStage, ClaimsFactory.ProvisionalIdentityStage)
+            };
+
+            return _signinManager.SignInWithClaimsAsync(user, isPersistent, claims);
         }
 
         public Task RefreshUserLoginAsync(AppUser user)
