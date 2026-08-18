@@ -57,6 +57,7 @@ namespace LagoVista.UserAdmin.Managers
             var recoveryToken = CreateRecoveryToken();
             var environment = await _environmentRepo.FindByCreationRequestIdAsync(request.CreationRequestId);
             var wasResumed = environment != null;
+            var createdEnvironment = false;
 
             if (environment == null)
             {
@@ -96,6 +97,7 @@ namespace LagoVista.UserAdmin.Managers
                 try
                 {
                     await _environmentRepo.CreateAsync(environment);
+                    createdEnvironment = true;
                 }
                 catch
                 {
@@ -125,7 +127,9 @@ namespace LagoVista.UserAdmin.Managers
                 await _environmentRepo.UpdateAsync(environment);
             }
 
-            var appUser = await EnsureUserAsync(environment);
+            var appUser = createdEnvironment
+                ? await CreateFreshUserAsync(environment)
+                : await EnsureUserAsync(environment);
             if (!appUser.Successful) return InvokeResult<CreateProvisionalEnvironmentResponse>.FromInvokeResult(appUser.ToInvokeResult());
 
             var organization = await _organizationManager.CreateProvisionalOrganizationAsync(appUser.Result, environment.OrganizationId);
@@ -525,6 +529,14 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
+        private async Task<InvokeResult<AppUser>> CreateFreshUserAsync(ProvisionalEnvironment environment)
+        {
+            var appUser = CreateProvisionalUser(environment);
+            await _appUserRepo.CreateAsync(appUser);
+            await _appUserRepo.EnsureRelationalUserAsync(appUser);
+            return InvokeResult<AppUser>.Create(appUser);
+        }
+
         private async Task<InvokeResult<AppUser>> EnsureUserAsync(ProvisionalEnvironment environment)
         {
             var appUser = await _userManager.FindByIdAsync(environment.AppUserId);
@@ -534,7 +546,18 @@ namespace LagoVista.UserAdmin.Managers
                 return InvokeResult<AppUser>.Create(appUser);
             }
 
-            appUser = new AppUser(null, $"provisional-{environment.AppUserId}", "Provisional Environment")
+            appUser = CreateProvisionalUser(environment);
+
+            var createResult = await _userManager.CreateAsync(appUser);
+            if (!createResult.Successful) return InvokeResult<AppUser>.FromInvokeResult(createResult);
+
+            await _appUserRepo.EnsureRelationalUserAsync(appUser);
+            return InvokeResult<AppUser>.Create(appUser);
+        }
+
+        private static AppUser CreateProvisionalUser(ProvisionalEnvironment environment)
+        {
+            return new AppUser(null, $"provisional-{environment.AppUserId}", "Provisional Environment")
             {
                 Id = environment.AppUserId,
                 CreatedBy = EntityHeader.Create(environment.AppUserId, "Provisional Environment"),
@@ -545,12 +568,6 @@ namespace LagoVista.UserAdmin.Managers
                 TermsAndConditionsAcceptedDateTime = environment.TermsAndConditionsAcceptedUtc?.ToString("O"),
                 TermsAndConditionsAcceptedIPAddress = environment.TermsAndConditionsAcceptedIPAddress
             };
-
-            var createResult = await _userManager.CreateAsync(appUser);
-            if (!createResult.Successful) return InvokeResult<AppUser>.FromInvokeResult(createResult);
-
-            await _appUserRepo.EnsureRelationalUserAsync(appUser);
-            return InvokeResult<AppUser>.Create(appUser);
         }
 
         private async Task<InvokeResult> EnsureSubscriptionAsync(ProvisionalEnvironment environment, Organization organization, AppUser appUser)
