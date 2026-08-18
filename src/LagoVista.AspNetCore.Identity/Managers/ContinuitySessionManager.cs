@@ -37,10 +37,16 @@ namespace LagoVista.AspNetCore.Identity.Managers
             _tokenHelper = tokenHelper ?? throw new ArgumentNullException(nameof(tokenHelper));
         }
 
-        public async Task<InvokeResult<ContinuitySessionResponse>> ResolveAsync(string continuityToken)
+        public async Task<InvokeResult<ContinuitySessionResponse>> ResolveAsync(string continuityToken, string appUserId = null)
         {
             if (!String.IsNullOrWhiteSpace(continuityToken))
             {
+                if (!String.IsNullOrWhiteSpace(appUserId))
+                {
+                    var claimedResult = await GetClaimedSessionAsync(continuityToken, appUserId);
+                    if (claimedResult.Successful) return claimedResult;
+                }
+
                 var visitorResult = await _visitorManager.RestoreAsync(new AnonymousVisitorRestoreRequest { ContinuityToken = continuityToken });
                 if (visitorResult.Successful) return InvokeResult<ContinuitySessionResponse>.Create(ToSession(visitorResult.Result));
 
@@ -49,6 +55,31 @@ namespace LagoVista.AspNetCore.Identity.Managers
             }
 
             return await CreateFreshVisitorAsync();
+        }
+
+        public async Task<InvokeResult<ContinuitySessionResponse>> GetClaimedSessionAsync(string provisionalEnvironmentId, string appUserId, bool wasRestored = true)
+        {
+            if (String.IsNullOrWhiteSpace(provisionalEnvironmentId)) return InvokeResult<ContinuitySessionResponse>.FromError("ProvisionalEnvironmentId is required.");
+            if (String.IsNullOrWhiteSpace(appUserId)) return InvokeResult<ContinuitySessionResponse>.FromError("AppUserId is required.");
+
+            var environment = await _provisionalEnvironmentRepo.GetByIdAsync(provisionalEnvironmentId);
+            if (environment == null) return InvokeResult<ContinuitySessionResponse>.FromError("The claimed environment was not found.");
+            if (environment.State != ProvisionalEnvironmentState.Claimed) return InvokeResult<ContinuitySessionResponse>.FromError("The environment has not been claimed.");
+            if (!String.Equals(environment.AppUserId, appUserId, StringComparison.Ordinal)) return InvokeResult<ContinuitySessionResponse>.FromError("The claimed environment does not belong to the current user.");
+
+            return InvokeResult<ContinuitySessionResponse>.Create(new ContinuitySessionResponse
+            {
+                ActorId = environment.OriginActorId ?? environment.AppUserId,
+                IdentityStage = ClaimsFactory.RegisteredIdentityStage,
+                ContinuityToken = environment.Id,
+                IdentityExpiresUtc = environment.ExpiresUtc,
+                WasRestored = wasRestored,
+                ProvisionalEnvironmentId = environment.Id,
+                AppUserId = environment.AppUserId,
+                OrganizationId = environment.OrganizationId,
+                SubscriptionId = environment.SubscriptionId,
+                BootstrapContext = environment.BootstrapContext
+            });
         }
 
         public async Task<InvokeResult<ContinuitySessionResponse>> ResetAsync(string actorId, string identityStage, string continuityToken)

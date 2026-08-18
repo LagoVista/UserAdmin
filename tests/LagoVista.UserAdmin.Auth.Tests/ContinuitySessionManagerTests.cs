@@ -80,6 +80,49 @@ namespace LagoVista.UserAdmin.Auth.Tests
         }
 
         [Test]
+        public async Task ResolveAsync_Should_Return_Claimed_Session_For_Current_User()
+        {
+            var harness = CreateHarness();
+            var environment = new ProvisionalEnvironment
+            {
+                Id = "environment-id",
+                OriginActorId = "journey-actor",
+                AppUserId = "app-user-id",
+                OrganizationId = "organization-id",
+                SubscriptionId = "subscription-id",
+                State = ProvisionalEnvironmentState.Claimed,
+                ExpiresUtc = DateTime.UtcNow.AddDays(30)
+            };
+            harness.ProvisionalEnvironmentRepo.Setup(repo => repo.GetByIdAsync(environment.Id)).ReturnsAsync(environment);
+
+            var result = await harness.Manager.ResolveAsync(environment.Id, environment.AppUserId);
+
+            Assert.That(result.Successful, Is.True);
+            Assert.That(result.Result.IdentityStage, Is.EqualTo(ClaimsFactory.RegisteredIdentityStage));
+            Assert.That(result.Result.ActorId, Is.EqualTo(environment.OriginActorId));
+            Assert.That(result.Result.ContinuityToken, Is.EqualTo(environment.Id));
+            Assert.That(result.Result.AccessToken, Is.Null);
+            harness.VisitorManager.Verify(manager => manager.RestoreAsync(It.IsAny<AnonymousVisitorRestoreRequest>()), Times.Never);
+            harness.ProvisionalManager.Verify(manager => manager.RestoreAsync(It.IsAny<RestoreProvisionalEnvironmentRequest>()), Times.Never);
+        }
+
+        [Test]
+        public async Task GetClaimedSessionAsync_Should_Reject_Different_User()
+        {
+            var harness = CreateHarness();
+            harness.ProvisionalEnvironmentRepo.Setup(repo => repo.GetByIdAsync("environment-id")).ReturnsAsync(new ProvisionalEnvironment
+            {
+                Id = "environment-id",
+                AppUserId = "app-user-id",
+                State = ProvisionalEnvironmentState.Claimed
+            });
+
+            var result = await harness.Manager.GetClaimedSessionAsync("environment-id", "different-user");
+
+            Assert.That(result.Successful, Is.False);
+        }
+
+        [Test]
         public async Task ResetAsync_Should_Retire_Visitor_And_Create_Fresh_Visitor()
         {
             var harness = CreateHarness();

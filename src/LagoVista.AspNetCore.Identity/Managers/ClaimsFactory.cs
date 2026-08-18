@@ -48,6 +48,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string IdentityStage = "com.lagovista.iot.identitystage";
         public const string VisitorIdentityStage = "visitor";
         public const string ProvisionalIdentityStage = "provisional";
+        public const string RegisteredIdentityStage = "registered";
         public const string EmailVerified = "com.lagovista.iot.emailverified";
         public const string PhoneVerfiied = "com.lagovista.iot.phoneverified";
         public const string IsSystemAdmin = "com.lagovista.iot.issystemadmin";
