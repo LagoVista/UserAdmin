@@ -57,6 +57,40 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return await CreateFreshVisitorAsync();
         }
 
+        public async Task<InvokeResult<ContinuitySessionResponse>> CreatePromotedProvisionalSessionAsync(AnonymousVisitorPromotionResponse promotion)
+        {
+            if (promotion == null) return InvokeResult<ContinuitySessionResponse>.FromError("Promotion result is required.");
+            if (String.IsNullOrWhiteSpace(promotion.RecoveryToken)) return InvokeResult<ContinuitySessionResponse>.FromError("RecoveryToken is required.");
+            if (String.IsNullOrWhiteSpace(promotion.AppUserId)) return InvokeResult<ContinuitySessionResponse>.FromError("AppUserId is required.");
+            if (String.IsNullOrWhiteSpace(promotion.OrganizationId)) return InvokeResult<ContinuitySessionResponse>.FromError("OrganizationId is required.");
+
+            var appUser = await _appUserRepo.FindByIdAsync(promotion.AppUserId);
+            if (appUser == null) return InvokeResult<ContinuitySessionResponse>.FromError("The provisional AppUser was not found.");
+
+            var organization = await _organizationRepo.GetOrganizationAsync(promotion.OrganizationId);
+            if (organization == null) return InvokeResult<ContinuitySessionResponse>.FromError("The provisional organization was not found.");
+
+            appUser.CurrentOrganization = organization.CreateSummary();
+            var accessTokenExpiresUtc = DateTime.UtcNow.Add(_tokenOptions.AccessExpiration);
+            if (accessTokenExpiresUtc > promotion.ExpiresUtc) accessTokenExpiresUtc = promotion.ExpiresUtc;
+
+            return InvokeResult<ContinuitySessionResponse>.Create(new ContinuitySessionResponse
+            {
+                ActorId = promotion.ActorId,
+                IdentityStage = ClaimsFactory.ProvisionalIdentityStage,
+                AccessToken = _tokenHelper.GetProvisionalJWToken(appUser, promotion.ActorId, accessTokenExpiresUtc),
+                AccessTokenExpiresUtc = accessTokenExpiresUtc,
+                ContinuityToken = promotion.RecoveryToken,
+                IdentityExpiresUtc = promotion.ExpiresUtc,
+                WasRestored = false,
+                ProvisionalEnvironmentId = promotion.ProvisionalEnvironmentId,
+                AppUserId = promotion.AppUserId,
+                OrganizationId = promotion.OrganizationId,
+                SubscriptionId = promotion.SubscriptionId,
+                BootstrapContext = promotion.BootstrapContext
+            });
+        }
+
         public async Task<InvokeResult<ContinuitySessionResponse>> GetClaimedSessionAsync(string provisionalEnvironmentId, string appUserId, bool wasRestored = true)
         {
             if (String.IsNullOrWhiteSpace(provisionalEnvironmentId)) return InvokeResult<ContinuitySessionResponse>.FromError("ProvisionalEnvironmentId is required.");
