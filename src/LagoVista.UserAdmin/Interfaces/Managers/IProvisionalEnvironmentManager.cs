@@ -11,6 +11,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult<CreateProvisionalEnvironmentResponse>> CreateAsync(CreateProvisionalEnvironmentRequest request);
         Task<InvokeResult<RestoreProvisionalEnvironmentResponse>> RestoreAsync(RestoreProvisionalEnvironmentRequest request);
         Task<InvokeResult> RecordActivityAsync(string provisionalEnvironmentId);
+        Task<InvokeResult<EstablishProvisionalAccountResponse>> EstablishAccountAsync(EstablishProvisionalAccountRequest request, string appUserId);
         Task<InvokeResult> ClaimAsync(string provisionalEnvironmentId, string appUserId);
         Task<InvokeResult<IEnumerable<ProvisionalEnvironmentLifecycleSummary>>> GetByStateAsync(ProvisionalEnvironmentState state, DateTime? dueBeforeUtc = null, int take = 100);
         Task<InvokeResult<ProvisionalEnvironmentLifecycleBatchResult>> ExpireAsync(DateTime? asOfUtc = null, int take = 100);

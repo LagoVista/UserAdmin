@@ -8,6 +8,7 @@ using LagoVista.UserAdmin.Models.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace LagoVista.UserAdmin.Managers
 
         private readonly IProvisionalEnvironmentRepo _environmentRepo;
         private readonly IUserManager _userManager;
+        private readonly IUserVerficationManager _userVerificationManager;
         private readonly IAppUserRepo _appUserRepo;
         private readonly IOrganizationManager _organizationManager;
         private readonly ISubscriptionManager _subscriptionManager;
@@ -31,10 +33,11 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IProvisionalEnvironmentArchiveStore _archiveStore;
         private readonly IProvisionalEnvironmentArchiveAccountingService _archiveAccountingService;
 
-        public ProvisionalEnvironmentManager(IProvisionalEnvironmentRepo environmentRepo, IUserManager userManager, IAppUserRepo appUserRepo, IOrganizationManager organizationManager, ISubscriptionManager subscriptionManager, ISubscriptionLevelManager subscriptionLevelManager, IProvisionalEnvironmentBillingArchiveRepo billingArchiveRepo, IProvisionalEnvironmentArchiveStore archiveStore, IProvisionalEnvironmentArchiveAccountingService archiveAccountingService)
+        public ProvisionalEnvironmentManager(IProvisionalEnvironmentRepo environmentRepo, IUserManager userManager, IUserVerficationManager userVerificationManager, IAppUserRepo appUserRepo, IOrganizationManager organizationManager, ISubscriptionManager subscriptionManager, ISubscriptionLevelManager subscriptionLevelManager, IProvisionalEnvironmentBillingArchiveRepo billingArchiveRepo, IProvisionalEnvironmentArchiveStore archiveStore, IProvisionalEnvironmentArchiveAccountingService archiveAccountingService)
         {
             _environmentRepo = environmentRepo ?? throw new ArgumentNullException(nameof(environmentRepo));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _userVerificationManager = userVerificationManager ?? throw new ArgumentNullException(nameof(userVerificationManager));
             _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
             _organizationManager = organizationManager ?? throw new ArgumentNullException(nameof(organizationManager));
             _subscriptionManager = subscriptionManager ?? throw new ArgumentNullException(nameof(subscriptionManager));
@@ -192,6 +195,95 @@ namespace LagoVista.UserAdmin.Managers
             return await RecordActivityAsync(environment);
         }
 
+        public async Task<InvokeResult<EstablishProvisionalAccountResponse>> EstablishAccountAsync(EstablishProvisionalAccountRequest request, string appUserId)
+        {
+            if (request == null) return InvokeResult<EstablishProvisionalAccountResponse>.FromError("Account establishment request is required.");
+            if (String.IsNullOrWhiteSpace(request.ProvisionalEnvironmentId)) return InvokeResult<EstablishProvisionalAccountResponse>.FromError("ProvisionalEnvironmentId is required.");
+            if (String.IsNullOrWhiteSpace(appUserId)) return InvokeResult<EstablishProvisionalAccountResponse>.FromError("AppUserId is required.");
+            if (String.IsNullOrWhiteSpace(request.FirstName)) return InvokeResult<EstablishProvisionalAccountResponse>.FromError("FirstName is required.");
+            if (String.IsNullOrWhiteSpace(request.LastName)) return InvokeResult<EstablishProvisionalAccountResponse>.FromError("LastName is required.");
+            if (String.IsNullOrWhiteSpace(request.Email)) return InvokeResult<EstablishProvisionalAccountResponse>.FromError("Email is required.");
+            if (String.IsNullOrWhiteSpace(request.Password)) return InvokeResult<EstablishProvisionalAccountResponse>.FromError("Password is required.");
+
+            var firstName = request.FirstName.Trim();
+            var lastName = request.LastName.Trim();
+            var email = request.Email.Trim();
+
+            try
+            {
+                if (!String.Equals(new MailAddress(email).Address, email, StringComparison.OrdinalIgnoreCase))
+                    return InvokeResult<EstablishProvisionalAccountResponse>.FromError("Email is invalid.");
+            }
+            catch (FormatException)
+            {
+                return InvokeResult<EstablishProvisionalAccountResponse>.FromError("Email is invalid.");
+            }
+
+            var environment = await _environmentRepo.GetByIdAsync(request.ProvisionalEnvironmentId);
+            if (environment == null) return InvokeResult<EstablishProvisionalAccountResponse>.FromError("The provisional environment was not found.");
+            if (!String.Equals(environment.AppUserId, appUserId, StringComparison.Ordinal)) return InvokeResult<EstablishProvisionalAccountResponse>.FromError("The provisional environment does not belong to the current user.");
+            if (environment.State != ProvisionalEnvironmentState.Active) return InvokeResult<EstablishProvisionalAccountResponse>.FromError($"Provisional environment is {environment.State.ToString().ToLowerInvariant()}.");
+            if (environment.ExpiresUtc.ToUniversalTime() <= DateTime.UtcNow) return InvokeResult<EstablishProvisionalAccountResponse>.FromError("The provisional environment has expired.");
+
+            var appUser = await _userManager.FindByIdAsync(appUserId);
+            if (appUser == null) return InvokeResult<EstablishProvisionalAccountResponse>.FromError("The provisional environment user was not found.");
+
+            if (!appUser.IsAnonymous)
+            {
+                if (!String.Equals(appUser.Email, email, StringComparison.OrdinalIgnoreCase))
+                    return InvokeResult<EstablishProvisionalAccountResponse>.FromError("The provisional account has already been established with a different email address.");
+
+                return await SendAccountVerificationAsync(environment, appUser);
+            }
+
+            var existingUser = await _userManager.FindByEmailAsync(email);
+            if (existingUser != null && !String.Equals(existingUser.Id, appUser.Id, StringComparison.Ordinal))
+                return InvokeResult<EstablishProvisionalAccountResponse>.FromError("An account already exists for this email address.");
+
+            appUser.FirstName = firstName;
+            appUser.LastName = lastName;
+            appUser.Email = email;
+            appUser.UserName = email;
+            appUser.LoginType = LoginTypes.AppUser;
+            appUser.IsAnonymous = false;
+            appUser.EmailConfirmed = false;
+            appUser.HasGeneratedPassword = false;
+            appUser.ShowWelcome = false;
+            appUser.LastUpdatedBy = EntityHeader.Create(appUser.Id, $"{firstName} {lastName}");
+            appUser.LastUpdatedDate = UtcTimestamp.Now;
+
+            var passwordResult = await _userManager.AddPasswordAsync(appUser, request.Password);
+            if (!passwordResult.Successful) return InvokeResult<EstablishProvisionalAccountResponse>.FromInvokeResult(passwordResult);
+
+            return await SendAccountVerificationAsync(environment, appUser);
+        }
+
+        private async Task<InvokeResult<EstablishProvisionalAccountResponse>> SendAccountVerificationAsync(ProvisionalEnvironment environment, AppUser appUser)
+        {
+            if (appUser.EmailConfirmed)
+            {
+                return InvokeResult<EstablishProvisionalAccountResponse>.Create(ToEstablishAccountResponse(environment, appUser, null));
+            }
+
+            var verificationResult = await _userVerificationManager.SendConfirmationEmailAsync(appUser);
+            if (!verificationResult.Successful) return InvokeResult<EstablishProvisionalAccountResponse>.FromInvokeResult(verificationResult.ToInvokeResult());
+
+            return InvokeResult<EstablishProvisionalAccountResponse>.Create(ToEstablishAccountResponse(environment, appUser, verificationResult.Result));
+        }
+
+        private static EstablishProvisionalAccountResponse ToEstablishAccountResponse(ProvisionalEnvironment environment, AppUser appUser, string developmentVerificationCode)
+        {
+            return new EstablishProvisionalAccountResponse
+            {
+                ProvisionalEnvironmentId = environment.Id,
+                AppUserId = appUser.Id,
+                OrganizationId = environment.OrganizationId,
+                Email = appUser.Email,
+                EmailVerificationRequired = !appUser.EmailConfirmed,
+                DevelopmentVerificationCode = developmentVerificationCode
+            };
+        }
+
         public async Task<InvokeResult> ClaimAsync(string provisionalEnvironmentId, string appUserId)
         {
             if (String.IsNullOrWhiteSpace(provisionalEnvironmentId)) return InvokeResult.FromError("ProvisionalEnvironmentId is required.");
@@ -217,6 +309,7 @@ namespace LagoVista.UserAdmin.Managers
             var appUser = await _userManager.FindByIdAsync(environment.AppUserId);
             if (appUser == null) return InvokeResult.FromError("The provisional environment user was not found.");
             if (appUser.IsAnonymous) return InvokeResult.FromError("The provisional environment user must be established before the environment can be claimed.");
+            if (!appUser.EmailConfirmed) return InvokeResult.FromError("The provisional environment user must verify their email before the environment can be claimed.");
 
             environment.State = ProvisionalEnvironmentState.Claimed;
             environment.ClaimedUtc = now;

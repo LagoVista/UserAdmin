@@ -129,6 +129,78 @@ namespace LagoVista.UserAdmin.Auth.Tests
         }
 
         [Test]
+        public async Task EstablishAccountAsync_Should_EstablishSameUser_And_SendVerification()
+        {
+            var environment = CreateActiveEnvironment();
+            var appUser = new AppUser(null, $"provisional-{environment.AppUserId}", "Provisional Environment")
+            {
+                Id = environment.AppUserId,
+                IsAnonymous = true
+            };
+            var harness = CreateHarness();
+
+            harness.EnvironmentRepo.Setup(repo => repo.GetByIdAsync(environment.Id)).ReturnsAsync(environment);
+            harness.UserManager.Setup(manager => manager.FindByIdAsync(environment.AppUserId)).ReturnsAsync(appUser);
+            harness.UserManager.Setup(manager => manager.FindByEmailAsync("user@example.com")).ReturnsAsync((AppUser)null);
+            harness.UserManager.Setup(manager => manager.AddPasswordAsync(appUser, "Password123!")).ReturnsAsync(InvokeResult.Success);
+            harness.UserVerificationManager.Setup(manager => manager.SendConfirmationEmailAsync(appUser, "", "", "", "")).ReturnsAsync(InvokeResult<string>.Create("123456"));
+
+            var result = await harness.Manager.EstablishAccountAsync(new EstablishProvisionalAccountRequest
+            {
+                ProvisionalEnvironmentId = environment.Id,
+                FirstName = "Test",
+                LastName = "User",
+                Email = "user@example.com",
+                Password = "Password123!"
+            }, environment.AppUserId);
+
+            Assert.That(result.Successful, Is.True);
+            Assert.That(result.Result.AppUserId, Is.EqualTo(environment.AppUserId));
+            Assert.That(result.Result.OrganizationId, Is.EqualTo(environment.OrganizationId));
+            Assert.That(result.Result.EmailVerificationRequired, Is.True);
+            Assert.That(result.Result.DevelopmentVerificationCode, Is.EqualTo("123456"));
+            Assert.That(appUser.IsAnonymous, Is.False);
+            Assert.That(appUser.FirstName, Is.EqualTo("Test"));
+            Assert.That(appUser.LastName, Is.EqualTo("User"));
+            Assert.That(appUser.Email, Is.EqualTo("USER@EXAMPLE.COM"));
+            Assert.That(appUser.UserName, Is.EqualTo("USER@EXAMPLE.COM"));
+            Assert.That(environment.State, Is.EqualTo(ProvisionalEnvironmentState.Active));
+            harness.UserManager.Verify(manager => manager.AddPasswordAsync(appUser, "Password123!"), Times.Once);
+            harness.UserVerificationManager.Verify(manager => manager.SendConfirmationEmailAsync(appUser, "", "", "", ""), Times.Once);
+            harness.EnvironmentRepo.Verify(repo => repo.UpdateAsync(It.IsAny<ProvisionalEnvironment>()), Times.Never);
+        }
+
+        [Test]
+        public async Task EstablishAccountAsync_Should_RejectEmailOwnedByAnotherUser()
+        {
+            var environment = CreateActiveEnvironment();
+            var appUser = new AppUser(null, $"provisional-{environment.AppUserId}", "Provisional Environment")
+            {
+                Id = environment.AppUserId,
+                IsAnonymous = true
+            };
+            var existingUser = new AppUser("user@example.com", "Existing User");
+            var harness = CreateHarness();
+
+            harness.EnvironmentRepo.Setup(repo => repo.GetByIdAsync(environment.Id)).ReturnsAsync(environment);
+            harness.UserManager.Setup(manager => manager.FindByIdAsync(environment.AppUserId)).ReturnsAsync(appUser);
+            harness.UserManager.Setup(manager => manager.FindByEmailAsync("user@example.com")).ReturnsAsync(existingUser);
+
+            var result = await harness.Manager.EstablishAccountAsync(new EstablishProvisionalAccountRequest
+            {
+                ProvisionalEnvironmentId = environment.Id,
+                FirstName = "Test",
+                LastName = "User",
+                Email = "user@example.com",
+                Password = "Password123!"
+            }, environment.AppUserId);
+
+            Assert.That(result.Successful, Is.False);
+            harness.UserManager.Verify(manager => manager.AddPasswordAsync(It.IsAny<AppUser>(), It.IsAny<string>()), Times.Never);
+            harness.UserVerificationManager.Verify(manager => manager.SendConfirmationEmailAsync(It.IsAny<AppUser>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Test]
         public async Task ClaimAsync_Should_Require_CurrentEnvironmentUser()
         {
             var environment = CreateActiveEnvironment();
@@ -148,7 +220,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var environment = CreateActiveEnvironment();
             environment.RecoveryTokenHash = "recovery-hash";
             environment.InstallationIdHash = "installation-hash";
-            var user = new AppUser("user@example.com", "test") { Id = environment.AppUserId, IsAnonymous = false };
+            var user = new AppUser("user@example.com", "test") { Id = environment.AppUserId, IsAnonymous = false, EmailConfirmed = true };
             var harness = CreateHarness();
 
             harness.EnvironmentRepo.Setup(repo => repo.GetByIdAsync(environment.Id)).ReturnsAsync(environment);
@@ -259,6 +331,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         {
             var environmentRepo = new Mock<IProvisionalEnvironmentRepo>(MockBehavior.Strict);
             var userManager = new Mock<IUserManager>(MockBehavior.Strict);
+            var userVerificationManager = new Mock<IUserVerficationManager>(MockBehavior.Strict);
             var appUserRepo = new Mock<IAppUserRepo>(MockBehavior.Strict);
             var organizationManager = new Mock<IOrganizationManager>(MockBehavior.Strict);
             var subscriptionManager = new Mock<ISubscriptionManager>(MockBehavior.Strict);
@@ -266,8 +339,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var billingArchiveRepo = new Mock<IProvisionalEnvironmentBillingArchiveRepo>(MockBehavior.Strict);
             var archiveStore = new Mock<IProvisionalEnvironmentArchiveStore>(MockBehavior.Strict);
             var archiveAccountingService = new Mock<IProvisionalEnvironmentArchiveAccountingService>(MockBehavior.Strict);
-            var manager = new ProvisionalEnvironmentManager(environmentRepo.Object, userManager.Object, appUserRepo.Object, organizationManager.Object, subscriptionManager.Object, subscriptionLevelManager.Object, billingArchiveRepo.Object, archiveStore.Object, archiveAccountingService.Object);
-            return new Harness(manager, environmentRepo, userManager, appUserRepo, organizationManager, subscriptionManager, subscriptionLevelManager, billingArchiveRepo, archiveStore, archiveAccountingService);
+            var manager = new ProvisionalEnvironmentManager(environmentRepo.Object, userManager.Object, userVerificationManager.Object, appUserRepo.Object, organizationManager.Object, subscriptionManager.Object, subscriptionLevelManager.Object, billingArchiveRepo.Object, archiveStore.Object, archiveAccountingService.Object);
+            return new Harness(manager, environmentRepo, userManager, userVerificationManager, appUserRepo, organizationManager, subscriptionManager, subscriptionLevelManager, billingArchiveRepo, archiveStore, archiveAccountingService);
         }
 
         private static string Hash(string value)
@@ -283,11 +356,12 @@ namespace LagoVista.UserAdmin.Auth.Tests
 
         private sealed class Harness
         {
-            public Harness(ProvisionalEnvironmentManager manager, Mock<IProvisionalEnvironmentRepo> environmentRepo, Mock<IUserManager> userManager, Mock<IAppUserRepo> appUserRepo, Mock<IOrganizationManager> organizationManager, Mock<ISubscriptionManager> subscriptionManager, Mock<ISubscriptionLevelManager> subscriptionLevelManager, Mock<IProvisionalEnvironmentBillingArchiveRepo> billingArchiveRepo, Mock<IProvisionalEnvironmentArchiveStore> archiveStore, Mock<IProvisionalEnvironmentArchiveAccountingService> archiveAccountingService)
+            public Harness(ProvisionalEnvironmentManager manager, Mock<IProvisionalEnvironmentRepo> environmentRepo, Mock<IUserManager> userManager, Mock<IUserVerficationManager> userVerificationManager, Mock<IAppUserRepo> appUserRepo, Mock<IOrganizationManager> organizationManager, Mock<ISubscriptionManager> subscriptionManager, Mock<ISubscriptionLevelManager> subscriptionLevelManager, Mock<IProvisionalEnvironmentBillingArchiveRepo> billingArchiveRepo, Mock<IProvisionalEnvironmentArchiveStore> archiveStore, Mock<IProvisionalEnvironmentArchiveAccountingService> archiveAccountingService)
             {
                 Manager = manager;
                 EnvironmentRepo = environmentRepo;
                 UserManager = userManager;
+                UserVerificationManager = userVerificationManager;
                 AppUserRepo = appUserRepo;
                 OrganizationManager = organizationManager;
                 SubscriptionManager = subscriptionManager;
@@ -300,6 +374,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             public ProvisionalEnvironmentManager Manager { get; }
             public Mock<IProvisionalEnvironmentRepo> EnvironmentRepo { get; }
             public Mock<IUserManager> UserManager { get; }
+            public Mock<IUserVerficationManager> UserVerificationManager { get; }
             public Mock<IAppUserRepo> AppUserRepo { get; }
             public Mock<IOrganizationManager> OrganizationManager { get; }
             public Mock<ISubscriptionManager> SubscriptionManager { get; }

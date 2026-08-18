@@ -57,6 +57,11 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return (await _userManager.CreateAsync(appUser)).ToInvokeResult();
         }
 
+        public async Task<InvokeResult> AddPasswordAsync(AppUser appUser, string password)
+        {
+            return (await _userManager.AddPasswordAsync(appUser, password)).ToInvokeResult();
+        }
+
         public async Task<InvokeResult> UpdateAsync(AppUser appUser)
         {
             return (await _userManager.UpdateAsync(appUser)).ToInvokeResult();
