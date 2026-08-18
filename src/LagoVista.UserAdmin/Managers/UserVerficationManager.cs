@@ -346,12 +346,15 @@ namespace LagoVista.UserAdmin.Managers
 
                 if(null != appUser.CurrentOrganization)
                 {
-                    var org = await _orgManager.GetPublicOrginfoAsync(appUser.CurrentOrganization.Namespace);
-                    if(!String.IsNullOrEmpty(org.EndUserHomePage) && appUser.LoginType == Models.Users.LoginTypes.AppEndUser)
-                        return InvokeResult.SuccessRedirect(org.EndUserHomePage);
+                    if(appUser.CurrentOrganization.IsForProductLine)
+                    {
+                        var org = await _orgManager.GetPublicOrginfoAsync(appUser.CurrentOrganization.Namespace);
+                        if(!String.IsNullOrEmpty(org.EndUserHomePage) && appUser.LoginType == Models.Users.LoginTypes.AppEndUser)
+                            return InvokeResult.SuccessRedirect(org.EndUserHomePage);
 
-                    if(!String.IsNullOrEmpty(org.HomePage))
-                        return InvokeResult.SuccessRedirect(org.HomePage);
+                        if(!String.IsNullOrEmpty(org.HomePage))
+                            return InvokeResult.SuccessRedirect(org.HomePage);
+                    }
 
                     if(appUser.ShowWelcome)
                         return InvokeResult.SuccessRedirect(CommonLinks.HomeWelcome);

@@ -10,6 +10,7 @@ using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.DTOs;
+using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Security;
 using LagoVista.UserAdmin.Models.Users;
 using Moq;
@@ -60,6 +61,39 @@ namespace LagoVista.UserAdmin.Auth.Tests
             harness.EmailVerificationCodeRepo.Verify(repo => repo.UpdateAsync(It.Is<EmailVerificationCode>(code => code.ConsumedUtc.HasValue && code.AttemptCount == 0)), Times.Once);
             harness.SignInManager.Verify(manager => manager.SignInAsync(appUser, false), Times.Once);
             Assert.That(harness.Log.Events.Select(evt => evt.Type), Does.Contain(AuthLogTypes.ConfirmEmailSuccess));
+        }
+
+        [Test]
+        [Property("AptixEvidence", AcceptedVerificationEvidence)]
+        [Property("AptixAuthEvents", SuccessfulVerificationEvents)]
+        public async Task ValidCode_WithNonProductLineCurrentOrganization_Should_ReturnDefaultRedirect()
+        {
+            var harness = CreateHarness();
+            var appUser = CreateUser();
+            appUser.CurrentOrganization = new OrganizationSummary
+            {
+                Id = "4A4A2B1C4D6E48769A35C8B53462F0A1",
+                Text = "Provisional Workspace",
+                Namespace = "provisionalworkspace",
+                IsForProductLine = false
+            };
+
+            var request = new ConfirmEmail { ReceivedCode = ValidCode };
+            var userHeader = EntityHeader.Create(UserId, "Test User");
+            var verificationCode = CreateVerificationCode(appUser, ValidCode);
+
+            harness.UserManager.Setup(manager => manager.FindByIdAsync(UserId)).ReturnsAsync(appUser);
+            harness.EmailVerificationCodeRepo.Setup(repo => repo.GetLatestAsync(UserId)).ReturnsAsync(verificationCode);
+            harness.UserManager.Setup(manager => manager.UpdateAsync(It.Is<AppUser>(user => user.EmailConfirmed))).ReturnsAsync(InvokeResult.Success);
+            harness.EmailVerificationCodeRepo.Setup(repo => repo.UpdateAsync(It.IsAny<EmailVerificationCode>())).Returns(Task.CompletedTask);
+            harness.SignInManager.Setup(manager => manager.SignInAsync(appUser, false)).Returns(Task.CompletedTask);
+
+            var result = await harness.FlowService.VerifyEmailAsync(request, userHeader);
+
+            Assert.That(result.Successful, Is.True);
+            Assert.That(result.RedirectURL, Is.Not.Null.And.Not.Empty);
+            Assert.That(appUser.EmailConfirmed, Is.True);
+            harness.OrganizationManager.Verify(manager => manager.GetPublicOrginfoAsync(It.IsAny<string>()), Times.Never);
         }
 
         [Test]
@@ -198,6 +232,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var userManager = new Mock<IUserManager>(MockBehavior.Strict);
             var emailVerificationCodeRepo = new Mock<IEmailVerificationCodeRepo>(MockBehavior.Strict);
             var signInManager = new Mock<ISignInManager>(MockBehavior.Strict);
+            var organizationManager = new Mock<IOrganizationManager>(MockBehavior.Loose);
             var appConfig = new Mock<IAppConfig>(MockBehavior.Loose);
 
             var manager = new UserVerficationManager(
@@ -207,7 +242,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 new Mock<ISmsSender>(MockBehavior.Loose).Object,
                 new Mock<IAppUserRepo>(MockBehavior.Loose).Object,
                 log,
-                new Mock<IOrganizationManager>(MockBehavior.Loose).Object,
+                organizationManager.Object,
                 signInManager.Object,
                 new Mock<IEmailSender>(MockBehavior.Loose).Object,
                 emailVerificationCodeRepo.Object,
@@ -223,6 +258,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 Log = log,
                 UserManager = userManager,
                 EmailVerificationCodeRepo = emailVerificationCodeRepo,
+                OrganizationManager = organizationManager,
                 SignInManager = signInManager,
                 FlowService = new AuthenticationFlowService(passwordLoginHandler.Object, recoveryRequestHandler.Object, emailVerificationHandler: emailVerificationHandler)
             };
@@ -268,6 +304,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             public RecordingAuthenticationLogManager Log { get; set; }
             public Mock<IUserManager> UserManager { get; set; }
             public Mock<IEmailVerificationCodeRepo> EmailVerificationCodeRepo { get; set; }
+            public Mock<IOrganizationManager> OrganizationManager { get; set; }
             public Mock<ISignInManager> SignInManager { get; set; }
             public AuthenticationFlowService FlowService { get; set; }
         }
