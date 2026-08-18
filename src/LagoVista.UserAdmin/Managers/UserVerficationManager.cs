@@ -294,6 +294,7 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             InvokeResult result;
+            var emailConfirmedNow = false;
 
             if (appUser.EmailConfirmed)
             {
@@ -333,7 +334,7 @@ namespace LagoVista.UserAdmin.Managers
                     verificationCode.ConsumedUtc = DateTime.UtcNow;
                     await _emailVerificationCodeRepo.UpdateAsync(verificationCode);
                     await LogEntityActionAsync(appUser.Id, typeof(AppUser).Name, "ConfirmedEmail", appUser.CurrentOrganization?.ToEntityHeader(), appUser.ToEntityHeader());
-                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.ConfirmEmailSuccess, appUser);
+                    emailConfirmedNow = true;
                 }
             }
 
@@ -344,25 +345,33 @@ namespace LagoVista.UserAdmin.Managers
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Verbose, "UserVerficationManager_ValidateEmailAsync", "Success_ConfirmEmail",
                     new KeyValuePair<string, string>("userId", appUser.Id));
 
+                InvokeResult completionResult;
                 if(null != appUser.CurrentOrganization)
                 {
                     if(appUser.CurrentOrganization.IsForProductLine)
                     {
                         var org = await _orgManager.GetPublicOrginfoAsync(appUser.CurrentOrganization.Namespace);
                         if(!String.IsNullOrEmpty(org.EndUserHomePage) && appUser.LoginType == Models.Users.LoginTypes.AppEndUser)
-                            return InvokeResult.SuccessRedirect(org.EndUserHomePage);
-
-                        if(!String.IsNullOrEmpty(org.HomePage))
-                            return InvokeResult.SuccessRedirect(org.HomePage);
+                            completionResult = InvokeResult.SuccessRedirect(org.EndUserHomePage);
+                        else if(!String.IsNullOrEmpty(org.HomePage))
+                            completionResult = InvokeResult.SuccessRedirect(org.HomePage);
+                        else if(appUser.ShowWelcome)
+                            completionResult = InvokeResult.SuccessRedirect(CommonLinks.HomeWelcome);
+                        else
+                            completionResult = InvokeResult.SuccessRedirect(CommonLinks.Home);
                     }
-
-                    if(appUser.ShowWelcome)
-                        return InvokeResult.SuccessRedirect(CommonLinks.HomeWelcome);
-
-                    return InvokeResult.SuccessRedirect(CommonLinks.Home);
+                    else if(appUser.ShowWelcome)
+                        completionResult = InvokeResult.SuccessRedirect(CommonLinks.HomeWelcome);
+                    else
+                        completionResult = InvokeResult.Success;
                 }
+                else
+                    completionResult = InvokeResult.SuccessRedirect(CommonLinks.CreateDefaultOrg);
 
-                return InvokeResult.SuccessRedirect(CommonLinks.CreateDefaultOrg);
+                if(emailConfirmedNow)
+                    await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.ConfirmEmailSuccess, appUser, redirectUri: completionResult.RedirectURL ?? String.Empty);
+
+                return completionResult;
             }
             else
             {

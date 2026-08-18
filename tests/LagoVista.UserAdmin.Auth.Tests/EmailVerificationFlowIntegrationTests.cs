@@ -61,12 +61,14 @@ namespace LagoVista.UserAdmin.Auth.Tests
             harness.EmailVerificationCodeRepo.Verify(repo => repo.UpdateAsync(It.Is<EmailVerificationCode>(code => code.ConsumedUtc.HasValue && code.AttemptCount == 0)), Times.Once);
             harness.SignInManager.Verify(manager => manager.SignInAsync(appUser, false), Times.Once);
             Assert.That(harness.Log.Events.Select(evt => evt.Type), Does.Contain(AuthLogTypes.ConfirmEmailSuccess));
+            var successEvent = harness.Log.Events.Single(evt => evt.Type == AuthLogTypes.ConfirmEmailSuccess);
+            Assert.That(successEvent.RedirectUri, Is.EqualTo(result.RedirectURL ?? String.Empty));
         }
 
         [Test]
         [Property("AptixEvidence", AcceptedVerificationEvidence)]
         [Property("AptixAuthEvents", SuccessfulVerificationEvents)]
-        public async Task ValidCode_WithNonProductLineCurrentOrganization_Should_ReturnDefaultRedirect()
+        public async Task ValidCode_WithNonProductLineCurrentOrganization_Should_CompleteWithoutRedirect()
         {
             var harness = CreateHarness();
             var appUser = CreateUser();
@@ -91,9 +93,11 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var result = await harness.FlowService.VerifyEmailAsync(request, userHeader);
 
             Assert.That(result.Successful, Is.True);
-            Assert.That(result.RedirectURL, Is.Not.Null.And.Not.Empty);
+            Assert.That(result.RedirectURL, Is.Null.Or.Empty);
             Assert.That(appUser.EmailConfirmed, Is.True);
             harness.OrganizationManager.Verify(manager => manager.GetPublicOrginfoAsync(It.IsAny<string>()), Times.Never);
+            var successEvent = harness.Log.Events.Single(evt => evt.Type == AuthLogTypes.ConfirmEmailSuccess);
+            Assert.That(successEvent.RedirectUri, Is.EqualTo(result.RedirectURL ?? String.Empty));
         }
 
         [Test]
