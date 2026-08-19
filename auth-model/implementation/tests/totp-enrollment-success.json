@@ -1,0 +1,59 @@
+{
+  "$schema": "../../schemas/auth-test-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.test-binding.totp-enrollment.success",
+  "name": "TOTP Enrollment Flow Integration Proof",
+  "summary": "Registers integration proof that the real authentication flow service, typed TOTP enrollment handlers and AppUserMfaManager execute the canonical begin and confirm enrollment outcomes.",
+  "version": 1,
+  "maturity": "implemented",
+  "testLevel": "handler-integration",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "tests/LagoVista.UserAdmin.Auth.Tests",
+  "sourcePath": "tests/LagoVista.UserAdmin.Auth.Tests/TotpEnrollmentFlowIntegrationTests.cs",
+  "framework": "NUnit",
+  "testTypeName": "TotpEnrollmentFlowIntegrationTests",
+  "testMethodNames": [
+    "BeginEnrollment_Should_RunRealFlowHandlerAndMfaManager_AndStageAuthenticatorMaterial",
+    "ConfirmEnrollment_Should_RunRealFlowHandlerAndMfaManager_AndEnableTotp"
+  ],
+  "scenarioKeys": [
+    "auth.scenario.totp-enrollment.start-to-enroll",
+    "auth.scenario.totp-enrollment.confirm-to-recovery-codes"
+  ],
+  "handlerKeys": [
+    "auth.handler.totp-enrollment.begin",
+    "auth.handler.totp-enrollment.confirm"
+  ],
+  "endpointBindingKeys": [
+    "auth.endpoint.totp-enrollment.begin",
+    "auth.endpoint.totp-enrollment.confirm"
+  ],
+  "transitionKeys": [
+    "auth.transition.totp-enrollment.begin",
+    "auth.transition.totp-enrollment.success"
+  ],
+  "proofObligations": [
+    "real-authentication-flow-entry-point",
+    "real-totp-enrollment-begin-flow-handler",
+    "real-totp-enrollment-confirm-flow-handler",
+    "real-app-user-mfa-manager",
+    "authenticator-secret-staged",
+    "otpauth-uri-returned",
+    "real-current-totp-confirmed",
+    "recovery-code-set-issued",
+    "totp-enabled-after-confirmation",
+    "canonical-success-transitions",
+    "declared-auth-log-event-pairs",
+    "public-results-preserved"
+  ],
+  "notes": [
+    "AuthenticationFlowService, both TOTP enrollment handlers and AppUserMfaManager are real instances in the proof harness.",
+    "The confirm proof derives a real current TOTP from the secret produced by the real begin operation rather than mocking verification.",
+    "IAppUserRepo and ISecureStorage are mocked as infrastructure boundaries only.",
+    "Runtime execution status remains separate from this authored test binding."
+  ],
+  "sourceReferences": [
+    { "sourceType": "test", "reference": "LagoVista/UserAdmin:tests/LagoVista.UserAdmin.Auth.Tests/TotpEnrollmentFlowIntegrationTests.cs", "note": "Canonical server integration evidence source for TOTP enrollment begin and confirm." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:tools/Aptix.TestEvidence/Program.cs", "note": "Extracts AptixEvidence metadata from the compiled test assembly for runtime evidence generation." }
+  ]
+}
