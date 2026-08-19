@@ -1,0 +1,16 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.mfa.totp.disable",
+  "name": "Disable TOTP",
+  "description": "Navigates to the TOTP disable confirmation surface.",
+  "path": "/auth/mfa/totp/disable",
+  "routeType": "view",
+  "viewId": "auth.mfa.totp.disable",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "planned" },
+    "mobile": { "status": "planned" }
+  }
+}
