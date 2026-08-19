@@ -32,8 +32,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
 
         public async Task AddUserRole(UserRole role)
         {
-            await _cacheProvider.RemoveAsync(RolesCacheKey(role.User.Id, role.Organization.Id));
-            await InsertAsync(role.ToDTO());
+            var removeCacheTask = _cacheProvider.RemoveAsync(RolesCacheKey(role.User.Id, role.Organization.Id));
+            var insertTask = InsertAsync(role.ToDTO());
+            await Task.WhenAll(removeCacheTask, insertTask);
         }
 
         public async Task<UserRole> GetRoleAssignmentAsync(string userRoleId, string organizationId)
@@ -62,8 +63,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
 
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"Cache miss userid {userId} orgid {organizationId} loaded from storage in - {sw.Elapsed.TotalMilliseconds}ms");
             var roles = results.Select(usr => usr.ToUserRole()).OrderBy(usr => usr.Role.Text).ToList();
-            sw.Restart();
+            if (!roles.Any()) return roles;
 
+            sw.Restart();
             await _cacheProvider.AddAsync(RolesCacheKey(userId, organizationId), JsonConvert.SerializeObject(roles));
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), $"Userid {userId} orgid {organizationId} added to cache in - {sw.Elapsed.TotalMilliseconds}ms");
 
