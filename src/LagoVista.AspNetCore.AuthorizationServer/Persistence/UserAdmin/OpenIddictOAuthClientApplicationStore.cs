@@ -104,7 +104,38 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Persistence.UserAdmin
             => Value<JsonWebKeySet>(application, null, cancellationToken);
 
         public ValueTask<ImmutableArray<string>> GetPermissionsAsync(OAuthClientApplication application, CancellationToken cancellationToken)
-            => Value(application, ImmutableArray<string>.Empty, cancellationToken);
+        {
+            Validate(application, cancellationToken);
+
+            var permissions = ImmutableArray.CreateBuilder<string>();
+
+            // The authorization-code slice requires both endpoints and the code response type.
+            if (Values(application.AllowedGrantTypes).Contains(OpenIddictConstants.GrantTypes.AuthorizationCode, StringComparer.Ordinal))
+            {
+                permissions.Add(OpenIddictConstants.Permissions.Endpoints.Authorization);
+                permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token);
+                permissions.Add(OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode);
+                permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.Code);
+            }
+
+            foreach (var grantType in Values(application.AllowedGrantTypes))
+            {
+                if (!String.Equals(grantType, OpenIddictConstants.GrantTypes.AuthorizationCode, StringComparison.Ordinal))
+                    permissions.Add(OpenIddictConstants.Permissions.Prefixes.GrantType + grantType);
+            }
+
+            foreach (var scope in Values(application.AllowedScopes))
+            {
+                if (!String.Equals(scope, OpenIddictConstants.Scopes.OpenId, StringComparison.Ordinal) &&
+                    !String.Equals(scope, OpenIddictConstants.Scopes.OfflineAccess, StringComparison.Ordinal))
+                    permissions.Add(OpenIddictConstants.Permissions.Prefixes.Scope + scope);
+            }
+
+            foreach (var resource in Values(application.AllowedResources))
+                permissions.Add(OpenIddictConstants.Permissions.Prefixes.Resource + resource);
+
+            return new ValueTask<ImmutableArray<string>>(permissions.Distinct(StringComparer.Ordinal).ToImmutableArray());
+        }
 
         public ValueTask<ImmutableArray<string>> GetPostLogoutRedirectUrisAsync(OAuthClientApplication application, CancellationToken cancellationToken)
             => Value(application, Values(application.PostLogoutRedirectUris), cancellationToken);
@@ -116,7 +147,15 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Persistence.UserAdmin
             => Value(application, Values(application.RedirectUris), cancellationToken);
 
         public ValueTask<ImmutableArray<string>> GetRequirementsAsync(OAuthClientApplication application, CancellationToken cancellationToken)
-            => Value(application, ImmutableArray<string>.Empty, cancellationToken);
+        {
+            Validate(application, cancellationToken);
+
+            return Value(application,
+                application.RequirePkce
+                    ? ImmutableArray.Create(OpenIddictConstants.Requirements.Features.ProofKeyForCodeExchange)
+                    : ImmutableArray<string>.Empty,
+                cancellationToken);
+        }
 
         public ValueTask<ImmutableDictionary<string, string>> GetSettingsAsync(OAuthClientApplication application, CancellationToken cancellationToken)
             => Value(application, ImmutableDictionary<string, string>.Empty, cancellationToken);
