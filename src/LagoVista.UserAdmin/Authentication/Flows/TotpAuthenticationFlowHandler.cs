@@ -3,6 +3,7 @@ using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Auth;
+using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Resources;
 using System;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace LagoVista.UserAdmin.Authentication.Flows
 {
     public interface ITotpAuthenticationFlowHandler
     {
-        Task<AuthenticationFlowResult<AuthenticationResponse>> HandleAsync(TotpSignInRequest request);
+        Task<AuthenticationFlowResult<AppUser>> HandleAsync(TotpSignInRequest request);
     }
 
     [CriticalCoverage]
@@ -22,18 +23,16 @@ namespace LagoVista.UserAdmin.Authentication.Flows
 
         private readonly IAppUserRepo _appUserRepo;
         private readonly IAppUserMfaManager _mfaManager;
-        private readonly ISignInManager _signInManager;
         private readonly IAppConfig _appConfig;
 
-        public TotpAuthenticationFlowHandler(IAppUserRepo appUserRepo, IAppUserMfaManager mfaManager, ISignInManager signInManager, IAppConfig appConfig)
+        public TotpAuthenticationFlowHandler(IAppUserRepo appUserRepo, IAppUserMfaManager mfaManager, IAppConfig appConfig)
         {
             _appUserRepo = appUserRepo ?? throw new ArgumentNullException(nameof(appUserRepo));
             _mfaManager = mfaManager ?? throw new ArgumentNullException(nameof(mfaManager));
-            _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
             _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
         }
 
-        public async Task<AuthenticationFlowResult<AuthenticationResponse>> HandleAsync(TotpSignInRequest request)
+        public async Task<AuthenticationFlowResult<AppUser>> HandleAsync(TotpSignInRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
@@ -49,14 +48,12 @@ namespace LagoVista.UserAdmin.Authentication.Flows
             if (!verifyResult.Successful)
                 return Rejected();
 
-            await _signInManager.SignInAsync(appUser, request.RememberMe);
-            var result = await _signInManager.CompleteSignInToAppAsync(appUser);
-            return new AuthenticationFlowResult<AuthenticationResponse>(result.Successful ? SuccessTransitionKey : RejectedTransitionKey, result);
+            return new AuthenticationFlowResult<AppUser>(SuccessTransitionKey, InvokeResult<AppUser>.Create(appUser));
         }
 
-        private static AuthenticationFlowResult<AuthenticationResponse> Rejected()
+        private static AuthenticationFlowResult<AppUser> Rejected()
         {
-            return new AuthenticationFlowResult<AuthenticationResponse>(RejectedTransitionKey, InvokeResult<AuthenticationResponse>.FromErrors(UserAdminErrorCodes.AuthInvalidCredentials.ToErrorMessage()));
+            return new AuthenticationFlowResult<AppUser>(RejectedTransitionKey, InvokeResult<AppUser>.FromErrors(UserAdminErrorCodes.AuthInvalidCredentials.ToErrorMessage()));
         }
     }
 }
