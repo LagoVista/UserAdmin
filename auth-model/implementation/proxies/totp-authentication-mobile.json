@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/auth-proxy-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.proxy.totp-sign-in.mobile",
+  "name": "TOTP Sign-In Mobile Generated Proxy",
+  "summary": "Binds the canonical mobile TOTP authentication endpoint to the generated AuthClient operation used by the React Native authentication surface.",
+  "version": 1,
+  "maturity": "implemented",
+  "endpointBindingKey": "auth.endpoint.totp-sign-in.token",
+  "operationContractId": "nuvos.endpoint.auth.authentication-flow-authenticate-with-totp-token-api-auth-totp-token",
+  "operationId": "AuthenticationFlow_AuthenticateWithTotpToken_api_auth_totp_token",
+  "repository": "nuviot/nuvos-app-contracts",
+  "sourcePath": "generated/auth/client.ts",
+  "serviceType": "AuthClient",
+  "methodName": "createTotpToken",
+  "requestContract": "AuthRequest",
+  "resultContract": "InvokeResultEx<AuthResponse>",
+  "generator": "Aptix EndpointProjectGenerator",
+  "consumingPlatforms": ["mobile"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/client.ts", "commit": "ad1e2ef725d9ca3865e4d889e877e4f3a723a2df", "note": "Generated AuthClient.createTotpToken calls POST /api/auth/totp/token." },
+    { "sourceType": "code", "reference": "nuviot/vtm-client:src/platform/auth/auth-context.tsx", "note": "React Native TOTP sign-in uses the generated createTotpToken operation and the existing token-session store." }
+  ]
+}
