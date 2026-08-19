@@ -10,15 +10,15 @@
   "parameters": [],
   "status": "active",
   "commonLinks": {
-    "status": "planned",
+    "status": "implemented",
     "repository": "LagoVista/UserAdmin",
     "path": "src/LagoVista.UserAdmin/CommonLinks.cs",
     "member": "AuthContinueTotpUnable",
     "value": "/auth/continue/totp/unable"
   },
   "platforms": {
-    "web": { "status": "planned", "repository": "softwarelogistics/nuviot-ui-shared", "route": "/auth/continue/totp/unable" },
-    "mobile": { "status": "planned", "repository": "nuviot/vtm-client", "route": "/auth/continue/totp/unable" }
+    "web": { "status": "implemented", "repository": "softwarelogistics/nuviot-ui-shared", "route": "/auth/continue/totp/unable" },
+    "mobile": { "status": "implemented", "repository": "nuviot/vtm-client", "route": "/auth/continue/totp/unable" }
   },
   "source": {
     "commonLinksMember": "AuthContinueTotpUnable"
