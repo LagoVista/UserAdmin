@@ -52,8 +52,11 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                 return Reject(Errors.InvalidScope, "One or more requested scopes are not permitted for this OAuth client.");
 
             var resources = request.GetResources();
-            if (resources.Length != 1 || !_policyValidator.IsResourceAllowed(policy, resources[0]))
-                return Reject(Errors.InvalidTarget, "Exactly one registered resource must be requested.");
+            if (resources.Length > 1)
+                return Reject(Errors.InvalidTarget, "At most one registered resource may be requested.");
+
+            if (resources.Length == 1 && !_policyValidator.IsResourceAllowed(policy, resources[0]))
+                return Reject(Errors.InvalidTarget, "The requested resource is not registered for this OAuth client.");
 
             if (_policyValidator.IsPkceRequired(policy))
             {
@@ -79,8 +82,11 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             if (String.IsNullOrWhiteSpace(subject))
                 return Reject(Errors.AccessDenied, "The authenticated user does not have a stable subject identifier.");
 
+            var email = authentication.Principal.FindFirstValue(ClaimTypes.Email)
+                ?? authentication.Principal.FindFirstValue(Claims.Email);
+
             var displayName = authentication.Principal.Identity.Name
-                ?? authentication.Principal.FindFirstValue(ClaimTypes.Email)
+                ?? email
                 ?? subject;
 
             var identity = new ClaimsIdentity(
@@ -89,12 +95,26 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                 Claims.Role);
 
             identity.AddClaim(new Claim(Claims.Subject, subject));
-            identity.AddClaim(new Claim(Claims.Name, displayName).SetDestinations(Destinations.AccessToken));
+
+            var nameClaim = new Claim(Claims.Name, displayName);
+            if (scopes.Contains(Scopes.Profile, StringComparer.Ordinal))
+                nameClaim.SetDestinations(Destinations.AccessToken, Destinations.IdentityToken);
+            else
+                nameClaim.SetDestinations(Destinations.AccessToken);
+            identity.AddClaim(nameClaim);
+
+            if (!String.IsNullOrWhiteSpace(email) && scopes.Contains(Scopes.Email, StringComparer.Ordinal))
+            {
+                identity.AddClaim(new Claim(Claims.Email, email)
+                    .SetDestinations(Destinations.AccessToken, Destinations.IdentityToken));
+            }
+
             identity.AddClaim(new Claim(Claims.ClientId, policy.ClientId).SetDestinations(Destinations.AccessToken));
 
             var principal = new ClaimsPrincipal(identity);
             principal.SetScopes(scopes);
-            principal.SetResources(resources);
+            if (resources.Length == 1)
+                principal.SetResources(resources);
 
             if (policy.AccessTokenLifetimeMinutes.HasValue && policy.AccessTokenLifetimeMinutes.Value > 0)
                 principal.SetAccessTokenLifetime(TimeSpan.FromMinutes(policy.AccessTokenLifetimeMinutes.Value));
