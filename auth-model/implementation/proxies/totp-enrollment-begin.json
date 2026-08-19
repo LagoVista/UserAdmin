@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/auth-proxy-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.proxy.totp-enrollment.begin",
+  "name": "TOTP Enrollment Begin Generated Proxy",
+  "summary": "Binds the canonical TOTP enrollment-begin endpoint to the stable generated AuthClient operation consumed by web and mobile clients.",
+  "version": 1,
+  "maturity": "implemented",
+  "endpointBindingKey": "auth.endpoint.totp-enrollment.begin",
+  "operationContractId": "nuvos.endpoint.auth.mfa-begin-totp-enrollment-api-auth-mfatotp-enrollment-begin",
+  "operationId": "Mfa_BeginTotpEnrollment_api_auth_mfatotp_enrollment_begin",
+  "repository": "nuviot/nuvos-app-contracts",
+  "sourcePath": "generated/auth/client.ts",
+  "serviceType": "AuthClient",
+  "methodName": "createMfatotpEnrollmentBegin",
+  "requestContract": "none",
+  "resultContract": "InvokeResultEx<Models.AppUserTotpEnrollmentInfo>",
+  "generator": "Aptix EndpointProjectGenerator",
+  "consumingPlatforms": ["web", "mobile"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/operations.json", "note": "Generated operation manifest records the stable enrollment-begin contract." },
+    { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/client.ts", "note": "Shared generated AuthClient implementation consumed by Angular and React Native." }
+  ]
+}
