@@ -1,0 +1,16 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.mfa.totp.manage",
+  "name": "Manage TOTP",
+  "description": "Navigates to TOTP maintenance for the current authenticated identity.",
+  "path": "/auth/mfa/totp/manage",
+  "routeType": "view",
+  "viewId": "auth.mfa.totp.manage",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "planned" },
+    "mobile": { "status": "planned" }
+  }
+}
