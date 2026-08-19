@@ -200,6 +200,17 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 return result;
             }
 
+            if (signInResult.RequiresTwoFactor)
+            {
+                signIn.Dispose();
+                return InvokeResult<AuthenticationResponse>.Create(new AuthenticationResponse
+                {
+                    AuthenticationState = AuthenticationResponseState.MfaRequired,
+                    Provider = "totp",
+                    InviteId = loginRequest.InviteId ?? String.Empty
+                });
+            }
+
             if (signInResult.IsLockedOut)
             {
                 await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasswordAuthenticationFailed, appUser, errors: "User is locked out.");
