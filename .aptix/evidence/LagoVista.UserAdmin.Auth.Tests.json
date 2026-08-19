@@ -3,17 +3,17 @@
   "ProjectName": "LagoVista.UserAdmin.Auth.Tests",
   "ProjectPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj",
   "AssemblyPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
-  "RunId": "37035087-b3eb-430e-85c1-a6337f2b5f8d",
-  "StartedUtc": "2026-08-14T17:46:13.7362803Z",
-  "CompletedUtc": "2026-08-14T17:46:29.0323651Z",
+  "RunId": "79c77523-7c70-469b-a137-42490845a9e6",
+  "StartedUtc": "2026-08-19T18:59:25.5672955Z",
+  "CompletedUtc": "2026-08-19T18:59:35.7186096Z",
   "ExitCode": 0,
   "Outcome": "Passed",
   "Summary": {
-    "Total": 83,
-    "Passed": 83,
+    "Total": 98,
+    "Passed": 98,
     "Failed": 0,
     "Skipped": 0,
-    "DurationMilliseconds": 15296
+    "DurationMilliseconds": 10151
   },
   "Tests": [
     {
@@ -102,6 +102,23 @@
     {
       "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailVerificationFlowIntegrationTests",
       "TestMethod": "ValidCode_Should_ConfirmEmail_ConsumeCode_SignIn_And_ReturnRedirect",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.email-verification.verify-code",
+            "auth.flow.email-verification.verify-code",
+            "auth.transition.email-verification.code-accepted"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "ConfirmEmailSuccess"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailVerificationFlowIntegrationTests",
+      "TestMethod": "ValidCode_WithNonProductLineCurrentOrganization_Should_CompleteWithoutRedirect",
       "Evidence": [
         {
           "Profile": "auth",
@@ -468,28 +485,57 @@
       "ObservedAuthEvents": [
         "PasswordRecoveryCodeVerified"
       ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.TotpManagementFlowIntegrationTests",
+      "TestMethod": "RotateRecoveryCodes_Should_RunRealFlowHandlerAndMfaManager_AndKeepTotpEnabled",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.totp-management.maintenance",
+            "auth.flow.totp-management.rotate-recovery-codes",
+            "auth.transition.totp-management.rotate-recovery-codes-success"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "TotpRotateRecoveryCodesStart,TotpRotateRecoveryCodesSuccess"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.TotpManagementFlowIntegrationTests",
+      "TestMethod": "TurnOff_Should_RunRealFlowHandlerAndMfaManager_AndRemoveTotpMaterial",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.totp-management.maintenance",
+            "auth.flow.totp-management.turn-off",
+            "auth.transition.totp-management.disable-success"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "TotpDisableMfaStart,TotpDisableMfaSuccess"
+      ]
     }
   ],
   "Issues": [],
   "StandardOutput": [
     "  Determining projects to restore...",
-    "  Restored D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj (in 317 ms).",
-    "  Restored D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\LagoVista.UserAdmin.csproj (in 307 ms).",
-    "  Restored D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin.Models\\LagoVista.UserAdmin.Models.csproj (in 307 ms).",
-    "  Restored D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.AspNetCore.Identity\\LagoVista.AspNetCore.Identity.csproj (in 307 ms).",
-    "D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin.Models\\Testing\\AppUserTestScenario.cs(146,23): warning CS0108: \u0027AppUserTestScenarioSummary.CategoryKey\u0027 hides inherited member \u0027SummaryData.CategoryKey\u0027. Use the new keyword if hiding was intended. [D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin.Models\\LagoVista.UserAdmin.Models.csproj]",
+    "  All projects are up-to-date for restore.",
     "  LagoVista.UserAdmin.Models -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin.Models\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.Models.dll",
-    "CSC : warning CS8002: Referenced assembly \u0027RingCentral.Net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0027 does not have a strong name. [D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\LagoVista.UserAdmin.csproj]",
     "  LagoVista.UserAdmin -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.dll",
     "  LagoVista.AspNetCore.Identity -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.AspNetCore.Identity\\bin\\Debug\\net9.0\\LagoVista.AspNetCore.Identity.dll",
     "  LagoVista.UserAdmin.Auth.Tests -\u003E D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
     "Test run for D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll (.NETCoreApp,Version=v9.0)",
     "A total of 1 test files matched the specified pattern.",
     "",
-    "Passed!  - Failed:     0, Passed:    83, Skipped:     0, Total:    83, Duration: 628 ms - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
+    "Passed!  - Failed:     0, Passed:    98, Skipped:     0, Total:    98, Duration: 895 ms - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
     "",
     "Attachments:",
-    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\c9645c27-5082-4984-9c82-609f77aa293d\\coverage.cobertura.xml"
+    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\fc6594d4-a3d7-4c05-b1b3-29316c4a0f44\\coverage.cobertura.xml"
   ],
   "StandardError": []
 }
