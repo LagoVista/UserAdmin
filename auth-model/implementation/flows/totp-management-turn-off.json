@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/auth-flow.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.flow.totp-management.turn-off",
+  "name": "TOTP Turn Off",
+  "summary": "Executes authenticated TOTP removal through the stable authentication flow boundary and emits the canonical disable-success transition.",
+  "version": 1,
+  "maturity": "implemented",
+  "requestContract": "TotpManagementFlowRequest",
+  "resultContract": "AuthenticationFlowResult",
+  "handlerKeys": ["auth.handler.totp-management.turn-off"],
+  "transitionKeys": ["auth.transition.totp-management.disable-success"],
+  "entryActionKeys": ["auth.action.totp-management.disable"],
+  "supportedAudiences": ["platform-user", "tenant-user", "customer-end-user"],
+  "notes": [
+    "The existing POST /api/auth/mfadisable public contract is preserved while the server path is normalized through IAuthenticationFlowService.",
+    "The typed handler enforces that TOTP is actually enrolled and enabled before delegating to the real MFA manager."
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/AuthenticationFlowService.cs", "note": "TurnOffTotpAsync is the application front door." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/TotpTurnOffFlowHandler.cs", "note": "Typed handler enforces the canonical precondition and delegates to AppUserMfaManager." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "POST /api/auth/mfadisable delegates to IAuthenticationFlowService." }
+  ]
+}
