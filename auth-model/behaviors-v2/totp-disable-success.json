@@ -27,15 +27,20 @@
       "note": "Reset is not exposed as a separate user-facing behavior while its server semantics are identical to Disable."
     },
     {
-      "sourceType": "decision",
-      "reference": "ChatGPT conversation 2026-08-19",
-      "note": "Authored test design has started. Server proof must exercise the real MFA manager through a normalized authentication flow/handler path and prove secret removal, TwoFactorEnabled false, replay/last-MFA reset, canonical transition evidence, and TotpDisableMfaStart/TotpDisableMfaSuccess events. Runtime setup must be able to establish real TOTP secret and recovery-code material before this behavior can be independently executed."
+      "sourceType": "test",
+      "reference": "auth.test-binding.totp-management.maintenance",
+      "note": "Authored proof binds the real AuthenticationFlowService, typed turn-off handler and AppUserMfaManager, while the UI navigation scenario supplies the supported-client proof obligation. Runtime execution remains separate."
+    },
+    {
+      "sourceType": "code",
+      "reference": "src/LagoVista.UserAdmin/Managers/AppUserTestingManager.TotpSetup.cs",
+      "note": "Deterministic runner setup materializes authentic TOTP and recovery-code state through real enrollment operations."
     }
   ],
   "progress": {
     "scenarios": "complete",
     "presentation": "complete",
     "implementation": "in-progress",
-    "tests": "in-progress"
+    "tests": "complete"
   }
 }
