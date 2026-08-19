@@ -1,0 +1,40 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.totp-management.rotate-recovery-codes-success",
+  "runtimeEntityId": "2A45ED97035341D49B26BA3EFDCD1FF5",
+  "name": "Rotate Recovery Codes",
+  "summary": "The user confirms recovery-code rotation; the server replaces the old recovery-code set and returns fresh codes for display.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-management",
+  "startViewKey": "auth.mfa.totp.rotate-recovery-codes",
+  "action": { "id": "rotate", "finder": "action:rotate" },
+  "preconditions": {
+    "expression": "user is authenticated, TOTP is enabled, and recovery-code rotation has been explicitly confirmed",
+    "state": { "isUserLoggedIn": "set", "hasTOTP": "set", "twoFactorEnabled": "set" }
+  },
+  "inputs": [],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Invalidate the current recovery-code set exactly once, issue a fresh set, and return the plaintext codes for immediate presentation.",
+    "transitionKeys": ["auth.transition.totp-management.rotate-recovery-codes-success"]
+  },
+  "expectedViewKey": "auth.mfa.totp.recovery-codes",
+  "expectedVisibleFinders": ["display:recovery-codes", "action:done"],
+  "postconditions": {
+    "expression": "TOTP remains enabled and only the newly issued recovery codes are valid",
+    "state": { "isUserLoggedIn": "set", "hasTOTP": "set", "twoFactorEnabled": "set" }
+  },
+  "expectedAuthLogEvents": ["TotpRotateRecoveryCodesStart", "TotpRotateRecoveryCodesSuccess"],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
+      "note": "RotateRecoveryCodesAsync is the single server operation and returns the newly generated recovery-code list."
+    },
+    { "sourceType": "auth-view", "reference": "auth.mfa.totp.recovery-codes" }
+  ],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}
