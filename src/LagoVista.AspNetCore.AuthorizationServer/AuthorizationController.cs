@@ -71,10 +71,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             if (authentication?.Principal?.Identity?.IsAuthenticated != true)
             {
                 var returnUrl = Request.GetEncodedPathAndQuery();
-                return RedirectToAction(
-                    nameof(OidcController.Login),
-                    "Oidc",
-                    new { returnUrl });
+                return Redirect($"/oidc/login?returnUrl={Uri.EscapeDataString(returnUrl)}");
             }
 
             var subject = authentication.Principal.FindFirstValue(ClaimTypes.NameIdentifier)
