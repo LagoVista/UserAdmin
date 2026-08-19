@@ -3,7 +3,7 @@
   "schemaVersion": "1.0",
   "viewId": "auth.welcome",
   "name": "Welcome",
-  "description": "Presents the supported authentication entry methods before the user selects an email, provider, or passkey continuation path.",
+  "description": "Presents the supported launch authentication entry methods before the user selects an email or provider continuation path.",
   "category": "entry",
   "routeId": "auth.route.welcome",
   "status": "active",
@@ -20,12 +20,6 @@
       "name": "Continue with Provider",
       "actionType": "button",
       "finder": "action:continue-provider"
-    },
-    {
-      "id": "continue-passkey",
-      "name": "Continue with Passkey",
-      "actionType": "button",
-      "finder": "action:continue-passkey"
     }
   ],
   "platforms": {
@@ -37,9 +31,9 @@
       "implementation": "AuthWelcomeComponent with auth-welcome.component.html",
       "conformance": {
         "status": "verified",
-        "checkedUtc": "2026-08-11T18:38:00Z",
+        "checkedUtc": "2026-08-19T23:42:00Z",
         "checkedAgainst": ["view-identity", "actions", "finders", "navigation"],
-        "notes": "Verified the canonical auth.welcome screen identity and continue-email, continue-provider, and continue-passkey actions/finders against the Angular template and navigation handlers."
+        "notes": "Launch Welcome exposes Continue with Email and Continue with Provider. Direct Passkey-first entry is intentionally deferred."
       }
     },
     "mobile": {
@@ -50,9 +44,9 @@
       "implementation": "app/auth/welcome.tsx -> AuthWelcomeScreen",
       "conformance": {
         "status": "verified",
-        "checkedUtc": "2026-08-11T18:38:00Z",
+        "checkedUtc": "2026-08-19T23:42:00Z",
         "checkedAgainst": ["view-identity", "actions", "finders", "navigation"],
-        "notes": "Verified the canonical auth.welcome screen identity and all three canonical actions/finders against AuthWelcomeScreen."
+        "notes": "Launch Welcome exposes Continue with Email and Continue with Provider. Direct Passkey-first entry is intentionally deferred."
       }
     }
   },
@@ -61,5 +55,8 @@
     "runtimeSha256Hex": "c6ba864a48df1eb7816f72fdefffdab1dec39d3fbd44355debfd2d2e6220fc49",
     "webComponent": "AuthWelcomeComponent",
     "mobileComponent": "app/auth/welcome.tsx"
-  }
+  },
+  "notes": [
+    "Direct Passkey-first sign-in is intentionally deferred from launch scope; Passkey Sign In begins after email collection."
+  ]
 }
