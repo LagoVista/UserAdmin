@@ -66,6 +66,32 @@ namespace LagoVista.UserAdmin.Auth.Tests
         }
 
         [Test]
+        public async Task PasswordLoginFlowHandler_Should_Emit_MfaRequired_Transition()
+        {
+            var request = new AuthLoginRequest { Email = "user@example.com", Password = "correct-password" };
+            var managerResult = InvokeResult<AuthenticationResponse>.Create(new AuthenticationResponse
+            {
+                AuthenticationState = AuthenticationResponseState.MfaRequired,
+                Provider = "totp"
+            });
+            var signInManager = new Mock<ISignInManager>(MockBehavior.Strict);
+            signInManager.Setup(manager => manager.PasswordSignInAsync(request)).ReturnsAsync(managerResult);
+
+            var handlerResult = await new PasswordLoginFlowHandler(signInManager.Object).HandleAsync(request);
+
+            Assert.That(handlerResult.TransitionKey, Is.EqualTo(PasswordLoginFlowHandler.MfaRequiredTransitionKey));
+            Assert.That(handlerResult.PublicResult, Is.SameAs(managerResult));
+
+            var recoveryHandler = new Mock<IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest>>(MockBehavior.Strict);
+            var flowService = new AuthenticationFlowService(new PasswordLoginFlowHandler(signInManager.Object), recoveryHandler.Object);
+            var publicResult = await flowService.LoginWithPasswordAsync(request);
+
+            Assert.That(publicResult.Successful, Is.True);
+            Assert.That(publicResult.Result.AuthenticationState, Is.EqualTo(AuthenticationResponseState.MfaRequired));
+            Assert.That(publicResult.Result.Provider, Is.EqualTo("totp"));
+        }
+
+        [Test]
         public async Task PasswordLoginFlowHandler_Should_Emit_Rejected_Transition()
         {
             var request = new AuthLoginRequest { Email = "user@example.com", Password = "wrong-password" };
