@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OpenIddict.Abstractions;
 using System;
 using System.Linq;
+using static OpenIddict.Server.OpenIddictServerEvents;
 
 namespace LagoVista.AspNetCore.AuthorizationServer
 {
@@ -54,6 +55,16 @@ namespace LagoVista.AspNetCore.AuthorizationServer
 
                     if (settings.DisableAccessTokenEncryption)
                         options.DisableAccessTokenEncryption();
+
+                    // Degraded mode disables the OpenIddict application manager. These handlers
+                    // bridge authorization/token request validation to UserAdmin's OAuth client store.
+                    options.AddEventHandler<ValidateAuthorizationRequestContext>(builder =>
+                        builder.UseScopedHandler<OAuthAuthorizationRequestValidationHandler>()
+                               .SetOrder(Int32.MaxValue - 100_000));
+
+                    options.AddEventHandler<ValidateTokenRequestContext>(builder =>
+                        builder.UseScopedHandler<OAuthTokenRequestValidationHandler>()
+                               .SetOrder(Int32.MaxValue - 100_000));
 
                     options.UseAspNetCore()
                            .EnableStatusCodePagesIntegration()
