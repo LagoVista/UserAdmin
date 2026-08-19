@@ -13,9 +13,11 @@
   "finalOutcome": "TOTP Start",
   "supportedPlatforms": ["web", "android", "ios"],
   "sourceReferences": [
-    { "sourceType": "auth-view", "reference": "auth.select.mfa-type", "note": "The behavior starts on the new Select MFA Type surface." },
+    { "sourceType": "auth-view", "reference": "auth.select.mfa-type", "note": "The behavior starts on the canonical Select MFA Type surface." },
     { "sourceType": "auth-view", "reference": "auth.continue.totp", "note": "The behavior ends at the existing TOTP Start surface." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared/user/select-mfa-type/select-mfa-type.component.ts", "note": "Angular implementation routes action:select-totp to the existing TOTP continuation route." },
+    { "sourceType": "code", "reference": "nuviot/vtm-client/src/features/authentication/nuviot-account/screens/select-mfa-type-screen.tsx", "note": "React Native implementation routes action:select-totp to /auth/continue/totp." },
     { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Select MFA Type contains one TOTP behavior composed of exactly one UI-only scenario." }
   ],
-  "progress": { "scenarios": "complete", "presentation": "complete", "implementation": "not-started", "tests": "complete" }
+  "progress": { "scenarios": "complete", "presentation": "complete", "implementation": "complete", "tests": "complete" }
 }
