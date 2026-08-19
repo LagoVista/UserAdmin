@@ -13,6 +13,7 @@
   "methodName": "DisableMfaAsync",
   "httpMethods": ["POST"],
   "routeTemplates": ["/api/auth/mfadisable"],
+  "requestContract": "none",
   "responseContract": "InvokeResult",
   "handlerKey": "auth.handler.totp-management.turn-off",
   "transitionKeys": ["auth.transition.totp-management.disable-success"],
