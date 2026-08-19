@@ -28,7 +28,8 @@
   "evidenceRequirements": ["web", "android", "ios"],
   "sourceReferences": [
     { "sourceType": "auth-view", "reference": "auth.mfa.totp.manage" },
-    { "sourceType": "auth-view", "reference": "auth.mfa.totp.rotate-recovery-codes" }
+    { "sourceType": "auth-view", "reference": "auth.mfa.totp.rotate-recovery-codes" },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "The direct UI runner proof is fully specified by deterministic HasTOTP setup, action:rotate-recovery-codes, the confirmation destination, and required visible finders on each supported client platform." }
   ],
-  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "complete" }
 }
