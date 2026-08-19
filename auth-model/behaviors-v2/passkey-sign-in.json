@@ -28,13 +28,18 @@
     {
       "sourceType": "code",
       "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs",
-      "note": "Existing passwordless passkey implementation satisfies the canonical challenge, assertion, durable-user resolution, signature-counter and redirect responsibilities."
+      "note": "Existing passwordless passkey implementation owns challenge validation, durable-user resolution, WebAuthn assertion verification and signature-counter advancement; implementation reconciliation is completing session establishment and native mobile execution around that proof primitive."
+    },
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-19",
+      "note": "The previous implementation-complete status was reopened after source review found that React Native was presentation-only and passwordless passkey completion did not itself establish the canonical authenticated session."
     }
   ],
   "progress": {
     "scenarios": "complete",
     "presentation": "complete",
-    "implementation": "complete",
+    "implementation": "in-progress",
     "tests": "not-started"
   }
 }
