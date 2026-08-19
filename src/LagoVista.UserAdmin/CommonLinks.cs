@@ -15,6 +15,7 @@ namespace LagoVista.UserAdmin
         public const string AuthContinuePasskey = "/auth/continue/passkey";
         public const string AuthContinueProvider = "/auth/continue/provider";
         public const string AuthContinueTotp = "/auth/continue/totp";
+        public const string AuthContinueTotpUnable = "/auth/continue/totp/unable";
         public const string AuthSignInUnable = "/auth/sign-in/unable";
         public const string AuthSignInLockedOut = "/auth/sign-in/locked-out";
 
