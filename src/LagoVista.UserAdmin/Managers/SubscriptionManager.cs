@@ -143,7 +143,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<Subscription> GetTrialSubscriptionAsync(EntityHeader org, EntityHeader user)
         {
-            var subscription = await _subscriptionRepo.GetTrialSubscriptionAsync(org, user);
+            var subscription = await _subscriptionRepo.GetTrialSubscriptionAsync(org.Id, org, user);
             if (subscription != null)
             {
                 await AuthorizeAsync(user, org, "getTrialSubscription", subscription);
@@ -175,7 +175,7 @@ namespace LagoVista.UserAdmin.Managers
             var subscription = await GetSubscriptionAsync(subscriptionId, org, user);
             await AuthorizeAsync(user, org, "getResourcesForSubscription", subscription);
 
-            return await _subscriptionResourceRepo.GetResourcesForSubscriptionAsync(subscriptionId, listRequest, org.Id);
+            return await _subscriptionResourceRepo.GetSubscriptionAsync(subscriptionId, listRequest, org.Id);
         }
 
         public async Task<ListResponse<SubscriptionSummary>> GetSubscriptionsForOrgAsync(ListRequest listRequest, EntityHeader org, EntityHeader user)
