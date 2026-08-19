@@ -1,3 +1,4 @@
+using LagoVista.AspNetCore.AuthorizationServer.Persistence;
 using Microsoft.Extensions.DependencyInjection;
 using OpenIddict.Abstractions;
 using System;
@@ -23,10 +24,10 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                 .AddApplicationPart(typeof(AuthorizationController).Assembly);
 
             services.AddOpenIddict()
+                .AddLagoVistaPersistence()
                 .AddServer(options =>
                 {
-                    options.EnableDegradedMode();
-                    options.AcceptAnonymousClients();
+                    options.DisableAuthorizationStorage();
 
                     options.SetAuthorizationEndpointUris(AuthorizationServerConstants.AuthorizationEndpoint)
                            .SetTokenEndpointUris(AuthorizationServerConstants.TokenEndpoint)
@@ -48,7 +49,6 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                             OpenIddictConstants.ClientAuthenticationMethods.None);
                     });
 
-    
                     if (settings.Issuer != null)
                         options.SetIssuer(settings.Issuer);
 
@@ -61,8 +61,9 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                     if (settings.DisableAccessTokenEncryption)
                         options.DisableAccessTokenEncryption();
 
-                    // Degraded mode disables the OpenIddict application manager. These handlers
-                    // bridge authorization/token request validation to UserAdmin's OAuth client store.
+                    // UserAdmin remains the source of truth for client-specific policy. OpenIddict
+                    // now performs its normal application/token processing, while these handlers
+                    // retain the additional UserAdmin grant/scope/resource/redirect validations.
                     options.AddEventHandler<ValidateAuthorizationRequestContext>(builder =>
                         builder.UseScopedHandler<OAuthAuthorizationRequestValidationHandler>()
                                .SetOrder(Int32.MaxValue - 100_000));
