@@ -122,8 +122,11 @@
     {
       "key": "totp-management",
       "name": "TOTP Management",
-      "behaviorKeys": ["auth.behavior.totp.management-success"],
-      "progress": {"behaviors":"complete","scenarios":"not-started","presentation":"not-started","implementation":"not-started","tests":"not-started"}
+      "behaviorKeys": [
+        "auth.behavior.totp.disable-success",
+        "auth.behavior.totp.recovery-codes-rotation-success"
+      ],
+      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"in-progress","tests":"not-started"}
     },
     {
       "key": "totp-sign-in",
@@ -154,6 +157,7 @@
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-13","note":"Email Verification is represented by five lightweight start-to-end behaviors with behavior-owned atomic scenarios: direct success, rejection, retry success, resend success, and resend throttled. Presentation uses Send, Enter with deterministic View State, and Confirmed surfaces."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-14","note":"Email Verification implementation is complete after the canonical send flow was normalized to distinguish initial code-sent, accepted code-resent, and resend-throttled outcomes from durable proof state and cooldown timing."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-14","note":"Email Verification authored test obligations are complete. Seven send/resend scenarios are bound to EmailVerificationSendFlowTests and six accepted/rejected verification scenarios are bound to EmailVerificationFlowIntegrationTests; runtime execution evidence remains separate."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Enrollment and TOTP Sign In success behaviors were decomposed into canonical V2 scenarios and presentation was reconciled. Both categories entered implementation reconciliation with concrete client and server gaps recorded; implementation remains in-progress until those gaps are closed."}
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Enrollment and TOTP Sign In success behaviors were decomposed into canonical V2 scenarios and presentation was reconciled. Both categories entered implementation reconciliation with concrete client and server gaps recorded; implementation remains in-progress until those gaps are closed."},
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Management was decomposed into separate recovery-code rotation and disable behaviors. ResetMfaAsync remains an implementation alias of DisableMfaAsync rather than a separate user-facing behavior; recovery-code consumption remains outside maintenance because it is an authentication/recovery ceremony."}
   ]
 }
