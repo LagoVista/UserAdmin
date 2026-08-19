@@ -1,5 +1,5 @@
 param(
-    [string]$Authority = "https://localhost:5001",
+    [string]$Authority = "https://dev.nuviot.com",
     [string]$ClientId = "lagovista-oauth-test",
     [string]$Resource = "https://localhost:5001/test-resource",
 
@@ -84,7 +84,7 @@ $query = ConvertTo-QueryString @{
     state = $state
 }
 
-$authorizationUrl = $"{$authorizeUri}?$query"
+$authorizationUrl = "$($authorizeUri)?$query"
 $listener = [Net.HttpListener]::new()
 $listener.Prefixes.Add($RedirectUri)
 

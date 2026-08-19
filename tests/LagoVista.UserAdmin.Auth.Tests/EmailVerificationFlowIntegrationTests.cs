@@ -77,7 +77,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 Id = "4A4A2B1C4D6E48769A35C8B53462F0A1",
                 Text = "Provisional Workspace",
                 Namespace = OrgNamespace.Parse("provisionalworkspace"),
-                IsForProductLine = false
+                IsForProductLine = false,
             };
 
             var request = new ConfirmEmail { ReceivedCode = ValidCode };
@@ -276,7 +276,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 UserName = "user@example.com",
                 Email = "user@example.com",
                 SecurityStamp = SecurityStamp,
-                EmailConfirmed = false
+                EmailConfirmed = false,
+                ShowWelcome = false
             };
         }
 

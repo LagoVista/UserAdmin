@@ -53,6 +53,23 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 .SetupGet(services => services.Logger)
                 .Returns(Mock.Of<ILogger>());
 
+            coreAppServices
+                .SetupGet(services => services.AppConfig)
+                .Returns(Mock.Of<IAppConfig>());
+
+            coreAppServices
+                .SetupGet(services => services.DependencyManager)
+                .Returns(Mock.Of<IDependencyManager>());
+
+            coreAppServices
+                .SetupGet(services => services.Security)
+                .Returns(Mock.Of<ISecurity>());
+
+            coreAppServices
+                .SetupGet(services => services.Clock)
+                .Returns(Mock.Of<IClock>());
+
+
             var manager = new OrgManager(
                 organizationRepo.Object,
                 Mock.Of<IOrgLocationRepo>(),
@@ -86,7 +103,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
 
             Assert.That(result.Successful, Is.True);
             Assert.That(result.Result.Id.ToString(), Is.EqualTo(organizationId));
-            Assert.That(result.Result.Namespace, Is.EqualTo($"provisional{organizationId.ToLowerInvariant()}"));
+            Assert.That(result.Result.Namespace.Value, Is.EqualTo($"provisional{organizationId.ToLowerInvariant()}"));
             Assert.That(result.Result.DefaultVectorCollectionName, Is.EqualTo($"{result.Result.Namespace}-indexes"));
             Assert.That(appUser.CurrentOrganization.Id.ToString(), Is.EqualTo(organizationId));
             Assert.That(appUser.Organizations, Has.Count.EqualTo(1));

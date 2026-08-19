@@ -28,7 +28,10 @@ namespace LagoVista.UserAdmin.Auth.Tests
             harness.EnvironmentRepo.Setup(repo => repo.CreateAsync(It.IsAny<ProvisionalEnvironment>())).Returns(Task.CompletedTask);
             harness.EnvironmentRepo.Setup(repo => repo.UpdateAsync(It.IsAny<ProvisionalEnvironment>())).Returns(Task.CompletedTask);
             harness.UserManager.Setup(manager => manager.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((AppUser)null);
-            harness.UserManager.Setup(manager => manager.CreateAsync(It.IsAny<AppUser>())).ReturnsAsync(InvokeResult.Success);
+            
+            
+            harness.AppUserRepo.Setup(repo => repo.CreateAsync(It.IsAny<AppUser>())).Returns(Task.CompletedTask);
+
             harness.AppUserRepo.Setup(repo => repo.EnsureRelationalUserAsync(It.IsAny<AppUser>())).Returns(Task.CompletedTask);
             harness.OrganizationManager.Setup(manager => manager.CreateProvisionalOrganizationAsync(It.IsAny<AppUser>(), It.IsAny<string>())).ReturnsAsync(InvokeResult<Organization>.Create(organization));
             harness.SubscriptionLevelManager.Setup(manager => manager.EnsureSystemSubscriptionLevelAsync(It.Is<SubscriptionLevel>(level =>
