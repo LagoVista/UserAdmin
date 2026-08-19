@@ -409,7 +409,7 @@ namespace LagoVista.UserAdmin.Repos.Users
                 throw new InvalidOperationException($"Attempt to find user with null or empty external login id for provider: {loginType}.");
             }
 
-            var user = (await QueryAsync(usr => usr.ExternalLogins != null && usr.ExternalLogins.Where(ext => ext.Provider.Value == loginType && eja.Id == id || ext.UserName == id).Any())).FirstOrDefault();
+            var user = (await QueryAsync(usr => usr.ExternalLogins != null && usr.ExternalLogins.Where(ext => ext.Provider.Value == loginType && ext.Id == id || ext.UserName == id).Any())).FirstOrDefault();
             if (user == null)
             {
                 return null;
