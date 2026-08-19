@@ -1,0 +1,42 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.totp-enrollment.begin",
+  "name": "Begin TOTP Enrollment",
+  "summary": "Stages authenticator enrollment material for the current authenticated identity so the QR code and secret can be presented on the enrollment view.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-enrollment",
+  "priority": 100,
+  "sourceState": {
+    "expression": "session-capability == authenticated-normal"
+  },
+  "actionKey": "auth.action.totp-enrollment.begin",
+  "guards": [],
+  "destinationTransform": [
+    {
+      "dimensionKey": "auth.dimension.credential-proof",
+      "operation": "derive",
+      "valueExpression": "totp-enrollment-pending"
+    }
+  ],
+  "requiredEffects": [
+    "stage-totp-authenticator-secret",
+    "return-totp-enrollment-material"
+  ],
+  "forbiddenEffects": [
+    "enable-totp-before-proof",
+    "issue-new-session"
+  ],
+  "invariantKeys": [
+    "auth.invariant.transition.one-state-changing-action",
+    "auth.invariant.transition.deterministic-post-state"
+  ],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
+      "note": "BeginTotpEnrollmentAsync is the existing server primitive for this transition."
+    }
+  ]
+}
