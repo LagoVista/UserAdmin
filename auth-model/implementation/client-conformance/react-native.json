@@ -1,1 +1,811 @@
-{"$schema":"../../schemas/client-auth-view-conformance-manifest.schema.json","schemaVersion":"1.0","clientKey":"react-native","platform":"mobile","repository":"nuviot/vtm-client","inspectedCommit":"3276e133a3a1cae7b652afbde4bf8f7bec757f01","generatedUtc":"2026-08-14T21:01:50Z","views":[{"viewId":"auth.oauth.fault","status":"partial","route":"/auth/oauth/fault","component":"AuthOutcomeScreen","viewStates":[],"controlFinders":[],"actionFinders":["action:try-again","action:continue-email"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/oauth/fault.tsx"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions['/auth/oauth/fault']"}],"notes":["The mobile outcome omits canonical status:oauth-error and action:back; it exposes try-again and continue-email instead."]},{"viewId":"auth.welcome","status":"implemented","route":"/auth/welcome","component":"AuthWelcomeScreen","viewStates":[],"controlFinders":[],"actionFinders":["action:continue-email","action:continue-provider","action:continue-passkey"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/welcome.tsx"},{"path":"src/features/authentication/nuviot-account/screens/auth-welcome-screen.tsx","symbol":"AuthWelcomeScreen"}]},{"viewId":"auth.magic-link.sent","status":"partial","route":"/auth/magic-link/sent","component":"AuthOutcomeScreen","viewStates":[],"controlFinders":[],"actionFinders":["action:back"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/magic-link/sent.tsx"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions['/auth/magic-link/sent']"}],"notes":["The client exposes action:back rather than canonical action:back-to-sign-in."]},{"viewId":"auth.invitation.accepted","status":"partial","route":"/auth/invite/accepted","component":"AuthOutcomeScreen","viewStates":[],"controlFinders":[],"actionFinders":["action:continue"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/invite/accepted.tsx"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions['/auth/invite/accepted']"}],"notes":["The mobile route is /auth/invite/accepted, the screen ID is auth.invite.accepted, and canonical action:back-to-sign-in is absent."]},{"viewId":"auth.oauth.access-denied","status":"partial","route":"/auth/oauth/access-denied","component":"AuthOutcomeScreen","viewStates":[],"controlFinders":[],"actionFinders":["action:try-again","action:continue-email"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/oauth/access-denied.tsx"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions['/auth/oauth/access-denied']"}],"notes":["Canonical action:back is absent; the mobile outcome exposes try-again and continue-email instead."]},{"viewId":"auth.welcome.back","status":"partial","route":"/auth/welcome/back","component":"AuthOutcomeScreen","viewStates":[],"controlFinders":[],"actionFinders":["action:continue","action:use-different-email","action:clear-remembered","action:start-over"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/welcome/back.tsx"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions['/auth/welcome/back']"}],"notes":["All canonical action finders are present, but clear-remembered only navigates to /auth/welcome; this screen does not clear remembered login state."]},{"viewId":"auth.continue.email","status":"implemented","route":"/auth/continue/email","component":"ContinueEmailScreen","viewStates":[],"controlFinders":["field:email"],"actionFinders":["action:continue","action:back","action:start-over"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/continue/email.tsx"},{"path":"src/features/authentication/nuviot-account/screens/continue-email-screen.tsx","symbol":"ContinueEmailScreen"}]},{"viewId":"auth.invitation.failed","status":"partial","route":"/auth/invite/failed","component":"AuthOutcomeScreen","viewStates":[],"controlFinders":[],"actionFinders":["action:start-over"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/invite/failed.tsx"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions['/auth/invite/failed']"}],"notes":["The mobile route/screen identity use invite rather than invitation and canonical action:back-to-sign-in is absent."]},{"viewId":"auth.continue.totp","status":"partial","route":"/auth/continue/totp","component":"ContinueTotpScreen","viewStates":[],"controlFinders":["field:totp-code"],"actionFinders":["action:verify-totp","action:use-recovery-code","action:preview-totp-enrollment","action:back","action:start-over"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/continue/totp.tsx"},{"path":"src/features/authentication/nuviot-account/screens/continue-totp-screen.tsx","symbol":"ContinueTotpScreen"}],"notes":["The mobile surface does not expose canonical email/verification-code/validation-error finders or verify/cancel/use-password actions, and verification currently uses mock-authentication-service."]},{"viewId":"auth.sign-in.unable","status":"implemented","route":"/auth/continue/email/unable","component":"AuthOutcomeScreen","viewStates":[],"controlFinders":[],"actionFinders":["action:try-again","action:create-account","action:forgot-password","action:change-email","action:continue-provider","action:continue-passkey"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/continue/email/unable.tsx"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions['/auth/continue/email/unable']"}],"notes":["Observed client route is /auth/continue/email/unable; it differs from the canonical URL shape but the full action surface is implemented."]},{"viewId":"auth.continue.passkey","status":"partial","route":"/auth/continue/passkey","component":"ContinuePasskeyScreen","viewStates":[],"controlFinders":["status:passkey-error"],"actionFinders":["action:use-passkey","action:back","action:start-over"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/continue/passkey.tsx"},{"path":"src/features/authentication/nuviot-account/screens/continue-passkey-screen.tsx","symbol":"ContinuePasskeyScreen"}],"notes":["The finder surface exists, but use-passkey does not invoke a native passkey ceremony or server operation."]},{"viewId":"auth.invitation.review","status":"missing","route":null,"component":null,"viewStates":[],"controlFinders":[],"actionFinders":[],"apiOperations":[],"sourceEvidence":[{"path":"src/platform/auth/testing/auth-test-ids.ts","symbol":"AuthTestIds"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions"}],"notes":["No invitation review route/screen matching the canonical AuthView was found."]},{"viewId":"auth.mfa.totp.enroll","status":"partial","route":"/auth/mfa/totp/enroll","component":"TotpEnrollScreen","viewStates":[],"controlFinders":[],"actionFinders":["action:open-authenticator","action:copy-setup-key","action:next","action:back","action:start-over"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/mfa/totp/enroll.tsx"},{"path":"src/features/authentication/nuviot-account/screens/totp-enroll-screen.tsx","symbol":"TotpEnrollScreen"}],"notes":["No canonical display:qr-code/display:secret/status:enrollment-error finders are exposed. Enrollment data is placeholder/hard-coded and no generated-client operation is called."]},{"viewId":"auth.passkey.management","status":"partial","route":"/auth/passkey/manage","component":"AuthOutcomeScreen","viewStates":[],"controlFinders":[],"actionFinders":["action:add-passkey","action:remove-passkey"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/passkey/manage.tsx"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions['/auth/passkey/manage']"}],"notes":["The mobile route is /auth/passkey/manage and the shared outcome lacks canonical passkey-list, management-status, and action:done. Remove is navigation-only with no server operation."]},{"viewId":"auth.sign-in.locked-out","status":"implemented","route":"/auth/continue/email/locked-out","component":"AuthOutcomeScreen","viewStates":[],"controlFinders":[],"actionFinders":["action:forgot-password","action:try-again","action:change-email","action:continue-provider","action:continue-passkey"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/continue/email/locked-out.tsx"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions['/auth/continue/email/locked-out']"}],"notes":["Observed client route is /auth/continue/email/locked-out; it differs from the canonical URL shape but the full action surface is implemented."]},{"viewId":"auth.email-verification.send","status":"missing","route":null,"component":null,"viewStates":[],"controlFinders":[],"actionFinders":[],"apiOperations":[],"sourceEvidence":[{"path":"src/platform/auth/testing/auth-test-ids.ts","symbol":"AuthTestIds.screen"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions['/auth/email/verify']"}],"notes":["Only the legacy /auth/email/verify outcome exists; no canonical send-verification-code/sign-out surface was found."]},{"viewId":"auth.passkey.enrollment.start","status":"partial","route":"/auth/passkey/enroll","component":"AuthOutcomeScreen","viewStates":[],"controlFinders":[],"actionFinders":["action:enroll-passkey","action:cancel"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/passkey/enroll.tsx"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions['/auth/passkey/enroll']"}],"notes":["Route/screen/action IDs use legacy enroll names; canonical action:start-enrollment is absent and no native/server enrollment ceremony is performed."]},{"viewId":"auth.continue.provider","status":"partial","route":"/auth/continue/provider","component":"ContinueProviderScreen","viewStates":[],"controlFinders":[],"actionFinders":["action:oauth-google","action:oauth-microsoft","action:back","action:start-over"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/continue/provider.tsx"},{"path":"src/features/authentication/nuviot-account/screens/continue-provider-screen.tsx","symbol":"ContinueProviderScreen"}],"notes":["Only Google and Microsoft are shown, using noncanonical action:oauth-* finders. GitHub/LinkedIn/Twitter, continue-email, and cancel are absent, and provider selection does not start OAuth."]},{"viewId":"auth.mfa.totp.confirm","status":"partial","route":"/auth/mfa/totp/confirm","component":"TotpConfirmScreen","viewStates":[],"controlFinders":["field:totp-code"],"actionFinders":["action:confirm-totp-enrollment","action:back","action:start-over"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/mfa/totp/confirm.tsx"},{"path":"src/features/authentication/nuviot-account/screens/totp-confirm-screen.tsx","symbol":"TotpConfirmScreen"}],"notes":["Canonical verification/status finders, action:confirm, and action:cancel are absent; confirmation performs no server verification."]},{"viewId":"auth.password.reset.request","status":"implemented","route":"/auth/password/reset/request","component":"PasswordRecoveryRequestScreen","viewStates":[],"controlFinders":["field:email","status:validation-error"],"actionFinders":["action:send-recovery-code","action:cancel","action:back"],"apiOperations":["createResetpasswordSendlink"],"sourceEvidence":[{"path":"app/auth/password/reset/request.tsx"},{"path":"src/features/authentication/nuviot-account/screens/password-recovery-request-screen.tsx","symbol":"PasswordRecoveryRequestScreen"}]},{"viewId":"auth.passkey.enrollment.confirm","status":"partial","route":"/auth/passkey/enroll/confirm","component":"AuthOutcomeScreen","viewStates":[],"controlFinders":[],"actionFinders":["action:continue"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/passkey/enroll/confirm.tsx"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions['/auth/passkey/enroll/confirm']"}],"notes":["Route/screen identity use legacy enroll naming; canonical enrollment-status, complete-enrollment, and back finders are absent."]},{"viewId":"auth.email-verification.confirmed","status":"partial","route":"/auth/email/confirmed","component":"AuthOutcomeScreen","viewStates":[],"controlFinders":[],"actionFinders":["action:continue"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/email/confirmed.tsx"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions['/auth/email/confirmed']"}],"notes":["The route/screen identity use legacy auth.email.confirmed and canonical action:sign-out is absent."]},{"viewId":"auth.continue.email.password","status":"partial","route":"/auth/continue/email/password","component":"ContinueEmailPasswordScreen","viewStates":[],"controlFinders":["field:password"],"actionFinders":["action:sign-in","action:forgot-password","action:back","action:start-over"],"apiOperations":["auth.signInWithPasswordAsync"],"sourceEvidence":[{"path":"app/auth/continue/email/password.tsx"},{"path":"src/features/authentication/nuviot-account/screens/continue-email-password-screen.tsx","symbol":"ContinueEmailPasswordScreen"}],"notes":["Canonical editable field:email and status:validation-error are absent; the screen also exposes extra action:back."]},{"viewId":"auth.password.reset.complete","status":"implemented","route":"/auth/password/reset/complete","component":"PasswordRecoveryResetScreen","viewStates":[],"controlFinders":["field:new-password","field:confirm-password","status:validation-error"],"actionFinders":["action:reset-password","action:cancel"],"apiOperations":["createResetpassword"],"sourceEvidence":[{"path":"app/auth/password/reset/complete.tsx"},{"path":"src/features/authentication/nuviot-account/screens/password-recovery-reset-screen.tsx","symbol":"PasswordRecoveryResetScreen"}]},{"viewId":"auth.registration.complete-profile","status":"missing","route":null,"component":null,"viewStates":[],"controlFinders":[],"actionFinders":[],"apiOperations":[],"sourceEvidence":[{"path":"src/platform/auth/testing/auth-test-ids.ts","symbol":"AuthTestIds"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions['/auth/register']"}],"notes":["No dedicated complete-profile route/screen or canonical control surface was found."]},{"viewId":"auth.email-verification.enter","status":"missing","route":null,"component":null,"viewStates":[],"controlFinders":[],"actionFinders":[],"apiOperations":[],"sourceEvidence":[{"path":"src/platform/auth/testing/auth-test-ids.ts","symbol":"AuthTestIds"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions['/auth/email/verify']"}],"notes":["No canonical six-digit email-verification entry surface was found."]},{"viewId":"auth.registration.create-account","status":"partial","route":"/auth/register","component":"AuthOutcomeScreen","viewStates":[],"controlFinders":[],"actionFinders":["action:register"],"apiOperations":[],"sourceEvidence":[{"path":"app/auth/register.tsx"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions['/auth/register']"}],"notes":["The mobile route has no canonical registration form controls; it only exposes action:register and routes to legacy email verification."]},{"viewId":"auth.passkey.registration.identity","status":"missing","route":null,"component":null,"viewStates":[],"controlFinders":[],"actionFinders":[],"apiOperations":[],"sourceEvidence":[{"path":"src/platform/auth/testing/auth-test-ids.ts","symbol":"AuthTestIds"},{"path":"src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx","symbol":"authOutcomeDefinitions"}],"notes":["No dedicated canonical passkey-registration identity collection surface was found."]},{"viewId":"auth.password.reset.sent","status":"implemented","route":"/auth/password/reset/sent","component":"PasswordRecoveryCodeScreen","viewStates":[],"controlFinders":["field:recovery-code","status:validation-error"],"actionFinders":["action:verify-recovery-code","action:resend-code","action:back-to-sign-in","action:cancel"],"apiOperations":["createResetpasswordVerifycode","createResetpasswordSendlink"],"sourceEvidence":[{"path":"app/auth/password/reset/sent.tsx"},{"path":"src/features/authentication/nuviot-account/screens/password-recovery-code-screen.tsx","symbol":"PasswordRecoveryCodeScreen"}]}]}
+{
+  "$schema": "../../schemas/client-auth-view-conformance-manifest.schema.json",
+  "schemaVersion": "1.0",
+  "clientKey": "react-native",
+  "platform": "mobile",
+  "repository": "nuviot/vtm-client",
+  "inspectedCommit": "93b4d8d9030c28dea7061703ac52acb04be00aee",
+  "generatedUtc": "2026-08-19T17:04:03Z",
+  "views": [
+    {
+      "viewId": "auth.oauth.fault",
+      "status": "partial",
+      "route": "/auth/oauth/fault",
+      "component": "AuthOutcomeScreen",
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [
+        "action:try-again",
+        "action:continue-email"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/oauth/fault.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions['/auth/oauth/fault']"
+        }
+      ],
+      "notes": [
+        "The mobile outcome omits canonical status:oauth-error and action:back; it exposes try-again and continue-email instead."
+      ]
+    },
+    {
+      "viewId": "auth.welcome",
+      "status": "implemented",
+      "route": "/auth/welcome",
+      "component": "AuthWelcomeScreen",
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [
+        "action:continue-email",
+        "action:continue-provider",
+        "action:continue-passkey"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/welcome.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-welcome-screen.tsx",
+          "symbol": "AuthWelcomeScreen"
+        }
+      ]
+    },
+    {
+      "viewId": "auth.magic-link.sent",
+      "status": "partial",
+      "route": "/auth/magic-link/sent",
+      "component": "AuthOutcomeScreen",
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [
+        "action:back"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/magic-link/sent.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions['/auth/magic-link/sent']"
+        }
+      ],
+      "notes": [
+        "The client exposes action:back rather than canonical action:back-to-sign-in."
+      ]
+    },
+    {
+      "viewId": "auth.invitation.accepted",
+      "status": "partial",
+      "route": "/auth/invite/accepted",
+      "component": "AuthOutcomeScreen",
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [
+        "action:continue"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/invite/accepted.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions['/auth/invite/accepted']"
+        }
+      ],
+      "notes": [
+        "The mobile route is /auth/invite/accepted, the screen ID is auth.invite.accepted, and canonical action:back-to-sign-in is absent."
+      ]
+    },
+    {
+      "viewId": "auth.oauth.access-denied",
+      "status": "partial",
+      "route": "/auth/oauth/access-denied",
+      "component": "AuthOutcomeScreen",
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [
+        "action:try-again",
+        "action:continue-email"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/oauth/access-denied.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions['/auth/oauth/access-denied']"
+        }
+      ],
+      "notes": [
+        "Canonical action:back is absent; the mobile outcome exposes try-again and continue-email instead."
+      ]
+    },
+    {
+      "viewId": "auth.welcome.back",
+      "status": "partial",
+      "route": "/auth/welcome/back",
+      "component": "AuthOutcomeScreen",
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [
+        "action:continue",
+        "action:use-different-email",
+        "action:clear-remembered",
+        "action:start-over"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/welcome/back.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions['/auth/welcome/back']"
+        }
+      ],
+      "notes": [
+        "All canonical action finders are present, but clear-remembered only navigates to /auth/welcome; this screen does not clear remembered login state."
+      ]
+    },
+    {
+      "viewId": "auth.continue.email",
+      "status": "implemented",
+      "route": "/auth/continue/email",
+      "component": "ContinueEmailScreen",
+      "viewStates": [],
+      "controlFinders": [
+        "field:email"
+      ],
+      "actionFinders": [
+        "action:continue",
+        "action:back",
+        "action:start-over"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/continue/email.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/continue-email-screen.tsx",
+          "symbol": "ContinueEmailScreen"
+        }
+      ]
+    },
+    {
+      "viewId": "auth.invitation.failed",
+      "status": "partial",
+      "route": "/auth/invite/failed",
+      "component": "AuthOutcomeScreen",
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [
+        "action:start-over"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/invite/failed.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions['/auth/invite/failed']"
+        }
+      ],
+      "notes": [
+        "The mobile route/screen identity use invite rather than invitation and canonical action:back-to-sign-in is absent."
+      ]
+    },
+    {
+      "viewId": "auth.continue.totp",
+      "status": "partial",
+      "route": "/auth/continue/totp",
+      "component": "ContinueTotpScreen",
+      "viewStates": [],
+      "controlFinders": [
+        "field:totp-code"
+      ],
+      "actionFinders": [
+        "action:verify-totp",
+        "action:use-recovery-code",
+        "action:preview-totp-enrollment",
+        "action:back",
+        "action:start-over"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/continue/totp.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/continue-totp-screen.tsx",
+          "symbol": "ContinueTotpScreen"
+        }
+      ],
+      "notes": [
+        "The mobile surface does not expose canonical email/verification-code/validation-error finders or verify/cancel/use-password actions, and verification currently uses mock-authentication-service."
+      ]
+    },
+    {
+      "viewId": "auth.sign-in.unable",
+      "status": "implemented",
+      "route": "/auth/continue/email/unable",
+      "component": "AuthOutcomeScreen",
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [
+        "action:try-again",
+        "action:create-account",
+        "action:forgot-password",
+        "action:change-email",
+        "action:continue-provider",
+        "action:continue-passkey"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/continue/email/unable.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions['/auth/continue/email/unable']"
+        }
+      ],
+      "notes": [
+        "Observed client route is /auth/continue/email/unable; it differs from the canonical URL shape but the full action surface is implemented."
+      ]
+    },
+    {
+      "viewId": "auth.continue.passkey",
+      "status": "partial",
+      "route": "/auth/continue/passkey",
+      "component": "ContinuePasskeyScreen",
+      "viewStates": [],
+      "controlFinders": [
+        "status:passkey-error"
+      ],
+      "actionFinders": [
+        "action:use-passkey",
+        "action:back",
+        "action:start-over"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/continue/passkey.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/continue-passkey-screen.tsx",
+          "symbol": "ContinuePasskeyScreen"
+        }
+      ],
+      "notes": [
+        "The finder surface exists, but use-passkey does not invoke a native passkey ceremony or server operation."
+      ]
+    },
+    {
+      "viewId": "auth.invitation.review",
+      "status": "missing",
+      "route": null,
+      "component": null,
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "src/platform/auth/testing/auth-test-ids.ts",
+          "symbol": "AuthTestIds"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions"
+        }
+      ],
+      "notes": [
+        "No invitation review route/screen matching the canonical AuthView was found."
+      ]
+    },
+    {
+      "viewId": "auth.mfa.totp.start",
+      "status": "implemented",
+      "route": "/auth/mfa/totp/start",
+      "component": "TotpEnrollStartScreen",
+      "viewStates": [],
+      "controlFinders": [
+        "label:enrollment-description",
+        "status:enrollment-error"
+      ],
+      "actionFinders": [
+        "action:start",
+        "action:cancel"
+      ],
+      "apiOperations": [
+        "createMfatotpEnrollmentBegin"
+      ],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/mfa/totp/start.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/totp-enroll-start-screen.tsx",
+          "symbol": "TotpEnrollStartScreen"
+        }
+      ]
+    },
+    {
+      "viewId": "auth.mfa.totp.enroll",
+      "status": "partial",
+      "route": "/auth/mfa/totp/enroll",
+      "component": "TotpEnrollScreen",
+      "viewStates": [],
+      "controlFinders": [
+        "display:qr-code",
+        "display:secret"
+      ],
+      "actionFinders": [
+        "action:continue",
+        "action:cancel"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/mfa/totp/enroll.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/totp-enroll-screen.tsx",
+          "symbol": "TotpEnrollScreen"
+        }
+      ],
+      "notes": [
+        "Enrollment material now comes from the server-backed start view and the canonical display finders/actions are present, but display:qr-code still renders a placeholder plus the otpauth URI rather than an actual scannable QR code."
+      ]
+    },
+    {
+      "viewId": "auth.mfa.totp.recovery-codes",
+      "status": "implemented",
+      "route": "/auth/mfa/totp/recovery-codes",
+      "component": "RecoveryCodesScreen",
+      "viewStates": [],
+      "controlFinders": [
+        "display:recovery-codes"
+      ],
+      "actionFinders": [
+        "action:done"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/mfa/totp/recovery-codes.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/recovery-codes-screen.tsx",
+          "symbol": "RecoveryCodesScreen"
+        }
+      ]
+    },
+    {
+      "viewId": "auth.passkey.management",
+      "status": "partial",
+      "route": "/auth/passkey/manage",
+      "component": "AuthOutcomeScreen",
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [
+        "action:add-passkey",
+        "action:remove-passkey"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/passkey/manage.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions['/auth/passkey/manage']"
+        }
+      ],
+      "notes": [
+        "The mobile route is /auth/passkey/manage and the shared outcome lacks canonical passkey-list, management-status, and action:done. Remove is navigation-only with no server operation."
+      ]
+    },
+    {
+      "viewId": "auth.sign-in.locked-out",
+      "status": "implemented",
+      "route": "/auth/continue/email/locked-out",
+      "component": "AuthOutcomeScreen",
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [
+        "action:forgot-password",
+        "action:try-again",
+        "action:change-email",
+        "action:continue-provider",
+        "action:continue-passkey"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/continue/email/locked-out.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions['/auth/continue/email/locked-out']"
+        }
+      ],
+      "notes": [
+        "Observed client route is /auth/continue/email/locked-out; it differs from the canonical URL shape but the full action surface is implemented."
+      ]
+    },
+    {
+      "viewId": "auth.email-verification.send",
+      "status": "missing",
+      "route": null,
+      "component": null,
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "src/platform/auth/testing/auth-test-ids.ts",
+          "symbol": "AuthTestIds.screen"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions['/auth/email/verify']"
+        }
+      ],
+      "notes": [
+        "Only the legacy /auth/email/verify outcome exists; no canonical send-verification-code/sign-out surface was found."
+      ]
+    },
+    {
+      "viewId": "auth.passkey.enrollment.start",
+      "status": "partial",
+      "route": "/auth/passkey/enroll",
+      "component": "AuthOutcomeScreen",
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [
+        "action:enroll-passkey",
+        "action:cancel"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/passkey/enroll.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions['/auth/passkey/enroll']"
+        }
+      ],
+      "notes": [
+        "Route/screen/action IDs use legacy enroll names; canonical action:start-enrollment is absent and no native/server enrollment ceremony is performed."
+      ]
+    },
+    {
+      "viewId": "auth.continue.provider",
+      "status": "partial",
+      "route": "/auth/continue/provider",
+      "component": "ContinueProviderScreen",
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [
+        "action:oauth-google",
+        "action:oauth-microsoft",
+        "action:back",
+        "action:start-over"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/continue/provider.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/continue-provider-screen.tsx",
+          "symbol": "ContinueProviderScreen"
+        }
+      ],
+      "notes": [
+        "Only Google and Microsoft are shown, using noncanonical action:oauth-* finders. GitHub/LinkedIn/Twitter, continue-email, and cancel are absent, and provider selection does not start OAuth."
+      ]
+    },
+    {
+      "viewId": "auth.mfa.totp.confirm",
+      "status": "implemented",
+      "route": "/auth/mfa/totp/confirm",
+      "component": "TotpConfirmScreen",
+      "viewStates": [],
+      "controlFinders": [
+        "field:verification-code",
+        "status:validation-error",
+        "status:verification-error"
+      ],
+      "actionFinders": [
+        "action:confirm",
+        "action:back",
+        "action:cancel"
+      ],
+      "apiOperations": [
+        "createMfatotpEnrollmentConfirm"
+      ],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/mfa/totp/confirm.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/totp-confirm-screen.tsx",
+          "symbol": "TotpConfirmScreen"
+        }
+      ]
+    },
+    {
+      "viewId": "auth.password.reset.request",
+      "status": "implemented",
+      "route": "/auth/password/reset/request",
+      "component": "PasswordRecoveryRequestScreen",
+      "viewStates": [],
+      "controlFinders": [
+        "field:email",
+        "status:validation-error"
+      ],
+      "actionFinders": [
+        "action:send-recovery-code",
+        "action:cancel",
+        "action:back"
+      ],
+      "apiOperations": [
+        "createResetpasswordSendlink"
+      ],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/password/reset/request.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/password-recovery-request-screen.tsx",
+          "symbol": "PasswordRecoveryRequestScreen"
+        }
+      ]
+    },
+    {
+      "viewId": "auth.passkey.enrollment.confirm",
+      "status": "partial",
+      "route": "/auth/passkey/enroll/confirm",
+      "component": "AuthOutcomeScreen",
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [
+        "action:continue"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/passkey/enroll/confirm.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions['/auth/passkey/enroll/confirm']"
+        }
+      ],
+      "notes": [
+        "Route/screen identity use legacy enroll naming; canonical enrollment-status, complete-enrollment, and back finders are absent."
+      ]
+    },
+    {
+      "viewId": "auth.email-verification.confirmed",
+      "status": "partial",
+      "route": "/auth/email/confirmed",
+      "component": "AuthOutcomeScreen",
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [
+        "action:continue"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/email/confirmed.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions['/auth/email/confirmed']"
+        }
+      ],
+      "notes": [
+        "The route/screen identity use legacy auth.email.confirmed and canonical action:sign-out is absent."
+      ]
+    },
+    {
+      "viewId": "auth.continue.email.password",
+      "status": "partial",
+      "route": "/auth/continue/email/password",
+      "component": "ContinueEmailPasswordScreen",
+      "viewStates": [],
+      "controlFinders": [
+        "field:password"
+      ],
+      "actionFinders": [
+        "action:sign-in",
+        "action:forgot-password",
+        "action:back",
+        "action:start-over"
+      ],
+      "apiOperations": [
+        "auth.signInWithPasswordAsync"
+      ],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/continue/email/password.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/continue-email-password-screen.tsx",
+          "symbol": "ContinueEmailPasswordScreen"
+        }
+      ],
+      "notes": [
+        "Canonical editable field:email and status:validation-error are absent; the screen also exposes extra action:back."
+      ]
+    },
+    {
+      "viewId": "auth.password.reset.complete",
+      "status": "implemented",
+      "route": "/auth/password/reset/complete",
+      "component": "PasswordRecoveryResetScreen",
+      "viewStates": [],
+      "controlFinders": [
+        "field:new-password",
+        "field:confirm-password",
+        "status:validation-error"
+      ],
+      "actionFinders": [
+        "action:reset-password",
+        "action:cancel"
+      ],
+      "apiOperations": [
+        "createResetpassword"
+      ],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/password/reset/complete.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/password-recovery-reset-screen.tsx",
+          "symbol": "PasswordRecoveryResetScreen"
+        }
+      ]
+    },
+    {
+      "viewId": "auth.registration.complete-profile",
+      "status": "missing",
+      "route": null,
+      "component": null,
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "src/platform/auth/testing/auth-test-ids.ts",
+          "symbol": "AuthTestIds"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions['/auth/register']"
+        }
+      ],
+      "notes": [
+        "No dedicated complete-profile route/screen or canonical control surface was found."
+      ]
+    },
+    {
+      "viewId": "auth.email-verification.enter",
+      "status": "missing",
+      "route": null,
+      "component": null,
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "src/platform/auth/testing/auth-test-ids.ts",
+          "symbol": "AuthTestIds"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions['/auth/email/verify']"
+        }
+      ],
+      "notes": [
+        "No canonical six-digit email-verification entry surface was found."
+      ]
+    },
+    {
+      "viewId": "auth.registration.create-account",
+      "status": "partial",
+      "route": "/auth/register",
+      "component": "AuthOutcomeScreen",
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [
+        "action:register"
+      ],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/register.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions['/auth/register']"
+        }
+      ],
+      "notes": [
+        "The mobile route has no canonical registration form controls; it only exposes action:register and routes to legacy email verification."
+      ]
+    },
+    {
+      "viewId": "auth.passkey.registration.identity",
+      "status": "missing",
+      "route": null,
+      "component": null,
+      "viewStates": [],
+      "controlFinders": [],
+      "actionFinders": [],
+      "apiOperations": [],
+      "sourceEvidence": [
+        {
+          "path": "src/platform/auth/testing/auth-test-ids.ts",
+          "symbol": "AuthTestIds"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx",
+          "symbol": "authOutcomeDefinitions"
+        }
+      ],
+      "notes": [
+        "No dedicated canonical passkey-registration identity collection surface was found."
+      ]
+    },
+    {
+      "viewId": "auth.password.reset.sent",
+      "status": "implemented",
+      "route": "/auth/password/reset/sent",
+      "component": "PasswordRecoveryCodeScreen",
+      "viewStates": [],
+      "controlFinders": [
+        "field:recovery-code",
+        "status:validation-error"
+      ],
+      "actionFinders": [
+        "action:verify-recovery-code",
+        "action:resend-code",
+        "action:back-to-sign-in",
+        "action:cancel"
+      ],
+      "apiOperations": [
+        "createResetpasswordVerifycode",
+        "createResetpasswordSendlink"
+      ],
+      "sourceEvidence": [
+        {
+          "path": "app/auth/password/reset/sent.tsx"
+        },
+        {
+          "path": "src/features/authentication/nuviot-account/screens/password-recovery-code-screen.tsx",
+          "symbol": "PasswordRecoveryCodeScreen"
+        }
+      ]
+    }
+  ]
+}
