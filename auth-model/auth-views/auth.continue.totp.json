@@ -19,13 +19,30 @@
     { "id": "start-over", "name": "Start Over", "actionType": "link", "finder": "action:start-over" }
   ],
   "platforms": {
-    "web": { "status": "implemented", "implementation": "ContinueTotpComponent" },
-    "mobile": { "status": "planned" }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "user/continue-totp/continue-totp.component.ts",
+      "component": "ContinueTotpComponent",
+      "implementation": "Loads the primary login seed, submits the TOTP proof to the anonymous TOTP session endpoint, follows the resolved success destination, and routes rejection to auth.continue.totp.unable."
+    },
+    "mobile": {
+      "status": "implemented",
+      "repository": "nuviot/vtm-client",
+      "path": "src/features/authentication/nuviot-account/screens/continue-totp-screen.tsx",
+      "component": "ContinueTotpScreen",
+      "implementation": "Uses AuthContext.signInWithTotpAsync for the real token-backed TOTP sign-in path and routes rejection to /auth/continue/totp/unable."
+    }
   },
   "source": {
     "runtimeEntityId": "B06EB750EA5B4142AD1F017896E1F474",
     "runtimeSha256Hex": "ac3c8a86afda0ed1b962984cd1277aaf1cd1b6935400bbe90d07ca23d8230977",
-    "webComponent": "ContinueTotpComponent"
+    "webComponent": "ContinueTotpComponent",
+    "mobileComponent": "ContinueTotpScreen"
   },
-  "notes": ["The implementation field id totp is normalized to verification-code.", "Validation copy is not used as a stable identifier."]
+  "notes": [
+    "The implementation field id totp is normalized to verification-code.",
+    "Validation copy is not used as a stable identifier.",
+    "Generated AuthClient bindings for the new TOTP sign-in endpoints still require a normal contract regeneration pass; current source uses platform-native HTTP/transport wrappers in the interim."
+  ]
 }
