@@ -1,0 +1,36 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.session.sign-out-success",
+  "runtimeEntityId": "7A4D1F9C2E6B43A58D90C1E2F3A4B5C6",
+  "name": "Sign Out",
+  "summary": "An authenticated user chooses Sign Out, the current client session is terminated, local authentication state is cleared, and the client returns to the Welcome surface.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "session-management",
+  "startViewKey": "app.home",
+  "action": { "id": "sign-out", "finder": "action:sign-out" },
+  "preconditions": {
+    "expression": "the user has an active authenticated client session",
+    "state": { "isUserLoggedIn": "set" }
+  },
+  "inputs": [],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Terminate only the current client session, revoking the current refresh token for token-backed clients or ending the application cookie session for cookie-backed clients.",
+    "transitionKeys": ["auth.transition.session.sign-out-success"]
+  },
+  "expectedViewKey": "auth.welcome",
+  "postconditions": {
+    "expression": "the current client is anonymous, its local authentication state is cleared, and protected application state is no longer available through the terminated session",
+    "state": { "isUserLoggedIn": "notset" }
+  },
+  "expectedAuthLogEvents": ["UserLogout"],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/AuthServices.cs", "note": "Existing web logoff terminates the ASP.NET Identity session and records UserLogout." },
+    { "sourceType": "code", "reference": "nuviot/vtm-client:src/platform/auth/auth-context.tsx", "note": "Existing mobile sign-out clears local auth state and navigates to login, but currently does not revoke the server refresh token." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Sign Out is one atomic user action. No dedicated confirmation or completion AuthView is required; the action is host-owned and the canonical destination is auth.welcome." }
+  ],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}
