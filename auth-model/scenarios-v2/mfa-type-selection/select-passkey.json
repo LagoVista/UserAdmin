@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.mfa-type-selection.select-passkey",
+  "runtimeEntityId": "D51CB551E6CB4ECAA2562F60E15BA49F",
+  "name": "Select Passkey",
+  "summary": "From Select MFA Type, the user chooses Passkey and the client opens the existing Passkey Start surface.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "mfa-type-selection",
+  "startViewKey": "auth.select.mfa-type",
+  "action": { "id": "select-passkey", "finder": "action:select-passkey" },
+  "preconditions": {
+    "expression": "session-capability == anonymous and auth.select.mfa-type is visible with Passkey available"
+  },
+  "inputs": [],
+  "serverInteraction": { "required": false },
+  "expectedViewKey": "auth.continue.passkey",
+  "postconditions": {
+    "expression": "session-capability == anonymous and the canonical Passkey Start surface is visible"
+  },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.select.mfa-type", "note": "Starting surface owns the select-passkey action." },
+    { "sourceType": "auth-view", "reference": "auth.continue.passkey", "note": "Existing canonical Passkey Start surface owns the remaining passkey ceremony." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Select MFA Type has exactly one Passkey-choice scenario ending at Passkey Start." }
+  ],
+  "progress": { "presentation": "complete", "implementation": "not-started", "tests": "complete" }
+}
