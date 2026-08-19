@@ -49,22 +49,24 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments
 
             try
             {
-                if (!String.IsNullOrEmpty(environment.CreationRequestId))
-                {
-                    creationIndexInserted = await EnsureCreationIndexAsync(environment);
-                }
+                var creationIndexTask = String.IsNullOrEmpty(environment.CreationRequestId)
+                    ? Task.FromResult(false)
+                    : EnsureCreationIndexAsync(environment);
+                var recoveryIndexTask = String.IsNullOrEmpty(environment.RecoveryTokenHash)
+                    ? Task.FromResult(false)
+                    : EnsureRecoveryIndexAsync(environment);
+                var installationIndexTask = String.IsNullOrEmpty(environment.InstallationIdHash)
+                    ? Task.FromResult(false)
+                    : EnsureInstallationIndexAsync(environment);
+                var stateIndexTask = EnsureStateIndexAsync(environment);
 
-                if (!String.IsNullOrEmpty(environment.RecoveryTokenHash))
-                {
-                    recoveryIndexInserted = await EnsureRecoveryIndexAsync(environment);
-                }
+                await Task.WhenAll(creationIndexTask, recoveryIndexTask, installationIndexTask, stateIndexTask);
 
-                if (!String.IsNullOrEmpty(environment.InstallationIdHash))
-                {
-                    installationIndexInserted = await EnsureInstallationIndexAsync(environment);
-                }
+                creationIndexInserted = creationIndexTask.Result;
+                recoveryIndexInserted = recoveryIndexTask.Result;
+                installationIndexInserted = installationIndexTask.Result;
+                stateIndexInserted = stateIndexTask.Result;
 
-                stateIndexInserted = await EnsureStateIndexAsync(environment);
                 var persisted = await _environmentRepo.GetByIdAsync(environment.Id);
                 if (persisted != null) environment.ETag = persisted.ETag;
                 await CacheAsync(persisted ?? environment);
@@ -124,18 +126,23 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments
             var existing = await _environmentRepo.GetByIdAsync(environment.Id);
             if (existing == null) throw new InvalidOperationException($"Provisional environment '{environment.Id}' was not found.");
 
-            await EnsureCreationIndexAsync(environment);
-            await EnsureRecoveryIndexAsync(environment);
-            await EnsureInstallationIndexAsync(environment);
-            await EnsureStateIndexAsync(environment);
-            await _environmentRepo.UpdateAsync(environment);
-            await InvalidateCacheAsync(existing);
-            await InvalidateCacheAsync(environment);
+            var indexTasks = new List<Task<bool>>();
+            if (!String.Equals(existing.CreationRequestId, environment.CreationRequestId, StringComparison.Ordinal)) indexTasks.Add(EnsureCreationIndexAsync(environment));
+            if (!String.Equals(existing.RecoveryTokenHash, environment.RecoveryTokenHash, StringComparison.Ordinal)) indexTasks.Add(EnsureRecoveryIndexAsync(environment));
+            if (!String.Equals(existing.InstallationIdHash, environment.InstallationIdHash, StringComparison.Ordinal)) indexTasks.Add(EnsureInstallationIndexAsync(environment));
+            if (existing.State != environment.State || GetLifecycleDueUtc(existing) != GetLifecycleDueUtc(environment)) indexTasks.Add(EnsureStateIndexAsync(environment));
+            if (indexTasks.Count > 0) await Task.WhenAll(indexTasks);
 
-            if (!String.Equals(existing.CreationRequestId, environment.CreationRequestId, StringComparison.Ordinal) && !String.IsNullOrEmpty(existing.CreationRequestId)) await _creationIndexRepo.DeleteAsync(existing.CreationRequestId);
-            if (!String.Equals(existing.RecoveryTokenHash, environment.RecoveryTokenHash, StringComparison.Ordinal) && !String.IsNullOrEmpty(existing.RecoveryTokenHash)) await _recoveryIndexRepo.DeleteAsync(existing.RecoveryTokenHash);
-            if (!String.Equals(existing.InstallationIdHash, environment.InstallationIdHash, StringComparison.Ordinal) && !String.IsNullOrEmpty(existing.InstallationIdHash)) await _installationIndexRepo.DeleteAsync(existing.InstallationIdHash);
-            if (existing.State != environment.State || GetLifecycleDueUtc(existing) != GetLifecycleDueUtc(environment)) await _stateIndexRepo.DeleteAsync(existing.State, GetLifecycleDueUtc(existing), existing.Id);
+            await _environmentRepo.UpdateAsync(environment);
+            await InvalidateCacheAsync(existing, environment);
+
+            var staleIndexTasks = new List<Task>();
+            if (!String.Equals(existing.CreationRequestId, environment.CreationRequestId, StringComparison.Ordinal) && !String.IsNullOrEmpty(existing.CreationRequestId)) staleIndexTasks.Add(_creationIndexRepo.DeleteAsync(existing.CreationRequestId));
+            if (!String.Equals(existing.RecoveryTokenHash, environment.RecoveryTokenHash, StringComparison.Ordinal) && !String.IsNullOrEmpty(existing.RecoveryTokenHash)) staleIndexTasks.Add(_recoveryIndexRepo.DeleteAsync(existing.RecoveryTokenHash));
+            if (!String.Equals(existing.InstallationIdHash, environment.InstallationIdHash, StringComparison.Ordinal) && !String.IsNullOrEmpty(existing.InstallationIdHash)) staleIndexTasks.Add(_installationIndexRepo.DeleteAsync(existing.InstallationIdHash));
+            if (existing.State != environment.State || GetLifecycleDueUtc(existing) != GetLifecycleDueUtc(environment)) staleIndexTasks.Add(_stateIndexRepo.DeleteAsync(existing.State, GetLifecycleDueUtc(existing), existing.Id));
+            if (staleIndexTasks.Count > 0) await Task.WhenAll(staleIndexTasks);
+
             var persisted = await _environmentRepo.GetByIdAsync(environment.Id);
             if (persisted != null) environment.ETag = persisted.ETag;
             await CacheAsync(persisted ?? environment);
@@ -233,18 +240,35 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments
 
         private async Task CacheAsync(ProvisionalEnvironment environment)
         {
-            await TryAsync(() => _cacheProvider.AddAsync(GetEnvironmentCacheKey(environment.Id), environment, CacheDuration));
-            if (!String.IsNullOrEmpty(environment.CreationRequestId)) await TryAsync(() => _cacheProvider.AddAsync(GetLookupCacheKey(CreationCachePrefix, environment.CreationRequestId), environment.Id, CacheDuration));
-            if (!String.IsNullOrEmpty(environment.RecoveryTokenHash)) await TryAsync(() => _cacheProvider.AddAsync(GetLookupCacheKey(RecoveryCachePrefix, environment.RecoveryTokenHash), environment.Id, CacheDuration));
-            if (!String.IsNullOrEmpty(environment.InstallationIdHash)) await TryAsync(() => _cacheProvider.AddAsync(GetLookupCacheKey(InstallationCachePrefix, environment.InstallationIdHash), environment.Id, CacheDuration));
+            var cacheTasks = new List<Task>
+            {
+                TryAsync(() => _cacheProvider.AddAsync(GetEnvironmentCacheKey(environment.Id), environment, CacheDuration))
+            };
+
+            if (!String.IsNullOrEmpty(environment.CreationRequestId)) cacheTasks.Add(TryAsync(() => _cacheProvider.AddAsync(GetLookupCacheKey(CreationCachePrefix, environment.CreationRequestId), environment.Id, CacheDuration)));
+            if (!String.IsNullOrEmpty(environment.RecoveryTokenHash)) cacheTasks.Add(TryAsync(() => _cacheProvider.AddAsync(GetLookupCacheKey(RecoveryCachePrefix, environment.RecoveryTokenHash), environment.Id, CacheDuration)));
+            if (!String.IsNullOrEmpty(environment.InstallationIdHash)) cacheTasks.Add(TryAsync(() => _cacheProvider.AddAsync(GetLookupCacheKey(InstallationCachePrefix, environment.InstallationIdHash), environment.Id, CacheDuration)));
+
+            await Task.WhenAll(cacheTasks);
         }
 
-        private async Task InvalidateCacheAsync(ProvisionalEnvironment environment)
+        private Task InvalidateCacheAsync(params ProvisionalEnvironment[] environments)
         {
-            await TryAsync(() => _cacheProvider.RemoveAsync(GetEnvironmentCacheKey(environment.Id)));
-            if (!String.IsNullOrEmpty(environment.CreationRequestId)) await TryAsync(() => _cacheProvider.RemoveAsync(GetLookupCacheKey(CreationCachePrefix, environment.CreationRequestId)));
-            if (!String.IsNullOrEmpty(environment.RecoveryTokenHash)) await TryAsync(() => _cacheProvider.RemoveAsync(GetLookupCacheKey(RecoveryCachePrefix, environment.RecoveryTokenHash)));
-            if (!String.IsNullOrEmpty(environment.InstallationIdHash)) await TryAsync(() => _cacheProvider.RemoveAsync(GetLookupCacheKey(InstallationCachePrefix, environment.InstallationIdHash)));
+            var cacheKeys = environments
+                .Where(environment => environment != null)
+                .SelectMany(GetCacheKeys)
+                .Distinct(StringComparer.Ordinal)
+                .Select(key => TryAsync(() => _cacheProvider.RemoveAsync(key)));
+
+            return Task.WhenAll(cacheKeys);
+        }
+
+        private static IEnumerable<string> GetCacheKeys(ProvisionalEnvironment environment)
+        {
+            yield return GetEnvironmentCacheKey(environment.Id);
+            if (!String.IsNullOrEmpty(environment.CreationRequestId)) yield return GetLookupCacheKey(CreationCachePrefix, environment.CreationRequestId);
+            if (!String.IsNullOrEmpty(environment.RecoveryTokenHash)) yield return GetLookupCacheKey(RecoveryCachePrefix, environment.RecoveryTokenHash);
+            if (!String.IsNullOrEmpty(environment.InstallationIdHash)) yield return GetLookupCacheKey(InstallationCachePrefix, environment.InstallationIdHash);
         }
 
         private static string GetEnvironmentCacheKey(string environmentId)
