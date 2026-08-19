@@ -1,0 +1,40 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.mfa.totp.recovery-codes",
+  "name": "TOTP Recovery Codes",
+  "description": "Displays the fresh recovery codes issued after TOTP enrollment succeeds so the user can save them before leaving the enrollment behavior.",
+  "category": "totp",
+  "routeId": "auth.route.mfa.totp.recovery-codes",
+  "status": "active",
+  "controls": [
+    {
+      "id": "recovery-codes",
+      "name": "Recovery Codes",
+      "controlType": "copyable-value",
+      "finder": "display:recovery-codes",
+      "sensitivity": "secret"
+    }
+  ],
+  "actions": [
+    {
+      "id": "done",
+      "name": "Done",
+      "actionType": "button",
+      "finder": "action:done"
+    }
+  ],
+  "platforms": {
+    "web": {
+      "status": "planned",
+      "notes": "Current web confirmation code receives recovery codes from the server but does not present them on a dedicated surface."
+    },
+    "mobile": {
+      "status": "planned",
+      "notes": "Dedicated post-enrollment recovery-code presentation is required by the canonical behavior."
+    }
+  },
+  "notes": [
+    "Recovery codes are the output of the confirmation server operation and therefore belong on a destination view rather than as a mutated state of auth.mfa.totp.confirm."
+  ]
+}
