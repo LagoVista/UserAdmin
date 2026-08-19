@@ -51,9 +51,12 @@
   "expectedAuthLogEvents": ["TotpVerifyStart", "TotpVerifyFailed"],
   "evidenceRequirements": ["server", "web", "android", "ios"],
   "sourceReferences": [
-    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "VerifyTotpAsync emits TotpVerifyFailed and returns a failed result for an invalid or replayed TOTP proof." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/AuthenticationFlowService.cs", "note": "Both browser-session and mobile-token TOTP entry points return the canonical rejected result without establishing authenticated state." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/TotpAuthenticationFlowHandler.cs", "note": "Typed handler delegates invalid proof to the real MFA manager and emits auth.transition.totp-sign-in.rejected." },
+    { "sourceType": "test", "reference": "auth.test-binding.totp-sign-in", "note": "Real-path integration proof verifies invalid TOTP rejection and proves the sign-in adapter is not invoked." },
     { "sourceType": "auth-view", "reference": "auth.continue.totp.unable", "note": "Dedicated public failure surface provides Try Again and Start Over without disclosing internal rejection details." },
-    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "TOTP rejection is modeled as a distinct behavior because successful authentication and rejected proof have materially different session state and next actions." }
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/continue-totp/continue-totp.component.ts", "note": "Angular routes unsuccessful createTotpLogin results to the canonical unable view." },
+    { "sourceType": "code", "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/continue-totp-screen.tsx", "note": "React Native routes rejected token authentication to the canonical unable view." }
   ],
-  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "complete" }
 }
