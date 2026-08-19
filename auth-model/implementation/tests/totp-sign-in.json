@@ -3,7 +3,7 @@
   "schemaVersion": "1.0",
   "key": "auth.test-binding.totp-sign-in",
   "name": "TOTP Sign-In Flow Integration Proof",
-  "summary": "Registers real-path integration proof for accepted and rejected TOTP sign-in through AuthenticationFlowService, the typed TOTP handler, AppUserMfaManager and the real LagoVista SignInManager.",
+  "summary": "Registers real-path TOTP proof for accepted and rejected sign-in plus the mobile token adapter through AuthenticationFlowService, the typed TOTP handler, the real AppUserMfaManager and the real LagoVista SignInManager on the browser-session path.",
   "version": 1,
   "maturity": "implemented",
   "testLevel": "handler-integration",
@@ -14,7 +14,8 @@
   "testTypeName": "TotpAuthenticationFlowIntegrationTests",
   "testMethodNames": [
     "ValidTotp_Should_RunRealMfaAndSignInManagers_AndEstablishSession",
-    "InvalidTotp_Should_RunRealMfaManager_AndRejectWithoutSession"
+    "InvalidTotp_Should_RunRealMfaManager_AndRejectWithoutSession",
+    "ValidTotpToken_Should_RunRealMfaProof_BeforeDelegatingToTokenPipeline"
   ],
   "scenarioKeys": [
     "auth.scenario.totp-sign-in.verify-success",
@@ -33,25 +34,27 @@
     "real-authentication-flow-entry-point",
     "real-totp-flow-handler",
     "real-app-user-mfa-manager",
-    "real-lagovista-sign-in-manager",
+    "real-lagovista-sign-in-manager-for-browser-session",
     "real-totp-code-verification",
     "totp-replay-timestep-acceptance",
-    "authenticated-session-established-on-success",
+    "authenticated-session-established-on-browser-success",
+    "mobile-token-adapter-requires-real-accepted-totp-proof-before-token-delegation",
     "no-session-established-on-rejection",
     "canonical-success-and-rejected-transitions",
     "declared-auth-log-events",
     "non-enumerating-public-rejection"
   ],
   "notes": [
-    "The proof harness does not mock AppUserMfaManager or the LagoVista SignInManager; persistence, secure storage, redirect resolution and the ASP.NET Identity SignInManager adapter are infrastructure/framework seams.",
-    "The successful web-session path currently also emits PasswordAuthenticationSucceeded from the shared CompleteSignInToAppAsync implementation. That legacy event is recorded explicitly rather than hidden by the proof.",
-    "The mobile token adapter reuses the same TOTP proof and then internally exchanges an existing single-use token through the established access/refresh-token pipeline."
+    "AppUserMfaManager is never mocked. Both browser and mobile proofs execute its real TOTP verification and replay-protection logic.",
+    "The browser-session proof also uses the real LagoVista SignInManager; persistence, secure storage, redirect resolution and the ASP.NET Identity SignInManager adapter are infrastructure/framework seams.",
+    "The mobile adapter proof mocks IAuthTokenManager only after the real TOTP proof has succeeded. It verifies that the proven durable identity is converted to the established single-use-token grant contract; token issuance itself is an existing independently-owned authentication subsystem rather than the TOTP credential operation under proof.",
+    "The successful browser-session path currently also emits PasswordAuthenticationSucceeded from shared CompleteSignInToAppAsync. That legacy event is recorded explicitly rather than hidden by the proof."
   ],
   "sourceReferences": [
     {
       "sourceType": "test",
       "reference": "LagoVista/UserAdmin:tests/LagoVista.UserAdmin.Auth.Tests/TotpAuthenticationFlowIntegrationTests.cs",
-      "note": "Real-path success and rejection evidence source."
+      "note": "Real TOTP success/rejection proof and mobile token-adapter evidence source."
     },
     {
       "sourceType": "code",
@@ -61,7 +64,12 @@
     {
       "sourceType": "code",
       "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/SigninManager.cs",
-      "note": "Real application-session completion behavior under proof."
+      "note": "Real browser application-session completion behavior under proof."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AuthTokenManager.cs",
+      "note": "Existing mobile access/refresh-token pipeline receives the proven identity through the internal single-use-token grant adapter."
     }
   ]
 }
