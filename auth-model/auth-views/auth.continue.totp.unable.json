@@ -18,14 +18,14 @@
     "web": {
       "status": "implemented",
       "repository": "softwarelogistics/nuviot-ui-shared",
-      "path": "user/totp-signin-unable/totp-signin-unable.component.ts",
-      "component": "TotpSigninUnableComponent"
+      "path": "user/continue-totp-unable/continue-totp-unable.component.ts",
+      "component": "ContinueTotpUnableComponent"
     },
     "mobile": {
       "status": "implemented",
       "repository": "nuviot/vtm-client",
-      "path": "src/features/authentication/nuviot-account/screens/totp-unable-screen.tsx",
-      "component": "TotpUnableScreen"
+      "path": "src/features/authentication/nuviot-account/screens/continue-totp-unable-screen.tsx",
+      "component": "ContinueTotpUnableScreen"
     }
   },
   "source": {
