@@ -1,7 +1,10 @@
+using LagoVista.Core.Authentication.Models;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Authentication.Flows;
+using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.DTOs;
 using LagoVista.UserAdmin.Models.Users;
@@ -16,6 +19,8 @@ namespace LagoVista.UserAdmin.Authentication
     {
         private readonly IPasswordLoginFlowHandler _passwordLoginHandler;
         private readonly ITotpAuthenticationFlowHandler _totpAuthenticationHandler;
+        private readonly ISignInManager _signInManager;
+        private readonly IAuthTokenManager _authTokenManager;
         private readonly IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> _passwordRecoveryRequestHandler;
         private readonly IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> _passwordRecoveryCompletionHandler;
         private readonly IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> _invitationAcceptanceHandler;
@@ -28,7 +33,7 @@ namespace LagoVista.UserAdmin.Authentication
         private readonly ITotpTurnOffFlowHandler _totpTurnOffHandler;
         private readonly ITotpRecoveryCodeRotationFlowHandler _totpRecoveryCodeRotationHandler;
 
-        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> invitationAcceptanceHandler = null, IAuthenticationFlowHandler<EmailVerificationFlowRequest> emailVerificationHandler = null, IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> passwordRecoveryVerificationHandler = null, IAuthenticationFlowHandler<PasswordChangeFlowRequest> passwordChangeHandler = null, IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult> emailVerificationSendHandler = null, ITotpTurnOffFlowHandler totpTurnOffHandler = null, ITotpRecoveryCodeRotationFlowHandler totpRecoveryCodeRotationHandler = null, IAuthenticationFlowHandler<TotpEnrollmentBeginFlowRequest, AppUserTotpEnrollmentInfo> totpEnrollmentBeginHandler = null, IAuthenticationFlowHandler<TotpEnrollmentConfirmFlowRequest, List<string>> totpEnrollmentConfirmHandler = null, ITotpAuthenticationFlowHandler totpAuthenticationHandler = null)
+        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> invitationAcceptanceHandler = null, IAuthenticationFlowHandler<EmailVerificationFlowRequest> emailVerificationHandler = null, IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> passwordRecoveryVerificationHandler = null, IAuthenticationFlowHandler<PasswordChangeFlowRequest> passwordChangeHandler = null, IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult> emailVerificationSendHandler = null, ITotpTurnOffFlowHandler totpTurnOffHandler = null, ITotpRecoveryCodeRotationFlowHandler totpRecoveryCodeRotationHandler = null, IAuthenticationFlowHandler<TotpEnrollmentBeginFlowRequest, AppUserTotpEnrollmentInfo> totpEnrollmentBeginHandler = null, IAuthenticationFlowHandler<TotpEnrollmentConfirmFlowRequest, List<string>> totpEnrollmentConfirmHandler = null, ITotpAuthenticationFlowHandler totpAuthenticationHandler = null, ISignInManager signInManager = null, IAuthTokenManager authTokenManager = null)
         {
             _passwordLoginHandler = passwordLoginHandler ?? throw new ArgumentNullException(nameof(passwordLoginHandler));
             _passwordRecoveryRequestHandler = passwordRecoveryRequestHandler ?? throw new ArgumentNullException(nameof(passwordRecoveryRequestHandler));
@@ -43,6 +48,8 @@ namespace LagoVista.UserAdmin.Authentication
             _totpEnrollmentBeginHandler = totpEnrollmentBeginHandler;
             _totpEnrollmentConfirmHandler = totpEnrollmentConfirmHandler;
             _totpAuthenticationHandler = totpAuthenticationHandler;
+            _signInManager = signInManager;
+            _authTokenManager = authTokenManager;
         }
 
         public async Task<InvokeResult<AuthenticationResponse>> LoginWithPasswordAsync(AuthLoginRequest request)
@@ -58,12 +65,52 @@ namespace LagoVista.UserAdmin.Authentication
         {
             if (_totpAuthenticationHandler == null)
                 throw new InvalidOperationException("TOTP authentication flow handler is not configured.");
+            if (_signInManager == null)
+                throw new InvalidOperationException("Sign-in manager is not configured for TOTP authentication.");
 
             var result = await _totpAuthenticationHandler.HandleAsync(request);
             if (result.TransitionKey != TotpAuthenticationFlowHandler.SuccessTransitionKey && result.TransitionKey != TotpAuthenticationFlowHandler.RejectedTransitionKey)
                 throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
 
-            return result.PublicResult;
+            if (!result.PublicResult.Successful)
+                return InvokeResult<AuthenticationResponse>.FromInvokeResult(result.PublicResult.ToInvokeResult());
+
+            await _signInManager.SignInAsync(result.PublicResult.Result, request.RememberMe);
+            return await _signInManager.CompleteSignInToAppAsync(result.PublicResult.Result);
+        }
+
+        public async Task<InvokeResult<AuthResponse>> AuthenticateWithTotpTokenAsync(AuthRequest request)
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (_totpAuthenticationHandler == null)
+                throw new InvalidOperationException("TOTP authentication flow handler is not configured.");
+            if (_authTokenManager == null)
+                throw new InvalidOperationException("Auth token manager is not configured for TOTP authentication.");
+
+            var proofRequest = new TotpSignInRequest
+            {
+                Email = String.IsNullOrWhiteSpace(request.Email) ? request.UserName : request.Email,
+                Totp = request.Password,
+                RememberMe = true
+            };
+
+            var result = await _totpAuthenticationHandler.HandleAsync(proofRequest);
+            if (result.TransitionKey != TotpAuthenticationFlowHandler.SuccessTransitionKey && result.TransitionKey != TotpAuthenticationFlowHandler.RejectedTransitionKey)
+                throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
+
+            if (!result.PublicResult.Successful)
+                return InvokeResult<AuthResponse>.FromInvokeResult(result.PublicResult.ToInvokeResult());
+
+            var appUser = result.PublicResult.Result;
+            var singleUseToken = await _authTokenManager.GenerateOneTimeUseTokenAsync(appUser.Id);
+            if (!singleUseToken.Successful)
+                return InvokeResult<AuthResponse>.FromInvokeResult(singleUseToken.ToInvokeResult());
+
+            request.GrantType = "single-use-token";
+            request.UserId = appUser.Id;
+            request.UserName = appUser.UserName ?? appUser.Email;
+            request.SingleUseToken = singleUseToken.Result.Token;
+            return await _authTokenManager.SingleUseTokenGrantAsync(request);
         }
 
         public async Task<InvokeResult> ChangePasswordAsync(ChangePassword request, EntityHeader organization, EntityHeader user)
