@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/auth-endpoint-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.endpoint.totp-management.turn-off",
+  "name": "TOTP Turn Off Endpoint",
+  "summary": "Maps the stable authenticated MFA disable REST contract to the normalized TOTP maintenance flow boundary.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdminRest",
+  "projectPath": "src/LagoVista.UserAdmin.Rest",
+  "sourcePath": "src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs",
+  "controllerType": "MfaController",
+  "methodName": "DisableMfaAsync",
+  "httpMethods": ["POST"],
+  "routeTemplates": ["/api/auth/mfadisable"],
+  "responseContract": "InvokeResult",
+  "handlerKey": "auth.handler.totp-management.turn-off",
+  "transitionKeys": ["auth.transition.totp-management.disable-success"],
+  "projectionNotes": [
+    "The external route and response contract are unchanged; the controller now enters through IAuthenticationFlowService.TurnOffTotpAsync."
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "section": "MfaController.DisableMfaAsync", "note": "Authenticated POST endpoint delegates to IAuthenticationFlowService." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/AuthenticationFlowService.cs", "section": "TurnOffTotpAsync", "note": "Application front door validates the canonical transition key." }
+  ]
+}
