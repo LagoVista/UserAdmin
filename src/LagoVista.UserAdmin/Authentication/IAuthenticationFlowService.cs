@@ -2,6 +2,7 @@ using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.DTOs;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Authentication
@@ -16,5 +17,7 @@ namespace LagoVista.UserAdmin.Authentication
         Task<InvokeResult<AcceptInviteResponse>> AcceptInvitationAsync(string inviteId, string userId);
         Task<InvokeResult<EmailVerificationSendResult>> SendEmailVerificationCodeAsync(EntityHeader user);
         Task<InvokeResult> VerifyEmailAsync(ConfirmEmail request, EntityHeader user);
+        Task<InvokeResult> TurnOffTotpAsync(string userId, EntityHeader organization, EntityHeader user);
+        Task<InvokeResult<List<string>>> RotateTotpRecoveryCodesAsync(string userId, EntityHeader organization, EntityHeader user);
     }
 }
