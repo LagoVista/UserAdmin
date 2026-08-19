@@ -7,7 +7,12 @@
   "version": 1,
   "maturity": "proposed",
   "categoryKey": "totp-enrollment",
-  "scenarioKeys": [],
+  "scenarioKeys": [
+    "auth.scenario.totp-enrollment.enrollment-to-confirm",
+    "auth.scenario.totp-enrollment.confirm-success"
+  ],
+  "entryViewKey": "auth.mfa.totp.enroll",
+  "finalViewKey": "auth.mfa.totp.confirm",
   "finalOutcome": "TOTP is enabled for the current durable identity, the authenticator secret is stored securely, and a fresh set of recovery codes has been issued to the user.",
   "supportedPlatforms": [
     "server",
@@ -24,18 +29,23 @@
     {
       "sourceType": "auth-view",
       "reference": "auth.mfa.totp.enroll",
-      "note": "Existing AuthView represents TOTP enrollment."
+      "note": "Canonical AuthView represents TOTP enrollment material and navigation to confirmation."
     },
     {
       "sourceType": "auth-view",
       "reference": "auth.mfa.totp.confirm",
-      "note": "Existing AuthView represents enrollment confirmation."
+      "note": "Canonical AuthView represents enrollment confirmation."
+    },
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-19",
+      "note": "Success behavior was decomposed into enrollment-to-confirm and confirmation-success scenarios. Presentation is coherent; implementation remains in progress because the web confirm surface restarts enrollment on load and discards successful recovery-code output, while mobile remains partial."
     }
   ],
   "progress": {
-    "scenarios": "not-started",
-    "presentation": "not-started",
-    "implementation": "not-started",
+    "scenarios": "complete",
+    "presentation": "complete",
+    "implementation": "in-progress",
     "tests": "not-started"
   }
 }
