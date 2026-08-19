@@ -27,15 +27,20 @@
       "note": "Recovery-code rotation is modeled separately from TOTP disable because the durable MFA post-state is materially different."
     },
     {
-      "sourceType": "decision",
-      "reference": "ChatGPT conversation 2026-08-19",
-      "note": "Authored test design has started. Server proof must exercise the real MFA manager through a normalized authentication flow/handler path, prove the previous recovery-code set is invalidated, prove a fresh set is returned while TOTP remains enabled, and capture TotpRotateRecoveryCodesStart/TotpRotateRecoveryCodesSuccess transition evidence. Runtime setup must establish real TOTP and recovery-code material before this behavior can be independently executed."
+      "sourceType": "test",
+      "reference": "auth.test-binding.totp-management.maintenance",
+      "note": "Authored proof binds the real AuthenticationFlowService, typed rotation handler and AppUserMfaManager, while the UI navigation scenario supplies the supported-client proof obligation. Runtime execution remains separate."
+    },
+    {
+      "sourceType": "code",
+      "reference": "src/LagoVista.UserAdmin/Managers/AppUserTestingManager.TotpSetup.cs",
+      "note": "Deterministic runner setup materializes authentic TOTP and recovery-code state through real enrollment operations."
     }
   ],
   "progress": {
     "scenarios": "complete",
     "presentation": "complete",
     "implementation": "in-progress",
-    "tests": "in-progress"
+    "tests": "complete"
   }
 }
