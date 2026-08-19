@@ -111,7 +111,7 @@
       "key": "totp-enrollment",
       "name": "TOTP Enrollment",
       "behaviorKeys": ["auth.behavior.totp.enrollment-success"],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"in-progress","tests":"complete"}
+      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
     },
     {
       "key": "totp-management",
@@ -154,7 +154,7 @@
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-13","note":"Email Verification is represented by five lightweight start-to-end behaviors with behavior-owned atomic scenarios: direct success, rejection, retry success, resend success, and resend throttled. Presentation uses Send, Enter with deterministic View State, and Confirmed surfaces."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-14","note":"Email Verification implementation is complete after the canonical send flow was normalized to distinguish initial code-sent, accepted code-resent, and resend-throttled outcomes from durable proof state and cooldown timing."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-14","note":"Email Verification authored test obligations are complete. Seven send/resend scenarios are bound to EmailVerificationSendFlowTests and six accepted/rejected verification scenarios are bound to EmailVerificationFlowIntegrationTests; runtime execution evidence remains separate."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Enrollment and TOTP Sign In success behaviors were decomposed into canonical V2 scenarios and presentation was reconciled. TOTP Enrollment server Begin/Confirm paths and authored tests were subsequently normalized; RN QR rendering remains the only known enrollment implementation gap before UI runtime."},
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Enrollment is authored complete across server, Angular Web, Android and iOS. The React Native enrollment surface locally renders the staged otpauth URI as a scannable QR code, both stable clients expose optional Advanced open-authenticator/copy-key conveniences, and UI runtime remains intentionally separate."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Management was decomposed into separate recovery-code rotation and disable behaviors. Server flow normalization, deterministic HasTOTP setup, real-manager integration proof, and stable-client conformance are authored complete; current C# evidence is tracked separately."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Sign In is authored complete for Success and Could Not Authenticate. Both browser-session and mobile-token server paths normalize through AuthenticationFlowService and TotpAuthenticationFlowHandler into the real AppUserMfaManager proof operation; Angular and React Native consume generated AuthClient TOTP operations; the dedicated unable view is implemented on both clients; real-path integration proof is bound to both canonical transitions. Runtime UI evidence remains intentionally separate."}
   ]
