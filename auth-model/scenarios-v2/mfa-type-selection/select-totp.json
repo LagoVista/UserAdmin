@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.mfa-type-selection.select-totp",
+  "runtimeEntityId": "A52192C66CDC4340BF6E8641280AB707",
+  "name": "Select TOTP",
+  "summary": "From Select MFA Type, the user chooses TOTP and the client opens the existing TOTP Start surface.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "mfa-type-selection",
+  "startViewKey": "auth.select.mfa-type",
+  "action": { "id": "select-totp", "finder": "action:select-totp" },
+  "preconditions": {
+    "expression": "session-capability == anonymous and auth.select.mfa-type is visible with TOTP available"
+  },
+  "inputs": [],
+  "serverInteraction": { "required": false },
+  "expectedViewKey": "auth.continue.totp",
+  "postconditions": {
+    "expression": "session-capability == anonymous and the canonical TOTP Start surface is visible"
+  },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.select.mfa-type", "note": "Starting surface owns the select-totp action." },
+    { "sourceType": "auth-view", "reference": "auth.continue.totp", "note": "Existing canonical TOTP Start surface owns the remaining TOTP ceremony." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Select MFA Type has exactly one TOTP-choice scenario ending at TOTP Start." }
+  ],
+  "progress": { "presentation": "complete", "implementation": "not-started", "tests": "complete" }
+}
