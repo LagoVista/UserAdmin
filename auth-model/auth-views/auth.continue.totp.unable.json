@@ -1,0 +1,29 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.continue.totp.unable",
+  "name": "TOTP Could Not Authenticate",
+  "description": "Reports that the submitted authenticator code could not be accepted and offers deterministic recovery navigation without revealing additional account information.",
+  "category": "totp",
+  "routeId": "auth.route.continue.totp.unable",
+  "status": "active",
+  "controls": [
+    { "id": "authentication-error", "name": "Authentication Error", "controlType": "status", "finder": "status:authentication-error" }
+  ],
+  "actions": [
+    { "id": "try-again", "name": "Try Again", "actionType": "button", "finder": "action:try-again" },
+    { "id": "start-over", "name": "Start Over", "actionType": "link", "finder": "action:start-over" }
+  ],
+  "platforms": {
+    "web": { "status": "planned" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "runtimeEntityId": "D1390775E0DB44D7B3ECC1E725A8B372"
+  },
+  "notes": [
+    "Try Again returns to auth.continue.totp for another authenticator-code attempt.",
+    "Start Over returns to auth.welcome and abandons the identified-account continuation state.",
+    "The public error surface must not disclose whether rejection was caused by mismatch, expiry, replay protection, or account lookup details."
+  ]
+}
