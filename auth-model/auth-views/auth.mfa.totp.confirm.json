@@ -60,14 +60,15 @@
     },
     "mobile": {
       "status": "implemented",
-      "implementation": "app/auth/mfa/totp/confirm.tsx"
+      "implementation": "TotpConfirmScreen",
+      "notes": "Mobile confirmation validates the six-digit input, invokes createMfatotpEnrollmentConfirm exactly once, stores returned recovery codes in ephemeral AuthFlowContext state, and navigates to the canonical recovery-code destination."
     }
   },
   "source": {
     "runtimeEntityId": "AFC380B39AE842588952EE0276D0A574",
     "runtimeSha256Hex": "e8f9719aa8c27fd12f1a8301cb469c27e8e52788ac12b4cd787059559a24feca",
     "webComponent": "TotpEnrollConfirmComponent",
-    "mobileComponent": "app/auth/mfa/totp/confirm.tsx"
+    "mobileComponent": "TotpConfirmScreen"
   },
   "notes": [
     "The runtime route typo '/auth/mfa/top/confirm' is corrected by the canonical route contract.",
