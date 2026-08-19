@@ -46,5 +46,5 @@
       "note": "Runner setup now materializes authentic TOTP and recovery-code state through the real begin and confirm enrollment operations when HasTOTP is set."
     }
   ],
-  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "complete" }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "complete" }
 }
