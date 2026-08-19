@@ -56,6 +56,7 @@ namespace LagoVista.AspNetCore.Identity
             services.AddScoped<IExternalLoginManager, ExternalLoginManager>();
             services.AddScoped<IAppUserMfaManager, AppUserMfaManager>();
             services.AddScoped<IAppUserPasskeyManager, AppUserPasskeyManager>();
+            services.AddScoped<IEmailPasskeyAuthenticationService, EmailPasskeyAuthenticationService>();
             services.AddTransient<IMagicLinkManager, MagicLinkManager>();
            
             services.AddTransient<IPasswordHasher<PendingIdentity>, PasswordHasher<PendingIdentity>>();
