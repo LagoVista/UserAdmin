@@ -8,44 +8,30 @@
   "routeId": "auth.route.mfa.totp.disable",
   "status": "active",
   "controls": [
-    {
-      "id": "disable-warning",
-      "name": "Disable Warning",
-      "controlType": "label",
-      "finder": "label:disable-warning",
-      "sensitivity": "public"
-    },
-    {
-      "id": "disable-error",
-      "name": "Disable Error",
-      "controlType": "status",
-      "finder": "status:disable-error",
-      "sensitivity": "public",
-      "visibilityCondition": "TOTP disable failed."
-    }
+    { "id": "disable-warning", "name": "Disable Warning", "controlType": "label", "finder": "label:disable-warning", "sensitivity": "public" },
+    { "id": "disable-error", "name": "Disable Error", "controlType": "status", "finder": "status:disable-error", "sensitivity": "public", "visibilityCondition": "TOTP disable failed." }
   ],
   "actions": [
-    {
-      "id": "disable",
-      "name": "Disable TOTP",
-      "actionType": "button",
-      "finder": "action:disable"
-    },
-    {
-      "id": "back",
-      "name": "Back",
-      "actionType": "button",
-      "finder": "action:back"
-    },
-    {
-      "id": "cancel",
-      "name": "Cancel",
-      "actionType": "button",
-      "finder": "action:cancel"
-    }
+    { "id": "disable", "name": "Disable TOTP", "actionType": "button", "finder": "action:disable" },
+    { "id": "back", "name": "Back", "actionType": "button", "finder": "action:back" },
+    { "id": "cancel", "name": "Cancel", "actionType": "button", "finder": "action:cancel" }
   ],
   "platforms": {
-    "web": { "status": "planned" },
-    "mobile": { "status": "planned" }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "user/totp-disable/totp-disable.component.html",
+      "component": "TotpDisableComponent"
+    },
+    "mobile": {
+      "status": "implemented",
+      "repository": "nuviot/vtm-client",
+      "path": "src/features/authentication/nuviot-account/screens/totp-disable-screen.tsx",
+      "component": "TotpDisableScreen"
+    }
+  },
+  "source": {
+    "webComponent": "TotpDisableComponent",
+    "mobileComponent": "TotpDisableScreen"
   }
 }
