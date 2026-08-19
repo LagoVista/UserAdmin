@@ -23,14 +23,14 @@ Password submit
   -> MFA Required
        -> availableMfaProviders=[totp]          -> auth.continue.totp
        -> availableMfaProviders=[passkey]       -> auth.continue.passkey
-       -> availableMfaProviders=[passkey,totp]  -> choose verification method
-                                                   -> passkey -> auth.continue.passkey
-                                                   -> totp    -> auth.continue.totp
+       -> availableMfaProviders=[passkey,totp]  -> auth.select.mfa-type
+                                                   -> select-passkey -> auth.continue.passkey
+                                                   -> select-totp    -> auth.continue.totp
 ```
 
-Provider-specific routing does not create separate server transitions. The TOTP and Passkey destination AuthViews continue to belong to their respective sign-in categories. When multiple methods are available, the client selection is presentation-only navigation and does not constitute an authentication state transition.
+Provider-specific routing does not create separate server transitions. The TOTP and Passkey destination AuthViews continue to belong to their respective sign-in categories. When multiple methods are available, `auth.select.mfa-type` is a presentation-only choice surface and selecting a method does not constitute an authentication state transition.
 
-Clients MUST prefer `availableMfaProviders` when present. A one-element list routes directly to that method. A list with more than one supported method presents a method chooser. `provider` exists only for backward compatibility and MUST NOT be used to suppress an alternative method that appears in `availableMfaProviders`.
+Clients MUST prefer `availableMfaProviders` when present. A one-element list routes directly to that method. A list with more than one supported method routes to `auth.select.mfa-type`. `provider` exists only for backward compatibility and MUST NOT be used to suppress an alternative method that appears in `availableMfaProviders`.
 
 ## Scenario modeling
 
@@ -47,7 +47,7 @@ The provider-specific client obligation is represented by deterministic setup, s
 
 - TOTP-only setup -> `auth.continue.totp`
 - passkey-only setup -> `auth.continue.passkey`
-- TOTP + passkey setup -> method chooser, followed by the selected canonical continuation view
+- TOTP + passkey setup -> `auth.select.mfa-type`
 
 The scenario's `evidenceRequirements` determines which runtime proof surfaces are required. For provider-specific client routing, use only the client platforms:
 
@@ -57,17 +57,34 @@ The scenario's `evidenceRequirements` determines which runtime proof surfaces ar
 
 Do not add `server` merely because the initiating action calls the server. The generic MFA-required server transition may have its own server proof, but the provider-specific navigation branch is not a separate C# flow proof obligation.
 
+## Select MFA Type behavior category
+
+`mfa-type-selection` owns the presentation-only decision after Password Sign-In discovers more than one available MFA method.
+
+It contains exactly two behaviors, each composed of exactly one scenario:
+
+- `auth.behavior.mfa-type-selection.passkey`
+  - starts at `auth.select.mfa-type`
+  - invokes `action:select-passkey`
+  - ends at `auth.continue.passkey` (`Passkey Start`)
+- `auth.behavior.mfa-type-selection.totp`
+  - starts at `auth.select.mfa-type`
+  - invokes `action:select-totp`
+  - ends at `auth.continue.totp` (`TOTP Start`)
+
+Both scenarios use `serverInteraction.required = false`. They only select which already-existing MFA ceremony to enter.
+
 ## Test-progress semantics
 
 `progress.tests = complete` means the authored proof obligation is fully specified. It does not mean a C# test must exist for every scenario.
 
-For response-directed client routing, the test specification is complete when the required client runtime platforms and deterministic destination are declared. Current UI execution status remains separate runtime evidence.
+For response-directed client routing and pure UI selection, the test specification is complete when the required client runtime platforms and deterministic destination are declared. Current UI execution status remains separate runtime evidence.
 
 ## UI-only versus response-directed routing
 
 Two related cases must remain distinct:
 
-1. **Pure UI-only navigation**: no server call occurs. Use `serverInteraction.required = false`. Example: Welcome -> Continue with Passkey.
+1. **Pure UI-only navigation**: no server call occurs. Use `serverInteraction.required = false`. Example: `auth.select.mfa-type -> auth.continue.passkey`.
 2. **Response-directed client routing**: the user action calls the server, but response metadata selects the next AuthView. Keep `serverInteraction.required = true`, reference the generic server transition, and omit `server` from `evidenceRequirements` when only the client routing distinction is under proof.
 
 This distinction prevents presentation routing from being inflated into fake authentication state transitions while preserving an executable end-to-end scenario contract.
