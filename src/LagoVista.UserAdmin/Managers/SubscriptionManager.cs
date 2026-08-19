@@ -112,10 +112,30 @@ namespace LagoVista.UserAdmin.Managers
             {
                 if (existing.Key != Subscription.SubscriptionKey_Provisional) return InvokeResult.FromError("The subscription ID is already in use by a non-provisional subscription.");
                 if (existing.OwnerOrganization != null && existing.OwnerOrganization.Id != org.Id) return InvokeResult.FromError("The provisional subscription belongs to a different organization.");
+                return await EnsureProvisionalDefaultSubscriptionAsync(existing, org);
+            }
+
+            var addResult = await AddSubscriptionAsync(subscription, org, user);
+            if (!addResult.Successful) return addResult;
+
+            return await EnsureProvisionalDefaultSubscriptionAsync(subscription, org);
+        }
+
+        private async Task<InvokeResult> EnsureProvisionalDefaultSubscriptionAsync(Subscription subscription, EntityHeader org)
+        {
+            var organization = await _organizationRepo.GetOrganizationAsync(org.Id);
+            if (organization == null) return InvokeResult.FromError("The provisional organization could not be found.");
+
+            var subscriptionId = subscription.Id.ToString();
+            if (!EntityHeader.IsNullOrEmpty(organization.DefaultSubscription) &&
+                String.Equals(organization.DefaultSubscription.Id, subscriptionId, StringComparison.OrdinalIgnoreCase))
+            {
                 return InvokeResult.Success;
             }
 
-            return await AddSubscriptionAsync(subscription, org, user);
+            organization.DefaultSubscription = EntityHeader.Create(subscriptionId, subscription.Name);
+            await _organizationRepo.UpdateOrganizationAsync(organization);
+            return InvokeResult.Success;
         }
 
         public async Task<Subscription> GetTrialSubscriptionAsync(EntityHeader org, EntityHeader user)
