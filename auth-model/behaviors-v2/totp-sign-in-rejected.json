@@ -15,14 +15,15 @@
   "finalOutcome": "The submitted TOTP proof is rejected, the user remains unauthenticated, and the dedicated unable-to-authenticate surface offers Try Again or Start Over without revealing internal rejection details.",
   "supportedPlatforms": ["server", "web", "android", "ios"],
   "sourceReferences": [
-    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "VerifyTotpAsync provides the reusable TOTP rejection semantics and audit event trail." },
-    { "sourceType": "auth-view", "reference": "auth.continue.totp.unable", "note": "Dedicated rejected TOTP sign-in outcome surface with Try Again and Start Over." },
-    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Rejected TOTP authentication is modeled separately from success because no session is established and the public next actions differ materially." }
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/TotpAuthenticationFlowHandler.cs", "note": "Typed handler delegates invalid proof to the real MFA manager and returns the canonical rejected transition." },
+    { "sourceType": "test", "reference": "auth.test-binding.totp-sign-in", "note": "Real-path integration proof verifies rejection and proves no authenticated session is established." },
+    { "sourceType": "auth-view", "reference": "auth.continue.totp.unable", "note": "Dedicated rejected TOTP sign-in outcome surface with Try Again and Start Over is implemented on web and mobile." },
+    { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/client.ts", "note": "Generated TOTP operations are consumed by both supported clients." }
   ],
   "progress": {
     "scenarios": "complete",
     "presentation": "complete",
-    "implementation": "in-progress",
-    "tests": "not-started"
+    "implementation": "complete",
+    "tests": "complete"
   }
 }
