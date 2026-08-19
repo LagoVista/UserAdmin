@@ -35,6 +35,24 @@
       "name": "Cancel",
       "actionType": "button",
       "finder": "action:cancel"
+    },
+    {
+      "id": "advanced",
+      "name": "Advanced",
+      "actionType": "button",
+      "finder": "action:advanced"
+    },
+    {
+      "id": "open-authenticator",
+      "name": "Open in Authenticator App",
+      "actionType": "link",
+      "finder": "action:open-authenticator"
+    },
+    {
+      "id": "copy-secret",
+      "name": "Copy Setup Key",
+      "actionType": "button",
+      "finder": "action:copy-secret"
     }
   ],
   "platforms": {
@@ -43,9 +61,9 @@
       "implementation": "TotpEnrollStartComponent"
     },
     "mobile": {
-      "status": "partial",
+      "status": "implemented",
       "implementation": "TotpEnrollScreen",
-      "notes": "Mobile now displays the real staged otpauth URI and secret with canonical finders and performs no server operation on Continue. The remaining gap is rendering the otpauth URI as an actual scannable QR code."
+      "notes": "Mobile renders the staged otpauth URI locally as a scannable QR code, displays the setup secret, and provides optional Advanced actions to open the otpauth URI in a registered authenticator app or copy the setup key."
     }
   },
   "source": {
@@ -57,6 +75,7 @@
   "notes": [
     "The runtime inventory represented the QR code and secret as unknown fields. The canonical contract models them as non-input display controls.",
     "The prior action id 'next' is normalized to the semantic action id 'continue'.",
-    "This view is operation-free; begin-enrollment errors belong to auth.mfa.totp.start."
+    "This view is operation-free; begin-enrollment errors belong to auth.mfa.totp.start.",
+    "Advanced convenience actions do not alter the enrollment ceremony: open-authenticator launches the local otpauth URI and copy-secret copies the setup key without any additional server operation."
   ]
 }
