@@ -3,11 +3,15 @@
   "schemaVersion": "2.0",
   "key": "auth.behavior.totp.sign-in-success",
   "name": "TOTP Sign-In Success",
-  "summary": "A returning user with TOTP enabled identifies the existing account, supplies a valid time-based one-time authenticator code, and establishes an authenticated application session without using the account password for that continuation path.",
+  "summary": "A returning user whose durable account has already been identified supplies a valid time-based one-time authenticator code and establishes an authenticated application session through the TOTP continuation path.",
   "version": 1,
   "maturity": "proposed",
   "categoryKey": "totp-sign-in",
-  "scenarioKeys": [],
+  "scenarioKeys": [
+    "auth.scenario.totp-sign-in.verify-success"
+  ],
+  "entryViewKey": "auth.continue.totp",
+  "finalViewKey": "app.home",
   "finalOutcome": "The submitted TOTP proof is accepted for the existing durable identity and an authenticated application session is active.",
   "supportedPlatforms": [
     "server",
@@ -19,18 +23,23 @@
     {
       "sourceType": "code",
       "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
-      "note": "VerifyTotpAsync supports login-time TOTP verification."
+      "note": "VerifyTotpAsync provides the reusable TOTP verification primitive."
     },
     {
       "sourceType": "auth-view",
       "reference": "auth.continue.totp",
-      "note": "Existing authentication view collects the TOTP verification code and permits password fallback."
+      "note": "Canonical authentication view collects the TOTP verification code and permits password fallback."
+    },
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-19",
+      "note": "The success behavior begins at the identified-account TOTP continuation surface. Presentation is coherent; implementation remains in progress because the existing server verify endpoint requires an already confirmed user and the Angular verify handler is still a TODO."
     }
   ],
   "progress": {
-    "scenarios": "not-started",
-    "presentation": "not-started",
-    "implementation": "not-started",
+    "scenarios": "complete",
+    "presentation": "complete",
+    "implementation": "in-progress",
     "tests": "not-started"
   }
 }
