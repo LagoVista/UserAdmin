@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schemas/auth-flow.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.flow.totp-sign-in",
+  "name": "TOTP Sign-In",
+  "summary": "Authenticates an identified durable identity with TOTP and adapts the accepted proof to either the web session path or the mobile token path.",
+  "version": 1,
+  "maturity": "implemented",
+  "requestContract": "TotpSignInRequest / AuthRequest",
+  "resultContract": "AuthenticationResponse / AuthResponse",
+  "handlerKeys": ["auth.handler.totp-sign-in"],
+  "transitionKeys": [
+    "auth.transition.totp-sign-in.success",
+    "auth.transition.totp-sign-in.rejected"
+  ],
+  "entryActionKeys": ["auth.action.totp-sign-in.submit"],
+  "supportedAudiences": ["platform-user", "tenant-user", "customer-end-user"],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/AuthenticationFlowService.cs",
+      "note": "AuthenticateWithTotpAsync adapts accepted proof to the real SignInManager web session path; AuthenticateWithTotpTokenAsync adapts the same proof to the existing single-use-token access/refresh-token pipeline for mobile."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/TotpAuthenticationFlowHandler.cs",
+      "note": "Both session adapters share one typed TOTP proof handler and canonical transition family."
+    }
+  ]
+}
