@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/auth-flow-handler.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.handler.session-sign-out",
+  "name": "Sign Out Flow Handler",
+  "summary": "Ends the current authenticated application session, revokes the supplied current refresh token when present, and records the logout audit event.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "src/LagoVista.UserAdmin",
+  "sourcePath": "src/LagoVista.UserAdmin/Authentication/Flows/SignOutFlowHandler.cs",
+  "interfaceName": "ISignOutFlowHandler",
+  "typeName": "SignOutFlowHandler",
+  "methodName": "HandleAsync",
+  "requestContract": "SignOutFlowRequest",
+  "resultContract": "AuthenticationFlowResult",
+  "transitionKeys": ["auth.transition.session.sign-out-success"],
+  "dependencies": ["ISignInManager", "IRefreshTokenManager", "IAuthenticationLogManager"],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/SignOutFlowHandler.cs",
+      "note": "The typed handler owns current-session termination, current refresh-token revocation when applicable, and UserLogout audit emission."
+    }
+  ]
+}
