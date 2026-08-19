@@ -1,0 +1,36 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.totp.recovery-codes-rotation-success",
+  "name": "TOTP Recovery Code Rotation Success",
+  "summary": "An authenticated user with TOTP enabled explicitly chooses to replace the current recovery-code set, confirms the destructive rotation, and receives the newly issued recovery codes on the dedicated recovery-code surface.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-management",
+  "scenarioKeys": [
+    "auth.scenario.totp-management.manage-to-rotate-recovery-codes",
+    "auth.scenario.totp-management.rotate-recovery-codes-success"
+  ],
+  "entryViewKey": "auth.mfa.totp.manage",
+  "finalViewKey": "auth.mfa.totp.recovery-codes",
+  "finalOutcome": "TOTP remains enabled for the current durable identity, all previously issued recovery codes are invalidated, and a fresh recovery-code set is displayed to the user.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
+      "note": "RotateRecoveryCodesAsync replaces the stored recovery-code secret and returns the fresh plaintext codes while leaving TOTP enabled."
+    },
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-19",
+      "note": "Recovery-code rotation is modeled separately from TOTP disable because the durable MFA post-state is materially different."
+    }
+  ],
+  "progress": {
+    "scenarios": "complete",
+    "presentation": "complete",
+    "implementation": "in-progress",
+    "tests": "not-started"
+  }
+}
