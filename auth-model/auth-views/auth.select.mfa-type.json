@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.select.mfa-type",
+  "name": "Select MFA Type",
+  "description": "Lets a user who has more than one available MFA method choose which second-factor ceremony to continue with.",
+  "category": "provider",
+  "routeId": "auth.route.select.mfa-type",
+  "status": "proposed",
+  "controls": [],
+  "actions": [
+    { "id": "select-passkey", "name": "Use Passkey", "actionType": "button", "finder": "action:select-passkey" },
+    { "id": "select-totp", "name": "Use Authenticator Code", "actionType": "button", "finder": "action:select-totp" }
+  ],
+  "platforms": {
+    "web": { "status": "planned", "repository": "softwarelogistics/nuviot-ui-shared", "notes": "New Select MFA Type surface must expose the two canonical selection actions and route to the existing passkey or TOTP continuation view." },
+    "mobile": { "status": "planned", "repository": "nuviot/vtm-client", "notes": "New Select MFA Type surface must expose the two canonical selection actions and route to the existing passkey or TOTP continuation view." }
+  },
+  "notes": [
+    "This view performs no authentication operation itself. It is a client-only choice surface between already-available MFA methods.",
+    "Passkey and TOTP ceremonies remain owned by auth.continue.passkey and auth.continue.totp respectively."
+  ]
+}
