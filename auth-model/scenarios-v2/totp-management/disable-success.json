@@ -1,0 +1,40 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.totp-management.disable-success",
+  "runtimeEntityId": "360F1331196A4C699D23F70A2A6CE5D8",
+  "name": "Disable TOTP",
+  "summary": "The user confirms TOTP disable; the server removes authenticator and recovery-code material and clears MFA state for the current durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-management",
+  "startViewKey": "auth.mfa.totp.disable",
+  "action": { "id": "disable", "finder": "action:disable" },
+  "preconditions": {
+    "expression": "user is authenticated, TOTP is enabled, and disable has been explicitly confirmed",
+    "state": { "isUserLoggedIn": "set", "hasTOTP": "set", "twoFactorEnabled": "set" }
+  },
+  "inputs": [],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Disable TOTP exactly once, remove authenticator and recovery-code secrets, and clear TOTP replay/last-MFA state.",
+    "transitionKeys": ["auth.transition.totp-management.disable-success"]
+  },
+  "expectedViewKey": "auth.mfa.totp.disabled",
+  "expectedVisibleFinders": ["status:totp-disabled", "action:done"],
+  "postconditions": {
+    "expression": "TOTP is disabled and the current durable identity remains signed in",
+    "state": { "isUserLoggedIn": "set", "hasTOTP": "notset", "twoFactorEnabled": "notset" }
+  },
+  "expectedAuthLogEvents": ["TotpDisableMfaStart", "TotpDisableMfaSuccess"],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
+      "note": "DisableMfaAsync is the single server operation and removes authenticator and recovery-code secrets before clearing TwoFactorEnabled and replay state."
+    },
+    { "sourceType": "auth-view", "reference": "auth.mfa.totp.disabled" }
+  ],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}
