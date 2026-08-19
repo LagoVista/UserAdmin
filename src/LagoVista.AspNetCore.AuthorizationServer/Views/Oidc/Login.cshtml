@@ -1,0 +1,60 @@
+@model LagoVista.AspNetCore.AuthorizationServer.OidcLoginViewModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Sign in";
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign in</title>
+    <style>
+        :root { color-scheme: light dark; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+        body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f4f6f8; color: #17202a; }
+        main { width: min(92vw, 420px); background: white; border-radius: 12px; box-shadow: 0 18px 50px rgba(0,0,0,.12); padding: 28px; }
+        h1 { margin: 0 0 8px; font-size: 1.6rem; }
+        p { margin: 0 0 24px; color: #5d6d7e; }
+        label { display: block; margin-top: 16px; font-weight: 600; }
+        input[type=email], input[type=password] { width: 100%; box-sizing: border-box; margin-top: 6px; padding: 11px 12px; border: 1px solid #c8d0d8; border-radius: 8px; font: inherit; }
+        .remember { display: flex; gap: 8px; align-items: center; font-weight: 400; }
+        button { width: 100%; margin-top: 22px; padding: 12px; border: 0; border-radius: 8px; font: inherit; font-weight: 700; cursor: pointer; background: #1f6feb; color: white; }
+        .validation-summary-errors { margin-top: 16px; color: #b42318; }
+        .field-validation-error { display: block; margin-top: 4px; color: #b42318; font-size: .9rem; }
+        .secondary { margin-top: 18px; text-align: center; font-size: .92rem; }
+        .secondary a { color: inherit; }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Sign in to continue</h1>
+        <p>Use your NuvIoT account to complete this authorization request.</p>
+
+        <form method="post" action="/oidc/login">
+            @Html.AntiForgeryToken()
+            <input asp-for="ReturnUrl" type="hidden" />
+
+            <div asp-validation-summary="ModelOnly"></div>
+
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" autocomplete="username" autofocus />
+            <span asp-validation-for="Email"></span>
+
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password" autocomplete="current-password" />
+            <span asp-validation-for="Password"></span>
+
+            <label class="remember">
+                <input asp-for="RememberMe" />
+                <span>Keep me signed in</span>
+            </label>
+
+            <button type="submit">Continue</button>
+        </form>
+
+        <div class="secondary">
+            Password reset and passkey sign-in will use the existing authentication services from this dedicated OIDC surface.
+        </div>
+    </main>
+</body>
+</html>
