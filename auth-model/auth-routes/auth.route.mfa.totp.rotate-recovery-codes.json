@@ -1,0 +1,16 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.mfa.totp.rotate-recovery-codes",
+  "name": "Rotate TOTP Recovery Codes",
+  "description": "Navigates to the recovery-code rotation confirmation surface.",
+  "path": "/auth/mfa/totp/rotate-recovery-codes",
+  "routeType": "view",
+  "viewId": "auth.mfa.totp.rotate-recovery-codes",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "planned" },
+    "mobile": { "status": "planned" }
+  }
+}
