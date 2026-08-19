@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/auth-endpoint-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.endpoint.session-sign-out",
+  "name": "Sign Out Endpoint",
+  "summary": "Maps authenticated browser and mobile sign-out requests to the normalized sign-out flow.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdminRest",
+  "projectPath": "src/LagoVista.UserAdmin.Rest",
+  "sourcePath": "src/LagoVista.UserAdmin.Rest/Rest/SignOutController.cs",
+  "controllerType": "SignOutController",
+  "methodName": "SignOutAsync",
+  "httpMethods": ["POST"],
+  "routeTemplates": ["/api/auth/signout"],
+  "requestContract": "SignOutRequest",
+  "responseContract": "InvokeResult",
+  "handlerKey": "auth.handler.session-sign-out",
+  "transitionKeys": ["auth.transition.session.sign-out-success"],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/SignOutController.cs",
+      "note": "Authorized POST endpoint delegates the current user and organization context plus optional refresh token to IAuthenticationFlowService.SignOutAsync."
+    }
+  ]
+}
