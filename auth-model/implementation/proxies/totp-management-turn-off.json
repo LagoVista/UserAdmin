@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/auth-proxy-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.proxy.totp-management.turn-off",
+  "name": "TOTP Turn Off Generated Proxy",
+  "summary": "Binds the canonical TOTP turn-off endpoint to the stable generated AuthClient operation consumed by web and mobile clients.",
+  "version": 1,
+  "maturity": "implemented",
+  "endpointBindingKey": "auth.endpoint.totp-management.turn-off",
+  "operationContractId": "nuvos.endpoint.auth.mfa-disable-mfa-api-auth-mfadisable",
+  "operationId": "Mfa_DisableMfa_api_auth_mfadisable",
+  "repository": "nuviot/nuvos-app-contracts",
+  "sourcePath": "generated/auth/client.ts",
+  "serviceType": "AuthClient",
+  "methodName": "createMfadisable",
+  "resultContract": "InvokeResult",
+  "generator": "Aptix EndpointProjectGenerator",
+  "consumingPlatforms": ["web", "mobile"],
+  "notes": [
+    "The generated operation identity remains unchanged; only the server implementation behind the REST endpoint was normalized."
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/operations.json", "note": "Generated operation manifest records the stable mfadisable operation." },
+    { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/client.ts", "note": "Shared generated AuthClient consumed by Angular and React Native." }
+  ]
+}
