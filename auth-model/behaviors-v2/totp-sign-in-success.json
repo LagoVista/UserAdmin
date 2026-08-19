@@ -22,24 +22,29 @@
   "sourceReferences": [
     {
       "sourceType": "code",
-      "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
-      "note": "VerifyTotpAsync provides the reusable TOTP verification primitive."
+      "reference": "src/LagoVista.UserAdmin/Authentication/Flows/TotpAuthenticationFlowHandler.cs",
+      "note": "Typed handler resolves the durable identity and delegates TOTP proof validation to the real AppUserMfaManager."
     },
     {
-      "sourceType": "auth-view",
-      "reference": "auth.continue.totp",
-      "note": "Canonical authentication view collects the TOTP verification code and permits password fallback."
+      "sourceType": "code",
+      "reference": "src/LagoVista.UserAdmin/Authentication/AuthenticationFlowService.cs",
+      "note": "Stable browser and mobile entry points adapt the same accepted TOTP proof into the appropriate application session model."
     },
     {
-      "sourceType": "decision",
-      "reference": "ChatGPT conversation 2026-08-19",
-      "note": "The success behavior begins at the identified-account TOTP continuation surface. Presentation is coherent; implementation remains in progress because the existing server verify endpoint requires an already confirmed user and the Angular verify handler is still a TODO."
+      "sourceType": "test",
+      "reference": "auth.test-binding.totp-sign-in",
+      "note": "Real-path integration proof covers valid TOTP verification and session establishment without mocking the MFA/domain operation."
+    },
+    {
+      "sourceType": "code",
+      "reference": "nuviot/nuvos-app-contracts:generated/auth/client.ts",
+      "note": "Generated createTotpLogin and createTotpToken operations provide the stable client contracts consumed by Angular and React Native."
     }
   ],
   "progress": {
     "scenarios": "complete",
     "presentation": "complete",
-    "implementation": "in-progress",
-    "tests": "not-started"
+    "implementation": "complete",
+    "tests": "complete"
   }
 }
