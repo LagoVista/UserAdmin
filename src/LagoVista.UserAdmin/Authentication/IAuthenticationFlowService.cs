@@ -1,3 +1,4 @@
+using LagoVista.Core.Authentication.Models;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Models.Auth;
@@ -12,6 +13,7 @@ namespace LagoVista.UserAdmin.Authentication
     {
         Task<InvokeResult<AuthenticationResponse>> LoginWithPasswordAsync(AuthLoginRequest request);
         Task<InvokeResult<AuthenticationResponse>> AuthenticateWithTotpAsync(TotpSignInRequest request);
+        Task<InvokeResult<AuthResponse>> AuthenticateWithTotpTokenAsync(AuthRequest request);
         Task<InvokeResult> ChangePasswordAsync(ChangePassword request, EntityHeader organization, EntityHeader user);
         Task<InvokeResult> RequestPasswordRecoveryAsync(SendResetPasswordLink request);
         Task<InvokeResult<string>> VerifyPasswordRecoveryAsync(VerifyPasswordResetCode request);
