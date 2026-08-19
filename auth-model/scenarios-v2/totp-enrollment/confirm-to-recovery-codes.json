@@ -9,75 +9,32 @@
   "maturity": "proposed",
   "categoryKey": "totp-enrollment",
   "startViewKey": "auth.mfa.totp.confirm",
-  "action": {
-    "id": "confirm",
-    "finder": "action:confirm"
-  },
+  "action": { "id": "confirm", "finder": "action:confirm" },
   "preconditions": {
     "expression": "user is authenticated, TOTP enrollment is pending, and the authenticator can produce a current valid code",
-    "state": {
-      "isUserLoggedIn": "set",
-      "hasTOTP": "notset",
-      "twoFactorEnabled": "notset"
-    }
+    "state": { "isUserLoggedIn": "set", "hasTOTP": "notset", "twoFactorEnabled": "notset" }
   },
   "inputs": [
-    {
-      "finder": "field:verification-code",
-      "name": "Verification Code",
-      "valueType": "secret-reference",
-      "required": true,
-      "value": "user.totp"
-    }
+    { "finder": "field:verification-code", "name": "Verification Code", "valueType": "secret-reference", "required": true, "value": "user.totp" }
   ],
   "serverInteraction": {
     "required": true,
     "intent": "Verify the staged authenticator exactly once, enable TOTP, and return the newly issued recovery codes.",
-    "transitionKeys": [
-      "auth.transition.totp-enrollment.success"
-    ]
+    "transitionKeys": ["auth.transition.totp-enrollment.success"]
   },
   "expectedViewKey": "auth.mfa.totp.recovery-codes",
-  "expectedVisibleFinders": [
-    "display:recovery-codes",
-    "action:done"
-  ],
+  "expectedVisibleFinders": ["display:recovery-codes", "action:done"],
   "postconditions": {
     "expression": "TOTP is enabled and fresh recovery codes have been issued for the current durable identity",
-    "state": {
-      "isUserLoggedIn": "set",
-      "hasTOTP": "set",
-      "twoFactorEnabled": "set"
-    }
+    "state": { "isUserLoggedIn": "set", "hasTOTP": "set", "twoFactorEnabled": "set" }
   },
-  "expectedAuthLogEvents": [
-    "TotpConfirmEnrollmentStart",
-    "TotpConfirmEnrollmentSuccess"
-  ],
-  "evidenceRequirements": [
-    "server",
-    "web",
-    "android",
-    "ios"
-  ],
+  "expectedAuthLogEvents": ["TotpConfirmEnrollmentStart", "TotpConfirmEnrollmentSuccess"],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
   "sourceReferences": [
-    {
-      "sourceType": "auth-view",
-      "reference": "auth.mfa.totp.confirm"
-    },
-    {
-      "sourceType": "auth-view",
-      "reference": "auth.mfa.totp.recovery-codes"
-    },
-    {
-      "sourceType": "code",
-      "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
-      "note": "ConfirmTotpEnrollmentAsync is the single server operation for this scenario and returns the recovery codes displayed on the destination view."
-    }
+    { "sourceType": "auth-view", "reference": "auth.mfa.totp.confirm" },
+    { "sourceType": "auth-view", "reference": "auth.mfa.totp.recovery-codes" },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ConfirmTotpEnrollmentAsync is the single server operation for this scenario and returns the recovery codes displayed on the destination view." },
+    { "sourceType": "test", "reference": "auth.test-binding.totp-enrollment.success", "note": "Real-path proof stages enrollment through Begin, generates a current TOTP from the real staged secret, then exercises the typed confirm handler and AppUserMfaManager." }
   ],
-  "progress": {
-    "presentation": "complete",
-    "implementation": "in-progress",
-    "tests": "not-started"
-  }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "complete" }
 }
