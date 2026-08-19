@@ -34,7 +34,12 @@
       "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
       "note": "RotateRecoveryCodesAsync is the single server operation and returns the newly generated recovery-code list."
     },
-    { "sourceType": "auth-view", "reference": "auth.mfa.totp.recovery-codes" }
+    { "sourceType": "auth-view", "reference": "auth.mfa.totp.recovery-codes" },
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-19",
+      "note": "Test proof must establish a real TOTP-enabled test identity with an existing recovery-code set, exercise the real server maintenance path, prove the old recovery-code set is invalidated, prove a fresh set is returned while TOTP remains enabled, and validate the declared auth-log event pair. The current test setup model exposes HasTOTP but ApplySetupAsync does not yet materialize TOTP or recovery-code secret state."
+    }
   ],
-  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "in-progress" }
 }
