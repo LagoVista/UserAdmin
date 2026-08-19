@@ -37,12 +37,14 @@
       "notes": "Start explicitly invokes BeginTotpEnrollment and stages the returned secret and otpauth URI in ephemeral client flow state before navigating to auth.mfa.totp.enroll."
     },
     "mobile": {
-      "status": "planned",
-      "notes": "Canonical surface added before the existing QR/secret enrollment view so BeginTotpEnrollment executes only after an explicit user action."
+      "status": "implemented",
+      "implementation": "TotpEnrollStartScreen",
+      "notes": "Mobile Start explicitly invokes createMfatotpEnrollmentBegin, stores the returned otpauth URI and secret only in AuthFlowContext, and navigates to the enrollment-material view."
     }
   },
   "source": {
-    "webComponent": "TotpEnrollBeginComponent"
+    "webComponent": "TotpEnrollBeginComponent",
+    "mobileComponent": "TotpEnrollStartScreen"
   },
   "notes": [
     "This view intentionally does not display the QR code or authenticator secret. Those values belong exclusively to auth.mfa.totp.enroll after the begin-enrollment server operation succeeds."
