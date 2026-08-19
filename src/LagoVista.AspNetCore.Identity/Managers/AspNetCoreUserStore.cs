@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LagoVista.Core;
 using LagoVista.Core.Authentication.Models;
+using LagoVista.Core.Interfaces;
 using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 
@@ -20,16 +21,19 @@ namespace LagoVista.AspNetCore.Identity.Managers
             IUserEmailStore<AppUser>,
             IUserPhoneNumberStore<AppUser>,
             IUserTwoFactorStore<AppUser>,
+            IUserAuthenticatorKeyStore<AppUser>,
             IUserLoginStore<AppUser>,
             IUserLockoutStore<AppUser>,
             IUserSecurityStampStore<AppUser>
 
     {
-        IAppUserRepo _userRepo;
+        private readonly IAppUserRepo _userRepo;
+        private readonly ISecureStorage _secureStorage;
 
-        public AspNetCoreUserStore(IAppUserRepo userRepo)
+        public AspNetCoreUserStore(IAppUserRepo userRepo, ISecureStorage secureStorage)
         {
-            _userRepo = userRepo;
+            _userRepo = userRepo ?? throw new ArgumentNullException(nameof(userRepo));
+            _secureStorage = secureStorage ?? throw new ArgumentNullException(nameof(secureStorage));
         }
 
         public async Task<IdentityResult> CreateAsync(AppUser user, CancellationToken token)
@@ -176,6 +180,43 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return Task.FromResult(user.TwoFactorEnabled);
         }
 
+        public async Task SetAuthenticatorKeyAsync(AppUser user, string key, CancellationToken token)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+
+            if (!String.IsNullOrEmpty(user.AuthenticatorKeySecretId))
+            {
+                var removeResult = await _secureStorage.RemoveUserSecretAsync(user.ToEntityHeader(), user.AuthenticatorKeySecretId);
+                if (!removeResult.Successful)
+                    throw new InvalidOperationException("Could not remove the existing authenticator key from secure storage.");
+            }
+
+            user.AuthenticatorKey = null;
+            user.AuthenticatorKeySecretId = null;
+
+            if (String.IsNullOrWhiteSpace(key))
+                return;
+
+            var addResult = await _secureStorage.AddUserSecretAsync(user.ToEntityHeader(), key);
+            if (!addResult.Successful)
+                throw new InvalidOperationException("Could not store the authenticator key in secure storage.");
+
+            user.AuthenticatorKeySecretId = addResult.Result;
+        }
+
+        public async Task<string> GetAuthenticatorKeyAsync(AppUser user, CancellationToken token)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            if (String.IsNullOrEmpty(user.AuthenticatorKeySecretId))
+                return null;
+
+            var result = await _secureStorage.GetUserSecretAsync(user.ToEntityHeader(), user.AuthenticatorKeySecretId);
+            if (!result.Successful)
+                throw new InvalidOperationException("Could not retrieve the authenticator key from secure storage.");
+
+            return result.Result;
+        }
+
         public Task AddLoginAsync(AppUser user, UserLoginInfo login, CancellationToken token)
         {
             user.Logins.Add(new ThirdPartyLoginInfo()
@@ -276,4 +317,3 @@ namespace LagoVista.AspNetCore.Identity.Managers
         }
     }
 }
-
