@@ -1,0 +1,29 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.totp-management.disable",
+  "name": "Disable TOTP",
+  "summary": "Disables TOTP for the current authenticated identity and removes enrolled authenticator and recovery-code material.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [],
+  "guards": [
+    { "expression": "session-capability == authenticated-normal and TOTP is enabled for the current durable identity", "failureCode": "totp-not-enabled" }
+  ],
+  "permittedMutations": ["auth.dimension.credential-proof"],
+  "requiredEffects": ["disable-totp", "remove-authenticator-secret", "remove-recovery-codes", "clear-totp-replay-state"],
+  "forbiddenEffects": ["create-durable-user", "change-password-credential", "issue-new-session"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
+      "note": "DisableMfaAsync removes both secure secrets, clears LastMfaDateTimeUtc and LastTotpAcceptedTimeStep, and sets TwoFactorEnabled false."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs",
+      "note": "POST /api/auth/mfadisable exposes the operation for a confirmed user."
+    }
+  ]
+}
