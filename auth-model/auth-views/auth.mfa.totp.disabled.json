@@ -8,24 +8,27 @@
   "routeId": "auth.route.mfa.totp.disabled",
   "status": "active",
   "controls": [
-    {
-      "id": "totp-disabled",
-      "name": "TOTP Disabled",
-      "controlType": "status",
-      "finder": "status:totp-disabled",
-      "sensitivity": "public"
-    }
+    { "id": "totp-disabled", "name": "TOTP Disabled", "controlType": "status", "finder": "status:totp-disabled", "sensitivity": "public" }
   ],
   "actions": [
-    {
-      "id": "done",
-      "name": "Done",
-      "actionType": "button",
-      "finder": "action:done"
-    }
+    { "id": "done", "name": "Done", "actionType": "button", "finder": "action:done" }
   ],
   "platforms": {
-    "web": { "status": "planned" },
-    "mobile": { "status": "planned" }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "user/totp-disabled/totp-disabled.component.html",
+      "component": "TotpDisabledComponent"
+    },
+    "mobile": {
+      "status": "implemented",
+      "repository": "nuviot/vtm-client",
+      "path": "src/features/authentication/nuviot-account/screens/totp-disabled-screen.tsx",
+      "component": "TotpDisabledScreen"
+    }
+  },
+  "source": {
+    "webComponent": "TotpDisabledComponent",
+    "mobileComponent": "TotpDisabledScreen"
   }
 }
