@@ -14,6 +14,6 @@ namespace LagoVista.AspNetCore.Identity.Interfaces
     public interface IEmailPasskeyAuthenticationService
     {
         Task<InvokeResult<PasskeyBeginOptionsResponse>> BeginAsync(string email, string passkeyUrl, EntityHeader organization, EntityHeader user);
-        Task<InvokeResult<AppUser>> CompleteAsync(string email, PasskeyAuthenticationCompleteRequest request, EntityHeader organization, EntityHeader user);
+        Task<InvokeResult<AppUser>> CompleteAsync(string email, PasskeyAuthenticationCompleteRequest request, bool isStepUp, EntityHeader organization, EntityHeader user);
     }
 }
