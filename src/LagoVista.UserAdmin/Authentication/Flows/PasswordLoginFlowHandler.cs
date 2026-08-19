@@ -18,6 +18,7 @@ namespace LagoVista.UserAdmin.Authentication.Flows
     public class PasswordLoginFlowHandler : IPasswordLoginFlowHandler
     {
         public const string SuccessTransitionKey = "auth.transition.password-sign-in.success";
+        public const string MfaRequiredTransitionKey = "auth.transition.password-sign-in.mfa-required";
         public const string RejectedTransitionKey = "auth.transition.password-sign-in.rejected";
         public const string LockedOutTransitionKey = "auth.transition.password-sign-in.locked-out";
 
@@ -33,7 +34,11 @@ namespace LagoVista.UserAdmin.Authentication.Flows
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             var result = await _signInManager.PasswordSignInAsync(request);
-            if (result.Successful) return new AuthenticationFlowResult<AuthenticationResponse>(SuccessTransitionKey, result);
+            if (result.Successful && result.Result?.AuthenticationState == AuthenticationResponseState.MfaRequired)
+                return new AuthenticationFlowResult<AuthenticationResponse>(MfaRequiredTransitionKey, result);
+
+            if (result.Successful)
+                return new AuthenticationFlowResult<AuthenticationResponse>(SuccessTransitionKey, result);
 
             if (result.Errors.Any(error => error.ErrorCode == UserAdminErrorCodes.AuthUserLockedOut.Code))
                 return new AuthenticationFlowResult<AuthenticationResponse>(LockedOutTransitionKey, result);
