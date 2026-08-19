@@ -55,12 +55,22 @@
     {
       "sourceType": "code",
       "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs",
-      "note": "Passwordless authentication consumes and validates the challenge, resolves the stored credential to one durable user, validates the WebAuthn assertion, advances the signature counter, emits the canonical runtime audit events, and resolves the landing destination."
+      "note": "Passwordless authentication consumes and validates the challenge, resolves the stored credential to one durable user, validates the WebAuthn assertion, advances the signature counter, emits the canonical runtime audit events, and resolves the landing destination. The current manager does not itself establish an application session."
+    },
+    {
+      "sourceType": "code",
+      "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/continue-passkey-screen.tsx",
+      "note": "The current React Native Use Passkey action is presentation-only and does not yet execute the generated challenge endpoints or a native passkey assertion ceremony."
+    },
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-19",
+      "note": "Implementation reconciliation reopened this scenario until browser session establishment and native mobile passkey/token-session completion are source-supported."
     }
   ],
   "progress": {
     "presentation": "complete",
-    "implementation": "complete",
+    "implementation": "in-progress",
     "tests": "not-started"
   }
 }
