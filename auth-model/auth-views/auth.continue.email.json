@@ -3,7 +3,7 @@
   "schemaVersion": "1.0",
   "viewId": "auth.continue.email",
   "name": "Continue with Email",
-  "description": "Collects the email address used to continue the authentication journey.",
+  "description": "Collects the email address and lets the user choose Password or Passkey as the primary sign-in credential.",
   "category": "entry",
   "routeId": "auth.route.continue.email",
   "status": "active",
@@ -11,7 +11,8 @@
     { "id": "email", "name": "Email", "controlType": "email-input", "finder": "field:email", "required": true, "sensitivity": "personal" }
   ],
   "actions": [
-    { "id": "continue", "name": "Continue", "actionType": "button", "finder": "action:continue" },
+    { "id": "continue-password", "name": "Continue with Password", "actionType": "button", "finder": "action:continue-password" },
+    { "id": "continue-passkey", "name": "Continue with Passkey", "actionType": "button", "finder": "action:continue-passkey" },
     { "id": "back", "name": "Back", "actionType": "button", "finder": "action:back" },
     { "id": "start-over", "name": "Start Over", "actionType": "link", "finder": "action:start-over" }
   ],
@@ -24,9 +25,9 @@
       "implementation": "ContinueEmailComponent with continue-email.component.html",
       "conformance": {
         "status": "verified",
-        "checkedUtc": "2026-08-11T18:38:00Z",
+        "checkedUtc": "2026-08-19T23:42:00Z",
         "checkedAgainst": ["view-identity", "controls", "actions", "finders", "navigation"],
-        "notes": "Verified auth.continue.email, field:email, and the continue, back, and start-over actions/finders against the Angular component and template."
+        "notes": "Verified field:email plus continue-password, continue-passkey, back, and start-over actions against the Angular component and template."
       }
     },
     "mobile": {
@@ -37,9 +38,9 @@
       "implementation": "app/auth/continue/email.tsx -> ContinueEmailScreen",
       "conformance": {
         "status": "verified",
-        "checkedUtc": "2026-08-11T18:38:00Z",
+        "checkedUtc": "2026-08-19T23:42:00Z",
         "checkedAgainst": ["view-identity", "controls", "actions", "finders", "navigation"],
-        "notes": "Verified auth.continue.email, field:email, and all three canonical actions after aligning the mobile submit finder to action:continue."
+        "notes": "Verified field:email plus continue-password, continue-passkey, back, and start-over actions against ContinueEmailScreen."
       }
     }
   },
@@ -49,5 +50,7 @@
     "webComponent": "ContinueEmailComponent",
     "mobileComponent": "app/auth/continue/email.tsx"
   },
-  "notes": ["The legacy next action is normalized to continue."]
+  "notes": [
+    "The email surface is a shared credential-choice fork. Password Sign In owns continue-password; Passkey Sign In owns continue-passkey."
+  ]
 }
