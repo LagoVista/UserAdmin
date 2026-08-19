@@ -1,0 +1,28 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.totp-sign-in.success",
+  "name": "TOTP Sign-In Success",
+  "summary": "Accepts a valid TOTP proof for an identified durable identity and establishes a normal authenticated application session.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-sign-in",
+  "priority": 100,
+  "sourceState": { "expression": "session-capability == anonymous" },
+  "actionKey": "auth.action.totp-sign-in.submit",
+  "guards": [
+    { "expression": "the identified account has TOTP enabled and the submitted code is valid and has not already been accepted", "failureCode": "totp-sign-in-not-successful" }
+  ],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "derive", "valueExpression": "authenticated-normal" },
+    { "dimensionKey": "auth.dimension.credential-proof", "operation": "set", "valueExpression": "totp-proved" }
+  ],
+  "requiredEffects": ["verify-totp-proof", "issue-authenticated-session", "record-totp-authentication-success", "resolve-application-landing-destination"],
+  "forbiddenEffects": ["create-durable-user", "change-password-credential", "disclose-account-existence-on-failure"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "VerifyTotpAsync provides the existing proof validation and replay prevention primitive." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Interfaces/Managers/ISigninManager.cs", "note": "CompleteSignInToAppAsync is the existing session-completion primitive used after an identity credential is accepted." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "The only current TOTP verify endpoint requires a confirmed current user and therefore cannot implement this anonymous sign-in transition as-is." }
+  ]
+}
