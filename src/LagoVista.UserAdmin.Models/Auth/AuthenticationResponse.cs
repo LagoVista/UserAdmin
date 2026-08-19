@@ -12,7 +12,17 @@ namespace LagoVista.UserAdmin.Models.Auth
 
         public string MaskedEmail { get; set; }
 
+        /// <summary>
+        /// Backward-compatible primary provider hint. Clients should prefer AvailableMfaProviders
+        /// when AuthenticationState is MfaRequired.
+        /// </summary>
         public string Provider { get; set; }
+
+        /// <summary>
+        /// Authentication methods that may satisfy the outstanding MFA requirement.
+        /// Known values are "totp" and "passkey".
+        /// </summary>
+        public string[] AvailableMfaProviders { get; set; }
 
         public string InviteId { get; set; }
 
@@ -28,6 +38,7 @@ namespace LagoVista.UserAdmin.Models.Auth
             PendingIdentityId = String.Empty;
             MaskedEmail = String.Empty;
             Provider = String.Empty;
+            AvailableMfaProviders = Array.Empty<string>();
             InviteId = String.Empty;
             ResponseMessage = String.Empty;
             RedirectPage = String.Empty;
