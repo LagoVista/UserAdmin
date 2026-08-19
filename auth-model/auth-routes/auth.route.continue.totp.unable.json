@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.continue.totp.unable",
+  "name": "TOTP Could Not Authenticate",
+  "description": "Dedicated rejected TOTP sign-in outcome surface with Try Again and Start Over recovery actions.",
+  "path": "/auth/continue/totp/unable",
+  "routeType": "view",
+  "viewId": "auth.continue.totp.unable",
+  "parameters": [],
+  "status": "active",
+  "commonLinks": {
+    "status": "planned",
+    "repository": "LagoVista/UserAdmin",
+    "path": "src/LagoVista.UserAdmin/CommonLinks.cs",
+    "member": "AuthContinueTotpUnable",
+    "value": "/auth/continue/totp/unable"
+  },
+  "platforms": {
+    "web": { "status": "planned", "repository": "softwarelogistics/nuviot-ui-shared", "route": "/auth/continue/totp/unable" },
+    "mobile": { "status": "planned", "repository": "nuviot/vtm-client", "route": "/auth/continue/totp/unable" }
+  },
+  "source": {
+    "commonLinksMember": "AuthContinueTotpUnable"
+  }
+}
