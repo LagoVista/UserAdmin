@@ -17,28 +17,27 @@
     }
   ],
   "actions": [
-    {
-      "id": "rotate-recovery-codes",
-      "name": "Rotate Recovery Codes",
-      "actionType": "button",
-      "finder": "action:rotate-recovery-codes"
-    },
-    {
-      "id": "disable",
-      "name": "Disable TOTP",
-      "actionType": "button",
-      "finder": "action:disable"
-    },
-    {
-      "id": "done",
-      "name": "Done",
-      "actionType": "button",
-      "finder": "action:done"
-    }
+    { "id": "rotate-recovery-codes", "name": "Rotate Recovery Codes", "actionType": "button", "finder": "action:rotate-recovery-codes" },
+    { "id": "disable", "name": "Disable TOTP", "actionType": "button", "finder": "action:disable" },
+    { "id": "done", "name": "Done", "actionType": "button", "finder": "action:done" }
   ],
   "platforms": {
-    "web": { "status": "planned" },
-    "mobile": { "status": "planned" }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "user/totp-manage/totp-manage.component.html",
+      "component": "TotpManageComponent"
+    },
+    "mobile": {
+      "status": "implemented",
+      "repository": "nuviot/vtm-client",
+      "path": "src/features/authentication/nuviot-account/screens/totp-manage-screen.tsx",
+      "component": "TotpManageScreen"
+    }
+  },
+  "source": {
+    "webComponent": "TotpManageComponent",
+    "mobileComponent": "TotpManageScreen"
   },
   "notes": [
     "This is a client-only branching surface. Destructive server operations occur only after an explicit confirmation view."
