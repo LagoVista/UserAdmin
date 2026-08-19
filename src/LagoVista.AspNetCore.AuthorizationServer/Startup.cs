@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using OpenIddict.Abstractions;
 using System;
 using System.Linq;
 
@@ -27,13 +28,15 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                     options.AcceptAnonymousClients();
 
                     options.SetAuthorizationEndpointUris(AuthorizationServerConstants.AuthorizationEndpoint)
-                           .SetTokenEndpointUris(AuthorizationServerConstants.TokenEndpoint);
+                           .SetTokenEndpointUris(AuthorizationServerConstants.TokenEndpoint)
+                           .SetUserInfoEndpointUris(AuthorizationServerConstants.UserInfoEndpoint);
 
                     options.AllowAuthorizationCodeFlow();
                     options.RequireProofKeyForCodeExchange();
 
                     var scopes = settings.Scopes
                         .Where(scope => !String.IsNullOrWhiteSpace(scope))
+                        .Concat(new[] { OpenIddictConstants.Scopes.Profile, OpenIddictConstants.Scopes.Email })
                         .Distinct(StringComparer.Ordinal)
                         .ToArray();
 
@@ -54,7 +57,8 @@ namespace LagoVista.AspNetCore.AuthorizationServer
 
                     options.UseAspNetCore()
                            .EnableStatusCodePagesIntegration()
-                           .EnableAuthorizationEndpointPassthrough();
+                           .EnableAuthorizationEndpointPassthrough()
+                           .EnableUserInfoEndpointPassthrough();
                 })
                 .AddValidation(options =>
                 {
