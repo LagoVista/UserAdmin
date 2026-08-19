@@ -54,6 +54,15 @@
       "progress": {"behaviors":"complete","scenarios":"not-started","presentation":"not-started","implementation":"not-started","tests":"not-started"}
     },
     {
+      "key": "mfa-type-selection",
+      "name": "Select MFA Type",
+      "behaviorKeys": [
+        "auth.behavior.mfa-type-selection.passkey",
+        "auth.behavior.mfa-type-selection.totp"
+      ],
+      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"not-started","tests":"complete"}
+    },
+    {
       "key": "passkey-management",
       "name": "Passkey Management",
       "behaviorKeys": ["auth.behavior.passkey.add-success"],
@@ -92,8 +101,8 @@
     {
       "key": "password-sign-in",
       "name": "Password Sign In",
-      "behaviorKeys": ["auth.behavior.password.sign-in-locked-out","auth.behavior.password.sign-in-mfa-required","auth.behavior.password.sign-in-passkey-required","auth.behavior.password.sign-in-rejected","auth.behavior.password.sign-in-success"],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"in-progress","tests":"in-progress"}
+      "behaviorKeys": ["auth.behavior.password.sign-in-locked-out","auth.behavior.password.sign-in-mfa-required","auth.behavior.password.sign-in-mfa-selection-required","auth.behavior.password.sign-in-passkey-required","auth.behavior.password.sign-in-rejected","auth.behavior.password.sign-in-success"],
+      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"in-progress","tests":"complete"}
     },
     {
       "key": "security-step-up",
@@ -159,6 +168,8 @@
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Sign In is authored complete for Success and Could Not Authenticate. Both browser-session and mobile-token server paths normalize through AuthenticationFlowService and TotpAuthenticationFlowHandler into the real AppUserMfaManager proof operation; Angular and React Native consume generated AuthClient TOTP operations; the dedicated unable view is implemented on both clients; real-path integration proof is bound to both canonical transitions. Runtime UI evidence remains intentionally separate."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Password Sign In adds MFA Required as a fourth behavior. A valid password for a TOTP-enabled identity returns AuthenticationState=MfaRequired with provider=totp, does not establish the authenticated application session, and must route the client to auth.continue.totp. Server transition support already exists, while Angular and React Native password entry currently require implementation changes and dedicated proof before the category can return to green."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Password Sign In also models Passkey Required as a distinct fifth outcome. A future password response with provider=passkey must preserve anonymous application state and route to the existing auth.continue.passkey surface; the existing Passkey Sign In category then owns the passkey ceremony and session establishment. Current server password sign-in hardcodes provider=totp for RequiresTwoFactor, so Passkey Required remains implementation/test in progress."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"The session-management category is presented as Sign Out while retaining its stable category key. Sign Out is one atomic host-owned action ending at auth.welcome. The canonical POST /api/auth/signout path is implemented through AuthenticationFlowService and SignOutFlowHandler; Angular Web and React Native both consume generated AuthClient.createSignout, token-backed mobile sign-out revokes only the current refresh token, and authored integration proof covers cookie and token session termination with UserLogout audit evidence."}
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"The session-management category is presented as Sign Out while retaining its stable category key. Sign Out is one atomic host-owned action ending at auth.welcome. The canonical POST /api/auth/signout path is implemented through AuthenticationFlowService and SignOutFlowHandler; Angular Web and React Native both consume generated AuthClient.createSignout, token-backed mobile sign-out revokes only the current refresh token, and authored integration proof covers cookie and token session termination with UserLogout audit evidence."},
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Password Sign In now distinguishes three MFA-routing outcomes beneath the same generic MFA-required server transition: TOTP-only routes to auth.continue.totp, Passkey-only routes to auth.continue.passkey, and identities with both methods route to auth.select.mfa-type. Provider-specific routing is a client presentation obligation, so these branches require UI evidence rather than separate C# transition tests."},
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Select MFA Type is a new behavior category with exactly two one-scenario behaviors. Both start at auth.select.mfa-type; selecting Passkey ends at auth.continue.passkey (Passkey Start), while selecting TOTP ends at auth.continue.totp (TOTP Start). The selection itself is UI-only and performs no authentication state transition."}
   ]
 }
