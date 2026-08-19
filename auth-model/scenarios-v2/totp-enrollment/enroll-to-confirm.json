@@ -1,0 +1,58 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.totp-enrollment.enroll-to-confirm",
+  "runtimeEntityId": "B2D5F801A93C4E67B9D2F304C5E6A718",
+  "name": "Continue to TOTP Confirmation",
+  "summary": "After configuring an authenticator from the displayed enrollment material, the user continues to the verification-code view without invoking another server operation.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-enrollment",
+  "startViewKey": "auth.mfa.totp.enroll",
+  "action": {
+    "id": "continue",
+    "finder": "action:continue"
+  },
+  "preconditions": {
+    "expression": "user is authenticated and TOTP enrollment material has already been staged"
+  },
+  "inputs": [],
+  "serverInteraction": {
+    "required": false,
+    "intent": "Navigate to confirmation without regenerating or replacing the staged authenticator secret."
+  },
+  "expectedViewKey": "auth.mfa.totp.confirm",
+  "expectedVisibleFinders": [
+    "field:verification-code",
+    "action:confirm"
+  ],
+  "postconditions": {
+    "expression": "the same staged TOTP enrollment remains pending and TOTP is not yet enabled"
+  },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": [
+    "web",
+    "android",
+    "ios"
+  ],
+  "sourceReferences": [
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.mfa.totp.enroll"
+    },
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.mfa.totp.confirm"
+    },
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-19",
+      "note": "Continue is a navigation-only scenario. Entering the confirm view must not call BeginTotpEnrollment again."
+    }
+  ],
+  "progress": {
+    "presentation": "complete",
+    "implementation": "in-progress",
+    "tests": "not-started"
+  }
+}
