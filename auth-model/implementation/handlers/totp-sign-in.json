@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schemas/auth-flow-handler.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.handler.totp-sign-in",
+  "name": "TOTP Sign-In Flow Handler",
+  "summary": "Resolves an identified durable user and verifies the submitted TOTP proof through the real MFA manager before session-specific completion occurs.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "src/LagoVista.UserAdmin",
+  "sourcePath": "src/LagoVista.UserAdmin/Authentication/Flows/TotpAuthenticationFlowHandler.cs",
+  "interfaceName": "ITotpAuthenticationFlowHandler",
+  "typeName": "TotpAuthenticationFlowHandler",
+  "methodName": "HandleAsync",
+  "requestContract": "TotpSignInRequest",
+  "resultContract": "AuthenticationFlowResult<AppUser>",
+  "transitionKeys": [
+    "auth.transition.totp-sign-in.success",
+    "auth.transition.totp-sign-in.rejected"
+  ],
+  "dependencies": ["IAppUserRepo", "IAppUserMfaManager", "IAppConfig"],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/TotpAuthenticationFlowHandler.cs",
+      "note": "The typed handler resolves the durable identity, invokes the real AppUserMfaManager.VerifyTotpAsync proof/replay logic, and selects success or rejected canonical transition without duplicating credential verification."
+    }
+  ]
+}
