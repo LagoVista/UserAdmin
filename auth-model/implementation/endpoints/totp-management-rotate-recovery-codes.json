@@ -13,6 +13,7 @@
   "methodName": "RotateRecoveryCodesAsync",
   "httpMethods": ["POST"],
   "routeTemplates": ["/api/auth/mfarecovery/rotate"],
+  "requestContract": "none",
   "responseContract": "InvokeResult<List<string>>",
   "handlerKey": "auth.handler.totp-management.rotate-recovery-codes",
   "transitionKeys": ["auth.transition.totp-management.rotate-recovery-codes-success"],
