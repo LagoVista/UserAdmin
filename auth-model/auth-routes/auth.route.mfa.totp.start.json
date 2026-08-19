@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.mfa.totp.start",
+  "name": "Start TOTP Enrollment",
+  "description": "Navigates to the explicit entry surface for beginning authenticator enrollment.",
+  "path": "/auth/mfa/totp/start",
+  "routeType": "view",
+  "viewId": "auth.mfa.totp.start",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": {
+      "status": "planned",
+      "notes": "New canonical route required before the existing QR/secret enrollment route."
+    },
+    "mobile": {
+      "status": "planned",
+      "notes": "New canonical route required before the existing QR/secret enrollment route."
+    }
+  }
+}
