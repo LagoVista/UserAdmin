@@ -26,8 +26,9 @@ namespace LagoVista.AspNetCore.Identity.Services
             if (appUser == null)
                 return InvokeResult<PasskeyBeginOptionsResponse>.FromError("passkey_not_available");
 
-            // A passkey accepted as primary authentication must perform user verification.
-            // The existing user-bound manager uses isStepUp=true to request UV=required.
+            // Primary passkey sign-in and passkey MFA both require user verification.
+            // BeginAuthenticationOptionsAsync uses isStepUp=true to emit UV=required;
+            // whether the completed proof counts as step-up is carried separately.
             var result = await _passkeyManager.BeginAuthenticationOptionsAsync(appUser.Id, true, passkeyUrl, organization, user);
             if (!result.Successful)
                 return InvokeResult<PasskeyBeginOptionsResponse>.FromError("passkey_not_available");
@@ -35,7 +36,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             return result;
         }
 
-        public async Task<InvokeResult<AppUser>> CompleteAsync(string email, PasskeyAuthenticationCompleteRequest request, EntityHeader organization, EntityHeader user)
+        public async Task<InvokeResult<AppUser>> CompleteAsync(string email, PasskeyAuthenticationCompleteRequest request, bool isStepUp, EntityHeader organization, EntityHeader user)
         {
             if (request == null)
                 return InvokeResult<AppUser>.FromError("passkey_request_required");
@@ -46,7 +47,8 @@ namespace LagoVista.AspNetCore.Identity.Services
 
             // CompleteAuthenticationAsync verifies that the consumed challenge belongs
             // to this exact user and that the asserted credential is registered to them.
-            var result = await _passkeyManager.CompleteAuthenticationAsync(appUser.Id, request, true, organization, user);
+            // isStepUp only controls MFA-freshness bookkeeping after successful proof.
+            var result = await _passkeyManager.CompleteAuthenticationAsync(appUser.Id, request, isStepUp, organization, user);
             if (!result.Successful)
                 return InvokeResult<AppUser>.FromError("passkey_authentication_failed");
 
