@@ -1,0 +1,71 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.passkey.email-entry-to-passkey",
+  "runtimeEntityId": "E6A1C74B8D234F0A91B2C3D4E5F60718",
+  "name": "Email Entry to Passkey",
+  "summary": "The user enters an email address, chooses Passkey, and the client opens the passkey continuation view without yet contacting the server.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "passkey-sign-in",
+  "startViewKey": "auth.continue.email",
+  "action": {
+    "id": "continue-passkey",
+    "finder": "action:continue-passkey"
+  },
+  "preconditions": {
+    "expression": "session-capability == anonymous and auth.continue.email is visible"
+  },
+  "inputs": [
+    {
+      "finder": "field:email",
+      "name": "Email",
+      "valueType": "string",
+      "required": true,
+      "description": "Email address used to resolve the expected durable account when the passkey ceremony begins. Choosing Passkey does not itself reveal whether the account or a passkey exists."
+    }
+  ],
+  "serverInteraction": {
+    "required": false
+  },
+  "expectedViewKey": "auth.continue.passkey",
+  "postconditions": {
+    "expression": "session-capability == anonymous and auth.continue.passkey is visible and the normalized email is retained in client authentication flow state"
+  },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": [
+    "web",
+    "android",
+    "ios"
+  ],
+  "sourceReferences": [
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.continue.email"
+    },
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.continue.passkey"
+    },
+    {
+      "sourceType": "code",
+      "reference": "softwarelogistics/nuviot-ui-shared:user/continue-email/continue-email.component.ts",
+      "note": "Angular stores the email login seed and navigates to auth.continue.passkey from action:continue-passkey."
+    },
+    {
+      "sourceType": "code",
+      "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/continue-email-screen.tsx",
+      "note": "React Native stores the normalized email in AuthFlow state and navigates to the passkey challenge route."
+    },
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-19",
+      "note": "Direct Passkey-first discovery from Welcome is deferred from launch scope. Passkey Sign In begins after email collection."
+    }
+  ],
+  "progress": {
+    "presentation": "complete",
+    "implementation": "complete",
+    "tests": "not-started"
+  }
+}
