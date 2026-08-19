@@ -62,6 +62,9 @@ namespace LagoVista.UserAdmin.Managers
             if (!credentialsResult.Successful) return credentialsResult.ToInvokeResult<AuthRunnerPlan>();
             var credentials = credentialsResult.Result ?? new TestUserCredentials();
 
+            var totpSetupResult = await ApplyTotpSetupAsync(scenario, credentials, org, user);
+            if (!totpSetupResult.Successful) return totpSetupResult.ToInvokeResult<AuthRunnerPlan>();
+
             // The canonical test identity remains useful even for scenarios that deliberately
             // remove or omit the user record. Do not make the UI runner infer it locally.
             if (String.IsNullOrWhiteSpace(credentials.EmailAddress)) credentials.EmailAddress = TestUserSeed.Email;
