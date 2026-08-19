@@ -19,6 +19,7 @@ namespace LagoVista.UserAdmin.Authentication
     {
         private readonly IPasswordLoginFlowHandler _passwordLoginHandler;
         private readonly ITotpAuthenticationFlowHandler _totpAuthenticationHandler;
+        private readonly ISignOutFlowHandler _signOutHandler;
         private readonly ISignInManager _signInManager;
         private readonly IAuthTokenManager _authTokenManager;
         private readonly IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> _passwordRecoveryRequestHandler;
@@ -33,7 +34,7 @@ namespace LagoVista.UserAdmin.Authentication
         private readonly ITotpTurnOffFlowHandler _totpTurnOffHandler;
         private readonly ITotpRecoveryCodeRotationFlowHandler _totpRecoveryCodeRotationHandler;
 
-        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> invitationAcceptanceHandler = null, IAuthenticationFlowHandler<EmailVerificationFlowRequest> emailVerificationHandler = null, IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> passwordRecoveryVerificationHandler = null, IAuthenticationFlowHandler<PasswordChangeFlowRequest> passwordChangeHandler = null, IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult> emailVerificationSendHandler = null, ITotpTurnOffFlowHandler totpTurnOffHandler = null, ITotpRecoveryCodeRotationFlowHandler totpRecoveryCodeRotationHandler = null, IAuthenticationFlowHandler<TotpEnrollmentBeginFlowRequest, AppUserTotpEnrollmentInfo> totpEnrollmentBeginHandler = null, IAuthenticationFlowHandler<TotpEnrollmentConfirmFlowRequest, List<string>> totpEnrollmentConfirmHandler = null, ITotpAuthenticationFlowHandler totpAuthenticationHandler = null, ISignInManager signInManager = null, IAuthTokenManager authTokenManager = null)
+        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> invitationAcceptanceHandler = null, IAuthenticationFlowHandler<EmailVerificationFlowRequest> emailVerificationHandler = null, IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> passwordRecoveryVerificationHandler = null, IAuthenticationFlowHandler<PasswordChangeFlowRequest> passwordChangeHandler = null, IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult> emailVerificationSendHandler = null, ITotpTurnOffFlowHandler totpTurnOffHandler = null, ITotpRecoveryCodeRotationFlowHandler totpRecoveryCodeRotationHandler = null, IAuthenticationFlowHandler<TotpEnrollmentBeginFlowRequest, AppUserTotpEnrollmentInfo> totpEnrollmentBeginHandler = null, IAuthenticationFlowHandler<TotpEnrollmentConfirmFlowRequest, List<string>> totpEnrollmentConfirmHandler = null, ITotpAuthenticationFlowHandler totpAuthenticationHandler = null, ISignInManager signInManager = null, IAuthTokenManager authTokenManager = null, ISignOutFlowHandler signOutHandler = null)
         {
             _passwordLoginHandler = passwordLoginHandler ?? throw new ArgumentNullException(nameof(passwordLoginHandler));
             _passwordRecoveryRequestHandler = passwordRecoveryRequestHandler ?? throw new ArgumentNullException(nameof(passwordRecoveryRequestHandler));
@@ -50,6 +51,7 @@ namespace LagoVista.UserAdmin.Authentication
             _totpAuthenticationHandler = totpAuthenticationHandler;
             _signInManager = signInManager;
             _authTokenManager = authTokenManager;
+            _signOutHandler = signOutHandler;
         }
 
         public async Task<InvokeResult<AuthenticationResponse>> LoginWithPasswordAsync(AuthLoginRequest request)
@@ -114,6 +116,18 @@ namespace LagoVista.UserAdmin.Authentication
             request.UserName = appUser.UserName ?? appUser.Email;
             request.SingleUseToken = singleUseToken.Result.Token;
             return await _authTokenManager.SingleUseTokenGrantAsync(request);
+        }
+
+        public async Task<InvokeResult> SignOutAsync(SignOutRequest request, EntityHeader organization, EntityHeader user)
+        {
+            if (_signOutHandler == null)
+                throw new InvalidOperationException("Sign-out flow handler is not configured.");
+
+            var result = await _signOutHandler.HandleAsync(new SignOutFlowRequest(request, organization, user));
+            if (result.TransitionKey != SignOutFlowHandler.SuccessTransitionKey)
+                throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
+
+            return result.PublicResult;
         }
 
         public async Task<InvokeResult> ChangePasswordAsync(ChangePassword request, EntityHeader organization, EntityHeader user)
