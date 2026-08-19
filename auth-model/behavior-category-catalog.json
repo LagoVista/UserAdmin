@@ -92,8 +92,8 @@
     {
       "key": "password-sign-in",
       "name": "Password Sign In",
-      "behaviorKeys": ["auth.behavior.password.sign-in-locked-out","auth.behavior.password.sign-in-rejected","auth.behavior.password.sign-in-success"],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
+      "behaviorKeys": ["auth.behavior.password.sign-in-locked-out","auth.behavior.password.sign-in-mfa-required","auth.behavior.password.sign-in-rejected","auth.behavior.password.sign-in-success"],
+      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"in-progress","tests":"in-progress"}
     },
     {
       "key": "security-step-up",
@@ -156,6 +156,7 @@
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-14","note":"Email Verification authored test obligations are complete. Seven send/resend scenarios are bound to EmailVerificationSendFlowTests and six accepted/rejected verification scenarios are bound to EmailVerificationFlowIntegrationTests; runtime execution evidence remains separate."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Enrollment is authored complete across server, Angular Web, Android and iOS. The React Native enrollment surface locally renders the staged otpauth URI as a scannable QR code, both stable clients expose optional Advanced open-authenticator/copy-key conveniences, and UI runtime remains intentionally separate."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Management was decomposed into separate recovery-code rotation and disable behaviors. Server flow normalization, deterministic HasTOTP setup, real-manager integration proof, and stable-client conformance are authored complete; current C# evidence is tracked separately."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Sign In is authored complete for Success and Could Not Authenticate. Both browser-session and mobile-token server paths normalize through AuthenticationFlowService and TotpAuthenticationFlowHandler into the real AppUserMfaManager proof operation; Angular and React Native consume generated AuthClient TOTP operations; the dedicated unable view is implemented on both clients; real-path integration proof is bound to both canonical transitions. Runtime UI evidence remains intentionally separate."}
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Sign In is authored complete for Success and Could Not Authenticate. Both browser-session and mobile-token server paths normalize through AuthenticationFlowService and TotpAuthenticationFlowHandler into the real AppUserMfaManager proof operation; Angular and React Native consume generated AuthClient TOTP operations; the dedicated unable view is implemented on both clients; real-path integration proof is bound to both canonical transitions. Runtime UI evidence remains intentionally separate."},
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Password Sign In adds MFA Required as a fourth behavior. A valid password for a TOTP-enabled identity returns AuthenticationState=MfaRequired with provider=totp, does not establish the authenticated application session, and must route the client to auth.continue.totp. Server transition support already exists, while Angular and React Native password entry currently require implementation changes and dedicated proof before the category can return to green."}
   ]
 }
