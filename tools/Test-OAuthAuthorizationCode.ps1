@@ -39,6 +39,10 @@ function Get-QueryValue {
     foreach ($item in $Uri.Query.TrimStart('?').Split('&', [StringSplitOptions]::RemoveEmptyEntries)) {
         $parts = $item.Split('=', 2)
         if ([Uri]::UnescapeDataString($parts[0]) -eq $Name) {
+            if ($parts.Length -eq 1) {
+                return ""
+            }
+
             return [Uri]::UnescapeDataString($parts[1])
         }
     }
@@ -50,6 +54,17 @@ function New-CodeVerifier {
     $bytes = New-Object byte[] 64
     [Security.Cryptography.RandomNumberGenerator]::Fill($bytes)
     return ConvertTo-Base64Url $bytes
+}
+
+function Assert-True {
+    param(
+        [bool]$Condition,
+        [string]$Message
+    )
+
+    if (!$Condition) {
+        throw $Message
+    }
 }
 
 $authorityUri = [Uri]$Authority
@@ -74,7 +89,7 @@ $query = ConvertTo-QueryString @{
     state = $state
 }
 
-$authorizationUrl = "$authorizeUri?$query"
+$authorizationUrl = "$($authorizeUri)?$query"
 $listener = [Net.HttpListener]::new()
 $listener.Prefixes.Add($RedirectUri)
 
@@ -94,9 +109,7 @@ try {
     $context.Response.Close()
 
     $returnedState = Get-QueryValue -Uri $callback -Name "state"
-    if ($returnedState -ne $state) {
-        throw "OAuth state validation failed."
-    }
+    Assert-True ($returnedState -eq $state) "OAuth state validation failed."
 
     $error = Get-QueryValue -Uri $callback -Name "error"
     if (![String]::IsNullOrWhiteSpace($error)) {
@@ -105,9 +118,7 @@ try {
     }
 
     $code = Get-QueryValue -Uri $callback -Name "code"
-    if ([String]::IsNullOrWhiteSpace($code)) {
-        throw "The callback did not contain an authorization code: $callback"
-    }
+    Assert-True (![String]::IsNullOrWhiteSpace($code)) "The callback did not contain an authorization code: $callback"
 
     $token = Invoke-RestMethod -Method Post -Uri $tokenUri -ContentType "application/x-www-form-urlencoded" -Body @{
         grant_type = "authorization_code"
@@ -118,10 +129,21 @@ try {
         resource = $Resource
     }
 
+    Assert-True (![String]::IsNullOrWhiteSpace($token.access_token)) "The token response did not contain an access token."
+
     Write-Host "Access token received. Calling whoami..."
     $whoAmI = Invoke-RestMethod -Method Get -Uri $whoAmIUri -Headers @{
         Authorization = "Bearer $($token.access_token)"
     }
+
+    Assert-True (![String]::IsNullOrWhiteSpace($whoAmI.Subject)) "whoami did not return a subject."
+    Assert-True ($whoAmI.ClientId -eq $ClientId) "whoami ClientId [$($whoAmI.ClientId)] did not match expected [$ClientId]."
+    Assert-True ($whoAmI.Scopes -contains $Scope) "whoami did not contain expected scope [$Scope]."
+    Assert-True ($whoAmI.Resources -contains $Resource) "whoami did not contain expected resource [$Resource]."
+
+    Write-Host "[PASS] Authorization code + S256 PKCE flow completed."
+    Write-Host "[PASS] whoami subject present."
+    Write-Host "[PASS] client_id, scope, and resource matched the request."
 
     [PSCustomObject]@{
         Token = $token
