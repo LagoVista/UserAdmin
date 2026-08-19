@@ -5,9 +5,11 @@ using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Apps;
 using LagoVista.UserAdmin.Models.Auth;
+using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Repos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 
 namespace LagoVista.UserAdmin
 {
@@ -62,6 +64,8 @@ namespace LagoVista.UserAdmin
             services.AddScoped<IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse>, InvitationAcceptanceFlowHandler>();
             services.AddScoped<IAuthenticationFlowHandler<EmailVerificationFlowRequest>, EmailVerificationFlowHandler>();
             services.AddScoped<IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult>, EmailVerificationSendFlowHandler>();
+            services.AddScoped<IAuthenticationFlowHandler<TotpEnrollmentBeginFlowRequest, AppUserTotpEnrollmentInfo>, TotpEnrollmentBeginFlowHandler>();
+            services.AddScoped<IAuthenticationFlowHandler<TotpEnrollmentConfirmFlowRequest, List<string>>, TotpEnrollmentConfirmFlowHandler>();
             services.AddScoped<ITotpTurnOffFlowHandler, TotpTurnOffFlowHandler>();
             services.AddScoped<ITotpRecoveryCodeRotationFlowHandler, TotpRecoveryCodeRotationFlowHandler>();
             services.AddScoped<IAuthenticationFlowService, AuthenticationFlowService>();
