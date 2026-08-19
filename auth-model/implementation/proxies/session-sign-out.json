@@ -1,0 +1,38 @@
+{
+  "$schema": "../../schemas/auth-proxy-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.proxy.session-sign-out",
+  "name": "Sign Out Generated Proxy",
+  "summary": "Binds the canonical sign-out endpoint to the generated AuthClient operation used by both stable web and mobile clients.",
+  "version": 1,
+  "maturity": "implemented",
+  "endpointBindingKey": "auth.endpoint.session-sign-out",
+  "operationContractId": "nuvos.endpoint.auth.sign-out-sign-out-api-auth-signout",
+  "operationId": "SignOut_SignOut_api_auth_signout",
+  "repository": "nuviot/nuvos-app-contracts",
+  "sourcePath": "generated/auth/client.ts",
+  "serviceType": "AuthClient",
+  "methodName": "createSignout",
+  "requestContract": "SignOutRequest",
+  "resultContract": "InvokeResult",
+  "generator": "Aptix EndpointProjectGenerator",
+  "consumingPlatforms": ["web", "mobile"],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "nuviot/nuvos-app-contracts:generated/auth/client.ts",
+      "commit": "bff06aabb05e999e42a0985dbae93f418655df68",
+      "note": "Generated AuthClient.createSignout calls POST /api/auth/signout with SignOutRequest."
+    },
+    {
+      "sourceType": "code",
+      "reference": "softwarelogistics/nuviot-ui-shared:user/logout/logout.component.ts",
+      "note": "Angular sign-out uses the generated createSignout operation for the authenticated cookie session."
+    },
+    {
+      "sourceType": "code",
+      "reference": "nuviot/vtm-client:src/platform/auth/auth-context.tsx",
+      "note": "React Native sign-out reads the stored current refresh token, sends it through generated createSignout, and clears local session state only after server success."
+    }
+  ]
+}
