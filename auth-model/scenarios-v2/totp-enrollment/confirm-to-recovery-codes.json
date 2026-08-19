@@ -1,0 +1,83 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.totp-enrollment.confirm-to-recovery-codes",
+  "runtimeEntityId": "C3E60912BA4D5F78C0E3A415D6F7B829",
+  "name": "Confirm TOTP Enrollment",
+  "summary": "The user submits one authenticator verification code; the server verifies the staged secret, enables TOTP, issues recovery codes, and the client transitions to the recovery-code view.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-enrollment",
+  "startViewKey": "auth.mfa.totp.confirm",
+  "action": {
+    "id": "confirm",
+    "finder": "action:confirm"
+  },
+  "preconditions": {
+    "expression": "user is authenticated, TOTP enrollment is pending, and the authenticator can produce a current valid code",
+    "state": {
+      "isUserLoggedIn": "set",
+      "hasTOTP": "notset",
+      "twoFactorEnabled": "notset"
+    }
+  },
+  "inputs": [
+    {
+      "finder": "field:verification-code",
+      "name": "Verification Code",
+      "valueType": "secret-reference",
+      "required": true,
+      "value": "user.totp"
+    }
+  ],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Verify the staged authenticator exactly once, enable TOTP, and return the newly issued recovery codes.",
+    "transitionKeys": [
+      "auth.transition.totp-enrollment.success"
+    ]
+  },
+  "expectedViewKey": "auth.mfa.totp.recovery-codes",
+  "expectedVisibleFinders": [
+    "display:recovery-codes",
+    "action:done"
+  ],
+  "postconditions": {
+    "expression": "TOTP is enabled and fresh recovery codes have been issued for the current durable identity",
+    "state": {
+      "isUserLoggedIn": "set",
+      "hasTOTP": "set",
+      "twoFactorEnabled": "set"
+    }
+  },
+  "expectedAuthLogEvents": [
+    "TotpConfirmEnrollmentStart",
+    "TotpConfirmEnrollmentSuccess"
+  ],
+  "evidenceRequirements": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
+  "sourceReferences": [
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.mfa.totp.confirm"
+    },
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.mfa.totp.recovery-codes"
+    },
+    {
+      "sourceType": "code",
+      "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
+      "note": "ConfirmTotpEnrollmentAsync is the single server operation for this scenario and returns the recovery codes displayed on the destination view."
+    }
+  ],
+  "progress": {
+    "presentation": "complete",
+    "implementation": "in-progress",
+    "tests": "not-started"
+  }
+}
