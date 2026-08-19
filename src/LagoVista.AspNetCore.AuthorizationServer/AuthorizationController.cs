@@ -70,10 +70,11 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             var authentication = await HttpContext.AuthenticateAsync();
             if (authentication?.Principal?.Identity?.IsAuthenticated != true)
             {
-                return Challenge(new AuthenticationProperties
-                {
-                    RedirectUri = Request.GetEncodedUrl(),
-                });
+                var returnUrl = Request.GetEncodedPathAndQuery();
+                return RedirectToAction(
+                    nameof(OidcController.Login),
+                    "Oidc",
+                    new { returnUrl });
             }
 
             var subject = authentication.Principal.FindFirstValue(ClaimTypes.NameIdentifier)
