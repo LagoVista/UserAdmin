@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schemas/auth-endpoint-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.endpoint.totp-enrollment.confirm",
+  "name": "TOTP Enrollment Confirm Endpoint",
+  "summary": "Maps the stable authenticated TOTP enrollment-confirm REST contract to the normalized authentication flow boundary.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdminRest",
+  "projectPath": "src/LagoVista.UserAdmin.Rest",
+  "sourcePath": "src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs",
+  "controllerType": "MfaController",
+  "methodName": "ConfirmTotpEnrollmentAsync",
+  "httpMethods": ["POST"],
+  "routeTemplates": ["/api/auth/mfatotp/enrollment/confirm"],
+  "requestContract": "AppUserTotpSecret",
+  "responseContract": "InvokeResult<List<string>>",
+  "handlerKey": "auth.handler.totp-enrollment.confirm",
+  "transitionKeys": ["auth.transition.totp-enrollment.success"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "section": "MfaController.ConfirmTotpEnrollmentAsync", "note": "Authenticated endpoint delegates to IAuthenticationFlowService.ConfirmTotpEnrollmentAsync." }
+  ]
+}
