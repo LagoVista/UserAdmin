@@ -118,6 +118,8 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<bool> UserHasRoleAsync(string roleId, string userId, string orgId)
         {
+            if (ProvisionalOrganizationBootstrapContext.TryConsumeRoleProbe(orgId, userId)) return false;
+
             var roles = await _userRoleRepo.GetRolesForUserAsync(userId, orgId);
             return roles.Any(rl=>rl.Role.Id == roleId);
         }
