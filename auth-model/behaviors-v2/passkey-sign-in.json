@@ -3,17 +3,17 @@
   "schemaVersion": "2.0",
   "key": "auth.behavior.passkey.sign-in",
   "name": "Passkey Sign-In",
-  "summary": "A returning user chooses passkey authentication, completes the platform passkey ceremony, and reaches the application home view.",
-  "version": 1,
+  "summary": "A returning user identifies the account by email, chooses passkey authentication, completes the platform passkey ceremony, and reaches the application home view.",
+  "version": 2,
   "maturity": "proposed",
   "categoryKey": "passkey-sign-in",
   "scenarioKeys": [
-    "auth.scenario.passkey.welcome-to-passkey",
+    "auth.scenario.passkey.email-entry-to-passkey",
     "auth.scenario.passkey.passkey-to-home"
   ],
-  "entryViewKey": "auth.welcome",
+  "entryViewKey": "auth.continue.email",
   "finalViewKey": "app.home",
-  "finalOutcome": "The existing durable user has an authenticated session established through a valid passkey assertion.",
+  "finalOutcome": "The email-resolved durable user has an authenticated session established through a valid user-verified passkey assertion.",
   "supportedPlatforms": [
     "server",
     "web",
@@ -28,12 +28,17 @@
     {
       "sourceType": "code",
       "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs",
-      "note": "Existing passwordless passkey implementation owns challenge validation, durable-user resolution, WebAuthn assertion verification and signature-counter advancement; implementation reconciliation is completing session establishment and native mobile execution around that proof primitive."
+      "note": "The existing user-bound passkey manager owns challenge validation, credential ownership checks, WebAuthn assertion verification, user verification policy, and signature-counter advancement."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Services/EmailPasskeyAuthenticationService.cs",
+      "note": "Launch Passkey Sign In resolves the entered email to the expected durable UserId and delegates to the same user-bound passkey proof used for step-up authentication."
     },
     {
       "sourceType": "decision",
       "reference": "ChatGPT conversation 2026-08-19",
-      "note": "The previous implementation-complete status was reopened after source review found that React Native was presentation-only and passwordless passkey completion did not itself establish the canonical authenticated session."
+      "note": "Direct Passkey-first discovery is deferred from launch scope. Email-first primary Passkey and Password-then-Passkey MFA share one user-bound passkey proof primitive; the surrounding authentication state determines how successful proof is consumed."
     }
   ],
   "progress": {
