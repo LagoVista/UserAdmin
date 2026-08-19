@@ -1,0 +1,44 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.totp-enrollment.begin",
+  "name": "Begin TOTP Enrollment",
+  "summary": "Begins authenticator enrollment for the current authenticated durable identity and stages the secret material required to configure an authenticator.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [],
+  "guards": [
+    {
+      "expression": "session-capability == authenticated-normal",
+      "failureCode": "totp-enrollment-not-authorized"
+    }
+  ],
+  "permittedMutations": [
+    "auth.dimension.credential-proof"
+  ],
+  "requiredEffects": [
+    "stage-totp-authenticator-secret",
+    "return-totp-enrollment-material"
+  ],
+  "forbiddenEffects": [
+    "create-durable-user",
+    "issue-new-session",
+    "enable-totp-before-proof"
+  ],
+  "invariantKeys": [
+    "auth.invariant.transition.one-state-changing-action",
+    "auth.invariant.transition.deterministic-post-state"
+  ],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
+      "note": "BeginTotpEnrollmentAsync generates and securely stages authenticator secret material and returns the otpauth URI and secret."
+    },
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-19",
+      "note": "Enrollment begins only after an explicit action on auth.mfa.totp.start; the resulting QR code and secret are displayed on auth.mfa.totp.enroll."
+    }
+  ]
+}
