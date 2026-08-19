@@ -3,12 +3,18 @@
   "schemaVersion": "2.0",
   "key": "auth.behavior.totp.enrollment-success",
   "name": "TOTP Enrollment Success",
-  "summary": "An authenticated user enrolls a time-based one-time password authenticator, confirms possession with a valid generated code, enables MFA for the current durable identity, and receives recovery codes for later account access.",
-  "version": 1,
+  "summary": "An authenticated user explicitly begins time-based one-time password enrollment, configures an authenticator from the returned enrollment material, confirms possession with one valid generated code, enables MFA, and receives recovery codes on a dedicated destination view.",
+  "version": 2,
   "maturity": "proposed",
   "categoryKey": "totp-enrollment",
-  "scenarioKeys": [],
-  "finalOutcome": "TOTP is enabled for the current durable identity, the authenticator secret is stored securely, and a fresh set of recovery codes has been issued to the user.",
+  "scenarioKeys": [
+    "auth.scenario.totp-enrollment.start-to-enroll",
+    "auth.scenario.totp-enrollment.enroll-to-confirm",
+    "auth.scenario.totp-enrollment.confirm-to-recovery-codes"
+  ],
+  "entryViewKey": "auth.mfa.totp.start",
+  "finalViewKey": "auth.mfa.totp.recovery-codes",
+  "finalOutcome": "TOTP is enabled for the current durable identity, the authenticator secret is stored securely, and a fresh set of recovery codes is displayed to the user on the dedicated recovery-code surface.",
   "supportedPlatforms": [
     "server",
     "web",
@@ -19,23 +25,38 @@
     {
       "sourceType": "code",
       "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
-      "note": "BeginTotpEnrollmentAsync and ConfirmTotpEnrollmentAsync implement authenticator enrollment and confirmation."
+      "note": "BeginTotpEnrollmentAsync and ConfirmTotpEnrollmentAsync are modeled as two distinct server operations in separate scenarios."
+    },
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.mfa.totp.start",
+      "note": "Explicit user-facing entry point for the begin-enrollment operation."
     },
     {
       "sourceType": "auth-view",
       "reference": "auth.mfa.totp.enroll",
-      "note": "Existing AuthView represents TOTP enrollment."
+      "note": "Displays QR code and secret returned by successful begin enrollment."
     },
     {
       "sourceType": "auth-view",
       "reference": "auth.mfa.totp.confirm",
-      "note": "Existing AuthView represents enrollment confirmation."
+      "note": "Collects the single verification code used by the confirmation server operation."
+    },
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.mfa.totp.recovery-codes",
+      "note": "Dedicated destination surface for recovery codes returned by successful confirmation."
+    },
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-19",
+      "note": "Canonical enrollment uses simple stable screens rather than mutating one screen through workflow states. Each server-backed scenario contains one server operation and normally transitions to a new AuthView."
     }
   ],
   "progress": {
-    "scenarios": "not-started",
-    "presentation": "not-started",
-    "implementation": "not-started",
+    "scenarios": "complete",
+    "presentation": "complete",
+    "implementation": "in-progress",
     "tests": "not-started"
   }
 }
