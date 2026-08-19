@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/auth-flow-handler.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.handler.totp-management.rotate-recovery-codes",
+  "name": "TOTP Recovery Code Rotation Flow Handler",
+  "summary": "Provides the typed application boundary for replacing recovery codes while preserving an enrolled TOTP factor.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "src/LagoVista.UserAdmin",
+  "sourcePath": "src/LagoVista.UserAdmin/Authentication/Flows/TotpRecoveryCodeRotationFlowHandler.cs",
+  "interfaceName": "ITotpRecoveryCodeRotationFlowHandler",
+  "typeName": "TotpRecoveryCodeRotationFlowHandler",
+  "methodName": "HandleAsync",
+  "requestContract": "TotpManagementFlowRequest",
+  "resultContract": "AuthenticationFlowResult<List<string>>",
+  "transitionKeys": ["auth.transition.totp-management.rotate-recovery-codes-success"],
+  "dependencies": ["IAppUserMfaManager", "IAppUserRepo"],
+  "notes": [
+    "The handler owns the enabled-TOTP guard and delegates secure recovery-code replacement to IAppUserMfaManager.",
+    "AuthenticationFlowService is the stable application front door used by the REST endpoint."
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/TotpRecoveryCodeRotationFlowHandler.cs", "note": "Implemented typed handler and canonical transition ownership." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "RotateRecoveryCodesAsync performs the real secure recovery-code replacement." }
+  ]
+}
