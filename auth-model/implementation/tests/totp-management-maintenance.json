@@ -1,0 +1,61 @@
+{
+  "$schema": "../../schemas/auth-test-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.test-binding.totp-management.maintenance",
+  "name": "TOTP Management Flow Integration Proof",
+  "summary": "Registers integration proof that the real authentication flow service, typed TOTP maintenance handlers, AppUserMfaManager, repository and secure-storage seams execute the canonical turn-off and recovery-code rotation outcomes.",
+  "version": 1,
+  "maturity": "implemented",
+  "testLevel": "handler-integration",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "tests/LagoVista.UserAdmin.Auth.Tests",
+  "sourcePath": "tests/LagoVista.UserAdmin.Auth.Tests/TotpManagementFlowIntegrationTests.cs",
+  "framework": "NUnit",
+  "testTypeName": "TotpManagementFlowIntegrationTests",
+  "testMethodNames": [
+    "TurnOff_Should_RunRealFlowHandlerAndMfaManager_AndRemoveTotpMaterial",
+    "RotateRecoveryCodes_Should_RunRealFlowHandlerAndMfaManager_AndKeepTotpEnabled",
+    "RotateRecoveryCodes_WhenTotpIsNotEnabled_ShouldRejectBeforeMutation"
+  ],
+  "scenarioKeys": [
+    "auth.scenario.totp-management.disable-success",
+    "auth.scenario.totp-management.rotate-recovery-codes-success"
+  ],
+  "handlerKeys": [
+    "auth.handler.totp-management.turn-off",
+    "auth.handler.totp-management.rotate-recovery-codes"
+  ],
+  "endpointBindingKeys": [
+    "auth.endpoint.totp-management.turn-off",
+    "auth.endpoint.totp-management.rotate-recovery-codes"
+  ],
+  "transitionKeys": [
+    "auth.transition.totp-management.disable-success",
+    "auth.transition.totp-management.rotate-recovery-codes-success"
+  ],
+  "proofObligations": [
+    "real-authentication-flow-entry-point",
+    "real-totp-turn-off-flow-handler",
+    "real-totp-recovery-code-rotation-flow-handler",
+    "real-app-user-mfa-manager",
+    "enabled-totp-precondition-enforced",
+    "authenticator-secret-removal",
+    "recovery-code-secret-removal",
+    "recovery-code-set-replaced",
+    "totp-remains-enabled-after-rotation",
+    "totp-state-cleared-after-turn-off",
+    "canonical-success-transitions",
+    "declared-auth-log-event-pairs",
+    "public-result-preserved"
+  ],
+  "notes": [
+    "AuthenticationFlowService, both TOTP maintenance handlers and AppUserMfaManager are real instances in the proof harness.",
+    "IAppUserRepo and ISecureStorage are mocked as infrastructure boundaries so the proof can inspect durable-state mutations and secret operations deterministically.",
+    "Runtime execution status remains separate from this authored test binding."
+  ],
+  "sourceReferences": [
+    { "sourceType": "test", "reference": "LagoVista/UserAdmin:tests/LagoVista.UserAdmin.Auth.Tests/TotpManagementFlowIntegrationTests.cs", "note": "Canonical server integration evidence source for both TOTP maintenance outcomes and the enabled-factor guard." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Managers/AppUserTestingManager.TotpSetup.cs", "note": "Runner setup uses real begin/confirm enrollment operations to materialize authentic TOTP and recovery-code state." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:tools/Aptix.TestEvidence/Program.cs", "note": "Extracts AptixEvidence metadata from the compiled test assembly for runtime evidence generation." }
+  ]
+}
