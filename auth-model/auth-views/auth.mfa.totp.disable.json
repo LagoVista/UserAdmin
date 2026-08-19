@@ -1,0 +1,51 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.mfa.totp.disable",
+  "name": "Disable TOTP",
+  "description": "Warns that disabling TOTP removes the enrolled authenticator and recovery codes and requires explicit confirmation before the server mutation occurs.",
+  "category": "totp",
+  "routeId": "auth.route.mfa.totp.disable",
+  "status": "active",
+  "controls": [
+    {
+      "id": "disable-warning",
+      "name": "Disable Warning",
+      "controlType": "label",
+      "finder": "label:disable-warning",
+      "sensitivity": "public"
+    },
+    {
+      "id": "disable-error",
+      "name": "Disable Error",
+      "controlType": "status",
+      "finder": "status:disable-error",
+      "sensitivity": "public",
+      "visibilityCondition": "TOTP disable failed."
+    }
+  ],
+  "actions": [
+    {
+      "id": "disable",
+      "name": "Disable TOTP",
+      "actionType": "button",
+      "finder": "action:disable"
+    },
+    {
+      "id": "back",
+      "name": "Back",
+      "actionType": "button",
+      "finder": "action:back"
+    },
+    {
+      "id": "cancel",
+      "name": "Cancel",
+      "actionType": "button",
+      "finder": "action:cancel"
+    }
+  ],
+  "platforms": {
+    "web": { "status": "planned" },
+    "mobile": { "status": "planned" }
+  }
+}
