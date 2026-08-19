@@ -1,6 +1,9 @@
 using LagoVista.AspNetCore.AuthorizationServer.Persistence;
+using LagoVista.AspNetCore.AuthorizationServer.Security;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
+using OpenIddict.Server;
 using System;
 using System.Linq;
 using static OpenIddict.Server.OpenIddictServerEvents;
@@ -19,6 +22,11 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             services.AddSingleton(settings);
             services.AddScoped<IOAuthClientPolicyResolver, OAuthClientPolicyResolver>();
             services.AddScoped<IOAuthClientPolicyValidator, OAuthClientPolicyValidator>();
+
+            if (!settings.UseDevelopmentCertificates)
+            {
+                services.AddSingleton<IConfigureOptions<OpenIddictServerOptions>, OpenIddictSecureStorageCredentialConfigurator>();
+            }
 
             services.AddControllers()
                 .AddApplicationPart(typeof(AuthorizationController).Assembly);
