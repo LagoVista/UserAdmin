@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.mfa-type-selection.passkey",
+  "name": "Select MFA Type - Passkey",
+  "summary": "A user on Select MFA Type chooses Passkey and is handed off to the existing Passkey Start surface.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "mfa-type-selection",
+  "scenarioKeys": ["auth.scenario.mfa-type-selection.select-passkey"],
+  "entryViewKey": "auth.select.mfa-type",
+  "finalViewKey": "auth.continue.passkey",
+  "finalOutcome": "Passkey Start",
+  "supportedPlatforms": ["web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.select.mfa-type", "note": "The behavior starts on the new Select MFA Type surface." },
+    { "sourceType": "auth-view", "reference": "auth.continue.passkey", "note": "The behavior ends at the existing Passkey Start surface." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Select MFA Type contains one Passkey behavior composed of exactly one UI-only scenario." }
+  ],
+  "progress": { "scenarios": "complete", "presentation": "complete", "implementation": "not-started", "tests": "complete" }
+}
