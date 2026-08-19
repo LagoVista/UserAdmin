@@ -1,0 +1,48 @@
+{
+  "$schema": "../../schemas/auth-test-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.test-binding.session-sign-out",
+  "name": "Sign Out Flow Integration Proof",
+  "summary": "Registers real-path sign-out proof for cookie-backed and token-backed current sessions through AuthenticationFlowService and the typed SignOutFlowHandler.",
+  "version": 1,
+  "maturity": "implemented",
+  "testLevel": "handler-integration",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "tests/LagoVista.UserAdmin.Auth.Tests",
+  "sourcePath": "tests/LagoVista.UserAdmin.Auth.Tests/SignOutFlowIntegrationTests.cs",
+  "framework": "NUnit",
+  "testTypeName": "SignOutFlowIntegrationTests",
+  "testMethodNames": [
+    "CookieSessionSignOut_Should_EndSession_AndRecordLogout",
+    "TokenSessionSignOut_Should_RevokeCurrentRefreshToken_EndSession_AndRecordLogout"
+  ],
+  "scenarioKeys": ["auth.scenario.session.sign-out-success"],
+  "handlerKeys": ["auth.handler.session-sign-out"],
+  "endpointBindingKeys": ["auth.endpoint.session-sign-out"],
+  "transitionKeys": ["auth.transition.session.sign-out-success"],
+  "proofObligations": [
+    "real-authentication-flow-entry-point",
+    "real-sign-out-flow-handler",
+    "cookie-session-termination",
+    "current-refresh-token-revocation-for-token-session",
+    "no-refresh-token-revocation-for-cookie-session",
+    "user-logout-audit-event",
+    "canonical-sign-out-success-transition"
+  ],
+  "notes": [
+    "The tests exercise AuthenticationFlowService and the real typed SignOutFlowHandler. ISignInManager, IRefreshTokenManager and the authentication log store are security/infrastructure seams whose exact calls are asserted.",
+    "The token-backed proof verifies revocation of only the supplied current refresh token rather than all user sessions."
+  ],
+  "sourceReferences": [
+    {
+      "sourceType": "test",
+      "reference": "LagoVista/UserAdmin:tests/LagoVista.UserAdmin.Auth.Tests/SignOutFlowIntegrationTests.cs",
+      "note": "Cookie and token current-session sign-out proof source."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/SignOutFlowHandler.cs",
+      "note": "Canonical session termination, current refresh-token revocation and audit behavior under proof."
+    }
+  ]
+}
