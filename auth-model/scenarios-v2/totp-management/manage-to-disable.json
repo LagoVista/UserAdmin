@@ -1,0 +1,34 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.totp-management.manage-to-disable",
+  "runtimeEntityId": "5AF8B8BF55EA4D71BACF6FC508965298",
+  "name": "Choose TOTP Disable",
+  "summary": "An authenticated user with TOTP enabled chooses to disable the authenticator and is shown an explicit confirmation surface before any server mutation occurs.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-management",
+  "startViewKey": "auth.mfa.totp.manage",
+  "action": { "id": "disable", "finder": "action:disable" },
+  "preconditions": {
+    "expression": "user is authenticated and TOTP is enabled",
+    "state": { "isUserLoggedIn": "set", "hasTOTP": "set", "twoFactorEnabled": "set" }
+  },
+  "inputs": [],
+  "serverInteraction": {
+    "required": false,
+    "intent": "Navigate to the TOTP disable confirmation surface without changing MFA state."
+  },
+  "expectedViewKey": "auth.mfa.totp.disable",
+  "expectedVisibleFinders": ["label:disable-warning", "action:disable", "action:back", "action:cancel"],
+  "postconditions": {
+    "expression": "TOTP remains enabled until the user explicitly confirms disable"
+  },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.mfa.totp.manage" },
+    { "sourceType": "auth-view", "reference": "auth.mfa.totp.disable" }
+  ],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}
