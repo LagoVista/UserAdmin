@@ -21,13 +21,6 @@
       "controlType": "copyable-value",
       "finder": "display:secret",
       "sensitivity": "secret"
-    },
-    {
-      "id": "enrollment-error",
-      "name": "Enrollment Error",
-      "controlType": "status",
-      "finder": "status:enrollment-error",
-      "visibilityCondition": "TOTP enrollment setup failed."
     }
   ],
   "actions": [
@@ -63,6 +56,7 @@
   },
   "notes": [
     "The runtime inventory represented the QR code and secret as unknown fields. The canonical contract models them as non-input display controls.",
-    "The prior action id 'next' is normalized to the semantic action id 'continue'."
+    "The prior action id 'next' is normalized to the semantic action id 'continue'.",
+    "This view is operation-free; begin-enrollment errors belong to auth.mfa.totp.start."
   ]
 }
