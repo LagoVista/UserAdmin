@@ -13,6 +13,7 @@
   "sourcePath": "generated/auth/client.ts",
   "serviceType": "AuthClient",
   "methodName": "createMfadisable",
+  "requestContract": "none",
   "resultContract": "InvokeResult",
   "generator": "Aptix EndpointProjectGenerator",
   "consumingPlatforms": ["web", "mobile"],
