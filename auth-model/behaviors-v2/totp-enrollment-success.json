@@ -15,12 +15,7 @@
   "entryViewKey": "auth.mfa.totp.start",
   "finalViewKey": "auth.mfa.totp.recovery-codes",
   "finalOutcome": "TOTP is enabled for the current durable identity, the authenticator secret is stored securely, and a fresh set of recovery codes is displayed to the user on the dedicated recovery-code surface.",
-  "supportedPlatforms": [
-    "server",
-    "web",
-    "android",
-    "ios"
-  ],
+  "supportedPlatforms": ["server", "web", "android", "ios"],
   "sourceReferences": [
     {
       "sourceType": "code",
@@ -48,15 +43,20 @@
       "note": "Dedicated destination surface for recovery codes returned by successful confirmation."
     },
     {
+      "sourceType": "test",
+      "reference": "auth.test-binding.totp-enrollment.success",
+      "note": "Authored server proof exercises the real AuthenticationFlowService, typed begin/confirm handlers and AppUserMfaManager, including generation of a real current TOTP from the staged secret."
+    },
+    {
       "sourceType": "decision",
       "reference": "ChatGPT conversation 2026-08-19",
-      "note": "Canonical enrollment uses simple stable screens rather than mutating one screen through workflow states. Each server-backed scenario contains one server operation and normally transitions to a new AuthView."
+      "note": "Canonical enrollment uses simple stable screens rather than mutating one screen through workflow states. The only remaining authored implementation gap is the React Native enrollment view's placeholder QR renderer; UI runtime execution remains a separate later phase."
     }
   ],
   "progress": {
     "scenarios": "complete",
     "presentation": "complete",
     "implementation": "in-progress",
-    "tests": "not-started"
+    "tests": "complete"
   }
 }
