@@ -1,12 +1,7 @@
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$Authority,
-
-    [Parameter(Mandatory = $true)]
-    [string]$ClientId,
-
-    [Parameter(Mandatory = $true)]
-    [string]$Resource,
+    [string]$Authority = "https://localhost:5001",
+    [string]$ClientId = "lagovista-oauth-test",
+    [string]$Resource = "https://localhost:5001/test-resource",
 
     [string]$Scope = "knowledge.read",
     [string]$RedirectUri = "http://127.0.0.1:8765/callback/"
@@ -89,7 +84,11 @@ $query = ConvertTo-QueryString @{
     state = $state
 }
 
+<<<<<<< Updated upstream
 $authorizationUrl = "$($authorizeUri)?$query"
+=======
+$authorizationUrl = "${authorizeUri}?$query"
+>>>>>>> Stashed changes
 $listener = [Net.HttpListener]::new()
 $listener.Prefixes.Add($RedirectUri)
 
@@ -136,6 +135,8 @@ try {
         Authorization = "Bearer $($token.access_token)"
     }
 
+    $whoAmI
+
     Assert-True (![String]::IsNullOrWhiteSpace($whoAmI.Subject)) "whoami did not return a subject."
     Assert-True ($whoAmI.ClientId -eq $ClientId) "whoami ClientId [$($whoAmI.ClientId)] did not match expected [$ClientId]."
     Assert-True ($whoAmI.Scopes -contains $Scope) "whoami did not contain expected scope [$Scope]."
@@ -143,7 +144,8 @@ try {
 
     Write-Host "[PASS] Authorization code + S256 PKCE flow completed."
     Write-Host "[PASS] whoami subject present."
-    Write-Host "[PASS] client_id, scope, and resource matched the request."
+    Write-Host "[PASS] client_id, scope, and resource matched the request."=======
+    
 
     [PSCustomObject]@{
         Token = $token

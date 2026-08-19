@@ -34,16 +34,21 @@ namespace LagoVista.AspNetCore.AuthorizationServer
 
                     options.AllowAuthorizationCodeFlow();
                     options.RequireProofKeyForCodeExchange();
+                    options.DisableScopeValidation();
+                    options.DisableResourceValidation();
+                    
+                    options.Configure(options =>
+                    {
+                        options.CodeChallengeMethods.Remove(
+                            OpenIddictConstants.CodeChallengeMethods.Plain);
 
-                    var scopes = settings.Scopes
-                        .Where(scope => !String.IsNullOrWhiteSpace(scope))
-                        .Concat(new[] { OpenIddictConstants.Scopes.Profile, OpenIddictConstants.Scopes.Email })
-                        .Distinct(StringComparer.Ordinal)
-                        .ToArray();
+                        options.ClientAuthenticationMethods.Clear();
 
-                    if (scopes.Length > 0)
-                        options.RegisterScopes(scopes);
+                        options.ClientAuthenticationMethods.Add(
+                            OpenIddictConstants.ClientAuthenticationMethods.None);
+                    });
 
+    
                     if (settings.Issuer != null)
                         options.SetIssuer(settings.Issuer);
 
