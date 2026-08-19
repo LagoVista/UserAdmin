@@ -22,18 +22,28 @@
   "sourceReferences": [
     {
       "sourceType": "code",
-      "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/AuthServices.cs",
-      "note": "Existing cookie-backed logoff terminates the current ASP.NET Identity sign-in session and records UserLogout."
+      "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/SignOutFlowHandler.cs",
+      "note": "Canonical handler revokes the supplied current refresh token when present, terminates the current sign-in session and records UserLogout."
     },
     {
       "sourceType": "code",
-      "reference": "src/LagoVista.UserAdmin/Interfaces/Repos/Security/IRefreshTokenManager.cs",
-      "note": "RevokeRefreshTokenAsync provides current-device refresh-token revocation for token-backed clients."
+      "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/SignOutController.cs",
+      "note": "Canonical POST /api/auth/signout delegates authenticated current-session termination to AuthenticationFlowService."
+    },
+    {
+      "sourceType": "code",
+      "reference": "softwarelogistics/nuviot-ui-shared:user/logout/logout.component.ts",
+      "note": "Angular Web consumes the generated createSignout operation and returns to auth.welcome after successful cookie-session termination."
     },
     {
       "sourceType": "code",
       "reference": "nuviot/vtm-client:src/platform/auth/auth-context.tsx",
-      "note": "Mobile currently clears local auth state but does not yet invoke server-side current-token revocation."
+      "note": "React Native consumes generated createSignout with the stored current refresh token, then clears local auth state and returns to auth.welcome."
+    },
+    {
+      "sourceType": "test",
+      "reference": "auth.test-binding.session-sign-out",
+      "note": "Authored proof covers cookie-backed and token-backed current-session termination plus UserLogout audit evidence."
     },
     {
       "sourceType": "decision",
@@ -44,7 +54,7 @@
   "progress": {
     "scenarios": "complete",
     "presentation": "complete",
-    "implementation": "in-progress",
-    "tests": "not-started"
+    "implementation": "complete",
+    "tests": "complete"
   }
 }
