@@ -50,15 +50,16 @@
       "implementation": "TotpEnrollStartComponent"
     },
     "mobile": {
-      "status": "implemented",
-      "implementation": "app/auth/mfa/totp/enroll.tsx"
+      "status": "partial",
+      "implementation": "TotpEnrollScreen",
+      "notes": "Mobile now displays the real staged otpauth URI and secret with canonical finders and performs no server operation on Continue. The remaining gap is rendering the otpauth URI as an actual scannable QR code."
     }
   },
   "source": {
     "runtimeEntityId": "F3EE5F762E3A4D03A5358F21F4DC027F",
     "runtimeSha256Hex": "307b86b739d69febb50ccd4e6b2a429d38938763bfaf5513d8cd7eaae8c2b262",
     "webComponent": "TotpEnrollStartComponent",
-    "mobileComponent": "app/auth/mfa/totp/enroll.tsx"
+    "mobileComponent": "TotpEnrollScreen"
   },
   "notes": [
     "The runtime inventory represented the QR code and secret as unknown fields. The canonical contract models them as non-input display controls.",
