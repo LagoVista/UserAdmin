@@ -10,6 +10,7 @@ using LagoVista.Core.Models;
 using System;
 using LagoVista.CloudStorage.Storage;
 using LagoVista.UserAdmin.Models.Orgs;
+using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Core.Interfaces;
@@ -36,6 +37,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 
         public async Task<bool> QueryOrgHasUserAsync(string orgId, string userId)
         {
+            if (ProvisionalOrganizationBootstrapContext.TryConsumeMembershipProbe(orgId, userId)) return false;
             return (await base.GetAsync(orgId, OrgUser.CreateRowKey(orgId, userId), false)) != null;
         }
 
