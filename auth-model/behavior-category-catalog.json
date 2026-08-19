@@ -105,7 +105,7 @@
       "key": "session-management",
       "name": "Sign Out",
       "behaviorKeys": ["auth.behavior.session.sign-out"],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"in-progress","tests":"not-started"}
+      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
     },
     {
       "key": "totp-enrollment",
@@ -159,6 +159,6 @@
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Sign In is authored complete for Success and Could Not Authenticate. Both browser-session and mobile-token server paths normalize through AuthenticationFlowService and TotpAuthenticationFlowHandler into the real AppUserMfaManager proof operation; Angular and React Native consume generated AuthClient TOTP operations; the dedicated unable view is implemented on both clients; real-path integration proof is bound to both canonical transitions. Runtime UI evidence remains intentionally separate."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Password Sign In adds MFA Required as a fourth behavior. A valid password for a TOTP-enabled identity returns AuthenticationState=MfaRequired with provider=totp, does not establish the authenticated application session, and must route the client to auth.continue.totp. Server transition support already exists, while Angular and React Native password entry currently require implementation changes and dedicated proof before the category can return to green."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Password Sign In also models Passkey Required as a distinct fifth outcome. A future password response with provider=passkey must preserve anonymous application state and route to the existing auth.continue.passkey surface; the existing Passkey Sign In category then owns the passkey ceremony and session establishment. Current server password sign-in hardcodes provider=totp for RequiresTwoFactor, so Passkey Required remains implementation/test in progress."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"The session-management category is presented as Sign Out while retaining its stable category key. Sign Out is one atomic host-owned action ending at auth.welcome. The canonical server path terminates cookie sessions and revokes only the current refresh token for token-backed clients; client and proof reconciliation remain in progress."}
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"The session-management category is presented as Sign Out while retaining its stable category key. Sign Out is one atomic host-owned action ending at auth.welcome. The canonical POST /api/auth/signout path is implemented through AuthenticationFlowService and SignOutFlowHandler; Angular Web and React Native both consume generated AuthClient.createSignout, token-backed mobile sign-out revokes only the current refresh token, and authored integration proof covers cookie and token session termination with UserLogout audit evidence."}
   ]
 }
