@@ -1,0 +1,60 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.totp-sign-in.verify-success",
+  "runtimeEntityId": "9C8EAF603B4D5E21C7D8F90123456789",
+  "name": "TOTP Sign-In Succeeds",
+  "summary": "An identified returning user submits a valid authenticator code and the server establishes a normal authenticated application session.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-sign-in",
+  "startViewKey": "auth.continue.totp",
+  "action": { "id": "verify", "finder": "action:verify" },
+  "preconditions": {
+    "expression": "session-capability == anonymous and an active durable identity with confirmed email and enrolled TOTP is prepared for sign-in",
+    "state": {
+      "ensureUserExists": "set",
+      "userHasEmail": "set",
+      "emailConfirmed": "set",
+      "belongsToOrg": "set",
+      "twoFactorEnabled": "set",
+      "hasTOTP": "set",
+      "isAccountDisabled": "notset",
+      "isLockedOut": "notset",
+      "isUserLoggedIn": "notset"
+    }
+  },
+  "inputs": [
+    { "finder": "field:email", "name": "Email", "valueType": "string", "required": true, "value": "user.email", "description": "Prepared test-user email resolved by the server before the runner plan is returned." },
+    { "finder": "field:verification-code", "name": "Verification Code", "valueType": "secret-reference", "required": true, "value": "user.totp", "description": "Current TOTP generated from the enrolled authenticator secret by deterministic test setup." }
+  ],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Resolve the existing durable identity, verify the submitted TOTP proof, establish the application session, and resolve the landing destination.",
+    "transitionKeys": ["auth.transition.totp-sign-in.success"]
+  },
+  "expectedViewKey": "app.home",
+  "postconditions": {
+    "expression": "the durable identity remains active with TOTP enabled, records a successful login, and the resolved application landing destination is active",
+    "state": {
+      "ensureUserExists": "set",
+      "emailConfirmed": "set",
+      "belongsToOrg": "set",
+      "twoFactorEnabled": "set",
+      "hasTOTP": "set",
+      "isAccountDisabled": "notset",
+      "isLockedOut": "notset",
+      "hasLastLogin": "set",
+      "isUserLoggedIn": "set"
+    }
+  },
+  "expectedAuthLogEvents": ["TotpVerifyStart", "TotpVerifySuccess"],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "VerifyTotpAsync provides proof validation and replay prevention but does not itself resolve an anonymous account or complete application sign-in." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Interfaces/Managers/ISigninManager.cs", "note": "CompleteSignInToAppAsync is available to establish the authenticated application session once proof is accepted." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/continue-totp/continue-totp.component.ts", "note": "The canonical Angular surface exists, but verify() is currently a TODO and makes no server call." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "The existing /api/auth/mfatotp/verify endpoint requires a confirmed current user, so it cannot implement this anonymous sign-in scenario." }
+  ],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}
