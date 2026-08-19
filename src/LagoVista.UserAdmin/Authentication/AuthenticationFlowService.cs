@@ -70,8 +70,6 @@ namespace LagoVista.UserAdmin.Authentication
         {
             if (_totpAuthenticationHandler == null)
                 throw new InvalidOperationException("TOTP authentication flow handler is not configured.");
-            if (_signInManager == null)
-                throw new InvalidOperationException("Sign-in manager is not configured for TOTP authentication.");
 
             var result = await _totpAuthenticationHandler.HandleAsync(request);
             if (result.TransitionKey != TotpAuthenticationFlowHandler.SuccessTransitionKey && result.TransitionKey != TotpAuthenticationFlowHandler.RejectedTransitionKey)
@@ -80,8 +78,7 @@ namespace LagoVista.UserAdmin.Authentication
             if (!result.PublicResult.Successful)
                 return InvokeResult<AuthenticationResponse>.FromInvokeResult(result.PublicResult.ToInvokeResult());
 
-            await _signInManager.SignInAsync(result.PublicResult.Result, request.RememberMe);
-            return await _signInManager.CompleteSignInToAppAsync(result.PublicResult.Result);
+            return await CompleteProvenUserSessionAsync(result.PublicResult.Result, request.RememberMe);
         }
 
         public async Task<InvokeResult<AuthResponse>> AuthenticateWithTotpTokenAsync(AuthRequest request)
@@ -89,8 +86,6 @@ namespace LagoVista.UserAdmin.Authentication
             if (request == null) throw new ArgumentNullException(nameof(request));
             if (_totpAuthenticationHandler == null)
                 throw new InvalidOperationException("TOTP authentication flow handler is not configured.");
-            if (_authTokenManager == null)
-                throw new InvalidOperationException("Auth token manager is not configured for TOTP authentication.");
 
             var proofRequest = new TotpSignInRequest
             {
@@ -106,7 +101,28 @@ namespace LagoVista.UserAdmin.Authentication
             if (!result.PublicResult.Successful)
                 return InvokeResult<AuthResponse>.FromInvokeResult(result.PublicResult.ToInvokeResult());
 
-            var appUser = result.PublicResult.Result;
+            return await CompleteProvenUserTokenAsync(request, result.PublicResult.Result);
+        }
+
+        public async Task<InvokeResult<AuthenticationResponse>> CompleteProvenUserSessionAsync(AppUser appUser, bool rememberMe = true)
+        {
+            if (appUser == null || String.IsNullOrWhiteSpace(appUser.Id))
+                throw new ArgumentException("A durable proven user is required.", nameof(appUser));
+            if (_signInManager == null)
+                throw new InvalidOperationException("Sign-in manager is not configured for proven-user session completion.");
+
+            await _signInManager.SignInAsync(appUser, rememberMe);
+            return await _signInManager.CompleteSignInToAppAsync(appUser);
+        }
+
+        public async Task<InvokeResult<AuthResponse>> CompleteProvenUserTokenAsync(AuthRequest request, AppUser appUser)
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (appUser == null || String.IsNullOrWhiteSpace(appUser.Id))
+                throw new ArgumentException("A durable proven user is required.", nameof(appUser));
+            if (_authTokenManager == null)
+                throw new InvalidOperationException("Auth token manager is not configured for proven-user token completion.");
+
             var singleUseToken = await _authTokenManager.GenerateOneTimeUseTokenAsync(appUser.Id);
             if (!singleUseToken.Successful)
                 return InvokeResult<AuthResponse>.FromInvokeResult(singleUseToken.ToInvokeResult());
