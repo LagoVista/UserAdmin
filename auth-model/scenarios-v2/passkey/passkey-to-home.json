@@ -4,8 +4,8 @@
   "key": "auth.scenario.passkey.passkey-to-home",
   "runtimeEntityId": "1E4062BEFB7CE59560CC3F5F5EAE8AAD",
   "name": "Passkey Authentication to Home",
-  "summary": "The user completes a valid passkey assertion, the server resolves the existing durable user, and the client opens the application home view.",
-  "version": 1,
+  "summary": "The email-resolved user completes a valid user-verified passkey assertion and receives a normal authenticated application session.",
+  "version": 2,
   "maturity": "proposed",
   "categoryKey": "passkey-sign-in",
   "startViewKey": "auth.continue.passkey",
@@ -14,12 +14,12 @@
     "finder": "action:use-passkey"
   },
   "preconditions": {
-    "expression": "session-capability == anonymous and a registered passkey is available"
+    "expression": "session-capability == anonymous and a normalized email is retained in authentication flow state and a registered passkey is available for that account"
   },
   "inputs": [],
   "serverInteraction": {
     "required": true,
-    "intent": "Issue and validate a passkey authentication challenge, resolve the existing durable user, advance the signature counter, and establish the application session.",
+    "intent": "Resolve the expected account by email, issue a user-bound passkey challenge requiring user verification, validate that the assertion credential belongs to that exact user, advance the signature counter, and establish the platform-appropriate application session.",
     "transitionKeys": [
       "auth.transition.passkey.complete-authentication"
     ]
@@ -29,8 +29,10 @@
     "expression": "credential-proof == passkey-proved and session-capability in [authenticated-limited,authenticated-normal]"
   },
   "expectedAuthLogEvents": [
-    "PasskeyBeginPasswordlessAuthenticationSuccess",
-    "PasskeyCompletePasswordlessAuthenticationSuccess"
+    "PasskeyAuthenticationOptionsSent",
+    "PasskeyAuthenticationOptionsBeginSent",
+    "PasskeyCompleteAuthenticationStart",
+    "PasskeyCompleteAuthenticationSuccess"
   ],
   "evidenceRequirements": [
     "server",
@@ -50,22 +52,27 @@
     {
       "sourceType": "code",
       "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs",
-      "note": "Anonymous passwordless begin and complete endpoints delegate directly to IAppUserPasskeyManager."
+      "note": "Email-bound begin/complete endpoints use one proof service, then establish either a browser session or mobile token session after successful proof."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Services/EmailPasskeyAuthenticationService.cs",
+      "note": "Email resolves the expected durable UserId before challenge issuance; the service delegates to the existing user-bound passkey manager with user verification required."
     },
     {
       "sourceType": "code",
       "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs",
-      "note": "Passwordless authentication consumes and validates the challenge, resolves the stored credential to one durable user, validates the WebAuthn assertion, advances the signature counter, emits the canonical runtime audit events, and resolves the landing destination. The current manager does not itself establish an application session."
+      "note": "The shared user-bound proof validates challenge ownership, credential ownership, WebAuthn assertion and signature counter."
     },
     {
       "sourceType": "code",
       "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/continue-passkey-screen.tsx",
-      "note": "The current React Native Use Passkey action is presentation-only and does not yet execute the generated challenge endpoints or a native passkey assertion ceremony."
+      "note": "React Native still requires native passkey ceremony wiring before implementation can be complete."
     },
     {
       "sourceType": "decision",
       "reference": "ChatGPT conversation 2026-08-19",
-      "note": "Implementation reconciliation reopened this scenario until browser session establishment and native mobile passkey/token-session completion are source-supported."
+      "note": "Email-first primary Passkey and Password-then-Passkey MFA intentionally share the same user-bound passkey proof primitive. Direct discoverable Passkey-first sign-in is deferred."
     }
   ],
   "progress": {
