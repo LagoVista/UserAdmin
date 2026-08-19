@@ -36,10 +36,15 @@
     },
     { "sourceType": "auth-view", "reference": "auth.mfa.totp.disabled" },
     {
-      "sourceType": "decision",
-      "reference": "ChatGPT conversation 2026-08-19",
-      "note": "Test proof must establish a real TOTP-enabled test identity with authenticator and recovery-code secrets, exercise the real server maintenance path, prove both secrets are removed and TOTP state is cleared, and validate the declared auth-log event pair. The current test setup model exposes HasTOTP but ApplySetupAsync does not yet materialize TOTP secret state."
+      "sourceType": "test",
+      "reference": "auth.test-binding.totp-management.maintenance",
+      "note": "The bound integration proof exercises the real flow service, typed turn-off handler and AppUserMfaManager and verifies secret removal, state cleanup and the declared auth-log events."
+    },
+    {
+      "sourceType": "code",
+      "reference": "src/LagoVista.UserAdmin/Managers/AppUserTestingManager.TotpSetup.cs",
+      "note": "Runner setup now materializes authentic TOTP and recovery-code state through the real begin and confirm enrollment operations when HasTOTP is set."
     }
   ],
-  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "in-progress" }
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "complete" }
 }
