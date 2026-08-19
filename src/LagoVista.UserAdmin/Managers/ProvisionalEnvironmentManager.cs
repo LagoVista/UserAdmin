@@ -562,6 +562,7 @@ namespace LagoVista.UserAdmin.Managers
                 Id = environment.AppUserId,
                 CreatedBy = EntityHeader.Create(environment.AppUserId, "Provisional Environment"),
                 LastUpdatedBy = EntityHeader.Create(environment.AppUserId, "Provisional Environment"),
+                SecurityStamp = Guid.NewGuid().ToString("N"),
                 IsAnonymous = true,
                 ShowWelcome = false,
                 TermsAndConditionsAccepted = environment.TermsAndConditionsAccepted,
