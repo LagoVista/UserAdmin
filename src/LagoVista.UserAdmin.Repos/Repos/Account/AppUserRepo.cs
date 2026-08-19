@@ -263,7 +263,7 @@ namespace LagoVista.UserAdmin.Repos.Users
                 {
                     AppUserId = user.Id,
                     FullName = user.Name,
-                    Email = user.Email,
+                    Email = String.IsNullOrWhiteSpace(user.Email) ? $"{user.Id.ToLowerInvariant()}@provisional.invalid" : user.Email,
                     LastUpdatedDate = DateTime.UtcNow,
 
                 };
@@ -278,7 +278,7 @@ namespace LagoVista.UserAdmin.Repos.Users
 
         public async Task<ListResponse<UserInfoSummary>> GetDeviceUsersAsync(string deviceRepoId, ListRequest listRequest)
         {
-            return await QuerySummaryAsync<UserInfoSummary, AppUser>(usr => usr.IsUserDevice == true && usr.DeviceRepo != null && usr.DeviceRepo.Id == deviceRepoId, usr=>usr.Name, listRequest);
+            return await QuerySummaryAsync<UserInfoSummary, AppUser>(usr => usr.IsUserDevice == true && usr.DeviceRepo != null, usr=>usr.Name, listRequest);
         }
 
         public static string ByteArrayToString(byte[] ba)
