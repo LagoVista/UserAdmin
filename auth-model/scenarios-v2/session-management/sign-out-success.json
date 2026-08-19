@@ -28,9 +28,12 @@
   "expectedAuthLogEvents": ["UserLogout"],
   "evidenceRequirements": ["server", "web", "android", "ios"],
   "sourceReferences": [
-    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/AuthServices.cs", "note": "Existing web logoff terminates the ASP.NET Identity session and records UserLogout." },
-    { "sourceType": "code", "reference": "nuviot/vtm-client:src/platform/auth/auth-context.tsx", "note": "Existing mobile sign-out clears local auth state and navigates to login, but currently does not revoke the server refresh token." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/SignOutFlowHandler.cs", "note": "Canonical typed handler revokes the supplied current refresh token when present, terminates the sign-in session and records UserLogout." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/SignOutController.cs", "note": "Authorized POST /api/auth/signout delegates current user and organization context to AuthenticationFlowService." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/logout/logout.component.ts", "note": "Angular Web invokes generated AuthClient.createSignout, clears remembered login seeds and performs a full navigation to auth.welcome." },
+    { "sourceType": "code", "reference": "nuviot/vtm-client:src/platform/auth/auth-context.tsx", "note": "React Native sends the stored current refresh token through generated AuthClient.createSignout before clearing local session state and navigating to auth.welcome." },
+    { "sourceType": "test", "reference": "auth.test-binding.session-sign-out", "note": "Authored integration proof covers cookie-backed session termination, token-backed current refresh-token revocation, canonical transition and UserLogout audit evidence." },
     { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Sign Out is one atomic user action. No dedicated confirmation or completion AuthView is required; the action is host-owned and the canonical destination is auth.welcome." }
   ],
-  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "complete" }
 }
