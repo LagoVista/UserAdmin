@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/auth-flow.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.flow.session-sign-out",
+  "name": "Sign Out",
+  "summary": "Terminates the current authenticated client session, revoking the current refresh token for token-backed sessions and ending the cookie session for browser-backed sessions.",
+  "version": 1,
+  "maturity": "implemented",
+  "requestContract": "SignOutRequest",
+  "resultContract": "InvokeResult",
+  "handlerKeys": ["auth.handler.session-sign-out"],
+  "transitionKeys": ["auth.transition.session.sign-out-success"],
+  "entryActionKeys": ["auth.action.session.sign-out"],
+  "supportedAudiences": ["platform-user", "tenant-user", "customer-end-user"],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/AuthenticationFlowService.cs",
+      "note": "SignOutAsync delegates the authenticated sign-out request to the typed sign-out flow handler and accepts only the canonical sign-out success transition."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/SignOutFlowHandler.cs",
+      "note": "The handler revokes the supplied current refresh token when present, ends the sign-in session and records UserLogout."
+    }
+  ]
+}
