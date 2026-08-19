@@ -51,10 +51,11 @@
   "expectedAuthLogEvents": ["TotpVerifyStart", "TotpVerifySuccess"],
   "evidenceRequirements": ["server", "web", "android", "ios"],
   "sourceReferences": [
-    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "VerifyTotpAsync provides proof validation and replay prevention but does not itself resolve an anonymous account or complete application sign-in." },
-    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Interfaces/Managers/ISigninManager.cs", "note": "CompleteSignInToAppAsync is available to establish the authenticated application session once proof is accepted." },
-    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/continue-totp/continue-totp.component.ts", "note": "The canonical Angular surface exists, but verify() is currently a TODO and makes no server call." },
-    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "The existing /api/auth/mfatotp/verify endpoint requires a confirmed current user, so it cannot implement this anonymous sign-in scenario." }
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/AuthenticationFlowService.cs", "note": "AuthenticateWithTotpAsync is the stable browser application entry point and adapts successful proof into the normal application session." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/TotpAuthenticationFlowHandler.cs", "note": "Typed handler resolves the durable identity and delegates proof validation to the real MFA manager." },
+    { "sourceType": "test", "reference": "auth.test-binding.totp-sign-in", "note": "Real-path integration proof covers valid TOTP verification and session establishment without mocking the MFA manager." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/continue-totp/continue-totp.component.ts", "note": "Angular uses generated AuthClient.createTotpLogin." },
+    { "sourceType": "code", "reference": "nuviot/vtm-client:src/platform/auth/auth-context.tsx", "note": "React Native uses generated AuthClient.createTotpToken and the existing token-session lifecycle." }
   ],
-  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "complete" }
 }
