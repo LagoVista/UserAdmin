@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/auth-proxy-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.proxy.totp-management.rotate-recovery-codes",
+  "name": "TOTP Recovery Code Rotation Generated Proxy",
+  "summary": "Binds the canonical recovery-code rotation endpoint to the stable generated AuthClient operation consumed by web and mobile clients.",
+  "version": 1,
+  "maturity": "implemented",
+  "endpointBindingKey": "auth.endpoint.totp-management.rotate-recovery-codes",
+  "operationContractId": "nuvos.endpoint.auth.mfa-rotate-recovery-codes-api-auth-mfarecovery-rotate",
+  "operationId": "Mfa_RotateRecoveryCodes_api_auth_mfarecovery_rotate",
+  "repository": "nuviot/nuvos-app-contracts",
+  "sourcePath": "generated/auth/client.ts",
+  "serviceType": "AuthClient",
+  "methodName": "createMfarecoveryRotate",
+  "resultContract": "InvokeResultEx<string[]>",
+  "generator": "Aptix EndpointProjectGenerator",
+  "consumingPlatforms": ["web", "mobile"],
+  "notes": [
+    "The generated operation identity remains unchanged; only the server implementation behind the REST endpoint was normalized."
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/operations.json", "note": "Generated operation manifest records the stable recovery-code rotation operation." },
+    { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/client.ts", "note": "Shared generated AuthClient consumed by Angular and React Native." }
+  ]
+}
