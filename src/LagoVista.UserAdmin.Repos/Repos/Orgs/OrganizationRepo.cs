@@ -12,6 +12,7 @@ using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Repos;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Models;
+using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Models.Orgs;
 using Microsoft.Azure.Cosmos;
@@ -78,6 +79,13 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             var dto = await _autoMapper.CreateAsync<Organization, OrganizationDTO>(org, _systemUsers.SystemOrg, _systemUsers.HostUser);
             await CreateDocumentAsync(org);
             await _relationalRepo.AddOrganizationAsync(dto, _systemUsers.SystemOrg, _systemUsers.HostUser);
+
+            if (!String.IsNullOrWhiteSpace(org.Id) &&
+                !EntityHeader.IsNullOrEmpty(org.Owner) &&
+                String.Equals(org.Namespace, $"provisional{org.Id.ToLowerInvariant()}", StringComparison.OrdinalIgnoreCase))
+            {
+                ProvisionalOrganizationBootstrapContext.MarkFresh(org.Id, org.Owner.Id);
+            }
         }
 
         public async Task EnsureRelationalOrganizationAsync(Organization org)
