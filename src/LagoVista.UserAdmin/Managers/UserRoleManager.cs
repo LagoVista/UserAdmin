@@ -46,7 +46,11 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult<UserRole>> GrantUserRoleAsync(string userId, string roleId, EntityHeader org, EntityHeader user)
         {
-            var roleUser = await _userRepo.FindByIdAsync(userId);
+            var roleUserHeader = String.Equals(userId, user?.Id, StringComparison.Ordinal)
+                ? user
+                : (await _userRepo.FindByIdAsync(userId))?.ToEntityHeader();
+            if (roleUserHeader == null) return InvokeResult<UserRole>.FromError($"Could not find user '{userId}' while granting role.");
+
             var role = _defaultRoleList.GetStandardRoles().FirstOrDefault(rl=>rl.Id == roleId);
             if(role == null)
                 role = await _roleRepo.GetRoleAsync(roleId);
@@ -56,14 +60,14 @@ namespace LagoVista.UserAdmin.Managers
                 CreatedBy = user,
                 Organization = org,
                 Id = DateTime.UtcNow.ToInverseTicksRowKey(),
-                User = roleUser.ToEntityHeader(),
+                User = roleUserHeader,
                 CreationDate = DateTime.UtcNow.ToJSONString(),
                 Role = role.ToEntityHeader(),
             };
 
             await _userRoleRepo.AddUserRole(appUserRole);
 
-            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.GrantRole, userId, roleUser.Name, org.Id, org.Text, extras: $"granted role: {role.Name} by user id: {user.Id} name: {user.Text}");
+            await _authLogMgr.AddAsync(Models.Security.AuthLogTypes.GrantRole, userId, roleUserHeader.Text, org.Id, org.Text, extras: $"granted role: {role.Name} by user id: {user.Id} name: {user.Text}");
 
             return InvokeResult<UserRole>.Create(appUserRole);
         }
