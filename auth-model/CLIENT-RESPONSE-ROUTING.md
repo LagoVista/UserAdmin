@@ -13,18 +13,24 @@ The server owns authentication state and returns one canonical outcome when the 
 - `auth.transition.password-sign-in.mfa-required`
 - no authenticated application session is issued
 - password proof has succeeded
-- response metadata identifies the required provider
+- `availableMfaProviders` identifies every enrolled method that may satisfy the outstanding MFA requirement
+- `provider` remains a backward-compatible single-provider hint for older clients
 
 The client owns the presentation routing that follows that response:
 
 ```text
 Password submit
   -> MFA Required
-       -> provider=totp    -> auth.continue.totp
-       -> provider=passkey -> auth.continue.passkey
+       -> availableMfaProviders=[totp]          -> auth.continue.totp
+       -> availableMfaProviders=[passkey]       -> auth.continue.passkey
+       -> availableMfaProviders=[passkey,totp]  -> choose verification method
+                                                   -> passkey -> auth.continue.passkey
+                                                   -> totp    -> auth.continue.totp
 ```
 
-`provider=totp` and `provider=passkey` do not create separate server transitions. The destination AuthViews already belong to the TOTP Sign In and Passkey Sign In categories respectively.
+Provider-specific routing does not create separate server transitions. The TOTP and Passkey destination AuthViews continue to belong to their respective sign-in categories. When multiple methods are available, the client selection is presentation-only navigation and does not constitute an authentication state transition.
+
+Clients MUST prefer `availableMfaProviders` when present. A one-element list routes directly to that method. A list with more than one supported method presents a method chooser. `provider` exists only for backward compatibility and MUST NOT be used to suppress an alternative method that appears in `availableMfaProviders`.
 
 ## Scenario modeling
 
@@ -39,8 +45,9 @@ A response-directed routing scenario still records the password submit action as
 
 The provider-specific client obligation is represented by deterministic setup, scenario summary/intent, and `expectedViewKey`:
 
-- TOTP-enabled setup + `provider=totp` -> `auth.continue.totp`
-- passkey-required setup + `provider=passkey` -> `auth.continue.passkey`
+- TOTP-only setup -> `auth.continue.totp`
+- passkey-only setup -> `auth.continue.passkey`
+- TOTP + passkey setup -> method chooser, followed by the selected canonical continuation view
 
 The scenario's `evidenceRequirements` determines which runtime proof surfaces are required. For provider-specific client routing, use only the client platforms:
 
@@ -61,6 +68,6 @@ For response-directed client routing, the test specification is complete when th
 Two related cases must remain distinct:
 
 1. **Pure UI-only navigation**: no server call occurs. Use `serverInteraction.required = false`. Example: Welcome -> Continue with Passkey.
-2. **Response-directed client routing**: the user action calls the server, but a response field selects the next AuthView. Keep `serverInteraction.required = true`, reference the generic server transition, and omit `server` from `evidenceRequirements` when only the client routing distinction is under proof.
+2. **Response-directed client routing**: the user action calls the server, but response metadata selects the next AuthView. Keep `serverInteraction.required = true`, reference the generic server transition, and omit `server` from `evidenceRequirements` when only the client routing distinction is under proof.
 
 This distinction prevents presentation routing from being inflated into fake authentication state transitions while preserving an executable end-to-end scenario contract.
