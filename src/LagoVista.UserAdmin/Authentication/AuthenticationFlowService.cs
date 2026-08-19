@@ -4,6 +4,7 @@ using LagoVista.Core.Validation;
 using LagoVista.UserAdmin.Authentication.Flows;
 using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.DTOs;
+using LagoVista.UserAdmin.Models.Users;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -21,10 +22,12 @@ namespace LagoVista.UserAdmin.Authentication
         private readonly IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult> _emailVerificationSendHandler;
         private readonly IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> _passwordRecoveryVerificationHandler;
         private readonly IAuthenticationFlowHandler<PasswordChangeFlowRequest> _passwordChangeHandler;
+        private readonly IAuthenticationFlowHandler<TotpEnrollmentBeginFlowRequest, AppUserTotpEnrollmentInfo> _totpEnrollmentBeginHandler;
+        private readonly IAuthenticationFlowHandler<TotpEnrollmentConfirmFlowRequest, List<string>> _totpEnrollmentConfirmHandler;
         private readonly ITotpTurnOffFlowHandler _totpTurnOffHandler;
         private readonly ITotpRecoveryCodeRotationFlowHandler _totpRecoveryCodeRotationHandler;
 
-        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> invitationAcceptanceHandler = null, IAuthenticationFlowHandler<EmailVerificationFlowRequest> emailVerificationHandler = null, IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> passwordRecoveryVerificationHandler = null, IAuthenticationFlowHandler<PasswordChangeFlowRequest> passwordChangeHandler = null, IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult> emailVerificationSendHandler = null, ITotpTurnOffFlowHandler totpTurnOffHandler = null, ITotpRecoveryCodeRotationFlowHandler totpRecoveryCodeRotationHandler = null)
+        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> invitationAcceptanceHandler = null, IAuthenticationFlowHandler<EmailVerificationFlowRequest> emailVerificationHandler = null, IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> passwordRecoveryVerificationHandler = null, IAuthenticationFlowHandler<PasswordChangeFlowRequest> passwordChangeHandler = null, IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult> emailVerificationSendHandler = null, ITotpTurnOffFlowHandler totpTurnOffHandler = null, ITotpRecoveryCodeRotationFlowHandler totpRecoveryCodeRotationHandler = null, IAuthenticationFlowHandler<TotpEnrollmentBeginFlowRequest, AppUserTotpEnrollmentInfo> totpEnrollmentBeginHandler = null, IAuthenticationFlowHandler<TotpEnrollmentConfirmFlowRequest, List<string>> totpEnrollmentConfirmHandler = null)
         {
             _passwordLoginHandler = passwordLoginHandler ?? throw new ArgumentNullException(nameof(passwordLoginHandler));
             _passwordRecoveryRequestHandler = passwordRecoveryRequestHandler ?? throw new ArgumentNullException(nameof(passwordRecoveryRequestHandler));
@@ -36,6 +39,8 @@ namespace LagoVista.UserAdmin.Authentication
             _emailVerificationSendHandler = emailVerificationSendHandler;
             _totpTurnOffHandler = totpTurnOffHandler;
             _totpRecoveryCodeRotationHandler = totpRecoveryCodeRotationHandler;
+            _totpEnrollmentBeginHandler = totpEnrollmentBeginHandler;
+            _totpEnrollmentConfirmHandler = totpEnrollmentConfirmHandler;
         }
 
         public async Task<InvokeResult<AuthenticationResponse>> LoginWithPasswordAsync(AuthLoginRequest request)
@@ -126,6 +131,30 @@ namespace LagoVista.UserAdmin.Authentication
 
             var result = await _emailVerificationHandler.HandleAsync(new EmailVerificationFlowRequest(request, user));
             if (result.TransitionKey != EmailVerificationFlowHandler.AcceptedTransitionKey && result.TransitionKey != EmailVerificationFlowHandler.RejectedTransitionKey)
+                throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
+
+            return result.PublicResult;
+        }
+
+        public async Task<InvokeResult<AppUserTotpEnrollmentInfo>> BeginTotpEnrollmentAsync(string userId, EntityHeader organization, EntityHeader user)
+        {
+            if (_totpEnrollmentBeginHandler == null)
+                throw new InvalidOperationException("TOTP enrollment begin flow handler is not configured.");
+
+            var result = await _totpEnrollmentBeginHandler.HandleAsync(new TotpEnrollmentBeginFlowRequest(userId, organization, user));
+            if (result.TransitionKey != TotpEnrollmentBeginFlowHandler.SuccessTransitionKey)
+                throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
+
+            return result.PublicResult;
+        }
+
+        public async Task<InvokeResult<List<string>>> ConfirmTotpEnrollmentAsync(string userId, string totp, EntityHeader organization, EntityHeader user)
+        {
+            if (_totpEnrollmentConfirmHandler == null)
+                throw new InvalidOperationException("TOTP enrollment confirm flow handler is not configured.");
+
+            var result = await _totpEnrollmentConfirmHandler.HandleAsync(new TotpEnrollmentConfirmFlowRequest(userId, totp, organization, user));
+            if (result.TransitionKey != TotpEnrollmentConfirmFlowHandler.SuccessTransitionKey)
                 throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
 
             return result.PublicResult;
