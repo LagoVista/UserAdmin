@@ -25,12 +25,17 @@
       "sourceType": "decision",
       "reference": "ChatGPT conversation 2026-08-19",
       "note": "Reset is not exposed as a separate user-facing behavior while its server semantics are identical to Disable."
+    },
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-19",
+      "note": "Authored test design has started. Server proof must exercise the real MFA manager through a normalized authentication flow/handler path and prove secret removal, TwoFactorEnabled false, replay/last-MFA reset, canonical transition evidence, and TotpDisableMfaStart/TotpDisableMfaSuccess events. Runtime setup must be able to establish real TOTP secret and recovery-code material before this behavior can be independently executed."
     }
   ],
   "progress": {
     "scenarios": "complete",
     "presentation": "complete",
     "implementation": "in-progress",
-    "tests": "not-started"
+    "tests": "in-progress"
   }
 }
