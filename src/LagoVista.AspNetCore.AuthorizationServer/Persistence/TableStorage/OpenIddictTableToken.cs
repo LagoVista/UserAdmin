@@ -1,4 +1,5 @@
 using LagoVista.CloudStorage.Storage;
+using LagoVista.Core.Models;
 using System;
 
 namespace LagoVista.AspNetCore.AuthorizationServer.Persistence.TableStorage
