@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/auth-flow-handler.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.handler.totp-enrollment.begin",
+  "name": "TOTP Enrollment Begin Flow Handler",
+  "summary": "Provides the typed application boundary for staging TOTP enrollment material.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "src/LagoVista.UserAdmin",
+  "sourcePath": "src/LagoVista.UserAdmin/Authentication/Flows/TotpEnrollmentBeginFlowHandler.cs",
+  "interfaceName": "IAuthenticationFlowHandler<TotpEnrollmentBeginFlowRequest, AppUserTotpEnrollmentInfo>",
+  "typeName": "TotpEnrollmentBeginFlowHandler",
+  "methodName": "HandleAsync",
+  "requestContract": "TotpEnrollmentBeginFlowRequest",
+  "resultContract": "AuthenticationFlowResult<AppUserTotpEnrollmentInfo>",
+  "transitionKeys": ["auth.transition.totp-enrollment.begin"],
+  "dependencies": ["IAppUserMfaManager"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/TotpEnrollmentBeginFlowHandler.cs", "note": "Real handler delegates to IAppUserMfaManager.BeginTotpEnrollmentAsync." }
+  ]
+}
