@@ -30,7 +30,7 @@
     {
       "sourceType": "auth-view",
       "reference": "auth.mfa.totp.enroll",
-      "note": "Displays QR code and secret returned by successful begin enrollment."
+      "note": "Displays the locally rendered QR code and secret returned by successful begin enrollment."
     },
     {
       "sourceType": "auth-view",
@@ -50,13 +50,13 @@
     {
       "sourceType": "decision",
       "reference": "ChatGPT conversation 2026-08-19",
-      "note": "Canonical enrollment uses simple stable screens rather than mutating one screen through workflow states. The only remaining authored implementation gap is the React Native enrollment view's placeholder QR renderer; UI runtime execution remains a separate later phase."
+      "note": "TOTP Enrollment is authored complete across server, Angular Web, Android and iOS. React Native renders the otpauth URI locally as a scannable QR code and both stable clients expose optional Advanced actions to open an authenticator app or copy the setup key. UI runtime execution remains a separate later phase."
     }
   ],
   "progress": {
     "scenarios": "complete",
     "presentation": "complete",
-    "implementation": "in-progress",
+    "implementation": "complete",
     "tests": "complete"
   }
 }
