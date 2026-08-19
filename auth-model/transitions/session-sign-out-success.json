@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.session.sign-out-success",
+  "name": "Sign Out Success",
+  "summary": "Terminates the current authenticated client session and returns the client to an anonymous authentication state.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "session-management",
+  "priority": 100,
+  "sourceState": { "expression": "session-capability != anonymous" },
+  "actionKey": "auth.action.session.sign-out",
+  "guards": [
+    { "expression": "the current authenticated client session can be terminated", "failureCode": "sign-out-not-completed" }
+  ],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "derive", "valueExpression": "anonymous" }
+  ],
+  "requiredEffects": ["terminate-current-client-session", "record-user-logout", "clear-client-auth-state"],
+  "forbiddenEffects": ["revoke-all-user-sessions", "delete-durable-user", "change-user-credentials"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/AuthServices.cs", "note": "Current cookie-backed logoff path terminates the application sign-in session and records UserLogout." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Interfaces/Repos/Security/IRefreshTokenManager.cs", "note": "Current-device token revocation is available through RevokeRefreshTokenAsync." }
+  ]
+}
