@@ -1,4 +1,5 @@
 using LagoVista.Core.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Server;
@@ -16,20 +17,14 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Security
     /// </summary>
     public sealed class OpenIddictSecureStorageCredentialConfigurator : IConfigureOptions<OpenIddictServerOptions>
     {
-        private readonly ISecureStorage _secureStorage;
-        private readonly IAppConfig _appConfig;
-        private readonly ISystemUsers _systemUsers;
+        private readonly IServiceScopeFactory _scopeFactory;
         private readonly AuthorizationServerOptions _settings;
 
         public OpenIddictSecureStorageCredentialConfigurator(
-            ISecureStorage secureStorage,
-            IAppConfig appConfig,
-            ISystemUsers systemUsers,
+            IServiceScopeFactory scopeFactory,
             AuthorizationServerOptions settings)
         {
-            _secureStorage = secureStorage ?? throw new ArgumentNullException(nameof(secureStorage));
-            _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
-            _systemUsers = systemUsers ?? throw new ArgumentNullException(nameof(systemUsers));
+            _scopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
@@ -59,8 +54,16 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Security
 
         private X509Certificate2 LoadOrCreateCertificate()
         {
-            var org = _appConfig.SystemOwnerOrg ?? _systemUsers.SystemOrg;
-            var user = _systemUsers.HostUser;
+            // IConfigureOptions<T> is registered as a singleton, while secure storage and
+            // some of its dependencies may be scoped. Resolve those services inside a
+            // short-lived startup scope instead of capturing them in the singleton.
+            using var scope = _scopeFactory.CreateScope();
+            var secureStorage = scope.ServiceProvider.GetRequiredService<ISecureStorage>();
+            var appConfig = scope.ServiceProvider.GetRequiredService<IAppConfig>();
+            var systemUsers = scope.ServiceProvider.GetRequiredService<ISystemUsers>();
+
+            var org = appConfig.SystemOwnerOrg ?? systemUsers.SystemOrg;
+            var user = systemUsers.HostUser;
 
             if (org == null)
                 throw new InvalidOperationException("The system owner organization is required to load OpenIddict key material.");
@@ -68,7 +71,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Security
             if (user == null)
                 throw new InvalidOperationException("The host system user is required to load OpenIddict key material.");
 
-            var get = _secureStorage
+            var get = secureStorage
                 .GetSecretAsync(org, _settings.SharedCertificateSecretId, user)
                 .ConfigureAwait(false)
                 .GetAwaiter()
@@ -79,7 +82,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Security
                 var generated = CreateCertificate();
                 var payload = Convert.ToBase64String(generated.Export(X509ContentType.Pkcs12));
 
-                var add = _secureStorage
+                var add = secureStorage
                     .AddSecretAsync(org, _settings.SharedCertificateSecretId, payload)
                     .ConfigureAwait(false)
                     .GetAwaiter()
@@ -87,7 +90,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Security
 
                 // Another pod may have won the create race. Always re-read the canonical
                 // secret instead of assuming the locally generated certificate is authoritative.
-                get = _secureStorage
+                get = secureStorage
                     .GetSecretAsync(org, _settings.SharedCertificateSecretId, user)
                     .ConfigureAwait(false)
                     .GetAwaiter()
