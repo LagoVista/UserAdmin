@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/auth-flow-handler.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.handler.totp-management.turn-off",
+  "name": "TOTP Turn Off Flow Handler",
+  "summary": "Provides the typed application boundary for removing an enrolled TOTP factor after validating the durable factor is enabled.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "src/LagoVista.UserAdmin",
+  "sourcePath": "src/LagoVista.UserAdmin/Authentication/Flows/TotpTurnOffFlowHandler.cs",
+  "interfaceName": "ITotpTurnOffFlowHandler",
+  "typeName": "TotpTurnOffFlowHandler",
+  "methodName": "HandleAsync",
+  "requestContract": "TotpManagementFlowRequest",
+  "resultContract": "AuthenticationFlowResult",
+  "transitionKeys": ["auth.transition.totp-management.disable-success"],
+  "dependencies": ["IAppUserMfaManager", "IAppUserRepo"],
+  "notes": [
+    "The handler owns the enabled-TOTP guard and delegates the actual secure-secret removal and MFA-state mutation to IAppUserMfaManager.",
+    "AuthenticationFlowService is the stable application front door used by the REST endpoint."
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/TotpTurnOffFlowHandler.cs", "note": "Implemented typed handler and canonical transition ownership." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "DisableMfaAsync performs the real secure MFA cleanup." }
+  ]
+}
