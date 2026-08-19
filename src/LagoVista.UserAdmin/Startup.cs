@@ -62,6 +62,8 @@ namespace LagoVista.UserAdmin
             services.AddScoped<IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse>, InvitationAcceptanceFlowHandler>();
             services.AddScoped<IAuthenticationFlowHandler<EmailVerificationFlowRequest>, EmailVerificationFlowHandler>();
             services.AddScoped<IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult>, EmailVerificationSendFlowHandler>();
+            services.AddScoped<ITotpTurnOffFlowHandler, TotpTurnOffFlowHandler>();
+            services.AddScoped<ITotpRecoveryCodeRotationFlowHandler, TotpRecoveryCodeRotationFlowHandler>();
             services.AddScoped<IAuthenticationFlowService, AuthenticationFlowService>();
 
             Services.Startup.ConfigureServices(services, configuration);
