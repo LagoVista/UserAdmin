@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schemas/auth-endpoint-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.endpoint.totp-sign-in.session",
+  "name": "TOTP Sign-In Session Endpoint",
+  "summary": "Maps anonymous web TOTP authentication to the normalized authentication flow and cookie/application-session completion path.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdminRest",
+  "projectPath": "src/LagoVista.UserAdmin.Rest",
+  "sourcePath": "src/LagoVista.UserAdmin.Rest/Rest/AuthenticationFlowController.cs",
+  "controllerType": "AuthenticationFlowController",
+  "methodName": "AuthenticateWithTotpAsync",
+  "httpMethods": ["POST"],
+  "routeTemplates": ["/api/auth/totp/login"],
+  "requestContract": "TotpSignInRequest",
+  "responseContract": "InvokeResult<AuthenticationResponse>",
+  "handlerKey": "auth.handler.totp-sign-in",
+  "transitionKeys": [
+    "auth.transition.totp-sign-in.success",
+    "auth.transition.totp-sign-in.rejected"
+  ],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/AuthenticationFlowController.cs",
+      "note": "AllowAnonymous endpoint delegates directly to IAuthenticationFlowService.AuthenticateWithTotpAsync."
+    }
+  ]
+}
