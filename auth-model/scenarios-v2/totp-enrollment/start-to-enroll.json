@@ -33,7 +33,7 @@
     { "sourceType": "auth-view", "reference": "auth.mfa.totp.enroll" },
     { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "BeginTotpEnrollmentAsync is the single server operation for this scenario." },
     { "sourceType": "test", "reference": "auth.test-binding.totp-enrollment.success", "note": "Real-path server proof exercises AuthenticationFlowService, the typed begin handler and AppUserMfaManager and validates staged material plus auth events." },
-    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Server and Angular implementation are complete. React Native still renders a placeholder instead of a locally generated scannable QR code, so implementation remains in-progress until that client gap is closed." }
+    { "sourceType": "code", "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/totp-enroll-screen.tsx", "commit": "db3169e93ee3637833070475d6147363a4111069", "note": "React Native renders the staged otpauth URI locally as a scannable QR code and preserves the canonical secret and Continue surface; optional Advanced actions provide local app-open and copy-key conveniences." }
   ],
-  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "complete" }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "complete" }
 }
