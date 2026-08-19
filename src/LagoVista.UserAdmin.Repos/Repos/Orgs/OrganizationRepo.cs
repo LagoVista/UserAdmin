@@ -82,7 +82,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 
             if (!String.IsNullOrWhiteSpace(org.Id) &&
                 !EntityHeader.IsNullOrEmpty(org.Owner) &&
-                String.Equals(org.Namespace, $"provisional{org.Id.ToLowerInvariant()}", StringComparison.OrdinalIgnoreCase))
+                String.Equals(org.Namespace, $"provisional{org.Id.Value.ToLowerInvariant()}", StringComparison.OrdinalIgnoreCase))
             {
                 ProvisionalOrganizationBootstrapContext.MarkFresh(org.Id, org.Owner.Id);
             }
