@@ -1,0 +1,67 @@
+{
+  "$schema": "../../schemas/auth-test-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.test-binding.totp-sign-in",
+  "name": "TOTP Sign-In Flow Integration Proof",
+  "summary": "Registers real-path integration proof for accepted and rejected TOTP sign-in through AuthenticationFlowService, the typed TOTP handler, AppUserMfaManager and the real LagoVista SignInManager.",
+  "version": 1,
+  "maturity": "implemented",
+  "testLevel": "handler-integration",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "tests/LagoVista.UserAdmin.Auth.Tests",
+  "sourcePath": "tests/LagoVista.UserAdmin.Auth.Tests/TotpAuthenticationFlowIntegrationTests.cs",
+  "framework": "NUnit",
+  "testTypeName": "TotpAuthenticationFlowIntegrationTests",
+  "testMethodNames": [
+    "ValidTotp_Should_RunRealMfaAndSignInManagers_AndEstablishSession",
+    "InvalidTotp_Should_RunRealMfaManager_AndRejectWithoutSession"
+  ],
+  "scenarioKeys": [
+    "auth.scenario.totp-sign-in.verify-success",
+    "auth.scenario.totp-sign-in.verify-rejected"
+  ],
+  "handlerKeys": ["auth.handler.totp-sign-in"],
+  "endpointBindingKeys": [
+    "auth.endpoint.totp-sign-in.session",
+    "auth.endpoint.totp-sign-in.token"
+  ],
+  "transitionKeys": [
+    "auth.transition.totp-sign-in.success",
+    "auth.transition.totp-sign-in.rejected"
+  ],
+  "proofObligations": [
+    "real-authentication-flow-entry-point",
+    "real-totp-flow-handler",
+    "real-app-user-mfa-manager",
+    "real-lagovista-sign-in-manager",
+    "real-totp-code-verification",
+    "totp-replay-timestep-acceptance",
+    "authenticated-session-established-on-success",
+    "no-session-established-on-rejection",
+    "canonical-success-and-rejected-transitions",
+    "declared-auth-log-events",
+    "non-enumerating-public-rejection"
+  ],
+  "notes": [
+    "The proof harness does not mock AppUserMfaManager or the LagoVista SignInManager; persistence, secure storage, redirect resolution and the ASP.NET Identity SignInManager adapter are infrastructure/framework seams.",
+    "The successful web-session path currently also emits PasswordAuthenticationSucceeded from the shared CompleteSignInToAppAsync implementation. That legacy event is recorded explicitly rather than hidden by the proof.",
+    "The mobile token adapter reuses the same TOTP proof and then internally exchanges an existing single-use token through the established access/refresh-token pipeline."
+  ],
+  "sourceReferences": [
+    {
+      "sourceType": "test",
+      "reference": "LagoVista/UserAdmin:tests/LagoVista.UserAdmin.Auth.Tests/TotpAuthenticationFlowIntegrationTests.cs",
+      "note": "Real-path success and rejection evidence source."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
+      "note": "Real TOTP verification and replay-protection behavior under proof."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/SigninManager.cs",
+      "note": "Real application-session completion behavior under proof."
+    }
+  ]
+}
