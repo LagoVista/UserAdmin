@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.mfa-type-selection.totp",
+  "name": "Select MFA Type - TOTP",
+  "summary": "A user on Select MFA Type chooses TOTP and is handed off to the existing TOTP Start surface.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "mfa-type-selection",
+  "scenarioKeys": ["auth.scenario.mfa-type-selection.select-totp"],
+  "entryViewKey": "auth.select.mfa-type",
+  "finalViewKey": "auth.continue.totp",
+  "finalOutcome": "TOTP Start",
+  "supportedPlatforms": ["web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.select.mfa-type", "note": "The behavior starts on the new Select MFA Type surface." },
+    { "sourceType": "auth-view", "reference": "auth.continue.totp", "note": "The behavior ends at the existing TOTP Start surface." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Select MFA Type contains one TOTP behavior composed of exactly one UI-only scenario." }
+  ],
+  "progress": { "scenarios": "complete", "presentation": "complete", "implementation": "not-started", "tests": "complete" }
+}
