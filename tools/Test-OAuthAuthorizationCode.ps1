@@ -84,11 +84,7 @@ $query = ConvertTo-QueryString @{
     state = $state
 }
 
-<<<<<<< Updated upstream
-$authorizationUrl = "$($authorizeUri)?$query"
-=======
-$authorizationUrl = "${authorizeUri}?$query"
->>>>>>> Stashed changes
+$authorizationUrl = $"{$authorizeUri}?$query"
 $listener = [Net.HttpListener]::new()
 $listener.Prefixes.Add($RedirectUri)
 
