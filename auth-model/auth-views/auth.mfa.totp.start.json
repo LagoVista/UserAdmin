@@ -1,0 +1,46 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.mfa.totp.start",
+  "name": "Start TOTP Enrollment",
+  "description": "Introduces authenticator enrollment and lets an authenticated user explicitly begin the server-backed enrollment operation.",
+  "category": "totp",
+  "routeId": "auth.route.mfa.totp.start",
+  "status": "active",
+  "controls": [
+    {
+      "id": "enrollment-description",
+      "name": "Enrollment Description",
+      "controlType": "label",
+      "finder": "label:enrollment-description",
+      "sensitivity": "public"
+    }
+  ],
+  "actions": [
+    {
+      "id": "start",
+      "name": "Start",
+      "actionType": "button",
+      "finder": "action:start"
+    },
+    {
+      "id": "cancel",
+      "name": "Cancel",
+      "actionType": "button",
+      "finder": "action:cancel"
+    }
+  ],
+  "platforms": {
+    "web": {
+      "status": "planned",
+      "notes": "Canonical surface added before the existing QR/secret enrollment view so BeginTotpEnrollment executes only after an explicit user action."
+    },
+    "mobile": {
+      "status": "planned",
+      "notes": "Canonical surface added before the existing QR/secret enrollment view so BeginTotpEnrollment executes only after an explicit user action."
+    }
+  },
+  "notes": [
+    "This view intentionally does not display the QR code or authenticator secret. Those values belong exclusively to auth.mfa.totp.enroll after the begin-enrollment server operation succeeds."
+  ]
+}
