@@ -10,7 +10,7 @@
   "parameters": [],
   "status": "active",
   "platforms": {
-    "web": { "status": "planned" },
-    "mobile": { "status": "planned" }
+    "web": { "status": "implemented" },
+    "mobile": { "status": "implemented" }
   }
 }
