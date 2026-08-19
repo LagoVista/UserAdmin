@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schemas/auth-flow.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.flow.totp-enrollment.confirm",
+  "name": "TOTP Enrollment Confirm",
+  "summary": "Verifies the staged authenticator code, enables TOTP, and issues recovery codes through the normalized authentication flow boundary.",
+  "version": 1,
+  "maturity": "implemented",
+  "requestContract": "TotpEnrollmentConfirmFlowRequest",
+  "resultContract": "AuthenticationFlowResult<List<string>>",
+  "handlerKeys": ["auth.handler.totp-enrollment.confirm"],
+  "transitionKeys": ["auth.transition.totp-enrollment.success"],
+  "entryActionKeys": ["auth.action.totp-enrollment.confirm"],
+  "supportedAudiences": ["platform-user", "tenant-user", "customer-end-user"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/AuthenticationFlowService.cs", "note": "ConfirmTotpEnrollmentAsync is the stable application entry point." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/TotpEnrollmentConfirmFlowHandler.cs", "note": "Typed handler delegates to the real MFA manager and emits the canonical success transition." }
+  ]
+}
