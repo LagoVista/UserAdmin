@@ -128,7 +128,7 @@ namespace LagoVista.UserAdmin.Managers
             }
 
             var appUser = createdEnvironment
-                ? await CreateFreshUserAsync(environment)
+                ? await CreateFreshUserAsync(environment, request)
                 : await EnsureUserAsync(environment);
             if (!appUser.Successful) return InvokeResult<CreateProvisionalEnvironmentResponse>.FromInvokeResult(appUser.ToInvokeResult());
 
@@ -529,9 +529,9 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult.Success;
         }
 
-        private async Task<InvokeResult<AppUser>> CreateFreshUserAsync(ProvisionalEnvironment environment)
+        private async Task<InvokeResult<AppUser>> CreateFreshUserAsync(ProvisionalEnvironment environment, CreateProvisionalEnvironmentRequest request)
         {
-            var appUser = CreateProvisionalUser(environment);
+            var appUser = CreateProvisionalUser(environment, request);
             await _appUserRepo.CreateAsync(appUser);
             await _appUserRepo.EnsureRelationalUserAsync(appUser);
             return InvokeResult<AppUser>.Create(appUser);
@@ -555,11 +555,14 @@ namespace LagoVista.UserAdmin.Managers
             return InvokeResult<AppUser>.Create(appUser);
         }
 
-        private static AppUser CreateProvisionalUser(ProvisionalEnvironment environment)
+        private static AppUser CreateProvisionalUser(ProvisionalEnvironment environment, CreateProvisionalEnvironmentRequest request = null)
         {
             return new AppUser(null, $"provisional-{environment.AppUserId}", "Provisional Environment")
             {
                 Id = environment.AppUserId,
+                FirstName = request?.ProvisionalFirstName,
+                LastName = request?.ProvisionalLastName,
+                TimeZone = request?.ProvisionalTimeZone,
                 CreatedBy = EntityHeader.Create(environment.AppUserId, "Provisional Environment"),
                 LastUpdatedBy = EntityHeader.Create(environment.AppUserId, "Provisional Environment"),
                 SecurityStamp = Guid.NewGuid().ToString("N"),
