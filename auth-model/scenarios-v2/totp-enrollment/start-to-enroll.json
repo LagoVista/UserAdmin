@@ -9,68 +9,31 @@
   "maturity": "proposed",
   "categoryKey": "totp-enrollment",
   "startViewKey": "auth.mfa.totp.start",
-  "action": {
-    "id": "start",
-    "finder": "action:start"
-  },
+  "action": { "id": "start", "finder": "action:start" },
   "preconditions": {
     "expression": "user is authenticated and TOTP is not currently enabled",
-    "state": {
-      "isUserLoggedIn": "set",
-      "hasTOTP": "notset",
-      "twoFactorEnabled": "notset"
-    }
+    "state": { "isUserLoggedIn": "set", "hasTOTP": "notset", "twoFactorEnabled": "notset" }
   },
   "inputs": [],
   "serverInteraction": {
     "required": true,
     "intent": "Begin TOTP enrollment exactly once and return the staged otpauth URI and secret needed by the destination view.",
-    "transitionKeys": [
-      "auth.transition.totp-enrollment.begin"
-    ]
+    "transitionKeys": ["auth.transition.totp-enrollment.begin"]
   },
   "expectedViewKey": "auth.mfa.totp.enroll",
-  "expectedVisibleFinders": [
-    "display:qr-code",
-    "display:secret",
-    "action:continue"
-  ],
+  "expectedVisibleFinders": ["display:qr-code", "display:secret", "action:continue"],
   "postconditions": {
     "expression": "TOTP enrollment material is staged but TOTP is not yet enabled",
-    "state": {
-      "isUserLoggedIn": "set",
-      "hasTOTP": "notset",
-      "twoFactorEnabled": "notset"
-    }
+    "state": { "isUserLoggedIn": "set", "hasTOTP": "notset", "twoFactorEnabled": "notset" }
   },
-  "expectedAuthLogEvents": [
-    "TotpBeginEnrollmentStart",
-    "TotpBeginEnrollmentSuccess"
-  ],
-  "evidenceRequirements": [
-    "server",
-    "web",
-    "android",
-    "ios"
-  ],
+  "expectedAuthLogEvents": ["TotpBeginEnrollmentStart", "TotpBeginEnrollmentSuccess"],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
   "sourceReferences": [
-    {
-      "sourceType": "auth-view",
-      "reference": "auth.mfa.totp.start"
-    },
-    {
-      "sourceType": "auth-view",
-      "reference": "auth.mfa.totp.enroll"
-    },
-    {
-      "sourceType": "code",
-      "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
-      "note": "BeginTotpEnrollmentAsync is the single server operation for this scenario."
-    }
+    { "sourceType": "auth-view", "reference": "auth.mfa.totp.start" },
+    { "sourceType": "auth-view", "reference": "auth.mfa.totp.enroll" },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "BeginTotpEnrollmentAsync is the single server operation for this scenario." },
+    { "sourceType": "test", "reference": "auth.test-binding.totp-enrollment.success", "note": "Real-path server proof exercises AuthenticationFlowService, the typed begin handler and AppUserMfaManager and validates staged material plus auth events." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Server and Angular implementation are complete. React Native still renders a placeholder instead of a locally generated scannable QR code, so implementation remains in-progress until that client gap is closed." }
   ],
-  "progress": {
-    "presentation": "complete",
-    "implementation": "in-progress",
-    "tests": "not-started"
-  }
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "complete" }
 }
