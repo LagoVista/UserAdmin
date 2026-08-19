@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/auth-proxy-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.proxy.totp-sign-in.browser",
+  "name": "TOTP Sign-In Browser Generated Proxy",
+  "summary": "Binds the canonical browser TOTP authentication endpoint to the generated AuthClient operation used by the Angular authentication surface.",
+  "version": 1,
+  "maturity": "implemented",
+  "endpointBindingKey": "auth.endpoint.totp-sign-in.session",
+  "operationContractId": "nuvos.endpoint.auth.authentication-flow-authenticate-with-totp-api-auth-totp-login",
+  "operationId": "AuthenticationFlow_AuthenticateWithTotp_api_auth_totp_login",
+  "repository": "nuviot/nuvos-app-contracts",
+  "sourcePath": "generated/auth/client.ts",
+  "serviceType": "AuthClient",
+  "methodName": "createTotpLogin",
+  "requestContract": "TotpSignInRequest",
+  "resultContract": "InvokeResultEx<AuthenticationResponse>",
+  "generator": "Aptix EndpointProjectGenerator",
+  "consumingPlatforms": ["web"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/client.ts", "commit": "ad1e2ef725d9ca3865e4d889e877e4f3a723a2df", "note": "Generated AuthClient.createTotpLogin calls POST /api/auth/totp/login." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/continue-totp/continue-totp.component.ts", "note": "Angular TOTP continuation uses the generated createTotpLogin operation." }
+  ]
+}
