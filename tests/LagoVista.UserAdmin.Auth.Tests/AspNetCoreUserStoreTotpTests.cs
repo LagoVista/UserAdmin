@@ -7,6 +7,7 @@ using LagoVista.UserAdmin.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,6 +42,26 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(key, Is.EqualTo("JBSWY3DPEHPK3PXP"));
             Assert.That(user.AuthenticatorKey, Is.Null);
             secureStorage.Verify(storage => storage.GetUserSecretAsync(It.IsAny<EntityHeader>(), "totp-secret-id"), Times.Once);
+            secureStorage.VerifyNoOtherCalls();
+            userRepo.VerifyNoOtherCalls();
+        }
+
+        [Test]
+        public void AuthenticatorKeyStore_Should_FailClosed_When_TotpEnabledWithoutSecretReference()
+        {
+            var userRepo = new Mock<IAppUserRepo>(MockBehavior.Strict);
+            var secureStorage = new Mock<ISecureStorage>(MockBehavior.Strict);
+            var user = new AppUser("user@example.com", "test")
+            {
+                UserName = "user@example.com",
+                AuthenticatorKeySecretId = null,
+                AuthenticatorKey = null,
+                TwoFactorEnabled = true
+            };
+
+            var store = new AspNetCoreUserStore(userRepo.Object, secureStorage.Object);
+
+            Assert.ThrowsAsync<InvalidOperationException>(() => store.GetAuthenticatorKeyAsync(user, CancellationToken.None));
             secureStorage.VerifyNoOtherCalls();
             userRepo.VerifyNoOtherCalls();
         }
