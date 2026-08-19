@@ -57,7 +57,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Persistence.TableStorage
             if (token == null) throw new ArgumentNullException(nameof(token));
             cancellationToken.ThrowIfCancellationRequested();
             EnsureKeys(token);
-            await RemoveAsync(token);
+            await RemoveAsync(token, String.IsNullOrWhiteSpace(token.ETag) ? "*" : token.ETag);
         }
 
         public async IAsyncEnumerable<OpenIddictTableToken> FindAsync(
@@ -255,7 +255,11 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Persistence.TableStorage
             if (token == null) throw new ArgumentNullException(nameof(token));
             cancellationToken.ThrowIfCancellationRequested();
             EnsureKeys(token);
-            await base.UpdateAsync(token);
+
+            // Existing protocol records must use their storage ETag. In particular, authorization-code
+            // redemption is a state transition where only one competing pod may successfully update
+            // a given token version. TableStorageBase converts a failed If-Match into ContentModifiedException.
+            await base.UpdateAsync(token, String.IsNullOrWhiteSpace(token.ETag) ? "*" : token.ETag);
         }
 
         private async Task<IReadOnlyList<OpenIddictTableToken>> LoadAllAsync(CancellationToken cancellationToken)
