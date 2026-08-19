@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.totp-sign-in.rejected",
+  "name": "TOTP Sign-In Rejected",
+  "summary": "Rejects an invalid, expired, or replayed TOTP proof without establishing an authenticated session and directs the user to the dedicated unable-to-authenticate surface.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-sign-in",
+  "priority": 90,
+  "sourceState": { "expression": "session-capability == anonymous" },
+  "actionKey": "auth.action.totp-sign-in.submit",
+  "guards": [
+    { "expression": "the identified account has TOTP enabled and the submitted code is not accepted", "failureCode": "totp-sign-in-rejected" }
+  ],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "derive", "valueExpression": "anonymous" },
+    { "dimensionKey": "auth.dimension.credential-proof", "operation": "set", "valueExpression": "totp-rejected" }
+  ],
+  "requiredEffects": ["verify-totp-proof", "do-not-issue-authenticated-session", "record-totp-authentication-failure"],
+  "forbiddenEffects": ["create-durable-user", "change-password-credential", "disclose-account-existence", "issue-authenticated-session"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "VerifyTotpAsync rejects missing, malformed, mismatched, or replayed TOTP proofs without establishing a session." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Rejected TOTP sign-in is a materially distinct public outcome and lands on a dedicated unable-to-authenticate view offering Try Again and Start Over." }
+  ]
+}
