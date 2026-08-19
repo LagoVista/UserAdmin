@@ -60,7 +60,7 @@
         "auth.behavior.mfa-type-selection.passkey",
         "auth.behavior.mfa-type-selection.totp"
       ],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"not-started","tests":"complete"}
+      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
     },
     {
       "key": "passkey-management",
@@ -170,6 +170,7 @@
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Password Sign In also models Passkey Required as a distinct fifth outcome. A future password response with provider=passkey must preserve anonymous application state and route to the existing auth.continue.passkey surface; the existing Passkey Sign In category then owns the passkey ceremony and session establishment. Current server password sign-in hardcodes provider=totp for RequiresTwoFactor, so Passkey Required remains implementation/test in progress."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"The session-management category is presented as Sign Out while retaining its stable category key. Sign Out is one atomic host-owned action ending at auth.welcome. The canonical POST /api/auth/signout path is implemented through AuthenticationFlowService and SignOutFlowHandler; Angular Web and React Native both consume generated AuthClient.createSignout, token-backed mobile sign-out revokes only the current refresh token, and authored integration proof covers cookie and token session termination with UserLogout audit evidence."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Password Sign In now distinguishes three MFA-routing outcomes beneath the same generic MFA-required server transition: TOTP-only routes to auth.continue.totp, Passkey-only routes to auth.continue.passkey, and identities with both methods route to auth.select.mfa-type. Provider-specific routing is a client presentation obligation, so these branches require UI evidence rather than separate C# transition tests."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Select MFA Type is a new behavior category with exactly two one-scenario behaviors. Both start at auth.select.mfa-type; selecting Passkey ends at auth.continue.passkey (Passkey Start), while selecting TOTP ends at auth.continue.totp (TOTP Start). The selection itself is UI-only and performs no authentication state transition."}
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Select MFA Type is a new behavior category with exactly two one-scenario behaviors. Both start at auth.select.mfa-type; selecting Passkey ends at auth.continue.passkey (Passkey Start), while selecting TOTP ends at auth.continue.totp (TOTP Start). The selection itself is UI-only and performs no authentication state transition."},
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Select MFA Type implementation is complete on Angular Web and React Native. Both stable clients expose auth.select.mfa-type with action:select-passkey and action:select-totp and route those actions to the existing canonical continuation views; no server implementation is required for this UI-only category."}
   ]
 }
