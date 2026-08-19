@@ -26,13 +26,17 @@
   ],
   "platforms": {
     "web": {
-      "status": "planned",
-      "notes": "Current web confirmation code receives recovery codes from the server but does not present them on a dedicated surface."
+      "status": "implemented",
+      "implementation": "TotpRecoveryCodesComponent",
+      "notes": "Confirmation stores the returned recovery-code list only in ephemeral client flow state and navigates here for presentation."
     },
     "mobile": {
       "status": "planned",
       "notes": "Dedicated post-enrollment recovery-code presentation is required by the canonical behavior."
     }
+  },
+  "source": {
+    "webComponent": "TotpRecoveryCodesComponent"
   },
   "notes": [
     "Recovery codes are the output of the confirmation server operation and therefore belong on a destination view rather than as a mutated state of auth.mfa.totp.confirm."
