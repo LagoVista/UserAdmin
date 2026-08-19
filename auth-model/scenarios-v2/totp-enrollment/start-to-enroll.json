@@ -1,0 +1,76 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.totp-enrollment.start-to-enroll",
+  "runtimeEntityId": "A1C4E7F2903B4D56A8C1E2F3B4D5A607",
+  "name": "Start TOTP Enrollment",
+  "summary": "An authenticated user explicitly starts TOTP enrollment; the server stages authenticator material and the client transitions to the QR/secret enrollment view.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-enrollment",
+  "startViewKey": "auth.mfa.totp.start",
+  "action": {
+    "id": "start",
+    "finder": "action:start"
+  },
+  "preconditions": {
+    "expression": "user is authenticated and TOTP is not currently enabled",
+    "state": {
+      "isUserLoggedIn": "set",
+      "hasTOTP": "notset",
+      "twoFactorEnabled": "notset"
+    }
+  },
+  "inputs": [],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Begin TOTP enrollment exactly once and return the staged otpauth URI and secret needed by the destination view.",
+    "transitionKeys": [
+      "auth.transition.totp-enrollment.begin"
+    ]
+  },
+  "expectedViewKey": "auth.mfa.totp.enroll",
+  "expectedVisibleFinders": [
+    "display:qr-code",
+    "display:secret",
+    "action:continue"
+  ],
+  "postconditions": {
+    "expression": "TOTP enrollment material is staged but TOTP is not yet enabled",
+    "state": {
+      "isUserLoggedIn": "set",
+      "hasTOTP": "notset",
+      "twoFactorEnabled": "notset"
+    }
+  },
+  "expectedAuthLogEvents": [
+    "TotpBeginEnrollmentStart",
+    "TotpBeginEnrollmentSuccess"
+  ],
+  "evidenceRequirements": [
+    "server",
+    "web",
+    "android",
+    "ios"
+  ],
+  "sourceReferences": [
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.mfa.totp.start"
+    },
+    {
+      "sourceType": "auth-view",
+      "reference": "auth.mfa.totp.enroll"
+    },
+    {
+      "sourceType": "code",
+      "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
+      "note": "BeginTotpEnrollmentAsync is the single server operation for this scenario."
+    }
+  ],
+  "progress": {
+    "presentation": "complete",
+    "implementation": "in-progress",
+    "tests": "not-started"
+  }
+}
