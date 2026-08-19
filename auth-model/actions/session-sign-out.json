@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.session.sign-out",
+  "name": "Sign Out",
+  "summary": "Ends the current authenticated client session and returns the user to an anonymous authentication state.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [],
+  "guards": [
+    { "expression": "session-capability != anonymous", "failureCode": "sign-out-requires-authenticated-session" }
+  ],
+  "permittedMutations": ["auth.dimension.session-capability"],
+  "requiredEffects": ["terminate-current-client-session", "record-user-logout"],
+  "forbiddenEffects": ["revoke-all-user-sessions", "delete-durable-user", "change-user-credentials"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/AuthServices.cs", "note": "The existing web logoff endpoint terminates the ASP.NET Identity sign-in session and records UserLogout." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Interfaces/Repos/Security/IRefreshTokenManager.cs", "note": "RevokeRefreshTokenAsync provides the server primitive needed to terminate the current token-backed mobile session without revoking every device." },
+    { "sourceType": "code", "reference": "nuviot/vtm-client:src/platform/auth/auth-context.tsx", "note": "React Native currently clears only local session state during sign-out; server refresh-token revocation remains to be normalized." }
+  ]
+}
