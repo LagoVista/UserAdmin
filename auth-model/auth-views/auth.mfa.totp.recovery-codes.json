@@ -31,12 +31,14 @@
       "notes": "Confirmation stores the returned recovery-code list only in ephemeral client flow state and navigates here for presentation."
     },
     "mobile": {
-      "status": "planned",
-      "notes": "Dedicated post-enrollment recovery-code presentation is required by the canonical behavior."
+      "status": "implemented",
+      "implementation": "RecoveryCodesScreen",
+      "notes": "Mobile renders the recovery-code list returned by the confirmation server operation from ephemeral AuthFlowContext state and exposes the canonical Done action."
     }
   },
   "source": {
-    "webComponent": "TotpRecoveryCodesComponent"
+    "webComponent": "TotpRecoveryCodesComponent",
+    "mobileComponent": "RecoveryCodesScreen"
   },
   "notes": [
     "Recovery codes are the output of the confirmation server operation and therefore belong on a destination view rather than as a mutated state of auth.mfa.totp.confirm."
