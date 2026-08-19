@@ -15,8 +15,18 @@
     { "id": "start-over", "name": "Start Over", "actionType": "link", "finder": "action:start-over" }
   ],
   "platforms": {
-    "web": { "status": "planned" },
-    "mobile": { "status": "planned" }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "user/totp-signin-unable/totp-signin-unable.component.ts",
+      "component": "TotpSigninUnableComponent"
+    },
+    "mobile": {
+      "status": "implemented",
+      "repository": "nuviot/vtm-client",
+      "path": "src/features/authentication/nuviot-account/screens/totp-unable-screen.tsx",
+      "component": "TotpUnableScreen"
+    }
   },
   "source": {
     "runtimeEntityId": "D1390775E0DB44D7B3ECC1E725A8B372"
