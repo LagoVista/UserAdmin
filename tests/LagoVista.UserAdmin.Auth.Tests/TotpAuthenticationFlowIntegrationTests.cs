@@ -1,4 +1,5 @@
 using LagoVista.AspNetCore.Identity.Managers;
+using LagoVista.Core.Authentication.Models;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Models;
@@ -9,6 +10,7 @@ using LagoVista.UserAdmin.Authentication.Flows;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
+using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Auth;
@@ -101,6 +103,61 @@ namespace LagoVista.UserAdmin.Auth.Tests
             }));
         }
 
+        [Test]
+        [Property("AptixEvidence", SuccessEvidence)]
+        [Property("AptixAuthEvents", "TotpVerifyStart|TotpVerifySuccess")]
+        public async Task ValidTotpToken_Should_RunRealMfaProof_BeforeDelegatingToTokenPipeline()
+        {
+            var harness = CreateHarness();
+            var code = new Totp(Base32Encoding.ToBytes(Secret), step: 30, totpSize: 6).ComputeTotp();
+
+            harness.AppUserRepo.Setup(repo => repo.TryAcceptTotpTimeStepAsync(UserId, It.IsAny<long>(), false, null))
+                .ReturnsAsync(InvokeResult<long>.Create(1));
+            harness.AuthTokenManager.Setup(manager => manager.GenerateOneTimeUseTokenAsync(UserId, null))
+                .ReturnsAsync(InvokeResult<SingleUseToken>.Create(new SingleUseToken
+                {
+                    UserId = UserId,
+                    Token = "single-use-token",
+                    Expires = DateTime.UtcNow.AddMinutes(5).ToString("O")
+                }));
+            harness.AuthTokenManager.Setup(manager => manager.SingleUseTokenGrantAsync(It.Is<AuthRequest>(request =>
+                    request.GrantType == "single-use-token" &&
+                    request.UserId == UserId &&
+                    request.SingleUseToken == "single-use-token")))
+                .ReturnsAsync(InvokeResult<AuthResponse>.Create(new AuthResponse
+                {
+                    AccessToken = "access-token",
+                    RefreshToken = "refresh-token"
+                }));
+
+            var request = new AuthRequest
+            {
+                AppId = "test-app",
+                AppInstanceId = "test-instance",
+                Email = harness.User.Email,
+                UserName = harness.User.UserName,
+                GrantType = "totp",
+                Password = code
+            };
+
+            var result = await harness.FlowService.AuthenticateWithTotpTokenAsync(request);
+
+            Assert.That(result.Successful, Is.True);
+            Assert.That(result.Result.AccessToken, Is.EqualTo("access-token"));
+            Assert.That(result.Result.RefreshToken, Is.EqualTo("refresh-token"));
+            harness.AppUserRepo.Verify(repo => repo.TryAcceptTotpTimeStepAsync(UserId, It.IsAny<long>(), false, null), Times.Once);
+            harness.AuthTokenManager.Verify(manager => manager.GenerateOneTimeUseTokenAsync(UserId, null), Times.Once);
+            harness.AuthTokenManager.Verify(manager => manager.SingleUseTokenGrantAsync(It.Is<AuthRequest>(tokenRequest =>
+                tokenRequest.GrantType == "single-use-token" &&
+                tokenRequest.UserId == UserId &&
+                tokenRequest.SingleUseToken == "single-use-token")), Times.Once);
+            Assert.That(harness.Log.Events.Select(evt => evt.Type), Is.EqualTo(new AuthLogTypes?[]
+            {
+                AuthLogTypes.TotpVerifyStart,
+                AuthLogTypes.TotpVerifySuccess
+            }));
+        }
+
         private static TotpAuthenticationHarness CreateHarness()
         {
             var log = new RecordingAuthenticationLogManager();
@@ -108,6 +165,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var secureStorage = new Mock<ISecureStorage>(MockBehavior.Strict);
             var redirectServices = new Mock<IUserRedirectServices>(MockBehavior.Strict);
             var userManager = new Mock<IUserManager>(MockBehavior.Strict);
+            var authTokenManager = new Mock<IAuthTokenManager>(MockBehavior.Strict);
             var aspNetSignInManager = CreateAspNetSignInManager();
             var appConfig = new Mock<IAppConfig>(MockBehavior.Loose);
             var systemOrg = EntityHeader.Create(OrgId, "System");
@@ -158,13 +216,19 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var handler = new TotpAuthenticationFlowHandler(appUserRepo.Object, mfaManager, appConfig.Object);
             var passwordHandler = new Mock<IPasswordLoginFlowHandler>(MockBehavior.Strict);
             var recoveryHandler = new Mock<IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest>>(MockBehavior.Strict);
-            var flowService = new AuthenticationFlowService(passwordHandler.Object, recoveryHandler.Object, totpAuthenticationHandler: handler, signInManager: signInManager);
+            var flowService = new AuthenticationFlowService(
+                passwordHandler.Object,
+                recoveryHandler.Object,
+                totpAuthenticationHandler: handler,
+                signInManager: signInManager,
+                authTokenManager: authTokenManager.Object);
 
             return new TotpAuthenticationHarness
             {
                 FlowService = flowService,
                 AppUserRepo = appUserRepo,
                 RedirectServices = redirectServices,
+                AuthTokenManager = authTokenManager,
                 AspNetSignInManager = aspNetSignInManager,
                 Log = log,
                 User = user
@@ -201,6 +265,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             public AuthenticationFlowService FlowService { get; set; }
             public Mock<IAppUserRepo> AppUserRepo { get; set; }
             public Mock<IUserRedirectServices> RedirectServices { get; set; }
+            public Mock<IAuthTokenManager> AuthTokenManager { get; set; }
             public Mock<AspNetSignInManager> AspNetSignInManager { get; set; }
             public RecordingAuthenticationLogManager Log { get; set; }
             public AppUser User { get; set; }
