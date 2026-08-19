@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.mfa.totp.recovery-codes",
+  "name": "TOTP Recovery Codes",
+  "description": "Navigates to the post-enrollment surface that presents freshly issued recovery codes.",
+  "path": "/auth/mfa/totp/recovery-codes",
+  "routeType": "view",
+  "viewId": "auth.mfa.totp.recovery-codes",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": {
+      "status": "planned",
+      "notes": "New canonical destination after successful enrollment confirmation."
+    },
+    "mobile": {
+      "status": "planned",
+      "notes": "New canonical destination after successful enrollment confirmation."
+    }
+  }
+}
