@@ -155,10 +155,10 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 new Mock<IOrganizationRepo>().Object,
                 aspNetSignInManager.Object);
 
-            var handler = new TotpAuthenticationFlowHandler(appUserRepo.Object, mfaManager, signInManager, appConfig.Object);
+            var handler = new TotpAuthenticationFlowHandler(appUserRepo.Object, mfaManager, appConfig.Object);
             var passwordHandler = new Mock<IPasswordLoginFlowHandler>(MockBehavior.Strict);
             var recoveryHandler = new Mock<IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest>>(MockBehavior.Strict);
-            var flowService = new AuthenticationFlowService(passwordHandler.Object, recoveryHandler.Object, totpAuthenticationHandler: handler);
+            var flowService = new AuthenticationFlowService(passwordHandler.Object, recoveryHandler.Object, totpAuthenticationHandler: handler, signInManager: signInManager);
 
             return new TotpAuthenticationHarness
             {
