@@ -31,5 +31,5 @@
     { "sourceType": "auth-view", "reference": "auth.mfa.totp.rotate-recovery-codes" },
     { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "The direct UI runner proof is fully specified by deterministic HasTOTP setup, action:rotate-recovery-codes, the confirmation destination, and required visible finders on each supported client platform." }
   ],
-  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "complete" }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "complete" }
 }
