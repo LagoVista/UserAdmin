@@ -1,0 +1,25 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.totp-management.disable-success",
+  "name": "TOTP Disable Success",
+  "summary": "Removes TOTP credential material and clears MFA state for the current authenticated identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-management",
+  "priority": 100,
+  "sourceState": { "expression": "session-capability == authenticated-normal and TOTP is enabled" },
+  "actionKey": "auth.action.totp-management.disable",
+  "guards": [
+    { "expression": "the current durable identity has TOTP enabled", "failureCode": "totp-not-enabled" }
+  ],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.credential-proof", "operation": "derive", "valueExpression": "totp-disabled" }
+  ],
+  "requiredEffects": ["disable-totp", "remove-authenticator-secret", "remove-recovery-codes", "clear-totp-replay-state", "record-totp-disable-success"],
+  "forbiddenEffects": ["create-durable-user", "change-password-credential", "issue-new-session"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "DisableMfaAsync removes secure MFA material, clears state, and logs TotpDisableMfaSuccess." }
+  ]
+}
