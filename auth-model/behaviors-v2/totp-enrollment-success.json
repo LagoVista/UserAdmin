@@ -8,7 +8,6 @@
   "maturity": "proposed",
   "categoryKey": "totp-enrollment",
   "scenarioKeys": [
-<<<<<<< HEAD
     "auth.scenario.totp-enrollment.start-to-enroll",
     "auth.scenario.totp-enrollment.enroll-to-confirm",
     "auth.scenario.totp-enrollment.confirm-to-recovery-codes"
@@ -16,14 +15,6 @@
   "entryViewKey": "auth.mfa.totp.start",
   "finalViewKey": "auth.mfa.totp.recovery-codes",
   "finalOutcome": "TOTP is enabled for the current durable identity, the authenticator secret is stored securely, and a fresh set of recovery codes is displayed to the user on the dedicated recovery-code surface.",
-=======
-    "auth.scenario.totp-enrollment.enrollment-to-confirm",
-    "auth.scenario.totp-enrollment.confirm-success"
-  ],
-  "entryViewKey": "auth.mfa.totp.enroll",
-  "finalViewKey": "auth.mfa.totp.confirm",
-  "finalOutcome": "TOTP is enabled for the current durable identity, the authenticator secret is stored securely, and a fresh set of recovery codes has been issued to the user.",
->>>>>>> b665f3d2 (Advance TOTP enrollment to implementation reconciliation)
   "supportedPlatforms": [
     "server",
     "web",
@@ -44,34 +35,22 @@
     {
       "sourceType": "auth-view",
       "reference": "auth.mfa.totp.enroll",
-<<<<<<< HEAD
       "note": "Displays QR code and secret returned by successful begin enrollment."
-=======
-      "note": "Canonical AuthView represents TOTP enrollment material and navigation to confirmation."
->>>>>>> b665f3d2 (Advance TOTP enrollment to implementation reconciliation)
     },
     {
       "sourceType": "auth-view",
       "reference": "auth.mfa.totp.confirm",
-<<<<<<< HEAD
       "note": "Collects the single verification code used by the confirmation server operation."
     },
     {
       "sourceType": "auth-view",
       "reference": "auth.mfa.totp.recovery-codes",
       "note": "Dedicated destination surface for recovery codes returned by successful confirmation."
-=======
-      "note": "Canonical AuthView represents enrollment confirmation."
->>>>>>> b665f3d2 (Advance TOTP enrollment to implementation reconciliation)
     },
     {
       "sourceType": "decision",
       "reference": "ChatGPT conversation 2026-08-19",
-<<<<<<< HEAD
       "note": "Canonical enrollment uses simple stable screens rather than mutating one screen through workflow states. Each server-backed scenario contains one server operation and normally transitions to a new AuthView."
-=======
-      "note": "Success behavior was decomposed into enrollment-to-confirm and confirmation-success scenarios. Presentation is coherent; implementation remains in progress because the web confirm surface restarts enrollment on load and discards successful recovery-code output, while mobile remains partial."
->>>>>>> b665f3d2 (Advance TOTP enrollment to implementation reconciliation)
     }
   ],
   "progress": {
