@@ -8,44 +8,30 @@
   "routeId": "auth.route.mfa.totp.rotate-recovery-codes",
   "status": "active",
   "controls": [
-    {
-      "id": "rotation-warning",
-      "name": "Rotation Warning",
-      "controlType": "label",
-      "finder": "label:rotation-warning",
-      "sensitivity": "public"
-    },
-    {
-      "id": "rotation-error",
-      "name": "Rotation Error",
-      "controlType": "status",
-      "finder": "status:rotation-error",
-      "sensitivity": "public",
-      "visibilityCondition": "Recovery-code rotation failed."
-    }
+    { "id": "rotation-warning", "name": "Rotation Warning", "controlType": "label", "finder": "label:rotation-warning", "sensitivity": "public" },
+    { "id": "rotation-error", "name": "Rotation Error", "controlType": "status", "finder": "status:rotation-error", "sensitivity": "public", "visibilityCondition": "Recovery-code rotation failed." }
   ],
   "actions": [
-    {
-      "id": "rotate",
-      "name": "Rotate Codes",
-      "actionType": "button",
-      "finder": "action:rotate"
-    },
-    {
-      "id": "back",
-      "name": "Back",
-      "actionType": "button",
-      "finder": "action:back"
-    },
-    {
-      "id": "cancel",
-      "name": "Cancel",
-      "actionType": "button",
-      "finder": "action:cancel"
-    }
+    { "id": "rotate", "name": "Rotate Codes", "actionType": "button", "finder": "action:rotate" },
+    { "id": "back", "name": "Back", "actionType": "button", "finder": "action:back" },
+    { "id": "cancel", "name": "Cancel", "actionType": "button", "finder": "action:cancel" }
   ],
   "platforms": {
-    "web": { "status": "planned" },
-    "mobile": { "status": "planned" }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "user/totp-rotate-recovery-codes/totp-rotate-recovery-codes.component.html",
+      "component": "TotpRotateRecoveryCodesComponent"
+    },
+    "mobile": {
+      "status": "implemented",
+      "repository": "nuviot/vtm-client",
+      "path": "src/features/authentication/nuviot-account/screens/totp-rotate-recovery-codes-screen.tsx",
+      "component": "TotpRotateRecoveryCodesScreen"
+    }
+  },
+  "source": {
+    "webComponent": "TotpRotateRecoveryCodesComponent",
+    "mobileComponent": "TotpRotateRecoveryCodesScreen"
   }
 }
