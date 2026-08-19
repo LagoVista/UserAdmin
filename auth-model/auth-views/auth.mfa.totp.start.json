@@ -14,6 +14,14 @@
       "controlType": "label",
       "finder": "label:enrollment-description",
       "sensitivity": "public"
+    },
+    {
+      "id": "enrollment-error",
+      "name": "Enrollment Error",
+      "controlType": "status",
+      "finder": "status:enrollment-error",
+      "sensitivity": "public",
+      "visibilityCondition": "The begin-enrollment server operation failed."
     }
   ],
   "actions": [
@@ -47,6 +55,7 @@
     "mobileComponent": "TotpEnrollStartScreen"
   },
   "notes": [
-    "This view intentionally does not display the QR code or authenticator secret. Those values belong exclusively to auth.mfa.totp.enroll after the begin-enrollment server operation succeeds."
+    "This view intentionally does not display the QR code or authenticator secret. Those values belong exclusively to auth.mfa.totp.enroll after the begin-enrollment server operation succeeds.",
+    "Begin-enrollment failures are presented here because this view owns the BeginTotpEnrollment server operation."
   ]
 }
