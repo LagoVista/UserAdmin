@@ -25,12 +25,17 @@
       "sourceType": "decision",
       "reference": "ChatGPT conversation 2026-08-19",
       "note": "Recovery-code rotation is modeled separately from TOTP disable because the durable MFA post-state is materially different."
+    },
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-19",
+      "note": "Authored test design has started. Server proof must exercise the real MFA manager through a normalized authentication flow/handler path, prove the previous recovery-code set is invalidated, prove a fresh set is returned while TOTP remains enabled, and capture TotpRotateRecoveryCodesStart/TotpRotateRecoveryCodesSuccess transition evidence. Runtime setup must establish real TOTP and recovery-code material before this behavior can be independently executed."
     }
   ],
   "progress": {
     "scenarios": "complete",
     "presentation": "complete",
     "implementation": "in-progress",
-    "tests": "not-started"
+    "tests": "in-progress"
   }
 }
