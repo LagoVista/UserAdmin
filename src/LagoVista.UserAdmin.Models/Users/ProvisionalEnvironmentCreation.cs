@@ -1,3 +1,4 @@
+using LagoVista.Core.Models;
 using System;
 
 namespace LagoVista.UserAdmin.Models.Users
@@ -12,6 +13,10 @@ namespace LagoVista.UserAdmin.Models.Users
         public bool TermsAndConditionsAccepted { get; set; }
         public string TermsAndConditionsVersion { get; set; }
         public string TermsAndConditionsAcceptedIPAddress { get; set; }
+
+        public string ProvisionalFirstName { get; set; }
+        public string ProvisionalLastName { get; set; }
+        public EntityHeader ProvisionalTimeZone { get; set; }
 
         public string ConversionJourneyId { get; set; }
         public string AcquisitionSourceKey { get; set; }
