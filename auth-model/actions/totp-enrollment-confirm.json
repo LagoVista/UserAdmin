@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.totp-enrollment.confirm",
+  "name": "Confirm TOTP Enrollment",
+  "summary": "Verifies the authenticator code for an authenticated user with enrollment in progress and enables TOTP when the proof is accepted.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "verification-code", "valueType": "secret-reference", "required": true, "description": "Current time-based one-time code generated from the staged authenticator secret." }
+  ],
+  "guards": [
+    { "expression": "session-capability == authenticated-normal and TOTP enrollment has been started for the current durable identity", "failureCode": "totp-enrollment-not-ready" }
+  ],
+  "permittedMutations": ["auth.dimension.credential-proof"],
+  "requiredEffects": ["verify-totp-enrollment-proof", "enable-totp", "issue-recovery-codes"],
+  "forbiddenEffects": ["create-durable-user", "issue-anonymous-authenticated-session", "change-password-credential"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ConfirmTotpEnrollmentAsync verifies the submitted code, enables TwoFactorEnabled, stores MFA state, and returns recovery codes." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "POST /api/auth/mfatotp/enrollment/confirm delegates to the MFA manager for the current confirmed user." }
+  ]
+}
