@@ -175,7 +175,7 @@ namespace LagoVista.UserAdmin.Managers
             var subscription = await GetSubscriptionAsync(subscriptionId, org, user);
             await AuthorizeAsync(user, org, "getResourcesForSubscription", subscription);
 
-            return await _subscriptionResourceRepo.GetSubscriptionAsync(subscriptionId, listRequest, org.Id);
+            return await _subscriptionResourceRepo.GetResourcesForSubscriptionAsync(subscriptionId, listRequest, org.Id);
         }
 
         public async Task<ListResponse<SubscriptionSummary>> GetSubscriptionsForOrgAsync(ListRequest listRequest, EntityHeader org, EntityHeader user)
