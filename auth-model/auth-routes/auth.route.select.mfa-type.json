@@ -4,13 +4,27 @@
   "routeId": "auth.route.select.mfa-type",
   "name": "Select MFA Type",
   "description": "Canonical route for choosing between available MFA methods after password proof has succeeded.",
-  "path": "/auth/select/mfa-type",
+  "path": "/auth/select/mfa/type",
   "routeType": "view",
   "viewId": "auth.select.mfa-type",
-  "status": "proposed",
+  "status": "active",
   "platforms": {
-    "web": { "status": "planned", "repository": "softwarelogistics/nuviot-ui-shared" },
-    "mobile": { "status": "planned", "repository": "nuviot/vtm-client" }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "auth-routes.ts",
+      "route": "/auth/select/mfa/type",
+      "component": "SelectMfaTypeComponent",
+      "implementation": "AuthRoutePaths.selectMfaType -> SelectMfaTypeComponent"
+    },
+    "mobile": {
+      "status": "implemented",
+      "repository": "nuviot/vtm-client",
+      "path": "app/auth/select/mfa/type.tsx",
+      "route": "/auth/select/mfa/type",
+      "component": "SelectMfaTypeScreen",
+      "implementation": "Expo Router file route -> SelectMfaTypeScreen"
+    }
   },
   "notes": ["This route is presentation-only and does not represent a server authentication transition."]
 }
