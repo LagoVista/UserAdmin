@@ -1,0 +1,28 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.totp.sign-in-rejected",
+  "name": "TOTP Could Not Authenticate",
+  "summary": "A returning user whose durable account has already been identified submits a TOTP proof that is not accepted, no authenticated session is established, and the client presents a dedicated error surface with Try Again and Start Over recovery choices.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-sign-in",
+  "scenarioKeys": [
+    "auth.scenario.totp-sign-in.verify-rejected"
+  ],
+  "entryViewKey": "auth.continue.totp",
+  "finalViewKey": "auth.continue.totp.unable",
+  "finalOutcome": "The submitted TOTP proof is rejected, the user remains unauthenticated, and the dedicated unable-to-authenticate surface offers Try Again or Start Over without revealing internal rejection details.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "VerifyTotpAsync provides the reusable TOTP rejection semantics and audit event trail." },
+    { "sourceType": "auth-view", "reference": "auth.continue.totp.unable", "note": "Dedicated rejected TOTP sign-in outcome surface with Try Again and Start Over." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Rejected TOTP authentication is modeled separately from success because no session is established and the public next actions differ materially." }
+  ],
+  "progress": {
+    "scenarios": "complete",
+    "presentation": "complete",
+    "implementation": "in-progress",
+    "tests": "not-started"
+  }
+}
