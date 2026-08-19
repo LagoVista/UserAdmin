@@ -1,0 +1,36 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.totp.disable-success",
+  "name": "TOTP Disable Success",
+  "summary": "An authenticated user with TOTP enabled explicitly chooses to disable the authenticator, confirms the destructive action, and removes the enrolled authenticator and recovery-code material from the current durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-management",
+  "scenarioKeys": [
+    "auth.scenario.totp-management.manage-to-disable",
+    "auth.scenario.totp-management.disable-success"
+  ],
+  "entryViewKey": "auth.mfa.totp.manage",
+  "finalViewKey": "auth.mfa.totp.disabled",
+  "finalOutcome": "TOTP is disabled for the current durable identity, authenticator and recovery-code secrets are removed, and the user remains signed in as the same durable identity.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
+      "note": "DisableMfaAsync removes authenticator and recovery-code secrets, clears TOTP replay/last-MFA state, and sets TwoFactorEnabled false. ResetMfaAsync currently delegates directly to the same operation."
+    },
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-19",
+      "note": "Reset is not exposed as a separate user-facing behavior while its server semantics are identical to Disable."
+    }
+  ],
+  "progress": {
+    "scenarios": "complete",
+    "presentation": "complete",
+    "implementation": "in-progress",
+    "tests": "not-started"
+  }
+}
