@@ -1,0 +1,25 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.totp-management.rotate-recovery-codes-success",
+  "name": "TOTP Recovery Code Rotation Success",
+  "summary": "Replaces the recovery-code set for the current authenticated identity while preserving the enrolled TOTP authenticator.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-management",
+  "priority": 100,
+  "sourceState": { "expression": "session-capability == authenticated-normal and TOTP is enabled" },
+  "actionKey": "auth.action.totp-management.rotate-recovery-codes",
+  "guards": [
+    { "expression": "the current durable identity has TOTP enabled", "failureCode": "totp-not-enabled" }
+  ],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.credential-proof", "operation": "derive", "valueExpression": "totp-enrolled-with-new-recovery-codes" }
+  ],
+  "requiredEffects": ["invalidate-existing-recovery-codes", "issue-recovery-codes", "record-totp-recovery-code-rotation-success"],
+  "forbiddenEffects": ["disable-totp", "replace-authenticator-secret", "issue-new-session"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "RotateRecoveryCodesAsync replaces only the recovery-code secret and logs TotpRotateRecoveryCodesSuccess." }
+  ]
+}
