@@ -207,11 +207,17 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public async Task<string> GetAuthenticatorKeyAsync(AppUser user, CancellationToken token)
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
+
             if (String.IsNullOrEmpty(user.AuthenticatorKeySecretId))
+            {
+                if (user.TwoFactorEnabled)
+                    throw new InvalidOperationException("TOTP is enabled for the user but the authenticator key reference is missing.");
+
                 return null;
+            }
 
             var result = await _secureStorage.GetUserSecretAsync(user.ToEntityHeader(), user.AuthenticatorKeySecretId);
-            if (!result.Successful)
+            if (!result.Successful || String.IsNullOrWhiteSpace(result.Result))
                 throw new InvalidOperationException("Could not retrieve the authenticator key from secure storage.");
 
             return result.Result;
