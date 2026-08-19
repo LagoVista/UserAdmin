@@ -24,7 +24,9 @@
   "sourceReferences": [
     { "sourceType": "auth-view", "reference": "auth.select.mfa-type", "note": "Starting surface owns the select-passkey action." },
     { "sourceType": "auth-view", "reference": "auth.continue.passkey", "note": "Existing canonical Passkey Start surface owns the remaining passkey ceremony." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared/user/select-mfa-type/select-mfa-type.component.ts", "note": "Angular action:select-passkey navigates to the canonical passkey continuation route." },
+    { "sourceType": "code", "reference": "nuviot/vtm-client/src/features/authentication/nuviot-account/screens/select-mfa-type-screen.tsx", "note": "React Native action:select-passkey navigates to /auth/continue/passkey." },
     { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Select MFA Type has exactly one Passkey-choice scenario ending at Passkey Start." }
   ],
-  "progress": { "presentation": "complete", "implementation": "not-started", "tests": "complete" }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "complete" }
 }
