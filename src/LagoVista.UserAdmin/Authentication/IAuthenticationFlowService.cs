@@ -11,6 +11,7 @@ namespace LagoVista.UserAdmin.Authentication
     public interface IAuthenticationFlowService
     {
         Task<InvokeResult<AuthenticationResponse>> LoginWithPasswordAsync(AuthLoginRequest request);
+        Task<InvokeResult<AuthenticationResponse>> AuthenticateWithTotpAsync(TotpSignInRequest request);
         Task<InvokeResult> ChangePasswordAsync(ChangePassword request, EntityHeader organization, EntityHeader user);
         Task<InvokeResult> RequestPasswordRecoveryAsync(SendResetPasswordLink request);
         Task<InvokeResult<string>> VerifyPasswordRecoveryAsync(VerifyPasswordResetCode request);
