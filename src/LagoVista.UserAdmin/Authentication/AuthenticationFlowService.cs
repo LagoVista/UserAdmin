@@ -5,6 +5,7 @@ using LagoVista.UserAdmin.Authentication.Flows;
 using LagoVista.UserAdmin.Models.Auth;
 using LagoVista.UserAdmin.Models.DTOs;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Authentication
@@ -20,8 +21,10 @@ namespace LagoVista.UserAdmin.Authentication
         private readonly IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult> _emailVerificationSendHandler;
         private readonly IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> _passwordRecoveryVerificationHandler;
         private readonly IAuthenticationFlowHandler<PasswordChangeFlowRequest> _passwordChangeHandler;
+        private readonly ITotpTurnOffFlowHandler _totpTurnOffHandler;
+        private readonly ITotpRecoveryCodeRotationFlowHandler _totpRecoveryCodeRotationHandler;
 
-        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> invitationAcceptanceHandler = null, IAuthenticationFlowHandler<EmailVerificationFlowRequest> emailVerificationHandler = null, IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> passwordRecoveryVerificationHandler = null, IAuthenticationFlowHandler<PasswordChangeFlowRequest> passwordChangeHandler = null, IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult> emailVerificationSendHandler = null)
+        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> invitationAcceptanceHandler = null, IAuthenticationFlowHandler<EmailVerificationFlowRequest> emailVerificationHandler = null, IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> passwordRecoveryVerificationHandler = null, IAuthenticationFlowHandler<PasswordChangeFlowRequest> passwordChangeHandler = null, IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult> emailVerificationSendHandler = null, ITotpTurnOffFlowHandler totpTurnOffHandler = null, ITotpRecoveryCodeRotationFlowHandler totpRecoveryCodeRotationHandler = null)
         {
             _passwordLoginHandler = passwordLoginHandler ?? throw new ArgumentNullException(nameof(passwordLoginHandler));
             _passwordRecoveryRequestHandler = passwordRecoveryRequestHandler ?? throw new ArgumentNullException(nameof(passwordRecoveryRequestHandler));
@@ -31,6 +34,8 @@ namespace LagoVista.UserAdmin.Authentication
             _passwordRecoveryVerificationHandler = passwordRecoveryVerificationHandler;
             _passwordChangeHandler = passwordChangeHandler;
             _emailVerificationSendHandler = emailVerificationSendHandler;
+            _totpTurnOffHandler = totpTurnOffHandler;
+            _totpRecoveryCodeRotationHandler = totpRecoveryCodeRotationHandler;
         }
 
         public async Task<InvokeResult<AuthenticationResponse>> LoginWithPasswordAsync(AuthLoginRequest request)
@@ -121,6 +126,30 @@ namespace LagoVista.UserAdmin.Authentication
 
             var result = await _emailVerificationHandler.HandleAsync(new EmailVerificationFlowRequest(request, user));
             if (result.TransitionKey != EmailVerificationFlowHandler.AcceptedTransitionKey && result.TransitionKey != EmailVerificationFlowHandler.RejectedTransitionKey)
+                throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
+
+            return result.PublicResult;
+        }
+
+        public async Task<InvokeResult> TurnOffTotpAsync(string userId, EntityHeader organization, EntityHeader user)
+        {
+            if (_totpTurnOffHandler == null)
+                throw new InvalidOperationException("TOTP turn-off flow handler is not configured.");
+
+            var result = await _totpTurnOffHandler.HandleAsync(new TotpManagementFlowRequest(userId, TotpManagementOperation.TurnOff, organization, user));
+            if (result.TransitionKey != TotpTurnOffFlowHandler.SuccessTransitionKey)
+                throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
+
+            return result.PublicResult;
+        }
+
+        public async Task<InvokeResult<List<string>>> RotateTotpRecoveryCodesAsync(string userId, EntityHeader organization, EntityHeader user)
+        {
+            if (_totpRecoveryCodeRotationHandler == null)
+                throw new InvalidOperationException("TOTP recovery-code rotation flow handler is not configured.");
+
+            var result = await _totpRecoveryCodeRotationHandler.HandleAsync(new TotpManagementFlowRequest(userId, TotpManagementOperation.RotateRecoveryCodes, organization, user));
+            if (result.TransitionKey != TotpRecoveryCodeRotationFlowHandler.SuccessTransitionKey)
                 throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
 
             return result.PublicResult;
