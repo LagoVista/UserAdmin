@@ -6,15 +6,39 @@
   "description": "Lets a user who has more than one available MFA method choose which second-factor ceremony to continue with.",
   "category": "provider",
   "routeId": "auth.route.select.mfa-type",
-  "status": "proposed",
+  "status": "active",
   "controls": [],
   "actions": [
     { "id": "select-passkey", "name": "Use Passkey", "actionType": "button", "finder": "action:select-passkey" },
     { "id": "select-totp", "name": "Use Authenticator Code", "actionType": "button", "finder": "action:select-totp" }
   ],
   "platforms": {
-    "web": { "status": "planned", "repository": "softwarelogistics/nuviot-ui-shared", "notes": "New Select MFA Type surface must expose the two canonical selection actions and route to the existing passkey or TOTP continuation view." },
-    "mobile": { "status": "planned", "repository": "nuviot/vtm-client", "notes": "New Select MFA Type surface must expose the two canonical selection actions and route to the existing passkey or TOTP continuation view." }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "user/select-mfa-type/select-mfa-type.component.html",
+      "component": "SelectMfaTypeComponent",
+      "implementation": "SelectMfaTypeComponent with /auth/select/mfa/type route",
+      "conformance": {
+        "status": "verified",
+        "checkedUtc": "2026-08-19T22:32:00Z",
+        "checkedAgainst": ["view-identity", "actions", "finders", "navigation"],
+        "notes": "Verified auth.select.mfa-type identity, select-passkey/select-totp semantic action IDs, and navigation to the existing passkey and TOTP continuation routes."
+      }
+    },
+    "mobile": {
+      "status": "implemented",
+      "repository": "nuviot/vtm-client",
+      "path": "src/features/authentication/nuviot-account/screens/select-mfa-type-screen.tsx",
+      "component": "SelectMfaTypeScreen",
+      "implementation": "app/auth/select/mfa/type.tsx -> SelectMfaTypeScreen",
+      "conformance": {
+        "status": "verified",
+        "checkedUtc": "2026-08-19T22:32:00Z",
+        "checkedAgainst": ["view-identity", "actions", "finders", "navigation"],
+        "notes": "Verified auth.select.mfa-type test identity, canonical select-passkey/select-totp actions, and routing to /auth/continue/passkey or /auth/continue/totp."
+      }
+    }
   },
   "notes": [
     "This view performs no authentication operation itself. It is a client-only choice surface between already-available MFA methods.",
