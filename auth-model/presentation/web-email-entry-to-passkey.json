@@ -1,0 +1,33 @@
+{
+  "$schema": "../schemas/presentation-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.presentation.web.email-entry-to-passkey",
+  "name": "Web Email Entry to Passkey",
+  "summary": "Binds the client-only Continue with Passkey action from email entry to the passkey continuation surface.",
+  "version": 1,
+  "maturity": "reviewed",
+  "bindingKind": "ui-navigation",
+  "channel": "web-ui",
+  "platform": "web",
+  "scenarioKeys": ["auth.scenario.passkey.email-entry-to-passkey"],
+  "actionKey": null,
+  "navigationKey": "auth.navigation.continue-email.passkey",
+  "authViewKey": "auth.continue.email",
+  "route": "/auth/continue/email",
+  "viewId": "auth.continue.email",
+  "fieldBindings": [
+    { "inputKey": "email", "authViewFieldId": "email", "finder": "field:email", "bindingType": "field", "valueSource": null }
+  ],
+  "actionBinding": {
+    "authFieldActionId": "continue-passkey",
+    "finder": "action:continue-passkey",
+    "bindingType": "navigation",
+    "operationReference": "ContinueEmailComponent.continuePasskey"
+  },
+  "expectedViewId": "auth.continue.passkey",
+  "expectedRoute": "/auth/continue/passkey",
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/continue-email/continue-email.component.ts" },
+    { "sourceType": "decision", "reference": "auth-model/scenarios-v2/passkey/email-entry-to-passkey.json" }
+  ]
+}
