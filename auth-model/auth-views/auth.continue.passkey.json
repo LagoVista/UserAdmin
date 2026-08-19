@@ -3,12 +3,12 @@
   "schemaVersion": "1.0",
   "viewId": "auth.continue.passkey",
   "name": "Continue with Passkey",
-  "description": "Starts authentication with a registered passkey and provides navigation back to the authentication entry flow.",
+  "description": "Authenticates the email-resolved account with a registered passkey and provides navigation back to the email credential-choice surface.",
   "category": "passkey",
   "routeId": "auth.route.continue.passkey",
   "status": "active",
   "controls": [
-    { "id": "passkey-error", "name": "Passkey Error", "controlType": "status", "finder": "status:passkey-error", "visibilityCondition": "Passkey authentication or creation failed." }
+    { "id": "passkey-error", "name": "Passkey Error", "controlType": "status", "finder": "status:passkey-error", "visibilityCondition": "Passkey authentication failed, was cancelled, or no usable passkey was available." }
   ],
   "actions": [
     { "id": "use-passkey", "name": "Use Passkey", "actionType": "native-capability", "finder": "action:use-passkey" },
@@ -24,9 +24,9 @@
       "implementation": "ContinuePasskeyComponent with continue-passkey.component.html",
       "conformance": {
         "status": "verified",
-        "checkedUtc": "2026-08-11T20:27:00Z",
+        "checkedUtc": "2026-08-19T23:42:00Z",
         "checkedAgainst": ["view-identity", "controls", "actions", "finders", "navigation"],
-        "notes": "Verified auth.continue.passkey identity, status:passkey-error, use-passkey, back, and start-over selectors against the Angular template and navigation handlers."
+        "notes": "The screen is authentication-only. Back returns to auth.continue.email; Start Over returns to auth.welcome."
       }
     },
     "mobile": {
@@ -37,9 +37,9 @@
       "implementation": "app/auth/continue/passkey.tsx -> ContinuePasskeyScreen",
       "conformance": {
         "status": "verified",
-        "checkedUtc": "2026-08-11T20:27:00Z",
+        "checkedUtc": "2026-08-19T23:42:00Z",
         "checkedAgainst": ["view-identity", "controls", "actions", "finders", "navigation"],
-        "notes": "Verified auth.continue.passkey identity and canonical use-passkey, back, start-over, and passkey-error selectors after aligning the mobile status test ID."
+        "notes": "The canonical authentication-only surface is present; native passkey execution remains an implementation gap tracked by the scenario."
       }
     }
   },
@@ -48,5 +48,8 @@
     "runtimeSha256Hex": "521628217707b15540a176c20aa0730999b5705c63d3d75b9eaeff7f85edd22c",
     "webComponent": "ContinuePasskeyComponent",
     "mobileComponent": "app/auth/continue/passkey.tsx"
-  }
+  },
+  "notes": [
+    "Passkey registration is a separate category and MUST NOT be invoked as a fallback from this screen."
+  ]
 }
