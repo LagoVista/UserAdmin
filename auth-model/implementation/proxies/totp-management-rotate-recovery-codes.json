@@ -13,6 +13,7 @@
   "sourcePath": "generated/auth/client.ts",
   "serviceType": "AuthClient",
   "methodName": "createMfarecoveryRotate",
+  "requestContract": "none",
   "resultContract": "InvokeResultEx<string[]>",
   "generator": "Aptix EndpointProjectGenerator",
   "consumingPlatforms": ["web", "mobile"],
