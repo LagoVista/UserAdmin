@@ -1,0 +1,42 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.totp-enrollment.enrollment-to-confirm",
+  "runtimeEntityId": "7A6C8D4E1F2B4930A5C6D7E8F9012345",
+  "name": "TOTP Enrollment to Confirmation",
+  "summary": "An authenticated user reviews the generated authenticator enrollment material and continues to the TOTP confirmation surface.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-enrollment",
+  "startViewKey": "auth.mfa.totp.enroll",
+  "action": { "id": "continue", "finder": "action:continue" },
+  "preconditions": {
+    "expression": "an authenticated durable identity without enabled TOTP is viewing enrollment material produced for the current enrollment attempt",
+    "state": {
+      "ensureUserExists": "set",
+      "isUserLoggedIn": "set",
+      "emailConfirmed": "set",
+      "twoFactorEnabled": "notset",
+      "hasTOTP": "notset"
+    }
+  },
+  "inputs": [],
+  "serverInteraction": { "required": false },
+  "expectedViewKey": "auth.mfa.totp.confirm",
+  "postconditions": {
+    "expression": "the same authenticated durable identity remains signed in with TOTP still disabled while auth.mfa.totp.confirm is visible",
+    "state": {
+      "ensureUserExists": "set",
+      "isUserLoggedIn": "set",
+      "twoFactorEnabled": "notset"
+    }
+  },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.mfa.totp.enroll" },
+    { "sourceType": "auth-view", "reference": "auth.mfa.totp.confirm" },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/totp-enroll-start/totp-enroll-start.component.ts", "note": "The web component loads enrollment material and action:continue navigates to the canonical confirm route." }
+  ],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}
