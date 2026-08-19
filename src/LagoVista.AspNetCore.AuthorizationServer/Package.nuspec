@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>LagoVista.AspNetCore.AuthorizationServer</id>
+    <version>3.0.3381.1143</version>
+    <authors>Software Logistics, LLC</authors>
+    <owners>Software Logistics, LLC</owners>
+    <title>LagoVista User Administration</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://www.nuviot.com</projectUrl>
+    <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
+    <summary>OAuth and OIDC Servers for LagoVista Frameworks</summary>
+    <description>User, Organization and Location Management Models and API for LagoVista IoT, Devices and Home Automation Framework</description>
+    <copyright>Copyright Software Logistics - 2026</copyright>
+    <tags>HomeAutomation IoT Devices NuvIoT LagoVista</tags>
+    <icon>LagoVistaIcon.png</icon>
+    <releaseNotes>Build Date: 8/19/2026 3:43:09 PM UTC</releaseNotes>
+    <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
+    <dependencies>
+      <group targetFramework="net9.0">
+        <dependency id="OpenIddict.Core" version="7.6.0" />
+        <dependency id="OpenIddict.Server.AspNetCore" version="7.6.0" />
+        <dependency id="OpenIddict.Validation.ServerIntegration" version="7.6.0" />
+        <dependency id="OpenIddict.Validation.AspNetCore" version="7.6.0" />
+        <dependency id="LagoVista.AspNetCore.Identity" version="3.0.3381.1143" />
+        <dependency id="LagoVista.UserAdmin" version="3.0.3381.1143" />
+        <dependency id="LagoVista.UserAdmin.Repos" version="3.0.3381.1143" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
+    <file src="bin\release\net9.0\LagoVista.AspNetCore.AuthorizationServer.dll" target="lib\net9.0\LagoVista.AspNetCore.AuthorizationServer.dll" />
+    <file src="bin\release\net9.0\LagoVista.AspNetCore.AuthorizationServer.pdb" target="lib\net9.0\LagoVista.AspNetCore.AuthorizationServer.pdb" />
+  </files>
+</package>
