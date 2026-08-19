@@ -14,6 +14,8 @@ namespace LagoVista.UserAdmin.Authentication
         Task<InvokeResult<AuthenticationResponse>> LoginWithPasswordAsync(AuthLoginRequest request);
         Task<InvokeResult<AuthenticationResponse>> AuthenticateWithTotpAsync(TotpSignInRequest request);
         Task<InvokeResult<AuthResponse>> AuthenticateWithTotpTokenAsync(AuthRequest request);
+        Task<InvokeResult<AuthenticationResponse>> CompleteProvenUserSessionAsync(AppUser appUser, bool rememberMe = true);
+        Task<InvokeResult<AuthResponse>> CompleteProvenUserTokenAsync(AuthRequest request, AppUser appUser);
         Task<InvokeResult> SignOutAsync(SignOutRequest request, EntityHeader organization, EntityHeader user);
         Task<InvokeResult> ChangePasswordAsync(ChangePassword request, EntityHeader organization, EntityHeader user);
         Task<InvokeResult> RequestPasswordRecoveryAsync(SendResetPasswordLink request);
