@@ -8,43 +8,19 @@
   "maturity": "proposed",
   "categoryKey": "totp-enrollment",
   "priority": 100,
-  "sourceState": {
-    "expression": "session-capability == authenticated-normal and TOTP enrollment is pending"
-  },
+  "sourceState": { "expression": "session-capability == authenticated-normal and TOTP enrollment is pending" },
   "actionKey": "auth.action.totp-enrollment.confirm",
   "guards": [
-    {
-      "expression": "the submitted TOTP code matches the staged authenticator secret and the timestep has not already been accepted",
-      "failureCode": "totp-enrollment-proof-rejected"
-    }
+    { "expression": "the submitted TOTP code matches the staged authenticator secret and the timestep has not already been accepted", "failureCode": "totp-enrollment-proof-rejected" }
   ],
   "destinationTransform": [
-    {
-      "dimensionKey": "auth.dimension.credential-proof",
-      "operation": "derive",
-      "valueExpression": "totp-enrolled"
-    }
+    { "dimensionKey": "auth.dimension.credential-proof", "operation": "derive", "valueExpression": "totp-enrolled" }
   ],
-  "requiredEffects": [
-    "enable-totp",
-    "store-authenticator-secret-securely",
-    "issue-recovery-codes",
-    "record-totp-enrollment-success"
-  ],
-  "forbiddenEffects": [
-    "create-durable-user",
-    "change-password-credential",
-    "issue-new-session"
-  ],
-  "invariantKeys": [
-    "auth.invariant.transition.one-state-changing-action",
-    "auth.invariant.transition.deterministic-post-state"
-  ],
+  "requiredEffects": ["enable-totp", "store-authenticator-secret-securely", "issue-recovery-codes", "record-totp-enrollment-success"],
+  "forbiddenEffects": ["create-durable-user", "change-password-credential", "issue-new-session"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
   "sourceReferences": [
-    {
-      "sourceType": "code",
-      "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
-      "note": "ConfirmTotpEnrollmentAsync verifies the staged secret, enables TOTP, stores recovery codes, and returns those codes to the caller."
-    }
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ConfirmTotpEnrollmentAsync accepts a matching timestep, sets TwoFactorEnabled, stores recovery-code material securely, and records TotpConfirmEnrollmentSuccess." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "Existing confirmed-user endpoint exposes the enrollment confirmation operation." }
   ]
 }
