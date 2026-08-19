@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schemas/auth-proxy-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.proxy.totp-enrollment.confirm",
+  "name": "TOTP Enrollment Confirm Generated Proxy",
+  "summary": "Binds the canonical TOTP enrollment-confirm endpoint to the stable generated AuthClient operation consumed by web and mobile clients.",
+  "version": 1,
+  "maturity": "implemented",
+  "endpointBindingKey": "auth.endpoint.totp-enrollment.confirm",
+  "operationContractId": "nuvos.endpoint.auth.mfa-confirm-totp-enrollment-api-auth-mfatotp-enrollment-confirm",
+  "operationId": "Mfa_ConfirmTotpEnrollment_api_auth_mfatotp_enrollment_confirm",
+  "repository": "nuviot/nuvos-app-contracts",
+  "sourcePath": "generated/auth/client.ts",
+  "serviceType": "AuthClient",
+  "methodName": "createMfatotpEnrollmentConfirm",
+  "requestContract": "Models.AppUserTotpSecret",
+  "resultContract": "InvokeResultEx<string[]>",
+  "generator": "Aptix EndpointProjectGenerator",
+  "consumingPlatforms": ["web", "mobile"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/operations.json", "note": "Generated operation manifest records the stable enrollment-confirm contract." },
+    { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/client.ts", "note": "Shared generated AuthClient implementation consumed by Angular and React Native." }
+  ]
+}
