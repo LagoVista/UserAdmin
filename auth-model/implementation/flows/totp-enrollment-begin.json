@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schemas/auth-flow.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.flow.totp-enrollment.begin",
+  "name": "TOTP Enrollment Begin",
+  "summary": "Stages authenticator material for the current authenticated identity through the normalized authentication flow boundary.",
+  "version": 1,
+  "maturity": "implemented",
+  "requestContract": "TotpEnrollmentBeginFlowRequest",
+  "resultContract": "AuthenticationFlowResult<AppUserTotpEnrollmentInfo>",
+  "handlerKeys": ["auth.handler.totp-enrollment.begin"],
+  "transitionKeys": ["auth.transition.totp-enrollment.begin"],
+  "entryActionKeys": ["auth.action.totp-enrollment.begin"],
+  "supportedAudiences": ["platform-user", "tenant-user", "customer-end-user"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/AuthenticationFlowService.cs", "note": "BeginTotpEnrollmentAsync is the stable application entry point." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/TotpEnrollmentBeginFlowHandler.cs", "note": "Typed handler delegates to the real MFA manager and emits the canonical begin transition." }
+  ]
+}
