@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.mfa.totp.admin-reset",
+  "name": "Administrative TOTP Reset",
+  "path": "/auth/mfa/totp/admin-reset",
+  "routeType": "view",
+  "viewId": "auth.mfa.totp.admin-reset",
+  "parameters": [
+    { "name": "targetUserId", "required": true, "valueType": "string" }
+  ],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "planned" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {}
+}
