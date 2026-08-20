@@ -12,5 +12,5 @@
     "web": { "status": "planned" },
     "mobile": { "status": "implemented", "implementation": "app/auth/continue/recovery.tsx -> ContinueRecoveryScreen" }
   },
-  "source": { "mobileComponent": "ContinueRecoveryScreen" }
+  "source": { "mobileRoute": "app/auth/continue/recovery.tsx" }
 }
