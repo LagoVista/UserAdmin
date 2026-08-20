@@ -40,5 +40,5 @@
     { "sourceType": "transition", "reference": "auth.transition.passkey.complete-existing-user-registration" },
     { "sourceType": "code", "reference": "src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs" }
   ],
-  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "complete" }
 }
