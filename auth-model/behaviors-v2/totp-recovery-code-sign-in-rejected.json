@@ -1,0 +1,29 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.totp.recovery-code-sign-in-rejected",
+  "name": "TOTP Recovery Code Could Not Authenticate",
+  "summary": "A returning user with an outstanding TOTP MFA requirement chooses recovery-code authentication and submits a code that is not accepted; no authenticated session is established and the recovery-code entry surface remains available for retry or exit.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-sign-in",
+  "scenarioKeys": [
+    "auth.scenario.totp-sign-in.use-recovery-code",
+    "auth.scenario.totp-sign-in.recovery-code-rejected"
+  ],
+  "entryViewKey": "auth.continue.totp",
+  "finalViewKey": "auth.continue.recovery",
+  "finalOutcome": "The submitted recovery-code proof is rejected, the outstanding MFA requirement remains unsatisfied, and no authenticated application session is established.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ConsumeRecoveryCodeAsync already rejects invalid or unavailable recovery codes without authenticating the user." },
+    { "sourceType": "auth-view", "reference": "auth.continue.recovery", "note": "Rejected recovery-code sign-in remains on the same canonical entry view with a non-enumerating error state." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Invalid, already-consumed and otherwise unusable recovery codes share one public rejected outcome rather than exposing internal rejection reasons." }
+  ],
+  "progress": {
+    "scenarios": "complete",
+    "presentation": "in-progress",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
+}
