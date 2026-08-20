@@ -3,22 +3,22 @@
   "schemaVersion": "1.0",
   "key": "auth.action.totp-recovery-sign-in.submit",
   "name": "Submit TOTP Recovery Code",
-  "summary": "Attempts to satisfy an outstanding TOTP MFA requirement for an already identified durable account by consuming one valid recovery code and establishes an authenticated session only when the code is accepted.",
+  "summary": "Attempts to satisfy an outstanding TOTP MFA requirement for an already identified durable account by consuming one valid recovery code, invalidating the lost authenticator enrollment, and establishing an authenticated session only when the recovery proof is accepted.",
   "version": 1,
   "maturity": "proposed",
   "requiredInputs": [
-    { "key": "email", "valueType": "string", "required": true, "description": "Previously identified account email used to resolve the durable identity." },
+    { "key": "email", "valueType": "string", "required": true, "description": "Previously identified account email used to bind the MFA challenge to the durable identity." },
     { "key": "recovery-code", "valueType": "secret-reference", "required": true, "description": "One unused recovery code issued for the enrolled TOTP factor." }
   ],
   "guards": [
-    { "expression": "session-capability == anonymous and an outstanding MFA challenge exists for the identified durable identity", "failureCode": "totp-recovery-sign-in-requires-mfa-challenge" }
+    { "expression": "session-capability == anonymous and a valid password-issued MFA challenge exists for the identified durable identity", "failureCode": "totp-recovery-sign-in-requires-mfa-challenge" }
   ],
-  "permittedMutations": ["auth.dimension.credential-proof", "auth.dimension.session-capability"],
-  "requiredEffects": ["resolve-existing-identity", "consume-one-recovery-code", "record-recovery-code-authentication-attempt"],
-  "forbiddenEffects": ["create-durable-user", "disable-totp", "rotate-recovery-codes", "disclose-account-existence"],
+  "permittedMutations": ["auth.dimension.credential-proof", "auth.dimension.session-capability", "auth.dimension.totp-enrollment"],
+  "requiredEffects": ["resolve-existing-identity-from-mfa-challenge", "consume-one-recovery-code", "invalidate-current-totp-authenticator", "disable-totp-until-reenrollment", "record-recovery-code-authentication-attempt"],
+  "forbiddenEffects": ["create-durable-user", "change-password-credential", "authenticate-without-primary-proof", "disclose-account-existence"],
   "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
   "sourceReferences": [
-    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ConsumeRecoveryCodeAsync provides the one-time recovery-code validation and consumption primitive." },
-    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "The current /api/auth/mfarecovery/consume endpoint requires a confirmed current user and therefore does not yet implement anonymous post-password MFA completion." }
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ConsumeRecoveryCodeAsync validates and consumes one recovery code, rotates the stored remaining-code blob, removes the current authenticator secret, sets TwoFactorEnabled false, and updates MFA freshness when used as step-up." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/RecoveryCodeAuthenticationFlowHandler.cs", "note": "The sign-in handler requires a password-issued MFA challenge bound to the same durable user before invoking the recovery-code primitive." }
   ]
 }
