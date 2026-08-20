@@ -4,7 +4,7 @@
   "key": "auth.behavior.passkey.sign-in",
   "name": "Passkey Sign-In",
   "summary": "A returning user identifies the account by email, chooses passkey authentication, completes the platform passkey ceremony, and reaches the application home view.",
-  "version": 2,
+  "version": 3,
   "maturity": "proposed",
   "categoryKey": "passkey-sign-in",
   "scenarioKeys": [
@@ -18,20 +18,23 @@
   "sourceReferences": [
     { "sourceType": "journey", "reference": "auth.journey.passkey.authentication" },
     { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "The user-bound passkey manager owns challenge validation, credential ownership checks, WebAuthn assertion verification, user verification policy, and signature-counter advancement." },
-    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Services/EmailPasskeyAuthenticationService.cs", "note": "Passkey Sign In resolves the entered email to the expected durable UserId and delegates to the same user-bound passkey proof used for step-up authentication." },
-    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs", "note": "The server exposes email-bound begin, browser-session complete, and mobile-token complete operations." },
-    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/continue-passkey/continue-passkey.component.ts", "note": "Angular Web now uses the retained email with the email-bound passkey operations and the browser WebAuthn ceremony." },
-    { "sourceType": "code", "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/continue-passkey-screen.tsx", "note": "React Native now performs the native passkey ceremony and completes the email-bound proof into the existing token-session lifecycle." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Services/EmailPasskeyAuthenticationService.cs", "note": "Passkey Sign In resolves the entered email to the expected durable UserId and delegates to the same user-bound passkey proof primitive used by MFA, while primary completion does not mutate MFA freshness." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs", "note": "The server exposes email-bound begin, browser-session complete, and mobile-token complete operations and establishes application state only after the proof service returns a durable user." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/continue-email/continue-email.component.ts", "note": "Angular retains normalized email and routes action:continue-passkey to the canonical Passkey surface without a server call." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/continue-passkey/continue-passkey.component.ts", "note": "Angular uses the retained email with the email-bound passkey operations and the browser WebAuthn ceremony." },
+    { "sourceType": "code", "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/continue-email-screen.tsx", "note": "React Native retains normalized email in AuthFlow and routes the Passkey choice without a server call." },
+    { "sourceType": "code", "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/continue-passkey-screen.tsx", "note": "React Native performs the native passkey ceremony and completes the email-bound proof into the existing token-session lifecycle." },
     { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/client.ts", "note": "Generated AuthClient contracts expose typed email-bound passkey begin, browser complete, and mobile token complete methods." },
-    { "sourceType": "test", "reference": "LagoVista/UserAdmin:tests/LagoVista.UserAdmin.Auth.Tests/EmailPasskeyAuthenticationServiceTests.cs", "note": "Initial server proof is authored for email normalization/resolution, UV-required challenge delegation, exact-user proof binding, MFA step-up forwarding, and neutral negative paths." },
-    { "sourceType": "decision", "reference": "auth-model/implementation/tests/passkey-sign-in.json", "note": "The initial server test binding is authored. Deeper WebAuthn-manager integration, browser/mobile session adapters and client/runtime tests remain outstanding." },
+    { "sourceType": "test", "reference": "auth.test-binding.passkey-sign-in", "note": "Service proof covers normalized email resolution, neutral account/passkey availability failures, exact-user completion and rejected assertions." },
+    { "sourceType": "test", "reference": "auth.test-binding.passkey-sign-in.real-manager", "note": "Real-manager proof covers UV-required challenge creation, per-user allowCredentials, challenge/credential ownership, signature counter advancement, and no primary-auth MFA freshness mutation." },
+    { "sourceType": "test", "reference": "auth.test-binding.passkey-sign-in.session-completion", "note": "Common adapter proof covers durable proven-user browser session and mobile token completion and rejects missing proof before mutation." },
     { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Direct Passkey-first discovery is deferred from launch scope. Email-first primary Passkey and Password-then-Passkey MFA share one user-bound passkey proof primitive; the surrounding authentication state determines how successful proof is consumed." },
-    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "Both canonical Passkey Sign-In scenarios are implementation-complete by source inspection. Initial server tests are authored but not yet executed, while client/runtime proof remains outstanding; tests are therefore in progress." }
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "Both canonical primary Passkey scenarios now have complete authored test obligations. Runtime C# and UI execution evidence remain separate from authored Tests status." }
   ],
   "progress": {
     "scenarios": "complete",
     "presentation": "complete",
     "implementation": "complete",
-    "tests": "in-progress"
+    "tests": "complete"
   }
 }
