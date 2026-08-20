@@ -213,6 +213,10 @@ namespace LagoVista.UserAdmin.Models.Security
         TotpDisableMfaFailed,
         TotpDisableMfaSuccess,
 
+        TotpAdministrativeResetStart,
+        TotpAdministrativeResetFailed,
+        TotpAdministrativeResetSuccess,
+
         MagicLinkRequested,
         MagicLinkSent,
         MagicLinkConsumed,
