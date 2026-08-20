@@ -77,8 +77,8 @@
     {
       "key": "passkey-sign-in",
       "name": "Passkey Sign In",
-      "behaviorKeys": ["auth.behavior.passkey.sign-in"],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"not-started"}
+      "behaviorKeys": ["auth.behavior.passkey.mfa-sign-in","auth.behavior.passkey.sign-in"],
+      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
     },
     {
       "key": "password-management",
@@ -130,7 +130,7 @@
         "auth.behavior.totp.disable-success",
         "auth.behavior.totp.recovery-codes-rotation-success"
       ],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"not-started","implementation":"not-started","tests":"not-started"}
+      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
     },
     {
       "key": "totp-sign-in",
@@ -141,7 +141,7 @@
         "auth.behavior.totp.sign-in-rejected",
         "auth.behavior.totp.sign-in-success"
       ],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"in-progress","implementation":"not-started","tests":"not-started"}
+      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
     }
   ],
   "sourceReferences": [
@@ -176,7 +176,7 @@
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Select MFA Type is a new behavior category with exactly two one-scenario behaviors. Both start at auth.select.mfa-type; selecting Passkey ends at auth.continue.passkey (Passkey Start), while selecting TOTP ends at auth.continue.totp (TOTP Start). The selection itself is UI-only and performs no authentication state transition."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Select MFA Type implementation is complete on Angular Web and React Native. Both stable clients expose auth.select.mfa-type with action:select-passkey and action:select-totp and route those actions to the existing canonical continuation views; no server implementation is required for this UI-only category."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Password Sign In MFA response routing is implementation-complete on the stable Angular Web master and React Native main branches. Both clients prefer availableMfaProviders, preserve provider as a compatibility fallback, route TOTP-only and Passkey-only directly to their continuation views, route dual-factor identities to Select MFA Type, and avoid treating MFA-required responses as authenticated mobile sessions."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Sign In now includes separate recovery-code success and rejected behaviors because the linear behavior model cannot honestly represent recovery-code authentication as an alternate branch inside the existing TOTP-code behaviors. Recovery code remains an MFA-only proof, not a primary login credential. TOTP Management now also includes privileged administrative reset, which requires fresh actor step-up proof, records actor and target identity, removes the target user's TOTP and recovery-code material, and never authenticates the target user."
-    }
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Sign In now includes separate recovery-code success and rejected behaviors because the linear behavior model cannot honestly represent recovery-code authentication as an alternate branch inside the existing TOTP-code behaviors. Recovery code remains an MFA-only proof, not a primary login credential. TOTP Management now also includes privileged administrative reset, which requires fresh actor step-up proof, records actor and target identity, removes the target user's TOTP and recovery-code material, and never authenticates the target user."},
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-20","note":"Passkey Sign In now includes both primary Email-to-Passkey and Password-to-Passkey MFA behaviors. Both stable clients use generated challenge-aware operations, primary Passkey requires user verification without recording MFA freshness, MFA Passkey consumes the password-issued MFA challenge, and authored proof covers real AppUserPasskeyManager security bindings plus browser/mobile proven-user completion. TOTP Sign In recovery-code paths and TOTP Management administrative reset are likewise reconciled complete. Runtime execution evidence remains separate from authored category progress."}
   ]
 }
