@@ -10,6 +10,7 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
     {
         Task<InvokeResult<AuthenticationResponse>> CompleteSignInToAppAsync(AppUser appUser, Stopwatch sw = null, string inviteId = "", string orgId = "");
         Task<InvokeResult<AuthenticationResponse>> PasswordSignInAsync(AuthLoginRequest loginRequest);
+        Task<InvokeResult<AppUser>> VerifyPasswordForMfaAsync(AuthLoginRequest loginRequest);
         Task SignInAsync(AppUser user, bool isPersistent = false);
         Task SignInProvisionalAsync(AppUser user, string actorId, bool isPersistent = false);
         Task SignOutAsync();
