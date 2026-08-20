@@ -1,0 +1,44 @@
+{
+  "$schema": "../../schemas/auth-test-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.test-binding.passkey-sign-in.session-completion",
+  "name": "Passkey Proven-User Session Completion Proof",
+  "summary": "Registers proof for the common proven-user adapters used after accepted Passkey proof: browser sign-in is established only for a durable proven user, and mobile tokens are minted only through the one-time-use-token bridge for that same durable user.",
+  "version": 1,
+  "maturity": "implemented",
+  "testLevel": "handler-integration",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "tests/LagoVista.UserAdmin.Auth.Tests",
+  "sourcePath": "tests/LagoVista.UserAdmin.Auth.Tests/ProvenUserSessionCompletionTests.cs",
+  "framework": "NUnit",
+  "testTypeName": "ProvenUserSessionCompletionTests",
+  "testMethodNames": [
+    "CompleteProvenUserSession_WithDurableUser_Should_EstablishBrowserSessionAndReturnResolvedDestination",
+    "CompleteProvenUserToken_WithDurableUser_Should_MintSingleUseTokenBeforeIssuingMobileTokens",
+    "CompleteProvenUserSession_WithoutDurableUser_Should_RejectBeforeSessionMutation",
+    "CompleteProvenUserToken_WithoutDurableUser_Should_RejectBeforeTokenMutation"
+  ],
+  "scenarioKeys": ["auth.scenario.passkey.passkey-to-home"],
+  "handlerKeys": [],
+  "endpointBindingKeys": [],
+  "transitionKeys": ["auth.transition.passkey.complete-authentication"],
+  "proofObligations": [
+    "browser-session-completion-requires-durable-proven-user",
+    "browser-session-established-before-application-destination-returned",
+    "mobile-token-completion-requires-durable-proven-user",
+    "mobile-token-completion-generates-single-use-token-for-proven-user-id",
+    "mobile-token-grant-uses-single-use-token-and-same-proven-user-id",
+    "missing-proven-user-cannot-mutate-browser-session",
+    "missing-proven-user-cannot-mint-mobile-token"
+  ],
+  "notes": [
+    "These are common AuthenticationFlowService adapters shared by Passkey, TOTP and recovery-code proof paths. PasskeyController calls them only after EmailPasskeyAuthenticationService returns a proven AppUser.",
+    "The tests intentionally do not repeat WebAuthn proof; that security boundary is covered by passkey-sign-in.real-manager and passkey-sign-in service proof bindings.",
+    "Runtime execution evidence remains separate from this authored proof binding."
+  ],
+  "sourceReferences": [
+    { "sourceType": "test", "reference": "LagoVista/UserAdmin:tests/LagoVista.UserAdmin.Auth.Tests/ProvenUserSessionCompletionTests.cs", "note": "Browser and token proven-user completion proof source." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/AuthenticationFlowService.cs", "note": "CompleteProvenUserSessionAsync and CompleteProvenUserTokenAsync are the adapters under proof." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs", "note": "Email-bound Passkey complete endpoints invoke these adapters only after accepted Passkey proof returns the durable user." }
+  ]
+}
