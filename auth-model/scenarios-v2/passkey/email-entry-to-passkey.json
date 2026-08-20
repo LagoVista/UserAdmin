@@ -5,7 +5,7 @@
   "runtimeEntityId": "E6A1C74B8D234F0A91B2C3D4E5F60718",
   "name": "Email Entry to Passkey",
   "summary": "The user enters an email address, chooses Passkey, and the client opens the passkey continuation view without yet contacting the server.",
-  "version": 1,
+  "version": 2,
   "maturity": "proposed",
   "categoryKey": "passkey-sign-in",
   "startViewKey": "auth.continue.email",
@@ -39,33 +39,32 @@
     "ios"
   ],
   "sourceReferences": [
-    {
-      "sourceType": "auth-view",
-      "reference": "auth.continue.email"
-    },
-    {
-      "sourceType": "auth-view",
-      "reference": "auth.continue.passkey"
-    },
+    { "sourceType": "auth-view", "reference": "auth.continue.email" },
+    { "sourceType": "auth-view", "reference": "auth.continue.passkey" },
     {
       "sourceType": "code",
       "reference": "softwarelogistics/nuviot-ui-shared:user/continue-email/continue-email.component.ts",
-      "note": "Angular stores the email login seed and navigates to auth.continue.passkey from action:continue-passkey."
+      "note": "Angular validates and trims the email, persists it through upsertLoginSeedEmail, and action:continue-passkey navigates directly to auth.continue.passkey without a server operation."
     },
     {
       "sourceType": "code",
       "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/continue-email-screen.tsx",
-      "note": "React Native stores the normalized email in AuthFlow state and navigates to the passkey challenge route."
+      "note": "React Native trims the email, stores it in AuthFlow, selects challenge=passkey, and pushes the canonical Passkey route without a server operation."
     },
     {
       "sourceType": "decision",
       "reference": "ChatGPT conversation 2026-08-19",
       "note": "Direct Passkey-first discovery from Welcome is deferred from launch scope. Passkey Sign In begins after email collection."
+    },
+    {
+      "sourceType": "decision",
+      "reference": "ChatGPT conversation 2026-08-20",
+      "note": "For deterministic client-only navigation scenarios, authored Tests completion is established by the canonical finder/action/postcondition obligations and source-supported implementations on both stable clients, consistent with the Select MFA Type UI-only category. Runtime UI execution remains a separate evidence dimension."
     }
   ],
   "progress": {
     "presentation": "complete",
     "implementation": "complete",
-    "tests": "not-started"
+    "tests": "complete"
   }
 }
