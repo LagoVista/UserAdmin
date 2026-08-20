@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.totp-management.admin-reset",
+  "name": "Administratively Reset TOTP",
+  "summary": "Allows an authorized, recently step-up-authenticated administrator or support operator to invalidate another user's TOTP enrollment and recovery-code material without authenticating that target user.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "target-user-id", "valueType": "string", "required": true, "description": "Durable identity whose TOTP enrollment is being reset." }
+  ],
+  "guards": [
+    { "expression": "actor-session-capability in [authenticated-limited,authenticated-normal]", "failureCode": "admin-reset-requires-authenticated-actor" },
+    { "expression": "actor has permission to reset another user's MFA", "failureCode": "admin-reset-not-authorized" },
+    { "expression": "actor has fresh step-up proof", "failureCode": "admin-reset-step-up-required" }
+  ],
+  "permittedMutations": ["target-user.totp-enrollment", "target-user.recovery-codes", "target-user.mfa-freshness"],
+  "requiredEffects": ["remove-target-authenticator-secret", "remove-target-recovery-code-secret", "clear-target-totp-state", "record-actor-and-target-reset-audit"],
+  "forbiddenEffects": ["authenticate-target-user", "issue-target-user-session", "change-target-password", "delete-target-user"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ResetMfaAsync currently supplies the state-clearing primitive by delegating to the existing MFA disable operation." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "The existing /api/auth/mfareset endpoint resets only the confirmed current user and therefore is not an administrative target-user boundary." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Administrative MFA reset is modeled as a privileged operation that does not authenticate the target user and requires fresh step-up proof for the actor." }
+  ]
+}
