@@ -113,6 +113,13 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 return InvokeResult<AuthResponse>.FromInvokeResult(signInResponse.ToInvokeResult());
             }
 
+            if (signInResponse.Result?.AuthenticationState == AuthenticationResponseState.MfaRequired)
+            {
+                const string mfaRequiredMessage = "Additional authentication is required.";
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.AccessTokenGrantFailure, userName: userName, errors: mfaRequiredMessage);
+                return InvokeResult<AuthResponse>.FromError(mfaRequiredMessage, "AUTH041");
+            }
+
             _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, this.Tag(), "UserLoggedIn", new KeyValuePair<string, string>("email", userName));
 
             var appUser = await _userManager.FindByNameAsync(userName);
@@ -304,7 +311,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                     {
                         await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.RefreshTokenGrantFailed, appUser, errors: $"Sorry, you do not have access to the {authRequest.OrgName} organization.");
 
-                        return InvokeResult<AuthResponse>.FromError($"Sorry, you do not have access to the {authRequest.OrgName} organization.", "NOORGACESS");
+                        return InvokeResult<AuthResponse>.FromError($"Sorry, you do not have access to {authRequest.OrgName}");
                     }
                 }
             }
