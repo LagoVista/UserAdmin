@@ -1,0 +1,37 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.passkey-mfa-sign-in.submit",
+  "name": "Submit Passkey MFA Proof",
+  "summary": "Completes a user-verified Passkey assertion for the durable identity bound to a password-issued MFA challenge and establishes an authenticated session only after both the WebAuthn proof and MFA challenge are satisfied.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "mfa-challenge-id", "valueType": "reference", "required": true, "description": "Short-lived password-issued MFA challenge that identifies the durable user and allows provider passkey." },
+    { "key": "passkey-challenge-id", "valueType": "reference", "required": true, "description": "Single-use user-bound WebAuthn assertion challenge issued after validating the MFA challenge." },
+    { "key": "assertion", "valueType": "object", "required": true, "description": "User-verified WebAuthn assertion returned by the platform authenticator." }
+  ],
+  "guards": [
+    { "expression": "the password-issued MFA challenge is valid, allows passkey, and identifies the same durable user as the WebAuthn challenge and stored credential", "failureCode": "passkey-mfa-not-successful" }
+  ],
+  "permittedMutations": ["auth.dimension.credential-proof", "auth.dimension.session-capability"],
+  "requiredEffects": [
+    "validate-password-issued-mfa-challenge",
+    "consume-passkey-challenge",
+    "validate-user-verifying-passkey-assertion",
+    "advance-sign-counter",
+    "record-fresh-mfa-time",
+    "consume-password-issued-mfa-challenge-after-passkey-proof"
+  ],
+  "forbiddenEffects": [
+    "resolve-mfa-user-from-client-email",
+    "change-durable-identity",
+    "consume-password-issued-mfa-challenge-before-passkey-proof",
+    "issue-session-before-passkey-proof"
+  ],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.AspNetCore.Identity/Services/PasskeyMfaAuthenticationService.cs", "note": "Challenge-bound MFA orchestration validates provider and UserId, invokes real Passkey proof, then consumes the password-issued MFA challenge." },
+    { "sourceType": "code", "reference": "src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "User-bound Passkey completion consumes the WebAuthn challenge, validates credential ownership and assertion proof, advances the counter, and records MFA freshness." }
+  ]
+}
