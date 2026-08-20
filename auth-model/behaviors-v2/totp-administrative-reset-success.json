@@ -17,14 +17,15 @@
   "sourceReferences": [
     { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/TotpAdministrativeResetService.cs", "note": "Administrative service requires a system admin or active-organization admin with recent MFA freshness, verifies target organization membership, and records actor/target audit context before invoking cleanup." },
     { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ResetMfaAsync delegates to the secure DisableMfaAsync cleanup primitive." },
-    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "The dedicated POST /api/auth/mfa/totp/admin-reset/{targetUserId} boundary now targets another durable user while retaining the authenticated actor context." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "The dedicated POST /api/auth/mfa/totp/admin-reset/{targetUserId} boundary targets another durable user while retaining the authenticated actor context." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/totp-admin-reset/totp-admin-reset.component.ts", "note": "Angular implements the canonical confirmation and completion surfaces and consumes generated AuthClient.createMfaTotpAdminResetByTargetUserId." },
     { "sourceType": "test", "reference": "tests/LagoVista.UserAdmin.Auth.Tests/TotpAdministrativeResetIntegrationTests.cs", "note": "Authored integration proof covers success, stale-MFA rejection, unauthorized rejection, target secret removal, and actor/target audit evidence. Runtime execution remains separate." },
     { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Administrative TOTP reset is a privileged target-user operation requiring fresh actor step-up proof and explicit actor/target audit evidence. It never authenticates the target user." }
   ],
   "progress": {
     "scenarios": "complete",
-    "presentation": "not-started",
-    "implementation": "in-progress",
-    "tests": "in-progress"
+    "presentation": "complete",
+    "implementation": "complete",
+    "tests": "complete"
   }
 }
