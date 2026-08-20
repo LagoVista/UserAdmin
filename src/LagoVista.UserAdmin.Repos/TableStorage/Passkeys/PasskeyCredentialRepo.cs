@@ -79,8 +79,9 @@ namespace LagoVista.UserAdmin.Repos.TableStorage.Passkeys
             var partitionKey = PasskeyCredentialEntity.CreatePartitionKey(userId, rpId);
             var rowKey = PasskeyCredentialEntity.CreateRowKey(credentialId);
             var entity = await GetAsync(partitionKey, rowKey);
-            if (entity != null) await RemoveAsync(entity);
+            if (entity == null) return InvokeResult.FromError("credential_not_found");
 
+            await RemoveAsync(entity);
             await _indexRepo.RemoveAsync(rpId, credentialId);
 
             return InvokeResult.Success;
