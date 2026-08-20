@@ -1,0 +1,56 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.totp-sign-in.recovery-code-success",
+  "runtimeEntityId": "B4ZJFUBFUO99UNBR1KRJ4NHWH4891W5V",
+  "name": "Recovery Code Sign-In Succeeds",
+  "summary": "An identified returning user submits one valid unused TOTP recovery code, the code is consumed exactly once, and the server establishes a normal authenticated application session.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-sign-in",
+  "startViewKey": "auth.continue.recovery",
+  "action": { "id": "verify-recovery-code", "finder": "action:verify-recovery-code" },
+  "preconditions": {
+    "expression": "session-capability == anonymous and an active durable identity with confirmed email, enabled TOTP, recovery codes, and an outstanding MFA requirement is prepared for sign-in",
+    "state": {
+      "ensureUserExists": "set",
+      "userHasEmail": "set",
+      "emailConfirmed": "set",
+      "belongsToOrg": "set",
+      "twoFactorEnabled": "set",
+      "hasTOTP": "set",
+      "isAccountDisabled": "notset",
+      "isLockedOut": "notset",
+      "isUserLoggedIn": "notset"
+    }
+  },
+  "inputs": [
+    { "finder": "field:email", "name": "Email", "valueType": "string", "required": true, "value": "user.email", "description": "Previously identified durable-user email held by the authentication flow." },
+    { "finder": "field:recovery-code", "name": "Recovery Code", "valueType": "secret-reference", "required": true, "value": "user.recovery-code", "description": "One unused recovery code generated during TOTP enrollment or recovery-code rotation." }
+  ],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Resolve the existing durable identity, consume exactly one valid recovery code, satisfy the outstanding MFA requirement, establish the application session, and resolve the landing destination.",
+    "transitionKeys": ["auth.transition.totp-recovery-sign-in.success"]
+  },
+  "expectedViewKey": "app.home",
+  "postconditions": {
+    "expression": "the submitted recovery code is consumed, TOTP remains enabled for the durable identity, and an authenticated application session is active",
+    "state": {
+      "ensureUserExists": "set",
+      "emailConfirmed": "set",
+      "belongsToOrg": "set",
+      "twoFactorEnabled": "set",
+      "hasTOTP": "set",
+      "isUserLoggedIn": "set"
+    }
+  },
+  "expectedAuthLogEvents": ["TotpConsumeRecoveryCodeStart", "TotpConsumeRecoveryCodeSuccess"],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ConsumeRecoveryCodeAsync validates the stored recovery-code set and consumes one accepted code." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "The current recovery-code endpoint is confirmed-current-user only and does not yet establish an anonymous post-password application session." },
+    { "sourceType": "auth-view", "reference": "auth.continue.recovery" }
+  ],
+  "progress": { "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+}
