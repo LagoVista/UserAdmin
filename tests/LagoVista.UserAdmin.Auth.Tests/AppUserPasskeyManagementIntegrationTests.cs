@@ -14,7 +14,6 @@ using LagoVista.UserAdmin.Models.Users;
 using Moq;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Auth.Tests
@@ -54,13 +53,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
                     {
                         Challenge = new byte[] { 4, 5, 6 },
                         User = options.User,
-                        Rp = new PublicKeyCredentialRpEntity(RpId, "NuvIoT", null),
-                        PubKeyCredParams = new List<PubKeyCredParam>(),
-                        Timeout = 60000,
-                        ExcludeCredentials = options.ExcludeCredentials,
-                        AuthenticatorSelection = options.AuthenticatorSelection,
-                        Attestation = options.AttestationPreference,
-                        Extensions = options.Extensions
+                        ExcludeCredentials = options.ExcludeCredentials
                     };
                 });
             harness.ChallengeStore
