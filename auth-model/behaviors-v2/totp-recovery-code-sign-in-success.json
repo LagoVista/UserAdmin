@@ -17,15 +17,17 @@
   "supportedPlatforms": ["server", "web", "android", "ios"],
   "sourceReferences": [
     { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ConsumeRecoveryCodeAsync consumes one recovery code, replaces the remaining recovery-code blob, removes the authenticator secret, and disables TOTP until the user enrolls again." },
-    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/RecoveryCodeAuthenticationFlowHandler.cs", "note": "Recovery-code sign-in now requires and consumes a password-issued MFA challenge bound to the same durable user." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/RecoveryCodeAuthenticationFlowHandler.cs", "note": "Recovery-code sign-in requires and consumes a password-issued MFA challenge bound to the same durable user." },
     { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/AuthenticationFlowService.cs", "note": "Successful recovery proof is adapted to browser-session or mobile-token completion through the common proven-user session adapters." },
-    { "sourceType": "auth-view", "reference": "auth.continue.recovery", "note": "Canonical recovery-code entry surface is defined; React Native has a partial presentation shell while Angular and functional client verification remain outstanding." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/continue-recovery/continue-recovery.component.ts", "note": "Angular consumes generated createMfarecoveryLogin with the session-scoped MFA challenge and implements the canonical recovery surface." },
+    { "sourceType": "code", "reference": "nuviot/vtm-client:src/platform/auth/auth-context.tsx", "note": "React Native consumes generated createMfarecoveryToken with an in-memory MFA challenge and persists tokens only after accepted proof." },
+    { "sourceType": "test", "reference": "tests/LagoVista.UserAdmin.Auth.Tests/RecoveryCodeAuthenticationFlowIntegrationTests.cs", "note": "Authored real-manager proof covers issued-code success, invalid-code rejection, and rejection when the password-issued challenge is absent." },
     { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Recovery code remains an MFA recovery proof, never a standalone primary login credential. Successful recovery intentionally invalidates the lost authenticator so the user can re-enroll cleanly." }
   ],
   "progress": {
     "scenarios": "complete",
-    "presentation": "in-progress",
-    "implementation": "in-progress",
-    "tests": "in-progress"
+    "presentation": "complete",
+    "implementation": "complete",
+    "tests": "complete"
   }
 }
