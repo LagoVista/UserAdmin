@@ -25,12 +25,11 @@
     }
   },
   "inputs": [
-    { "finder": "field:email", "name": "Email", "valueType": "string", "required": true, "value": "user.email", "description": "Previously identified durable-user email held by the authentication flow." },
     { "finder": "field:recovery-code", "name": "Recovery Code", "valueType": "secret-reference", "required": true, "value": "user.invalid-recovery-code", "description": "A deliberately invalid or previously consumed recovery code used to prove the rejected outcome." }
   ],
   "serverInteraction": {
     "required": true,
-    "intent": "Resolve the existing durable identity, reject the submitted recovery-code proof without establishing a session, and preserve the outstanding MFA requirement.",
+    "intent": "Resolve the existing durable identity held by the MFA challenge, reject the submitted recovery-code proof without establishing a session, and preserve the outstanding MFA requirement.",
     "transitionKeys": ["auth.transition.totp-recovery-sign-in.rejected"]
   },
   "expectedViewKey": "auth.continue.recovery",
