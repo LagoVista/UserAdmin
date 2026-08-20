@@ -9,7 +9,7 @@
   "categoryKey": "passkey-sign-in",
   "priority": 100,
   "sourceState": { "expression": "session-capability == anonymous and password-issued mfa-challenge == pending and provider passkey is allowed" },
-  "actionKey": "auth.action.passkey.complete-authentication",
+  "actionKey": "auth.action.passkey-mfa-sign-in.submit",
   "guards": [
     { "expression": "the MFA challenge is valid for provider passkey and the completed WebAuthn assertion proves a credential registered to the challenge-bound UserId", "failureCode": "passkey-mfa-not-successful" }
   ],
@@ -31,7 +31,7 @@
   ],
   "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
   "sourceReferences": [
-    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs", "note": "Password-bound Passkey MFA endpoints validate provider=passkey against the MFA challenge, use its UserId for the existing user-bound Passkey manager, consume the MFA challenge only after successful WebAuthn proof, then establish browser or token session." },
-    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/MfaChallengeFlowService.cs", "note": "MFA challenge validation enforces the allowed provider and challenge-bound durable UserId; consumption is single-use." }
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs", "note": "Password-bound Passkey MFA endpoints delegate challenge-bound proof to IPasskeyMfaAuthenticationService, then establish browser or token session only after the service returns a proven AppUser." },
+    { "sourceType": "code", "reference": "src/LagoVista.AspNetCore.Identity/Services/PasskeyMfaAuthenticationService.cs", "note": "MFA challenge validation enforces provider and durable UserId binding; the challenge is consumed only after the user-bound WebAuthn proof succeeds." }
   ]
 }
