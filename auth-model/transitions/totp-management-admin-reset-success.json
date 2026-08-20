@@ -13,7 +13,9 @@
   "guards": [
     { "expression": "actor is authorized to reset target-user MFA and has fresh step-up proof", "failureCode": "totp-admin-reset-not-authorized" }
   ],
-  "destinationTransform": [],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "derive", "valueExpression": "current" }
+  ],
   "requiredEffects": ["remove-target-authenticator-secret", "remove-target-recovery-code-secret", "clear-target-totp-state", "record-admin-reset-success-with-actor-and-target"],
   "forbiddenEffects": ["authenticate-target-user", "issue-target-user-session", "change-target-password", "delete-target-user"],
   "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
