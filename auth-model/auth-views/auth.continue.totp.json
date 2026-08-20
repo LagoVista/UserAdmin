@@ -21,18 +21,18 @@
   ],
   "platforms": {
     "web": {
-      "status": "implemented",
+      "status": "partial",
       "repository": "softwarelogistics/nuviot-ui-shared",
       "path": "user/continue-totp/continue-totp.component.ts",
       "component": "ContinueTotpComponent",
-      "implementation": "Loads the primary login seed, submits the TOTP proof with generated AuthClient.createTotpLogin, follows the resolved success destination, and routes rejection to auth.continue.totp.unable. The new use-recovery-code action is not yet implemented."
+      "implementation": "Existing TOTP verification is implemented, but the canonical use-recovery-code action is not yet present."
     },
     "mobile": {
-      "status": "implemented",
+      "status": "partial",
       "repository": "nuviot/vtm-client",
       "path": "src/features/authentication/nuviot-account/screens/continue-totp-screen.tsx",
       "component": "ContinueTotpScreen",
-      "implementation": "Uses AuthContext.signInWithTotpAsync and generated AuthClient.createTotpToken for the token-backed TOTP sign-in path, then routes rejection to /auth/continue/totp/unable. The new use-recovery-code action is not yet implemented."
+      "implementation": "Existing TOTP verification is implemented, but the canonical use-recovery-code action is not yet present."
     }
   },
   "source": {
