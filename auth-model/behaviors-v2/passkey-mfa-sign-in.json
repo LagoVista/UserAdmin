@@ -1,0 +1,29 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.passkey.mfa-sign-in",
+  "name": "Passkey MFA Sign-In",
+  "summary": "A password-proved user with a pending MFA challenge completes Passkey as the selected second factor and establishes the authenticated application session.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "passkey-sign-in",
+  "scenarioKeys": [
+    "auth.scenario.passkey.mfa-passkey-to-home"
+  ],
+  "entryViewKey": "auth.continue.passkey",
+  "finalViewKey": "app.home",
+  "finalOutcome": "The challenge-bound durable user proves a registered Passkey, the password-issued MFA challenge is consumed, and the authenticated application session is established.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs", "note": "Dedicated Passkey MFA endpoints are source-implemented and bind the WebAuthn proof to the password-issued MFA challenge UserId." },
+    { "sourceType": "auth-view", "reference": "auth.continue.passkey", "note": "The existing canonical Passkey continuation view is reused; clients still need to select the MFA endpoints when an MFA challenge is active." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "Passkey and TOTP are interchangeable allowed second-factor completions when both are present on the same password-issued MFA challenge."
+    }
+  ],
+  "progress": {
+    "scenarios": "complete",
+    "presentation": "complete",
+    "implementation": "in-progress",
+    "tests": "not-started"
+  }
+}
