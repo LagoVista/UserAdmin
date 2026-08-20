@@ -5,6 +5,7 @@ using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Interfaces.Repos.Security.Passkeys;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Models.Auth;
+using LagoVista.UserAdmin.Models.Users;
 using LagoVista.UserAdmin.Resources;
 using System;
 using System.Collections.Generic;
@@ -93,10 +94,10 @@ namespace LagoVista.UserAdmin.Authentication.Flows
             throw new InvalidOperationException("Password sign-in produced a failure that is not mapped to a canonical authentication transition.");
         }
 
-        private async Task<Models.Users.AppUser> PopulateAvailableMfaProvidersAsync(AuthLoginRequest request, AuthenticationResponse response)
+        private async Task<AppUser> PopulateAvailableMfaProvidersAsync(AuthLoginRequest request, AuthenticationResponse response)
         {
             var providers = new List<string>();
-            Models.Users.AppUser appUser = null;
+            AppUser appUser = null;
 
             if (_appUserRepo != null && _passkeyCredentialRepo != null && _appConfig != null)
             {
