@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/auth-endpoint-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.endpoint.passkey-mfa-sign-in.token",
+  "name": "Passkey MFA Token Endpoint",
+  "summary": "Maps password-challenge-bound Passkey MFA completion to the shared Passkey MFA proof service and establishes a mobile token session only after the challenge-bound Passkey proof succeeds.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdminRest",
+  "projectPath": "src/LagoVista.UserAdmin.Rest",
+  "sourcePath": "src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs",
+  "controllerType": "PasskeyController",
+  "methodName": "CompleteMfaAuthenticationTokenAsync",
+  "httpMethods": ["POST"],
+  "routeTemplates": ["/api/auth/passkey/mfa/authentication/token"],
+  "requestContract": "PasskeyMfaAuthenticationTokenCompleteRequest",
+  "responseContract": "InvokeResult<AuthResponse>",
+  "handlerKey": "auth.handler.passkey-mfa-sign-in",
+  "transitionKeys": ["auth.transition.passkey.complete-mfa"],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs",
+      "note": "The anonymous mobile completion endpoint delegates challenge-bound proof to IPasskeyMfaAuthenticationService and mints the token session only after a proven AppUser is returned."
+    }
+  ]
+}
