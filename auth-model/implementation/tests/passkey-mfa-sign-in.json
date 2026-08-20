@@ -1,0 +1,74 @@
+{
+  "$schema": "../../schemas/auth-test-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.test-binding.passkey-sign-in.mfa",
+  "name": "Passkey MFA Sign-In Proof",
+  "summary": "Binds authored proof that Passkey MFA requires a password-issued challenge allowing Passkey, derives the durable UserId from that challenge, requires user verification, rejects challenge or credential user substitution, advances the signature counter, updates MFA freshness, consumes the MFA challenge only after successful Passkey proof, and establishes browser or mobile session only from the proven user.",
+  "version": 1,
+  "maturity": "implemented",
+  "testLevel": "handler-integration",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "tests/LagoVista.UserAdmin.Auth.Tests",
+  "sourcePath": "tests/LagoVista.UserAdmin.Auth.Tests",
+  "framework": "NUnit",
+  "testTypeName": "PasskeyMfaAuthenticationServiceTests + AppUserPasskeyMfaIntegrationTests",
+  "testMethodNames": [
+    "Begin_WithValidPasswordIssuedChallenge_Should_BindPasskeyChallengeToChallengeUserAndRequireStepUp",
+    "Complete_WithValidPasskeyProof_Should_ConsumeMfaChallengeAfterProofAndReturnChallengeUser",
+    "Complete_WhenPasskeyProofFails_Should_NotConsumePasswordIssuedMfaChallenge",
+    "Complete_WithInvalidMfaChallenge_Should_RejectBeforePasskeyProof",
+    "BeginAuthentication_ForMfa_Should_RequireUserVerificationAndBindChallengeToExpectedUser",
+    "CompleteAuthentication_WhenPasskeyChallengeBelongsToDifferentUser_Should_RejectBeforeCredentialOrFidoVerification",
+    "CompleteAuthentication_WhenCredentialBelongsToDifferentUser_Should_RejectBeforeFidoVerification",
+    "CompleteAuthentication_WithValidChallengeAndCredential_Should_AdvanceCounterAndUpdateMfaFreshness"
+  ],
+  "scenarioKeys": ["auth.scenario.passkey.mfa-passkey-to-home"],
+  "handlerKeys": ["auth.handler.passkey-mfa-sign-in"],
+  "endpointBindingKeys": [
+    "auth.endpoint.passkey-mfa-sign-in.session",
+    "auth.endpoint.passkey-mfa-sign-in.token"
+  ],
+  "transitionKeys": ["auth.transition.passkey.complete-mfa"],
+  "proofObligations": [
+    "password-issued-mfa-challenge-required-before-passkey-mfa-proof",
+    "mfa-challenge-must-allow-passkey-provider",
+    "mfa-challenge-user-id-is-authoritative-passkey-user",
+    "passkey-mfa-begin-requires-user-verification",
+    "webauthn-challenge-bound-to-expected-durable-user",
+    "asserted-credential-must-belong-to-expected-durable-user",
+    "fido-assertion-proof-required-before-mfa-challenge-consumption",
+    "failed-passkey-proof-does-not-consume-password-issued-mfa-challenge",
+    "passkey-signature-counter-advances-on-success",
+    "passkey-step-up-updates-mfa-freshness",
+    "browser-session-established-only-after-proven-passkey-mfa-user",
+    "mobile-token-session-established-only-after-proven-passkey-mfa-user",
+    "primary-email-bound-passkey-remains-independent-from-password-mfa-challenge"
+  ],
+  "notes": [
+    "PasskeyMfaAuthenticationServiceTests prove the password-issued MFA challenge orchestration and consumption ordering.",
+    "AppUserPasskeyMfaIntegrationTests exercise the real AppUserPasskeyManager while mocking repository/challenge/FIDO infrastructure seams; the manager's user binding, credential binding, signature-counter, user-verification and MFA-freshness behavior remain real.",
+    "Runtime execution evidence remains separate from this authored proof binding."
+  ],
+  "sourceReferences": [
+    {
+      "sourceType": "test",
+      "reference": "LagoVista/UserAdmin:tests/LagoVista.UserAdmin.Auth.Tests/PasskeyMfaAuthenticationServiceTests.cs",
+      "note": "Challenge orchestration and consume-after-proof source."
+    },
+    {
+      "sourceType": "test",
+      "reference": "LagoVista/UserAdmin:tests/LagoVista.UserAdmin.Auth.Tests/AppUserPasskeyMfaIntegrationTests.cs",
+      "note": "Real AppUserPasskeyManager security-binding source."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Services/PasskeyMfaAuthenticationService.cs",
+      "note": "Challenge-bound proof service under test."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs",
+      "note": "Real user-bound WebAuthn manager under integration proof."
+    }
+  ]
+}
