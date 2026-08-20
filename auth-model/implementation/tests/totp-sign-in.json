@@ -3,8 +3,8 @@
   "schemaVersion": "1.0",
   "key": "auth.test-binding.totp-sign-in",
   "name": "TOTP Sign-In Flow Integration Proof",
-  "summary": "Registers real-path TOTP proof for accepted and rejected sign-in plus the mobile token adapter through AuthenticationFlowService, the typed TOTP handler, the real AppUserMfaManager and the real LagoVista SignInManager on the browser-session path.",
-  "version": 1,
+  "summary": "Registers real-path proof that TOTP can complete sign-in only when bound to a password-issued MFA challenge, then adapts the accepted proof to browser session or mobile token completion.",
+  "version": 2,
   "maturity": "implemented",
   "testLevel": "handler-integration",
   "repository": "LagoVista/UserAdmin",
@@ -13,9 +13,10 @@
   "framework": "NUnit",
   "testTypeName": "TotpAuthenticationFlowIntegrationTests",
   "testMethodNames": [
-    "ValidTotp_Should_RunRealMfaAndSignInManagers_AndEstablishSession",
-    "InvalidTotp_Should_RunRealMfaManager_AndRejectWithoutSession",
-    "ValidTotpToken_Should_RunRealMfaProof_BeforeDelegatingToTokenPipeline"
+    "ValidTotp_WithPasswordIssuedChallenge_Should_EstablishSession_AndConsumeChallenge",
+    "Totp_WithoutPasswordIssuedChallenge_Should_RejectWithoutEvaluatingFactor",
+    "InvalidTotp_WithValidChallenge_Should_RejectWithoutConsumingChallengeOrSession",
+    "ValidTotpToken_WithPasswordIssuedChallenge_Should_ProveMfaBeforeIssuingTokens"
   ],
   "scenarioKeys": [
     "auth.scenario.totp-sign-in.verify-success",
@@ -35,41 +36,41 @@
     "real-totp-flow-handler",
     "real-app-user-mfa-manager",
     "real-lagovista-sign-in-manager-for-browser-session",
+    "password-issued-mfa-challenge-required-before-totp-proof",
+    "mfa-challenge-bound-to-durable-user-and-totp-provider",
     "real-totp-code-verification",
-    "totp-replay-timestep-acceptance",
+    "totp-replay-timestep-acceptance-as-step-up",
+    "mfa-challenge-consumed-only-after-successful-totp-proof",
     "authenticated-session-established-on-browser-success",
     "mobile-token-adapter-requires-real-accepted-totp-proof-before-token-delegation",
-    "no-session-established-on-rejection",
+    "no-factor-evaluation-or-session-without-mfa-challenge",
+    "invalid-totp-does-not-consume-mfa-challenge",
     "canonical-success-and-rejected-transitions",
     "declared-auth-log-events",
     "non-enumerating-public-rejection"
   ],
   "notes": [
     "AppUserMfaManager is never mocked. Both browser and mobile proofs execute its real TOTP verification and replay-protection logic.",
-    "The browser-session proof also uses the real LagoVista SignInManager; persistence, secure storage, redirect resolution and the ASP.NET Identity SignInManager adapter are infrastructure/framework seams.",
-    "The mobile adapter proof mocks IAuthTokenManager only after the real TOTP proof has succeeded. It verifies that the proven durable identity is converted to the established single-use-token grant contract; token issuance itself is an existing independently-owned authentication subsystem rather than the TOTP credential operation under proof.",
-    "The successful browser-session path currently also emits PasswordAuthenticationSucceeded from shared CompleteSignInToAppAsync. That legacy event is recorded explicitly rather than hidden by the proof."
+    "IMfaChallengeStore is treated as an infrastructure seam; the real typed handler is responsible for challenge validation, user/provider binding and consumption ordering.",
+    "The browser-session proof uses the real LagoVista SignInManager. Persistence, secure storage, redirect resolution and the ASP.NET Identity adapter remain infrastructure/framework seams.",
+    "The mobile adapter proof mocks IAuthTokenManager only after real challenge-bound TOTP proof has succeeded.",
+    "Runtime execution evidence remains separate from this authored proof binding."
   ],
   "sourceReferences": [
     {
       "sourceType": "test",
       "reference": "LagoVista/UserAdmin:tests/LagoVista.UserAdmin.Auth.Tests/TotpAuthenticationFlowIntegrationTests.cs",
-      "note": "Real TOTP success/rejection proof and mobile token-adapter evidence source."
+      "note": "Challenge-required TOTP success/rejection proof and mobile token-adapter evidence source."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/TotpAuthenticationFlowHandler.cs",
+      "note": "Real challenge-bound TOTP handler under proof."
     },
     {
       "sourceType": "code",
       "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs",
-      "note": "Real TOTP verification and replay-protection behavior under proof."
-    },
-    {
-      "sourceType": "code",
-      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/SigninManager.cs",
-      "note": "Real browser application-session completion behavior under proof."
-    },
-    {
-      "sourceType": "code",
-      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AuthTokenManager.cs",
-      "note": "Existing mobile access/refresh-token pipeline receives the proven identity through the internal single-use-token grant adapter."
+      "note": "Real TOTP verification, replay protection and MFA freshness behavior under proof."
     }
   ]
 }
