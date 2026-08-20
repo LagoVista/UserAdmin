@@ -15,18 +15,19 @@
   "finalOutcome": "The challenge-bound durable user proves a registered Passkey, the password-issued MFA challenge is consumed, and the authenticated application session is established.",
   "supportedPlatforms": ["server", "web", "android", "ios"],
   "sourceReferences": [
-    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs", "note": "Dedicated Passkey MFA begin, browser-complete and mobile-token endpoints validate provider=passkey against the password-issued challenge and bind WebAuthn proof to that challenge's durable UserId." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs", "note": "Dedicated Passkey MFA begin, browser-complete and mobile-token endpoints delegate challenge-bound proof to IPasskeyMfaAuthenticationService and establish session only after a proven AppUser is returned." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Services/PasskeyMfaAuthenticationService.cs", "note": "The Passkey MFA service validates the password-issued challenge for provider=passkey, derives the durable UserId from that challenge, invokes the real user-bound Passkey manager, and consumes the MFA challenge only after successful proof." },
     { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/continue-passkey/continue-passkey.component.ts", "note": "Angular reuses auth.continue.passkey and selects the generated MFA Passkey operations whenever a password-issued MFA challenge is active." },
     { "sourceType": "code", "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/continue-passkey-screen.tsx", "note": "React Native reuses auth.continue.passkey, consumes the in-memory MFA challenge through generated MFA Passkey token completion, and restores the authenticated token-backed session." },
     { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/client.ts", "note": "Generated contracts expose the three Passkey MFA operations used by the stable clients." },
+    { "sourceType": "test", "reference": "auth-model/implementation/tests/passkey-mfa-sign-in.json", "note": "Authored orchestration and real-manager proof covers challenge/provider/UserId binding, required user verification, proof-before-consume ordering, credential ownership, signature-counter advancement and MFA freshness." },
     { "sourceType": "auth-view", "reference": "auth.continue.passkey", "note": "The existing canonical Passkey continuation view is shared between primary email-bound Passkey authentication and password-bound Passkey MFA." },
-    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "Passkey and TOTP are interchangeable allowed second-factor completions when both are present on the same password-issued MFA challenge."
-    }
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "Passkey and TOTP are interchangeable allowed second-factor completions when both are present on the same password-issued MFA challenge." }
   ],
   "progress": {
     "scenarios": "complete",
     "presentation": "complete",
     "implementation": "complete",
-    "tests": "not-started"
+    "tests": "complete"
   }
 }
