@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.mfa.totp.admin-reset.complete",
+  "name": "User TOTP Reset",
+  "description": "Confirms that the target user's TOTP enrollment and recovery codes were reset without changing the target user's password or authenticating the target user.",
+  "category": "totp",
+  "routeId": "auth.route.mfa.totp.admin-reset.complete",
+  "status": "active",
+  "controls": [
+    { "id": "reset-complete", "name": "TOTP Reset Complete", "controlType": "status", "finder": "status:totp-reset-complete", "sensitivity": "public" }
+  ],
+  "actions": [
+    { "id": "done", "name": "Done", "actionType": "button", "finder": "action:done" }
+  ],
+  "platforms": {
+    "web": { "status": "planned", "repository": "softwarelogistics/nuviot-ui-shared" },
+    "mobile": { "status": "planned", "repository": "nuviot/vtm-client" }
+  },
+  "source": {
+    "runtimeEntityId": "LPSI4907TIIL0WV8CX0T712Z1U1XRL6H"
+  },
+  "notes": [
+    "The target user remains unauthenticated after this operation and must use a normal permitted sign-in path before re-enrolling TOTP."
+  ]
+}
