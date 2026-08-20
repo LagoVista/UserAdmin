@@ -53,6 +53,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
                     {
                         Challenge = new byte[] { 4, 5, 6 },
                         User = options.User,
+                        Rp = null,
+                        PubKeyCredParams = Array.Empty<PubKeyCredParam>(),
                         ExcludeCredentials = options.ExcludeCredentials
                     };
                 });
