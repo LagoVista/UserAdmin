@@ -14,37 +14,22 @@
   "entryViewKey": "auth.continue.email",
   "finalViewKey": "app.home",
   "finalOutcome": "The email-resolved durable user has an authenticated session established through a valid user-verified passkey assertion.",
-  "supportedPlatforms": [
-    "server",
-    "web",
-    "android",
-    "ios"
-  ],
+  "supportedPlatforms": ["server", "web", "android", "ios"],
   "sourceReferences": [
-    {
-      "sourceType": "journey",
-      "reference": "auth.journey.passkey.authentication"
-    },
-    {
-      "sourceType": "code",
-      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs",
-      "note": "The existing user-bound passkey manager owns challenge validation, credential ownership checks, WebAuthn assertion verification, user verification policy, and signature-counter advancement."
-    },
-    {
-      "sourceType": "code",
-      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Services/EmailPasskeyAuthenticationService.cs",
-      "note": "Launch Passkey Sign In resolves the entered email to the expected durable UserId and delegates to the same user-bound passkey proof used for step-up authentication."
-    },
-    {
-      "sourceType": "decision",
-      "reference": "ChatGPT conversation 2026-08-19",
-      "note": "Direct Passkey-first discovery is deferred from launch scope. Email-first primary Passkey and Password-then-Passkey MFA share one user-bound passkey proof primitive; the surrounding authentication state determines how successful proof is consumed."
-    }
+    { "sourceType": "journey", "reference": "auth.journey.passkey.authentication" },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "The user-bound passkey manager owns challenge validation, credential ownership checks, WebAuthn assertion verification, user verification policy, and signature-counter advancement." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Services/EmailPasskeyAuthenticationService.cs", "note": "Passkey Sign In resolves the entered email to the expected durable UserId and delegates to the same user-bound passkey proof used for step-up authentication." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs", "note": "The server exposes email-bound begin, browser-session complete, and mobile-token complete operations." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/continue-passkey/continue-passkey.component.ts", "note": "Angular Web now uses the retained email with the email-bound passkey operations and the browser WebAuthn ceremony." },
+    { "sourceType": "code", "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/continue-passkey-screen.tsx", "note": "React Native now performs the native passkey ceremony and completes the email-bound proof into the existing token-session lifecycle." },
+    { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/client.ts", "note": "Generated AuthClient contracts expose typed email-bound passkey begin, browser complete, and mobile token complete methods." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Direct Passkey-first discovery is deferred from launch scope. Email-first primary Passkey and Password-then-Passkey MFA share one user-bound passkey proof primitive; the surrounding authentication state determines how successful proof is consumed." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Both canonical Passkey Sign-In scenarios are implementation-complete by source inspection. Browser and native runtime execution have not yet been performed, so authored tests remain not-started." }
   ],
   "progress": {
     "scenarios": "complete",
     "presentation": "complete",
-    "implementation": "in-progress",
+    "implementation": "complete",
     "tests": "not-started"
   }
 }
