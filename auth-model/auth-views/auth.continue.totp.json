@@ -3,7 +3,7 @@
   "schemaVersion": "1.0",
   "viewId": "auth.continue.totp",
   "name": "Continue with TOTP",
-  "description": "Collects a one-time authenticator code for a known email identity and offers password fallback navigation.",
+  "description": "Collects a one-time authenticator code for a known email identity and offers recovery-code, password fallback, and restart navigation.",
   "category": "totp",
   "routeId": "auth.route.continue.totp",
   "status": "active",
@@ -14,6 +14,7 @@
   ],
   "actions": [
     { "id": "verify", "name": "Verify", "actionType": "button", "finder": "action:verify" },
+    { "id": "use-recovery-code", "name": "Use a Recovery Code", "actionType": "link", "finder": "action:use-recovery-code" },
     { "id": "cancel", "name": "Cancel", "actionType": "button", "finder": "action:cancel" },
     { "id": "use-password", "name": "Use Password Instead", "actionType": "link", "finder": "action:use-password" },
     { "id": "start-over", "name": "Start Over", "actionType": "link", "finder": "action:start-over" }
@@ -24,14 +25,14 @@
       "repository": "softwarelogistics/nuviot-ui-shared",
       "path": "user/continue-totp/continue-totp.component.ts",
       "component": "ContinueTotpComponent",
-      "implementation": "Loads the primary login seed, submits the TOTP proof with generated AuthClient.createTotpLogin, follows the resolved success destination, and routes rejection to auth.continue.totp.unable."
+      "implementation": "Loads the primary login seed, submits the TOTP proof with generated AuthClient.createTotpLogin, follows the resolved success destination, and routes rejection to auth.continue.totp.unable. The new use-recovery-code action is not yet implemented."
     },
     "mobile": {
       "status": "implemented",
       "repository": "nuviot/vtm-client",
       "path": "src/features/authentication/nuviot-account/screens/continue-totp-screen.tsx",
       "component": "ContinueTotpScreen",
-      "implementation": "Uses AuthContext.signInWithTotpAsync and generated AuthClient.createTotpToken for the token-backed TOTP sign-in path, then routes rejection to /auth/continue/totp/unable."
+      "implementation": "Uses AuthContext.signInWithTotpAsync and generated AuthClient.createTotpToken for the token-backed TOTP sign-in path, then routes rejection to /auth/continue/totp/unable. The new use-recovery-code action is not yet implemented."
     }
   },
   "source": {
@@ -43,6 +44,7 @@
   "notes": [
     "The implementation field id totp is normalized to verification-code.",
     "Validation copy is not used as a stable identifier.",
+    "Recovery-code navigation is canonical but not yet implemented on either stable client.",
     "Both supported clients consume generated AuthClient operations from nuviot/nuvos-app-contracts commit ad1e2ef725d9ca3865e4d889e877e4f3a723a2df."
   ]
 }
