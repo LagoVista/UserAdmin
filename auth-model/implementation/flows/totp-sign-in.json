@@ -3,10 +3,10 @@
   "schemaVersion": "1.0",
   "key": "auth.flow.totp-sign-in",
   "name": "TOTP Sign-In",
-  "summary": "Authenticates an identified durable identity with TOTP and adapts the accepted proof to either the web session path or the mobile token path.",
-  "version": 1,
+  "summary": "Completes a password-issued MFA challenge with TOTP and adapts the accepted proof to either the web session path or the mobile token path.",
+  "version": 2,
   "maturity": "implemented",
-  "requestContract": "TotpSignInRequest / AuthRequest",
+  "requestContract": "TotpSignInRequest / TotpTokenSignInRequest",
   "resultContract": "AuthenticationResponse / AuthResponse",
   "handlerKeys": ["auth.handler.totp-sign-in"],
   "transitionKeys": [
@@ -19,12 +19,17 @@
     {
       "sourceType": "code",
       "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/AuthenticationFlowService.cs",
-      "note": "AuthenticateWithTotpAsync adapts accepted proof to the real SignInManager web session path; AuthenticateWithTotpTokenAsync adapts the same proof to the existing single-use-token access/refresh-token pipeline for mobile."
+      "note": "AuthenticateWithTotpAsync and AuthenticateWithTotpTokenAsync both require challenge-aware request contracts and adapt only accepted TOTP proof into browser or token session completion."
     },
     {
       "sourceType": "code",
       "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/TotpAuthenticationFlowHandler.cs",
-      "note": "Both session adapters share one typed TOTP proof handler and canonical transition family."
+      "note": "The shared typed handler requires a password-issued MFA challenge bound to the same durable user, verifies TOTP as step-up, and consumes the challenge only after successful proof."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Interfaces/Repos/Security/IMfaChallengeStore.cs",
+      "note": "The short-lived MFA challenge is the server-side bridge between accepted primary-password proof and the second-factor continuation."
     }
   ]
 }
