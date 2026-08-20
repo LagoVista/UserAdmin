@@ -3,28 +3,27 @@
   "schemaVersion": "2.0",
   "key": "auth.behavior.passkey.add-success",
   "name": "Add Passkey Success",
-  "summary": "An authenticated existing user adds a passkey to the current durable identity without creating or switching accounts.",
-  "version": 1,
+  "summary": "An authenticated existing user opens passkey enrollment from Passkey Management, completes a platform passkey creation ceremony, and returns to Passkey Management with a new credential bound to the same durable identity.",
+  "version": 2,
   "maturity": "proposed",
   "categoryKey": "passkey-management",
-  "scenarioKeys": [],
-  "finalOutcome": "A new passkey credential is registered to the current durable identity and the active session identity is unchanged.",
-  "supportedPlatforms": [
-    "server",
-    "web",
-    "android",
-    "ios"
+  "scenarioKeys": [
+    "auth.scenario.passkey-management.manage-to-enroll",
+    "auth.scenario.passkey-management.enroll-success"
   ],
+  "entryViewKey": "auth.passkey.management",
+  "finalViewKey": "auth.passkey.management",
+  "finalOutcome": "A new passkey credential is registered to the current durable identity, the active session identity is unchanged, and the refreshed management list includes the new credential.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
   "sourceReferences": [
-    {
-      "sourceType": "journey",
-      "reference": "auth.journey.passkey.existing-user-registration"
-    }
+    { "sourceType": "journey", "reference": "auth.journey.passkey.existing-user-registration" },
+    { "sourceType": "code", "reference": "src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "Existing-user registration issues a user-bound challenge, excludes already-registered credentials, validates the consumed challenge and embedded FIDO user id, and persists the new credential without changing durable identity." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "Passkey Management owns authenticated existing-user enrollment. Anonymous passkey account creation remains a separate Passkey Registration category. Successful management enrollment returns directly to Manage Passkeys rather than requiring a separate confirmation screen." }
   ],
   "progress": {
-    "scenarios": "not-started",
-    "presentation": "not-started",
-    "implementation": "not-started",
+    "scenarios": "complete",
+    "presentation": "complete",
+    "implementation": "in-progress",
     "tests": "not-started"
   }
 }
