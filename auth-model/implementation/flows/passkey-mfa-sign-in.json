@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/auth-flow.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.flow.passkey-mfa-sign-in",
+  "name": "Passkey MFA Sign-In",
+  "summary": "Completes a password-issued MFA challenge with a user-verified Passkey and adapts the accepted proof to either the browser-session or mobile-token completion path.",
+  "version": 1,
+  "maturity": "implemented",
+  "requestContract": "PasskeyMfaAuthenticationCompleteRequest / PasskeyMfaAuthenticationTokenCompleteRequest",
+  "resultContract": "AuthenticationResponse / AuthResponse",
+  "handlerKeys": ["auth.handler.passkey-mfa-sign-in"],
+  "transitionKeys": ["auth.transition.passkey.complete-mfa"],
+  "entryActionKeys": ["auth.action.passkey-sign-in.submit"],
+  "supportedAudiences": ["platform-user", "tenant-user", "customer-end-user"],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Services/PasskeyMfaAuthenticationService.cs",
+      "note": "The shared proof service validates provider=passkey against the password-issued MFA challenge, derives the expected UserId from that challenge, delegates user-bound WebAuthn proof, and consumes the MFA challenge only after proof succeeds."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs",
+      "note": "Browser and mobile endpoints share the proof service and differ only in application-session versus token-session completion after a proven AppUser is returned."
+    }
+  ]
+}
