@@ -16,13 +16,13 @@
   "supportedPlatforms": ["server", "web", "android", "ios"],
   "sourceReferences": [
     { "sourceType": "code", "reference": "src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "The server exposes user-bound passkey removal and scopes persistence by the current user, relying party and credential id." },
-    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Repos/TableStorage/Passkeys/PasskeyCredentialRepo.cs", "note": "Removal now leaves the global credential index untouched when the credential is absent from the current user's scoped partition." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Repos/TableStorage/Passkeys/PasskeyCredentialRepo.cs", "note": "Removal leaves the global credential index untouched when the credential is absent from the current user's scoped partition." },
     { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "Passkey Management V1 models Add Passkey and Remove Passkey as the user-visible management outcomes. Rename remains an available server capability but is not required product surface for this pass." }
   ],
   "progress": {
     "scenarios": "complete",
     "presentation": "complete",
-    "implementation": "in-progress",
-    "tests": "in-progress"
+    "implementation": "complete",
+    "tests": "complete"
   }
 }
