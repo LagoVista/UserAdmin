@@ -9,75 +9,35 @@
   "maturity": "proposed",
   "categoryKey": "passkey-sign-in",
   "startViewKey": "auth.continue.passkey",
-  "action": {
-    "id": "use-passkey",
-    "finder": "action:use-passkey"
-  },
-  "preconditions": {
-    "expression": "session-capability == anonymous and a normalized email is retained in authentication flow state and a registered passkey is available for that account"
-  },
+  "action": { "id": "use-passkey", "finder": "action:use-passkey" },
+  "preconditions": { "expression": "session-capability == anonymous and a normalized email is retained in authentication flow state and a registered passkey is available for that account" },
   "inputs": [],
   "serverInteraction": {
     "required": true,
     "intent": "Resolve the expected account by email, issue a user-bound passkey challenge requiring user verification, validate that the assertion credential belongs to that exact user, advance the signature counter, and establish the platform-appropriate application session.",
-    "transitionKeys": [
-      "auth.transition.passkey.complete-authentication"
-    ]
+    "transitionKeys": ["auth.transition.passkey.complete-authentication"]
   },
   "expectedViewKey": "app.home",
-  "postconditions": {
-    "expression": "credential-proof == passkey-proved and session-capability in [authenticated-limited,authenticated-normal]"
-  },
+  "postconditions": { "expression": "credential-proof == passkey-proved and session-capability in [authenticated-limited,authenticated-normal]" },
   "expectedAuthLogEvents": [
     "PasskeyAuthenticationOptionsSent",
     "PasskeyAuthenticationOptionsBeginSent",
     "PasskeyCompleteAuthenticationStart",
     "PasskeyCompleteAuthenticationSuccess"
   ],
-  "evidenceRequirements": [
-    "server",
-    "web",
-    "android",
-    "ios"
-  ],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
   "sourceReferences": [
-    {
-      "sourceType": "auth-view",
-      "reference": "auth.continue.passkey"
-    },
-    {
-      "sourceType": "decision",
-      "reference": "auth-model/transitions/passkey-complete-authentication.json"
-    },
-    {
-      "sourceType": "code",
-      "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs",
-      "note": "Email-bound begin/complete endpoints use one proof service, then establish either a browser session or mobile token session after successful proof."
-    },
-    {
-      "sourceType": "code",
-      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Services/EmailPasskeyAuthenticationService.cs",
-      "note": "Email resolves the expected durable UserId before challenge issuance; the service delegates to the existing user-bound passkey manager with user verification required."
-    },
-    {
-      "sourceType": "code",
-      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs",
-      "note": "The shared user-bound proof validates challenge ownership, credential ownership, WebAuthn assertion and signature counter."
-    },
-    {
-      "sourceType": "code",
-      "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/continue-passkey-screen.tsx",
-      "note": "React Native still requires native passkey ceremony wiring before implementation can be complete."
-    },
-    {
-      "sourceType": "decision",
-      "reference": "ChatGPT conversation 2026-08-19",
-      "note": "Email-first primary Passkey and Password-then-Passkey MFA intentionally share the same user-bound passkey proof primitive. Direct discoverable Passkey-first sign-in is deferred."
-    }
+    { "sourceType": "auth-view", "reference": "auth.continue.passkey" },
+    { "sourceType": "decision", "reference": "auth-model/transitions/passkey-complete-authentication.json" },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs", "note": "Email-bound begin/complete endpoints use one proof service, then establish either a browser session or mobile token session after successful proof." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Services/EmailPasskeyAuthenticationService.cs", "note": "Email resolves the expected durable UserId before challenge issuance and delegates to the user-bound passkey manager with user verification required." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "The shared proof validates challenge ownership, credential ownership, WebAuthn assertion and signature counter." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/continue-passkey/continue-passkey.component.ts", "note": "Angular Web consumes the retained login-seed email, uses the generated email-bound begin/complete operations, performs navigator.credentials.get, and follows the authenticated redirect." },
+    { "sourceType": "code", "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/continue-passkey-screen.tsx", "note": "React Native begins the email-bound challenge, invokes the native passkey ceremony, maps the assertion to the generated wire contract, completes through the email-bound token operation, persists AuthResponse, restores the token lifecycle, and routes to the authenticated landing destination." },
+    { "sourceType": "code", "reference": "nuviot/vtm-client:app.json", "note": "React Native declares native passkey support and the iOS webcredentials association required by the ceremony; domain association files remain deployment infrastructure." },
+    { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/client.ts", "note": "Generated contracts expose typed email-bound passkey begin, browser complete, and mobile token complete operations." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Email-first primary Passkey and Password-then-Passkey MFA intentionally share the same user-bound passkey proof primitive. Direct discoverable Passkey-first sign-in is deferred." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Passkey Authentication to Home is implementation-complete by source inspection across server, Angular Web, Android and iOS. Runtime browser/device execution has not yet been performed, so tests remain not-started." }
   ],
-  "progress": {
-    "presentation": "complete",
-    "implementation": "in-progress",
-    "tests": "not-started"
-  }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "not-started" }
 }
