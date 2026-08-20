@@ -1,0 +1,46 @@
+{
+  "$schema": "../../schemas/auth-test-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.test-binding.passkey-management",
+  "name": "Passkey Management Server Proof",
+  "summary": "Registers server proof for authenticated existing-user passkey enrollment challenge binding and user/RP-scoped credential removal.",
+  "version": 1,
+  "maturity": "implemented",
+  "testLevel": "handler-integration",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "tests/LagoVista.UserAdmin.Auth.Tests",
+  "sourcePath": "tests/LagoVista.UserAdmin.Auth.Tests/AppUserPasskeyManagementIntegrationTests.cs",
+  "framework": "NUnit",
+  "testTypeName": "AppUserPasskeyManagementIntegrationTests",
+  "testMethodNames": [
+    "BeginRegistration_ForExistingUser_Should_BindChallengeAndExcludeExistingCredentials",
+    "RemovePasskey_Should_ScopeRemovalToCurrentUserAndRelyingParty",
+    "RemovePasskey_WhenScopedCredentialDoesNotExist_Should_PropagateFailure"
+  ],
+  "scenarioKeys": [
+    "auth.scenario.passkey-management.enroll-success",
+    "auth.scenario.passkey-management.remove-success"
+  ],
+  "handlerKeys": [],
+  "endpointBindingKeys": [],
+  "transitionKeys": [
+    "auth.transition.passkey.begin-existing-user-registration",
+    "auth.transition.passkey.remove-existing-user-credential"
+  ],
+  "proofObligations": [
+    "existing-user-registration-resolves-the-current-durable-user",
+    "registration-challenge-is-bound-to-current-user-rp-and-origin",
+    "registration-options-exclude-existing-user-credentials",
+    "remove-operation-is-scoped-to-current-user-rp-and-credential",
+    "missing-scoped-credential-is-rejected"
+  ],
+  "notes": [
+    "This is the first Passkey Management proof slice. Complete-registration attestation persistence and the table-storage index regression remain follow-on proof obligations before authored tests are complete.",
+    "Runtime execution evidence remains separate from authored proof status."
+  ],
+  "sourceReferences": [
+    { "sourceType": "test", "reference": "LagoVista/UserAdmin:tests/LagoVista.UserAdmin.Auth.Tests/AppUserPasskeyManagementIntegrationTests.cs" },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs" },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin.Repos/TableStorage/Passkeys/PasskeyCredentialRepo.cs" }
+  ]
+}
