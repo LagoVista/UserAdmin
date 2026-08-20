@@ -3,17 +3,17 @@
   "ProjectName": "LagoVista.UserAdmin.Auth.Tests",
   "ProjectPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj",
   "AssemblyPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
-  "RunId": "79c77523-7c70-469b-a137-42490845a9e6",
-  "StartedUtc": "2026-08-19T18:59:25.5672955Z",
-  "CompletedUtc": "2026-08-19T18:59:35.7186096Z",
+  "RunId": "5e362798-ef1d-48cb-aec8-86211938adaf",
+  "StartedUtc": "2026-08-20T02:13:39.9601407Z",
+  "CompletedUtc": "2026-08-20T02:13:53.2936516Z",
   "ExitCode": 0,
   "Outcome": "Passed",
   "Summary": {
-    "Total": 98,
-    "Passed": 98,
+    "Total": 121,
+    "Passed": 121,
     "Failed": 0,
     "Skipped": 0,
-    "DurationMilliseconds": 10151
+    "DurationMilliseconds": 13333
   },
   "Tests": [
     {
@@ -279,6 +279,66 @@
       "ObservedAuthEvents": []
     },
     {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.MfaChallengeFlowServiceTests",
+      "TestMethod": "ConsumePasskeyChallenge_Should_RevalidateThenConsumeExactlyOnce",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.password-sign-in",
+            "auth.flow.password-sign-in",
+            "auth.transition.password-sign-in.mfa-required"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.MfaChallengeFlowServiceTests",
+      "TestMethod": "ValidatePasskeyChallenge_Should_ReturnServerBoundUser",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.password-sign-in",
+            "auth.flow.password-sign-in",
+            "auth.transition.password-sign-in.mfa-required"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.MfaChallengeFlowServiceTests",
+      "TestMethod": "ValidatePasskeyChallenge_WhenPasskeyWasNotOffered_Should_Reject",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.password-sign-in",
+            "auth.flow.password-sign-in",
+            "auth.transition.password-sign-in.mfa-required"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.MfaChallengeFlowServiceTests",
+      "TestMethod": "ValidatePasskeyChallenge_WithDifferentEmail_Should_Reject",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.password-sign-in",
+            "auth.flow.password-sign-in",
+            "auth.transition.password-sign-in.mfa-required"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
       "TestType": "LagoVista.UserAdmin.Auth.Tests.PasswordChangeFlowIntegrationTests",
       "TestMethod": "RejectedChange_Should_RunRealFlowAndManagers_AndEmitFailedTransitionEvidence",
       "Evidence": [
@@ -487,6 +547,214 @@
       ]
     },
     {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.RecoveryCodeAuthenticationFlowIntegrationTests",
+      "TestMethod": "InvalidRecoveryCode_WithValidChallenge_Should_RejectWithoutConsumingChallengeOrSession",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.totp-sign-in.recovery-code",
+            "auth.flow.totp-recovery-sign-in",
+            "auth.transition.totp-recovery-sign-in.rejected"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "TotpConsumeRecoveryCodeStart",
+        "TotpConsumeRecoveryCodeFailed"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.RecoveryCodeAuthenticationFlowIntegrationTests",
+      "TestMethod": "RecoveryCode_WithoutPasswordIssuedChallenge_Should_RejectBeforeSecretAccessOrSession",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.totp-sign-in.recovery-code",
+            "auth.flow.totp-recovery-sign-in",
+            "auth.transition.totp-recovery-sign-in.rejected"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.RecoveryCodeAuthenticationFlowIntegrationTests",
+      "TestMethod": "ValidRecoveryCode_WithPasswordIssuedChallenge_Should_InvalidateAuthenticator_AndEstablishSession",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.totp-sign-in.recovery-code",
+            "auth.flow.totp-recovery-sign-in",
+            "auth.transition.totp-recovery-sign-in.success"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "TotpConsumeRecoveryCodeStart",
+        "TotpConsumeRecoveryCodeSuccess"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.SignOutFlowIntegrationTests",
+      "TestMethod": "CookieSessionSignOut_Should_EndSession_AndRecordLogout",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.session-sign-out",
+            "auth.flow.session-sign-out",
+            "auth.transition.session.sign-out-success"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "UserLogout"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.SignOutFlowIntegrationTests",
+      "TestMethod": "TokenSessionSignOut_Should_RevokeCurrentRefreshToken_EndSession_AndRecordLogout",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.session-sign-out",
+            "auth.flow.session-sign-out",
+            "auth.transition.session.sign-out-success"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "UserLogout"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.TotpAdministrativeResetIntegrationTests",
+      "TestMethod": "OrgAdmin_WithFreshMfa_Should_ResetTargetTotp_AndRecordActorTargetAudit",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.totp-management.admin-reset",
+            "auth.transition.totp-management.admin-reset-success"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "TotpAdministrativeResetStart",
+        "TotpDisableMfaStart",
+        "TotpDisableMfaSuccess",
+        "TotpAdministrativeResetSuccess"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.TotpAuthenticationFlowIntegrationTests",
+      "TestMethod": "InvalidTotp_WithValidChallenge_Should_RejectWithoutConsumingChallengeOrSession",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.totp-sign-in",
+            "auth.flow.totp-sign-in",
+            "auth.transition.totp-sign-in.rejected"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "TotpVerifyStart",
+        "TotpVerifyFailed"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.TotpAuthenticationFlowIntegrationTests",
+      "TestMethod": "Totp_WithoutPasswordIssuedChallenge_Should_RejectWithoutEvaluatingFactor",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.totp-sign-in",
+            "auth.flow.totp-sign-in",
+            "auth.transition.totp-sign-in.rejected"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.TotpAuthenticationFlowIntegrationTests",
+      "TestMethod": "ValidTotp_WithPasswordIssuedChallenge_Should_EstablishSession_AndConsumeChallenge",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.totp-sign-in",
+            "auth.flow.totp-sign-in",
+            "auth.transition.totp-sign-in.success"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "TotpVerifyStart",
+        "TotpVerifySuccess",
+        "PasswordAuthenticationSucceeded"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.TotpAuthenticationFlowIntegrationTests",
+      "TestMethod": "ValidTotpToken_WithPasswordIssuedChallenge_Should_ProveMfaBeforeIssuingTokens",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.totp-sign-in",
+            "auth.flow.totp-sign-in",
+            "auth.transition.totp-sign-in.success"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "TotpVerifyStart",
+        "TotpVerifySuccess"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.TotpEnrollmentFlowIntegrationTests",
+      "TestMethod": "BeginEnrollment_Should_RunRealFlowHandlerAndMfaManager_AndStageAuthenticatorMaterial",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.totp-enrollment.success",
+            "auth.flow.totp-enrollment.begin",
+            "auth.transition.totp-enrollment.begin"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "TotpBeginEnrollmentStart,TotpBeginEnrollmentSuccess"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.TotpEnrollmentFlowIntegrationTests",
+      "TestMethod": "ConfirmEnrollment_Should_RunRealFlowHandlerAndMfaManager_AndEnableTotp",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.totp-enrollment.success",
+            "auth.flow.totp-enrollment.confirm",
+            "auth.transition.totp-enrollment.success"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "TotpConfirmEnrollmentStart,TotpConfirmEnrollmentSuccess"
+      ]
+    },
+    {
       "TestType": "LagoVista.UserAdmin.Auth.Tests.TotpManagementFlowIntegrationTests",
       "TestMethod": "RotateRecoveryCodes_Should_RunRealFlowHandlerAndMfaManager_AndKeepTotpEnabled",
       "Evidence": [
@@ -524,18 +792,20 @@
   "Issues": [],
   "StandardOutput": [
     "  Determining projects to restore...",
-    "  All projects are up-to-date for restore.",
+    "  Restored D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj (in 846 ms).",
+    "  3 of 4 projects are up-to-date for restore.",
     "  LagoVista.UserAdmin.Models -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin.Models\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.Models.dll",
+    "CSC : warning CS8002: Referenced assembly \u0027RingCentral.Net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0027 does not have a strong name. [D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\LagoVista.UserAdmin.csproj]",
     "  LagoVista.UserAdmin -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.dll",
     "  LagoVista.AspNetCore.Identity -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.AspNetCore.Identity\\bin\\Debug\\net9.0\\LagoVista.AspNetCore.Identity.dll",
     "  LagoVista.UserAdmin.Auth.Tests -\u003E D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
     "Test run for D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll (.NETCoreApp,Version=v9.0)",
     "A total of 1 test files matched the specified pattern.",
     "",
-    "Passed!  - Failed:     0, Passed:    98, Skipped:     0, Total:    98, Duration: 895 ms - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
+    "Passed!  - Failed:     0, Passed:   121, Skipped:     0, Total:   121, Duration: 2 s - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
     "",
     "Attachments:",
-    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\fc6594d4-a3d7-4c05-b1b3-29316c4a0f44\\coverage.cobertura.xml"
+    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\8939db31-42a6-4e19-bd7e-d506a66154af\\coverage.cobertura.xml"
   ],
   "StandardError": []
 }
