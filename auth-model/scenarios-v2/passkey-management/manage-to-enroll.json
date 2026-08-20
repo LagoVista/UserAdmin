@@ -30,5 +30,5 @@
     { "sourceType": "auth-view", "reference": "auth.passkey.management" },
     { "sourceType": "auth-view", "reference": "auth.passkey.management.enroll" }
   ],
-  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "complete" }
 }
