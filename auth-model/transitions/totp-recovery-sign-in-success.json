@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.totp-recovery-sign-in.success",
+  "name": "TOTP Recovery Code Sign-In Success",
+  "summary": "Consumes one valid TOTP recovery code for the identified durable identity and completes the outstanding MFA requirement by establishing a normal authenticated application session.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-sign-in",
+  "priority": 100,
+  "sourceState": { "expression": "session-capability == anonymous and mfa-challenge == pending" },
+  "actionKey": "auth.action.totp-recovery-sign-in.submit",
+  "guards": [
+    { "expression": "the identified account has TOTP enabled and the submitted recovery code is valid and unused", "failureCode": "totp-recovery-sign-in-not-successful" }
+  ],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "derive", "valueExpression": "authenticated-normal" },
+    { "dimensionKey": "auth.dimension.credential-proof", "operation": "set", "valueExpression": "recovery-code-proved" }
+  ],
+  "requiredEffects": ["consume-one-recovery-code", "issue-authenticated-session", "record-recovery-code-authentication-success", "resolve-application-landing-destination"],
+  "forbiddenEffects": ["create-durable-user", "disable-totp", "rotate-recovery-codes", "disclose-account-existence-on-failure"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ConsumeRecoveryCodeAsync validates and consumes one recovery code and can update MFA freshness when used as step-up." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "Current recovery-code consumption is confirmed-user-only and requires orchestration normalization before it can establish an anonymous post-password sign-in session." }
+  ]
+}
