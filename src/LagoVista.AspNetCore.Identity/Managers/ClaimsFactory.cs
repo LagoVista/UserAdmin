@@ -349,6 +349,14 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return claims;
         }
 
+        private Claim AddClaim(string type, string value)
+        {
+            if(String.IsNullOrEmpty(value))
+                throw new ArgumentNullException($"Claim value for {type} cannot be null or empty.");
+
+            return new Claim(type, value);
+        }
+
         public List<Claim> GetClaimsForDeviceOwner(AppUser owner)
         {
             if (string.IsNullOrEmpty(owner.Id)) throw new ArgumentNullException("Owner.Id");
@@ -360,26 +368,26 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             var claims = new List<Claim>
             {
-                new Claim(CurrentUserId, owner.Id),
-                new Claim(CurrentUserName, String.IsNullOrEmpty(owner.UserName) ? owner.Email : owner.UserName),
-                new Claim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(owner.FirstName) ? owner.FirstName : None),
-                new Claim(ClaimTypes.Surname, !string.IsNullOrWhiteSpace(owner.LastName) ? owner.LastName : None),
-                new Claim(ClaimTypes.Email, !string.IsNullOrEmpty(owner.Email) ? owner.Email : None),
-                new Claim(Logintype, nameof(DeviceOwnerUser)),
-                new Claim(Anonymous, owner.IsAnonymous.ToString()),
-                new Claim(EmailVerified, true.ToString()),
-                new Claim(PhoneVerfiied, true.ToString()),
-                new Claim(IsCustomerAdmin, owner.IsCustomerAdmin.ToString()),
-                new Claim(CurrentOrgNamespace, owner.CurrentOrganization?.Namespace ?? None),
-                new Claim(CurrentOrgName, owner.OwnerOrganization.Text),
-                new Claim(CurrentOrgId, owner.OwnerOrganization.Id),
-                new Claim(DeviceId, owner.CurrentDeviceId),
-                new Claim(DeviceRepoId, owner.CurrentRepo.Id),
-                new Claim(DeviceRepoName, owner.CurrentRepo.Text),
-                new Claim(DeviceUniqueId, owner.CurrentDevice.Id),
-                new Claim(DeviceName, owner.CurrentDevice.Text),
-                new Claim(DeviceConfigId, owner.CurrentDeviceConfig.Id),
-                new Claim(DeviceConfigName, owner.CurrentDeviceConfig.Text),
+                AddClaim(CurrentUserId, owner.Id),
+                AddClaim(CurrentUserName, owner.UserName ?? owner.Email ?? owner.PhoneNumber ?? None),
+                AddClaim(ClaimTypes.GivenName, !string.IsNullOrWhiteSpace(owner.FirstName) ? owner.FirstName : None),
+                AddClaim(ClaimTypes.Surname, !string.IsNullOrWhiteSpace(owner.LastName) ? owner.LastName : None),
+                AddClaim(ClaimTypes.Email, !string.IsNullOrEmpty(owner.Email) ? owner.Email : None),
+                AddClaim(Logintype, nameof(DeviceOwnerUser)),
+                AddClaim(Anonymous, owner.IsAnonymous.ToString()),
+                AddClaim(EmailVerified, true.ToString()),
+                AddClaim(PhoneVerfiied, true.ToString()),
+                AddClaim(IsCustomerAdmin, owner.IsCustomerAdmin.ToString()),
+                AddClaim(CurrentOrgNamespace, owner.CurrentOrganization?.Namespace ?? "anonymous"),
+                AddClaim(CurrentOrgName, owner.OwnerOrganization.Text),
+                AddClaim(CurrentOrgId, owner.OwnerOrganization.Id),
+                AddClaim(DeviceId, owner.CurrentDeviceId),
+                AddClaim(DeviceRepoId, owner.CurrentRepo.Id),
+                AddClaim(DeviceRepoName, owner.CurrentRepo.Text),
+                AddClaim(DeviceUniqueId, owner.CurrentDevice.Id),
+                AddClaim(DeviceName, owner.CurrentDevice.Text),
+                AddClaim(DeviceConfigId, owner.CurrentDeviceConfig.Id),
+                AddClaim(DeviceConfigName, owner.CurrentDeviceConfig.Text),
             };
 
             if (!String.IsNullOrWhiteSpace(owner.VerifyEmailSentTimeStamp))
