@@ -1,0 +1,39 @@
+{
+  "$schema": "../../schemas/implementation-proxy.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.proxy.passkey-authentication",
+  "name": "Passkey Authentication",
+  "summary": "Source-level implementation evidence for email-bound passkey authentication across browser and mobile clients.",
+  "status": "implemented",
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs",
+      "note": "Email-bound begin, browser-complete, and token-complete endpoints are exposed."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Services/EmailPasskeyAuthenticationService.cs",
+      "note": "Email resolves the durable user and delegates to the user-bound passkey proof with user verification required."
+    },
+    {
+      "sourceType": "code",
+      "reference": "softwarelogistics/nuviot-ui-shared:user/continue-passkey/continue-passkey.component.ts",
+      "note": "Angular uses the retained email with generated email-bound begin/complete operations and the browser WebAuthn ceremony."
+    },
+    {
+      "sourceType": "code",
+      "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/continue-passkey-screen.tsx",
+      "note": "React Native performs the native passkey ceremony and completes through the generated email-bound token operation."
+    },
+    {
+      "sourceType": "code",
+      "reference": "nuviot/nuvos-app-contracts:generated/auth/client.ts",
+      "note": "Generated contracts expose typed email-bound begin, browser complete, and mobile token complete operations."
+    }
+  ],
+  "runtimeEvidence": {
+    "status": "not-run",
+    "note": "Implementation is source-ready. Browser/device runtime execution has not yet been performed."
+  }
+}
