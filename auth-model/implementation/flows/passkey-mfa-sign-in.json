@@ -10,7 +10,7 @@
   "resultContract": "AuthenticationResponse / AuthResponse",
   "handlerKeys": ["auth.handler.passkey-mfa-sign-in"],
   "transitionKeys": ["auth.transition.passkey.complete-mfa"],
-  "entryActionKeys": ["auth.action.passkey-sign-in.submit"],
+  "entryActionKeys": ["auth.action.passkey-mfa-sign-in.submit"],
   "supportedAudiences": ["platform-user", "tenant-user", "customer-end-user"],
   "sourceReferences": [
     {
