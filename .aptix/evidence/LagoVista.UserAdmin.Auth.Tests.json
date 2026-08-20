@@ -3,19 +3,206 @@
   "ProjectName": "LagoVista.UserAdmin.Auth.Tests",
   "ProjectPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj",
   "AssemblyPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
-  "RunId": "5e362798-ef1d-48cb-aec8-86211938adaf",
-  "StartedUtc": "2026-08-20T02:13:39.9601407Z",
-  "CompletedUtc": "2026-08-20T02:13:53.2936516Z",
+  "RunId": "54f7edb8-356a-4e53-aeb3-1a6723e39919",
+  "StartedUtc": "2026-08-20T15:53:29.0252195Z",
+  "CompletedUtc": "2026-08-20T15:53:41.2891419Z",
   "ExitCode": 0,
   "Outcome": "Passed",
   "Summary": {
-    "Total": 121,
-    "Passed": 121,
+    "Total": 137,
+    "Passed": 137,
     "Failed": 0,
     "Skipped": 0,
-    "DurationMilliseconds": 13333
+    "DurationMilliseconds": 12263
   },
   "Tests": [
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.AppUserPasskeyMfaIntegrationTests",
+      "TestMethod": "BeginAuthentication_ForMfa_Should_RequireUserVerificationAndBindChallengeToExpectedUser",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in.mfa",
+            "auth.behavior.passkey.mfa-sign-in",
+            "auth.transition.passkey.complete-mfa"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "PasskeyAuthenticationOptionsSent",
+        "PasskeySetupStarted",
+        "PasskeyAuthenticationOptionsBeginSent"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.AppUserPasskeyMfaIntegrationTests",
+      "TestMethod": "CompleteAuthentication_WhenCredentialBelongsToDifferentUser_Should_RejectBeforeFidoVerification",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in.mfa",
+            "auth.behavior.passkey.mfa-sign-in",
+            "auth.transition.passkey.complete-mfa"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.AppUserPasskeyMfaIntegrationTests",
+      "TestMethod": "CompleteAuthentication_WhenPasskeyChallengeBelongsToDifferentUser_Should_RejectBeforeCredentialOrFidoVerification",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in.mfa",
+            "auth.behavior.passkey.mfa-sign-in",
+            "auth.transition.passkey.complete-mfa"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.AppUserPasskeyMfaIntegrationTests",
+      "TestMethod": "CompleteAuthentication_WithValidChallengeAndCredential_Should_AdvanceCounterAndUpdateMfaFreshness",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in.mfa",
+            "auth.behavior.passkey.mfa-sign-in",
+            "auth.transition.passkey.complete-mfa"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "PasskeyCompleteAuthenticationStart",
+        "PasskeyCompleteAuthenticationSuccess"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailPasskeyAuthenticationServiceTests",
+      "TestMethod": "Begin_WhenUserBoundChallengeFails_Should_ReturnNeutralFailure",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in",
+            "auth.flow.passkey-sign-in",
+            "auth.transition.passkey.complete-authentication"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailPasskeyAuthenticationServiceTests",
+      "TestMethod": "Begin_WithKnownEmail_Should_ResolveExactUser_AndRequireUserVerification",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in",
+            "auth.flow.passkey-sign-in",
+            "auth.transition.passkey.complete-authentication"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailPasskeyAuthenticationServiceTests",
+      "TestMethod": "Begin_WithUnknownEmail_Should_NotAskPasskeyManagerForChallenge",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in",
+            "auth.flow.passkey-sign-in",
+            "auth.transition.passkey.complete-authentication"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailPasskeyAuthenticationServiceTests",
+      "TestMethod": "Complete_ForMfa_Should_ForwardStepUpToSameUserBoundProof",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in",
+            "auth.flow.passkey-sign-in",
+            "auth.transition.passkey.complete-authentication"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailPasskeyAuthenticationServiceTests",
+      "TestMethod": "Complete_WhenAssertionFails_Should_NotReturnResolvedUser",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in",
+            "auth.flow.passkey-sign-in",
+            "auth.transition.passkey.complete-authentication"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailPasskeyAuthenticationServiceTests",
+      "TestMethod": "Complete_WithMissingRequest_Should_RejectBeforeResolvingUser",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in",
+            "auth.flow.passkey-sign-in",
+            "auth.transition.passkey.complete-authentication"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailPasskeyAuthenticationServiceTests",
+      "TestMethod": "Complete_WithUnknownEmail_Should_NotEvaluateAssertion",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in",
+            "auth.flow.passkey-sign-in",
+            "auth.transition.passkey.complete-authentication"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailPasskeyAuthenticationServiceTests",
+      "TestMethod": "Complete_WithValidProof_Should_BindProofToResolvedUser_AndReturnThatUser",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in",
+            "auth.flow.passkey-sign-in",
+            "auth.transition.passkey.complete-authentication"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
     {
       "TestType": "LagoVista.UserAdmin.Auth.Tests.EmailVerificationFlowIntegrationTests",
       "TestMethod": "AlreadyConfirmedUser_Should_ReturnIdempotentSuccess_WithoutReadingCode",
@@ -333,6 +520,66 @@
             "auth.test-binding.password-sign-in",
             "auth.flow.password-sign-in",
             "auth.transition.password-sign-in.mfa-required"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.PasskeyMfaAuthenticationServiceTests",
+      "TestMethod": "Begin_WithValidPasswordIssuedChallenge_Should_BindPasskeyChallengeToChallengeUserAndRequireStepUp",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in.mfa",
+            "auth.behavior.passkey.mfa-sign-in",
+            "auth.transition.passkey.complete-mfa"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.PasskeyMfaAuthenticationServiceTests",
+      "TestMethod": "Complete_WhenPasskeyProofFails_Should_NotConsumePasswordIssuedMfaChallenge",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in.mfa",
+            "auth.behavior.passkey.mfa-sign-in",
+            "auth.transition.passkey.complete-mfa"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.PasskeyMfaAuthenticationServiceTests",
+      "TestMethod": "Complete_WithInvalidMfaChallenge_Should_RejectBeforePasskeyProof",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in.mfa",
+            "auth.behavior.passkey.mfa-sign-in",
+            "auth.transition.passkey.complete-mfa"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.PasskeyMfaAuthenticationServiceTests",
+      "TestMethod": "Complete_WithValidPasskeyProof_Should_ConsumeMfaChallengeAfterProofAndReturnChallengeUser",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in.mfa",
+            "auth.behavior.passkey.mfa-sign-in",
+            "auth.transition.passkey.complete-mfa"
           ]
         }
       ],
@@ -792,20 +1039,19 @@
   "Issues": [],
   "StandardOutput": [
     "  Determining projects to restore...",
-    "  Restored D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj (in 846 ms).",
+    "  Restored D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj (in 370 ms).",
     "  3 of 4 projects are up-to-date for restore.",
     "  LagoVista.UserAdmin.Models -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin.Models\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.Models.dll",
-    "CSC : warning CS8002: Referenced assembly \u0027RingCentral.Net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0027 does not have a strong name. [D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\LagoVista.UserAdmin.csproj]",
     "  LagoVista.UserAdmin -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.dll",
     "  LagoVista.AspNetCore.Identity -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.AspNetCore.Identity\\bin\\Debug\\net9.0\\LagoVista.AspNetCore.Identity.dll",
     "  LagoVista.UserAdmin.Auth.Tests -\u003E D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
     "Test run for D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll (.NETCoreApp,Version=v9.0)",
     "A total of 1 test files matched the specified pattern.",
     "",
-    "Passed!  - Failed:     0, Passed:   121, Skipped:     0, Total:   121, Duration: 2 s - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
+    "Passed!  - Failed:     0, Passed:   137, Skipped:     0, Total:   137, Duration: 2 s - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
     "",
     "Attachments:",
-    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\8939db31-42a6-4e19-bd7e-d506a66154af\\coverage.cobertura.xml"
+    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\dc294295-d4b5-4561-8c40-f793488257e7\\coverage.cobertura.xml"
   ],
   "StandardError": []
 }
