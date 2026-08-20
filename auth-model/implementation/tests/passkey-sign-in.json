@@ -2,9 +2,9 @@
   "$schema": "../../schemas/auth-test-binding.schema.json",
   "schemaVersion": "1.0",
   "key": "auth.test-binding.passkey-sign-in",
-  "name": "Passkey Sign-In Server Proof",
-  "summary": "Registers source-level server proof that email-bound Passkey Sign In resolves one durable account, requires user verification for challenge issuance, binds completion to that same user, and does not expose or authenticate on failed proof.",
-  "version": 1,
+  "name": "Passkey Sign-In Service Proof",
+  "summary": "Registers service-level proof that email-bound Passkey Sign In resolves one durable account, requires user verification for challenge issuance, binds completion to that same user, and does not expose or authenticate on failed proof.",
+  "version": 2,
   "maturity": "implemented",
   "testLevel": "handler-integration",
   "repository": "LagoVista/UserAdmin",
@@ -22,14 +22,10 @@
     "Complete_WhenAssertionFails_Should_NotReturnResolvedUser",
     "Complete_WithMissingRequest_Should_RejectBeforeResolvingUser"
   ],
-  "scenarioKeys": [
-    "auth.scenario.passkey.passkey-to-home"
-  ],
+  "scenarioKeys": ["auth.scenario.passkey.passkey-to-home"],
   "handlerKeys": [],
   "endpointBindingKeys": [],
-  "transitionKeys": [
-    "auth.transition.passkey.complete-authentication"
-  ],
+  "transitionKeys": ["auth.transition.passkey.complete-authentication"],
   "proofObligations": [
     "email-is-normalized-before-durable-user-resolution",
     "known-email-resolves-exact-durable-user",
@@ -44,25 +40,14 @@
     "canonical-passkey-complete-authentication-transition"
   ],
   "notes": [
-    "These tests exercise EmailPasskeyAuthenticationService with IAppUserRepo and IAppUserPasskeyManager as infrastructure/security seams. They do not fake a browser or native authenticator ceremony.",
-    "The real AppUserPasskeyManager WebAuthn cryptographic proof path, browser session adapter, and mobile token adapter require additional integration/runtime proof slices.",
-    "Runtime execution evidence remains separate from this authored proof binding; these tests have not yet been run after authoring."
+    "This binding proves the email-resolution and service orchestration boundary. The deeper real-manager WebAuthn obligations are bound separately by auth.test-binding.passkey-sign-in.real-manager.",
+    "Browser and mobile proven-user session adapters are bound separately by auth.test-binding.passkey-sign-in.session-completion.",
+    "Runtime execution evidence remains separate from authored proof status."
   ],
   "sourceReferences": [
-    {
-      "sourceType": "test",
-      "reference": "LagoVista/UserAdmin:tests/LagoVista.UserAdmin.Auth.Tests/EmailPasskeyAuthenticationServiceTests.cs",
-      "note": "Email resolution, UV-required begin, exact-user completion and negative-path proof source."
-    },
-    {
-      "sourceType": "code",
-      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Services/EmailPasskeyAuthenticationService.cs",
-      "note": "Service under proof resolves the expected account and delegates to the shared user-bound passkey manager."
-    },
-    {
-      "sourceType": "code",
-      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs",
-      "note": "Shared WebAuthn proof primitive that remains the next deeper integration-test target."
-    }
+    { "sourceType": "test", "reference": "LagoVista/UserAdmin:tests/LagoVista.UserAdmin.Auth.Tests/EmailPasskeyAuthenticationServiceTests.cs", "note": "Email resolution, UV-required begin, exact-user completion and negative-path proof source." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Services/EmailPasskeyAuthenticationService.cs", "note": "Service under proof resolves the expected account and delegates to the shared user-bound passkey manager." },
+    { "sourceType": "test", "reference": "auth.test-binding.passkey-sign-in.real-manager", "note": "Companion binding covers the real AppUserPasskeyManager security invariants." },
+    { "sourceType": "test", "reference": "auth.test-binding.passkey-sign-in.session-completion", "note": "Companion binding covers browser-session and mobile-token completion after accepted proof." }
   ]
 }
