@@ -16,12 +16,10 @@
       "isUserLoggedIn": "set"
     }
   },
-  "inputs": [
-    { "finder": "status:target-user", "name": "Target User", "valueType": "string", "required": true, "value": "target.user.id", "description": "The durable target identity selected by the authorized operator before confirmation." }
-  ],
+  "inputs": [],
   "serverInteraction": {
     "required": true,
-    "intent": "Authorize the actor, verify fresh step-up proof, reset the target user's TOTP and recovery-code material exactly once, preserve the target account and password, and record actor/target audit evidence.",
+    "intent": "Authorize the actor, verify fresh step-up proof, reset the route-selected target user's TOTP and recovery-code material exactly once, preserve the target account and password, and record actor/target audit evidence.",
     "transitionKeys": ["auth.transition.totp-management.admin-reset-success"]
   },
   "expectedViewKey": "auth.mfa.totp.admin-reset.complete",
