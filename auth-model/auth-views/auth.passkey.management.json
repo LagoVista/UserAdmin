@@ -3,7 +3,7 @@
   "schemaVersion": "1.0",
   "viewId": "auth.passkey.management",
   "name": "Manage Passkeys",
-  "description": "Lists the user's passkeys and provides actions to add or remove credentials.",
+  "description": "Lists passkeys owned by the current durable identity and provides actions to add or remove credentials.",
   "category": "passkey",
   "routeId": "auth.route.passkey.management",
   "status": "active",
@@ -17,11 +17,15 @@
     { "id": "done", "name": "Done", "actionType": "button", "finder": "action:done" }
   ],
   "platforms": {
-    "web": { "status": "implemented" },
+    "web": { "status": "planned" },
     "mobile": { "status": "planned" }
   },
   "source": {
     "runtimeEntityId": "A9D88EEAAFC04BA499C3FC06A4A0FA32",
     "runtimeSha256Hex": "b356adc78c6718229e889814975b62db465fd08e87e3b4170aaae9ecc06bdd27"
-  }
+  },
+  "notes": [
+    "Existing client implementations are treated as reference material for this reconciliation pass; implementation status will be re-earned against the current canonical contract.",
+    "Rename is supported by the server but is intentionally outside the V1 Passkey Management presentation contract."
+  ]
 }
