@@ -70,8 +70,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(result.Successful, Is.True);
             Assert.That(result.Result.ChallengeId, Is.EqualTo(ChallengeId));
             Assert.That(capturedOptions, Is.Not.Null);
-            Assert.That(capturedOptions.User.Name, Is.EqualTo(Email));
-            Assert.That(capturedOptions.User.DisplayName, Is.EqualTo(Email));
+            Assert.That(capturedOptions.User.Name, Is.EqualTo(Email.ToUpper()));
+            Assert.That(capturedOptions.User.DisplayName, Is.EqualTo(Email.ToUpper()));
             Assert.That(capturedOptions.ExcludeCredentials, Has.Count.EqualTo(1));
             Assert.That(capturedPacket, Is.Not.Null);
             Assert.That(capturedPacket.Challenge.UserId, Is.EqualTo(UserId));

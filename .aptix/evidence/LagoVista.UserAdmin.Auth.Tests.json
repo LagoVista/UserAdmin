@@ -3,19 +3,67 @@
   "ProjectName": "LagoVista.UserAdmin.Auth.Tests",
   "ProjectPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj",
   "AssemblyPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
-  "RunId": "edad21b9-d571-43aa-b91c-5e5cef8efe3b",
-  "StartedUtc": "2026-08-20T17:39:26.1376645Z",
-  "CompletedUtc": "2026-08-20T17:39:40.8964349Z",
+  "RunId": "6ea7fb40-2c4b-4d55-8e15-ea8bec85ec16",
+  "StartedUtc": "2026-08-20T19:25:00.7264383Z",
+  "CompletedUtc": "2026-08-20T19:25:12.874634Z",
   "ExitCode": 0,
   "Outcome": "Passed",
   "Summary": {
-    "Total": 145,
-    "Passed": 145,
+    "Total": 148,
+    "Passed": 148,
     "Failed": 0,
     "Skipped": 0,
-    "DurationMilliseconds": 14758
+    "DurationMilliseconds": 12148
   },
   "Tests": [
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.AppUserPasskeyManagementIntegrationTests",
+      "TestMethod": "BeginRegistration_ForExistingUser_Should_BindChallengeAndExcludeExistingCredentials",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-management",
+            "auth.behavior.passkey.add-success",
+            "auth.transition.passkey.begin-existing-user-registration"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "PasskeyBeginRegistrationStart",
+        "PasskeyBeginRegistrationSuccess"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.AppUserPasskeyManagementIntegrationTests",
+      "TestMethod": "RemovePasskey_Should_ScopeRemovalToCurrentUserAndRelyingParty",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-management",
+            "auth.behavior.passkey.remove-success",
+            "auth.transition.passkey.remove-existing-user-credential"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.AppUserPasskeyManagementIntegrationTests",
+      "TestMethod": "RemovePasskey_WhenScopedCredentialDoesNotExist_Should_PropagateFailure",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-management",
+            "auth.behavior.passkey.remove-success",
+            "auth.transition.passkey.remove-existing-user-credential"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
     {
       "TestType": "LagoVista.UserAdmin.Auth.Tests.AppUserPasskeyMfaIntegrationTests",
       "TestMethod": "BeginAuthentication_ForMfa_Should_RequireUserVerificationAndBindChallengeToExpectedUser",
@@ -1166,7 +1214,7 @@
   "Issues": [],
   "StandardOutput": [
     "  Determining projects to restore...",
-    "  Restored D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj (in 415 ms).",
+    "  Restored D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj (in 379 ms).",
     "  3 of 4 projects are up-to-date for restore.",
     "  LagoVista.UserAdmin.Models -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin.Models\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.Models.dll",
     "CSC : warning CS8002: Referenced assembly \u0027RingCentral.Net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0027 does not have a strong name. [D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\LagoVista.UserAdmin.csproj]",
@@ -1176,10 +1224,10 @@
     "Test run for D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll (.NETCoreApp,Version=v9.0)",
     "A total of 1 test files matched the specified pattern.",
     "",
-    "Passed!  - Failed:     0, Passed:   145, Skipped:     0, Total:   145, Duration: 2 s - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
+    "Passed!  - Failed:     0, Passed:   148, Skipped:     0, Total:   148, Duration: 2 s - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
     "",
     "Attachments:",
-    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\bec5bf16-a743-4297-b5c2-bd6a5a067a0f\\coverage.cobertura.xml"
+    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\f8a70c6d-a251-42b0-9b5a-47056ef6ce6f\\coverage.cobertura.xml"
   ],
   "StandardError": []
 }
