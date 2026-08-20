@@ -126,19 +126,22 @@
       "key": "totp-management",
       "name": "TOTP Management",
       "behaviorKeys": [
+        "auth.behavior.totp.administrative-reset-success",
         "auth.behavior.totp.disable-success",
         "auth.behavior.totp.recovery-codes-rotation-success"
       ],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
+      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"not-started","implementation":"not-started","tests":"not-started"}
     },
     {
       "key": "totp-sign-in",
       "name": "TOTP Sign In",
       "behaviorKeys": [
+        "auth.behavior.totp.recovery-code-sign-in-rejected",
+        "auth.behavior.totp.recovery-code-sign-in-success",
         "auth.behavior.totp.sign-in-rejected",
         "auth.behavior.totp.sign-in-success"
       ],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
+      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"in-progress","implementation":"not-started","tests":"not-started"}
     }
   ],
   "sourceReferences": [
@@ -172,6 +175,8 @@
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Password Sign In now distinguishes three MFA-routing outcomes beneath the same generic MFA-required server transition: TOTP-only routes to auth.continue.totp, Passkey-only routes to auth.continue.passkey, and identities with both methods route to auth.select.mfa-type. Provider-specific routing is a client presentation obligation, so these branches require UI evidence rather than separate C# transition tests."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Select MFA Type is a new behavior category with exactly two one-scenario behaviors. Both start at auth.select.mfa-type; selecting Passkey ends at auth.continue.passkey (Passkey Start), while selecting TOTP ends at auth.continue.totp (TOTP Start). The selection itself is UI-only and performs no authentication state transition."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Select MFA Type implementation is complete on Angular Web and React Native. Both stable clients expose auth.select.mfa-type with action:select-passkey and action:select-totp and route those actions to the existing canonical continuation views; no server implementation is required for this UI-only category."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Password Sign In MFA response routing is implementation-complete on the stable Angular Web master and React Native main branches. Both clients prefer availableMfaProviders, preserve provider as a compatibility fallback, route TOTP-only and Passkey-only directly to their continuation views, route dual-factor identities to Select MFA Type, and avoid treating MFA-required responses as authenticated mobile sessions."}
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Password Sign In MFA response routing is implementation-complete on the stable Angular Web master and React Native main branches. Both clients prefer availableMfaProviders, preserve provider as a compatibility fallback, route TOTP-only and Passkey-only directly to their continuation views, route dual-factor identities to Select MFA Type, and avoid treating MFA-required responses as authenticated mobile sessions."},
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Sign In now includes separate recovery-code success and rejected behaviors because the linear behavior model cannot honestly represent recovery-code authentication as an alternate branch inside the existing TOTP-code behaviors. Recovery code remains an MFA-only proof, not a primary login credential. TOTP Management now also includes privileged administrative reset, which requires fresh actor step-up proof, records actor and target identity, removes the target user's TOTP and recovery-code material, and never authenticates the target user."
+    }
   ]
 }
