@@ -3,17 +3,17 @@
   "ProjectName": "LagoVista.UserAdmin.Auth.Tests",
   "ProjectPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj",
   "AssemblyPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
-  "RunId": "54f7edb8-356a-4e53-aeb3-1a6723e39919",
-  "StartedUtc": "2026-08-20T15:53:29.0252195Z",
-  "CompletedUtc": "2026-08-20T15:53:41.2891419Z",
+  "RunId": "edad21b9-d571-43aa-b91c-5e5cef8efe3b",
+  "StartedUtc": "2026-08-20T17:39:26.1376645Z",
+  "CompletedUtc": "2026-08-20T17:39:40.8964349Z",
   "ExitCode": 0,
   "Outcome": "Passed",
   "Summary": {
-    "Total": 137,
-    "Passed": 137,
+    "Total": 145,
+    "Passed": 145,
     "Failed": 0,
     "Skipped": 0,
-    "DurationMilliseconds": 12263
+    "DurationMilliseconds": 14758
   },
   "Tests": [
     {
@@ -75,6 +75,73 @@
             "auth.test-binding.passkey-sign-in.mfa",
             "auth.behavior.passkey.mfa-sign-in",
             "auth.transition.passkey.complete-mfa"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "PasskeyCompleteAuthenticationStart",
+        "PasskeyCompleteAuthenticationSuccess"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.AppUserPasskeyPrimaryIntegrationTests",
+      "TestMethod": "BeginPrimaryAuthentication_WithKnownEmail_Should_RequireUserVerificationAndAllowOnlyResolvedUsersCredentials",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in.real-manager",
+            "auth.behavior.passkey.sign-in",
+            "auth.transition.passkey.complete-authentication"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "PasskeyAuthenticationOptionsSent",
+        "PasskeySetupStarted",
+        "PasskeyAuthenticationOptionsBeginSent"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.AppUserPasskeyPrimaryIntegrationTests",
+      "TestMethod": "CompletePrimaryAuthentication_WhenCredentialBelongsToDifferentUser_Should_RejectBeforeFidoVerification",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in.real-manager",
+            "auth.behavior.passkey.sign-in",
+            "auth.transition.passkey.complete-authentication"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.AppUserPasskeyPrimaryIntegrationTests",
+      "TestMethod": "CompletePrimaryAuthentication_WhenPasskeyChallengeBelongsToDifferentUser_Should_RejectBeforeCredentialVerification",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in.real-manager",
+            "auth.behavior.passkey.sign-in",
+            "auth.transition.passkey.complete-authentication"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.AppUserPasskeyPrimaryIntegrationTests",
+      "TestMethod": "CompletePrimaryAuthentication_WithValidAssertion_Should_AdvanceCounterWithoutRecordingMfaFreshness",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in.real-manager",
+            "auth.behavior.passkey.sign-in",
+            "auth.transition.passkey.complete-authentication"
           ]
         }
       ],
@@ -794,6 +861,66 @@
       ]
     },
     {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.ProvenUserSessionCompletionTests",
+      "TestMethod": "CompleteProvenUserSession_WithDurableUser_Should_EstablishBrowserSessionAndReturnResolvedDestination",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in.session-completion",
+            "auth.behavior.passkey.sign-in",
+            "auth.transition.passkey.complete-authentication"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.ProvenUserSessionCompletionTests",
+      "TestMethod": "CompleteProvenUserSession_WithoutDurableUser_Should_RejectBeforeSessionMutation",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in.session-completion",
+            "auth.behavior.passkey.sign-in",
+            "auth.transition.passkey.complete-authentication"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.ProvenUserSessionCompletionTests",
+      "TestMethod": "CompleteProvenUserToken_WithDurableUser_Should_MintSingleUseTokenBeforeIssuingMobileTokens",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in.session-completion",
+            "auth.behavior.passkey.sign-in",
+            "auth.transition.passkey.complete-authentication"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.ProvenUserSessionCompletionTests",
+      "TestMethod": "CompleteProvenUserToken_WithoutDurableUser_Should_RejectBeforeTokenMutation",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-sign-in.session-completion",
+            "auth.behavior.passkey.sign-in",
+            "auth.transition.passkey.complete-authentication"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
       "TestType": "LagoVista.UserAdmin.Auth.Tests.RecoveryCodeAuthenticationFlowIntegrationTests",
       "TestMethod": "InvalidRecoveryCode_WithValidChallenge_Should_RejectWithoutConsumingChallengeOrSession",
       "Evidence": [
@@ -1039,19 +1166,20 @@
   "Issues": [],
   "StandardOutput": [
     "  Determining projects to restore...",
-    "  Restored D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj (in 370 ms).",
+    "  Restored D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj (in 415 ms).",
     "  3 of 4 projects are up-to-date for restore.",
     "  LagoVista.UserAdmin.Models -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin.Models\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.Models.dll",
+    "CSC : warning CS8002: Referenced assembly \u0027RingCentral.Net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0027 does not have a strong name. [D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\LagoVista.UserAdmin.csproj]",
     "  LagoVista.UserAdmin -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.dll",
     "  LagoVista.AspNetCore.Identity -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.AspNetCore.Identity\\bin\\Debug\\net9.0\\LagoVista.AspNetCore.Identity.dll",
     "  LagoVista.UserAdmin.Auth.Tests -\u003E D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
     "Test run for D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll (.NETCoreApp,Version=v9.0)",
     "A total of 1 test files matched the specified pattern.",
     "",
-    "Passed!  - Failed:     0, Passed:   137, Skipped:     0, Total:   137, Duration: 2 s - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
+    "Passed!  - Failed:     0, Passed:   145, Skipped:     0, Total:   145, Duration: 2 s - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
     "",
     "Attachments:",
-    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\dc294295-d4b5-4561-8c40-f793488257e7\\coverage.cobertura.xml"
+    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\bec5bf16-a743-4297-b5c2-bd6a5a067a0f\\coverage.cobertura.xml"
   ],
   "StandardError": []
 }

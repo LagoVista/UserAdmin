@@ -85,7 +85,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(tokenGrantRequest, Is.SameAs(request));
             Assert.That(tokenGrantRequest.GrantType, Is.EqualTo("single-use-token"));
             Assert.That(tokenGrantRequest.UserId, Is.EqualTo(UserId));
-            Assert.That(tokenGrantRequest.UserName, Is.EqualTo(Email));
+            Assert.That(tokenGrantRequest.UserName, Is.EqualTo(Email.ToUpper()));
             Assert.That(tokenGrantRequest.SingleUseToken, Is.EqualTo("single-use-token"));
             harness.AuthTokenManager.Verify(manager => manager.GenerateOneTimeUseTokenAsync(UserId, null), Times.Once);
             harness.AuthTokenManager.Verify(manager => manager.SingleUseTokenGrantAsync(request), Times.Once);
