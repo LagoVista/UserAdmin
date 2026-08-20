@@ -1,0 +1,37 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.passkey.complete-mfa",
+  "name": "Complete Passkey MFA",
+  "summary": "Completes a user-verified Passkey assertion for the durable identity bound to a password-issued MFA challenge, consumes that MFA challenge, and establishes the authenticated application session.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "passkey-sign-in",
+  "priority": 100,
+  "sourceState": { "expression": "session-capability == anonymous and password-issued mfa-challenge == pending and provider passkey is allowed" },
+  "actionKey": "auth.action.passkey-sign-in.submit",
+  "guards": [
+    { "expression": "the MFA challenge is valid for provider passkey and the completed WebAuthn assertion proves a credential registered to the challenge-bound UserId", "failureCode": "passkey-mfa-not-successful" }
+  ],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "derive", "valueExpression": "authenticated-normal" },
+    { "dimensionKey": "auth.dimension.credential-proof", "operation": "set", "valueExpression": "passkey-proved" }
+  ],
+  "requiredEffects": [
+    "validate-password-issued-mfa-challenge",
+    "validate-passkey-for-challenge-user",
+    "advance-passkey-signature-counter",
+    "consume-mfa-challenge-after-passkey-proof",
+    "issue-authenticated-session"
+  ],
+  "forbiddenEffects": [
+    "resolve-mfa-user-from-client-email",
+    "consume-mfa-challenge-before-passkey-proof",
+    "issue-session-before-passkey-proof"
+  ],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs", "note": "Password-bound Passkey MFA endpoints validate provider=passkey against the MFA challenge, use its UserId for the existing user-bound Passkey manager, consume the MFA challenge only after successful WebAuthn proof, then establish browser or token session." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/MfaChallengeFlowService.cs", "note": "MFA challenge validation enforces the allowed provider and challenge-bound durable UserId; consumption is single-use." }
+  ]
+}
