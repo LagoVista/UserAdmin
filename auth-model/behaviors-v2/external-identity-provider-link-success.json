@@ -1,0 +1,21 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.external-identity-provider.link-success",
+  "name": "External Identity Provider Link Success",
+  "summary": "An authenticated user explicitly links a validated, currently unlinked external provider subject to the current durable identity without creating or switching durable users.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "external-identity-provider-management",
+  "scenarioKeys": ["auth.scenario.external-identity-provider-management.link-provider-success"],
+  "entryViewKey": "auth.provider.manage",
+  "finalViewKey": "auth.provider.manage",
+  "finalOutcome": "The selected external provider subject is associated with the current durable identity, and the same user remains authenticated.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserManager.cs", "note": "AssociateExternalLoginAsync requires the target user id to match the acting user before persisting an external login association." },
+    { "sourceType": "decision", "reference": "User Authentication", "note": "Approved authentication policy requires independent NuvIoT email proof before an unlinked external provider may be linked to an existing durable identity; provider email is supporting evidence only." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External Identity Provider category reconciliation separates linked-subject sign-in, provider denial/fault, first-time registration, and provider link/unlink management while preserving provider-specific choices as permutations." }
+  ],
+  "progress": { "scenarios": "complete", "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}

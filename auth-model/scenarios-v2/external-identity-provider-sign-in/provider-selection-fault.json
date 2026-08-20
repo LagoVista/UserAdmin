@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.external-identity-provider-sign-in.provider-selection-fault",
+  "runtimeEntityId": "E2199A8DF6FB4C5CBFCBBF48BC550B19",
+  "name": "Provider Sign-In Faults",
+  "summary": "The user selects Microsoft as the representative supported-provider permutation and the provider callback, assertion validation, or mobile token exchange fails, returning to a deterministic recoverable fault surface without resolving a durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "external-identity-provider-sign-in",
+  "startViewKey": "auth.continue.provider",
+  "action": { "id": "continue-microsoft", "finder": "action:continue-microsoft" },
+  "preconditions": { "expression": "session-capability == anonymous and the provider round trip is configured to fail before a valid durable identity is resolved" },
+  "inputs": [],
+  "serverInteraction": { "required": true, "intent": "Normalize provider, callback-validation, or mobile token-exchange failure without creating, linking, or authenticating a durable identity." },
+  "expectedViewKey": "auth.oauth.fault",
+  "expectedVisibleFinders": ["status:oauth-error", "action:try-again", "action:continue-email"],
+  "postconditions": { "expression": "session-capability == anonymous and no durable identity was created, linked, or authenticated" },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [{ "sourceType": "auth-view", "reference": "auth.oauth.fault" }, { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External Identity Provider category reconciliation separates linked-subject sign-in, provider denial/fault, first-time registration, and provider link/unlink management while preserving provider-specific choices as permutations." }],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}

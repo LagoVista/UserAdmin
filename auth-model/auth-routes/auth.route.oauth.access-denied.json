@@ -10,14 +10,9 @@
   "parameters": [],
   "status": "active",
   "platforms": {
-    "web": { "status": "implemented", "implementation": "OauthAccessDeniedComponent" },
-    "mobile": { "status": "planned" }
+    "web": { "status": "implemented", "repository": "softwarelogistics/nuviot-ui-shared", "route": "/auth/oauth/access-denied", "component": "OauthAccessDeniedComponent" },
+    "mobile": { "status": "implemented", "repository": "nuviot/vtm-client", "route": "/auth/oauth/access-denied", "component": "AuthOutcomeScreen", "conformance": { "status": "verified", "checkedUtc": "2026-08-20T19:27:00Z", "checkedAgainst": ["canonical-path", "route-registration", "view-binding"], "notes": "React Native routes this path through the shared AuthOutcomeScreen." } }
   },
-  "source": {
-    "commonLinksMember": "OAuthAccessDenied",
-    "angularComponent": "OauthAccessDeniedComponent"
-  },
-  "notes": [
-    "Normalizes accessdenied to access-denied."
-  ]
+  "source": { "commonLinksMember": "OAuthAccessDenied", "angularComponent": "OauthAccessDeniedComponent", "mobileRoute": "/auth/oauth/access-denied" },
+  "notes": ["Normalizes accessdenied to access-denied."]
 }

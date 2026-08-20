@@ -3,23 +3,18 @@
   "schemaVersion": "1.0",
   "viewId": "auth.oauth.fault",
   "name": "OAuth Fault",
-  "description": "Explains that an external provider sign-in failed and lets the user return to authentication choices.",
+  "description": "Explains that external provider sign-in failed and lets the user retry provider authentication or choose email authentication.",
   "category": "provider",
   "routeId": "auth.route.oauth.fault",
   "status": "active",
-  "controls": [
-    { "id": "oauth-error", "name": "OAuth Error", "controlType": "status", "finder": "status:oauth-error" }
-  ],
+  "controls": [{ "id": "oauth-error", "name": "OAuth Error", "controlType": "status", "finder": "status:oauth-error" }],
   "actions": [
-    { "id": "back", "name": "Back", "actionType": "link", "finder": "action:back" }
+    { "id": "try-again", "name": "Try Again", "actionType": "button", "finder": "action:try-again" },
+    { "id": "continue-email", "name": "Continue with Email", "actionType": "button", "finder": "action:continue-email" }
   ],
   "platforms": {
-    "web": { "status": "implemented", "implementation": "OauthFaultComponent" },
-    "mobile": { "status": "planned" }
+    "web": { "status": "partial", "repository": "softwarelogistics/nuviot-ui-shared", "path": "user/oauth-fault/oauth-fault.component.html", "component": "OauthFaultComponent", "conformance": { "status": "mismatch", "checkedUtc": "2026-08-20T19:27:00Z", "checkedAgainst": ["view-identity", "controls", "actions", "finders", "navigation"], "notes": "Angular renders the error status but currently exposes only Back; it must adopt the canonical Try Again and Continue with Email recovery actions." } },
+    "mobile": { "status": "implemented", "repository": "nuviot/vtm-client", "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx", "component": "AuthOutcomeScreen", "conformance": { "status": "verified", "checkedUtc": "2026-08-20T19:27:00Z", "checkedAgainst": ["view-identity", "actions", "finders", "navigation"], "notes": "React Native already renders Try Again to provider selection and Continue with Email for /auth/oauth/fault; an observable oauth-error status still needs implementation review." } }
   },
-  "source": {
-    "runtimeEntityId": "99C4991BDDCE421FB568EE6844880EB3",
-    "runtimeSha256Hex": "8d951e542902eefd5561ff47506afe27bb910306048a7d735a2a17dd108e1455",
-    "webComponent": "OauthFaultComponent"
-  }
+  "source": { "runtimeEntityId": "99C4991BDDCE421FB568EE6844880EB3", "runtimeSha256Hex": "8d951e542902eefd5561ff47506afe27bb910306048a7d735a2a17dd108e1455", "webComponent": "OauthFaultComponent", "mobileComponent": "AuthOutcomeScreen" }
 }

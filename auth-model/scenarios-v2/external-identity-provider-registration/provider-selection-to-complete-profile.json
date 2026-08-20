@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.external-identity-provider-registration.provider-selection-to-complete-profile",
+  "runtimeEntityId": "8F7CD4CF0371463398D5E6539A9C3245",
+  "name": "Unlinked Provider Begins Registration",
+  "summary": "The user completes the Microsoft provider ceremony as the representative supported-provider permutation; the validated subject is unlinked and no canonical durable user exists, so the server creates an OAuth-external PendingIdentity and the client opens Complete Profile without trusting provider email as ownership proof.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "external-identity-provider-registration",
+  "startViewKey": "auth.continue.provider",
+  "action": { "id": "continue-microsoft", "finder": "action:continue-microsoft" },
+  "preconditions": { "expression": "session-capability == anonymous, the provider subject is unlinked, and duplicate lookup finds no durable user", "state": { "ensureUserDoesNotExist": "set", "ensurePendingIdentity": "notset" } },
+  "inputs": [],
+  "serverInteraction": { "required": true, "intent": "Validate the external-provider assertion, begin exactly one oauth-external PendingIdentity, preserve provider email only as asserted evidence, and route the ceremony to profile completion.", "transitionKeys": ["auth.transition.pending-identity.begin", "auth.transition.external-idp.capture-assertion"] },
+  "expectedViewKey": "auth.registration.complete-profile",
+  "postconditions": { "expression": "a ceremony-only OAuth-external PendingIdentity exists; no durable user or normal application session exists", "state": { "ensureUserDoesNotExist": "set", "ensurePendingIdentity": "set" } },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [{ "sourceType": "decision", "reference": "User Authentication", "note": "Approved authentication policy requires independent NuvIoT email proof before an unlinked external provider may be linked to an existing durable identity; provider email is supporting evidence only." }, { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Users/PendingIdentity.cs" }, { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External Identity Provider category reconciliation separates linked-subject sign-in, provider denial/fault, first-time registration, and provider link/unlink management while preserving provider-specific choices as permutations." }],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}

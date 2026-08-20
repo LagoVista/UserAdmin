@@ -1,0 +1,17 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.external-identity-provider.sign-in-fault",
+  "name": "External Identity Provider Sign-In Fault",
+  "summary": "An anonymous user selects a supported external identity provider but the provider ceremony, callback validation, or mobile token exchange cannot be completed, so no NuvIoT durable identity is resolved and the user receives a recoverable provider-fault outcome.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "external-identity-provider-sign-in",
+  "scenarioKeys": ["auth.scenario.external-identity-provider-sign-in.welcome-to-provider-selection", "auth.scenario.external-identity-provider-sign-in.provider-selection-fault"],
+  "entryViewKey": "auth.welcome",
+  "finalViewKey": "auth.oauth.fault",
+  "finalOutcome": "No durable identity or normal application session is established, and the user can retry provider sign-in or choose email authentication.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [{ "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External Identity Provider category reconciliation separates linked-subject sign-in, provider denial/fault, first-time registration, and provider link/unlink management while preserving provider-specific choices as permutations." }],
+  "progress": { "scenarios": "complete", "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}

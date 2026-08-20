@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.external-identity-provider-registration.complete-profile-to-email-verification",
+  "runtimeEntityId": "0EB82D665FA34186B3ED8CF0771542C4",
+  "name": "Complete Profile Requires Email Verification",
+  "summary": "The user supplies the required registration profile fields; the server persists them only on the PendingIdentity and requires independent NuvIoT email verification before durable identity resolution.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "external-identity-provider-registration",
+  "startViewKey": "auth.registration.complete-profile",
+  "action": { "id": "complete-profile", "finder": "action:complete-profile" },
+  "preconditions": { "expression": "an OAuth-external PendingIdentity is active, provider proof is valid, and no durable user has been created", "state": { "ensureUserDoesNotExist": "set", "ensurePendingIdentity": "set" } },
+  "inputs": [
+    { "finder": "field:email", "name": "Email", "valueType": "string", "required": true, "value": "user.email", "description": "Registration email to prove independently through NuvIoT." },
+    { "finder": "field:first-name", "name": "First name", "valueType": "string", "required": true, "value": "Provider" },
+    { "finder": "field:last-name", "name": "Last name", "valueType": "string", "required": true, "value": "Registration" }
+  ],
+  "serverInteraction": { "required": true, "intent": "Persist the submitted profile on the PendingIdentity and place the ceremony behind the independent email-verification gate without creating a durable user.", "transitionKeys": ["auth.transition.pending-identity.require-verification"] },
+  "expectedViewKey": "auth.email-verification.send",
+  "postconditions": { "expression": "the PendingIdentity requires independent email verification and still has no normal application authorization", "state": { "ensurePendingIdentity": "set", "ensureUserDoesNotExist": "set" } },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [{ "sourceType": "auth-view", "reference": "auth.registration.complete-profile" }, { "sourceType": "auth-view", "reference": "auth.email-verification.send" }, { "sourceType": "decision", "reference": "User Authentication", "note": "Approved authentication policy requires independent NuvIoT email proof before an unlinked external provider may be linked to an existing durable identity; provider email is supporting evidence only." }],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}

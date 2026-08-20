@@ -1,0 +1,28 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.external-idp.create-user",
+  "name": "Create External Provider User",
+  "summary": "Creates one durable user for a verified OAuth-external PendingIdentity after provider-subject and canonical-identity duplicate checks pass, and attaches the provider subject to that new user.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "provider", "valueType": "string", "required": true },
+    { "key": "provider-subject", "valueType": "string", "required": true },
+    { "key": "verified-email", "valueType": "string", "required": true },
+    { "key": "idempotency-key", "valueType": "string", "required": true }
+  ],
+  "guards": [
+    { "expression": "provider subject has no durable identity link", "failureCode": "provider-subject-already-linked" },
+    { "expression": "independently verified email has no matching canonical durable identity", "failureCode": "existing-canonical-identity-requires-link" }
+  ],
+  "permittedMutations": ["auth.dimension.durable-identity", "auth.dimension.account-status", "auth.dimension.home-workspace", "auth.dimension.pending-identity-status"],
+  "requiredEffects": ["create-durable-user-once", "persist-provider-link", "record-idempotency-result"],
+  "forbiddenEffects": ["create-second-durable-user", "link-subject-to-multiple-users", "grant-normal-application-authorization"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.email-identities.not-conflated", "auth.invariant.pending-identity.no-normal-authorization"],
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "User Authentication", "note": "Approved policy requires provider-subject-first resolution and independent NuvIoT email proof before linking an unlinked provider to an existing durable user." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Users/PendingIdentity.cs", "note": "PendingIdentity defines OAuthExternalLogin as a ceremony-only flow bucket." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External IdP V2 reconciliation retains provider protocols as implementation details beneath provider-independent auth semantics." }
+  ]
+}

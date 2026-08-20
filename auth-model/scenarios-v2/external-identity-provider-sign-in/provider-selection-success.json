@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.external-identity-provider-sign-in.provider-selection-success",
+  "runtimeEntityId": "ABFDDD2C7C394443B651D0D5EA11C4D4",
+  "name": "Linked Provider Sign-In Succeeds",
+  "summary": "The user selects Microsoft as the representative supported-provider permutation; the validated provider subject is already linked to exactly one active durable identity, so the server resolves that link and establishes the normal application session.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "external-identity-provider-sign-in",
+  "startViewKey": "auth.continue.provider",
+  "action": { "id": "continue-microsoft", "finder": "action:continue-microsoft" },
+  "preconditions": { "expression": "session-capability == anonymous and the Microsoft provider subject is already linked to exactly one active durable identity", "state": { "ensureUserExists": "set", "emailConfirmed": "set", "belongsToOrg": "set", "isAccountDisabled": "notset", "isLockedOut": "notset", "externalLoginProviders": ["Microsoft"] } },
+  "inputs": [],
+  "serverInteraction": { "required": true, "intent": "Complete the external-provider ceremony, resolve the durable identity by provider subject rather than email, establish the normal session, and resolve the application landing destination.", "transitionKeys": ["auth.transition.external-idp.resolve-linked-subject", "auth.transition.external-idp.establish-session"] },
+  "expectedViewKey": "app.home",
+  "postconditions": { "expression": "the same durable identity is authenticated through its established provider-subject link and the application landing destination is active", "state": { "ensureUserExists": "set", "isUserLoggedIn": "set", "externalLoginProviders": ["Microsoft"], "hasLastLogin": "set" } },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [{ "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/ExternalLoginManager.cs", "note": "Existing linked-subject OAuth finalization is retained as implementation evidence; the current unlinked email auto-link/create branch is implementation drift and is not canonical." }, { "sourceType": "auth-view", "reference": "auth.continue.provider" }, { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External Identity Provider category reconciliation separates linked-subject sign-in, provider denial/fault, first-time registration, and provider link/unlink management while preserving provider-specific choices as permutations." }, { "sourceType": "decision", "reference": "User Authentication", "note": "Approved authentication policy requires independent NuvIoT email proof before an unlinked external provider may be linked to an existing durable identity; provider email is supporting evidence only." }],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}

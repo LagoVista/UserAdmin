@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.external-idp.resolve-linked-subject",
+  "name": "Resolve Linked External Provider Subject",
+  "summary": "Resolves a validated external provider subject through an existing unique provider link to one durable user.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "provider", "valueType": "string", "required": true },
+    { "key": "provider-subject", "valueType": "string", "required": true }
+  ],
+  "guards": [{ "expression": "exactly one active provider-subject link exists", "failureCode": "provider-subject-link-not-unique" }],
+  "permittedMutations": ["auth.dimension.durable-identity"],
+  "requiredEffects": ["record-provider-subject-resolution"],
+  "forbiddenEffects": ["resolve-user-by-email-alone", "relink-provider-subject", "create-durable-user"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.email-identities.not-conflated"],
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "User Authentication", "note": "Approved policy requires provider-subject-first resolution and independent NuvIoT email proof before linking an unlinked provider to an existing durable user." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Users/PendingIdentity.cs", "note": "PendingIdentity defines OAuthExternalLogin as a ceremony-only flow bucket." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External IdP V2 reconciliation retains provider protocols as implementation details beneath provider-independent auth semantics." }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.external-identity-provider-sign-in.welcome-to-provider-selection",
+  "runtimeEntityId": "3E5E8D18A7574282881FC869133D6660",
+  "name": "Welcome to Provider Selection",
+  "summary": "The anonymous user chooses external-provider authentication from Welcome and the client opens the canonical provider-selection surface.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "external-identity-provider-sign-in",
+  "startViewKey": "auth.welcome",
+  "action": { "id": "continue-provider", "finder": "action:continue-provider" },
+  "preconditions": { "expression": "session-capability == anonymous and auth.welcome is visible" },
+  "inputs": [],
+  "serverInteraction": { "required": false },
+  "expectedViewKey": "auth.continue.provider",
+  "postconditions": { "expression": "session-capability == anonymous and auth.continue.provider is visible" },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["web", "android", "ios"],
+  "sourceReferences": [{ "sourceType": "auth-view", "reference": "auth.welcome" }, { "sourceType": "auth-view", "reference": "auth.continue.provider" }, { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External Identity Provider category reconciliation separates linked-subject sign-in, provider denial/fault, first-time registration, and provider link/unlink management while preserving provider-specific choices as permutations." }],
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "not-started" }
+}

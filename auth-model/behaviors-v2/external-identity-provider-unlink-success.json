@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.external-identity-provider.unlink-success",
+  "name": "External Identity Provider Unlink Success",
+  "summary": "An authenticated user explicitly removes an existing external provider association from the current durable identity without deleting or switching the durable user.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "external-identity-provider-management",
+  "scenarioKeys": ["auth.scenario.external-identity-provider-management.unlink-provider-success"],
+  "entryViewKey": "auth.provider.manage",
+  "finalViewKey": "auth.provider.manage",
+  "finalOutcome": "The selected external provider association is removed from the current durable identity, and the same user remains authenticated.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserManager.cs", "note": "RemoveExternalLoginAsync requires the target user id to match the acting user and records OAuthRemoveUserLogin before removing the association." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External Identity Provider category reconciliation separates linked-subject sign-in, provider denial/fault, first-time registration, and provider link/unlink management while preserving provider-specific choices as permutations." }
+  ],
+  "progress": { "scenarios": "complete", "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}

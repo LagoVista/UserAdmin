@@ -1,0 +1,26 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.provider.manage",
+  "name": "Manage External Providers",
+  "description": "Lets an authenticated user explicitly link or unlink an external identity provider association for the current durable identity.",
+  "category": "provider",
+  "routeId": "auth.route.provider.manage",
+  "status": "active",
+  "viewStates": { "defaultState": "ready", "states": ["ready", "link-complete", "unlink-complete"] },
+  "controls": [
+    { "id": "provider", "name": "Provider", "controlType": "select", "finder": "field:provider", "required": true, "sensitivity": "public" },
+    { "id": "provider-link-complete", "name": "Provider Linked", "controlType": "status", "finder": "status:provider-link-complete", "sensitivity": "public", "visibleInViewStates": ["link-complete"] },
+    { "id": "provider-unlink-complete", "name": "Provider Unlinked", "controlType": "status", "finder": "status:provider-unlink-complete", "sensitivity": "public", "visibleInViewStates": ["unlink-complete"] }
+  ],
+  "actions": [
+    { "id": "link-provider", "name": "Link Provider", "actionType": "button", "finder": "action:link-provider", "enabledInViewStates": ["ready"] },
+    { "id": "unlink-provider", "name": "Unlink Provider", "actionType": "button", "finder": "action:unlink-provider", "enabledInViewStates": ["ready"] },
+    { "id": "done", "name": "Done", "actionType": "button", "finder": "action:done", "enabledInViewStates": ["ready", "link-complete", "unlink-complete"] }
+  ],
+  "platforms": {
+    "web": { "status": "planned", "repository": "softwarelogistics/nuviot-ui-shared", "notes": "No canonical external-provider management surface was found during reconciliation." },
+    "mobile": { "status": "planned", "repository": "nuviot/vtm-client", "notes": "No canonical external-provider management surface was found during reconciliation." }
+  },
+  "notes": ["Provider names are data/permutations beneath this provider-independent surface.", "The unlink action does not yet encode a policy requiring another viable login method; that safeguard must be decided explicitly rather than invented by this model."]
+}
