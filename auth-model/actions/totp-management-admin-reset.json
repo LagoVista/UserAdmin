@@ -14,7 +14,7 @@
     { "expression": "actor has permission to reset another user's MFA", "failureCode": "admin-reset-not-authorized" },
     { "expression": "actor has fresh step-up proof", "failureCode": "admin-reset-step-up-required" }
   ],
-  "permittedMutations": ["target-user.totp-enrollment", "target-user.recovery-codes", "target-user.mfa-freshness"],
+  "permittedMutations": ["auth.target-user.totp-enrollment", "auth.target-user.recovery-codes", "auth.target-user.mfa-freshness"],
   "requiredEffects": ["remove-target-authenticator-secret", "remove-target-recovery-code-secret", "clear-target-totp-state", "record-actor-and-target-reset-audit"],
   "forbiddenEffects": ["authenticate-target-user", "issue-target-user-session", "change-target-password", "delete-target-user"],
   "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
