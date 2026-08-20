@@ -27,14 +27,21 @@
   "postconditions": {
     "expression": "the target user's TOTP enrollment and recovery codes are removed, the target user is not authenticated by the operation, and the actor remains authenticated"
   },
-  "expectedAuthLogEvents": ["TotpAdministrativeResetStart", "TotpAdministrativeResetSuccess"],
+  "expectedAuthLogEvents": [
+    "TotpAdministrativeResetStart",
+    "TotpDisableMfaStart",
+    "TotpDisableMfaSuccess",
+    "TotpAdministrativeResetSuccess"
+  ],
   "evidenceRequirements": ["server", "web"],
   "sourceReferences": [
-    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ResetMfaAsync currently supplies the state-clearing primitive through the same secret-removal and state-cleanup path as DisableMfaAsync." },
-    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "The existing /api/auth/mfareset endpoint only resets the confirmed current user; a privileged target-user endpoint and actor/target audit semantics are required for this scenario." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/TotpAdministrativeResetService.cs", "note": "Privileged service resolves the actor, requires system-admin or active-org-admin authority, requires recent LastMfaDateTimeUtc, verifies target organization membership, records actor/target audit evidence, and delegates secure cleanup to the real MFA manager." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ResetMfaAsync delegates to DisableMfaAsync, which removes authenticator and recovery-code secrets, clears replay/MFA freshness state, and sets TwoFactorEnabled false." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "POST /api/auth/mfa/totp/admin-reset/{targetUserId} is the confirmed-user administrative boundary and delegates to TotpAdministrativeResetService." },
+    { "sourceType": "test", "reference": "tests/LagoVista.UserAdmin.Auth.Tests/TotpAdministrativeResetIntegrationTests.cs", "note": "Authored proof covers authorized fresh-MFA reset, stale-MFA rejection, non-admin rejection, secret cleanup, and actor/target audit evidence. Runtime execution remains separate." },
     { "sourceType": "auth-view", "reference": "auth.mfa.totp.admin-reset" },
     { "sourceType": "auth-view", "reference": "auth.mfa.totp.admin-reset.complete" },
     { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Administrative reset must not authenticate the target user. The target subsequently signs in using another permitted primary method and may re-enroll TOTP." }
   ],
-  "progress": { "presentation": "not-started", "implementation": "not-started", "tests": "not-started" }
+  "progress": { "presentation": "not-started", "implementation": "in-progress", "tests": "in-progress" }
 }
