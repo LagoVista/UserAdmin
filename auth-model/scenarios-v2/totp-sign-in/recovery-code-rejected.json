@@ -1,0 +1,57 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.totp-sign-in.recovery-code-rejected",
+  "runtimeEntityId": "LTWPBM0E3M07DVEEXMFDPO6LMVD1JSQI",
+  "name": "Recovery Code Sign-In Could Not Authenticate",
+  "summary": "An identified returning user submits a TOTP recovery code that is not accepted; no authenticated session is created and the recovery-code entry surface remains visible with a non-enumerating error.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-sign-in",
+  "startViewKey": "auth.continue.recovery",
+  "action": { "id": "verify-recovery-code", "finder": "action:verify-recovery-code" },
+  "preconditions": {
+    "expression": "session-capability == anonymous and an active durable identity with confirmed email, enabled TOTP, recovery codes, and an outstanding MFA requirement is prepared for sign-in",
+    "state": {
+      "ensureUserExists": "set",
+      "userHasEmail": "set",
+      "emailConfirmed": "set",
+      "belongsToOrg": "set",
+      "twoFactorEnabled": "set",
+      "hasTOTP": "set",
+      "isAccountDisabled": "notset",
+      "isLockedOut": "notset",
+      "isUserLoggedIn": "notset"
+    }
+  },
+  "inputs": [
+    { "finder": "field:email", "name": "Email", "valueType": "string", "required": true, "value": "user.email", "description": "Previously identified durable-user email held by the authentication flow." },
+    { "finder": "field:recovery-code", "name": "Recovery Code", "valueType": "secret-reference", "required": true, "value": "user.invalid-recovery-code", "description": "A deliberately invalid or previously consumed recovery code used to prove the rejected outcome." }
+  ],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Resolve the existing durable identity, reject the submitted recovery-code proof without establishing a session, and preserve the outstanding MFA requirement.",
+    "transitionKeys": ["auth.transition.totp-recovery-sign-in.rejected"]
+  },
+  "expectedViewKey": "auth.continue.recovery",
+  "expectedVisibleFinders": ["status:recovery-error", "field:recovery-code", "action:verify-recovery-code", "action:back", "action:start-over"],
+  "postconditions": {
+    "expression": "the durable identity remains active with TOTP enabled, no authenticated session is established, and the recovery-code entry surface remains visible without disclosing rejection internals",
+    "state": {
+      "ensureUserExists": "set",
+      "emailConfirmed": "set",
+      "belongsToOrg": "set",
+      "twoFactorEnabled": "set",
+      "hasTOTP": "set",
+      "isUserLoggedIn": "notset"
+    }
+  },
+  "expectedAuthLogEvents": ["TotpConsumeRecoveryCodeStart", "TotpConsumeRecoveryCodeFailed"],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ConsumeRecoveryCodeAsync rejects missing, unavailable, invalid, or previously consumed recovery codes without authenticating the user." },
+    { "sourceType": "auth-view", "reference": "auth.continue.recovery" },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Rejected recovery-code proof remains on the recovery-code view and does not reveal why the code was not accepted." }
+  ],
+  "progress": { "presentation": "in-progress", "implementation": "not-started", "tests": "not-started" }
+}
