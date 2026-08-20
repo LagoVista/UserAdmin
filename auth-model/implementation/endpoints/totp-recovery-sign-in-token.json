@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/auth-endpoint-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.endpoint.totp-recovery-sign-in.token",
+  "name": "TOTP Recovery Code Token Endpoint",
+  "summary": "Maps password-challenge-bound mobile recovery-code authentication to the normalized recovery flow and standard access/refresh-token issuance pipeline.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdminRest",
+  "projectPath": "src/LagoVista.UserAdmin.Rest",
+  "sourcePath": "src/LagoVista.UserAdmin.Rest/Rest/AuthenticationFlowController.cs",
+  "controllerType": "AuthenticationFlowController",
+  "methodName": "AuthenticateWithRecoveryCodeTokenAsync",
+  "httpMethods": ["POST"],
+  "routeTemplates": ["/api/auth/mfarecovery/token"],
+  "requestContract": "RecoveryCodeTokenSignInRequest",
+  "responseContract": "InvokeResult<AuthResponse>",
+  "handlerKey": "auth.handler.totp-recovery-sign-in",
+  "transitionKeys": [
+    "auth.transition.totp-recovery-sign-in.success",
+    "auth.transition.totp-recovery-sign-in.rejected"
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/AuthenticationFlowController.cs", "note": "AllowAnonymous endpoint accepts the MFA challenge, recovery proof and normal AuthRequest metadata in one generated-client-friendly wrapper." }
+  ]
+}
