@@ -50,7 +50,10 @@
     { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ConsumeRecoveryCodeAsync consumes one recovery code, replaces the remaining recovery-code secret, removes the authenticator secret, clears AuthenticatorKeySecretId and sets TwoFactorEnabled false." },
     { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/RecoveryCodeAuthenticationFlowHandler.cs", "note": "The handler requires the password-issued MFA challenge, resolves the user from that challenge, invokes recovery as step-up, and consumes the challenge only after successful proof." },
     { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/AuthenticationFlowService.cs", "note": "The accepted recovery proof is adapted into the browser or token-backed application session." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/continue-recovery/continue-recovery.component.ts", "note": "Angular uses generated createMfarecoveryLogin and clears the MFA challenge only after successful completion." },
+    { "sourceType": "code", "reference": "nuviot/vtm-client:src/platform/auth/auth-context.tsx", "note": "React Native uses generated createMfarecoveryToken and stores access/refresh tokens only after successful recovery proof." },
+    { "sourceType": "test", "reference": "tests/LagoVista.UserAdmin.Auth.Tests/RecoveryCodeAuthenticationFlowIntegrationTests.cs", "note": "Authored real-manager integration proof covers issued-code success, missing challenge rejection, and invalid-code rejection." },
     { "sourceType": "auth-view", "reference": "auth.continue.recovery" }
   ],
-  "progress": { "presentation": "in-progress", "implementation": "in-progress", "tests": "in-progress" }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "complete" }
 }
