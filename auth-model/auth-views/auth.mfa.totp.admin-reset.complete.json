@@ -14,11 +14,18 @@
     { "id": "done", "name": "Done", "actionType": "button", "finder": "action:done" }
   ],
   "platforms": {
-    "web": { "status": "planned", "repository": "softwarelogistics/nuviot-ui-shared" },
-    "mobile": { "status": "planned", "repository": "nuviot/vtm-client" }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "user/totp-admin-reset-complete/totp-admin-reset-complete.component.ts",
+      "component": "TotpAdminResetCompleteComponent",
+      "implementation": "Renders the canonical reset-complete state and Done action after successful privileged reset."
+    },
+    "mobile": { "status": "planned", "repository": "nuviot/vtm-client", "implementation": "Administrative reset is not a declared mobile behavior surface for the current launch scope." }
   },
   "source": {
-    "runtimeEntityId": "LPSI4907TIIL0WV8CX0T712Z1U1XRL6H"
+    "runtimeEntityId": "LPSI4907TIIL0WV8CX0T712Z1U1XRL6H",
+    "webComponent": "TotpAdminResetCompleteComponent"
   },
   "notes": [
     "The target user remains unauthenticated after this operation and must use a normal permitted sign-in path before re-enrolling TOTP."
