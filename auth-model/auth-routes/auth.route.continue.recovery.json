@@ -9,11 +9,11 @@
   "parameters": [],
   "status": "active",
   "platforms": {
-    "web": { "status": "implemented", "implementation": "softwarelogistics/nuviot-ui-shared auth-routes.ts -> ContinueRecoveryComponent" },
-    "mobile": { "status": "implemented", "implementation": "app/auth/continue/recovery.tsx -> ContinueRecoveryScreen" }
+    "web": { "status": "implemented", "repository": "softwarelogistics/nuviot-ui-shared", "path": "auth-routes.ts", "route": "auth/continue/recovery", "component": "ContinueRecoveryComponent", "implementation": "Canonical recovery route is registered to ContinueRecoveryComponent." },
+    "mobile": { "status": "implemented", "repository": "nuviot/vtm-client", "path": "app/auth/continue/recovery.tsx", "route": "/auth/continue/recovery", "component": "ContinueRecoveryScreen", "implementation": "Expo Router route resolves to ContinueRecoveryScreen." }
   },
   "source": {
-    "webRoute": "auth/continue/recovery",
+    "angularComponent": "ContinueRecoveryComponent",
     "mobileRoute": "app/auth/continue/recovery.tsx"
   }
 }
