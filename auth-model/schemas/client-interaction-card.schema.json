@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.lagovista.com/auth/client-interaction-card.schema.json",
+  "$id": "https://schemas.lagovista.com/client-interaction-card.schema.json",
   "title": "Client Interaction Card",
   "type": "object",
   "additionalProperties": false,
@@ -21,7 +21,7 @@
   "properties": {
     "$schema": { "type": "string" },
     "schemaVersion": { "const": "1.0" },
-    "key": { "$ref": "#/$defs/authKey" },
+    "key": { "$ref": "#/$defs/definitionKey" },
     "name": { "type": "string", "minLength": 1, "maxLength": 160 },
     "summary": { "type": "string", "minLength": 1, "maxLength": 1000 },
     "version": { "type": "integer", "minimum": 1 },
@@ -63,9 +63,9 @@
     }
   },
   "$defs": {
-    "authKey": {
+    "definitionKey": {
       "type": "string",
-      "pattern": "^auth\\.[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})+$"
+      "pattern": "^[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})+$"
     },
     "directiveKey": {
       "type": "string",
@@ -127,7 +127,7 @@
           "type": "array",
           "uniqueItems": true,
           "items": {
-            "enum": ["string", "boolean", "number", "entity-header", "multi-select-string", "multi-select-number", "multi-select-entity-header"]
+            "enum": ["string", "boolean", "number", "entity-header", "multi-select-string", "multi-select-boolean", "multi-select-number", "multi-select-entity-header"]
           }
         },
         "notes": { "type": "string", "minLength": 1 }
