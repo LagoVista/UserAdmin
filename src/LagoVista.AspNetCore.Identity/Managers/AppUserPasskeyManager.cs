@@ -126,6 +126,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
         {
             if (String.IsNullOrEmpty(userId)) throw new ArgumentNullException(nameof(userId));
 
+            if (payload?.Attestation == null)
+            {
+                await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyCompleteRegistrationFailed, user, org, errors: "missing_attestation");
+                return InvokeResult.FromError("missing_attestation");
+            }
+
             var (rpId, origin) = GetRpIdAndOrigin();
 
             string challengeId = payload.ChallengeId;
@@ -135,7 +141,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 return InvokeResult.FromError("missing_challenge_id");
             }
 
-            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyCompleteRegistrationStart, user, org, errors:"missing_challenge_id", challengeId: challengeId, assertionId: payload.Attestation.Id);
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyCompleteRegistrationStart, user, org, challengeId: challengeId, assertionId: payload.Attestation.Id);
        
             var challengeResult = await _challengeStore.ConsumeAsync(challengeId);
             var validateChallenge = ValidateChallenge(challengeResult, PasskeyChallengePurpose.Register, rpId, origin);
@@ -572,7 +578,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             var payload = new PasskeyBeginOptionsResponse() { ChallengeId = storeResult.Result.Challenge.Id, Options = JToken.FromObject(options) };
 
-            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyBeginPasswordlessAuthenticationSuccess, user, org,challengeId: payload.ChallengeId);
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyBeginPasswordlessAuthenticationSuccess, provisionUser, org, challengeId: payload.ChallengeId);
 
             return InvokeResult<PasskeyBeginOptionsResponse>.Create(payload);
         }
