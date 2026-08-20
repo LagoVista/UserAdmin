@@ -3,9 +3,9 @@
   "ProjectName": "LagoVista.UserAdmin.Auth.Tests",
   "ProjectPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj",
   "AssemblyPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
-  "RunId": "54bc8f3c-4440-4b67-8046-ceae9961d31a",
-  "StartedUtc": "2026-08-20T21:14:17.3925697Z",
-  "CompletedUtc": "2026-08-20T21:14:33.2626497Z",
+  "RunId": "43ca3691-d30c-438e-9e1b-ba9b2fd2b65f",
+  "StartedUtc": "2026-08-20T23:09:06.7423879Z",
+  "CompletedUtc": "2026-08-20T23:09:18.7134387Z",
   "ExitCode": 0,
   "Outcome": "Passed",
   "Summary": {
@@ -13,7 +13,7 @@
     "Passed": 156,
     "Failed": 0,
     "Skipped": 0,
-    "DurationMilliseconds": 15870
+    "DurationMilliseconds": 11971
   },
   "Tests": [
     {
@@ -1266,7 +1266,7 @@
   "Issues": [],
   "StandardOutput": [
     "  Determining projects to restore...",
-    "  Restored D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj (in 395 ms).",
+    "  Restored D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj (in 410 ms).",
     "  3 of 4 projects are up-to-date for restore.",
     "  LagoVista.UserAdmin.Models -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin.Models\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.Models.dll",
     "CSC : warning CS8002: Referenced assembly \u0027RingCentral.Net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0027 does not have a strong name. [D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\LagoVista.UserAdmin.csproj]",
@@ -1279,7 +1279,7 @@
     "Passed!  - Failed:     0, Passed:   156, Skipped:     0, Total:   156, Duration: 2 s - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
     "",
     "Attachments:",
-    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\7bfebbb8-00f6-40dd-9b2f-9132ea340f02\\coverage.cobertura.xml"
+    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\508af2b3-9f94-4c4c-8f6b-32759085abe4\\coverage.cobertura.xml"
   ],
   "StandardError": []
 }
