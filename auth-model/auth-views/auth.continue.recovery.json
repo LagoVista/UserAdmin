@@ -23,11 +23,11 @@
       "implementation": "Recovery-code sign-in surface not yet implemented."
     },
     "mobile": {
-      "status": "implemented",
+      "status": "partial",
       "repository": "nuviot/vtm-client",
       "path": "src/features/authentication/nuviot-account/screens/continue-recovery-screen.tsx",
       "component": "ContinueRecoveryScreen",
-      "implementation": "Presentation shell exists with canonical recovery-code field and actions, but verification is still a pending placeholder."
+      "implementation": "Presentation shell exists with the canonical recovery-code field and actions, but verification remains a pending placeholder and status:recovery-error is not yet exposed."
     }
   },
   "source": {
