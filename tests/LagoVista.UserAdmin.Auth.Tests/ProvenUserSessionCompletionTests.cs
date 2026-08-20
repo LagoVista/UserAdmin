@@ -58,6 +58,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 Email = Email,
                 UserName = Email
             };
+            AuthRequest tokenGrantRequest = null;
 
             harness.AuthTokenManager
                 .Setup(manager => manager.GenerateOneTimeUseTokenAsync(UserId, null))
@@ -68,12 +69,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
                     Expires = DateTime.UtcNow.AddMinutes(5).ToString("O")
                 }));
             harness.AuthTokenManager
-                .Setup(manager => manager.SingleUseTokenGrantAsync(It.Is<AuthRequest>(auth =>
-                    auth == request &&
-                    auth.GrantType == "single-use-token" &&
-                    auth.UserId == UserId &&
-                    auth.UserName == Email &&
-                    auth.SingleUseToken == "single-use-token")))
+                .Setup(manager => manager.SingleUseTokenGrantAsync(It.IsAny<AuthRequest>()))
+                .Callback<AuthRequest>(auth => tokenGrantRequest = auth)
                 .ReturnsAsync(InvokeResult<AuthResponse>.Create(new AuthResponse
                 {
                     AccessToken = "access-token",
@@ -85,11 +82,13 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(result.Successful, Is.True);
             Assert.That(result.Result.AccessToken, Is.EqualTo("access-token"));
             Assert.That(result.Result.RefreshToken, Is.EqualTo("refresh-token"));
+            Assert.That(tokenGrantRequest, Is.SameAs(request));
+            Assert.That(tokenGrantRequest.GrantType, Is.EqualTo("single-use-token"));
+            Assert.That(tokenGrantRequest.UserId, Is.EqualTo(UserId));
+            Assert.That(tokenGrantRequest.UserName, Is.EqualTo(Email));
+            Assert.That(tokenGrantRequest.SingleUseToken, Is.EqualTo("single-use-token"));
             harness.AuthTokenManager.Verify(manager => manager.GenerateOneTimeUseTokenAsync(UserId, null), Times.Once);
-            harness.AuthTokenManager.Verify(manager => manager.SingleUseTokenGrantAsync(It.Is<AuthRequest>(auth =>
-                auth.GrantType == "single-use-token" &&
-                auth.UserId == UserId &&
-                auth.SingleUseToken == "single-use-token")), Times.Once);
+            harness.AuthTokenManager.Verify(manager => manager.SingleUseTokenGrantAsync(request), Times.Once);
         }
 
         [Test]
