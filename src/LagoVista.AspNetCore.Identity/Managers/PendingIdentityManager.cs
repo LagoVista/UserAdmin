@@ -18,6 +18,7 @@ using Security.Models;
 using System;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using LagoVista.UserAdmin.Models.Resources;
 
 namespace LagoVista.AspNetCore.Identity.Managers
 {
