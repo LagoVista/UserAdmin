@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.passkey.remove-success",
+  "name": "Remove Passkey Success",
+  "summary": "An authenticated existing user removes one passkey credential owned by the current durable identity and remains signed in as the same user.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "passkey-management",
+  "scenarioKeys": [
+    "auth.scenario.passkey-management.remove-success"
+  ],
+  "entryViewKey": "auth.passkey.management",
+  "finalViewKey": "auth.passkey.management",
+  "finalOutcome": "The selected passkey credential is removed from the current durable identity, other credentials are unchanged, and the active session identity is unchanged.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "The server exposes user-bound passkey removal and enforces credential ownership before deletion." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "Passkey Management V1 models Add Passkey and Remove Passkey as the user-visible management outcomes. Rename remains an available server capability but is not required product surface for this pass." }
+  ],
+  "progress": {
+    "scenarios": "complete",
+    "presentation": "complete",
+    "implementation": "in-progress",
+    "tests": "not-started"
+  }
+}
