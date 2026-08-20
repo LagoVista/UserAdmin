@@ -43,7 +43,7 @@ namespace LagoVista.UserAdmin
             services.AddScoped<IDistributionManager, DistributionManager>();
             services.AddScoped<ISingleUseTokenManager, SingleUseTokenManager>();
             services.AddScoped<ICalendarManager, CalendarManager>();
-            services.AddScoped<IMostRecentlyUsedManager, MostRecentUsedManager>();
+            services.AddScoped<IMostRecentlyUsedManager, MostRecentlyUsedManager>();
             services.AddScoped<IUserFavoritesManager, UserFavoritesManager>();            
             services.AddScoped<ISystemNotificationManager, SystemNotificationManager>();
             services.AddScoped<IAppUserInboxManager, AppUserInboxManager>();

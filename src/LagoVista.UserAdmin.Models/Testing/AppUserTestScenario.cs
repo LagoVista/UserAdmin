@@ -143,7 +143,6 @@ namespace LagoVista.UserAdmin.Models.Testing
     {
         public string CanonicalKey { get; set; }
         public int DefinitionVersion { get; set; }
-        public string CategoryKey { get; set; }
         public List<string> EvidenceRequirements { get; set; } = new List<string>();
         public AppUserTestPlatformStatus WebStatus { get; set; } = AppUserTestPlatformStatus.Create(AppUserTestPlatform.Web);
         public AppUserTestPlatformStatus AndroidStatus { get; set; } = AppUserTestPlatformStatus.Create(AppUserTestPlatform.Android);
