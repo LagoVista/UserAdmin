@@ -17,6 +17,7 @@ namespace LagoVista.UserAdmin.Authentication.Flows
     public interface IPasswordLoginFlowHandler
     {
         Task<AuthenticationFlowResult<AuthenticationResponse>> HandleAsync(AuthLoginRequest request);
+        Task<InvokeResult<AuthenticationResponse>> CreateMfaChallengeAsync(AuthLoginRequest request);
     }
 
     [CriticalCoverage]
@@ -63,21 +64,9 @@ namespace LagoVista.UserAdmin.Authentication.Flows
             var result = await _signInManager.PasswordSignInAsync(request);
             if (result.Successful && result.Result?.AuthenticationState == AuthenticationResponseState.MfaRequired)
             {
-                var appUser = await PopulateAvailableMfaProvidersAsync(request, result.Result);
-                if (appUser != null && _mfaChallengeStore != null)
-                {
-                    var challengeResult = await _mfaChallengeStore.CreateAsync(new MfaChallenge
-                    {
-                        UserId = appUser.Id,
-                        Email = appUser.Email,
-                        AvailableProviders = result.Result.AvailableMfaProviders
-                    });
-
-                    if (!challengeResult.Successful)
-                        return new AuthenticationFlowResult<AuthenticationResponse>(RejectedTransitionKey, InvokeResult<AuthenticationResponse>.FromInvokeResult(challengeResult.ToInvokeResult()));
-
-                    result.Result.MfaChallengeId = challengeResult.Result.Id;
-                }
+                var challengeResult = await AttachMfaChallengeAsync(request, result.Result);
+                if (!challengeResult.Successful)
+                    return new AuthenticationFlowResult<AuthenticationResponse>(RejectedTransitionKey, InvokeResult<AuthenticationResponse>.FromInvokeResult(challengeResult.ToInvokeResult()));
 
                 return new AuthenticationFlowResult<AuthenticationResponse>(MfaRequiredTransitionKey, result);
             }
@@ -94,14 +83,66 @@ namespace LagoVista.UserAdmin.Authentication.Flows
             throw new InvalidOperationException("Password sign-in produced a failure that is not mapped to a canonical authentication transition.");
         }
 
-        private async Task<AppUser> PopulateAvailableMfaProvidersAsync(AuthLoginRequest request, AuthenticationResponse response)
+        public async Task<InvokeResult<AuthenticationResponse>> CreateMfaChallengeAsync(AuthLoginRequest request)
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (_mfaChallengeStore == null)
+                throw new InvalidOperationException("MFA challenge store is not configured.");
+
+            var proofResult = await _signInManager.VerifyPasswordForMfaAsync(request);
+            if (!proofResult.Successful || proofResult.Result == null)
+                return InvokeResult<AuthenticationResponse>.FromInvokeResult(proofResult.ToInvokeResult());
+
+            var response = new AuthenticationResponse
+            {
+                AuthenticationState = AuthenticationResponseState.MfaRequired,
+                InviteId = request.InviteId ?? String.Empty
+            };
+
+            await PopulateAvailableMfaProvidersAsync(request, response, proofResult.Result);
+            if (response.AvailableMfaProviders.Length == 0)
+                return InvokeResult<AuthenticationResponse>.FromError("mfa_not_available");
+
+            var challengeResult = await CreateChallengeAsync(proofResult.Result, response.AvailableMfaProviders);
+            if (!challengeResult.Successful)
+                return InvokeResult<AuthenticationResponse>.FromInvokeResult(challengeResult.ToInvokeResult());
+
+            response.MfaChallengeId = challengeResult.Result.Id;
+            return InvokeResult<AuthenticationResponse>.Create(response);
+        }
+
+        private async Task<InvokeResult> AttachMfaChallengeAsync(AuthLoginRequest request, AuthenticationResponse response)
+        {
+            var appUser = await PopulateAvailableMfaProvidersAsync(request, response);
+            if (appUser == null || _mfaChallengeStore == null)
+                return InvokeResult.FromError("mfa_challenge_unavailable");
+
+            var challengeResult = await CreateChallengeAsync(appUser, response.AvailableMfaProviders);
+            if (!challengeResult.Successful)
+                return challengeResult.ToInvokeResult();
+
+            response.MfaChallengeId = challengeResult.Result.Id;
+            return InvokeResult.Success;
+        }
+
+        private Task<InvokeResult<MfaChallenge>> CreateChallengeAsync(AppUser appUser, string[] providers)
+        {
+            return _mfaChallengeStore.CreateAsync(new MfaChallenge
+            {
+                UserId = appUser.Id,
+                Email = appUser.Email,
+                AvailableProviders = providers ?? Array.Empty<string>()
+            });
+        }
+
+        private async Task<AppUser> PopulateAvailableMfaProvidersAsync(AuthLoginRequest request, AuthenticationResponse response, AppUser knownUser = null)
         {
             var providers = new List<string>();
-            AppUser appUser = null;
+            var appUser = knownUser;
 
             if (_appUserRepo != null && _passkeyCredentialRepo != null && _appConfig != null)
             {
-                appUser = await _appUserRepo.FindByEmailAsync(request.Email);
+                appUser = appUser ?? await _appUserRepo.FindByEmailAsync(request.Email);
                 if (appUser != null)
                 {
                     if (!String.IsNullOrWhiteSpace(appUser.AuthenticatorKeySecretId))
