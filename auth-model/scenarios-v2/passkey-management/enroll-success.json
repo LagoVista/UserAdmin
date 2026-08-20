@@ -1,0 +1,44 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.passkey-management.enroll-success",
+  "runtimeEntityId": "B1E9243F705D4F2FBFE65F0AAFE268E7",
+  "name": "Create Passkey",
+  "summary": "An authenticated existing user starts a user-bound WebAuthn creation ceremony, completes attestation, and returns to Passkey Management with the new credential attached to the same durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "passkey-management",
+  "startViewKey": "auth.passkey.management.enroll",
+  "action": { "id": "create-passkey", "finder": "action:create-passkey" },
+  "preconditions": {
+    "expression": "user is authenticated as a resolved durable identity",
+    "state": { "isUserLoggedIn": "set" }
+  },
+  "inputs": [],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Issue a short-lived registration challenge bound to the current user and relying party, perform the platform passkey creation ceremony, consume and validate the challenge and attestation, and persist the new credential for the same durable identity.",
+    "transitionKeys": [
+      "auth.transition.passkey.begin-existing-user-registration",
+      "auth.transition.passkey.complete-existing-user-registration"
+    ]
+  },
+  "expectedViewKey": "auth.passkey.management",
+  "expectedVisibleFinders": ["display:passkey-list", "action:add-passkey"],
+  "postconditions": {
+    "expression": "one additional passkey credential is bound to the current durable identity and the authenticated session identity is unchanged"
+  },
+  "expectedAuthLogEvents": [
+    "PasskeyBeginRegistrationStart",
+    "PasskeyBeginRegistrationSuccess",
+    "PasskeyCompleteRegistrationStart",
+    "PasskeyCompleteRegistrationSuccess"
+  ],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "transition", "reference": "auth.transition.passkey.begin-existing-user-registration" },
+    { "sourceType": "transition", "reference": "auth.transition.passkey.complete-existing-user-registration" },
+    { "sourceType": "code", "reference": "src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs" }
+  ],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}
