@@ -3,8 +3,8 @@
   "schemaVersion": "1.0",
   "key": "auth.handler.totp-sign-in",
   "name": "TOTP Sign-In Flow Handler",
-  "summary": "Resolves an identified durable user and verifies the submitted TOTP proof through the real MFA manager before session-specific completion occurs.",
-  "version": 1,
+  "summary": "Resolves the durable identity from a password-issued MFA challenge, verifies the submitted TOTP proof through the real MFA manager, and consumes the challenge before session-specific completion occurs.",
+  "version": 2,
   "maturity": "implemented",
   "repository": "LagoVista/UserAdmin",
   "projectPath": "src/LagoVista.UserAdmin",
@@ -18,12 +18,12 @@
     "auth.transition.totp-sign-in.success",
     "auth.transition.totp-sign-in.rejected"
   ],
-  "dependencies": ["IAppUserRepo", "IAppUserMfaManager", "IAppConfig"],
+  "dependencies": ["IAppUserRepo", "IAppUserMfaManager", "IMfaChallengeStore", "IAppConfig"],
   "sourceReferences": [
     {
       "sourceType": "code",
       "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/TotpAuthenticationFlowHandler.cs",
-      "note": "The typed handler resolves the durable identity, invokes the real AppUserMfaManager.VerifyTotpAsync proof/replay logic, and selects success or rejected canonical transition without duplicating credential verification."
+      "note": "The typed handler rejects missing, mismatched, expired, or provider-ineligible MFA challenges before credential proof; valid TOTP is verified as step-up through AppUserMfaManager and the MFA challenge is consumed only after proof succeeds."
     }
   ]
 }
