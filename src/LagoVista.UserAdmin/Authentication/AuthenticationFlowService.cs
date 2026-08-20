@@ -68,6 +68,11 @@ namespace LagoVista.UserAdmin.Authentication
             return result.PublicResult;
         }
 
+        public Task<InvokeResult<AuthenticationResponse>> CreatePasswordMfaChallengeAsync(AuthLoginRequest request)
+        {
+            return _passwordLoginHandler.CreateMfaChallengeAsync(request);
+        }
+
         public async Task<InvokeResult<AuthenticationResponse>> AuthenticateWithTotpAsync(TotpSignInRequest request)
         {
             if (_totpAuthenticationHandler == null)
@@ -83,16 +88,17 @@ namespace LagoVista.UserAdmin.Authentication
             return await CompleteProvenUserSessionAsync(result.PublicResult.Result, request.RememberMe);
         }
 
-        public async Task<InvokeResult<AuthResponse>> AuthenticateWithTotpTokenAsync(AuthRequest request)
+        public async Task<InvokeResult<AuthResponse>> AuthenticateWithTotpTokenAsync(TotpTokenSignInRequest request)
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (request?.Auth == null) throw new ArgumentNullException(nameof(request));
             if (_totpAuthenticationHandler == null)
                 throw new InvalidOperationException("TOTP authentication flow handler is not configured.");
 
             var proofRequest = new TotpSignInRequest
             {
-                Email = String.IsNullOrWhiteSpace(request.Email) ? request.UserName : request.Email,
-                Totp = request.Password,
+                Email = String.IsNullOrWhiteSpace(request.Auth.Email) ? request.Auth.UserName : request.Auth.Email,
+                Totp = request.Totp,
+                MfaChallengeId = request.MfaChallengeId,
                 RememberMe = true
             };
 
@@ -103,7 +109,7 @@ namespace LagoVista.UserAdmin.Authentication
             if (!result.PublicResult.Successful)
                 return InvokeResult<AuthResponse>.FromInvokeResult(result.PublicResult.ToInvokeResult());
 
-            return await CompleteProvenUserTokenAsync(request, result.PublicResult.Result);
+            return await CompleteProvenUserTokenAsync(request.Auth, result.PublicResult.Result);
         }
 
         public async Task<InvokeResult<AuthenticationResponse>> AuthenticateWithRecoveryCodeAsync(RecoveryCodeSignInRequest request)
@@ -121,16 +127,17 @@ namespace LagoVista.UserAdmin.Authentication
             return await CompleteProvenUserSessionAsync(result.PublicResult.Result, request.RememberMe);
         }
 
-        public async Task<InvokeResult<AuthResponse>> AuthenticateWithRecoveryCodeTokenAsync(AuthRequest request)
+        public async Task<InvokeResult<AuthResponse>> AuthenticateWithRecoveryCodeTokenAsync(RecoveryCodeTokenSignInRequest request)
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (request?.Auth == null) throw new ArgumentNullException(nameof(request));
             if (_recoveryCodeAuthenticationHandler == null)
                 throw new InvalidOperationException("Recovery-code authentication flow handler is not configured.");
 
             var proofRequest = new RecoveryCodeSignInRequest
             {
-                Email = String.IsNullOrWhiteSpace(request.Email) ? request.UserName : request.Email,
-                RecoveryCode = request.Password,
+                Email = String.IsNullOrWhiteSpace(request.Auth.Email) ? request.Auth.UserName : request.Auth.Email,
+                RecoveryCode = request.RecoveryCode,
+                MfaChallengeId = request.MfaChallengeId,
                 RememberMe = true
             };
 
@@ -141,7 +148,7 @@ namespace LagoVista.UserAdmin.Authentication
             if (!result.PublicResult.Successful)
                 return InvokeResult<AuthResponse>.FromInvokeResult(result.PublicResult.ToInvokeResult());
 
-            return await CompleteProvenUserTokenAsync(request, result.PublicResult.Result);
+            return await CompleteProvenUserTokenAsync(request.Auth, result.PublicResult.Result);
         }
 
         public async Task<InvokeResult<AuthenticationResponse>> CompleteProvenUserSessionAsync(AppUser appUser, bool rememberMe = true)
