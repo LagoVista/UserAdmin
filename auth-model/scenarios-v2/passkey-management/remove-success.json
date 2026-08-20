@@ -1,0 +1,35 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.passkey-management.remove-success",
+  "runtimeEntityId": "C8284EAA9CFF431F8802FD89B4661B33",
+  "name": "Remove Passkey",
+  "summary": "An authenticated user removes one selected passkey owned by the current durable identity and remains on Passkey Management with the refreshed credential list.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "passkey-management",
+  "startViewKey": "auth.passkey.management",
+  "action": { "id": "remove-passkey", "finder": "action:remove-passkey" },
+  "preconditions": {
+    "expression": "user is authenticated and at least one removable passkey belongs to the current durable identity",
+    "state": { "isUserLoggedIn": "set", "hasPasskey": "set" }
+  },
+  "inputs": [],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Delete only the selected passkey credential after proving it belongs to the current durable user and relying party, then reload the user's passkey list.",
+    "transitionKeys": ["auth.transition.passkey.remove-existing-user-credential"]
+  },
+  "expectedViewKey": "auth.passkey.management",
+  "expectedVisibleFinders": ["display:passkey-list", "action:add-passkey"],
+  "postconditions": {
+    "expression": "the selected passkey no longer exists for the current durable identity; other credentials and the active authenticated identity are unchanged"
+  },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "transition", "reference": "auth.transition.passkey.remove-existing-user-credential" },
+    { "sourceType": "auth-view", "reference": "auth.passkey.management" }
+  ],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}
