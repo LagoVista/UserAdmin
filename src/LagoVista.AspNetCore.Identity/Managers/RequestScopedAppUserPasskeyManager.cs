@@ -6,6 +6,7 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security.Passkeys;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
+using LagoVista.UserAdmin.Managers;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -57,8 +58,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 Timeout = baseConfiguration.Timeout,
                 TimestampDriftTolerance = baseConfiguration.TimestampDriftTolerance,
                 ChallengeSize = baseConfiguration.ChallengeSize,
-                RPID = relyingParty.RpId,
-                RPName = String.IsNullOrWhiteSpace(baseConfiguration.RPName) ? "NuvOS" : baseConfiguration.RPName,
+                ServerDomain = relyingParty.RpId,
+                ServerName = String.IsNullOrWhiteSpace(baseConfiguration.ServerName) ? "NuvOS" : baseConfiguration.ServerName,
                 ServerIcon = baseConfiguration.ServerIcon,
                 Origins = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { relyingParty.Origin },
                 MDSCacheDirPath = baseConfiguration.MDSCacheDirPath,

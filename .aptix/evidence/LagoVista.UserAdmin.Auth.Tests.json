@@ -3,17 +3,17 @@
   "ProjectName": "LagoVista.UserAdmin.Auth.Tests",
   "ProjectPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj",
   "AssemblyPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
-  "RunId": "6ea7fb40-2c4b-4d55-8e15-ea8bec85ec16",
-  "StartedUtc": "2026-08-20T19:25:00.7264383Z",
-  "CompletedUtc": "2026-08-20T19:25:12.874634Z",
+  "RunId": "54bc8f3c-4440-4b67-8046-ceae9961d31a",
+  "StartedUtc": "2026-08-20T21:14:17.3925697Z",
+  "CompletedUtc": "2026-08-20T21:14:33.2626497Z",
   "ExitCode": 0,
   "Outcome": "Passed",
   "Summary": {
-    "Total": 148,
-    "Passed": 148,
+    "Total": 156,
+    "Passed": 156,
     "Failed": 0,
     "Skipped": 0,
-    "DurationMilliseconds": 12148
+    "DurationMilliseconds": 15870
   },
   "Tests": [
     {
@@ -25,13 +25,65 @@
           "References": [
             "auth.test-binding.passkey-management",
             "auth.behavior.passkey.add-success",
-            "auth.transition.passkey.begin-existing-user-registration"
+            "auth.transition.passkey.begin-existing-user-registration",
+            "auth.transition.passkey.complete-existing-user-registration"
           ]
         }
       ],
       "ObservedAuthEvents": [
         "PasskeyBeginRegistrationStart",
         "PasskeyBeginRegistrationSuccess"
+      ]
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.AppUserPasskeyManagementIntegrationTests",
+      "TestMethod": "CompleteRegistration_WithMissingAttestation_Should_RejectBeforeChallengeOrFidoWork",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-management",
+            "auth.behavior.passkey.add-success",
+            "auth.transition.passkey.begin-existing-user-registration",
+            "auth.transition.passkey.complete-existing-user-registration"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.AppUserPasskeyManagementIntegrationTests",
+      "TestMethod": "CompleteRegistration_WithMissingPayload_Should_RejectBeforeChallengeOrFidoWork",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-management",
+            "auth.behavior.passkey.add-success",
+            "auth.transition.passkey.begin-existing-user-registration",
+            "auth.transition.passkey.complete-existing-user-registration"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": []
+    },
+    {
+      "TestType": "LagoVista.UserAdmin.Auth.Tests.AppUserPasskeyManagementIntegrationTests",
+      "TestMethod": "CompleteRegistration_WithVerifiedAttestation_Should_PersistCredentialForCurrentUser",
+      "Evidence": [
+        {
+          "Profile": "auth",
+          "References": [
+            "auth.test-binding.passkey-management",
+            "auth.behavior.passkey.add-success",
+            "auth.transition.passkey.begin-existing-user-registration",
+            "auth.transition.passkey.complete-existing-user-registration"
+          ]
+        }
+      ],
+      "ObservedAuthEvents": [
+        "PasskeyCompleteRegistrationStart",
+        "PasskeyCompleteRegistrationSuccess"
       ]
     },
     {
@@ -1214,7 +1266,7 @@
   "Issues": [],
   "StandardOutput": [
     "  Determining projects to restore...",
-    "  Restored D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj (in 379 ms).",
+    "  Restored D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj (in 395 ms).",
     "  3 of 4 projects are up-to-date for restore.",
     "  LagoVista.UserAdmin.Models -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin.Models\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.Models.dll",
     "CSC : warning CS8002: Referenced assembly \u0027RingCentral.Net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0027 does not have a strong name. [D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\LagoVista.UserAdmin.csproj]",
@@ -1224,10 +1276,10 @@
     "Test run for D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll (.NETCoreApp,Version=v9.0)",
     "A total of 1 test files matched the specified pattern.",
     "",
-    "Passed!  - Failed:     0, Passed:   148, Skipped:     0, Total:   148, Duration: 2 s - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
+    "Passed!  - Failed:     0, Passed:   156, Skipped:     0, Total:   156, Duration: 2 s - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
     "",
     "Attachments:",
-    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\f8a70c6d-a251-42b0-9b5a-47056ef6ce6f\\coverage.cobertura.xml"
+    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\7bfebbb8-00f6-40dd-9b2f-9132ea340f02\\coverage.cobertura.xml"
   ],
   "StandardError": []
 }

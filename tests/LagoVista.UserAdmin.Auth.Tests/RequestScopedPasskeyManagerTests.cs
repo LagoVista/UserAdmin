@@ -7,6 +7,7 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security.Passkeys;
 using LagoVista.UserAdmin.Interfaces.Repos.Users;
+using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Security.Passkeys;
 using LagoVista.UserAdmin.Models.Users;
 using Microsoft.Extensions.DependencyInjection;
@@ -61,8 +62,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
 
             var baseFido2Configuration = new Fido2Configuration
             {
-                RPID = "localhost",
-                RPName = "NuvOS",
+                ServerDomain = "localhost",
+                ServerName = "NuvOS",
                 Origins = new HashSet<string> { "https://localhost:5001" }
             };
 
