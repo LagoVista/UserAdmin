@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schemas/auth-flow-handler.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.handler.totp-management.admin-reset",
+  "name": "TOTP Administrative Reset Handler",
+  "summary": "Enforces operator authorization, fresh MFA and target-organization membership before delegating target-user TOTP cleanup to the real MFA manager and recording actor/target audit evidence.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "src/LagoVista.UserAdmin",
+  "sourcePath": "src/LagoVista.UserAdmin/Authentication/Flows/TotpAdministrativeResetService.cs",
+  "interfaceName": "ITotpAdministrativeResetService",
+  "typeName": "TotpAdministrativeResetService",
+  "methodName": "ResetAsync",
+  "requestContract": "targetUserId + EntityHeader organization + EntityHeader actor",
+  "resultContract": "InvokeResult",
+  "transitionKeys": ["auth.transition.totp-management.admin-reset-success"],
+  "dependencies": ["IAppUserRepo", "IAppUserMfaManager", "IOrganizationManager", "IAuthenticationLogManager"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/TotpAdministrativeResetService.cs", "note": "Requires system-admin or active-org-admin authority, recent LastMfaDateTimeUtc, target membership in the active organization, and dedicated actor/target reset audit evidence." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "Target factor cleanup is delegated to the real ResetMfaAsync primitive, which removes secure authenticator and recovery-code material." }
+  ]
+}
