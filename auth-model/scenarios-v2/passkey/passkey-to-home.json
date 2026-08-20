@@ -5,7 +5,7 @@
   "runtimeEntityId": "1E4062BEFB7CE59560CC3F5F5EAE8AAD",
   "name": "Passkey Authentication to Home",
   "summary": "The email-resolved user completes a valid user-verified passkey assertion and receives a normal authenticated application session.",
-  "version": 2,
+  "version": 3,
   "maturity": "proposed",
   "categoryKey": "passkey-sign-in",
   "startViewKey": "auth.continue.passkey",
@@ -29,17 +29,18 @@
   "sourceReferences": [
     { "sourceType": "auth-view", "reference": "auth.continue.passkey" },
     { "sourceType": "decision", "reference": "auth-model/transitions/passkey-complete-authentication.json" },
-    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs", "note": "Email-bound begin/complete endpoints use one proof service, then establish either a browser session or mobile token session after successful proof." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs", "note": "Email-bound begin/complete endpoints obtain a proven durable user from EmailPasskeyAuthenticationService before invoking common browser-session or mobile-token completion adapters." },
     { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Services/EmailPasskeyAuthenticationService.cs", "note": "Email resolves the expected durable UserId before challenge issuance and delegates to the user-bound passkey manager with user verification required." },
-    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "The shared proof validates challenge ownership, credential ownership, WebAuthn assertion and signature counter." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "The shared proof validates challenge ownership, credential ownership, WebAuthn assertion and signature counter. Primary completion uses isStepUp=false and therefore does not record MFA freshness." },
     { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/continue-passkey/continue-passkey.component.ts", "note": "Angular Web consumes the retained login-seed email, uses the generated email-bound begin/complete operations, performs navigator.credentials.get, and follows the authenticated redirect." },
     { "sourceType": "code", "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/continue-passkey-screen.tsx", "note": "React Native begins the email-bound challenge, invokes the native passkey ceremony, maps the assertion to the generated wire contract, completes through the email-bound token operation, persists AuthResponse, restores the token lifecycle, and routes to the authenticated landing destination." },
     { "sourceType": "code", "reference": "nuviot/vtm-client:app.json", "note": "React Native declares native passkey support and the iOS webcredentials association required by the ceremony; domain association files remain deployment infrastructure." },
     { "sourceType": "code", "reference": "nuviot/nuvos-app-contracts:generated/auth/client.ts", "note": "Generated contracts expose typed email-bound passkey begin, browser complete, and mobile token complete operations." },
-    { "sourceType": "test", "reference": "LagoVista/UserAdmin:tests/LagoVista.UserAdmin.Auth.Tests/EmailPasskeyAuthenticationServiceTests.cs", "note": "Initial server proof covers normalized email resolution, UV-required challenge delegation, exact-user completion, MFA step-up forwarding, neutral challenge failure, unknown-account handling, assertion failure, and missing requests." },
-    { "sourceType": "decision", "reference": "auth-model/implementation/tests/passkey-sign-in.json", "note": "The initial authored server test binding is in place; real WebAuthn-manager integration, browser session/token adapters, and client/runtime proof remain follow-on test slices." },
+    { "sourceType": "test", "reference": "auth.test-binding.passkey-sign-in", "note": "Service-level proof covers normalized email resolution, neutral unknown-account handling, UV-required begin delegation, exact-user completion and rejected proof." },
+    { "sourceType": "test", "reference": "auth.test-binding.passkey-sign-in.real-manager", "note": "Real-manager proof covers required user verification, per-user allowCredentials, challenge/credential UserId binding, signature-counter advancement, and no primary-auth MFA freshness mutation." },
+    { "sourceType": "test", "reference": "auth.test-binding.passkey-sign-in.session-completion", "note": "Common proven-user adapter proof covers browser-session and mobile-token completion and rejects missing durable proof before session/token mutation." },
     { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Email-first primary Passkey and Password-then-Passkey MFA intentionally share the same user-bound passkey proof primitive. Direct discoverable Passkey-first sign-in is deferred." },
-    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "Passkey Authentication to Home is implementation-complete by source inspection. The first server test obligations are authored but have not yet been executed; browser/native client and runtime proof remain outstanding, so tests are in progress." }
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "Authored primary Passkey proof obligations are complete. Runtime execution and UI evidence remain separate current-evidence dimensions and do not gate authored Tests completion." }
   ],
-  "progress": { "presentation": "complete", "implementation": "complete", "tests": "in-progress" }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "complete" }
 }
