@@ -1,0 +1,47 @@
+{
+  "$schema": "../../schemas/auth-test-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.test-binding.passkey-sign-in.real-manager",
+  "name": "Primary Passkey Real-Manager Proof",
+  "summary": "Registers real AppUserPasskeyManager proof for email-first primary Passkey Sign In, including required user verification, challenge and credential ownership binding, signature-counter advancement, and the invariant that primary Passkey proof does not record MFA freshness.",
+  "version": 1,
+  "maturity": "implemented",
+  "testLevel": "handler-integration",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "tests/LagoVista.UserAdmin.Auth.Tests",
+  "sourcePath": "tests/LagoVista.UserAdmin.Auth.Tests/AppUserPasskeyPrimaryIntegrationTests.cs",
+  "framework": "NUnit",
+  "testTypeName": "AppUserPasskeyPrimaryIntegrationTests",
+  "testMethodNames": [
+    "BeginPrimaryAuthentication_WithKnownEmail_Should_RequireUserVerificationAndAllowOnlyResolvedUsersCredentials",
+    "CompletePrimaryAuthentication_WithValidAssertion_Should_AdvanceCounterWithoutRecordingMfaFreshness",
+    "CompletePrimaryAuthentication_WhenPasskeyChallengeBelongsToDifferentUser_Should_RejectBeforeCredentialVerification",
+    "CompletePrimaryAuthentication_WhenCredentialBelongsToDifferentUser_Should_RejectBeforeFidoVerification"
+  ],
+  "scenarioKeys": ["auth.scenario.passkey.passkey-to-home"],
+  "handlerKeys": [],
+  "endpointBindingKeys": [],
+  "transitionKeys": ["auth.transition.passkey.complete-authentication"],
+  "proofObligations": [
+    "email-resolves-expected-durable-user-before-webauthn-begin",
+    "primary-passkey-begin-requires-user-verification",
+    "allow-credentials-contains-only-credentials-for-email-resolved-user",
+    "passkey-challenge-is-bound-to-email-resolved-user-id",
+    "passkey-challenge-user-mismatch-rejected-before-credential-verification",
+    "stored-credential-user-mismatch-rejected-before-fido-verification",
+    "valid-assertion-advances-signature-counter",
+    "primary-passkey-completion-does-not-record-mfa-freshness",
+    "real-app-user-passkey-manager",
+    "fido2-library-remains-cryptographic-infrastructure-seam"
+  ],
+  "notes": [
+    "EmailPasskeyAuthenticationService and the real AppUserPasskeyManager are both exercised; only repositories, FIDO2 itself, logging and configuration are mocked infrastructure seams.",
+    "Primary authentication intentionally calls BeginAuthenticationOptionsAsync with user verification required while CompleteAuthenticationAsync receives isStepUp=false, so successful primary Passkey authentication does not mutate LastMfaDateTimeUtc.",
+    "Runtime execution evidence remains separate from this authored proof binding."
+  ],
+  "sourceReferences": [
+    { "sourceType": "test", "reference": "LagoVista/UserAdmin:tests/LagoVista.UserAdmin.Auth.Tests/AppUserPasskeyPrimaryIntegrationTests.cs", "note": "Real-manager primary Passkey proof source." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Services/EmailPasskeyAuthenticationService.cs", "note": "Resolves normalized email to the expected durable user and separates UV-required begin semantics from primary completion bookkeeping." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "Real challenge ownership, credential ownership, WebAuthn verification, signature-counter and MFA-freshness logic under proof." }
+  ]
+}
