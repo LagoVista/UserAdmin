@@ -1,0 +1,41 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.passkey.mfa-passkey-to-home",
+  "runtimeEntityId": "8C9E5D54B6A24FA98B7F2C1D3E4A5B6C",
+  "name": "Passkey MFA to Home",
+  "summary": "A password-proved user with a pending MFA challenge completes a valid user-verified Passkey assertion for the challenge-bound account, consumes the MFA challenge, and receives the authenticated application session.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "passkey-sign-in",
+  "startViewKey": "auth.continue.passkey",
+  "action": { "id": "use-passkey", "finder": "action:use-passkey" },
+  "preconditions": {
+    "expression": "session-capability == anonymous and a password-issued MFA challenge is active for an existing durable identity and provider passkey is included in the challenge's allowed providers"
+  },
+  "inputs": [],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Validate the password-issued MFA challenge for provider passkey, use its UserId to issue and validate a user-bound Passkey assertion requiring user verification, advance the signature counter, consume the MFA challenge only after successful Passkey proof, and establish the platform-appropriate application session.",
+    "transitionKeys": ["auth.transition.passkey.complete-mfa"]
+  },
+  "expectedViewKey": "app.home",
+  "postconditions": {
+    "expression": "credential-proof == passkey-proved, the password-issued MFA challenge is consumed, and session-capability in [authenticated-limited,authenticated-normal]"
+  },
+  "expectedAuthLogEvents": [
+    "PasskeyAuthenticationOptionsSent",
+    "PasskeyAuthenticationOptionsBeginSent",
+    "PasskeyCompleteAuthenticationStart",
+    "PasskeyCompleteAuthenticationSuccess"
+  ],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.continue.passkey", "note": "The same canonical Passkey continuation surface is reused for primary Passkey and password-bound Passkey MFA; the active MFA challenge determines which server orchestration is used." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs", "note": "The MFA begin/complete/token endpoints validate provider=passkey, derive UserId from the password-issued challenge, delegate cryptographic proof to the existing user-bound Passkey manager, and consume the MFA challenge only after successful proof." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/MfaChallengeFlowService.cs", "note": "Challenge validation enforces allowed-provider and durable-user binding; challenge consumption is single-use." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs", "note": "The existing user-bound Passkey primitive validates WebAuthn challenge ownership, credential ownership, user verification and signature counter advancement." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "When both TOTP and Passkey are enabled, either allowed provider may satisfy the same password-issued MFA challenge; devices unable to perform Passkey may complete with TOTP instead." }
+  ],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}
