@@ -18,24 +18,28 @@
   ],
   "platforms": {
     "web": {
-      "status": "planned",
+      "status": "implemented",
       "repository": "softwarelogistics/nuviot-ui-shared",
-      "implementation": "Recovery-code sign-in surface not yet implemented."
+      "path": "user/continue-recovery/continue-recovery.component.ts",
+      "component": "ContinueRecoveryComponent",
+      "implementation": "Uses generated AuthClient.createMfarecoveryLogin with the short-lived password-issued MFA challenge, exposes canonical recovery-code error state, remains on rejection, and clears challenge state after successful completion or restart."
     },
     "mobile": {
-      "status": "partial",
+      "status": "implemented",
       "repository": "nuviot/vtm-client",
       "path": "src/features/authentication/nuviot-account/screens/continue-recovery-screen.tsx",
       "component": "ContinueRecoveryScreen",
-      "implementation": "Presentation shell exists with the canonical recovery-code field and actions, but verification remains a pending placeholder and status:recovery-error is not yet exposed."
+      "implementation": "Uses AuthContext.signInWithRecoveryCodeAsync, which consumes generated AuthClient.createMfarecoveryToken with the in-memory password-issued MFA challenge and stores tokens only after accepted recovery proof. The canonical status:recovery-error state is exposed on rejection."
     }
   },
   "source": {
     "runtimeEntityId": "EP9CA37KMMY7LSJKTSNWEUE26RSP3H6J",
+    "webComponent": "ContinueRecoveryComponent",
     "mobileComponent": "ContinueRecoveryScreen"
   },
   "notes": [
-    "This surface is entered only after a primary credential has produced an outstanding MFA requirement.",
-    "A rejected recovery code remains on this view and must not disclose whether the code was invalid, already consumed, or otherwise unavailable."
+    "This surface is entered only after a primary password credential has produced a short-lived MFA challenge.",
+    "A rejected recovery code remains on this view and must not disclose whether the code was invalid, already consumed, or otherwise unavailable.",
+    "Both stable clients consume generated Auth contracts from nuviot/nuvos-app-contracts commit 56f0679a24579937052d7bafb362fa2ef703910a."
   ]
 }
