@@ -11,8 +11,8 @@
   ],
   "status": "active",
   "platforms": {
-    "web": { "status": "implemented", "implementation": "softwarelogistics/nuviot-ui-shared auth-routes.ts -> TotpAdminResetComponent" },
-    "mobile": { "status": "planned" }
+    "web": { "status": "implemented", "repository": "softwarelogistics/nuviot-ui-shared", "path": "auth-routes.ts", "route": "auth/mfa/totp/admin-reset/:targetUserId", "component": "TotpAdminResetComponent", "implementation": "Canonical administrative reset route is registered to TotpAdminResetComponent; the Angular parameter name projects target-user-id as targetUserId." },
+    "mobile": { "status": "not-applicable", "notes": "Administrative reset is not a declared mobile behavior surface for the current launch scope." }
   },
-  "source": { "webRoute": "auth/mfa/totp/admin-reset/:targetUserId" }
+  "source": { "angularComponent": "TotpAdminResetComponent" }
 }
