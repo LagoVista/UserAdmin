@@ -9,8 +9,11 @@
   "parameters": [],
   "status": "active",
   "platforms": {
-    "web": { "status": "planned" },
+    "web": { "status": "implemented", "implementation": "softwarelogistics/nuviot-ui-shared auth-routes.ts -> ContinueRecoveryComponent" },
     "mobile": { "status": "implemented", "implementation": "app/auth/continue/recovery.tsx -> ContinueRecoveryScreen" }
   },
-  "source": { "mobileRoute": "app/auth/continue/recovery.tsx" }
+  "source": {
+    "webRoute": "auth/continue/recovery",
+    "mobileRoute": "app/auth/continue/recovery.tsx"
+  }
 }
