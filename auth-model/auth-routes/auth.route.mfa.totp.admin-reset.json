@@ -11,8 +11,8 @@
   ],
   "status": "active",
   "platforms": {
-    "web": { "status": "planned" },
+    "web": { "status": "implemented", "implementation": "softwarelogistics/nuviot-ui-shared auth-routes.ts -> TotpAdminResetComponent" },
     "mobile": { "status": "planned" }
   },
-  "source": {}
+  "source": { "webRoute": "auth/mfa/totp/admin-reset/:targetUserId" }
 }
