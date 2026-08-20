@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schemas/auth-flow.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.flow.totp-recovery-sign-in",
+  "name": "TOTP Recovery Code Sign-In",
+  "summary": "Completes a password-issued TOTP MFA challenge with one recovery code, invalidates the lost authenticator enrollment, and adapts the accepted recovery proof to browser-session or mobile-token completion.",
+  "version": 1,
+  "maturity": "implemented",
+  "requestContract": "RecoveryCodeSignInRequest / RecoveryCodeTokenSignInRequest",
+  "resultContract": "AuthenticationResponse / AuthResponse",
+  "handlerKeys": ["auth.handler.totp-recovery-sign-in"],
+  "transitionKeys": [
+    "auth.transition.totp-recovery-sign-in.success",
+    "auth.transition.totp-recovery-sign-in.rejected"
+  ],
+  "entryActionKeys": ["auth.action.totp-recovery-sign-in.submit"],
+  "supportedAudiences": ["platform-user", "tenant-user", "customer-end-user"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/AuthenticationFlowService.cs", "note": "AuthenticateWithRecoveryCodeAsync and AuthenticateWithRecoveryCodeTokenAsync adapt accepted recovery proof to the shared proven-user browser or token session completion paths." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/RecoveryCodeAuthenticationFlowHandler.cs", "note": "Typed handler requires the password-issued MFA challenge, invokes the real recovery-code primitive as step-up, and consumes the challenge after accepted proof." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ConsumeRecoveryCodeAsync consumes one issued code, replaces the remaining-code secret, invalidates the current authenticator, and disables TOTP until re-enrollment." }
+  ]
+}
