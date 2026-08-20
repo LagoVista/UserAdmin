@@ -13,8 +13,11 @@
   "guards": [
     { "expression": "the submitted recovery code is not accepted for the identified durable identity", "failureCode": "totp-recovery-code-rejected" }
   ],
-  "destinationTransform": [],
-  "requiredEffects": ["reject-recovery-code-proof", "record-recovery-code-authentication-failure"],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.session-capability", "operation": "derive", "valueExpression": "anonymous" },
+    { "dimensionKey": "auth.dimension.credential-proof", "operation": "set", "valueExpression": "recovery-code-rejected" }
+  ],
+  "requiredEffects": ["reject-recovery-code-proof", "do-not-issue-authenticated-session", "record-recovery-code-authentication-failure"],
   "forbiddenEffects": ["issue-authenticated-session", "consume-unrelated-recovery-code", "create-durable-user", "disclose-account-existence"],
   "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
   "sourceReferences": [
