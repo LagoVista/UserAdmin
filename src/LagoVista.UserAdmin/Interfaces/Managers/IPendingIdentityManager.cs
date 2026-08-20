@@ -17,6 +17,8 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task UpdatePendingIdentity(PendingIdentity identity);
         Task AddRegistrationAsync(string pendingIdentityId, RegisterUser registration);
         Task AddNewOrgAsync(string pendingIdentityId, CreateOrganizationViewModel newOrg);
+        Task<InvokeResult<string>> SendEmailVerificationAsync(string pendingIdentityId);
+        Task<InvokeResult> VerifyEmailAsync(string pendingIdentityId, string code);
         Task DeletePendingIdentityAsync(string pendingIdentityId);
         Task<InvokeResult<AppUser>> TryCreateAppUserAsync(string pendingIdentityId);
     }

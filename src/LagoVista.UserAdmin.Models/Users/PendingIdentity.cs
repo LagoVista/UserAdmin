@@ -192,6 +192,12 @@ namespace Security.Models
         Resolved = 4,
         Expired = 5,
         Canceled = 6,
-        Failed = 7
+        Failed = 7,
+
+        /// <summary>
+        /// Email/profile proof is complete and the ceremony is ready to resolve to a durable identity.
+        /// Kept at a new numeric value so existing persisted enum values remain stable.
+        /// </summary>
+        ResolutionRequired = 8
     }
 }
