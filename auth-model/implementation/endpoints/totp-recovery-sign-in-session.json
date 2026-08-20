@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/auth-endpoint-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.endpoint.totp-recovery-sign-in.session",
+  "name": "TOTP Recovery Code Session Endpoint",
+  "summary": "Maps password-challenge-bound web recovery-code authentication to the normalized recovery flow and cookie/application-session completion path.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdminRest",
+  "projectPath": "src/LagoVista.UserAdmin.Rest",
+  "sourcePath": "src/LagoVista.UserAdmin.Rest/Rest/AuthenticationFlowController.cs",
+  "controllerType": "AuthenticationFlowController",
+  "methodName": "AuthenticateWithRecoveryCodeAsync",
+  "httpMethods": ["POST"],
+  "routeTemplates": ["/api/auth/mfarecovery/login"],
+  "requestContract": "RecoveryCodeSignInRequest",
+  "responseContract": "InvokeResult<AuthenticationResponse>",
+  "handlerKey": "auth.handler.totp-recovery-sign-in",
+  "transitionKeys": [
+    "auth.transition.totp-recovery-sign-in.success",
+    "auth.transition.totp-recovery-sign-in.rejected"
+  ],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/AuthenticationFlowController.cs", "note": "AllowAnonymous recovery-code endpoint delegates to IAuthenticationFlowService and requires RecoveryCodeSignInRequest.MfaChallengeId." }
+  ]
+}
