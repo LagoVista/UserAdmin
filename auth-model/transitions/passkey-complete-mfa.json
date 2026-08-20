@@ -9,7 +9,7 @@
   "categoryKey": "passkey-sign-in",
   "priority": 100,
   "sourceState": { "expression": "session-capability == anonymous and password-issued mfa-challenge == pending and provider passkey is allowed" },
-  "actionKey": "auth.action.passkey-sign-in.submit",
+  "actionKey": "auth.action.passkey.complete-authentication",
   "guards": [
     { "expression": "the MFA challenge is valid for provider passkey and the completed WebAuthn assertion proves a credential registered to the challenge-bound UserId", "failureCode": "passkey-mfa-not-successful" }
   ],
