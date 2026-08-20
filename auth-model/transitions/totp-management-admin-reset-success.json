@@ -1,0 +1,25 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.totp-management.admin-reset-success",
+  "name": "Administrative TOTP Reset Success",
+  "summary": "An authorized, recently step-up-authenticated operator invalidates the target user's TOTP enrollment and recovery-code material without authenticating the target user.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-management",
+  "priority": 100,
+  "sourceState": { "expression": "actor-session-capability in [authenticated-limited,authenticated-normal]" },
+  "actionKey": "auth.action.totp-management.admin-reset",
+  "guards": [
+    { "expression": "actor is authorized to reset target-user MFA and has fresh step-up proof", "failureCode": "totp-admin-reset-not-authorized" }
+  ],
+  "destinationTransform": [],
+  "requiredEffects": ["remove-target-authenticator-secret", "remove-target-recovery-code-secret", "clear-target-totp-state", "record-admin-reset-success-with-actor-and-target"],
+  "forbiddenEffects": ["authenticate-target-user", "issue-target-user-session", "change-target-password", "delete-target-user"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ResetMfaAsync currently supplies the target state-clearing primitive through the same secret-removal/state-cleanup implementation as DisableMfaAsync." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "The existing /api/auth/mfareset endpoint is confirmed-current-user only and therefore does not yet satisfy this privileged target-user transition." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Administrative reset only removes the unusable MFA enrollment. The target user must subsequently authenticate through a normal permitted sign-in path." }
+  ]
+}
