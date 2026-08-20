@@ -3,8 +3,8 @@
   "schemaVersion": "1.0",
   "key": "auth.endpoint.totp-sign-in.session",
   "name": "TOTP Sign-In Session Endpoint",
-  "summary": "Maps anonymous web TOTP authentication to the normalized authentication flow and cookie/application-session completion path.",
-  "version": 1,
+  "summary": "Maps password-challenge-bound web TOTP authentication to the normalized authentication flow and cookie/application-session completion path.",
+  "version": 2,
   "maturity": "implemented",
   "repository": "LagoVista/UserAdminRest",
   "projectPath": "src/LagoVista.UserAdmin.Rest",
@@ -24,7 +24,7 @@
     {
       "sourceType": "code",
       "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/AuthenticationFlowController.cs",
-      "note": "AllowAnonymous endpoint delegates directly to IAuthenticationFlowService.AuthenticateWithTotpAsync."
+      "note": "AllowAnonymous endpoint delegates to IAuthenticationFlowService.AuthenticateWithTotpAsync; TotpSignInRequest now carries the password-issued MfaChallengeId required by the server proof handler."
     }
   ]
 }
