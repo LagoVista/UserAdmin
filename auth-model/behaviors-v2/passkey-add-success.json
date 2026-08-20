@@ -23,7 +23,7 @@
   "progress": {
     "scenarios": "complete",
     "presentation": "complete",
-    "implementation": "in-progress",
-    "tests": "in-progress"
+    "implementation": "complete",
+    "tests": "complete"
   }
 }
