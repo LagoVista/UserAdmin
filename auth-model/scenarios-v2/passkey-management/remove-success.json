@@ -31,5 +31,5 @@
     { "sourceType": "transition", "reference": "auth.transition.passkey.remove-existing-user-credential" },
     { "sourceType": "auth-view", "reference": "auth.passkey.management" }
   ],
-  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+  "progress": { "presentation": "complete", "implementation": "complete", "tests": "complete" }
 }
