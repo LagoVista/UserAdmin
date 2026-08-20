@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.totp-sign-in.use-recovery-code",
+  "runtimeEntityId": "D79SEOC1O0Q2G0L9G1BUEH9OVGDRIS8J",
+  "name": "Use a Recovery Code",
+  "summary": "A user with an outstanding TOTP MFA requirement chooses recovery-code authentication and the client opens the recovery-code entry surface without changing authentication state.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-sign-in",
+  "startViewKey": "auth.continue.totp",
+  "action": { "id": "use-recovery-code", "finder": "action:use-recovery-code" },
+  "preconditions": {
+    "expression": "session-capability == anonymous and auth.continue.totp is visible for an already identified durable identity with an outstanding MFA requirement"
+  },
+  "inputs": [],
+  "serverInteraction": { "required": false },
+  "expectedViewKey": "auth.continue.recovery",
+  "expectedVisibleFinders": ["field:recovery-code", "action:verify-recovery-code", "action:back", "action:start-over"],
+  "postconditions": {
+    "expression": "session-capability remains anonymous and auth.continue.recovery is visible for the same identified durable identity"
+  },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.continue.totp" },
+    { "sourceType": "auth-view", "reference": "auth.continue.recovery" },
+    { "sourceType": "code", "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/continue-recovery-screen.tsx", "note": "React Native already contains the destination presentation shell, but the entry action from ContinueTotpScreen is not yet implemented." }
+  ],
+  "progress": { "presentation": "in-progress", "implementation": "in-progress", "tests": "not-started" }
+}
