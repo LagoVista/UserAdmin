@@ -1,0 +1,58 @@
+{
+  "$schema": "../../schemas/auth-test-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.test-binding.totp-sign-in.recovery-code",
+  "name": "TOTP Recovery Code Sign-In Integration Proof",
+  "summary": "Registers real-manager proof that recovery-code sign-in requires a password-issued MFA challenge, accepts one genuinely issued recovery code, invalidates the lost authenticator enrollment, and establishes a session only after successful recovery proof.",
+  "version": 1,
+  "maturity": "implemented",
+  "testLevel": "handler-integration",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "tests/LagoVista.UserAdmin.Auth.Tests",
+  "sourcePath": "tests/LagoVista.UserAdmin.Auth.Tests/RecoveryCodeAuthenticationFlowIntegrationTests.cs",
+  "framework": "NUnit",
+  "testTypeName": "RecoveryCodeAuthenticationFlowIntegrationTests",
+  "testMethodNames": [
+    "ValidRecoveryCode_WithPasswordIssuedChallenge_Should_InvalidateAuthenticator_AndEstablishSession",
+    "RecoveryCode_WithoutPasswordIssuedChallenge_Should_RejectBeforeSecretAccessOrSession",
+    "InvalidRecoveryCode_WithValidChallenge_Should_RejectWithoutConsumingChallengeOrSession"
+  ],
+  "scenarioKeys": [
+    "auth.scenario.totp-sign-in.recovery-code-success",
+    "auth.scenario.totp-sign-in.recovery-code-rejected"
+  ],
+  "handlerKeys": ["auth.handler.totp-recovery-sign-in"],
+  "endpointBindingKeys": [
+    "auth.endpoint.totp-recovery-sign-in.session",
+    "auth.endpoint.totp-recovery-sign-in.token"
+  ],
+  "transitionKeys": [
+    "auth.transition.totp-recovery-sign-in.success",
+    "auth.transition.totp-recovery-sign-in.rejected"
+  ],
+  "proofObligations": [
+    "password-issued-mfa-challenge-required-before-recovery-proof",
+    "mfa-challenge-bound-to-durable-user-and-totp-provider",
+    "real-app-user-mfa-manager",
+    "real-issued-recovery-code-material",
+    "one-recovery-code-consumed-on-success",
+    "lost-authenticator-secret-invalidated-on-success",
+    "totp-disabled-until-reenrollment-on-success",
+    "mfa-freshness-updated-on-recovery-step-up",
+    "mfa-challenge-consumed-only-after-successful-recovery-proof",
+    "session-completion-occurs-only-after-accepted-recovery-proof",
+    "no-secret-access-or-session-without-mfa-challenge",
+    "invalid-recovery-code-does-not-consume-mfa-challenge",
+    "non-enumerating-public-rejection"
+  ],
+  "notes": [
+    "The test setup uses the real AppUserMfaManager.RotateRecoveryCodesAsync operation to produce genuine hashed recovery-code material; no recovery blob is fabricated in the test.",
+    "AppUserMfaManager remains real for recovery-code consumption and authenticator invalidation. Secure storage and MFA challenge persistence are infrastructure seams.",
+    "Runtime execution evidence remains separate from this authored proof binding."
+  ],
+  "sourceReferences": [
+    { "sourceType": "test", "reference": "LagoVista/UserAdmin:tests/LagoVista.UserAdmin.Auth.Tests/RecoveryCodeAuthenticationFlowIntegrationTests.cs", "note": "Real issued-code success and challenge/rejection proof source." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "Real recovery-code hashing, consumption, secure-secret replacement and authenticator invalidation under proof." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/RecoveryCodeAuthenticationFlowHandler.cs", "note": "Challenge-bound recovery flow under proof." }
+  ]
+}
