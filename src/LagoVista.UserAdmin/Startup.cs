@@ -73,6 +73,7 @@ namespace LagoVista.UserAdmin
             services.AddScoped<ITotpTurnOffFlowHandler, TotpTurnOffFlowHandler>();
             services.AddScoped<ITotpRecoveryCodeRotationFlowHandler, TotpRecoveryCodeRotationFlowHandler>();
             services.AddScoped<IAuthenticationFlowService, AuthenticationFlowService>();
+            services.AddScoped<IMfaChallengeFlowService, MfaChallengeFlowService>();
 
             Services.Startup.ConfigureServices(services, configuration);
 
