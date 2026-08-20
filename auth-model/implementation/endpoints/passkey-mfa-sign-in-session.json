@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schemas/auth-endpoint-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.endpoint.passkey-mfa-sign-in.session",
+  "name": "Passkey MFA Session Endpoint",
+  "summary": "Maps password-challenge-bound Passkey MFA completion to the shared Passkey MFA proof service and establishes a browser application session only after the challenge-bound Passkey proof succeeds.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdminRest",
+  "projectPath": "src/LagoVista.UserAdmin.Rest",
+  "sourcePath": "src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs",
+  "controllerType": "PasskeyController",
+  "methodName": "CompleteMfaAuthenticationAsync",
+  "httpMethods": ["POST"],
+  "routeTemplates": ["/api/auth/passkey/mfa/authentication/complete"],
+  "requestContract": "PasskeyMfaAuthenticationCompleteRequest",
+  "responseContract": "InvokeResult<AuthenticationResponse>",
+  "handlerKey": "auth.handler.passkey-mfa-sign-in",
+  "transitionKeys": ["auth.transition.passkey.complete-mfa"],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/PasskeyController.cs",
+      "note": "The anonymous browser completion endpoint delegates challenge-bound proof to IPasskeyMfaAuthenticationService and establishes the application session only after a proven AppUser is returned."
+    }
+  ]
+}
