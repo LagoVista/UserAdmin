@@ -43,7 +43,7 @@ namespace LagoVista.UserAdmin
             services.AddScoped<IDistributionManager, DistributionManager>();
             services.AddScoped<ISingleUseTokenManager, SingleUseTokenManager>();
             services.AddScoped<ICalendarManager, CalendarManager>();
-            services.AddScoped<IMostRecentlyUsedManager, MostRecentlyUsedManager>();
+            services.AddScoped<IMostRecentlyUsedManager, MostRecentUsedManager>();
             services.AddScoped<IUserFavoritesManager, UserFavoritesManager>();            
             services.AddScoped<ISystemNotificationManager, SystemNotificationManager>();
             services.AddScoped<IAppUserInboxManager, AppUserInboxManager>();
@@ -58,6 +58,7 @@ namespace LagoVista.UserAdmin
             services.AddScoped<IPasswordLoginFlowHandler, PasswordLoginFlowHandler>();
             services.AddScoped<ITotpAuthenticationFlowHandler, TotpAuthenticationFlowHandler>();
             services.AddScoped<IRecoveryCodeAuthenticationFlowHandler, RecoveryCodeAuthenticationFlowHandler>();
+            services.AddScoped<ITotpAdministrativeResetService, TotpAdministrativeResetService>();
             services.AddScoped<ISignOutFlowHandler, SignOutFlowHandler>();
             services.AddScoped<IAuthenticationFlowHandler<PasswordChangeFlowRequest>, PasswordChangeFlowHandler>();
             services.AddScoped<IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest>, PasswordRecoveryRequestFlowHandler>();
