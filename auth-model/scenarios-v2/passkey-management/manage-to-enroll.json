@@ -1,0 +1,34 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.passkey-management.manage-to-enroll",
+  "runtimeEntityId": "88C12A813B06466BA022BFCF1BF6F20C",
+  "name": "Choose Add Passkey",
+  "summary": "An authenticated user opens the dedicated Add Passkey surface from Passkey Management without changing credential or session state.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "passkey-management",
+  "startViewKey": "auth.passkey.management",
+  "action": { "id": "add-passkey", "finder": "action:add-passkey" },
+  "preconditions": {
+    "expression": "user is authenticated as a resolved durable identity",
+    "state": { "isUserLoggedIn": "set" }
+  },
+  "inputs": [],
+  "serverInteraction": {
+    "required": false,
+    "intent": "Navigate to authenticated existing-user passkey enrollment without mutating passkey or session state."
+  },
+  "expectedViewKey": "auth.passkey.management.enroll",
+  "expectedVisibleFinders": ["status:enrollment-status", "action:create-passkey", "action:cancel"],
+  "postconditions": {
+    "expression": "durable identity and registered passkeys are unchanged"
+  },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "auth-view", "reference": "auth.passkey.management" },
+    { "sourceType": "auth-view", "reference": "auth.passkey.management.enroll" }
+  ],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}
