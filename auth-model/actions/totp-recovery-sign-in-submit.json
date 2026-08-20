@@ -1,0 +1,24 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.totp-recovery-sign-in.submit",
+  "name": "Submit TOTP Recovery Code",
+  "summary": "Attempts to satisfy an outstanding TOTP MFA requirement for an already identified durable account by consuming one valid recovery code and establishes an authenticated session only when the code is accepted.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "email", "valueType": "string", "required": true, "description": "Previously identified account email used to resolve the durable identity." },
+    { "key": "recovery-code", "valueType": "secret-reference", "required": true, "description": "One unused recovery code issued for the enrolled TOTP factor." }
+  ],
+  "guards": [
+    { "expression": "session-capability == anonymous and an outstanding MFA challenge exists for the identified durable identity", "failureCode": "totp-recovery-sign-in-requires-mfa-challenge" }
+  ],
+  "permittedMutations": ["auth.dimension.credential-proof", "auth.dimension.session-capability"],
+  "requiredEffects": ["resolve-existing-identity", "consume-one-recovery-code", "record-recovery-code-authentication-attempt"],
+  "forbiddenEffects": ["create-durable-user", "disable-totp", "rotate-recovery-codes", "disclose-account-existence"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ConsumeRecoveryCodeAsync provides the one-time recovery-code validation and consumption primitive." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "The current /api/auth/mfarecovery/consume endpoint requires a confirmed current user and therefore does not yet implement anonymous post-password MFA completion." }
+  ]
+}
