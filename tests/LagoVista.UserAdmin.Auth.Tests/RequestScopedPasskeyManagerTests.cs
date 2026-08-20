@@ -85,7 +85,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(capturedPacket, Is.Not.Null);
             Assert.That(capturedPacket.Challenge.RpId, Is.EqualTo(RpId));
             Assert.That(capturedPacket.Challenge.Origin, Is.EqualTo(Origin));
-            Assert.That(result.Result.Options["rp"]?["id"]?.Value<string>(), Is.EqualTo(RpId));
+            Assert.That(result.Result.Options["rp"]?["id"]?.ToString(), Is.EqualTo(RpId));
             credentialRepo.Verify(repo => repo.GetByUserAsync(UserId, RpId), Times.Once);
         }
     }
