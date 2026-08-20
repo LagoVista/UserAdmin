@@ -3,6 +3,8 @@ using LagoVista.Core.Attributes;
 using LagoVista.UserAdmin.Models.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Linq;
 
 namespace LagoVista.UserAdmin.Models.Auth.Passkeys
 {
@@ -51,7 +53,7 @@ namespace LagoVista.UserAdmin.Models.Auth.Passkeys
         public string Id { get; set; }                 // base64url string from browser
 
         [JsonProperty("rawId", Required = Required.Always)]
-        public string RawId { get; set; }              // base64url string
+        public string RawId { get; set; }              // base64url string from browser
 
         [JsonProperty("type", Required = Required.Always)]
         public string Type { get; set; }               // "public-key"
@@ -140,9 +142,10 @@ namespace LagoVista.UserAdmin.Models.Auth.Passkeys
         [JsonProperty("challengeId", Required = Required.Always)]
         public string ChallengeId { get; set; }
 
-        // Keep the public contract as JToken because registration and assertion options differ,
-        // but normalize CLR-shaped Newtonsoft projections through Fido2NetLib's own WebAuthn
-        // serializer before they leave the server.
+        // Keep the public contract as JToken because registration and assertion options differ.
+        // Fido2NetLib 4.x option CLR types are projected through Newtonsoft by the manager, so
+        // normalize that tree to the browser/WebAuthn camel-case shape without rehydrating Fido2
+        // objects (several descriptor types intentionally have no Newtonsoft-compatible constructor).
         [JsonProperty("options", Required = Required.Always)]
         public JToken Options
         {
@@ -161,20 +164,36 @@ namespace LagoVista.UserAdmin.Models.Auth.Passkeys
         {
             if (options == null) return null;
 
-            // Already in browser/WebAuthn wire shape.
-            if (options["rp"] != null || options["rpId"] != null)
-                return options;
+            var clone = options.DeepClone();
+            NormalizePropertyNames(clone);
+            return clone;
+        }
 
-            // AppUserPasskeyManager currently creates this JToken with Newtonsoft. Rehydrate the
-            // Fido2 option type, then let Fido2NetLib emit its canonical camel-cased/base64url wire JSON.
-            if (options["User"] != null)
+        private static void NormalizePropertyNames(JToken token)
+        {
+            if (token is JObject obj)
             {
-                var registrationOptions = options.ToObject<CredentialCreateOptions>();
-                return JToken.Parse(registrationOptions.ToJson());
-            }
+                foreach (var property in obj.Properties().ToArray())
+                {
+                    NormalizePropertyNames(property.Value);
 
-            var assertionOptions = options.ToObject<AssertionOptions>();
-            return JToken.Parse(assertionOptions.ToJson());
+                    var normalizedName = ToCamelCase(property.Name);
+                    if (!String.Equals(property.Name, normalizedName, StringComparison.Ordinal))
+                        property.Replace(new JProperty(normalizedName, property.Value));
+                }
+            }
+            else if (token is JArray array)
+            {
+                foreach (var item in array)
+                    NormalizePropertyNames(item);
+            }
+        }
+
+        private static string ToCamelCase(string name)
+        {
+            if (String.IsNullOrEmpty(name) || Char.IsLower(name[0])) return name;
+            if (name.Length == 1) return name.ToLowerInvariant();
+            return Char.ToLowerInvariant(name[0]) + name.Substring(1);
         }
     }
 
