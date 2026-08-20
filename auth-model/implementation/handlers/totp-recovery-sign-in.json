@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schemas/auth-flow-handler.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.handler.totp-recovery-sign-in",
+  "name": "TOTP Recovery Code Sign-In Handler",
+  "summary": "Resolves the durable identity from a password-issued MFA challenge, validates one recovery code through the real MFA manager, and consumes the challenge only after the recovery proof succeeds.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "src/LagoVista.UserAdmin",
+  "sourcePath": "src/LagoVista.UserAdmin/Authentication/Flows/RecoveryCodeAuthenticationFlowHandler.cs",
+  "interfaceName": "IRecoveryCodeAuthenticationFlowHandler",
+  "typeName": "RecoveryCodeAuthenticationFlowHandler",
+  "methodName": "HandleAsync",
+  "requestContract": "RecoveryCodeSignInRequest",
+  "resultContract": "AuthenticationFlowResult<AppUser>",
+  "transitionKeys": [
+    "auth.transition.totp-recovery-sign-in.success",
+    "auth.transition.totp-recovery-sign-in.rejected"
+  ],
+  "dependencies": ["IAppUserRepo", "IAppUserMfaManager", "IMfaChallengeStore", "IAppConfig"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/RecoveryCodeAuthenticationFlowHandler.cs", "note": "Rejects missing, mismatched, expired or TOTP-ineligible MFA challenges before recovery-code evaluation; accepted proof invokes AppUserMfaManager as step-up and then consumes the MFA challenge." }
+  ]
+}
