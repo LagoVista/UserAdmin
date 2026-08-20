@@ -1,0 +1,28 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.passkey.management.enroll",
+  "name": "Add Passkey",
+  "description": "Allows an authenticated existing user to create and attach a new passkey to the current durable identity.",
+  "category": "passkey",
+  "routeId": "auth.route.passkey.management.enroll",
+  "status": "active",
+  "controls": [
+    { "id": "enrollment-status", "name": "Enrollment Status", "controlType": "status", "finder": "status:enrollment-status" }
+  ],
+  "actions": [
+    { "id": "create-passkey", "name": "Create Passkey", "actionType": "native-capability", "finder": "action:create-passkey" },
+    { "id": "cancel", "name": "Cancel", "actionType": "button", "finder": "action:cancel" }
+  ],
+  "platforms": {
+    "web": { "status": "planned" },
+    "mobile": { "status": "planned" }
+  },
+  "source": {
+    "runtimeEntityId": "C36A031A3C774C298FAE6889D3F53D6E"
+  },
+  "notes": [
+    "This authenticated management surface is intentionally distinct from anonymous Passkey Registration enrollment.",
+    "Successful creation returns directly to auth.passkey.management; the refreshed credential list is the completion confirmation."
+  ]
+}
