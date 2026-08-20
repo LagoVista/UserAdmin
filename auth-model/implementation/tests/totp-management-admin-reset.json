@@ -1,0 +1,48 @@
+{
+  "$schema": "../../schemas/auth-test-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.test-binding.totp-management.admin-reset",
+  "name": "TOTP Administrative Reset Integration Proof",
+  "summary": "Registers real-manager proof that only an authorized operator with fresh MFA can reset TOTP for a target user in the active organization, with secure factor cleanup and actor/target audit evidence.",
+  "version": 1,
+  "maturity": "implemented",
+  "testLevel": "handler-integration",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "tests/LagoVista.UserAdmin.Auth.Tests",
+  "sourcePath": "tests/LagoVista.UserAdmin.Auth.Tests/TotpAdministrativeResetIntegrationTests.cs",
+  "framework": "NUnit",
+  "testTypeName": "TotpAdministrativeResetIntegrationTests",
+  "testMethodNames": [
+    "OrgAdmin_WithFreshMfa_Should_ResetTargetTotp_AndRecordActorTargetAudit",
+    "OrgAdmin_WithoutFreshMfa_Should_RejectBeforeTargetMutation",
+    "NonAdmin_Should_RejectBeforeTargetMutation"
+  ],
+  "scenarioKeys": ["auth.scenario.totp-management.admin-reset-success"],
+  "handlerKeys": ["auth.handler.totp-management.admin-reset"],
+  "endpointBindingKeys": ["auth.endpoint.totp-management.admin-reset"],
+  "transitionKeys": ["auth.transition.totp-management.admin-reset-success"],
+  "proofObligations": [
+    "authenticated-actor-required",
+    "system-admin-or-active-org-admin-authority",
+    "fresh-mfa-required-for-actor",
+    "target-must-belong-to-active-organization",
+    "real-app-user-mfa-manager-reset",
+    "authenticator-secret-removed",
+    "recovery-code-secret-removed",
+    "target-totp-state-cleared",
+    "target-user-not-authenticated-by-reset",
+    "actor-target-audit-context-recorded",
+    "no-target-mutation-when-step-up-is-stale",
+    "no-target-mutation-when-actor-is-unauthorized"
+  ],
+  "notes": [
+    "The real AppUserMfaManager ResetMfaAsync/DisableMfaAsync path performs secure factor cleanup; secure storage is the infrastructure seam.",
+    "The current implementation uses a 15-minute LastMfaDateTimeUtc freshness window isolated in TotpAdministrativeResetService; policy/configuration of that interval can be normalized independently.",
+    "Runtime execution evidence remains separate from this authored proof binding."
+  ],
+  "sourceReferences": [
+    { "sourceType": "test", "reference": "LagoVista/UserAdmin:tests/LagoVista.UserAdmin.Auth.Tests/TotpAdministrativeResetIntegrationTests.cs", "note": "Authorized success, stale-MFA rejection and unauthorized-actor proof source." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/TotpAdministrativeResetService.cs", "note": "Privileged actor/target policy under proof." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "Real target MFA cleanup primitive under proof." }
+  ]
+}
