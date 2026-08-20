@@ -250,14 +250,11 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 Challenge = Base64UrlEncode(options.Challenge),
                 CreatedUtc = DateTime.UtcNow.ToJSONString(),
                 ExpiresUtc = DateTime.UtcNow.AddMinutes(ChallengeTtlMinutes).ToJSONString(),
-
-                // NEW: persist primitives we need later
                 AllowCredentialIds = allowIds,
                 UserVerification = (int)uv,
                 TimeoutMs = (int)options.Timeout,
             };
 
-            // Optional: keep OptionsJson for debug/client replay only (do NOT deserialize it into AssertionOptions)
             var optionsWireJson = JsonConvert.SerializeObject(JToken.FromObject(options));
 
             var storeResult = await _challengeStore.CreateAsync(new PasskeyChallengePacket() { Challenge = challenge, OptionsJson = optionsWireJson });
@@ -274,7 +271,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             return InvokeResult<PasskeyBeginOptionsResponse>.Create(payload);
         }
-
 
         public async Task<InvokeResult> CompleteAuthenticationAsync(string userId, PasskeyAuthenticationCompleteRequest payload, bool isStepUp, EntityHeader org, EntityHeader user)
         {
@@ -311,7 +307,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 return InvokeResult.FromError("challenge_user_mismatch");
             }
 
-            // DO NOT deserialize AssertionOptions from JSON (Fido2 types are not JSON round-trippable)
             var ch = challengeResult.Result.Challenge;
             var uv = ch.UserVerification.HasValue ? (UserVerificationRequirement)ch.UserVerification.Value : (isStepUp ? UserVerificationRequirement.Required : UserVerificationRequirement.Preferred);
             var timeout = (uint)(ch.TimeoutMs ?? 60000);
@@ -384,7 +379,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return InvokeResult.SuccessRedirect(NormalizePasskeyUrl(challengeResult.Result.Challenge.PasskeyUrl));
         }
 
-
         /* Passwordless (discoverable/resident) flows */
 
         public async Task<InvokeResult<PasskeyBeginOptionsResponse>> BeginPasswordlessRegistrationOptionsAsync(string passkeyUrl, EntityHeader org, EntityHeader user)
@@ -393,7 +387,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             var (rpId, origin) = GetRpIdAndOrigin();
             var safeUrl = NormalizePasskeyUrl(passkeyUrl);
-
 
             var provisionalGuid = Guid.NewGuid();
             var provisionalUserId = provisionalGuid.ToId();
@@ -441,7 +434,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             return InvokeResult<PasskeyBeginOptionsResponse>.Create(payload);
         }
-
 
         public async Task<InvokeResult<PasskeySignInResult>> CompletePasswordlessRegistrationAsync(PasskeyRegistrationCompleteRequest payload, EntityHeader org, EntityHeader user)
         {
@@ -492,7 +484,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
            
             var registration = new RegisterUser()
             {
-                AppId = "1844A92CDDDF4B59A3BB294A1524D93A", // The one, the only app id for NuvIoT.
+                AppId = "1844A92CDDDF4B59A3BB294A1524D93A",
                 ClientType = "WEBAPP",
                 DeviceId = "BROWSER",
                 Source = UserCreationSource.Passkey,
@@ -520,8 +512,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 LastUsedUtc = null,
                 Name = null,
             };
-
-            // creatweUserResponse.Result.AppUser
 
             var addResult = await _credentialRepo.AddAsync(cred);
             if (!addResult.Successful)
@@ -578,7 +568,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
             var payload = new PasskeyBeginOptionsResponse() { ChallengeId = storeResult.Result.Challenge.Id, Options = JToken.FromObject(options) };
 
-            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyBeginPasswordlessAuthenticationSuccess, provisionUser, org, challengeId: payload.ChallengeId);
+            await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.PasskeyBeginPasswordlessAuthenticationSuccess, user, org, challengeId: payload.ChallengeId);
 
             return InvokeResult<PasskeyBeginOptionsResponse>.Create(payload);
         }
@@ -677,7 +667,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 RedirectUrl = redirect,
             });
         }
-
 
         public async Task<InvokeResult<PasskeyCredentialSummary[]>> ListPasskeysAsync(string userId, EntityHeader org, EntityHeader user)
         {
