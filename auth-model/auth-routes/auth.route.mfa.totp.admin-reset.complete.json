@@ -9,8 +9,8 @@
   "parameters": [],
   "status": "active",
   "platforms": {
-    "web": { "status": "implemented", "implementation": "softwarelogistics/nuviot-ui-shared auth-routes.ts -> TotpAdminResetCompleteComponent" },
-    "mobile": { "status": "planned" }
+    "web": { "status": "implemented", "repository": "softwarelogistics/nuviot-ui-shared", "path": "auth-routes.ts", "route": "auth/mfa/totp/admin-reset/complete", "component": "TotpAdminResetCompleteComponent", "implementation": "Canonical completion route is registered to TotpAdminResetCompleteComponent." },
+    "mobile": { "status": "not-applicable", "notes": "Administrative reset is not a declared mobile behavior surface for the current launch scope." }
   },
-  "source": { "webRoute": "auth/mfa/totp/admin-reset/complete" }
+  "source": { "angularComponent": "TotpAdminResetCompleteComponent" }
 }
