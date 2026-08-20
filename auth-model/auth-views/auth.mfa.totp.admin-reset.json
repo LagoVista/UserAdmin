@@ -1,0 +1,29 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.mfa.totp.admin-reset",
+  "name": "Reset User TOTP",
+  "description": "Presents a privileged confirmation surface for an authorized operator to reset another user's TOTP enrollment and recovery codes.",
+  "category": "totp",
+  "routeId": "auth.route.mfa.totp.admin-reset",
+  "status": "active",
+  "controls": [
+    { "id": "target-user", "name": "Target User", "controlType": "status", "finder": "status:target-user", "sensitivity": "personal" },
+    { "id": "reset-warning", "name": "Reset Warning", "controlType": "status", "finder": "status:reset-warning", "sensitivity": "public" }
+  ],
+  "actions": [
+    { "id": "reset-totp", "name": "Reset TOTP", "actionType": "button", "finder": "action:reset-totp" },
+    { "id": "cancel", "name": "Cancel", "actionType": "button", "finder": "action:cancel" }
+  ],
+  "platforms": {
+    "web": { "status": "planned", "repository": "softwarelogistics/nuviot-ui-shared" },
+    "mobile": { "status": "planned", "repository": "nuviot/vtm-client" }
+  },
+  "source": {
+    "runtimeEntityId": "EVS9R449MMBYTK8M8LMZ2NJTYQ338Q0V"
+  },
+  "notes": [
+    "The operator must already be authorized to manage the target identity and must have fresh step-up authentication before reset is accepted.",
+    "Resetting TOTP does not authenticate the target user or issue a session for the target user."
+  ]
+}
