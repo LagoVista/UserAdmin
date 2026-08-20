@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schemas/auth-endpoint-binding.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.endpoint.totp-management.admin-reset",
+  "name": "TOTP Administrative Reset Endpoint",
+  "summary": "Maps an authenticated operator's target-user TOTP reset request to the privileged administrative reset service while preserving actor and active-organization context.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdminRest",
+  "projectPath": "src/LagoVista.UserAdmin.Rest",
+  "sourcePath": "src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs",
+  "controllerType": "MfaController",
+  "methodName": "AdministrativelyResetTotpAsync",
+  "httpMethods": ["POST"],
+  "routeTemplates": ["/api/auth/mfa/totp/admin-reset/{targetUserId}"],
+  "requestContract": "targetUserId route parameter + confirmed actor/org context",
+  "responseContract": "InvokeResult",
+  "handlerKey": "auth.handler.totp-management.admin-reset",
+  "transitionKeys": ["auth.transition.totp-management.admin-reset-success"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "ConfirmedUser-protected endpoint delegates targetUserId together with OrgEntityHeader and UserEntityHeader to ITotpAdministrativeResetService." }
+  ]
+}
