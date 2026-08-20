@@ -168,6 +168,29 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return InvokeResult<AuthenticationResponse>.Create(response);
         }
 
+        public async Task<InvokeResult<AppUser>> VerifyPasswordForMfaAsync(AuthLoginRequest loginRequest)
+        {
+            if (loginRequest == null) throw new ArgumentNullException(nameof(loginRequest));
+
+            var email = loginRequest.Email?.Trim();
+            var userName = String.IsNullOrEmpty(loginRequest.EndUserAppOrgId) ? email : $"{email}@{loginRequest.EndUserAppOrgId}";
+            if (String.IsNullOrWhiteSpace(email) || String.IsNullOrWhiteSpace(loginRequest.Password))
+                return InvokeResult<AppUser>.FromErrors(UserAdminErrorCodes.AuthInvalidCredentials.ToErrorMessage());
+
+            var appUser = await _userManager.FindByNameAsync(userName);
+            if (appUser == null)
+                return InvokeResult<AppUser>.FromErrors(UserAdminErrorCodes.AuthInvalidCredentials.ToErrorMessage());
+
+            var signInResult = await _signinManager.CheckPasswordSignInAsync(appUser, loginRequest.Password, loginRequest.LockoutOnFailure);
+            if (signInResult.Succeeded || signInResult.RequiresTwoFactor)
+                return InvokeResult<AppUser>.Create(appUser);
+
+            if (signInResult.IsLockedOut)
+                return InvokeResult<AppUser>.FromErrors(UserAdminErrorCodes.AuthUserLockedOut.ToErrorMessage());
+
+            return InvokeResult<AppUser>.FromErrors(UserAdminErrorCodes.AuthInvalidCredentials.ToErrorMessage());
+        }
+
         public async Task<InvokeResult<AuthenticationResponse>> PasswordSignInAsync(AuthLoginRequest loginRequest)
         {
             if (loginRequest == null) throw new ArgumentNullException(nameof(loginRequest));
