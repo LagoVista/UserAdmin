@@ -17,15 +17,35 @@
     { "id": "done", "name": "Done", "actionType": "button", "finder": "action:done" }
   ],
   "platforms": {
-    "web": { "status": "planned" },
-    "mobile": { "status": "planned" }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "user/passkey-manage/passkey-manage.component.ts",
+      "component": "PasskeyManageComponent",
+      "conformance": {
+        "status": "verified",
+        "checkedUtc": "2026-08-20T18:45:00Z",
+        "checkedAgainst": ["view-identity", "controls", "actions", "finders", "navigation", "generated-client-operations"]
+      }
+    },
+    "mobile": {
+      "status": "implemented",
+      "repository": "nuviot/vtm-client",
+      "path": "src/features/authentication/nuviot-account/screens/passkey-manage-screen.tsx",
+      "component": "PasskeyManageScreen",
+      "conformance": {
+        "status": "verified",
+        "checkedUtc": "2026-08-20T18:45:00Z",
+        "checkedAgainst": ["view-identity", "controls", "actions", "finders", "navigation", "generated-client-operations"]
+      }
+    }
   },
   "source": {
     "runtimeEntityId": "A9D88EEAAFC04BA499C3FC06A4A0FA32",
     "runtimeSha256Hex": "b356adc78c6718229e889814975b62db465fd08e87e3b4170aaae9ecc06bdd27"
   },
   "notes": [
-    "Existing client implementations are treated as reference material for this reconciliation pass; implementation status will be re-earned against the current canonical contract.",
+    "Web and mobile implementation conformance was re-earned against the 2026-08-20 canonical Add/Remove management contract; no runtime UI execution is implied.",
     "Rename is supported by the server but is intentionally outside the V1 Passkey Management presentation contract."
   ]
 }
