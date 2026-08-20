@@ -16,14 +16,22 @@
     { "id": "cancel", "name": "Cancel", "actionType": "button", "finder": "action:cancel" }
   ],
   "platforms": {
-    "web": { "status": "planned", "repository": "softwarelogistics/nuviot-ui-shared" },
-    "mobile": { "status": "planned", "repository": "nuviot/vtm-client" }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "user/totp-admin-reset/totp-admin-reset.component.ts",
+      "component": "TotpAdminResetComponent",
+      "implementation": "Reads the route-selected target user, presents the canonical warning and explicit confirmation action, and calls generated AuthClient.createMfaTotpAdminResetByTargetUserId."
+    },
+    "mobile": { "status": "planned", "repository": "nuviot/vtm-client", "implementation": "Administrative reset is not a declared mobile behavior surface for the current launch scope." }
   },
   "source": {
-    "runtimeEntityId": "EVS9R449MMBYTK8M8LMZ2NJTYQ338Q0V"
+    "runtimeEntityId": "EVS9R449MMBYTK8M8LMZ2NJTYQ338Q0V",
+    "webComponent": "TotpAdminResetComponent"
   },
   "notes": [
     "The operator must already be authorized to manage the target identity and must have fresh step-up authentication before reset is accepted.",
-    "Resetting TOTP does not authenticate the target user or issue a session for the target user."
+    "Resetting TOTP does not authenticate the target user or issue a session for the target user.",
+    "The web implementation consumes generated Auth contracts from nuviot/nuvos-app-contracts commit 56f0679a24579937052d7bafb362fa2ef703910a."
   ]
 }
