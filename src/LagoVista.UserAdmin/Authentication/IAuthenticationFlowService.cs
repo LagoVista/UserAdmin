@@ -12,10 +12,11 @@ namespace LagoVista.UserAdmin.Authentication
     public interface IAuthenticationFlowService
     {
         Task<InvokeResult<AuthenticationResponse>> LoginWithPasswordAsync(AuthLoginRequest request);
+        Task<InvokeResult<AuthenticationResponse>> CreatePasswordMfaChallengeAsync(AuthLoginRequest request);
         Task<InvokeResult<AuthenticationResponse>> AuthenticateWithTotpAsync(TotpSignInRequest request);
-        Task<InvokeResult<AuthResponse>> AuthenticateWithTotpTokenAsync(AuthRequest request);
+        Task<InvokeResult<AuthResponse>> AuthenticateWithTotpTokenAsync(TotpTokenSignInRequest request);
         Task<InvokeResult<AuthenticationResponse>> AuthenticateWithRecoveryCodeAsync(RecoveryCodeSignInRequest request);
-        Task<InvokeResult<AuthResponse>> AuthenticateWithRecoveryCodeTokenAsync(AuthRequest request);
+        Task<InvokeResult<AuthResponse>> AuthenticateWithRecoveryCodeTokenAsync(RecoveryCodeTokenSignInRequest request);
         Task<InvokeResult<AuthenticationResponse>> CompleteProvenUserSessionAsync(AppUser appUser, bool rememberMe = true);
         Task<InvokeResult<AuthResponse>> CompleteProvenUserTokenAsync(AuthRequest request, AppUser appUser);
         Task<InvokeResult> SignOutAsync(SignOutRequest request, EntityHeader organization, EntityHeader user);
