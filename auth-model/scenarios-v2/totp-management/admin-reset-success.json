@@ -1,0 +1,42 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.totp-management.admin-reset-success",
+  "runtimeEntityId": "VLQWPAQWLNXDWNTY2Y5V4O0QPZQDMWIZ",
+  "name": "Administratively Reset TOTP",
+  "summary": "An authorized operator with fresh step-up proof confirms reset for a target user; the server removes the target user's authenticator and recovery-code material, clears TOTP state, and leaves the target user unauthenticated.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-management",
+  "startViewKey": "auth.mfa.totp.admin-reset",
+  "action": { "id": "reset-totp", "finder": "action:reset-totp" },
+  "preconditions": {
+    "expression": "the actor is authenticated, authorized to manage the target identity, has fresh step-up proof, and the target user currently has TOTP enrollment state",
+    "state": {
+      "isUserLoggedIn": "set"
+    }
+  },
+  "inputs": [
+    { "finder": "status:target-user", "name": "Target User", "valueType": "string", "required": true, "value": "target.user.id", "description": "The durable target identity selected by the authorized operator before confirmation." }
+  ],
+  "serverInteraction": {
+    "required": true,
+    "intent": "Authorize the actor, verify fresh step-up proof, reset the target user's TOTP and recovery-code material exactly once, preserve the target account and password, and record actor/target audit evidence.",
+    "transitionKeys": ["auth.transition.totp-management.admin-reset-success"]
+  },
+  "expectedViewKey": "auth.mfa.totp.admin-reset.complete",
+  "expectedVisibleFinders": ["status:totp-reset-complete", "action:done"],
+  "postconditions": {
+    "expression": "the target user's TOTP enrollment and recovery codes are removed, the target user is not authenticated by the operation, and the actor remains authenticated"
+  },
+  "expectedAuthLogEvents": ["TotpAdministrativeResetStart", "TotpAdministrativeResetSuccess"],
+  "evidenceRequirements": ["server", "web"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ResetMfaAsync currently supplies the state-clearing primitive through the same secret-removal and state-cleanup path as DisableMfaAsync." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "The existing /api/auth/mfareset endpoint only resets the confirmed current user; a privileged target-user endpoint and actor/target audit semantics are required for this scenario." },
+    { "sourceType": "auth-view", "reference": "auth.mfa.totp.admin-reset" },
+    { "sourceType": "auth-view", "reference": "auth.mfa.totp.admin-reset.complete" },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Administrative reset must not authenticate the target user. The target subsequently signs in using another permitted primary method and may re-enroll TOTP." }
+  ],
+  "progress": { "presentation": "not-started", "implementation": "not-started", "tests": "not-started" }
+}
