@@ -36,11 +36,13 @@ namespace LagoVista.UserAdmin.Authentication.Flows
         private readonly IAppUserPasskeyCredentialRepo _passkeyCredentialRepo;
         private readonly IMfaChallengeStore _mfaChallengeStore;
         private readonly IAppConfig _appConfig;
+        private readonly bool _transitionOnlyCompatibilityMode;
 
-        // Kept for focused unit tests and compatibility with callers that only exercise transition mapping.
+        // Focused transition-mapping tests intentionally do not compose the runtime MFA challenge dependencies.
         public PasswordLoginFlowHandler(ISignInManager signInManager)
         {
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+            _transitionOnlyCompatibilityMode = true;
         }
 
         public PasswordLoginFlowHandler(
@@ -64,6 +66,9 @@ namespace LagoVista.UserAdmin.Authentication.Flows
             var result = await _signInManager.PasswordSignInAsync(request);
             if (result.Successful && result.Result?.AuthenticationState == AuthenticationResponseState.MfaRequired)
             {
+                if (_transitionOnlyCompatibilityMode)
+                    return new AuthenticationFlowResult<AuthenticationResponse>(MfaRequiredTransitionKey, result);
+
                 var challengeResult = await AttachMfaChallengeAsync(request, result.Result);
                 if (!challengeResult.Successful)
                     return new AuthenticationFlowResult<AuthenticationResponse>(RejectedTransitionKey, InvokeResult<AuthenticationResponse>.FromInvokeResult(challengeResult.ToInvokeResult()));
