@@ -39,17 +39,18 @@ namespace LagoVista.UserAdmin.Auth.Tests
         private const string RejectedEvidence = "auth|auth.test-binding.totp-sign-in|auth.flow.totp-sign-in|auth.transition.totp-sign-in.rejected";
         private const string UserId = "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC";
         private const string OrgId = "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD";
+        private const string ChallengeId = "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE";
         private const string Secret = "JBSWY3DPEHPK3PXP";
 
         [Test]
         [Property("AptixEvidence", SuccessEvidence)]
         [Property("AptixAuthEvents", "TotpVerifyStart|TotpVerifySuccess|PasswordAuthenticationSucceeded")]
-        public async Task ValidTotp_Should_RunRealMfaAndSignInManagers_AndEstablishSession()
+        public async Task ValidTotp_WithPasswordIssuedChallenge_Should_EstablishSession_AndConsumeChallenge()
         {
             var harness = CreateHarness();
             var code = new Totp(Base32Encoding.ToBytes(Secret), step: 30, totpSize: 6).ComputeTotp();
 
-            harness.AppUserRepo.Setup(repo => repo.TryAcceptTotpTimeStepAsync(UserId, It.IsAny<long>(), false, null))
+            harness.AppUserRepo.Setup(repo => repo.TryAcceptTotpTimeStepAsync(UserId, It.IsAny<long>(), true, It.IsAny<string>()))
                 .ReturnsAsync(InvokeResult<long>.Create(1));
             harness.AspNetSignInManager.Setup(manager => manager.SignInAsync(harness.User, true, null)).Returns(Task.CompletedTask);
             harness.AppUserRepo.Setup(repo => repo.UpdateAsync(harness.User)).Returns(Task.CompletedTask);
@@ -59,6 +60,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             {
                 Email = harness.User.Email,
                 Totp = code,
+                MfaChallengeId = ChallengeId,
                 RememberMe = true
             });
 
@@ -68,7 +70,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(harness.User.TwoFactorEnabled, Is.True);
             Assert.That(harness.User.LastLogin, Is.Not.Null.And.Not.Empty);
             harness.AspNetSignInManager.Verify(manager => manager.SignInAsync(harness.User, true, null), Times.Once);
-            harness.AppUserRepo.Verify(repo => repo.TryAcceptTotpTimeStepAsync(UserId, It.IsAny<long>(), false, null), Times.Once);
+            harness.AppUserRepo.Verify(repo => repo.TryAcceptTotpTimeStepAsync(UserId, It.IsAny<long>(), true, It.IsAny<string>()), Times.Once);
+            harness.MfaChallengeStore.Verify(store => store.ConsumeAsync(ChallengeId), Times.Once);
             Assert.That(harness.Log.Events.Select(evt => evt.Type), Is.EqualTo(new AuthLogTypes?[]
             {
                 AuthLogTypes.TotpVerifyStart,
@@ -79,8 +82,29 @@ namespace LagoVista.UserAdmin.Auth.Tests
 
         [Test]
         [Property("AptixEvidence", RejectedEvidence)]
+        public async Task Totp_WithoutPasswordIssuedChallenge_Should_RejectWithoutEvaluatingFactor()
+        {
+            var harness = CreateHarness();
+            var code = new Totp(Base32Encoding.ToBytes(Secret), step: 30, totpSize: 6).ComputeTotp();
+
+            var result = await harness.FlowService.AuthenticateWithTotpAsync(new TotpSignInRequest
+            {
+                Email = harness.User.Email,
+                Totp = code,
+                RememberMe = true
+            });
+
+            Assert.That(result.Successful, Is.False);
+            harness.MfaChallengeStore.Verify(store => store.GetAsync(It.IsAny<string>()), Times.Never);
+            harness.AppUserRepo.Verify(repo => repo.TryAcceptTotpTimeStepAsync(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<bool>(), It.IsAny<string>()), Times.Never);
+            harness.AspNetSignInManager.Verify(manager => manager.SignInAsync(It.IsAny<AppUser>(), It.IsAny<bool>(), It.IsAny<string>()), Times.Never);
+            Assert.That(harness.Log.Events, Is.Empty);
+        }
+
+        [Test]
+        [Property("AptixEvidence", RejectedEvidence)]
         [Property("AptixAuthEvents", "TotpVerifyStart|TotpVerifyFailed")]
-        public async Task InvalidTotp_Should_RunRealMfaManager_AndRejectWithoutSession()
+        public async Task InvalidTotp_WithValidChallenge_Should_RejectWithoutConsumingChallengeOrSession()
         {
             var harness = CreateHarness();
             var validCode = new Totp(Base32Encoding.ToBytes(Secret), step: 30, totpSize: 6).ComputeTotp();
@@ -90,10 +114,12 @@ namespace LagoVista.UserAdmin.Auth.Tests
             {
                 Email = harness.User.Email,
                 Totp = invalidCode,
+                MfaChallengeId = ChallengeId,
                 RememberMe = true
             });
 
             Assert.That(result.Successful, Is.False);
+            harness.MfaChallengeStore.Verify(store => store.ConsumeAsync(It.IsAny<string>()), Times.Never);
             harness.AppUserRepo.Verify(repo => repo.TryAcceptTotpTimeStepAsync(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<bool>(), It.IsAny<string>()), Times.Never);
             harness.AspNetSignInManager.Verify(manager => manager.SignInAsync(It.IsAny<AppUser>(), It.IsAny<bool>(), It.IsAny<string>()), Times.Never);
             Assert.That(harness.Log.Events.Select(evt => evt.Type), Is.EqualTo(new AuthLogTypes?[]
@@ -106,12 +132,12 @@ namespace LagoVista.UserAdmin.Auth.Tests
         [Test]
         [Property("AptixEvidence", SuccessEvidence)]
         [Property("AptixAuthEvents", "TotpVerifyStart|TotpVerifySuccess")]
-        public async Task ValidTotpToken_Should_RunRealMfaProof_BeforeDelegatingToTokenPipeline()
+        public async Task ValidTotpToken_WithPasswordIssuedChallenge_Should_ProveMfaBeforeIssuingTokens()
         {
             var harness = CreateHarness();
             var code = new Totp(Base32Encoding.ToBytes(Secret), step: 30, totpSize: 6).ComputeTotp();
 
-            harness.AppUserRepo.Setup(repo => repo.TryAcceptTotpTimeStepAsync(UserId, It.IsAny<long>(), false, null))
+            harness.AppUserRepo.Setup(repo => repo.TryAcceptTotpTimeStepAsync(UserId, It.IsAny<long>(), true, It.IsAny<string>()))
                 .ReturnsAsync(InvokeResult<long>.Create(1));
             harness.AuthTokenManager.Setup(manager => manager.GenerateOneTimeUseTokenAsync(UserId, null))
                 .ReturnsAsync(InvokeResult<SingleUseToken>.Create(new SingleUseToken
@@ -130,22 +156,26 @@ namespace LagoVista.UserAdmin.Auth.Tests
                     RefreshToken = "refresh-token"
                 }));
 
-            var request = new AuthRequest
+            var authRequest = new AuthRequest
             {
                 AppId = "test-app",
                 AppInstanceId = "test-instance",
                 Email = harness.User.Email,
-                UserName = harness.User.UserName,
-                GrantType = "totp",
-                Password = code
+                UserName = harness.User.UserName
             };
 
-            var result = await harness.FlowService.AuthenticateWithTotpTokenAsync(request);
+            var result = await harness.FlowService.AuthenticateWithTotpTokenAsync(new TotpTokenSignInRequest
+            {
+                MfaChallengeId = ChallengeId,
+                Totp = code,
+                Auth = authRequest
+            });
 
             Assert.That(result.Successful, Is.True);
             Assert.That(result.Result.AccessToken, Is.EqualTo("access-token"));
             Assert.That(result.Result.RefreshToken, Is.EqualTo("refresh-token"));
-            harness.AppUserRepo.Verify(repo => repo.TryAcceptTotpTimeStepAsync(UserId, It.IsAny<long>(), false, null), Times.Once);
+            harness.AppUserRepo.Verify(repo => repo.TryAcceptTotpTimeStepAsync(UserId, It.IsAny<long>(), true, It.IsAny<string>()), Times.Once);
+            harness.MfaChallengeStore.Verify(store => store.ConsumeAsync(ChallengeId), Times.Once);
             harness.AuthTokenManager.Verify(manager => manager.GenerateOneTimeUseTokenAsync(UserId, null), Times.Once);
             harness.AuthTokenManager.Verify(manager => manager.SingleUseTokenGrantAsync(It.Is<AuthRequest>(tokenRequest =>
                 tokenRequest.GrantType == "single-use-token" &&
@@ -166,6 +196,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var redirectServices = new Mock<IUserRedirectServices>(MockBehavior.Strict);
             var userManager = new Mock<IUserManager>(MockBehavior.Strict);
             var authTokenManager = new Mock<IAuthTokenManager>(MockBehavior.Strict);
+            var mfaChallengeStore = new Mock<IMfaChallengeStore>(MockBehavior.Strict);
             var aspNetSignInManager = CreateAspNetSignInManager();
             var appConfig = new Mock<IAppConfig>(MockBehavior.Loose);
             var systemOrg = EntityHeader.Create(OrgId, "System");
@@ -181,10 +212,21 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 AuthenticatorKeySecretId = "auth-secret"
             };
 
-            appUserRepo.Setup(repo => repo.FindByEmailAsync(user.Email)).ReturnsAsync(user);
+            var challenge = new MfaChallenge
+            {
+                Id = ChallengeId,
+                UserId = UserId,
+                Email = user.Email,
+                AvailableProviders = new[] { "totp" },
+                CreatedUtc = DateTime.UtcNow.ToString("O"),
+                ExpiresUtc = DateTime.UtcNow.AddMinutes(5).ToString("O")
+            };
+
             appUserRepo.Setup(repo => repo.FindByIdAsync(UserId)).ReturnsAsync(user);
             secureStorage.Setup(storage => storage.GetUserSecretAsync(It.IsAny<EntityHeader>(), "auth-secret"))
                 .ReturnsAsync(InvokeResult<string>.Create(Secret));
+            mfaChallengeStore.Setup(store => store.GetAsync(ChallengeId)).ReturnsAsync(InvokeResult<MfaChallenge>.Create(challenge));
+            mfaChallengeStore.Setup(store => store.ConsumeAsync(ChallengeId)).ReturnsAsync(InvokeResult<MfaChallenge>.Create(challenge));
 
             var mfaManager = new AppUserMfaManager(
                 appUserRepo.Object,
@@ -213,7 +255,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 new Mock<IOrganizationRepo>().Object,
                 aspNetSignInManager.Object);
 
-            var handler = new TotpAuthenticationFlowHandler(appUserRepo.Object, mfaManager, appConfig.Object);
+            var handler = new TotpAuthenticationFlowHandler(appUserRepo.Object, mfaManager, appConfig.Object, mfaChallengeStore.Object);
             var passwordHandler = new Mock<IPasswordLoginFlowHandler>(MockBehavior.Strict);
             var recoveryHandler = new Mock<IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest>>(MockBehavior.Strict);
             var flowService = new AuthenticationFlowService(
@@ -229,6 +271,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 AppUserRepo = appUserRepo,
                 RedirectServices = redirectServices,
                 AuthTokenManager = authTokenManager,
+                MfaChallengeStore = mfaChallengeStore,
                 AspNetSignInManager = aspNetSignInManager,
                 Log = log,
                 User = user
@@ -266,6 +309,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             public Mock<IAppUserRepo> AppUserRepo { get; set; }
             public Mock<IUserRedirectServices> RedirectServices { get; set; }
             public Mock<IAuthTokenManager> AuthTokenManager { get; set; }
+            public Mock<IMfaChallengeStore> MfaChallengeStore { get; set; }
             public Mock<AspNetSignInManager> AspNetSignInManager { get; set; }
             public RecordingAuthenticationLogManager Log { get; set; }
             public AppUser User { get; set; }
