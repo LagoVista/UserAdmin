@@ -311,7 +311,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                     {
                         await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.RefreshTokenGrantFailed, appUser, errors: $"Sorry, you do not have access to the {authRequest.OrgName} organization.");
 
-                        return InvokeResult<AuthResponse>.FromError($"Sorry, you do not have access to {authRequest.OrgName}");
+                        return InvokeResult<AuthResponse>.FromError($"Sorry, you do not have access to the {authRequest.OrgName} organization.", "NOORGACESS");
                     }
                 }
             }
