@@ -1,0 +1,41 @@
+{
+  "$schema": "../schemas/auth-view.schema.json",
+  "schemaVersion": "1.0",
+  "viewId": "auth.continue.recovery",
+  "name": "Continue with Recovery Code",
+  "description": "Collects one TOTP recovery code for an already identified durable identity when the authenticator is unavailable.",
+  "category": "totp",
+  "routeId": "auth.route.continue.recovery",
+  "status": "active",
+  "controls": [
+    { "id": "recovery-code", "name": "Recovery Code", "controlType": "code-input", "finder": "field:recovery-code", "required": true, "sensitivity": "credential" },
+    { "id": "recovery-error", "name": "Recovery Code Error", "controlType": "status", "finder": "status:recovery-error" }
+  ],
+  "actions": [
+    { "id": "verify-recovery-code", "name": "Verify Recovery Code", "actionType": "button", "finder": "action:verify-recovery-code" },
+    { "id": "back", "name": "Back to Authenticator Code", "actionType": "button", "finder": "action:back" },
+    { "id": "start-over", "name": "Start Over", "actionType": "link", "finder": "action:start-over" }
+  ],
+  "platforms": {
+    "web": {
+      "status": "planned",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "implementation": "Recovery-code sign-in surface not yet implemented."
+    },
+    "mobile": {
+      "status": "implemented",
+      "repository": "nuviot/vtm-client",
+      "path": "src/features/authentication/nuviot-account/screens/continue-recovery-screen.tsx",
+      "component": "ContinueRecoveryScreen",
+      "implementation": "Presentation shell exists with canonical recovery-code field and actions, but verification is still a pending placeholder."
+    }
+  },
+  "source": {
+    "runtimeEntityId": "EP9CA37KMMY7LSJKTSNWEUE26RSP3H6J",
+    "mobileComponent": "ContinueRecoveryScreen"
+  },
+  "notes": [
+    "This surface is entered only after a primary credential has produced an outstanding MFA requirement.",
+    "A rejected recovery code remains on this view and must not disclose whether the code was invalid, already consumed, or otherwise unavailable."
+  ]
+}
