@@ -1,0 +1,106 @@
+{
+  "$schema": "../schemas/client-interaction-card.schema.json",
+  "schemaVersion": "1.0",
+  "key": "client.interaction.terms-and-conditions",
+  "name": "Accept or Reject Terms and Conditions",
+  "summary": "Present the current Terms and Conditions as one bounded client interaction and allow the person to explicitly accept or reject them before returning control to the agent.",
+  "version": 1,
+  "maturity": "proposed",
+  "cardType": "general",
+  "directiveKey": "client.terms-and-conditions",
+  "invocation": {
+    "payloadMode": "none",
+    "notes": "The client resolves and displays the authoritative current Terms and Conditions through its normal backend contract. The directive does not transport Terms and Conditions content or acceptance state."
+  },
+  "controls": [
+    {
+      "id": "terms-content",
+      "name": "Terms and Conditions",
+      "controlType": "display",
+      "finder": "display:terms-and-conditions",
+      "required": true,
+      "sensitivity": "public"
+    }
+  ],
+  "actions": [
+    {
+      "id": "accept",
+      "name": "Accept",
+      "actionType": "button",
+      "finder": "action:accept"
+    },
+    {
+      "id": "reject",
+      "name": "Reject",
+      "actionType": "button",
+      "finder": "action:reject"
+    }
+  ],
+  "presentationStates": [
+    "loading",
+    "ready",
+    "submitting",
+    "failed"
+  ],
+  "outcomes": [
+    {
+      "key": "accepted",
+      "name": "Accepted",
+      "summary": "The person explicitly accepted the Terms and Conditions and the client completed the authoritative acceptance operation.",
+      "terminal": true
+    },
+    {
+      "key": "rejected",
+      "name": "Rejected",
+      "summary": "The person explicitly rejected the Terms and Conditions.",
+      "terminal": true
+    },
+    {
+      "key": "canceled",
+      "name": "Canceled",
+      "summary": "The person dismissed or abandoned the interaction without accepting or rejecting the Terms and Conditions.",
+      "terminal": true
+    },
+    {
+      "key": "failed",
+      "name": "Failed",
+      "summary": "The client could not complete the Terms and Conditions interaction because the authoritative operation failed.",
+      "terminal": true
+    }
+  ],
+  "responseContract": {
+    "allowValue": false,
+    "allowedValueShapes": [],
+    "notes": "The terminal outcome fully expresses the control-flow result. No response value is returned."
+  },
+  "platforms": {
+    "angularWeb": {
+      "status": "partial",
+      "repository": "softwarelogistics/workforce-ui",
+      "component": "PromotionDirectiveComponent",
+      "notes": "A proven Angular prototype retrieves and accepts the real Terms and Conditions through the existing continuity promotion flow. It predates this canonical Client Interaction contract and requires conformance reconciliation."
+    },
+    "reactNative": {
+      "status": "planned",
+      "repository": "nuviot/vtm-client",
+      "notes": "React Native implementation has not yet been reconciled against this Client Interaction contract."
+    }
+  },
+  "sourceReferences": [
+    {
+      "sourceType": "decision",
+      "reference": "auth-model/CLIENT-CARD-CONTRACT.md",
+      "note": "Defines the one-directive, one-card, bounded-response contract."
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "LagoVista/AI docs/drive-by-visitor-agent-continuity-handoff.md",
+      "note": "Documents the existing offerPromotion prototype, real Terms and Conditions retrieval and acceptance, and the agent/client security boundary."
+    },
+    {
+      "sourceType": "discussion",
+      "reference": "ChatGPT conversation 2026-08-20",
+      "note": "Selected Accept or Reject Terms and Conditions as the first reference Client Interaction specimen."
+    }
+  ]
+}
