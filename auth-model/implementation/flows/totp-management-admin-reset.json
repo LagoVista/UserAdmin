@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schemas/auth-flow.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.flow.totp-management.admin-reset",
+  "name": "TOTP Administrative Reset",
+  "summary": "Authorizes a recently step-up-authenticated operator to reset TOTP for a target user in the active organization without authenticating or otherwise mutating the target account.",
+  "version": 1,
+  "maturity": "implemented",
+  "requestContract": "targetUserId + authenticated actor/org context",
+  "resultContract": "InvokeResult",
+  "handlerKeys": ["auth.handler.totp-management.admin-reset"],
+  "transitionKeys": ["auth.transition.totp-management.admin-reset-success"],
+  "entryActionKeys": ["auth.action.totp-management.admin-reset"],
+  "supportedAudiences": ["platform-user", "tenant-user"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Authentication/Flows/TotpAdministrativeResetService.cs", "note": "Privileged service owns authorization, MFA-freshness, target membership and actor/target audit requirements before delegating secure factor cleanup." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdmin:src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "Existing ResetMfaAsync/DisableMfaAsync primitive performs secure authenticator and recovery-code cleanup." }
+  ]
+}
