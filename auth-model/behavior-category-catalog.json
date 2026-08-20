@@ -5,182 +5,31 @@
   "name": "Authentication Behavior Categories",
   "inventoryStatus": "complete",
   "categories": [
-    {
-      "key": "email-verification",
-      "name": "Email Verification",
-      "behaviorKeys": [
-        "auth.behavior.email-verification.rejected",
-        "auth.behavior.email-verification.resend-success",
-        "auth.behavior.email-verification.resend-throttled",
-        "auth.behavior.email-verification.retry-success",
-        "auth.behavior.email-verification.success"
-      ],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
-    },
-    {
-      "key": "enterprise-sso-sign-in",
-      "name": "Enterprise SSO Sign In",
-      "behaviorKeys": ["auth.behavior.enterprise-sso.sign-in-success"],
-      "progress": {"behaviors":"complete","scenarios":"not-started","presentation":"not-started","implementation":"not-started","tests":"not-started"}
-    },
-    {
-      "key": "external-identity-provider-management",
-      "name": "External Identity Provider Management",
-      "behaviorKeys": ["auth.behavior.external-identity-provider.management-success"],
-      "progress": {"behaviors":"complete","scenarios":"not-started","presentation":"not-started","implementation":"not-started","tests":"not-started"}
-    },
-    {
-      "key": "external-identity-provider-registration",
-      "name": "External Identity Provider Registration",
-      "behaviorKeys": ["auth.behavior.external-identity-provider.registration-success"],
-      "progress": {"behaviors":"complete","scenarios":"not-started","presentation":"not-started","implementation":"not-started","tests":"not-started"}
-    },
-    {
-      "key": "external-identity-provider-sign-in",
-      "name": "External Identity Provider Sign In",
-      "behaviorKeys": ["auth.behavior.external-identity-provider.sign-in-success"],
-      "progress": {"behaviors":"complete","scenarios":"not-started","presentation":"not-started","implementation":"not-started","tests":"not-started"}
-    },
-    {
-      "key": "guest-value-claim",
-      "name": "Guest Value Claim",
-      "behaviorKeys": ["auth.behavior.guest.claim-value-success"],
-      "progress": {"behaviors":"complete","scenarios":"not-started","presentation":"not-started","implementation":"not-started","tests":"not-started"}
-    },
-    {
-      "key": "invitation-acceptance",
-      "name": "Invitation Acceptance",
-      "behaviorKeys": ["auth.behavior.invitation.acceptance-success"],
-      "progress": {"behaviors":"complete","scenarios":"not-started","presentation":"not-started","implementation":"not-started","tests":"not-started"}
-    },
-    {
-      "key": "mfa-type-selection",
-      "name": "Select MFA Type",
-      "behaviorKeys": [
-        "auth.behavior.mfa-type-selection.passkey",
-        "auth.behavior.mfa-type-selection.totp"
-      ],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
-    },
-    {
-      "key": "passkey-management",
-      "name": "Passkey Management",
-      "behaviorKeys": [
-        "auth.behavior.passkey.add-success",
-        "auth.behavior.passkey.remove-success"
-      ],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
-    },
-    {
-      "key": "passkey-registration",
-      "name": "Passkey Registration",
-      "behaviorKeys": ["auth.behavior.passkey.account-registration"],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"not-started","implementation":"not-started","tests":"not-started"}
-    },
-    {
-      "key": "passkey-sign-in",
-      "name": "Passkey Sign In",
-      "behaviorKeys": ["auth.behavior.passkey.mfa-sign-in","auth.behavior.passkey.sign-in"],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
-    },
-    {
-      "key": "password-management",
-      "name": "Password Management",
-      "behaviorKeys": ["auth.behavior.password.change-failed","auth.behavior.password.change-success"],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
-    },
-    {
-      "key": "password-recovery",
-      "name": "Password Recovery",
-      "behaviorKeys": ["auth.behavior.password-recovery.completion-rejected","auth.behavior.password-recovery.rejected","auth.behavior.password-recovery.success"],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
-    },
-    {
-      "key": "password-registration",
-      "name": "Password Registration",
-      "behaviorKeys": ["auth.behavior.password.registration-success"],
-      "progress": {"behaviors":"complete","scenarios":"not-started","presentation":"not-started","implementation":"not-started","tests":"not-started"}
-    },
-    {
-      "key": "password-sign-in",
-      "name": "Password Sign In",
-      "behaviorKeys": ["auth.behavior.password.sign-in-locked-out","auth.behavior.password.sign-in-mfa-required","auth.behavior.password.sign-in-mfa-selection-required","auth.behavior.password.sign-in-passkey-required","auth.behavior.password.sign-in-rejected","auth.behavior.password.sign-in-success"],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
-    },
-    {
-      "key": "security-step-up",
-      "name": "Security Step Up",
-      "behaviorKeys": ["auth.behavior.step-up-security.success"],
-      "progress": {"behaviors":"complete","scenarios":"not-started","presentation":"not-started","implementation":"not-started","tests":"not-started"}
-    },
-    {
-      "key": "session-management",
-      "name": "Sign Out",
-      "behaviorKeys": ["auth.behavior.session.sign-out"],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
-    },
-    {
-      "key": "totp-enrollment",
-      "name": "TOTP Enrollment",
-      "behaviorKeys": ["auth.behavior.totp.enrollment-success"],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
-    },
-    {
-      "key": "totp-management",
-      "name": "TOTP Management",
-      "behaviorKeys": [
-        "auth.behavior.totp.administrative-reset-success",
-        "auth.behavior.totp.disable-success",
-        "auth.behavior.totp.recovery-codes-rotation-success"
-      ],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
-    },
-    {
-      "key": "totp-sign-in",
-      "name": "TOTP Sign In",
-      "behaviorKeys": [
-        "auth.behavior.totp.recovery-code-sign-in-rejected",
-        "auth.behavior.totp.recovery-code-sign-in-success",
-        "auth.behavior.totp.sign-in-rejected",
-        "auth.behavior.totp.sign-in-success"
-      ],
-      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
-    }
+    {"key":"email-verification","name":"Email Verification","behaviorKeys":["auth.behavior.email-verification.rejected","auth.behavior.email-verification.resend-success","auth.behavior.email-verification.resend-throttled","auth.behavior.email-verification.retry-success","auth.behavior.email-verification.success"],"progress":{"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}},
+    {"key":"enterprise-sso-sign-in","name":"Enterprise SSO Sign In","behaviorKeys":["auth.behavior.enterprise-sso.sign-in-success"],"progress":{"behaviors":"complete","scenarios":"not-started","presentation":"not-started","implementation":"not-started","tests":"not-started"}},
+    {"key":"external-identity-provider-management","name":"External Identity Provider Management","behaviorKeys":["auth.behavior.external-identity-provider.link-success","auth.behavior.external-identity-provider.unlink-success"],"progress":{"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"in-progress","tests":"not-started"}},
+    {"key":"external-identity-provider-registration","name":"External Identity Provider Registration","behaviorKeys":["auth.behavior.external-identity-provider.registration-success"],"progress":{"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"in-progress","tests":"not-started"}},
+    {"key":"external-identity-provider-sign-in","name":"External Identity Provider Sign In","behaviorKeys":["auth.behavior.external-identity-provider.sign-in-access-denied","auth.behavior.external-identity-provider.sign-in-fault","auth.behavior.external-identity-provider.sign-in-success"],"progress":{"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"in-progress","tests":"not-started"}},
+    {"key":"guest-value-claim","name":"Guest Value Claim","behaviorKeys":["auth.behavior.guest.claim-value-success"],"progress":{"behaviors":"complete","scenarios":"not-started","presentation":"not-started","implementation":"not-started","tests":"not-started"}},
+    {"key":"invitation-acceptance","name":"Invitation Acceptance","behaviorKeys":["auth.behavior.invitation.acceptance-success"],"progress":{"behaviors":"complete","scenarios":"not-started","presentation":"not-started","implementation":"not-started","tests":"not-started"}},
+    {"key":"mfa-type-selection","name":"Select MFA Type","behaviorKeys":["auth.behavior.mfa-type-selection.passkey","auth.behavior.mfa-type-selection.totp"],"progress":{"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}},
+    {"key":"passkey-management","name":"Passkey Management","behaviorKeys":["auth.behavior.passkey.add-success","auth.behavior.passkey.remove-success"],"progress":{"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}},
+    {"key":"passkey-registration","name":"Passkey Registration","behaviorKeys":["auth.behavior.passkey.account-registration"],"progress":{"behaviors":"complete","scenarios":"complete","presentation":"not-started","implementation":"not-started","tests":"not-started"}},
+    {"key":"passkey-sign-in","name":"Passkey Sign In","behaviorKeys":["auth.behavior.passkey.mfa-sign-in","auth.behavior.passkey.sign-in"],"progress":{"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}},
+    {"key":"password-management","name":"Password Management","behaviorKeys":["auth.behavior.password.change-failed","auth.behavior.password.change-success"],"progress":{"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}},
+    {"key":"password-recovery","name":"Password Recovery","behaviorKeys":["auth.behavior.password-recovery.completion-rejected","auth.behavior.password-recovery.rejected","auth.behavior.password-recovery.success"],"progress":{"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}},
+    {"key":"password-registration","name":"Password Registration","behaviorKeys":["auth.behavior.password.registration-success"],"progress":{"behaviors":"complete","scenarios":"not-started","presentation":"not-started","implementation":"not-started","tests":"not-started"}},
+    {"key":"password-sign-in","name":"Password Sign In","behaviorKeys":["auth.behavior.password.sign-in-locked-out","auth.behavior.password.sign-in-mfa-required","auth.behavior.password.sign-in-mfa-selection-required","auth.behavior.password.sign-in-passkey-required","auth.behavior.password.sign-in-rejected","auth.behavior.password.sign-in-success"],"progress":{"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}},
+    {"key":"security-step-up","name":"Security Step Up","behaviorKeys":["auth.behavior.step-up-security.success"],"progress":{"behaviors":"complete","scenarios":"not-started","presentation":"not-started","implementation":"not-started","tests":"not-started"}},
+    {"key":"session-management","name":"Sign Out","behaviorKeys":["auth.behavior.session.sign-out"],"progress":{"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}},
+    {"key":"totp-enrollment","name":"TOTP Enrollment","behaviorKeys":["auth.behavior.totp.enrollment-success"],"progress":{"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}},
+    {"key":"totp-management","name":"TOTP Management","behaviorKeys":["auth.behavior.totp.administrative-reset-success","auth.behavior.totp.disable-success","auth.behavior.totp.recovery-codes-rotation-success"],"progress":{"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}},
+    {"key":"totp-sign-in","name":"TOTP Sign In","behaviorKeys":["auth.behavior.totp.recovery-code-sign-in-rejected","auth.behavior.totp.recovery-code-sign-in-success","auth.behavior.totp.sign-in-rejected","auth.behavior.totp.sign-in-success"],"progress":{"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}}
   ],
   "sourceReferences": [
-    {"sourceType":"discussion","reference":"ChatGPT conversation 2026-08-08","note":"Category-universe review completed after normalizing subject-action category names, dropping Magic Link from V2, and adding External Identity Provider Management."},
-    {"sourceType":"discussion","reference":"ChatGPT conversation 2026-08-08","note":"Hierarchical reconciliation progress is authored at category, behavior, and scenario levels. A phase is complete only after review and agreement, not merely because related files exist."},
-    {"sourceType":"discussion","reference":"ChatGPT conversation 2026-08-08","note":"Password Management behavior review resolved the category to Password Change Success and Password Change Failed; validation and identity failure permutations belong at the scenario/test layers."},
-    {"sourceType":"discussion","reference":"ChatGPT conversation 2026-08-08","note":"Password Management scenario review approved the successful submit ending at auth.password.change.complete and the rejected submit remaining on auth.password.change."},
-    {"sourceType":"discussion","reference":"ChatGPT conversation 2026-08-08","note":"Password Management presentation review approved the canonical Change Password and Password Changed surfaces while leaving host-specific navigation outside the auth model."},
-    {"sourceType":"discussion","reference":"ChatGPT conversation 2026-08-08","note":"Password Management implementation has a stable generated proxy and REST contract, AuthenticationFlowService application entry point, typed PasswordChangeFlowHandler, real PasswordManager and LagoVista Identity adapter integration proof. The AdminAuth suite is green and generated Aptix test evidence provides the runtime proof used by the reconciliation UI."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-09","note":"Password Sign In behavior review resolved the category to Success, Rejected, and Locked Out. Invalid password and unknown account are permutations of Rejected with distinct internal audit evidence; lockout remains separate because it represents materially different state and next actions."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-09","note":"Password Sign In scenario review approved two shared client navigation scenarios followed by one canonical server-submit scenario for Success, Rejected, or Locked Out. Rejected intentionally leaves expectedAuthLogEvents empty because invalid-password and unknown-account runtime proofs have different valid audit trails."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-09","note":"Password Sign In presentation review retains the shared Welcome, Continue with Email, and Sign In with Password surfaces; maps Rejected to auth.sign-in.unable; introduces auth.sign-in.locked-out for lockout; keeps success host-directed; and removes Magic Link from the V2 password sign-in surface."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-09","note":"Password Sign In server implementation is normalized through the stable generated proxy, REST endpoint, AuthenticationFlowService, PasswordLoginFlowHandler and SignInManager with canonical Success, Rejected and Locked Out transitions and non-enumerating public rejection."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-11","note":"Password Sign In authored test obligations are reconciled independently from execution status. C# Flow and UI Runtime remain separate current-evidence measures and may become stale or fail without reopening the authored Tests phase unless the proof specification itself changes."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-09","note":"Password Recovery behavior review resolved the category to Success and Rejected. Unknown-account recovery requests are internal permutations beneath Success because the public request-stage response intentionally matches a known account; malformed, expired, consumed, exhausted, unknown-user, and mismatched recovery proof failures are permutations beneath Rejected."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-09","note":"Password Recovery scenario review approved two shared scenarios from password sign-in through the neutral recovery-code state, then Success branches through code acceptance and new-password completion while Rejected remains on the recovery-code state after neutral proof rejection. The legacy reset-link completion scenario is deprecated."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-09","note":"Password Recovery presentation review normalizes auth.password.reset.request to request a six-digit code, auth.password.reset.sent to the neutral six-digit code-entry state, and auth.password.reset.complete to choose a new password using reset authority held internally after code verification. Existing web and mobile sources are recorded as partial/mismatched implementation rather than treated as conformant."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-09","note":"Password Recovery adds Completion Rejected as a third behavior because password replacement can fail after successful recovery-code verification. This path begins with valid reset authority and remains on the new-password surface, so it is materially different from recovery-code rejection."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-09","note":"Password Recovery client implementation is complete on web and mobile. Request, six-digit code verification/resend, and new-password completion surfaces use the generated Auth client operations; reset authority remains internal to client flow state; all three canonical AuthViews are conformance-verified on both platforms."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-11","note":"Passkey Sign In reconciled to one canonical behavior with Welcome-to-Passkey and Passkey-to-Home scenarios. Welcome and Continue with Passkey presentation surfaces are conformance-verified on web and mobile; implementation and tests remain separate follow-on phases."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-11","note":"Passkey Sign In implementation reconciliation confirmed the existing anonymous passwordless PasskeyController and AppUserPasskeyManager path consumes and validates challenges, resolves exactly one durable user from the credential, validates the WebAuthn assertion, advances the signature counter, emits concrete AuthLogTypes events, and resolves the landing destination."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-13","note":"Email Verification is represented by five lightweight start-to-end behaviors with behavior-owned atomic scenarios: direct success, rejection, retry success, resend success, and resend throttled. Presentation uses Send, Enter with deterministic View State, and Confirmed surfaces."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-14","note":"Email Verification implementation is complete after the canonical send flow was normalized to distinguish initial code-sent, accepted code-resent, and resend-throttled outcomes from durable proof state and cooldown timing."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-14","note":"Email Verification authored test obligations are complete. Seven send/resend scenarios are bound to EmailVerificationSendFlowTests and six accepted/rejected verification scenarios are bound to EmailVerificationFlowIntegrationTests; runtime execution evidence remains separate."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Enrollment is authored complete across server, Angular Web, Android and iOS. The React Native enrollment surface locally renders the staged otpauth URI as a scannable QR code, both stable clients expose optional Advanced open-authenticator/copy-key conveniences, and UI runtime remains intentionally separate."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Management was decomposed into separate recovery-code rotation and disable behaviors. Server flow normalization, deterministic HasTOTP setup, real-manager integration proof, and stable-client conformance are authored complete; current C# evidence is tracked separately."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Sign In is authored complete for Success and Could Not Authenticate. Both browser-session and mobile-token server paths normalize through AuthenticationFlowService and TotpAuthenticationFlowHandler into the real AppUserMfaManager proof operation; Angular and React Native consume generated AuthClient TOTP operations; the dedicated unable view is implemented on both clients; real-path integration proof is bound to both canonical transitions. Runtime UI evidence remains intentionally separate."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Password Sign In adds MFA Required as a fourth behavior. A valid password for a TOTP-enabled identity returns AuthenticationState=MfaRequired with provider=totp, does not establish the authenticated application session, and must route the client to auth.continue.totp. Server transition support already exists, while Angular and React Native password entry currently require implementation changes and dedicated proof before the category can return to green."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Password Sign In also models Passkey Required as a distinct fifth outcome. A future password response with provider=passkey must preserve anonymous application state and route to the existing auth.continue.passkey surface; the existing Passkey Sign In category then owns the passkey ceremony and session establishment. Current server password sign-in hardcodes provider=totp for RequiresTwoFactor, so Passkey Required remains implementation/test in progress."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"The session-management category is presented as Sign Out while retaining its stable category key. Sign Out is one atomic host-owned action ending at auth.welcome. The canonical POST /api/auth/signout path is implemented through AuthenticationFlowService and SignOutFlowHandler; Angular Web and React Native both consume generated AuthClient.createSignout, token-backed mobile sign-out revokes only the current refresh token, and authored integration proof covers cookie and token session termination with UserLogout audit evidence."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Password Sign In now distinguishes three MFA-routing outcomes beneath the same generic MFA-required server transition: TOTP-only routes to auth.continue.totp, Passkey-only routes to auth.continue.passkey, and identities with both methods route to auth.select.mfa-type. Provider-specific routing is a client presentation obligation, so these branches require UI evidence rather than separate C# transition tests."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Select MFA Type is a new behavior category with exactly two one-scenario behaviors. Both start at auth.select.mfa-type; selecting Passkey ends at auth.continue.passkey (Passkey Start), while selecting TOTP ends at auth.continue.totp (TOTP Start). The selection itself is UI-only and performs no authentication state transition."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Select MFA Type implementation is complete on Angular Web and React Native. Both stable clients expose auth.select.mfa-type with action:select-passkey and action:select-totp and route those actions to the existing canonical continuation views; no server implementation is required for this UI-only category."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Password Sign In MFA response routing is implementation-complete on the stable Angular Web master and React Native main branches. Both clients prefer availableMfaProviders, preserve provider as a compatibility fallback, route TOTP-only and Passkey-only directly to their continuation views, route dual-factor identities to Select MFA Type, and avoid treating MFA-required responses as authenticated mobile sessions."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Sign In now includes separate recovery-code success and rejected behaviors because the linear behavior model cannot honestly represent recovery-code authentication as an alternate branch inside the existing TOTP-code behaviors. Recovery code remains an MFA-only proof, not a primary login credential. TOTP Management now also includes privileged administrative reset, which requires fresh actor step-up proof, records actor and target identity, removes the target user's TOTP and recovery-code material, and never authenticates the target user."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-20","note":"Passkey Sign In now includes both primary Email-to-Passkey and Password-to-Passkey MFA behaviors. Both stable clients use generated challenge-aware operations, primary Passkey requires user verification without recording MFA freshness, MFA Passkey consumes the password-issued MFA challenge, and authored proof covers real AppUserPasskeyManager security bindings plus browser/mobile proven-user completion. TOTP Sign In recovery-code paths and TOTP Management administrative reset are likewise reconciled complete. Runtime execution evidence remains separate from authored category progress."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-20","note":"Passkey Management V1 is authored complete with Add Passkey and Remove Passkey behaviors. Authenticated existing-user enrollment is separated from anonymous Passkey Registration, Angular Web and React Native implement the canonical management/enrollment surfaces on their default branches, and server proof covers user/RP-bound registration, successful credential persistence, malformed completion rejection, and scoped removal. Runtime execution evidence remains separate from authored category progress."}
+    {"sourceType":"discussion","reference":"ChatGPT conversation 2026-08-08","note":"Category-universe review normalized subject-action category names and established hierarchical authored reconciliation progress."},
+    {"sourceType":"decision","reference":"auth-model/CATEGORY-TO-GREEN.md","note":"Authored reconciliation progress and runtime evidence are independent; a phase is complete only after semantic review rather than artifact existence alone."},
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-20","note":"Passkey Management reconciliation added explicit remove behavior and completed its authored phases."},
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-20","note":"External Identity Provider reconciliation splits sign-in into linked-subject Success, Access Denied, and Fault; registration requires OAuth-external PendingIdentity plus independent NuvIoT email proof; management splits into Link and Unlink. Provider choices remain permutations, Microsoft is the first representative scenario, and implementation/tests remain open where source drift or missing deterministic proof was found."}
   ]
 }

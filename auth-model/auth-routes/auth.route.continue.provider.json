@@ -9,9 +9,9 @@
   "parameters": [],
   "status": "active",
   "platforms": {
-    "web": { "status": "implemented", "implementation": "ContinueProviderComponent" },
-    "mobile": { "status": "implemented", "implementation": "app/auth/continue/provider.tsx" }
+    "web": { "status": "implemented", "repository": "softwarelogistics/nuviot-ui-shared", "route": "/auth/continue/provider", "component": "ContinueProviderComponent", "conformance": { "status": "verified", "checkedUtc": "2026-08-20T19:27:00Z", "checkedAgainst": ["canonical-path", "route-registration", "view-binding"], "notes": "Angular canonical route resolves the provider-selection view." } },
+    "mobile": { "status": "implemented", "repository": "nuviot/vtm-client", "route": "/auth/continue/provider", "component": "ContinueProviderScreen", "conformance": { "status": "verified", "checkedUtc": "2026-08-20T19:27:00Z", "checkedAgainst": ["canonical-path", "route-registration", "view-binding"], "notes": "Expo Router resolves /auth/continue/provider to ContinueProviderScreen; action wiring remains a view implementation gap, not a route gap." } }
   },
   "source": { "commonLinksMember": "AuthContinueProvider", "angularComponent": "ContinueProviderComponent", "mobileRoute": "/auth/continue/provider" },
-  "notes": ["CommonLinks member must be added during route projection reconciliation."]
+  "notes": ["CommonLinks member remains subject to route projection reconciliation."]
 }

@@ -1,0 +1,17 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.provider.manage",
+  "name": "Manage External Providers",
+  "description": "Canonical route for explicit external-provider link and unlink management on the current durable identity.",
+  "path": "/auth/provider/manage",
+  "routeType": "view",
+  "viewId": "auth.provider.manage",
+  "parameters": [],
+  "status": "active",
+  "platforms": {
+    "web": { "status": "planned", "repository": "softwarelogistics/nuviot-ui-shared" },
+    "mobile": { "status": "planned", "repository": "nuviot/vtm-client", "route": "/auth/provider/manage" }
+  },
+  "notes": ["No stable-client route currently implements this canonical management surface."]
+}

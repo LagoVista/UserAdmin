@@ -3,22 +3,22 @@
   "schemaVersion": "1.0",
   "key": "auth.dimension.email-ownership",
   "name": "Email Ownership",
-  "summary": "Describes whether an email address is absent, asserted, or verified as owned by the identity being resolved.",
-  "version": 1,
+  "summary": "Describes whether an email address is absent, asserted, or independently verified as owned by the identity being resolved.",
+  "version": 2,
   "maturity": "proposed",
   "authority": "canonical",
   "valueType": "enumeration",
   "requiredForCanonicalSnapshot": true,
   "values": [
     { "key": "unknown", "name": "Unknown", "summary": "No usable email assertion exists." },
-    { "key": "asserted", "name": "Asserted", "summary": "An email was supplied but ownership is not verified." },
-    { "key": "verification-pending", "name": "Verification Pending", "summary": "A verification ceremony is active." },
-    { "key": "verified", "name": "Verified", "summary": "Ownership of the canonical email was verified." },
-    { "key": "provider-verified", "name": "Provider Verified", "summary": "A trusted provider asserted and verified the email." },
+    { "key": "asserted", "name": "Asserted", "summary": "An email was supplied or asserted by an external provider, but NuvIoT has not independently verified ownership." },
+    { "key": "verification-pending", "name": "Verification Pending", "summary": "A NuvIoT email-verification ceremony is active." },
+    { "key": "verified", "name": "Verified", "summary": "Ownership of the canonical email was independently verified by the NuvIoT authentication ceremony." },
     { "key": "conflict", "name": "Conflict", "summary": "Verified or asserted emails conflict and require resolution." }
   ],
   "sourceReferences": [
-    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Users/PendingIdentity.cs", "note": "RegisteredEmail, VerifiedEmail, and provider email are distinct" },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Users/PendingIdentity.cs", "note": "RegisteredEmail and VerifiedEmail remain distinct; provider email is supporting evidence and never substitutes for VerifiedEmail." },
+    { "sourceType": "decision", "reference": "User Authentication", "note": "Approved policy treats email as a trusted identity anchor only after NuvIoT verification; provider email assertions cannot authorize linking by themselves." },
     { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "3" }
   ]
 }

@@ -1,0 +1,25 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.external-idp.link-to-user",
+  "name": "Link External Provider to Existing User",
+  "summary": "Links an OAuth-external PendingIdentity to the verified existing durable user only after independent NuvIoT email proof.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 75,
+  "sourceState": { "expression": "pending-identity-status == resolution-required and pending-identity-flow == oauth-external and credential-proof == oauth-proved and email-ownership == verified and durable-identity == existing" },
+  "actionKey": "auth.action.external-idp.link-to-user",
+  "guards": [{ "expression": "input.durable-identity-reference matches the verified-email resolution target", "failureCode": "provider-link-target-mismatch" }],
+  "destinationTransform": [
+    { "dimensionKey": "auth.dimension.durable-identity", "operation": "set", "valueExpression": "resolved" },
+    { "dimensionKey": "auth.dimension.pending-identity-status", "operation": "set", "valueExpression": "resolved" }
+  ],
+  "requiredEffects": ["atomically-create-provider-link", "record-idempotency-result", "record-provider-link"],
+  "forbiddenEffects": ["create-durable-user", "link-subject-to-multiple-users", "change-canonical-email-from-provider-email"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.email-identities.not-conflated", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "User Authentication", "note": "Approved policy requires provider-subject-first resolution and independent NuvIoT email proof before linking an unlinked provider to an existing durable user." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Users/PendingIdentity.cs", "note": "PendingIdentity defines OAuthExternalLogin as a ceremony-only flow bucket." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External IdP V2 reconciliation retains provider protocols as implementation details beneath provider-independent auth semantics." }
+  ]
+}

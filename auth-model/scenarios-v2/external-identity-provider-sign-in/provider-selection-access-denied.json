@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.external-identity-provider-sign-in.provider-selection-access-denied",
+  "runtimeEntityId": "ED12BB015E7B43C7A2E777B64E0963F6",
+  "name": "Provider Access Is Denied",
+  "summary": "The user selects Microsoft as the representative supported-provider permutation and cancels or denies authorization at the provider, returning to a deterministic recoverable access-denied surface without resolving a durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "external-identity-provider-sign-in",
+  "startViewKey": "auth.continue.provider",
+  "action": { "id": "continue-microsoft", "finder": "action:continue-microsoft" },
+  "preconditions": { "expression": "session-capability == anonymous and the provider round trip is configured to return access_denied" },
+  "inputs": [],
+  "serverInteraction": { "required": true, "intent": "Normalize a provider cancellation or access_denied callback without resolving, creating, or linking a durable identity." },
+  "expectedViewKey": "auth.oauth.access-denied",
+  "expectedVisibleFinders": ["action:try-again", "action:continue-email"],
+  "postconditions": { "expression": "session-capability == anonymous and no durable identity was created, linked, or authenticated" },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [{ "sourceType": "auth-view", "reference": "auth.oauth.access-denied" }, { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External Identity Provider category reconciliation separates linked-subject sign-in, provider denial/fault, first-time registration, and provider link/unlink management while preserving provider-specific choices as permutations." }],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}

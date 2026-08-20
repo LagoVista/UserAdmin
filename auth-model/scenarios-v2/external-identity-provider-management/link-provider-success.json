@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.external-identity-provider-management.link-provider-success",
+  "runtimeEntityId": "7282DF59C95146819BC834D919F25783",
+  "name": "Link External Provider",
+  "summary": "The authenticated user selects Microsoft as the representative provider permutation and explicitly links the validated, currently unlinked provider subject to the current durable identity.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "external-identity-provider-management",
+  "startViewKey": "auth.provider.manage",
+  "startViewState": "ready",
+  "action": { "id": "link-provider", "finder": "action:link-provider" },
+  "preconditions": { "expression": "the current durable user is authenticated and the selected provider subject is validated and not linked to any durable identity", "state": { "ensureUserExists": "set", "isUserLoggedIn": "set", "externalLoginProviders": [] } },
+  "inputs": [{ "finder": "field:provider", "name": "Provider", "valueType": "string", "required": true, "value": "Microsoft" }],
+  "serverInteraction": { "required": true, "intent": "Associate the validated provider subject only with the current durable identity; do not create or switch users and do not infer linking authority from provider email." },
+  "expectedViewKey": "auth.provider.manage",
+  "expectedViewState": "link-complete",
+  "expectedVisibleFinders": ["status:provider-link-complete"],
+  "postconditions": { "expression": "the selected provider subject is linked to the same authenticated durable identity", "state": { "ensureUserExists": "set", "isUserLoggedIn": "set", "externalLoginProviders": ["Microsoft"] } },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserManager.cs" },
+    { "sourceType": "decision", "reference": "User Authentication", "note": "Approved authentication policy requires independent NuvIoT email proof before an unlinked external provider may be linked to an existing durable identity; provider email is supporting evidence only." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External Identity Provider category reconciliation separates linked-subject sign-in, provider denial/fault, first-time registration, and provider link/unlink management while preserving provider-specific choices as permutations." }
+  ],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}

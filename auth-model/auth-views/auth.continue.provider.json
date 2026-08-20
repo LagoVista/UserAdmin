@@ -18,14 +18,9 @@
     { "id": "cancel", "name": "Cancel", "actionType": "button", "finder": "action:cancel" }
   ],
   "platforms": {
-    "web": { "status": "implemented", "implementation": "ContinueProviderComponent" },
-    "mobile": { "status": "implemented", "implementation": "app/auth/continue/provider.tsx" }
+    "web": { "status": "implemented", "repository": "softwarelogistics/nuviot-ui-shared", "path": "user/continue-provider/continue-provider.component.html", "component": "ContinueProviderComponent", "conformance": { "status": "verified", "checkedUtc": "2026-08-20T19:27:00Z", "checkedAgainst": ["view-identity", "actions", "finders", "navigation"], "notes": "Angular exposes all five canonical provider actions plus Continue with Email and Cancel; provider actions launch the server OAuth route with popup and same-tab fallback." } },
+    "mobile": { "status": "partial", "repository": "nuviot/vtm-client", "path": "src/features/authentication/nuviot-account/screens/continue-provider-screen.tsx", "component": "ContinueProviderScreen", "conformance": { "status": "mismatch", "checkedUtc": "2026-08-20T19:27:00Z", "checkedAgainst": ["view-identity", "actions", "finders", "navigation"], "notes": "The current screen exposes Google and Microsoft but does not call the existing MobileOAuthService from the provider buttons; GitHub, LinkedIn, Twitter, Continue with Email, and Cancel parity are also missing." } }
   },
-  "source": {
-    "runtimeEntityId": "205AD1E713CD494F987E0884767F7A4B",
-    "runtimeSha256Hex": "b598cf22154f554701b1d17f4637b8f692bf23b635d06405dfa76c4bb2f87227",
-    "webComponent": "ContinueProviderComponent",
-    "mobileComponent": "app/auth/continue/provider.tsx"
-  },
-  "notes": ["Provider actions use continue-{provider} rather than oauth-{provider}; OAuth is an implementation mechanism, not the user action."]
+  "source": { "runtimeEntityId": "205AD1E713CD494F987E0884767F7A4B", "runtimeSha256Hex": "b598cf22154f554701b1d17f4637b8f692bf23b635d06405dfa76c4bb2f87227", "webComponent": "ContinueProviderComponent", "mobileComponent": "app/auth/continue/provider.tsx" },
+  "notes": ["Provider actions use continue-{provider}; OAuth/OIDC are implementation mechanisms rather than distinct user behaviors.", "Microsoft is the representative provider permutation in the first V2 scenarios because the current server/web/RN stack has recent manual happy-path evidence; other provider choices remain required implementation permutations."]
 }

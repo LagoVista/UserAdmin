@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.external-identity-provider-management.unlink-provider-success",
+  "runtimeEntityId": "911D0EA82B4E4668AB470BE6A3BAEDB7",
+  "name": "Unlink External Provider",
+  "summary": "The authenticated user selects an existing Microsoft association as the representative provider permutation and explicitly removes it from the current durable identity while remaining signed in as the same user.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "external-identity-provider-management",
+  "startViewKey": "auth.provider.manage",
+  "startViewState": "ready",
+  "action": { "id": "unlink-provider", "finder": "action:unlink-provider" },
+  "preconditions": { "expression": "the current durable user is authenticated and Microsoft is linked to that same user", "state": { "ensureUserExists": "set", "isUserLoggedIn": "set", "externalLoginProviders": ["Microsoft"] } },
+  "inputs": [{ "finder": "field:provider", "name": "Provider", "valueType": "string", "required": true, "value": "Microsoft" }],
+  "serverInteraction": { "required": true, "intent": "Remove only the selected external provider association from the current durable identity and keep the current durable session intact." },
+  "expectedViewKey": "auth.provider.manage",
+  "expectedViewState": "unlink-complete",
+  "expectedVisibleFinders": ["status:provider-unlink-complete"],
+  "postconditions": { "expression": "the selected provider association is absent and the same durable user remains authenticated", "state": { "ensureUserExists": "set", "isUserLoggedIn": "set", "externalLoginProviders": [] } },
+  "expectedAuthLogEvents": ["OAuthRemoveUserLogin"],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserManager.cs", "note": "RemoveExternalLoginAsync authorizes only self-removal and records OAuthRemoveUserLogin." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External Identity Provider category reconciliation separates linked-subject sign-in, provider denial/fault, first-time registration, and provider link/unlink management while preserving provider-specific choices as permutations." }
+  ],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}

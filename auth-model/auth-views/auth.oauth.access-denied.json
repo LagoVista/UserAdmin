@@ -3,21 +3,18 @@
   "schemaVersion": "1.0",
   "viewId": "auth.oauth.access-denied",
   "name": "OAuth Access Denied",
-  "description": "Explains that the external provider denied access and lets the user return to authentication choices.",
+  "description": "Explains that the external provider did not grant access and lets the user retry provider authentication or choose email authentication.",
   "category": "provider",
   "routeId": "auth.route.oauth.access-denied",
   "status": "active",
   "controls": [],
   "actions": [
-    { "id": "back", "name": "Back", "actionType": "link", "finder": "action:back" }
+    { "id": "try-again", "name": "Try Again", "actionType": "button", "finder": "action:try-again" },
+    { "id": "continue-email", "name": "Continue with Email", "actionType": "button", "finder": "action:continue-email" }
   ],
   "platforms": {
-    "web": { "status": "implemented", "implementation": "OauthAccessDeniedComponent" },
-    "mobile": { "status": "planned" }
+    "web": { "status": "partial", "repository": "softwarelogistics/nuviot-ui-shared", "path": "user/oauth-access-denied/oauth-access-denied.component.html", "component": "OauthAccessDeniedComponent", "conformance": { "status": "mismatch", "checkedUtc": "2026-08-20T19:27:00Z", "checkedAgainst": ["view-identity", "actions", "finders", "navigation"], "notes": "Angular currently exposes only Back; it must adopt the canonical Try Again and Continue with Email recovery actions." } },
+    "mobile": { "status": "implemented", "repository": "nuviot/vtm-client", "path": "src/features/authentication/nuviot-account/screens/auth-outcome-screen.tsx", "component": "AuthOutcomeScreen", "conformance": { "status": "verified", "checkedUtc": "2026-08-20T19:27:00Z", "checkedAgainst": ["view-identity", "actions", "finders", "navigation"], "notes": "React Native already renders Try Again to provider selection and Continue with Email for /auth/oauth/access-denied." } }
   },
-  "source": {
-    "runtimeEntityId": "DAAACF6EF3F3433EA43546B6D498C223",
-    "runtimeSha256Hex": "df768b906df04be2f8155780c574f0e2b98feb9c5c1f873116e93a0d557829d6",
-    "webComponent": "OauthAccessDeniedComponent"
-  }
+  "source": { "runtimeEntityId": "DAAACF6EF3F3433EA43546B6D498C223", "runtimeSha256Hex": "df768b906df04be2f8155780c574f0e2b98feb9c5c1f873116e93a0d557829d6", "webComponent": "OauthAccessDeniedComponent", "mobileComponent": "AuthOutcomeScreen" }
 }

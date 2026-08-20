@@ -1,0 +1,27 @@
+{
+  "$schema": "../schemas/action.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.action.external-idp.unlink-current-user",
+  "name": "Unlink External Provider from Current User",
+  "summary": "Removes the selected external provider association from the currently authenticated durable user without changing the durable identity or current session.",
+  "version": 1,
+  "maturity": "proposed",
+  "requiredInputs": [
+    { "key": "external-login-reference", "valueType": "reference", "required": true },
+    { "key": "current-user-reference", "valueType": "reference", "required": true }
+  ],
+  "guards": [
+    { "expression": "session-capability == authenticated-normal", "failureCode": "authenticated-user-required" },
+    { "expression": "target durable identity is the current authenticated user", "failureCode": "provider-unlink-target-mismatch" }
+  ],
+  "permittedMutations": [],
+  "requiredEffects": ["remove-provider-link", "record-provider-unlink"],
+  "forbiddenEffects": ["delete-durable-user", "switch-durable-identity"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user"],
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "User Authentication", "note": "Approved policy requires provider-subject-first resolution and independent NuvIoT email proof before linking an unlinked provider to an existing durable user." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Users/PendingIdentity.cs", "note": "PendingIdentity defines OAuthExternalLogin as a ceremony-only flow bucket." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External IdP V2 reconciliation retains provider protocols as implementation details beneath provider-independent auth semantics." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserManager.cs", "note": "RemoveExternalLoginAsync enforces target user id equals acting user id and logs OAuthRemoveUserLogin." }
+  ]
+}

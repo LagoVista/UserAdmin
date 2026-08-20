@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.external-idp.establish-session",
+  "name": "Establish External Provider Session",
+  "summary": "Moves a resolved active durable identity with valid OAuth proof and established home context into normal authenticated session capability.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 50,
+  "sourceState": { "expression": "durable-identity == resolved and account-status == active and home-workspace == established and credential-proof == oauth-proved and session-capability != authenticated-normal" },
+  "actionKey": "auth.action.external-idp.establish-session",
+  "guards": [],
+  "destinationTransform": [{ "dimensionKey": "auth.dimension.session-capability", "operation": "set", "valueExpression": "authenticated-normal" }],
+  "requiredEffects": ["issue-normal-application-session", "record-external-provider-login"],
+  "forbiddenEffects": ["create-durable-user", "change-provider-link", "grant-session-to-unresolved-identity"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "User Authentication", "note": "Approved policy requires provider-subject-first resolution and independent NuvIoT email proof before linking an unlinked provider to an existing durable user." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Users/PendingIdentity.cs", "note": "PendingIdentity defines OAuthExternalLogin as a ceremony-only flow bucket." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External IdP V2 reconciliation retains provider protocols as implementation details beneath provider-independent auth semantics." }
+  ]
+}

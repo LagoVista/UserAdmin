@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.external-identity-provider-registration.email-verification-confirmed-to-home",
+  "runtimeEntityId": "95C3EA1C5DD24B278D9FC95395272D02",
+  "name": "Finalize External Provider Registration",
+  "summary": "After independent email proof and duplicate checks confirm that no durable user exists, Continue creates exactly one durable user, attaches the validated provider subject, establishes the required home workspace, and establishes the normal application session.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "external-identity-provider-registration",
+  "startViewKey": "auth.email-verification.confirmed",
+  "action": { "id": "continue", "finder": "action:continue" },
+  "preconditions": { "expression": "the OAuth-external PendingIdentity has verified email ownership, complete profile data, an unlinked validated provider subject, and duplicate checks find no durable user", "state": { "ensurePendingIdentity": "set", "ensureUserDoesNotExist": "set" } },
+  "inputs": [],
+  "serverInteraction": { "required": true, "intent": "Create one durable user, atomically attach the provider subject, create/reconcile the home workspace, resolve the PendingIdentity, establish the normal session, and return the application landing destination.", "transitionKeys": ["auth.transition.external-idp.create-user", "auth.transition.home-workspace.begin-creation", "auth.transition.home-workspace.complete-creation", "auth.transition.external-idp.establish-session"] },
+  "expectedViewKey": "app.home",
+  "postconditions": { "expression": "exactly one durable user exists with the provider subject linked, the home workspace is established, the PendingIdentity is resolved, and the normal application session is active", "state": { "ensureUserExists": "set", "belongsToOrg": "set", "isUserLoggedIn": "set", "externalLoginProviders": ["Microsoft"], "hasLastLogin": "set" } },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [{ "sourceType": "decision", "reference": "User Authentication", "note": "Approved authentication policy requires independent NuvIoT email proof before an unlinked external provider may be linked to an existing durable identity; provider email is supporting evidence only." }, { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External Identity Provider category reconciliation separates linked-subject sign-in, provider denial/fault, first-time registration, and provider link/unlink management while preserving provider-specific choices as permutations." }, { "sourceType": "journey", "reference": "auth.journey.native-provider.new-user-registration", "note": "Legacy journey supplies historical create-user/home/session decomposition." }],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}

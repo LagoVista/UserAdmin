@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.external-identity-provider-registration.email-verification-enter-to-confirmed",
+  "runtimeEntityId": "F189836CAF254A0BACD8D2A2B47B4043",
+  "name": "Verify Pending Identity Email",
+  "summary": "The user submits a valid NuvIoT email-verification code; ownership becomes verified for identity resolution while the PendingIdentity still cannot exercise normal application authorization.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "external-identity-provider-registration",
+  "startViewKey": "auth.email-verification.enter",
+  "action": { "id": "verify-verification-code", "finder": "action:verify-verification-code" },
+  "preconditions": { "expression": "the OAuth-external PendingIdentity verification operation is active and the supplied NuvIoT code is valid", "state": { "ensurePendingIdentity": "set", "emailVerificationCode": { "status": "valid", "attemptCount": 0 } } },
+  "inputs": [{ "finder": "field:verification-code", "name": "Verification Code", "valueType": "secret-reference", "required": true, "value": "email-verification.code" }],
+  "serverInteraction": { "required": true, "intent": "Consume the NuvIoT verification code, record verified email ownership on the PendingIdentity, and advance to identity resolution without yet granting normal application authorization.", "transitionKeys": ["auth.transition.pending-identity.complete-verification"] },
+  "expectedViewKey": "auth.email-verification.confirmed",
+  "postconditions": { "expression": "email ownership is independently verified, the PendingIdentity is ready for resolution, and no durable application session exists", "state": { "ensurePendingIdentity": "set", "emailVerificationCode": { "status": "consumed", "attemptCount": 0 } } },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [{ "sourceType": "auth-view", "reference": "auth.email-verification.enter" }, { "sourceType": "auth-view", "reference": "auth.email-verification.confirmed" }, { "sourceType": "decision", "reference": "User Authentication", "note": "Approved authentication policy requires independent NuvIoT email proof before an unlinked external provider may be linked to an existing durable identity; provider email is supporting evidence only." }],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}

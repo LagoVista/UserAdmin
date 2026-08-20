@@ -3,34 +3,26 @@
   "schemaVersion": "2.0",
   "key": "auth.behavior.external-identity-provider.registration-success",
   "name": "External Identity Provider Registration Success",
-  "summary": "A new user establishes a durable account from a validated supported external identity provider identity, binds that provider identity to the new user, and enters the application without conflating provider email with independent email ownership evidence.",
-  "version": 1,
+  "summary": "A first-time user completes a supported external provider ceremony for an unlinked subject, continues through a ceremony-only PendingIdentity, independently verifies the registration email with NuvIoT, creates exactly one durable user, binds the provider subject, establishes the required home context, and enters the application.",
+  "version": 2,
   "maturity": "proposed",
   "categoryKey": "external-identity-provider-registration",
-  "scenarioKeys": [],
-  "finalOutcome": "A new durable user exists, the external provider identity is bound to it, the required home context exists, and an authenticated application session is active.",
-  "supportedPlatforms": [
-    "server",
-    "web",
-    "android",
-    "ios"
+  "scenarioKeys": [
+    "auth.scenario.external-identity-provider-registration.welcome-to-provider-selection",
+    "auth.scenario.external-identity-provider-registration.provider-selection-to-complete-profile",
+    "auth.scenario.external-identity-provider-registration.complete-profile-to-email-verification",
+    "auth.scenario.external-identity-provider-registration.email-verification-send-to-enter",
+    "auth.scenario.external-identity-provider-registration.email-verification-enter-to-confirmed",
+    "auth.scenario.external-identity-provider-registration.email-verification-confirmed-to-home"
   ],
+  "entryViewKey": "auth.welcome",
+  "finalViewKey": "app.home",
+  "finalOutcome": "A new durable user exists only after independent email proof and duplicate checks, the external provider subject is bound to that user, the required home context exists, and an authenticated application session is active.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
   "sourceReferences": [
-    {
-      "sourceType": "journey",
-      "reference": "auth.journey.native-provider.new-user-registration",
-      "note": "Legacy journey provides discovery evidence and retains historical terminology until its own reconciliation."
-    },
-    {
-      "sourceType": "discussion",
-      "reference": "ChatGPT conversation 2026-08-08",
-      "note": "External Identity Provider is the canonical terminology for provider-mediated identity establishment."
-    }
+    { "sourceType": "decision", "reference": "User Authentication", "note": "Approved authentication policy requires independent NuvIoT email proof before an unlinked external provider may be linked to an existing durable identity; provider email is supporting evidence only." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External Identity Provider category reconciliation separates linked-subject sign-in, provider denial/fault, first-time registration, and provider link/unlink management while preserving provider-specific choices as permutations." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Users/PendingIdentity.cs", "note": "OAuthExternalLogin is a distinct PendingIdentity flow bucket; RegisteredEmail is untrusted until verification." }
   ],
-  "progress": {
-    "scenarios": "not-started",
-    "presentation": "not-started",
-    "implementation": "not-started",
-    "tests": "not-started"
-  }
+  "progress": { "scenarios": "complete", "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
 }

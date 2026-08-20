@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schemas/app-user-test-scenario-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.scenario.external-identity-provider-registration.email-verification-send-to-enter",
+  "runtimeEntityId": "F5BE7E9A156D45778DB0C791CC5E6F97",
+  "name": "Send Pending Identity Verification Code",
+  "summary": "The user requests the NuvIoT verification code and the ceremony advances to the code-entry surface while remaining authorization-limited to the PendingIdentity.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "external-identity-provider-registration",
+  "startViewKey": "auth.email-verification.send",
+  "action": { "id": "send-verification-code", "finder": "action:send-verification-code" },
+  "preconditions": { "expression": "the OAuth-external PendingIdentity requires email verification and has no normal application authorization", "state": { "ensurePendingIdentity": "set", "emailVerificationCode": { "status": "notset" } } },
+  "inputs": [],
+  "serverInteraction": { "required": true, "intent": "Issue the independent NuvIoT email-verification proof and begin PendingIdentity verification.", "transitionKeys": ["auth.transition.pending-identity.begin-verification"] },
+  "expectedViewKey": "auth.email-verification.enter",
+  "postconditions": { "expression": "the PendingIdentity verification operation is active and a valid email-verification code has been issued", "state": { "ensurePendingIdentity": "set", "emailVerificationCode": { "status": "valid", "attemptCount": 0 } } },
+  "expectedAuthLogEvents": [],
+  "evidenceRequirements": ["server", "web", "android", "ios"],
+  "sourceReferences": [{ "sourceType": "auth-view", "reference": "auth.email-verification.send" }, { "sourceType": "auth-view", "reference": "auth.email-verification.enter" }, { "sourceType": "decision", "reference": "User Authentication", "note": "Approved authentication policy requires independent NuvIoT email proof before an unlinked external provider may be linked to an existing durable identity; provider email is supporting evidence only." }],
+  "progress": { "presentation": "complete", "implementation": "in-progress", "tests": "not-started" }
+}

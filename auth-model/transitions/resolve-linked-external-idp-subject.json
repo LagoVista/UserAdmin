@@ -1,0 +1,22 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.external-idp.resolve-linked-subject",
+  "name": "Resolve Linked External Provider Subject",
+  "summary": "Resolves a validated OAuth provider subject to the already-linked durable identity without using provider email as an identity key.",
+  "version": 1,
+  "maturity": "proposed",
+  "priority": 90,
+  "sourceState": { "expression": "credential-proof == oauth-proved and durable-identity != resolved" },
+  "actionKey": "auth.action.external-idp.resolve-linked-subject",
+  "guards": [{ "expression": "provider-subject-link-count == 1", "failureCode": "provider-subject-link-not-unique" }],
+  "destinationTransform": [{ "dimensionKey": "auth.dimension.durable-identity", "operation": "set", "valueExpression": "resolved" }],
+  "requiredEffects": ["record-provider-subject-resolution"],
+  "forbiddenEffects": ["resolve-user-by-email-alone", "relink-provider-subject", "create-durable-user"],
+  "invariantKeys": ["auth.invariant.identity-resolution.no-duplicate-user", "auth.invariant.email-identities.not-conflated", "auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "User Authentication", "note": "Approved policy requires provider-subject-first resolution and independent NuvIoT email proof before linking an unlinked provider to an existing durable user." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin.Models/Users/PendingIdentity.cs", "note": "PendingIdentity defines OAuthExternalLogin as a ceremony-only flow bucket." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-20", "note": "External IdP V2 reconciliation retains provider protocols as implementation details beneath provider-independent auth semantics." }
+  ]
+}

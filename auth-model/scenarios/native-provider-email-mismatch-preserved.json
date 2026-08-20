@@ -3,8 +3,8 @@
   "schemaVersion": "1.0",
   "key": "auth.scenario.native-provider.email-mismatch-preserved",
   "name": "Preserve Native Provider Email Mismatch",
-  "summary": "Validates a provider assertion while preserving provider, registered, and invited emails as distinct evidence values when they differ.",
-  "version": 1,
+  "summary": "Validates a provider assertion while preserving provider, registered, and invited emails as distinct evidence values when they differ; provider email remains asserted until separately verified by NuvIoT.",
+  "version": 2,
   "maturity": "proposed",
   "scenarioType": "security-invariant",
   "journeyKeys": ["auth.journey.native-provider.existing-user", "auth.journey.native-provider.new-user-registration"],
@@ -19,11 +19,14 @@
     { "key": "provider-email-verified", "valueType": "boolean", "required": true, "example": true }
   ],
   "actionKey": "auth.action.native-provider.capture-assertion",
-  "postconditions": { "expression": "credential-proof == native-provider-proved and email-ownership == provider-verified and registered-email, provider-email, and invited-email remain distinct" },
+  "postconditions": { "expression": "credential-proof == native-provider-proved and email-ownership == asserted and registered-email, provider-email, and invited-email remain distinct" },
   "requiredEffects": ["persist-provider-subject", "preserve-provider-email-as-distinct-evidence"],
-  "forbiddenEffects": ["overwrite-registered-email", "overwrite-invited-email", "resolve-user-by-email-alone"],
+  "forbiddenEffects": ["overwrite-registered-email", "overwrite-invited-email", "resolve-user-by-email-alone", "mark-provider-email-as-nuviot-verified"],
   "invariantKeys": ["auth.invariant.email-identities.not-conflated", "auth.invariant.pending-identity.no-normal-authorization"],
   "expectedAuthLogEvents": ["native-provider-assertion-captured"],
   "evidenceRequirements": ["server", "web", "android", "ios", "vtm"],
-  "sourceReferences": [{ "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" }]
+  "sourceReferences": [
+    { "sourceType": "discussion", "reference": "AUTH-MODEL-GUIDE.md", "section": "4.7" },
+    { "sourceType": "decision", "reference": "User Authentication", "note": "Provider email may prefill or support the ceremony but never replaces independent NuvIoT email proof for identity linking." }
+  ]
 }
