@@ -19,6 +19,7 @@ namespace LagoVista.UserAdmin.Authentication
     {
         private readonly IPasswordLoginFlowHandler _passwordLoginHandler;
         private readonly ITotpAuthenticationFlowHandler _totpAuthenticationHandler;
+        private readonly IRecoveryCodeAuthenticationFlowHandler _recoveryCodeAuthenticationHandler;
         private readonly ISignOutFlowHandler _signOutHandler;
         private readonly ISignInManager _signInManager;
         private readonly IAuthTokenManager _authTokenManager;
@@ -34,7 +35,7 @@ namespace LagoVista.UserAdmin.Authentication
         private readonly ITotpTurnOffFlowHandler _totpTurnOffHandler;
         private readonly ITotpRecoveryCodeRotationFlowHandler _totpRecoveryCodeRotationHandler;
 
-        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> invitationAcceptanceHandler = null, IAuthenticationFlowHandler<EmailVerificationFlowRequest> emailVerificationHandler = null, IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> passwordRecoveryVerificationHandler = null, IAuthenticationFlowHandler<PasswordChangeFlowRequest> passwordChangeHandler = null, IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult> emailVerificationSendHandler = null, ITotpTurnOffFlowHandler totpTurnOffHandler = null, ITotpRecoveryCodeRotationFlowHandler totpRecoveryCodeRotationHandler = null, IAuthenticationFlowHandler<TotpEnrollmentBeginFlowRequest, AppUserTotpEnrollmentInfo> totpEnrollmentBeginHandler = null, IAuthenticationFlowHandler<TotpEnrollmentConfirmFlowRequest, List<string>> totpEnrollmentConfirmHandler = null, ITotpAuthenticationFlowHandler totpAuthenticationHandler = null, ISignInManager signInManager = null, IAuthTokenManager authTokenManager = null, ISignOutFlowHandler signOutHandler = null)
+        public AuthenticationFlowService(IPasswordLoginFlowHandler passwordLoginHandler, IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest> passwordRecoveryRequestHandler, IAuthenticationFlowHandler<PasswordRecoveryCompletionFlowRequest> passwordRecoveryCompletionHandler = null, IAuthenticationFlowHandler<InvitationAcceptanceFlowRequest, AcceptInviteResponse> invitationAcceptanceHandler = null, IAuthenticationFlowHandler<EmailVerificationFlowRequest> emailVerificationHandler = null, IAuthenticationFlowHandler<PasswordRecoveryVerificationFlowRequest, string> passwordRecoveryVerificationHandler = null, IAuthenticationFlowHandler<PasswordChangeFlowRequest> passwordChangeHandler = null, IAuthenticationFlowHandler<EmailVerificationSendFlowRequest, EmailVerificationSendResult> emailVerificationSendHandler = null, ITotpTurnOffFlowHandler totpTurnOffHandler = null, ITotpRecoveryCodeRotationFlowHandler totpRecoveryCodeRotationHandler = null, IAuthenticationFlowHandler<TotpEnrollmentBeginFlowRequest, AppUserTotpEnrollmentInfo> totpEnrollmentBeginHandler = null, IAuthenticationFlowHandler<TotpEnrollmentConfirmFlowRequest, List<string>> totpEnrollmentConfirmHandler = null, ITotpAuthenticationFlowHandler totpAuthenticationHandler = null, IRecoveryCodeAuthenticationFlowHandler recoveryCodeAuthenticationHandler = null, ISignInManager signInManager = null, IAuthTokenManager authTokenManager = null, ISignOutFlowHandler signOutHandler = null)
         {
             _passwordLoginHandler = passwordLoginHandler ?? throw new ArgumentNullException(nameof(passwordLoginHandler));
             _passwordRecoveryRequestHandler = passwordRecoveryRequestHandler ?? throw new ArgumentNullException(nameof(passwordRecoveryRequestHandler));
@@ -49,6 +50,7 @@ namespace LagoVista.UserAdmin.Authentication
             _totpEnrollmentBeginHandler = totpEnrollmentBeginHandler;
             _totpEnrollmentConfirmHandler = totpEnrollmentConfirmHandler;
             _totpAuthenticationHandler = totpAuthenticationHandler;
+            _recoveryCodeAuthenticationHandler = recoveryCodeAuthenticationHandler;
             _signInManager = signInManager;
             _authTokenManager = authTokenManager;
             _signOutHandler = signOutHandler;
@@ -96,6 +98,44 @@ namespace LagoVista.UserAdmin.Authentication
 
             var result = await _totpAuthenticationHandler.HandleAsync(proofRequest);
             if (result.TransitionKey != TotpAuthenticationFlowHandler.SuccessTransitionKey && result.TransitionKey != TotpAuthenticationFlowHandler.RejectedTransitionKey)
+                throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
+
+            if (!result.PublicResult.Successful)
+                return InvokeResult<AuthResponse>.FromInvokeResult(result.PublicResult.ToInvokeResult());
+
+            return await CompleteProvenUserTokenAsync(request, result.PublicResult.Result);
+        }
+
+        public async Task<InvokeResult<AuthenticationResponse>> AuthenticateWithRecoveryCodeAsync(RecoveryCodeSignInRequest request)
+        {
+            if (_recoveryCodeAuthenticationHandler == null)
+                throw new InvalidOperationException("Recovery-code authentication flow handler is not configured.");
+
+            var result = await _recoveryCodeAuthenticationHandler.HandleAsync(request);
+            if (result.TransitionKey != RecoveryCodeAuthenticationFlowHandler.SuccessTransitionKey && result.TransitionKey != RecoveryCodeAuthenticationFlowHandler.RejectedTransitionKey)
+                throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
+
+            if (!result.PublicResult.Successful)
+                return InvokeResult<AuthenticationResponse>.FromInvokeResult(result.PublicResult.ToInvokeResult());
+
+            return await CompleteProvenUserSessionAsync(result.PublicResult.Result, request.RememberMe);
+        }
+
+        public async Task<InvokeResult<AuthResponse>> AuthenticateWithRecoveryCodeTokenAsync(AuthRequest request)
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (_recoveryCodeAuthenticationHandler == null)
+                throw new InvalidOperationException("Recovery-code authentication flow handler is not configured.");
+
+            var proofRequest = new RecoveryCodeSignInRequest
+            {
+                Email = String.IsNullOrWhiteSpace(request.Email) ? request.UserName : request.Email,
+                RecoveryCode = request.Password,
+                RememberMe = true
+            };
+
+            var result = await _recoveryCodeAuthenticationHandler.HandleAsync(proofRequest);
+            if (result.TransitionKey != RecoveryCodeAuthenticationFlowHandler.SuccessTransitionKey && result.TransitionKey != RecoveryCodeAuthenticationFlowHandler.RejectedTransitionKey)
                 throw new InvalidOperationException($"Authentication flow emitted unsupported transition [{result.TransitionKey}].");
 
             if (!result.PublicResult.Successful)
