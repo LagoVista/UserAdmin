@@ -57,6 +57,7 @@ namespace LagoVista.UserAdmin
             services.AddScoped<IFunctionMapManager, FunctionMapManager>();
             services.AddScoped<IPasswordLoginFlowHandler, PasswordLoginFlowHandler>();
             services.AddScoped<ITotpAuthenticationFlowHandler, TotpAuthenticationFlowHandler>();
+            services.AddScoped<IRecoveryCodeAuthenticationFlowHandler, RecoveryCodeAuthenticationFlowHandler>();
             services.AddScoped<ISignOutFlowHandler, SignOutFlowHandler>();
             services.AddScoped<IAuthenticationFlowHandler<PasswordChangeFlowRequest>, PasswordChangeFlowHandler>();
             services.AddScoped<IAuthenticationFlowHandler<PasswordRecoveryRequestFlowRequest>, PasswordRecoveryRequestFlowHandler>();
