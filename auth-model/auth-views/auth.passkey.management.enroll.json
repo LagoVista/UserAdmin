@@ -15,14 +15,35 @@
     { "id": "cancel", "name": "Cancel", "actionType": "button", "finder": "action:cancel" }
   ],
   "platforms": {
-    "web": { "status": "planned" },
-    "mobile": { "status": "planned" }
+    "web": {
+      "status": "implemented",
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "path": "user/passkey-enroll-start/passkey-enroll-start.component.ts",
+      "component": "PasskeyEnrollStartComponent",
+      "conformance": {
+        "status": "verified",
+        "checkedUtc": "2026-08-20T18:45:00Z",
+        "checkedAgainst": ["view-identity", "actions", "finders", "native-ceremony", "generated-client-operations", "navigation"]
+      }
+    },
+    "mobile": {
+      "status": "implemented",
+      "repository": "nuviot/vtm-client",
+      "path": "src/features/authentication/nuviot-account/screens/passkey-management-enroll-screen.tsx",
+      "component": "PasskeyManagementEnrollScreen",
+      "conformance": {
+        "status": "verified",
+        "checkedUtc": "2026-08-20T18:45:00Z",
+        "checkedAgainst": ["view-identity", "actions", "finders", "native-ceremony", "generated-client-operations", "navigation"]
+      }
+    }
   },
   "source": {
     "runtimeEntityId": "C36A031A3C774C298FAE6889D3F53D6E"
   },
   "notes": [
     "This authenticated management surface is intentionally distinct from anonymous Passkey Registration enrollment.",
-    "Successful creation returns directly to auth.passkey.management; the refreshed credential list is the completion confirmation."
+    "Successful creation returns directly to auth.passkey.management; the refreshed credential list is the completion confirmation.",
+    "Web and mobile source conformance is verified; runtime browser/device execution remains separate evidence."
   ]
 }
