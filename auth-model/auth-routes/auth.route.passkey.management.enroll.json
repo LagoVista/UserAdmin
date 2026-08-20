@@ -1,0 +1,14 @@
+{
+  "$schema": "../schemas/auth-route.schema.json",
+  "schemaVersion": "1.0",
+  "routeId": "auth.route.passkey.management.enroll",
+  "name": "Add Passkey",
+  "path": "/auth/passkey/management/enroll",
+  "routeType": "view",
+  "viewId": "auth.passkey.management.enroll",
+  "status": "active",
+  "platforms": {
+    "web": { "status": "planned" },
+    "mobile": { "status": "planned" }
+  }
+}
