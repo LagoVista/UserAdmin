@@ -21,18 +21,18 @@
   ],
   "platforms": {
     "web": {
-      "status": "partial",
+      "status": "implemented",
       "repository": "softwarelogistics/nuviot-ui-shared",
       "path": "user/continue-totp/continue-totp.component.ts",
       "component": "ContinueTotpComponent",
-      "implementation": "Existing TOTP verification is implemented, but the canonical use-recovery-code action is not yet present."
+      "implementation": "TOTP verification uses generated AuthClient.createTotpLogin with the password-issued MFA challenge. The canonical recovery-code action routes to auth.continue.recovery, and exit paths clear the challenge."
     },
     "mobile": {
-      "status": "partial",
+      "status": "implemented",
       "repository": "nuviot/vtm-client",
       "path": "src/features/authentication/nuviot-account/screens/continue-totp-screen.tsx",
       "component": "ContinueTotpScreen",
-      "implementation": "Existing TOTP verification is implemented, but the canonical use-recovery-code action is not yet present."
+      "implementation": "TOTP verification uses AuthContext.signInWithTotpAsync and generated AuthClient.createTotpToken with the in-memory password-issued MFA challenge. The canonical recovery-code action routes to /auth/continue/recovery."
     }
   },
   "source": {
@@ -44,7 +44,7 @@
   "notes": [
     "The implementation field id totp is normalized to verification-code.",
     "Validation copy is not used as a stable identifier.",
-    "Recovery-code navigation is canonical but not yet implemented on either stable client.",
-    "Both supported clients consume generated AuthClient operations from nuviot/nuvos-app-contracts commit ad1e2ef725d9ca3865e4d889e877e4f3a723a2df."
+    "Both supported clients require the short-lived password-issued MFA challenge before TOTP proof can establish a session or token.",
+    "Both stable clients consume generated Auth contracts from nuviot/nuvos-app-contracts commit 56f0679a24579937052d7bafb362fa2ef703910a."
   ]
 }
