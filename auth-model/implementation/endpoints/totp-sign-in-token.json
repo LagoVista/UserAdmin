@@ -3,8 +3,8 @@
   "schemaVersion": "1.0",
   "key": "auth.endpoint.totp-sign-in.token",
   "name": "TOTP Sign-In Token Endpoint",
-  "summary": "Maps anonymous mobile TOTP authentication to the normalized authentication flow and the existing access/refresh-token issuance pipeline.",
-  "version": 1,
+  "summary": "Maps password-challenge-bound mobile TOTP authentication to the normalized authentication flow and the existing access/refresh-token issuance pipeline.",
+  "version": 2,
   "maturity": "implemented",
   "repository": "LagoVista/UserAdminRest",
   "projectPath": "src/LagoVista.UserAdmin.Rest",
@@ -13,7 +13,7 @@
   "methodName": "AuthenticateWithTotpTokenAsync",
   "httpMethods": ["POST"],
   "routeTemplates": ["/api/auth/totp/token"],
-  "requestContract": "AuthRequest",
+  "requestContract": "TotpTokenSignInRequest",
   "responseContract": "InvokeResult<AuthResponse>",
   "handlerKey": "auth.handler.totp-sign-in",
   "transitionKeys": [
@@ -24,7 +24,7 @@
     {
       "sourceType": "code",
       "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/AuthenticationFlowController.cs",
-      "note": "AllowAnonymous endpoint delegates to IAuthenticationFlowService.AuthenticateWithTotpTokenAsync; accepted proof is internally exchanged through the existing single-use-token grant pipeline so mobile receives the standard AuthResponse token contract in one external operation."
+      "note": "AllowAnonymous endpoint accepts TotpTokenSignInRequest containing MfaChallengeId, TOTP proof and the standard AuthRequest token metadata. Accepted proof is exchanged through the established single-use-token grant pipeline."
     }
   ]
 }
