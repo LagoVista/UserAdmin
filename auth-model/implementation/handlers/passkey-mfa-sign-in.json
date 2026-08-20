@@ -1,0 +1,35 @@
+{
+  "$schema": "../../schemas/auth-flow-handler.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.handler.passkey-mfa-sign-in",
+  "name": "Passkey MFA Authentication Handler",
+  "summary": "Binds Passkey step-up proof to the durable UserId carried by a password-issued MFA challenge, consumes that MFA challenge only after WebAuthn proof succeeds, and returns the proven AppUser for session-specific completion.",
+  "version": 1,
+  "maturity": "implemented",
+  "repository": "LagoVista/UserAdmin",
+  "projectPath": "src/LagoVista.AspNetCore.Identity",
+  "sourcePath": "src/LagoVista.AspNetCore.Identity/Services/PasskeyMfaAuthenticationService.cs",
+  "interfaceName": "IPasskeyMfaAuthenticationService",
+  "typeName": "PasskeyMfaAuthenticationService",
+  "methodName": "BeginAsync / CompleteAsync",
+  "requestContract": "MfaChallengeId + PasskeyAuthenticationCompleteRequest",
+  "resultContract": "InvokeResult<PasskeyBeginOptionsResponse> / InvokeResult<AppUser>",
+  "transitionKeys": ["auth.transition.passkey.complete-mfa"],
+  "dependencies": ["IMfaChallengeFlowService", "IAppUserPasskeyManager", "IAppUserRepo"],
+  "notes": [
+    "BeginAsync validates provider=passkey and starts the user-bound WebAuthn ceremony for the challenge UserId with step-up user verification required.",
+    "CompleteAsync validates the same MFA challenge, completes the real user-bound Passkey proof, consumes the MFA challenge only after proof succeeds, and resolves the proven AppUser by challenge UserId."
+  ],
+  "sourceReferences": [
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Services/PasskeyMfaAuthenticationService.cs",
+      "note": "Central Passkey-MFA orchestration seam."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/UserAdmin:src/LagoVista.AspNetCore.Identity/Managers/AppUserPasskeyManager.cs",
+      "note": "Real Passkey manager verifies challenge ownership, credential ownership, WebAuthn assertion, signature counter and MFA freshness."
+    }
+  ]
+}
