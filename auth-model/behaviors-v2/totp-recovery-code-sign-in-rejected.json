@@ -3,7 +3,7 @@
   "schemaVersion": "2.0",
   "key": "auth.behavior.totp.recovery-code-sign-in-rejected",
   "name": "TOTP Recovery Code Could Not Authenticate",
-  "summary": "A returning user with an outstanding TOTP MFA requirement chooses recovery-code authentication and submits a code that is not accepted; no authenticated session is established and the recovery-code entry surface remains available for retry or exit.",
+  "summary": "A returning user with a password-issued TOTP MFA challenge chooses recovery-code authentication and submits a code that is not accepted; no authenticated session is established, the challenge remains available for retry, and the recovery-code entry surface shows a non-enumerating error.",
   "version": 1,
   "maturity": "proposed",
   "categoryKey": "totp-sign-in",
@@ -13,17 +13,20 @@
   ],
   "entryViewKey": "auth.continue.totp",
   "finalViewKey": "auth.continue.recovery",
-  "finalOutcome": "The submitted recovery-code proof is rejected, the outstanding MFA requirement remains unsatisfied, and no authenticated application session is established.",
+  "finalOutcome": "The submitted recovery-code proof is rejected, the password-issued MFA challenge remains available for retry, the outstanding MFA requirement remains unsatisfied, and no authenticated application session is established.",
   "supportedPlatforms": ["server", "web", "android", "ios"],
   "sourceReferences": [
-    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ConsumeRecoveryCodeAsync already rejects invalid or unavailable recovery codes without authenticating the user." },
-    { "sourceType": "auth-view", "reference": "auth.continue.recovery", "note": "Rejected recovery-code sign-in remains on the same canonical entry view with a non-enumerating error state." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ConsumeRecoveryCodeAsync rejects invalid or unavailable recovery codes without authenticating the user." },
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Authentication/Flows/RecoveryCodeAuthenticationFlowHandler.cs", "note": "Rejected recovery proof does not consume the password-issued MFA challenge." },
+    { "sourceType": "code", "reference": "softwarelogistics/nuviot-ui-shared:user/continue-recovery/continue-recovery.component.ts", "note": "Angular remains on auth.continue.recovery and exposes the canonical generic rejection state." },
+    { "sourceType": "code", "reference": "nuviot/vtm-client:src/features/authentication/nuviot-account/screens/continue-recovery-screen.tsx", "note": "React Native remains on the recovery surface and exposes status:recovery-error after rejected proof." },
+    { "sourceType": "test", "reference": "tests/LagoVista.UserAdmin.Auth.Tests/RecoveryCodeAuthenticationFlowIntegrationTests.cs", "note": "Authored proof covers invalid recovery code and missing-challenge rejection without session establishment." },
     { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Invalid, already-consumed and otherwise unusable recovery codes share one public rejected outcome rather than exposing internal rejection reasons." }
   ],
   "progress": {
     "scenarios": "complete",
-    "presentation": "in-progress",
-    "implementation": "not-started",
-    "tests": "not-started"
+    "presentation": "complete",
+    "implementation": "complete",
+    "tests": "complete"
   }
 }
