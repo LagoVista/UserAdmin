@@ -1,0 +1,30 @@
+{
+  "$schema": "../schemas/linear-user-behavior-v2.schema.json",
+  "schemaVersion": "2.0",
+  "key": "auth.behavior.totp.recovery-code-sign-in-success",
+  "name": "TOTP Recovery Code Sign-In Success",
+  "summary": "A returning user with an outstanding TOTP MFA requirement chooses recovery-code authentication, submits one valid unused recovery code, consumes that code exactly once, and establishes an authenticated application session.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-sign-in",
+  "scenarioKeys": [
+    "auth.scenario.totp-sign-in.use-recovery-code",
+    "auth.scenario.totp-sign-in.recovery-code-success"
+  ],
+  "entryViewKey": "auth.continue.totp",
+  "finalViewKey": "app.home",
+  "finalOutcome": "One valid TOTP recovery code is consumed for the existing durable identity and the outstanding MFA requirement is satisfied by an authenticated application session.",
+  "supportedPlatforms": ["server", "web", "android", "ios"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ConsumeRecoveryCodeAsync already provides the one-time recovery-code validation and consumption primitive." },
+    { "sourceType": "code", "reference": "LagoVista/UserAdminRest:src/LagoVista.UserAdmin.Rest/Rest/MfaController.cs", "note": "Current recovery-code consumption is confirmed-current-user only, so the sign-in/session orchestration boundary remains implementation work." },
+    { "sourceType": "auth-view", "reference": "auth.continue.recovery", "note": "Canonical recovery-code entry surface is now defined; React Native has a presentation shell while Angular and functional verification remain outstanding." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Recovery code is modeled as an alternate way to satisfy the TOTP MFA requirement, not as a standalone primary login credential." }
+  ],
+  "progress": {
+    "scenarios": "complete",
+    "presentation": "in-progress",
+    "implementation": "not-started",
+    "tests": "not-started"
+  }
+}
