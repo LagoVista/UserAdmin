@@ -1,0 +1,24 @@
+{
+  "$schema": "../schemas/transition.schema.json",
+  "schemaVersion": "1.0",
+  "key": "auth.transition.totp-recovery-sign-in.rejected",
+  "name": "TOTP Recovery Code Sign-In Rejected",
+  "summary": "Rejects an invalid, already consumed, or otherwise unusable TOTP recovery code without establishing an authenticated application session.",
+  "version": 1,
+  "maturity": "proposed",
+  "categoryKey": "totp-sign-in",
+  "priority": 90,
+  "sourceState": { "expression": "session-capability == anonymous and mfa-challenge == pending" },
+  "actionKey": "auth.action.totp-recovery-sign-in.submit",
+  "guards": [
+    { "expression": "the submitted recovery code is not accepted for the identified durable identity", "failureCode": "totp-recovery-code-rejected" }
+  ],
+  "destinationTransform": [],
+  "requiredEffects": ["reject-recovery-code-proof", "record-recovery-code-authentication-failure"],
+  "forbiddenEffects": ["issue-authenticated-session", "consume-unrelated-recovery-code", "create-durable-user", "disclose-account-existence"],
+  "invariantKeys": ["auth.invariant.transition.one-state-changing-action", "auth.invariant.transition.deterministic-post-state"],
+  "sourceReferences": [
+    { "sourceType": "code", "reference": "src/LagoVista.UserAdmin/Managers/AppUserMfaManager.cs", "note": "ConsumeRecoveryCodeAsync returns rejected results for missing, invalid, unavailable or already consumed recovery codes without authenticating the user." },
+    { "sourceType": "decision", "reference": "ChatGPT conversation 2026-08-19", "note": "Rejected recovery-code sign-in remains on the recovery-code entry surface and exposes no account or secret-state details." }
+  ]
+}
