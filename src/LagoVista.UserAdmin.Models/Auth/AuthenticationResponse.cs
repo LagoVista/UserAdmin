@@ -13,6 +13,12 @@ namespace LagoVista.UserAdmin.Models.Auth
         public string MaskedEmail { get; set; }
 
         /// <summary>
+        /// Short-lived server-issued challenge that binds a second-factor proof to the
+        /// durable identity whose primary password proof already succeeded.
+        /// </summary>
+        public string MfaChallengeId { get; set; }
+
+        /// <summary>
         /// Backward-compatible primary provider hint. Clients should prefer AvailableMfaProviders
         /// when AuthenticationState is MfaRequired.
         /// </summary>
@@ -37,6 +43,7 @@ namespace LagoVista.UserAdmin.Models.Auth
             AuthenticationReasonCode = String.Empty;
             PendingIdentityId = String.Empty;
             MaskedEmail = String.Empty;
+            MfaChallengeId = String.Empty;
             Provider = String.Empty;
             AvailableMfaProviders = Array.Empty<string>();
             InviteId = String.Empty;
