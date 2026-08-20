@@ -65,8 +65,11 @@
     {
       "key": "passkey-management",
       "name": "Passkey Management",
-      "behaviorKeys": ["auth.behavior.passkey.add-success"],
-      "progress": {"behaviors":"complete","scenarios":"not-started","presentation":"not-started","implementation":"not-started","tests":"not-started"}
+      "behaviorKeys": [
+        "auth.behavior.passkey.add-success",
+        "auth.behavior.passkey.remove-success"
+      ],
+      "progress": {"behaviors":"complete","scenarios":"complete","presentation":"complete","implementation":"complete","tests":"complete"}
     },
     {
       "key": "passkey-registration",
@@ -177,6 +180,7 @@
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Select MFA Type implementation is complete on Angular Web and React Native. Both stable clients expose auth.select.mfa-type with action:select-passkey and action:select-totp and route those actions to the existing canonical continuation views; no server implementation is required for this UI-only category."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"Password Sign In MFA response routing is implementation-complete on the stable Angular Web master and React Native main branches. Both clients prefer availableMfaProviders, preserve provider as a compatibility fallback, route TOTP-only and Passkey-only directly to their continuation views, route dual-factor identities to Select MFA Type, and avoid treating MFA-required responses as authenticated mobile sessions."},
     {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-19","note":"TOTP Sign In now includes separate recovery-code success and rejected behaviors because the linear behavior model cannot honestly represent recovery-code authentication as an alternate branch inside the existing TOTP-code behaviors. Recovery code remains an MFA-only proof, not a primary login credential. TOTP Management now also includes privileged administrative reset, which requires fresh actor step-up proof, records actor and target identity, removes the target user's TOTP and recovery-code material, and never authenticates the target user."},
-    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-20","note":"Passkey Sign In now includes both primary Email-to-Passkey and Password-to-Passkey MFA behaviors. Both stable clients use generated challenge-aware operations, primary Passkey requires user verification without recording MFA freshness, MFA Passkey consumes the password-issued MFA challenge, and authored proof covers real AppUserPasskeyManager security bindings plus browser/mobile proven-user completion. TOTP Sign In recovery-code paths and TOTP Management administrative reset are likewise reconciled complete. Runtime execution evidence remains separate from authored category progress."}
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-20","note":"Passkey Sign In now includes both primary Email-to-Passkey and Password-to-Passkey MFA behaviors. Both stable clients use generated challenge-aware operations, primary Passkey requires user verification without recording MFA freshness, MFA Passkey consumes the password-issued MFA challenge, and authored proof covers real AppUserPasskeyManager security bindings plus browser/mobile proven-user completion. TOTP Sign In recovery-code paths and TOTP Management administrative reset are likewise reconciled complete. Runtime execution evidence remains separate from authored category progress."},
+    {"sourceType":"decision","reference":"ChatGPT conversation 2026-08-20","note":"Passkey Management V1 is authored complete with Add Passkey and Remove Passkey behaviors. Authenticated existing-user enrollment is separated from anonymous Passkey Registration, Angular Web and React Native implement the canonical management/enrollment surfaces on their default branches, and server proof covers user/RP-bound registration, successful credential persistence, malformed completion rejection, and scoped removal. Runtime execution evidence remains separate from authored category progress."}
   ]
 }
