@@ -25,12 +25,11 @@
     }
   },
   "inputs": [
-    { "finder": "field:email", "name": "Email", "valueType": "string", "required": true, "value": "user.email", "description": "Previously identified durable-user email held by the authentication flow." },
     { "finder": "field:recovery-code", "name": "Recovery Code", "valueType": "secret-reference", "required": true, "value": "user.recovery-code", "description": "One unused recovery code generated during TOTP enrollment or recovery-code rotation." }
   ],
   "serverInteraction": {
     "required": true,
-    "intent": "Resolve the existing durable identity, consume exactly one valid recovery code, satisfy the outstanding MFA requirement, establish the application session, and resolve the landing destination.",
+    "intent": "Resolve the existing durable identity held by the MFA challenge, consume exactly one valid recovery code, satisfy the outstanding MFA requirement, establish the application session, and resolve the landing destination.",
     "transitionKeys": ["auth.transition.totp-recovery-sign-in.success"]
   },
   "expectedViewKey": "app.home",
