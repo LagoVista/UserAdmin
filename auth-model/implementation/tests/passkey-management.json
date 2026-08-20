@@ -3,8 +3,8 @@
   "schemaVersion": "1.0",
   "key": "auth.test-binding.passkey-management",
   "name": "Passkey Management Server Proof",
-  "summary": "Registers server proof for authenticated existing-user passkey enrollment challenge binding and user/RP-scoped credential removal.",
-  "version": 1,
+  "summary": "Registers server proof for authenticated existing-user passkey enrollment, verified credential persistence, malformed completion rejection, and user/RP-scoped credential removal.",
+  "version": 2,
   "maturity": "implemented",
   "testLevel": "handler-integration",
   "repository": "LagoVista/UserAdmin",
@@ -14,6 +14,9 @@
   "testTypeName": "AppUserPasskeyManagementIntegrationTests",
   "testMethodNames": [
     "BeginRegistration_ForExistingUser_Should_BindChallengeAndExcludeExistingCredentials",
+    "CompleteRegistration_WithMissingPayload_Should_RejectBeforeChallengeOrFidoWork",
+    "CompleteRegistration_WithMissingAttestation_Should_RejectBeforeChallengeOrFidoWork",
+    "CompleteRegistration_WithVerifiedAttestation_Should_PersistCredentialForCurrentUser",
     "RemovePasskey_Should_ScopeRemovalToCurrentUserAndRelyingParty",
     "RemovePasskey_WhenScopedCredentialDoesNotExist_Should_PropagateFailure"
   ],
@@ -25,17 +28,24 @@
   "endpointBindingKeys": [],
   "transitionKeys": [
     "auth.transition.passkey.begin-existing-user-registration",
+    "auth.transition.passkey.complete-existing-user-registration",
     "auth.transition.passkey.remove-existing-user-credential"
   ],
   "proofObligations": [
     "existing-user-registration-resolves-the-current-durable-user",
     "registration-challenge-is-bound-to-current-user-rp-and-origin",
     "registration-options-exclude-existing-user-credentials",
+    "missing-registration-payload-is-rejected-before-challenge-consumption",
+    "missing-registration-attestation-is-rejected-before-challenge-consumption",
+    "verified-registration-persists-credential-for-current-user-and-rp",
+    "verified-registration-persists-fido-credential-id-public-key-and-sign-count",
+    "successful-registration-returns-to-passkey-management",
     "remove-operation-is-scoped-to-current-user-rp-and-credential",
     "missing-scoped-credential-is-rejected"
   ],
   "notes": [
-    "This is the first Passkey Management proof slice. Complete-registration attestation persistence and the table-storage index regression remain follow-on proof obligations before authored tests are complete.",
+    "The manager-level enrollment path now has authored proof from challenge issuance through verified credential persistence.",
+    "The table-storage index regression remains a separate storage-boundary proof obligation before authored Passkey Management tests are complete.",
     "Runtime execution evidence remains separate from authored proof status."
   ],
   "sourceReferences": [
