@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lagovista.com/auth/client-interaction-conformance-manifest.schema.json",
+  "title": "Client Interaction Conformance Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "clientKey", "platform", "repository", "inspectedCommit", "generatedUtc", "interactions"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "1.0" },
+    "clientKey": { "enum": ["angular-web", "react-native"] },
+    "platform": { "enum": ["web", "mobile"] },
+    "repository": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+    "inspectedCommit": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "generatedUtc": { "type": "string", "format": "date-time" },
+    "interactions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/interactionObservation" }
+    }
+  },
+  "$defs": {
+    "interactionObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["interactionKey", "exists", "controlsConform", "behaviorWired", "runtimeEvidence", "sourceEvidence"],
+      "properties": {
+        "interactionKey": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})+$" },
+        "exists": { "type": "boolean" },
+        "controlsConform": { "type": "boolean" },
+        "behaviorWired": { "type": "boolean" },
+        "runtimeEvidence": { "enum": ["not-run", "passed", "failed"] },
+        "component": { "type": "string", "minLength": 1 },
+        "directiveHandler": { "type": "string", "minLength": 1 },
+        "observedControlFinders": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "observedActionFinders": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "sourceEvidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path"],
+            "properties": {
+              "path": { "type": "string", "minLength": 1 },
+              "symbol": { "type": "string" },
+              "note": { "type": "string" }
+            }
+          }
+        },
+        "runtimeEvidenceReferences": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "notes": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    }
+  }
+}
