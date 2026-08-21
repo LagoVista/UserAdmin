@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Abstractions;
 using OpenIddict.Validation.AspNetCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
@@ -24,14 +25,25 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             var includeProfile = scopes.Contains(Scopes.Profile, StringComparer.Ordinal);
             var includeEmail = scopes.Contains(Scopes.Email, StringComparer.Ordinal);
 
-            return Ok(new
+            var response = new Dictionary<string, object>
             {
-                sub = subject,
-                name = includeProfile ? User.GetClaim(Claims.Name) : null,
-                preferred_username = includeProfile ? User.GetClaim(Claims.PreferredUsername) : null,
-                email = includeEmail ? User.GetClaim(Claims.Email) : null,
-                system_admin = User.GetClaim(ClaimsFactory.IsSystemAdmin),
-            });
+                [Claims.Subject] = subject,
+            };
+
+            if (includeProfile)
+            {
+                response[Claims.Name] = User.GetClaim(Claims.Name);
+                response[Claims.PreferredUsername] = User.GetClaim(Claims.PreferredUsername);
+            }
+
+            if (includeEmail)
+                response[Claims.Email] = User.GetClaim(Claims.Email);
+
+            var isSystemAdmin = User.GetClaim(ClaimsFactory.IsSystemAdmin);
+            if (!String.IsNullOrWhiteSpace(isSystemAdmin))
+                response[ClaimsFactory.IsSystemAdmin] = isSystemAdmin;
+
+            return Ok(response);
         }
     }
 }
