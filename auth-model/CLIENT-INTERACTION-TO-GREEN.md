@@ -63,23 +63,79 @@ Both manifests validate against:
 
 - `auth-model/schemas/client-interaction-conformance-manifest.schema.json`
 
-Each manifest records:
-
-- the exact inspected repository;
-- the exact inspected commit SHA;
-- one observation per reconciled interaction;
-- Exists;
-- Controls Conform;
-- Behavior Wired;
-- runtime-evidence status;
-- component/directive-handler identity when found;
-- observed semantic finders;
-- source evidence;
-- concrete notes explaining gaps or drift.
+Each manifest records the exact inspected repository and commit SHA, one observation per reconciled interaction, the three client checks, runtime-evidence status, component/directive-handler identity when found, observed semantic finders, source evidence, and concrete notes explaining gaps or drift.
 
 These manifests are implementation evidence, not authored product truth. Do not edit the interaction definition merely to make a client observation green.
 
 Aptix derives progress indicators from the interaction definition plus these evidence manifests.
+
+## Stable client implementation homes
+
+Client Interaction implementations have dedicated homes in both stable clients. Do not scatter new handlers through route-specific auth folders or application-specific chat surfaces.
+
+### Angular Web
+
+Repository:
+
+`softwarelogistics/nuviot-ui-shared`
+
+Canonical feature root:
+
+`client-interactions/`
+
+Structure:
+
+- `client-interactions/shared/` - reusable Client Interaction presentation primitives;
+- `client-interactions/handlers/` - one folder per canonical interaction handler;
+- `client-interactions/client-interaction.types.ts` - shared protocol-facing client types;
+- `client-interactions/client-interactions.module.ts` - Angular module exporting the shared shell and handlers.
+
+The reusable shell is:
+
+`client-interactions/shared/client-interaction-shell/ClientInteractionShellComponent`
+
+The shell owns the common card hierarchy and CSS custom properties prefixed with `--nuv-client-interaction-`. Individual handlers should use the shell rather than inventing their own card layout and action styling.
+
+### React Native
+
+Repository:
+
+`nuviot/vtm-client`
+
+Canonical feature root:
+
+`src/features/client-interactions/`
+
+Structure:
+
+- `src/features/client-interactions/components/` - reusable Client Interaction presentation primitives;
+- `src/features/client-interactions/handlers/` - one folder per canonical interaction handler;
+- `src/features/client-interactions/client-interaction-types.ts` - shared protocol-facing client types;
+- `src/features/client-interactions/index.ts` - feature exports.
+
+The reusable shell is:
+
+`src/features/client-interactions/components/ClientInteractionShell`
+
+Shared action styling is provided by:
+
+`src/features/client-interactions/components/ClientInteractionButton`
+
+React Native uses the existing `AppTheme` tokens rather than a second Client Interaction color system.
+
+### Shared visual vocabulary
+
+Angular and React Native do not share rendering code, but every interaction should preserve the same semantic visual hierarchy:
+
+- eyebrow;
+- title;
+- summary;
+- body;
+- status/error region;
+- primary action;
+- secondary action.
+
+Platform-specific presentation differences are allowed. The cards should nevertheless look and behave like members of the same product family.
 
 ## Status values
 
@@ -99,22 +155,9 @@ If implementation exists but does not match authored truth, treat it as drift/in
 
 Confirm that the interaction represents exactly one bounded client capability.
 
-The definition must establish:
+The definition must establish a stable interaction key, stable ClientDirective key, one bounded purpose, invocation payload contract, controls, actions, allowed local presentation states, terminal outcomes, response-value contract, and supported client platforms.
 
-- stable interaction key;
-- stable ClientDirective key;
-- one bounded purpose;
-- invocation payload contract;
-- controls;
-- actions;
-- allowed local presentation states;
-- terminal outcomes;
-- response-value contract;
-- supported client platforms.
-
-The interaction must satisfy the constraints in `CLIENT-CARD-CONTRACT.md`.
-
-In particular:
+The interaction must satisfy `CLIENT-CARD-CONTRACT.md`. In particular:
 
 - one ClientDirective maps to one interaction;
 - every invocation returns using the same correlation id;
@@ -123,23 +166,13 @@ In particular:
 - response values are limited to the contract-approved scalar, EntityHeader, or homogeneous multi-select shapes;
 - Auth Interactions return no response value of any kind.
 
-### Definition complete
-
-Definition is complete when:
-
-- the JSON validates against the correct schema;
-- required fields are present;
-- response rules are explicit;
-- supported platforms are declared honestly;
-- no unresolved authored ambiguity remains about what the client must render or return.
+Definition is complete when the JSON validates against the correct schema, required fields are present, response rules are explicit, supported platforms are declared honestly, and no unresolved authored ambiguity remains about what the client must render or return.
 
 ## 2. Validate Auth bindings
 
 This phase applies only to Auth Interactions.
 
-Confirm that every declared canonical authentication reference resolves to current authored authentication truth.
-
-Bindings may include Behaviors, Scenarios, Actions, Transitions, and AuthViews where presentation semantics are intentionally reused.
+Confirm that every declared canonical authentication reference resolves to current authored authentication truth. Bindings may include Behaviors, Scenarios, Actions, Transitions, and AuthViews where presentation semantics are intentionally reused.
 
 The Auth Interaction must not invent authentication guards, transitions, postconditions, or authoritative account state.
 
@@ -152,6 +185,8 @@ Evaluate exactly three checks.
 ### Exists
 
 Confirm that the authored ClientDirective is recognized, launches the intended interaction component/card, and has identifiable source evidence.
+
+A presentational component by itself does not satisfy Exists. The directive-to-handler dispatch path must be wired.
 
 ### Controls Conform
 
@@ -177,6 +212,8 @@ Apply the same three checks:
 - Controls Conform
 - Behavior Wired
 
+A presentational component by itself does not satisfy Exists. The directive-to-handler dispatch path must be wired.
+
 The semantic interaction contract must match Angular even when native presentation differs.
 
 React Native is green when all three checks are true.
@@ -185,16 +222,7 @@ React Native is green when all three checks are true.
 
 Runtime evidence proves the client interaction protocol actually works when executed.
 
-For each required platform prove:
-
-- the correct ClientDirective launches the correct interaction;
-- the interaction is usable;
-- the expected client/service behavior is invoked;
-- a modeled terminal outcome is produced;
-- the response returns the original correlation id;
-- the interaction terminates/closes;
-- any allowed response value has the authored shape;
-- Auth Interactions return no value.
+For each required platform prove that the correct ClientDirective launches the correct interaction, the interaction is usable, the expected client/service behavior is invoked, a modeled terminal outcome is produced, the response returns the original correlation id, the interaction terminates/closes, any allowed response value has the authored shape, and Auth Interactions return no value.
 
 Record runtime status and evidence references on that platform's conformance observation.
 
@@ -214,20 +242,13 @@ The Client Interactions visualizer should project the evidence as clear progress
 
 General interaction example:
 
-`Definition ✓   Angular 1/3   React Native 0/3   Runtime ○`
+`Definition ✓   Angular 1/3   React Native 1/3   Runtime ○`
 
 Auth interaction example:
 
 `Definition ✓   Auth Bindings ✓   Angular 3/3   React Native 3/3   Runtime ✓`
 
-Each client expands to show:
-
-- Exists
-- Controls
-- Behavior
-- inspected commit
-- source evidence
-- runtime evidence
+Each client expands to show Exists, Controls, Behavior, inspected commit, source evidence, and runtime evidence.
 
 Aptix is a projection. The JSON definitions and evidence manifests remain authoritative.
 
@@ -248,44 +269,66 @@ The authored interaction requires:
 - terminal outcomes `accepted`, `rejected`, `canceled`, and `failed`;
 - no response value.
 
-### Angular baseline
+### Angular reference location
 
-Inspected repository:
+Stable repository:
 
-`softwarelogistics/workforce-ui`
+`softwarelogistics/nuviot-ui-shared`
 
-Reference implementation precursor:
+Reference handler:
 
-`src/app/ui/workforce/client-directives/promotion-directive/PromotionDirectiveComponent`
+`client-interactions/handlers/terms-and-conditions/TermsAndConditionsInteractionComponent`
 
-The first reconciliation records Angular as 1/3:
+Shared shell:
 
-- Exists: true
-- Controls Conform: false
-- Behavior Wired: false
+`client-interactions/shared/client-interaction-shell/ClientInteractionShellComponent`
 
-Why: the existing prototype loads/submits real T&C acceptance, but its UI is a consent checkbox plus `Create my workspace`; it does not expose the authored Accept/Reject semantic surface, and completion emits `ContinuitySessionView` rather than the new correlated Client Interaction outcome contract.
+Current reference state:
 
-This is useful evidence, not a defect in the authored definition. The prototype predates the canonical interaction model.
+- Exists: false;
+- Controls Conform: true;
+- Behavior Wired: false;
+- Runtime: not-run.
 
-### React Native baseline
+The authored display/action finders are now represented by the stable presentational handler. Exists remains false until `client.terms-and-conditions` dispatches into this handler. Behavior remains false until authoritative T&C retrieval/acceptance, correlation, and terminal outcome mapping are wired.
 
-Inspected repository:
+The older `softwarelogistics/workforce-ui` `PromotionDirectiveComponent` remains useful precursor evidence for the real promotion/T&C backend path, but it is no longer the canonical home for this Client Interaction.
+
+### React Native reference location
+
+Stable repository:
 
 `nuviot/vtm-client`
 
-The first reconciliation records React Native as 0/3 because no matching Client Interaction implementation was found.
+Reference handler:
+
+`src/features/client-interactions/handlers/terms-and-conditions/TermsAndConditionsInteraction`
+
+Shared presentation:
+
+- `src/features/client-interactions/components/ClientInteractionShell`;
+- `src/features/client-interactions/components/ClientInteractionButton`.
+
+Current reference state:
+
+- Exists: false;
+- Controls Conform: true;
+- Behavior Wired: false;
+- Runtime: not-run.
+
+The authored display/action finders are represented by the presentational handler. Exists and Behavior remain blocked on directive host dispatch, authoritative behavior wiring, correlation, and terminal outcome mapping.
 
 ### How to use this specimen
 
 When implementing a new Client Interaction:
 
 1. author the definition;
-2. add or update its Angular observation;
-3. add or update its React Native observation;
-4. let Aptix expose the three checks;
-5. implement until both clients reach 3/3;
-6. execute each client and attach runtime evidence;
-7. mark runtime passed only from current evidence.
+2. create the handler in the stable client home for each required platform using the shared shell;
+3. add or update its Angular observation;
+4. add or update its React Native observation;
+5. let Aptix expose the three checks;
+6. wire directive dispatch and behavior until both clients reach 3/3;
+7. execute each client and attach runtime evidence;
+8. mark runtime passed only from current evidence.
 
-This Terms and Conditions interaction is the template for where definitions, client observations, source evidence, and runtime evidence belong. Future Client and Auth Interactions should follow the same layout.
+This Terms and Conditions interaction is the template for where definitions, client handlers, shared presentation, client observations, source evidence, and runtime evidence belong. Future Client and Auth Interactions should follow the same layout.
