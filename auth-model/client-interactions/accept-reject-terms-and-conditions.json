@@ -76,14 +76,15 @@
   "platforms": {
     "angularWeb": {
       "status": "partial",
-      "repository": "softwarelogistics/workforce-ui",
-      "component": "PromotionDirectiveComponent",
-      "notes": "A proven Angular prototype retrieves and accepts the real Terms and Conditions through the existing continuity promotion flow. It predates this canonical Client Interaction contract and requires conformance reconciliation."
+      "repository": "softwarelogistics/nuviot-ui-shared",
+      "component": "TermsAndConditionsInteractionComponent",
+      "notes": "Canonical Angular Client Interaction home is established under client-interactions/. The reference presentational handler conforms to the authored controls, but directive dispatch, authoritative behavior wiring, correlation, and terminal outcome mapping are not yet complete."
     },
     "reactNative": {
-      "status": "planned",
+      "status": "partial",
       "repository": "nuviot/vtm-client",
-      "notes": "React Native implementation has not yet been reconciled against this Client Interaction contract."
+      "component": "TermsAndConditionsInteraction",
+      "notes": "Canonical React Native Client Interaction home is established under src/features/client-interactions/. The reference presentational handler conforms to the authored controls, but directive dispatch, authoritative behavior wiring, correlation, and terminal outcome mapping are not yet complete."
     }
   },
   "sourceReferences": [
@@ -100,7 +101,7 @@
     {
       "sourceType": "discussion",
       "reference": "ChatGPT conversation 2026-08-20",
-      "note": "Selected Accept or Reject Terms and Conditions as the first reference Client Interaction specimen."
+      "note": "Selected Accept or Reject Terms and Conditions as the first reference Client Interaction specimen and established stable homes in both client repositories."
     }
   ]
 }
