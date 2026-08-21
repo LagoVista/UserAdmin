@@ -3,26 +3,32 @@
   "schemaVersion": "1.0",
   "key": "client.interaction.terms-and-conditions",
   "name": "Accept or Reject Terms and Conditions",
-  "summary": "Present the current Terms and Conditions as one bounded client interaction and allow the person to explicitly accept or reject them before returning control to the agent.",
-  "version": 1,
+  "summary": "Present the current Terms and Conditions version with a canonical View Terms link, then allow the person to explicitly accept or reject before returning control to the agent.",
+  "version": 2,
   "maturity": "proposed",
   "cardType": "general",
   "directiveKey": "client.terms-and-conditions",
   "invocation": {
     "payloadMode": "none",
-    "notes": "The client resolves and displays the authoritative current Terms and Conditions through its normal backend contract. The directive does not transport Terms and Conditions content or acceptance state."
+    "notes": "The client resolves the authoritative current Terms and Conditions version through its normal backend contract. The directive does not transport legal content, version, or acceptance state. The canonical legal document is opened from the client using the authored View Terms destination."
   },
   "controls": [
     {
-      "id": "terms-content",
-      "name": "Terms and Conditions",
+      "id": "terms-version",
+      "name": "Current Terms and Conditions Version",
       "controlType": "display",
-      "finder": "display:terms-and-conditions",
+      "finder": "display:terms-version",
       "required": true,
       "sensitivity": "public"
     }
   ],
   "actions": [
+    {
+      "id": "view-terms",
+      "name": "View Terms",
+      "actionType": "link",
+      "finder": "action:view-terms"
+    },
     {
       "id": "accept",
       "name": "Accept",
@@ -46,7 +52,7 @@
     {
       "key": "accepted",
       "name": "Accepted",
-      "summary": "The person explicitly accepted the Terms and Conditions and the client completed the authoritative acceptance operation.",
+      "summary": "The person explicitly accepted the Terms and Conditions and the client completed the authoritative acceptance operation for the displayed version.",
       "terminal": true
     },
     {
@@ -78,13 +84,13 @@
       "status": "partial",
       "repository": "softwarelogistics/nuviot-ui-shared",
       "component": "TermsAndConditionsInteractionComponent",
-      "notes": "Canonical Angular Client Interaction home is established under client-interactions/. The reference presentational handler conforms to the authored controls, but directive dispatch, authoritative behavior wiring, correlation, and terminal outcome mapping are not yet complete."
+      "notes": "Canonical Angular Client Interaction home is established under client-interactions/. The reference handler is being reconciled to the finalized version + View Terms + Accept/Reject surface; authoritative behavior wiring, correlation, and terminal outcome mapping remain separate conformance checks."
     },
     "reactNative": {
       "status": "partial",
       "repository": "nuviot/vtm-client",
       "component": "TermsAndConditionsInteraction",
-      "notes": "Canonical React Native Client Interaction home is established under src/features/client-interactions/. The reference presentational handler conforms to the authored controls, but directive dispatch, authoritative behavior wiring, correlation, and terminal outcome mapping are not yet complete."
+      "notes": "Canonical React Native Client Interaction home is established under src/features/client-interactions/. The reference handler is being reconciled to the finalized version + View Terms + Accept/Reject surface; authoritative behavior wiring, correlation, and terminal outcome mapping remain separate conformance checks."
     }
   },
   "sourceReferences": [
@@ -96,12 +102,17 @@
     {
       "sourceType": "discussion",
       "reference": "LagoVista/AI docs/drive-by-visitor-agent-continuity-handoff.md",
-      "note": "Documents the existing offerPromotion prototype, real Terms and Conditions retrieval and acceptance, and the agent/client security boundary."
+      "note": "Documents the existing offerPromotion prototype, current Terms and Conditions version retrieval and acceptance, and the agent/client security boundary."
+    },
+    {
+      "sourceType": "external",
+      "reference": "https://app.termly.io/policy-viewer/policy.html?policyUUID=90eaf71a-610a-435e-95b1-c94b808f8aca",
+      "note": "Canonical Terms and Conditions document opened by the View Terms action."
     },
     {
       "sourceType": "discussion",
-      "reference": "ChatGPT conversation 2026-08-20",
-      "note": "Selected Accept or Reject Terms and Conditions as the first reference Client Interaction specimen and established stable homes in both client repositories."
+      "reference": "ChatGPT conversation 2026-08-21",
+      "note": "Finalized the reference control surface as current version + View Terms + Accept + Reject."
     }
   ]
 }
