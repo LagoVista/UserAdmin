@@ -5,6 +5,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer
         public const string AuthorizationEndpoint = "/connect/authorize";
         public const string TokenEndpoint = "/connect/token";
         public const string UserInfoEndpoint = "/connect/userinfo";
+        public const string EndSessionEndpoint = "/connect/logout";
         public const string RevocationEndpoint = "/connect/revoke";
 
         public const string GrantTypeAuthorizationCode = "authorization_code";
