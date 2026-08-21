@@ -1,0 +1,38 @@
+{
+  "$schema": "../../schemas/client-interaction-conformance-manifest.schema.json",
+  "schemaVersion": "1.0",
+  "clientKey": "angular-web",
+  "platform": "web",
+  "repository": "softwarelogistics/workforce-ui",
+  "inspectedCommit": "1ffd25ead7f06569024c8622241103438212a884",
+  "generatedUtc": "2026-08-20T20:00:00-04:00",
+  "interactions": [
+    {
+      "interactionKey": "client.interaction.terms-and-conditions",
+      "exists": true,
+      "controlsConform": false,
+      "behaviorWired": false,
+      "runtimeEvidence": "not-run",
+      "component": "PromotionDirectiveComponent",
+      "observedControlFinders": [],
+      "observedActionFinders": [],
+      "sourceEvidence": [
+        {
+          "path": "src/app/ui/workforce/client-directives/promotion-directive/promotion-directive.component.ts",
+          "symbol": "PromotionDirectiveComponent",
+          "note": "Loads the authoritative promotion offer and submits the existing continuity promotion operation after terms acceptance."
+        },
+        {
+          "path": "src/app/ui/workforce/client-directives/promotion-directive/promotion-directive.component.html",
+          "note": "Current surface uses a consent checkbox and Create my workspace action and does not expose the canonical Client Interaction semantic finders."
+        }
+      ],
+      "runtimeEvidenceReferences": [],
+      "notes": [
+        "The interaction exists as a proven precursor, so Exists is green.",
+        "Controls do not conform: the canonical interaction requires display:terms-and-conditions plus action:accept and action:reject; the current prototype exposes neither canonical semantic finder set nor an explicit Reject action.",
+        "Behavior is not yet wired to the Client Interaction protocol: completion emits ContinuitySessionView rather than a correlated terminal outcome and the interaction is still coupled to workspace promotion."
+      ]
+    }
+  ]
+}
