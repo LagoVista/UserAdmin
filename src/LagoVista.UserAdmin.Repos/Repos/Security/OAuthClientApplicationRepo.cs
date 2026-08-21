@@ -3,6 +3,7 @@ using LagoVista.CloudStorage.Interfaces;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Auth;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,6 +39,11 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
         public async Task<OAuthClientApplication> GetOAuthClientApplicationByClientIdAsync(string clientId)
         {
             return (await QueryAsync(client => client.ClientId == clientId)).FirstOrDefault();
+        }
+
+        public async Task<List<OAuthClientApplication>> GetOAuthClientApplicationsByPostLogoutRedirectUriAsync(string postLogoutRedirectUri)
+        {
+            return (await QueryAsync(client => client.PostLogoutRedirectUris.Any(value => value.Value == postLogoutRedirectUri))).ToList();
         }
 
         public Task<ListResponse<OAuthClientApplicationSummary>> GetOAuthClientApplicationsAsync(string orgId, ListRequest listRequest)
