@@ -78,10 +78,15 @@ function Find-ProviderSections {
         foreach ($key in $Value.Keys) {
             $child = $Value[$key]
             $childPath = "$Path.$key"
-            if ($key -match "(?i)$ProviderName.*oauth|oauth.*$ProviderName|^$ProviderName$") {
+            if ([string]$key -match "(?i)$ProviderName.*oauth|oauth.*$ProviderName|^$ProviderName$") {
                 $results += [PSCustomObject]@{ Path = $childPath; Value = $child }
             }
-            $results += Find-ProviderSections -Value $child -ProviderName $ProviderName -Path $childPath
+
+            if ($child -is [System.Collections.IDictionary] -or
+                $child -is [PSCustomObject] -or
+                ($child -is [System.Collections.IEnumerable] -and -not ($child -is [string]))) {
+                $results += Find-ProviderSections -Value $child -ProviderName $ProviderName -Path $childPath
+            }
         }
         return $results
     }
@@ -89,19 +94,30 @@ function Find-ProviderSections {
     if ($Value -is [System.Collections.IEnumerable] -and -not ($Value -is [string])) {
         $index = 0
         foreach ($item in $Value) {
-            $results += Find-ProviderSections -Value $item -ProviderName $ProviderName -Path "$Path[$index]"
+            if ($item -is [System.Collections.IDictionary] -or
+                $item -is [PSCustomObject] -or
+                ($item -is [System.Collections.IEnumerable] -and -not ($item -is [string]))) {
+                $results += Find-ProviderSections -Value $item -ProviderName $ProviderName -Path "$Path[$index]"
+            }
             $index++
         }
         return $results
     }
 
-    $properties = $Value.PSObject.Properties
-    foreach ($property in $properties) {
-        $childPath = "$Path.$($property.Name)"
-        if ($property.Name -match "(?i)$ProviderName.*oauth|oauth.*$ProviderName|^$ProviderName$") {
-            $results += [PSCustomObject]@{ Path = $childPath; Value = $property.Value }
+    if ($Value -is [PSCustomObject]) {
+        foreach ($property in $Value.PSObject.Properties | Where-Object { $_.MemberType -eq 'NoteProperty' }) {
+            $childPath = "$Path.$($property.Name)"
+            if ($property.Name -match "(?i)$ProviderName.*oauth|oauth.*$ProviderName|^$ProviderName$") {
+                $results += [PSCustomObject]@{ Path = $childPath; Value = $property.Value }
+            }
+
+            $child = $property.Value
+            if ($child -is [System.Collections.IDictionary] -or
+                $child -is [PSCustomObject] -or
+                ($child -is [System.Collections.IEnumerable] -and -not ($child -is [string]))) {
+                $results += Find-ProviderSections -Value $child -ProviderName $ProviderName -Path $childPath
+            }
         }
-        $results += Find-ProviderSections -Value $property.Value -ProviderName $ProviderName -Path $childPath
     }
 
     return $results
