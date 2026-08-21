@@ -31,21 +31,23 @@ namespace LagoVista.UserAdmin.Repos
                 var childSection = section.GetSection(child);
                 var clientId = childSection.Require("ClientId");
                 var secret = childSection.Require("Secret");
+                var returnUrl = childSection.Require("ReturnUrl");
+
                 switch(child)
                 {
                     case "GitHub":
-                        GitHubOAuth = new OAuthConfig(clientId, secret);
+                        GitHubOAuth = new OAuthConfig(clientId, secret, returnUrl);
                         break;
                     case "Google":
-                        GoogleOAuth = new OAuthConfig(clientId, secret);
+                        GoogleOAuth = new OAuthConfig(clientId, secret, returnUrl);
                         break;
                     case "LinkedIn":
-                        LinkedInOAuth = new OAuthConfig(clientId, secret);
+                        LinkedInOAuth = new OAuthConfig(clientId, secret, returnUrl);
                         break;
                     case "Microsoft":
                         var secretId = childSection.Require("SecretId");
 
-                        MicrosoftOAuth = new OAuthConfig(clientId, secretId, secret);
+                        MicrosoftOAuth = new OAuthConfig(clientId, secretId, secret, returnUrl);
 
                         //settings.Settings = new System.Collections.Generic.Dictionary<string, string>
                         //{
@@ -53,10 +55,10 @@ namespace LagoVista.UserAdmin.Repos
                         //};
                         break;
                     case "Twitter":
-                        TwitterOAuth = new OAuthConfig(clientId, secret);
+                        TwitterOAuth = new OAuthConfig(clientId, secret, returnUrl);
                         break;
                     case "FaceBook":
-                        FaceBookOAuth = new OAuthConfig(clientId, secret);
+                        FaceBookOAuth = new OAuthConfig(clientId, secret, returnUrl);
                         break;
                         //case "Amazon":
                         //    AmazonOAuth = new OAuthConfig(clientId, secret);

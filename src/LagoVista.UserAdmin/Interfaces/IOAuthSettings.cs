@@ -17,21 +17,25 @@ namespace LagoVista.UserAdmin
 
     public class OAuthConfig
     {
-        public OAuthConfig(string clientId, string secret)
+        public OAuthConfig(string clientId, string secret, string returnUrl)
         {
             ClientId = clientId;
             Secret = secret;
+            ReturnUrl = returnUrl;
         }
 
-        public OAuthConfig(string clientId, string secretId, string secret)
+        public OAuthConfig(string clientId, string secretId, string secret, string returnUrl)
         {
             ClientId = clientId;
             ClientSecretId = secretId;
             Secret = secret;
+            ReturnUrl = returnUrl;
         }
 
         public string ClientId { get;  }
         public string ClientSecretId { get; }
         public string Secret { get; }   
+
+        public string ReturnUrl {get; }
     }
 }
