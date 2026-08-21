@@ -1,3 +1,4 @@
+using LagoVista.AspNetCore.Identity.Managers;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -74,36 +75,46 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                 return Redirect($"/oidc/login?returnUrl={Uri.EscapeDataString(returnUrl)}");
             }
 
-            var subject = authentication.Principal.FindFirstValue(ClaimTypes.NameIdentifier)
-                ?? authentication.Principal.FindFirstValue(Claims.Subject);
-
-            if (String.IsNullOrWhiteSpace(subject))
+            var projectedClaims = OidcClaimProjection.FromPrincipal(authentication.Principal);
+            if (String.IsNullOrWhiteSpace(projectedClaims.Subject))
                 return Reject(Errors.AccessDenied, "The authenticated user does not have a stable subject identifier.");
-
-            var email = authentication.Principal.FindFirstValue(ClaimTypes.Email)
-                ?? authentication.Principal.FindFirstValue(Claims.Email);
-
-            var displayName = authentication.Principal.Identity.Name
-                ?? email
-                ?? subject;
 
             var identity = new ClaimsIdentity(
                 TokenValidationParameters.DefaultAuthenticationType,
                 Claims.Name,
                 Claims.Role);
 
-            identity.AddClaim(new Claim(Claims.Subject, subject));
+            identity.AddClaim(new Claim(Claims.Subject, projectedClaims.Subject));
 
-            var nameClaim = new Claim(Claims.Name, displayName);
-            if (scopes.Contains(Scopes.Profile, StringComparer.Ordinal))
-                nameClaim.SetDestinations(Destinations.AccessToken, Destinations.IdentityToken);
-            else
-                nameClaim.SetDestinations(Destinations.AccessToken);
-            identity.AddClaim(nameClaim);
-
-            if (!String.IsNullOrWhiteSpace(email) && scopes.Contains(Scopes.Email, StringComparer.Ordinal))
+            if (!String.IsNullOrWhiteSpace(projectedClaims.Name))
             {
-                identity.AddClaim(new Claim(Claims.Email, email)
+                var nameClaim = new Claim(Claims.Name, projectedClaims.Name);
+                if (scopes.Contains(Scopes.Profile, StringComparer.Ordinal))
+                    nameClaim.SetDestinations(Destinations.AccessToken, Destinations.IdentityToken);
+                else
+                    nameClaim.SetDestinations(Destinations.AccessToken);
+                identity.AddClaim(nameClaim);
+            }
+
+            if (!String.IsNullOrWhiteSpace(projectedClaims.PreferredUsername))
+            {
+                var preferredUsernameClaim = new Claim(Claims.PreferredUsername, projectedClaims.PreferredUsername);
+                if (scopes.Contains(Scopes.Profile, StringComparer.Ordinal))
+                    preferredUsernameClaim.SetDestinations(Destinations.AccessToken, Destinations.IdentityToken);
+                else
+                    preferredUsernameClaim.SetDestinations(Destinations.AccessToken);
+                identity.AddClaim(preferredUsernameClaim);
+            }
+
+            if (!String.IsNullOrWhiteSpace(projectedClaims.Email) && scopes.Contains(Scopes.Email, StringComparer.Ordinal))
+            {
+                identity.AddClaim(new Claim(Claims.Email, projectedClaims.Email)
+                    .SetDestinations(Destinations.AccessToken, Destinations.IdentityToken));
+            }
+
+            if (!String.IsNullOrWhiteSpace(projectedClaims.IsSystemAdmin))
+            {
+                identity.AddClaim(new Claim(ClaimsFactory.IsSystemAdmin, projectedClaims.IsSystemAdmin)
                     .SetDestinations(Destinations.AccessToken, Destinations.IdentityToken));
             }
 
