@@ -5,7 +5,7 @@
   "name": "Accept or Reject Terms and Conditions",
   "summary": "Present the current Terms and Conditions version with a canonical View Terms link, then allow the person to explicitly accept or reject before returning control to the agent.",
   "version": 2,
-  "maturity": "proposed",
+  "maturity": "implemented",
   "cardType": "general",
   "directiveKey": "client.terms-and-conditions",
   "invocation": {
@@ -81,16 +81,16 @@
   },
   "platforms": {
     "angularWeb": {
-      "status": "partial",
+      "status": "implemented",
       "repository": "softwarelogistics/nuviot-ui-shared",
-      "component": "TermsAndConditionsInteractionComponent",
-      "notes": "Canonical Angular Client Interaction home is established under client-interactions/. The reference handler is being reconciled to the finalized version + View Terms + Accept/Reject surface; authoritative behavior wiring, correlation, and terminal outcome mapping remain separate conformance checks."
+      "component": "ClientInteractionHostComponent -> TermsAndConditionsInteractionComponent",
+      "notes": "The stable Angular implementation recognizes client.terms-and-conditions, retrieves the authoritative current version, renders View Terms + Accept/Reject, performs the authoritative acceptance mutation, keeps the promoted continuity session client-local, preserves correlation, and emits accepted/rejected/failed terminal outcomes. Runtime verification remains separate."
     },
     "reactNative": {
-      "status": "partial",
+      "status": "implemented",
       "repository": "nuviot/vtm-client",
-      "component": "TermsAndConditionsInteraction",
-      "notes": "Canonical React Native Client Interaction home is established under src/features/client-interactions/. The reference handler is being reconciled to the finalized version + View Terms + Accept/Reject surface; authoritative behavior wiring, correlation, and terminal outcome mapping remain separate conformance checks."
+      "component": "ClientInteractionHost -> TermsAndConditionsInteraction",
+      "notes": "The stable React Native implementation recognizes client.terms-and-conditions, retrieves the authoritative current version, renders View Terms + Accept/Reject, performs the authoritative acceptance mutation, keeps the promoted continuity session client-local, preserves correlation, and emits accepted/rejected/failed terminal outcomes. Runtime verification remains separate."
     }
   },
   "sourceReferences": [
@@ -112,7 +112,7 @@
     {
       "sourceType": "discussion",
       "reference": "ChatGPT conversation 2026-08-21",
-      "note": "Finalized the reference control surface as current version + View Terms + Accept + Reject."
+      "note": "Finalized the reference control surface and completed source-level client behavior wiring across Angular and React Native."
     }
   ]
 }
