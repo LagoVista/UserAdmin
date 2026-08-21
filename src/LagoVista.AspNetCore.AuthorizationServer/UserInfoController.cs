@@ -1,3 +1,4 @@
+using LagoVista.AspNetCore.Identity.Managers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Abstractions;
@@ -27,8 +28,9 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             {
                 sub = subject,
                 name = includeProfile ? User.GetClaim(Claims.Name) : null,
-                preferred_username = includeProfile ? User.GetClaim(Claims.Name) : null,
+                preferred_username = includeProfile ? User.GetClaim(Claims.PreferredUsername) : null,
                 email = includeEmail ? User.GetClaim(Claims.Email) : null,
+                system_admin = User.GetClaim(ClaimsFactory.IsSystemAdmin),
             });
         }
     }
