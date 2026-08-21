@@ -4,14 +4,14 @@
   "clientKey": "react-native",
   "platform": "mobile",
   "repository": "nuviot/vtm-client",
-  "inspectedCommit": "dafa1428ebf200fb258f102dee16871badfaab0e",
-  "generatedUtc": "2026-08-21T08:10:00-04:00",
+  "inspectedCommit": "b2424f841c97b2f9b2f9eecf74d3d1ed386d4476",
+  "generatedUtc": "2026-08-21T08:23:00-04:00",
   "interactions": [
     {
       "interactionKey": "client.interaction.terms-and-conditions",
       "exists": true,
       "controlsConform": true,
-      "behaviorWired": false,
+      "behaviorWired": true,
       "runtimeEvidence": "not-run",
       "component": "ClientInteractionHost -> TermsAndConditionsInteraction",
       "observedControlFinders": [
@@ -26,7 +26,7 @@
         {
           "path": "src/features/client-interactions/client-interaction-host.tsx",
           "symbol": "ClientInteractionHost",
-          "note": "Recognizes client.terms-and-conditions and dispatches it to the canonical Terms and Conditions handler while preserving the directive envelope for callbacks."
+          "note": "Recognizes client.terms-and-conditions, loads the authoritative current version through platform.clients.user.getContinuityPromotion(), submits acceptance through createContinuityPromotion(), exposes the promoted continuity session only through the client-local onSessionChanged callback, and returns only the original correlation id plus accepted/rejected/failed terminal outcome through onCompleted."
         },
         {
           "path": "src/features/client-interactions/handlers/terms-and-conditions/terms-and-conditions-interaction.tsx",
@@ -36,9 +36,10 @@
       ],
       "runtimeEvidenceReferences": [],
       "notes": [
-        "Exists is green because the stable React Native client now recognizes client.terms-and-conditions and dispatches it to the intended handler.",
+        "Exists is green because the stable React Native client recognizes client.terms-and-conditions and dispatches it to the intended handler.",
         "Controls conform to authored version 2: current version + View Terms + Accept + Reject.",
-        "Behavior Wired remains false because authoritative T&C version retrieval/acceptance and terminal correlated response mapping are not yet connected to the interaction host."
+        "Behavior Wired is green: authoritative version retrieval, acceptance mutation, client-local continuity session propagation, failure handling, correlation preservation, and accepted/rejected/failed terminal outcome mapping are all connected in the host.",
+        "Runtime remains not-run until the interaction is exercised from the live mobile agent surface."
       ]
     }
   ]
