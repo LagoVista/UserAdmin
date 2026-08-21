@@ -4,21 +4,45 @@
   "clientKey": "react-native",
   "platform": "mobile",
   "repository": "nuviot/vtm-client",
-  "inspectedCommit": "fbcdfd8f0e24ed996571d734ebd5c53962a135e9",
-  "generatedUtc": "2026-08-20T20:00:00-04:00",
+  "inspectedCommit": "59be05fea3a5d99e7193953b5516fc9d3ddd5c4a",
+  "generatedUtc": "2026-08-20T20:12:00-04:00",
   "interactions": [
     {
       "interactionKey": "client.interaction.terms-and-conditions",
       "exists": false,
-      "controlsConform": false,
+      "controlsConform": true,
       "behaviorWired": false,
       "runtimeEvidence": "not-run",
-      "observedControlFinders": [],
-      "observedActionFinders": [],
-      "sourceEvidence": [],
+      "component": "TermsAndConditionsInteraction",
+      "observedControlFinders": [
+        "display:terms-and-conditions"
+      ],
+      "observedActionFinders": [
+        "action:accept",
+        "action:reject"
+      ],
+      "sourceEvidence": [
+        {
+          "path": "src/features/client-interactions/components/client-interaction-shell.tsx",
+          "symbol": "ClientInteractionShell",
+          "note": "Shared React Native Client Interaction card shell establishes common hierarchy and presentation states using the existing app theme."
+        },
+        {
+          "path": "src/features/client-interactions/components/client-interaction-button.tsx",
+          "symbol": "ClientInteractionButton",
+          "note": "Shared primary/secondary action presentation for Client Interaction cards."
+        },
+        {
+          "path": "src/features/client-interactions/handlers/terms-and-conditions/terms-and-conditions-interaction.tsx",
+          "symbol": "TermsAndConditionsInteraction",
+          "note": "Reference presentational handler exposing the canonical display and Accept/Reject semantic finders."
+        }
+      ],
       "runtimeEvidenceReferences": [],
       "notes": [
-        "No Accept or Reject Terms and Conditions Client Interaction implementation was found in the inspected React Native source."
+        "Controls conform to the authored reference interaction.",
+        "Exists remains false by the Client Interaction -> Green definition because client.terms-and-conditions is not yet dispatched by an interaction host into this component.",
+        "Behavior Wired remains false because authoritative T&C retrieval/acceptance, correlation, and terminal outcome mapping have not yet been connected."
       ]
     }
   ]
