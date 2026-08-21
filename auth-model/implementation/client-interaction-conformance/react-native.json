@@ -4,45 +4,41 @@
   "clientKey": "react-native",
   "platform": "mobile",
   "repository": "nuviot/vtm-client",
-  "inspectedCommit": "59be05fea3a5d99e7193953b5516fc9d3ddd5c4a",
-  "generatedUtc": "2026-08-20T20:12:00-04:00",
+  "inspectedCommit": "dafa1428ebf200fb258f102dee16871badfaab0e",
+  "generatedUtc": "2026-08-21T08:10:00-04:00",
   "interactions": [
     {
       "interactionKey": "client.interaction.terms-and-conditions",
-      "exists": false,
+      "exists": true,
       "controlsConform": true,
       "behaviorWired": false,
       "runtimeEvidence": "not-run",
-      "component": "TermsAndConditionsInteraction",
+      "component": "ClientInteractionHost -> TermsAndConditionsInteraction",
       "observedControlFinders": [
-        "display:terms-and-conditions"
+        "display:terms-version"
       ],
       "observedActionFinders": [
+        "action:view-terms",
         "action:accept",
         "action:reject"
       ],
       "sourceEvidence": [
         {
-          "path": "src/features/client-interactions/components/client-interaction-shell.tsx",
-          "symbol": "ClientInteractionShell",
-          "note": "Shared React Native Client Interaction card shell establishes common hierarchy and presentation states using the existing app theme."
-        },
-        {
-          "path": "src/features/client-interactions/components/client-interaction-button.tsx",
-          "symbol": "ClientInteractionButton",
-          "note": "Shared primary/secondary action presentation for Client Interaction cards."
+          "path": "src/features/client-interactions/client-interaction-host.tsx",
+          "symbol": "ClientInteractionHost",
+          "note": "Recognizes client.terms-and-conditions and dispatches it to the canonical Terms and Conditions handler while preserving the directive envelope for callbacks."
         },
         {
           "path": "src/features/client-interactions/handlers/terms-and-conditions/terms-and-conditions-interaction.tsx",
           "symbol": "TermsAndConditionsInteraction",
-          "note": "Reference presentational handler exposing the canonical display and Accept/Reject semantic finders."
+          "note": "Exposes the canonical current-version display, Termly View Terms link, Accept action, and Reject action."
         }
       ],
       "runtimeEvidenceReferences": [],
       "notes": [
-        "Controls conform to the authored reference interaction.",
-        "Exists remains false by the Client Interaction -> Green definition because client.terms-and-conditions is not yet dispatched by an interaction host into this component.",
-        "Behavior Wired remains false because authoritative T&C retrieval/acceptance, correlation, and terminal outcome mapping have not yet been connected."
+        "Exists is green because the stable React Native client now recognizes client.terms-and-conditions and dispatches it to the intended handler.",
+        "Controls conform to authored version 2: current version + View Terms + Accept + Reject.",
+        "Behavior Wired remains false because authoritative T&C version retrieval/acceptance and terminal correlated response mapping are not yet connected to the interaction host."
       ]
     }
   ]
