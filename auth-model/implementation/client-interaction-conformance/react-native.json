@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schemas/client-interaction-conformance-manifest.schema.json",
+  "schemaVersion": "1.0",
+  "clientKey": "react-native",
+  "platform": "mobile",
+  "repository": "nuviot/vtm-client",
+  "inspectedCommit": "fbcdfd8f0e24ed996571d734ebd5c53962a135e9",
+  "generatedUtc": "2026-08-20T20:00:00-04:00",
+  "interactions": [
+    {
+      "interactionKey": "client.interaction.terms-and-conditions",
+      "exists": false,
+      "controlsConform": false,
+      "behaviorWired": false,
+      "runtimeEvidence": "not-run",
+      "observedControlFinders": [],
+      "observedActionFinders": [],
+      "sourceEvidence": [],
+      "runtimeEvidenceReferences": [],
+      "notes": [
+        "No Accept or Reject Terms and Conditions Client Interaction implementation was found in the inspected React Native source."
+      ]
+    }
+  ]
+}
