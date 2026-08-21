@@ -5,13 +5,13 @@
   "platform": "web",
   "repository": "softwarelogistics/nuviot-ui-shared",
   "inspectedCommit": "ff0e17c6d3d5038fb9a5ca22287e6a17ba465927",
-  "generatedUtc": "2026-08-21T08:23:00-04:00",
+  "generatedUtc": "2026-08-21T08:43:00-04:00",
   "interactions": [
     {
       "interactionKey": "client.interaction.terms-and-conditions",
       "exists": true,
       "controlsConform": true,
-      "behaviorWired": true,
+      "behaviorWired": false,
       "runtimeEvidence": "not-run",
       "component": "ClientInteractionHostComponent -> TermsAndConditionsInteractionComponent",
       "observedControlFinders": [
@@ -26,7 +26,7 @@
         {
           "path": "client-interactions/client-interaction-host.component.ts",
           "symbol": "ClientInteractionHostComponent",
-          "note": "Recognizes client.terms-and-conditions, loads the authoritative current version through ServiceContext.clients.user.getContinuityPromotion(), submits acceptance through createContinuityPromotion(), emits the promoted continuity session only to the client-local sessionChanged output, and returns only the original correlation id plus accepted/rejected/failed terminal outcome through completed."
+          "note": "Recognizes client.terms-and-conditions, loads the authoritative current version through ServiceContext.clients.user.getContinuityPromotion(), submits acceptance through createContinuityPromotion(), keeps the returned continuity session client-local, and maps local accepted/rejected/failed completion paths."
         },
         {
           "path": "client-interactions/handlers/terms-and-conditions/terms-and-conditions-interaction.component.ts",
@@ -40,10 +40,11 @@
       ],
       "runtimeEvidenceReferences": [],
       "notes": [
-        "Exists is green because the stable shared client recognizes client.terms-and-conditions and dispatches it to the intended handler.",
+        "Exists is green because the stable shared Angular client has a platform dispatcher for client.terms-and-conditions and the intended handler.",
         "Controls conform to authored version 2: current version + View Terms + Accept + Reject.",
-        "Behavior Wired is green: authoritative version retrieval, acceptance mutation, client-local continuity session propagation, failure handling, correlation preservation, and accepted/rejected/failed terminal outcome mapping are all connected in the host.",
-        "Runtime remains not-run until the interaction is exercised in a consuming Angular application."
+        "The card-local behavior is substantially implemented, including authoritative version retrieval and the acceptance operation.",
+        "Behavior Wired remains false because nuviot/ai-client AgentChatEngine does not yet project AgentExecuteResponse.clientDirectives into normalized Client Interaction state, no canonical Client Interaction completion submission/continuation contract exists yet, and a consuming Angular chat surface is therefore not connected to the complete agent round trip.",
+        "Runtime remains not-run."
       ]
     }
   ]
