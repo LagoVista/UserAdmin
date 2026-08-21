@@ -5,13 +5,13 @@
   "platform": "mobile",
   "repository": "nuviot/vtm-client",
   "inspectedCommit": "b2424f841c97b2f9b2f9eecf74d3d1ed386d4476",
-  "generatedUtc": "2026-08-21T08:23:00-04:00",
+  "generatedUtc": "2026-08-21T08:43:00-04:00",
   "interactions": [
     {
       "interactionKey": "client.interaction.terms-and-conditions",
       "exists": true,
       "controlsConform": true,
-      "behaviorWired": true,
+      "behaviorWired": false,
       "runtimeEvidence": "not-run",
       "component": "ClientInteractionHost -> TermsAndConditionsInteraction",
       "observedControlFinders": [
@@ -26,7 +26,7 @@
         {
           "path": "src/features/client-interactions/client-interaction-host.tsx",
           "symbol": "ClientInteractionHost",
-          "note": "Recognizes client.terms-and-conditions, loads the authoritative current version through platform.clients.user.getContinuityPromotion(), submits acceptance through createContinuityPromotion(), exposes the promoted continuity session only through the client-local onSessionChanged callback, and returns only the original correlation id plus accepted/rejected/failed terminal outcome through onCompleted."
+          "note": "Recognizes client.terms-and-conditions, loads the authoritative current version through platform.clients.user.getContinuityPromotion(), submits acceptance through createContinuityPromotion(), keeps the returned continuity session client-local, and maps local accepted/rejected/failed completion paths."
         },
         {
           "path": "src/features/client-interactions/handlers/terms-and-conditions/terms-and-conditions-interaction.tsx",
@@ -36,10 +36,11 @@
       ],
       "runtimeEvidenceReferences": [],
       "notes": [
-        "Exists is green because the stable React Native client recognizes client.terms-and-conditions and dispatches it to the intended handler.",
+        "Exists is green because the stable React Native client has a platform dispatcher for client.terms-and-conditions and the intended handler.",
         "Controls conform to authored version 2: current version + View Terms + Accept + Reject.",
-        "Behavior Wired is green: authoritative version retrieval, acceptance mutation, client-local continuity session propagation, failure handling, correlation preservation, and accepted/rejected/failed terminal outcome mapping are all connected in the host.",
-        "Runtime remains not-run until the interaction is exercised from the live mobile agent surface."
+        "The card-local behavior is substantially implemented, including authoritative version retrieval and the acceptance operation.",
+        "Behavior Wired remains false because nuviot/ai-client AgentChatEngine does not yet project AgentExecuteResponse.clientDirectives into normalized Client Interaction state, no canonical Client Interaction completion submission/continuation contract exists yet, and the live mobile chat surface is therefore not connected to the complete agent round trip.",
+        "Runtime remains not-run."
       ]
     }
   ]
