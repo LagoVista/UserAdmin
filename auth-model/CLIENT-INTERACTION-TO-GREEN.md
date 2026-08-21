@@ -35,7 +35,7 @@ Track these dimensions independently:
 - React Native
 - Runtime Evidence
 
-Each supported client is evaluated using the same three conformance checks:
+Each supported client is evaluated using exactly three conformance checks:
 
 - Exists
 - Controls Conform
@@ -47,21 +47,53 @@ A useful visual summary is:
 
 For a general Client Interaction, omit Auth Bindings.
 
+## Evidence storage contract
+
+Authored interaction definitions remain in:
+
+- `auth-model/client-interactions/*.json`
+- `auth-model/auth-interactions/*.json`
+
+Current client implementation observations are stored separately from authored interaction truth:
+
+- Angular Web: `auth-model/implementation/client-interaction-conformance/angular-web.json`
+- React Native: `auth-model/implementation/client-interaction-conformance/react-native.json`
+
+Both manifests validate against:
+
+- `auth-model/schemas/client-interaction-conformance-manifest.schema.json`
+
+Each manifest records:
+
+- the exact inspected repository;
+- the exact inspected commit SHA;
+- one observation per reconciled interaction;
+- Exists;
+- Controls Conform;
+- Behavior Wired;
+- runtime-evidence status;
+- component/directive-handler identity when found;
+- observed semantic finders;
+- source evidence;
+- concrete notes explaining gaps or drift.
+
+These manifests are implementation evidence, not authored product truth. Do not edit the interaction definition merely to make a client observation green.
+
+Aptix derives progress indicators from the interaction definition plus these evidence manifests.
+
 ## Status values
 
-Recommended status values are:
+The three client checks are evidence-backed booleans. Runtime evidence uses:
 
-- `not-started`
-- `in-progress`
-- `complete`
-- `drift`
-- `not-applicable`
+- `not-run`
+- `passed`
+- `failed`
 
-`drift` means implementation exists but no longer conforms to the current authored contract.
+A client is green when Exists, Controls Conform, and Behavior Wired are all true.
 
-A client is green only when all required conformance checks are complete.
+An interaction is fully green when every required client is green, required runtime evidence passes, and Auth Bindings are valid when applicable.
 
-An interaction is fully green only when every required dimension is complete.
+If implementation exists but does not match authored truth, treat it as drift/in-progress rather than redefining the interaction to match the implementation.
 
 ## 1. Author the interaction definition
 
@@ -107,77 +139,39 @@ This phase applies only to Auth Interactions.
 
 Confirm that every declared canonical authentication reference resolves to current authored authentication truth.
 
-Bindings may include:
-
-- Behaviors;
-- Scenarios;
-- Actions;
-- Transitions;
-- AuthViews where presentation semantics are intentionally reused.
+Bindings may include Behaviors, Scenarios, Actions, Transitions, and AuthViews where presentation semantics are intentionally reused.
 
 The Auth Interaction must not invent authentication guards, transitions, postconditions, or authoritative account state.
 
-### Auth Bindings complete
-
-Auth Bindings are complete when:
-
-- all declared references resolve;
-- the referenced definitions describe the behavior the interaction actually invokes;
-- no card-owned authentication semantics conflict with canonical auth truth.
-
 ## 3. Reconcile Angular Web
 
-Inspect the current stable Angular implementation repository.
+Inspect the current stable Angular implementation repository and record its exact commit SHA in `implementation/client-interaction-conformance/angular-web.json`.
 
 Evaluate exactly three checks.
 
 ### Exists
 
-Confirm that:
-
-- the authored ClientDirective is recognized;
-- it launches the intended interaction component/card;
-- the implementation path and component can be identified from source.
-
-Do not mark Exists complete based on naming similarity alone.
+Confirm that the authored ClientDirective is recognized, launches the intended interaction component/card, and has identifiable source evidence.
 
 ### Controls Conform
 
-Compare the rendered interaction contract to the authored definition.
-
-Confirm that:
-
-- required controls exist;
-- required actions exist;
-- stable finders match the authored contract where finders are required;
-- control types are semantically compatible;
-- required/optional behavior matches the definition;
-- Auth controls preserve their declared sensitivity boundary;
-- no materially different user operation has been silently added to the card.
+Compare the rendered interaction to the authored definition. Required controls, actions, semantic finders, control types, required/optional behavior, and sensitivity boundaries must match semantically.
 
 Visual styling does not need to be identical across platforms.
 
 ### Behavior Wired
 
-Confirm from source that:
-
-- each authored action invokes the intended client/service operation;
-- the interaction reaches the intended existing backend behavior when server-backed;
-- each terminal path maps to an allowed authored outcome;
-- completion returns using the original correlation id;
-- cancellation and failure terminate the interaction cleanly;
-- the response value conforms to the authored response contract;
-- Auth Interactions return no response value.
+Confirm from source that authored actions invoke the intended client/service behavior, terminal paths map to authored outcomes, the original correlation id returns, cancellation/failure terminate cleanly, and the response obeys the authored response contract.
 
 For this process, do not re-prove the backend implementation behind the invoked operation.
 
-### Angular complete
-
-Angular is green when Exists, Controls Conform, and Behavior Wired are all complete.
+Angular is green when all three checks are true.
 
 ## 4. Reconcile React Native
 
-Apply the same three checks to the current stable React Native implementation repository:
+Inspect the current stable React Native implementation repository and record its exact commit SHA in `implementation/client-interaction-conformance/react-native.json`.
+
+Apply the same three checks:
 
 - Exists
 - Controls Conform
@@ -185,37 +179,13 @@ Apply the same three checks to the current stable React Native implementation re
 
 The semantic interaction contract must match Angular even when native presentation differs.
 
-Do not require identical component structure, navigation primitives, styling, or platform-specific implementation details.
+React Native is green when all three checks are true.
 
-### React Native complete
-
-React Native is green when Exists, Controls Conform, and Behavior Wired are all complete.
-
-## 5. Detect drift
-
-A previously green client becomes `drift` when the current source no longer conforms to the authored interaction.
-
-Examples include:
-
-- directive key no longer resolves to the expected component;
-- a required control or action is missing;
-- a finder changed without updating the authored contract;
-- an action invokes a different behavior;
-- an authored terminal outcome can no longer be produced;
-- an unmodeled terminal result was introduced;
-- response shape changed;
-- an Auth Interaction returns a value;
-- correlation is lost or replaced.
-
-Drift should be surfaced separately for Angular and React Native.
-
-Do not change authored truth merely to make implementation drift disappear. First determine whether the implementation changed incorrectly or the authored interaction intentionally evolved.
-
-## 6. Runtime evidence
+## 5. Runtime evidence
 
 Runtime evidence proves the client interaction protocol actually works when executed.
 
-At minimum, exercise the interaction on each required platform and prove:
+For each required platform prove:
 
 - the correct ClientDirective launches the correct interaction;
 - the interaction is usable;
@@ -226,73 +196,96 @@ At minimum, exercise the interaction on each required platform and prove:
 - any allowed response value has the authored shape;
 - Auth Interactions return no value.
 
-Runtime evidence should focus on the client interaction boundary.
+Record runtime status and evidence references on that platform's conformance observation.
 
 Do not duplicate existing backend integration evidence unless a failure suggests the backend assumption is invalid.
 
-### Runtime complete
+## 6. Determine final green state
 
-Runtime Evidence is complete when the required supported clients have current passing evidence for the authored interaction contract.
+A general Client Interaction is green when Definition is valid, every required client is 3/3, and required runtime evidence passes.
 
-## 7. Determine final green state
+An Auth Interaction additionally requires valid canonical Auth Bindings.
 
-### General Client Interaction
-
-Green requires:
-
-- Definition complete
-- Angular complete, when supported
-- React Native complete, when supported
-- Runtime Evidence complete
-
-### Auth Interaction
-
-Green requires:
-
-- Definition complete
-- Auth Bindings complete
-- Angular complete, when supported
-- React Native complete, when supported
-- Runtime Evidence complete
-
-Unsupported or explicitly not-applicable platforms do not block green.
-
-Planned platforms do block full green until they are either implemented or intentionally reclassified.
+Unsupported or explicitly not-applicable platforms do not block green. Planned platforms do block full green until implemented or intentionally reclassified.
 
 ## Aptix visualization
 
-The Client Interactions visualizer should make this process visible without requiring the developer to inspect JSON manually.
+The Client Interactions visualizer should project the evidence as clear progress indicators.
 
-For each interaction, show a compact status strip such as:
+General interaction example:
 
-`Definition ✓   Angular 3/3   React Native 2/3   Runtime ○`
+`Definition ✓   Angular 1/3   React Native 0/3   Runtime ○`
 
-For Auth Interactions:
+Auth interaction example:
 
 `Definition ✓   Auth Bindings ✓   Angular 3/3   React Native 3/3   Runtime ✓`
 
-Each client should expand to show:
+Each client expands to show:
 
 - Exists
 - Controls
 - Behavior
+- inspected commit
+- source evidence
+- runtime evidence
 
-The visualizer should also surface:
+Aptix is a projection. The JSON definitions and evidence manifests remain authoritative.
 
-- implementation repository;
-- inspected commit SHA when conformance is recorded;
-- component/path evidence;
-- concrete drift findings;
-- runtime evidence status.
+## Reference specimen: Accept or Reject Terms and Conditions
 
-The visualizer is a projection of authored definitions and implementation evidence. It must not become the authoritative store for either.
+Use `client.interaction.terms-and-conditions` as the reference specimen for this process.
 
-## First reference interaction
+### Authored definition
 
-The first reference interaction is:
+`auth-model/client-interactions/accept-reject-terms-and-conditions.json`
 
-`Accept or Reject Terms and Conditions`
+The authored interaction requires:
 
-It is intentionally simple and should be used to establish the implementation-evidence and visualization pattern before applying this process broadly.
+- directive `client.terms-and-conditions`;
+- authoritative T&C display;
+- explicit Accept action;
+- explicit Reject action;
+- terminal outcomes `accepted`, `rejected`, `canceled`, and `failed`;
+- no response value.
 
-Its purpose is to prove the general Client Interaction process first. Authentication-specific interaction reconciliation can then reuse the same client-conformance machinery with the additional Auth Bindings and no-response-value constraints.
+### Angular baseline
+
+Inspected repository:
+
+`softwarelogistics/workforce-ui`
+
+Reference implementation precursor:
+
+`src/app/ui/workforce/client-directives/promotion-directive/PromotionDirectiveComponent`
+
+The first reconciliation records Angular as 1/3:
+
+- Exists: true
+- Controls Conform: false
+- Behavior Wired: false
+
+Why: the existing prototype loads/submits real T&C acceptance, but its UI is a consent checkbox plus `Create my workspace`; it does not expose the authored Accept/Reject semantic surface, and completion emits `ContinuitySessionView` rather than the new correlated Client Interaction outcome contract.
+
+This is useful evidence, not a defect in the authored definition. The prototype predates the canonical interaction model.
+
+### React Native baseline
+
+Inspected repository:
+
+`nuviot/vtm-client`
+
+The first reconciliation records React Native as 0/3 because no matching Client Interaction implementation was found.
+
+### How to use this specimen
+
+When implementing a new Client Interaction:
+
+1. author the definition;
+2. add or update its Angular observation;
+3. add or update its React Native observation;
+4. let Aptix expose the three checks;
+5. implement until both clients reach 3/3;
+6. execute each client and attach runtime evidence;
+7. mark runtime passed only from current evidence.
+
+This Terms and Conditions interaction is the template for where definitions, client observations, source evidence, and runtime evidence belong. Future Client and Auth Interactions should follow the same layout.
