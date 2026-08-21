@@ -55,29 +55,44 @@ function Get-EffectiveConfiguration {
     $uri = "$($ConfigServerBaseUrl.TrimEnd('/'))/api/config/$escapedAppKey/$escapedDeploymentKey"
 
     $headers = @{ 'x-config-auth' = $authToken }
-    $configuration = Invoke-RestMethod -Method Get -Uri $uri -Headers $headers
+    $resolvedConfiguration = Invoke-RestMethod -Method Get -Uri $uri -Headers $headers
+
+    if ($null -eq $resolvedConfiguration) {
+        throw 'Config Server returned an empty response.'
+    }
+
+    $valuesProperty = $resolvedConfiguration.PSObject.Properties |
+        Where-Object { $_.Name -ieq 'Values' } |
+        Select-Object -First 1
+
+    if ($null -eq $valuesProperty -or $null -eq $valuesProperty.Value) {
+        throw "Config Server response did not contain the required 'Values' collection."
+    }
 
     return [PSCustomObject]@{
         Uri = $uri
         EnvironmentVariableName = $environmentVariableName
-        Configuration = $configuration
+        AppKey = $resolvedConfiguration.AppKey
+        DeploymentKey = $resolvedConfiguration.DeploymentKey
+        GeneratedDateUtc = $resolvedConfiguration.GeneratedDateUtc
+        Values = $valuesProperty.Value
     }
 }
 
 function Get-ExactConfigurationValue {
     param(
-        [object]$Configuration,
+        [object]$Values,
         [string]$Key
     )
 
-    if ($null -eq $Configuration) {
-        throw "Config Server returned no configuration while looking for '$Key'."
+    if ($null -eq $Values) {
+        throw "Config Server returned no Values collection while looking for '$Key'."
     }
 
-    if ($Configuration -is [System.Collections.IDictionary]) {
-        foreach ($candidateKey in $Configuration.Keys) {
+    if ($Values -is [System.Collections.IDictionary]) {
+        foreach ($candidateKey in $Values.Keys) {
             if ([string]::Equals([string]$candidateKey, $Key, [System.StringComparison]::OrdinalIgnoreCase)) {
-                $value = $Configuration[$candidateKey]
+                $value = $Values[$candidateKey]
                 if ([string]::IsNullOrWhiteSpace([string]$value)) {
                     throw "Required configuration key '$Key' is present but blank."
                 }
@@ -86,7 +101,7 @@ function Get-ExactConfigurationValue {
         }
     }
     else {
-        $property = $Configuration.PSObject.Properties |
+        $property = $Values.PSObject.Properties |
             Where-Object { [string]::Equals($_.Name, $Key, [System.StringComparison]::OrdinalIgnoreCase) } |
             Select-Object -First 1
 
@@ -98,13 +113,13 @@ function Get-ExactConfigurationValue {
         }
     }
 
-    throw "Required configuration key '$Key' was not returned by Config Server."
+    throw "Required configuration key '$Key' was not returned in ResolvedConfiguration.Values."
 }
 
 function Assert-ProviderConfiguration {
     param(
         [string]$ProviderName,
-        [object]$Configuration
+        [object]$Values
     )
 
     $requiredKeys = switch ($ProviderName.ToLowerInvariant()) {
@@ -128,7 +143,7 @@ function Assert-ProviderConfiguration {
 
     $values = @{}
     foreach ($key in $requiredKeys) {
-        $values[$key] = Get-ExactConfigurationValue -Configuration $Configuration -Key $key
+        $values[$key] = Get-ExactConfigurationValue -Values $Values -Key $key
         Write-Check $key $true 'configured'
     }
 
@@ -153,10 +168,10 @@ function Test-JsonEndpoint {
 }
 
 function Test-MicrosoftProvider {
-    param([object]$Configuration)
+    param([object]$Values)
 
     Write-Host ' Microsoft'
-    $null = Assert-ProviderConfiguration -ProviderName 'microsoft' -Configuration $Configuration
+    $null = Assert-ProviderConfiguration -ProviderName 'microsoft' -Values $Values
 
     $metadata = Test-JsonEndpoint -Label 'Discovery document reachable' -Uri 'https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration'
     if ($null -eq $metadata) { return $false }
@@ -182,10 +197,10 @@ function Test-MicrosoftProvider {
 }
 
 function Test-GoogleProvider {
-    param([object]$Configuration)
+    param([object]$Values)
 
     Write-Host ' Google'
-    $null = Assert-ProviderConfiguration -ProviderName 'google' -Configuration $Configuration
+    $null = Assert-ProviderConfiguration -ProviderName 'google' -Values $Values
 
     $metadata = Test-JsonEndpoint -Label 'Discovery document reachable' -Uri 'https://accounts.google.com/.well-known/openid-configuration'
     if ($null -eq $metadata) { return $false }
@@ -221,11 +236,12 @@ foreach ($deploymentKey in $deployments) {
     $configResult = Get-EffectiveConfiguration -DeploymentKey $deploymentKey -ApplicationKey $AppKey
     Write-Check 'Config Server request' $true $configResult.Uri
     Write-Check 'Config auth token available' $true $configResult.EnvironmentVariableName
+    Write-Check 'Resolved configuration Values' $true "app=$($configResult.AppKey) deployment=$($configResult.DeploymentKey)"
 
     foreach ($providerName in $providers) {
         $providerHealthy = switch ($providerName) {
-            'microsoft' { Test-MicrosoftProvider -Configuration $configResult.Configuration }
-            'google'    { Test-GoogleProvider -Configuration $configResult.Configuration }
+            'microsoft' { Test-MicrosoftProvider -Values $configResult.Values }
+            'google'    { Test-GoogleProvider -Values $configResult.Values }
         }
 
         $overallHealthy = $overallHealthy -and $providerHealthy
