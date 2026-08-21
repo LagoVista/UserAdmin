@@ -3,35 +3,46 @@
   "schemaVersion": "1.0",
   "clientKey": "angular-web",
   "platform": "web",
-  "repository": "softwarelogistics/workforce-ui",
-  "inspectedCommit": "1ffd25ead7f06569024c8622241103438212a884",
-  "generatedUtc": "2026-08-20T20:00:00-04:00",
+  "repository": "softwarelogistics/nuviot-ui-shared",
+  "inspectedCommit": "9a44ad5c612bea43ba4f1e556803a384f1df56fe",
+  "generatedUtc": "2026-08-20T20:12:00-04:00",
   "interactions": [
     {
       "interactionKey": "client.interaction.terms-and-conditions",
-      "exists": true,
-      "controlsConform": false,
+      "exists": false,
+      "controlsConform": true,
       "behaviorWired": false,
       "runtimeEvidence": "not-run",
-      "component": "PromotionDirectiveComponent",
-      "observedControlFinders": [],
-      "observedActionFinders": [],
+      "component": "TermsAndConditionsInteractionComponent",
+      "observedControlFinders": [
+        "display:terms-and-conditions"
+      ],
+      "observedActionFinders": [
+        "action:accept",
+        "action:reject"
+      ],
       "sourceEvidence": [
         {
-          "path": "src/app/ui/workforce/client-directives/promotion-directive/promotion-directive.component.ts",
-          "symbol": "PromotionDirectiveComponent",
-          "note": "Loads the authoritative promotion offer and submits the existing continuity promotion operation after terms acceptance."
+          "path": "client-interactions/shared/client-interaction-shell/client-interaction-shell.component.ts",
+          "symbol": "ClientInteractionShellComponent",
+          "note": "Shared Angular Client Interaction card shell establishes common hierarchy and presentation states."
         },
         {
-          "path": "src/app/ui/workforce/client-directives/promotion-directive/promotion-directive.component.html",
-          "note": "Current surface uses a consent checkbox and Create my workspace action and does not expose the canonical Client Interaction semantic finders."
+          "path": "client-interactions/handlers/terms-and-conditions/terms-and-conditions-interaction.component.ts",
+          "symbol": "TermsAndConditionsInteractionComponent",
+          "note": "Reference presentational handler for the canonical Terms and Conditions interaction."
+        },
+        {
+          "path": "client-interactions/handlers/terms-and-conditions/terms-and-conditions-interaction.component.html",
+          "note": "Exposes the authored display:terms-and-conditions, action:accept, and action:reject semantic finders."
         }
       ],
       "runtimeEvidenceReferences": [],
       "notes": [
-        "The interaction exists as a proven precursor, so Exists is green.",
-        "Controls do not conform: the canonical interaction requires display:terms-and-conditions plus action:accept and action:reject; the current prototype exposes neither canonical semantic finder set nor an explicit Reject action.",
-        "Behavior is not yet wired to the Client Interaction protocol: completion emits ContinuitySessionView rather than a correlated terminal outcome and the interaction is still coupled to workspace promotion."
+        "Controls conform to the authored reference interaction.",
+        "Exists remains false by the Client Interaction -> Green definition because client.terms-and-conditions is not yet dispatched by an interaction host into this component.",
+        "Behavior Wired remains false because authoritative T&C retrieval/acceptance, correlation, and terminal outcome mapping have not yet been connected in the stable shared client implementation.",
+        "The older workforce-ui PromotionDirectiveComponent remains useful precursor evidence but is no longer the canonical Angular implementation home."
       ]
     }
   ]
