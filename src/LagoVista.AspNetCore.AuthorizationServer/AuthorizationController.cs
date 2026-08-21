@@ -120,6 +120,20 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
+        [HttpGet(AuthorizationServerConstants.EndSessionEndpoint)]
+        [HttpPost(AuthorizationServerConstants.EndSessionEndpoint)]
+        [IgnoreAntiforgeryToken]
+        public async Task<IActionResult> LogoutAsync()
+        {
+            var request = HttpContext.GetOpenIddictServerRequest();
+            if (request == null)
+                throw new InvalidOperationException("The OIDC end session request could not be resolved.");
+
+            await HttpContext.SignOutAsync();
+
+            return SignOut(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
+
         private IActionResult Reject(string error, string description)
         {
             var properties = new AuthenticationProperties(new Dictionary<string, string>
