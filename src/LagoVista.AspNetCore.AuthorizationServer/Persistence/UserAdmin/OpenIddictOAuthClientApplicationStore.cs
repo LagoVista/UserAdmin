@@ -51,8 +51,21 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Persistence.UserAdmin
         public ValueTask<OAuthClientApplication> FindByClientIdAsync(string identifier, CancellationToken cancellationToken)
             => FindByClientIdentifierAsync(identifier, cancellationToken);
 
-        public IAsyncEnumerable<OAuthClientApplication> FindByPostLogoutRedirectUriAsync(string uri, CancellationToken cancellationToken)
-            => throw ReadOnlyQueryNotSupported();
+        public async IAsyncEnumerable<OAuthClientApplication> FindByPostLogoutRedirectUriAsync(
+            string uri, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            if (String.IsNullOrWhiteSpace(uri))
+                throw new ArgumentNullException(nameof(uri));
+
+            cancellationToken.ThrowIfCancellationRequested();
+            var applications = await _manager.GetOAuthClientApplicationsByPostLogoutRedirectUriAsync(uri);
+
+            foreach (var application in applications)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                yield return application;
+            }
+        }
 
         public IAsyncEnumerable<OAuthClientApplication> FindByRedirectUriAsync(string uri, CancellationToken cancellationToken)
             => throw ReadOnlyQueryNotSupported();
@@ -109,10 +122,13 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Persistence.UserAdmin
 
             var permissions = ImmutableArray.CreateBuilder<string>();
 
-            // The authorization-code slice requires both endpoints and the code response type.
+            // The authorization-code slice requires the interactive endpoints, token endpoint,
+            // authorization-code grant and code response type. End-session is part of the same
+            // browser-facing OIDC client capability and does not revoke already-issued tokens.
             if (Values(application.AllowedGrantTypes).Contains(OpenIddictConstants.GrantTypes.AuthorizationCode, StringComparer.Ordinal))
             {
                 permissions.Add(OpenIddictConstants.Permissions.Endpoints.Authorization);
+                permissions.Add(OpenIddictConstants.Permissions.Endpoints.EndSession);
                 permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token);
                 permissions.Add(OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode);
                 permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.Code);

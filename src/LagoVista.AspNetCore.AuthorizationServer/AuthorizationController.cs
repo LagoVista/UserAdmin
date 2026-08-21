@@ -120,6 +120,27 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
+        [HttpGet(AuthorizationServerConstants.EndSessionEndpoint)]
+        [HttpPost(AuthorizationServerConstants.EndSessionEndpoint)]
+        [IgnoreAntiforgeryToken]
+        public async Task<IActionResult> LogoutAsync()
+        {
+            var request = HttpContext.GetOpenIddictServerRequest();
+            if (request == null)
+                throw new InvalidOperationException("The OIDC end session request could not be resolved.");
+
+            // This is a protocol endpoint, so ASP.NET antiforgery validation is intentionally not used.
+            // Requiring an OpenID Connect id_token_hint prevents a bare cross-site request from silently
+            // terminating the local NuvIoT browser session. Registered post-logout redirects are still
+            // validated through the UserAdmin-backed OpenIddict application store.
+            if (String.IsNullOrWhiteSpace(request.IdTokenHint))
+                return Reject(Errors.InvalidRequest, "An id_token_hint is required to terminate the NuvIoT authentication session.");
+
+            await HttpContext.SignOutAsync();
+
+            return SignOut(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
+
         private IActionResult Reject(string error, string description)
         {
             var properties = new AuthenticationProperties(new Dictionary<string, string>

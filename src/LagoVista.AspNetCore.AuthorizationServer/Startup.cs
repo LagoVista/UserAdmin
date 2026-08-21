@@ -39,7 +39,8 @@ namespace LagoVista.AspNetCore.AuthorizationServer
 
                     options.SetAuthorizationEndpointUris(AuthorizationServerConstants.AuthorizationEndpoint)
                            .SetTokenEndpointUris(AuthorizationServerConstants.TokenEndpoint)
-                           .SetUserInfoEndpointUris(AuthorizationServerConstants.UserInfoEndpoint);
+                           .SetUserInfoEndpointUris(AuthorizationServerConstants.UserInfoEndpoint)
+                           .SetEndSessionEndpointUris(AuthorizationServerConstants.EndSessionEndpoint);
 
                     options.AllowAuthorizationCodeFlow();
                     options.RequireProofKeyForCodeExchange();
@@ -83,6 +84,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                     options.UseAspNetCore()
                            .EnableStatusCodePagesIntegration()
                            .EnableAuthorizationEndpointPassthrough()
+                           .EnableEndSessionEndpointPassthrough()
                            .EnableUserInfoEndpointPassthrough();
                 })
                 .AddValidation(options =>

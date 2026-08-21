@@ -1,5 +1,6 @@
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.UserAdmin.Models.Auth;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Interfaces.Repos.Security
@@ -11,6 +12,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
         Task DeleteOAuthClientApplicationAsync(string id);
         Task<OAuthClientApplication> GetOAuthClientApplicationAsync(string id);
         Task<OAuthClientApplication> GetOAuthClientApplicationByClientIdAsync(string clientId);
+        Task<List<OAuthClientApplication>> GetOAuthClientApplicationsByPostLogoutRedirectUriAsync(string postLogoutRedirectUri);
         Task<ListResponse<OAuthClientApplicationSummary>> GetOAuthClientApplicationsAsync(string orgId, ListRequest listRequest);
         Task<bool> QueryKeyInUseAsync(string key, string orgId);
         Task<bool> QueryClientIdInUseAsync(string clientId, string currentId = null);

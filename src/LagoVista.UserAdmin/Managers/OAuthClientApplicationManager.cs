@@ -8,6 +8,7 @@ using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Auth;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using static LagoVista.Core.Models.AuthorizeResult;
 
@@ -112,6 +113,14 @@ namespace LagoVista.UserAdmin.Managers
             if (client != null)
                 client.ClientSecret = null;
             return client;
+        }
+
+        public async Task<List<OAuthClientApplication>> GetOAuthClientApplicationsByPostLogoutRedirectUriAsync(string postLogoutRedirectUri)
+        {
+            var clients = await _repo.GetOAuthClientApplicationsByPostLogoutRedirectUriAsync(postLogoutRedirectUri);
+            foreach (var client in clients)
+                client.ClientSecret = null;
+            return clients;
         }
 
         public async Task<ListResponse<OAuthClientApplicationSummary>> GetOAuthClientApplicationsForOrgAsync(EntityHeader org, EntityHeader user, ListRequest listRequest)
