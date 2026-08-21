@@ -81,6 +81,18 @@ namespace LagoVista.UserAdmin.Models.Testing
         public string PasswordRecoveryCode { get; set; }
         public string EmailVerificationCode { get; set; }
         public string PasswordResetToken { get; set; }
+
+        /// <summary>
+        /// Optional provider simulator facts prepared by UserAdmin for external OAuth scenarios.
+        /// DevTools uses these only to configure its local test IdP before invoking the normal UI action.
+        /// </summary>
+        public string OAuthProvider { get; set; }
+        public string OAuthSubject { get; set; }
+        public string OAuthEmail { get; set; }
+        public bool? OAuthEmailVerified { get; set; }
+        public string OAuthFirstName { get; set; }
+        public string OAuthLastName { get; set; }
+        public string OAuthOutcome { get; set; }
     }
 
     [EntityDescription(
