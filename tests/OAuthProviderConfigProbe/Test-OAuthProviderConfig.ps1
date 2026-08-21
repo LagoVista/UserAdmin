@@ -64,106 +64,75 @@ function Get-EffectiveConfiguration {
     }
 }
 
-function Find-ProviderSections {
+function Get-ExactConfigurationValue {
     param(
-        [object]$Value,
-        [string]$ProviderName,
-        [string]$Path = '$'
+        [object]$Configuration,
+        [string]$Key
     )
 
-    $results = @()
-    if ($null -eq $Value) { return $results }
-
-    if ($Value -is [System.Collections.IDictionary]) {
-        foreach ($key in $Value.Keys) {
-            $child = $Value[$key]
-            $childPath = "$Path.$key"
-            if ([string]$key -match "(?i)$ProviderName.*oauth|oauth.*$ProviderName|^$ProviderName$") {
-                $results += [PSCustomObject]@{ Path = $childPath; Value = $child }
-            }
-
-            if ($child -is [System.Collections.IDictionary] -or
-                $child -is [PSCustomObject] -or
-                ($child -is [System.Collections.IEnumerable] -and -not ($child -is [string]))) {
-                $results += Find-ProviderSections -Value $child -ProviderName $ProviderName -Path $childPath
-            }
-        }
-        return $results
+    if ($null -eq $Configuration) {
+        throw "Config Server returned no configuration while looking for '$Key'."
     }
 
-    if ($Value -is [System.Collections.IEnumerable] -and -not ($Value -is [string])) {
-        $index = 0
-        foreach ($item in $Value) {
-            if ($item -is [System.Collections.IDictionary] -or
-                $item -is [PSCustomObject] -or
-                ($item -is [System.Collections.IEnumerable] -and -not ($item -is [string]))) {
-                $results += Find-ProviderSections -Value $item -ProviderName $ProviderName -Path "$Path[$index]"
-            }
-            $index++
-        }
-        return $results
-    }
-
-    if ($Value -is [PSCustomObject]) {
-        foreach ($property in $Value.PSObject.Properties | Where-Object { $_.MemberType -eq 'NoteProperty' }) {
-            $childPath = "$Path.$($property.Name)"
-            if ($property.Name -match "(?i)$ProviderName.*oauth|oauth.*$ProviderName|^$ProviderName$") {
-                $results += [PSCustomObject]@{ Path = $childPath; Value = $property.Value }
-            }
-
-            $child = $property.Value
-            if ($child -is [System.Collections.IDictionary] -or
-                $child -is [PSCustomObject] -or
-                ($child -is [System.Collections.IEnumerable] -and -not ($child -is [string]))) {
-                $results += Find-ProviderSections -Value $child -ProviderName $ProviderName -Path $childPath
+    if ($Configuration -is [System.Collections.IDictionary]) {
+        foreach ($candidateKey in $Configuration.Keys) {
+            if ([string]::Equals([string]$candidateKey, $Key, [System.StringComparison]::OrdinalIgnoreCase)) {
+                $value = $Configuration[$candidateKey]
+                if ([string]::IsNullOrWhiteSpace([string]$value)) {
+                    throw "Required configuration key '$Key' is present but blank."
+                }
+                return $value
             }
         }
     }
+    else {
+        $property = $Configuration.PSObject.Properties |
+            Where-Object { [string]::Equals($_.Name, $Key, [System.StringComparison]::OrdinalIgnoreCase) } |
+            Select-Object -First 1
 
-    return $results
+        if ($null -ne $property) {
+            if ([string]::IsNullOrWhiteSpace([string]$property.Value)) {
+                throw "Required configuration key '$Key' is present but blank."
+            }
+            return $property.Value
+        }
+    }
+
+    throw "Required configuration key '$Key' was not returned by Config Server."
 }
 
-function Get-PropertyValue {
-    param(
-        [object]$Object,
-        [string[]]$Names
-    )
-
-    if ($null -eq $Object) { return $null }
-
-    foreach ($name in $Names) {
-        $property = $Object.PSObject.Properties | Where-Object { $_.Name -ieq $name } | Select-Object -First 1
-        if ($null -ne $property) { return $property.Value }
-    }
-
-    return $null
-}
-
-function Test-ProviderConfigSection {
+function Assert-ProviderConfiguration {
     param(
         [string]$ProviderName,
         [object]$Configuration
     )
 
-    $sections = @(Find-ProviderSections -Value $Configuration -ProviderName $ProviderName)
-    if ($sections.Count -eq 0) {
-        Write-Check "$ProviderName OAuth configuration section" $false 'No matching section found in Config Server JSON.'
-        return $false
+    $requiredKeys = switch ($ProviderName.ToLowerInvariant()) {
+        'microsoft' {
+            @(
+                'OAuth:Microsoft:ClientId',
+                'OAuth:Microsoft:Secret',
+                'OAuth:Microsoft:SecretId'
+            )
+        }
+        'google' {
+            @(
+                'OAuth:Google:ClientId',
+                'OAuth:Google:Secret'
+            )
+        }
+        default {
+            throw "Unsupported provider '$ProviderName'."
+        }
     }
 
-    $section = $sections[0]
-    Write-Check "$ProviderName OAuth configuration section" $true $section.Path
+    $values = @{}
+    foreach ($key in $requiredKeys) {
+        $values[$key] = Get-ExactConfigurationValue -Configuration $Configuration -Key $key
+        Write-Check $key $true 'configured'
+    }
 
-    $clientId = Get-PropertyValue -Object $section.Value -Names @('ClientId', 'ClientID', 'AppId', 'ApplicationId')
-    $secret = Get-PropertyValue -Object $section.Value -Names @('Secret', 'ClientSecret', 'ClientSecretValue')
-
-    $clientIdPresent = -not [string]::IsNullOrWhiteSpace([string]$clientId)
-    $secretPresent = -not [string]::IsNullOrWhiteSpace([string]$secret)
-
-    Write-Check 'Client ID configured' $clientIdPresent
-    Write-Check 'Client secret configured' $secretPresent
-
-    return ($clientIdPresent -and $secretPresent)
+    return $values
 }
 
 function Test-JsonEndpoint {
@@ -187,7 +156,7 @@ function Test-MicrosoftProvider {
     param([object]$Configuration)
 
     Write-Host ' Microsoft'
-    $healthy = Test-ProviderConfigSection -ProviderName 'microsoft' -Configuration $Configuration
+    $null = Assert-ProviderConfiguration -ProviderName 'microsoft' -Configuration $Configuration
 
     $metadata = Test-JsonEndpoint -Label 'Discovery document reachable' -Uri 'https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration'
     if ($null -eq $metadata) { return $false }
@@ -200,24 +169,23 @@ function Test-MicrosoftProvider {
     Write-Check 'Token endpoint advertised' $tokenPresent ([string]$metadata.token_endpoint)
     Write-Check 'JWKS endpoint advertised' $jwksPresent ([string]$metadata.jwks_uri)
 
+    $healthy = $authorizePresent -and $tokenPresent -and $jwksPresent
+
     if ($jwksPresent) {
         $jwks = Test-JsonEndpoint -Label 'JWKS reachable' -Uri ([string]$metadata.jwks_uri)
         $hasKeys = $null -ne $jwks -and $null -ne $jwks.keys -and @($jwks.keys).Count -gt 0
         Write-Check 'JWKS contains signing keys' $hasKeys
         $healthy = $healthy -and $hasKeys
     }
-    else {
-        $healthy = $false
-    }
 
-    return ($healthy -and $authorizePresent -and $tokenPresent)
+    return $healthy
 }
 
 function Test-GoogleProvider {
     param([object]$Configuration)
 
     Write-Host ' Google'
-    $healthy = Test-ProviderConfigSection -ProviderName 'google' -Configuration $Configuration
+    $null = Assert-ProviderConfiguration -ProviderName 'google' -Configuration $Configuration
 
     $metadata = Test-JsonEndpoint -Label 'Discovery document reachable' -Uri 'https://accounts.google.com/.well-known/openid-configuration'
     if ($null -eq $metadata) { return $false }
@@ -230,17 +198,16 @@ function Test-GoogleProvider {
     Write-Check 'Token endpoint advertised' $tokenPresent ([string]$metadata.token_endpoint)
     Write-Check 'JWKS endpoint advertised' $jwksPresent ([string]$metadata.jwks_uri)
 
+    $healthy = $authorizePresent -and $tokenPresent -and $jwksPresent
+
     if ($jwksPresent) {
         $jwks = Test-JsonEndpoint -Label 'JWKS reachable' -Uri ([string]$metadata.jwks_uri)
         $hasKeys = $null -ne $jwks -and $null -ne $jwks.keys -and @($jwks.keys).Count -gt 0
         Write-Check 'JWKS contains signing keys' $hasKeys
         $healthy = $healthy -and $hasKeys
     }
-    else {
-        $healthy = $false
-    }
 
-    return ($healthy -and $authorizePresent -and $tokenPresent)
+    return $healthy
 }
 
 $deployments = if ($Deployment -eq 'all') { @('localdev', 'dev', 'live') } else { @($Deployment) }
@@ -251,16 +218,9 @@ foreach ($deploymentKey in $deployments) {
     Write-Host ''
     Write-Host "OAuth configuration probe: app=$AppKey deployment=$deploymentKey"
 
-    try {
-        $configResult = Get-EffectiveConfiguration -DeploymentKey $deploymentKey -ApplicationKey $AppKey
-        Write-Check 'Config Server request' $true $configResult.Uri
-        Write-Check 'Config auth token available' $true $configResult.EnvironmentVariableName
-    }
-    catch {
-        Write-Check 'Config Server request' $false $_.Exception.Message
-        $overallHealthy = $false
-        continue
-    }
+    $configResult = Get-EffectiveConfiguration -DeploymentKey $deploymentKey -ApplicationKey $AppKey
+    Write-Check 'Config Server request' $true $configResult.Uri
+    Write-Check 'Config auth token available' $true $configResult.EnvironmentVariableName
 
     foreach ($providerName in $providers) {
         $providerHealthy = switch ($providerName) {
