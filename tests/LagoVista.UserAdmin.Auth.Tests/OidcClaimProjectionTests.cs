@@ -46,5 +46,45 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(projection.Name, Is.EqualTo("kevinw"));
             Assert.That(projection.PreferredUsername, Is.EqualTo("kevinw"));
         }
+
+        [Test]
+        public void GetTeamRole_SystemAdminWithTeamRoleScope_ReturnsOwner()
+        {
+            var role = OidcTeamRoleProjection.GetTeamRole(
+                new[] { "openid", "profile", "email", AuthorizationServerConstants.ScopeTeamRole },
+                "True");
+
+            Assert.That(role, Is.EqualTo(AuthorizationServerConstants.TeamRoleOwner));
+        }
+
+        [Test]
+        public void GetTeamRole_SystemAdminWithoutTeamRoleScope_ReturnsNull()
+        {
+            var role = OidcTeamRoleProjection.GetTeamRole(
+                new[] { "openid", "profile", "email" },
+                "True");
+
+            Assert.That(role, Is.Null);
+        }
+
+        [Test]
+        public void GetTeamRole_NonSystemAdminWithTeamRoleScope_ReturnsNull()
+        {
+            var role = OidcTeamRoleProjection.GetTeamRole(
+                new[] { "openid", AuthorizationServerConstants.ScopeTeamRole },
+                "False");
+
+            Assert.That(role, Is.Null);
+        }
+
+        [Test]
+        public void GetTeamRole_MalformedSystemAdminClaim_ReturnsNull()
+        {
+            var role = OidcTeamRoleProjection.GetTeamRole(
+                new[] { "openid", AuthorizationServerConstants.ScopeTeamRole },
+                "not-a-bool");
+
+            Assert.That(role, Is.Null);
+        }
     }
 }
