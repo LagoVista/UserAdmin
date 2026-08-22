@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "client-interaction-server-review.schema.json",
+  "title": "Client Interaction Server Review",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "generatedUtc", "reviewedRepositories", "interactions"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "generatedUtc": { "type": "string", "format": "date-time" },
+    "reviewedRepositories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["repository", "reviewedCommit"],
+        "properties": {
+          "repository": { "type": "string", "minLength": 1 },
+          "reviewedCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+        }
+      }
+    },
+    "interactions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["interactionKey", "status", "checks", "sourceEvidence", "supportingTests", "notes"],
+        "properties": {
+          "interactionKey": { "type": "string", "minLength": 1 },
+          "status": { "enum": ["not-reviewed", "passed", "failed"] },
+          "checks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["key", "name", "passed", "note"],
+              "properties": {
+                "key": { "type": "string", "minLength": 1 },
+                "name": { "type": "string", "minLength": 1 },
+                "passed": { "type": "boolean" },
+                "note": { "type": "string" }
+              }
+            }
+          },
+          "sourceEvidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["repository", "path"],
+              "properties": {
+                "repository": { "type": "string", "minLength": 1 },
+                "path": { "type": "string", "minLength": 1 },
+                "symbol": { "type": "string" },
+                "note": { "type": "string" }
+              }
+            }
+          },
+          "supportingTests": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["repository", "path", "status"],
+              "properties": {
+                "repository": { "type": "string", "minLength": 1 },
+                "path": { "type": "string", "minLength": 1 },
+                "status": { "enum": ["source-present", "passed", "failed", "not-run"] },
+                "evidenceReference": { "type": "string" },
+                "note": { "type": "string" }
+              }
+            }
+          },
+          "notes": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}
