@@ -1,3 +1,4 @@
+using LagoVista.Core.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Models.Auth;
 using Microsoft.IdentityModel.Tokens;
@@ -27,10 +28,17 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Persistence.UserAdmin
     public class OpenIddictOAuthClientApplicationStore : IOpenIddictApplicationStore<OAuthClientApplication>
     {
         private readonly IOAuthClientApplicationManager _manager;
+        private readonly ISecureStorage _secureStorage;
+        private readonly ISystemUsers _systemUsers;
 
-        public OpenIddictOAuthClientApplicationStore(IOAuthClientApplicationManager manager)
+        public OpenIddictOAuthClientApplicationStore(
+            IOAuthClientApplicationManager manager,
+            ISecureStorage secureStorage,
+            ISystemUsers systemUsers)
         {
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));
+            _secureStorage = secureStorage ?? throw new ArgumentNullException(nameof(secureStorage));
+            _systemUsers = systemUsers ?? throw new ArgumentNullException(nameof(systemUsers));
         }
 
         public ValueTask<long> CountAsync(CancellationToken cancellationToken)
@@ -81,13 +89,28 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Persistence.UserAdmin
         public ValueTask<string> GetClientIdAsync(OAuthClientApplication application, CancellationToken cancellationToken)
             => Value(application, application.ClientId, cancellationToken);
 
-        public ValueTask<string> GetClientSecretAsync(OAuthClientApplication application, CancellationToken cancellationToken)
+        public async ValueTask<string> GetClientSecretAsync(OAuthClientApplication application, CancellationToken cancellationToken)
         {
             Validate(application, cancellationToken);
 
-            // Public PKCE clients are the supported production slice today. Confidential-client
-            // secret resolution will be wired through ISecureStorage when that slice is enabled.
-            return new ValueTask<string>((string)null);
+            if (application.ClientType?.Id != OAuthClientApplication.ClientType_Confidential ||
+                String.IsNullOrWhiteSpace(application.ClientSecretId))
+                return null;
+
+            if (application.OwnerOrganization == null || String.IsNullOrWhiteSpace(application.OwnerOrganization.Id))
+                throw new InvalidOperationException($"OAuth client [{application.ClientId}] does not have an owner organization for secure client-secret resolution.");
+
+            var user = _systemUsers.HostUser;
+            if (user == null)
+                throw new InvalidOperationException("The host system user is required to resolve OAuth client secrets.");
+
+            var result = await _secureStorage.GetSecretAsync(application.OwnerOrganization, application.ClientSecretId, user);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (!result.Successful)
+                throw new InvalidOperationException($"Could not load the client secret for OAuth client [{application.ClientId}]. {result.ErrorMessage}");
+
+            return result.Result;
         }
 
         public ValueTask<string> GetClientTypeAsync(OAuthClientApplication application, CancellationToken cancellationToken)
