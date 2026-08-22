@@ -118,6 +118,16 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                     .SetDestinations(Destinations.AccessToken, Destinations.IdentityToken));
             }
 
+            if (scopes.Contains(AuthorizationServerConstants.ScopeTeamRole, StringComparer.Ordinal) &&
+                Boolean.TryParse(projectedClaims.IsSystemAdmin, out var isSystemAdmin) &&
+                isSystemAdmin)
+            {
+                identity.AddClaim(new Claim(
+                    AuthorizationServerConstants.ClaimTeamRole,
+                    AuthorizationServerConstants.TeamRoleOwner)
+                    .SetDestinations(Destinations.AccessToken, Destinations.IdentityToken));
+            }
+
             identity.AddClaim(new Claim(Claims.ClientId, policy.ClientId).SetDestinations(Destinations.AccessToken));
 
             var principal = new ClaimsPrincipal(identity);
