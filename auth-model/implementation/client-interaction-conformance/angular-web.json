@@ -43,7 +43,7 @@
         "Exists is green because the stable shared Angular client has a platform dispatcher for client.terms-and-conditions and the intended handler.",
         "Controls conform to authored version 2: current version + View Terms + Accept + Reject.",
         "The card-local behavior is substantially implemented, including authoritative version retrieval and the acceptance operation.",
-        "Behavior Wired remains false because nuviot/ai-client AgentChatEngine does not yet project AgentExecuteResponse.clientDirectives into normalized Client Interaction state, no canonical Client Interaction completion submission/continuation contract exists yet, and a consuming Angular chat surface is therefore not connected to the complete agent round trip.",
+        "The canonical AGN-000040 server transport and result-bearing continuation contract is now implemented. Behavior Wired remains false because nuviot/ai-client AgentChatEngine does not yet project ClientDirective values into normalized Client Interaction state, submit ClientDirectiveResult through the canonical continuation lane, apply the resumed response, and expose that state to the consuming Angular chat surface.",
         "Runtime remains not-run."
       ]
     }
