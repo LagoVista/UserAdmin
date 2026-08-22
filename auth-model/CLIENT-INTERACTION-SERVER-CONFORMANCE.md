@@ -57,6 +57,7 @@ For a result-bearing interaction, confirm from source that:
 
 - `AgentExecuteResponse.ClientDirectives` carries canonical `ClientDirective` values;
 - each issued directive has a stable `DirectiveId` and `Action`;
+- result-bearing handoff is identified by `AgentExecuteResponse.Kind = client_directive_continuation` without exposing internal Client Tool calls;
 - `AgentExecuteRequest.ClientDirectiveResults` exists as a dedicated request lane;
 - the result transport supports only the bounded value shapes allowed by AGN-000040; and
 - legacy Client Directive wire shapes or model-text directive envelopes are not required by the interaction.
@@ -71,7 +72,7 @@ Definition Registered proves that the authored `directiveKey` exists as a code-r
 
 Confirm from source that:
 
-- the registered action matches the authored `directiveKey` exactly;
+- the registered `Action` matches the authored dotted `directiveKey` exactly;
 - the directive has an explicit response mode;
 - model-facing usage metadata exists;
 - any optional build/result handler is discoverable through the registered directive type; and
@@ -83,16 +84,18 @@ A generic registry or framework does not satisfy this check by itself. The speci
 
 Invocation Wired proves that the model can invoke this specific registered directive through the formal AGN-000040 invocation path.
 
-For `RequiresResult` directives, confirm that the interaction can be resolved through `InvokeClientDirective(...)` and enters the client-execution-required flow.
+For `RequiresResult` directives, confirm that the interaction can be resolved through `invoke_client_directive` and enters the client-execution-required flow.
 
-For `FireAndForget` directives, confirm that the interaction can be resolved through `InvokeFireAndForgetDirective(...)`, the canonical `ClientDirective` is added to the response, and the model receives the immediate submitted result.
+For `FireAndForget` directives, confirm that the interaction can be resolved through `invoke_fire_and_forget_directive`, the canonical `ClientDirective` is added to the response, and the model receives the immediate submitted result.
 
 Also confirm that:
 
-- only directives enabled for the active Agent can be resolved;
+- the registered directive catalog is exposed when Client Directive invocation tools are active;
 - any build handler runs before the final outbound payload is emitted;
 - the outbound payload is the canonical `ClientDirective` shape; and
 - the model is not expected to manufacture a raw directive JSON envelope in assistant text.
+
+Per-Agent narrowing of the registered directive catalog is a future governance extension and does not change this source-conformance check.
 
 ## 4. Completion Wired
 
@@ -106,8 +109,10 @@ For `RequiresResult` directives, confirm from source that:
 4. `DirectiveId` and `Action` are correlated to the pending directive;
 5. allowed outcomes and bounded response values are validated;
 6. duplicate completion does not repeat deterministic side effects;
-7. any configured result handler runs exactly once; and
-8. the normalized semantic result is supplied to the model continuation.
+7. any configured result handler runs at most once; and
+8. the normalized semantic result is translated back into the suspended model tool call and normal model reasoning resumes.
+
+The server MAY reuse `ToolCallManifest` internally for the suspended model call, but that internal continuation mechanism must not leak into the Client Directive wire contract.
 
 For `FireAndForget` directives, Completion Wired means the invocation completes server-side without creating a pending Client Directive result obligation and returns the canonical immediate tool result to the model.
 
@@ -125,6 +130,7 @@ Confirm that:
 - allowed result values match authored terminal outcomes;
 - allowed response value shape matches `responseContract`;
 - Auth Interactions permit no response value;
+- user-entered text, when allowed by a general interaction, uses the bounded string Scalar rather than a second response channel;
 - client-provided arbitrary JSON is not accepted as a result; and
 - any server-side deterministic enrichment does not change the authored semantic contract.
 
@@ -138,7 +144,7 @@ Server 5/5 proves that Aptix can issue and resume the authored interaction corre
 
 Client `Behavior Wired` proves that the shared `AgentChatEngine` and the specific platform can consume that server contract, dispatch the intended handler, return the modeled completion, and apply the resumed agent response.
 
-Once Server is tracked separately, client `Behavior Wired` should no longer need to infer whether the server contract exists. It may require Server 5/5 as a prerequisite and then focus its source evidence on the shared client engine and platform path.
+Once Server is tracked separately, client `Behavior Wired` should no longer infer whether the server contract exists. It may require Server 5/5 as a prerequisite and then focus its source evidence on the shared client engine and platform path.
 
 ## Runtime evidence
 
@@ -160,22 +166,22 @@ Canonical directive key:
 
 `client.terms-and-conditions`
 
-This interaction requires a terminal result and no response value, so the eventual server definition should use the result-bearing invocation path and allow exactly the authored terminal outcomes:
+This interaction requires a terminal result and no response value. The registered server definition uses the result-bearing invocation path and allows exactly the authored terminal outcomes:
 
 - `accepted`
 - `rejected`
 - `canceled`
 - `failed`
 
-Current server evidence at the time this playbook was introduced is:
+Current source-backed server evidence is:
 
-`Transport Exists ✓   Definition Registered ○   Invocation Wired ○   Completion Wired ○   Contract Conforms ○`
+`Transport Exists ✓   Definition Registered ✓   Invocation Wired ✓   Completion Wired ✓   Contract Conforms ✓`
 
 or:
 
-`Server 1/5`
+`Server 5/5`
 
-That state is intentional. AGN-000040 transport and registration infrastructure now exists, while the Terms and Conditions-specific definition and end-to-end RequiresResult continuation have not yet been implemented.
+The reference implementation proves the canonical outbound/inbound transport, registered Terms definition, model-facing catalog and invocation tool, durable `AgentSessionTurn` pending state, correlated result validation, internal model-call resume, and exact no-response-value authored contract. Runtime evidence remains a separate final stage and is not implied by Server 5/5.
 
 ## Reconciliation rule
 
