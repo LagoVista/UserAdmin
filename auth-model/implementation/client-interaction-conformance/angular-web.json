@@ -44,7 +44,9 @@
         "Controls conform to authored version 2: current version + View Terms + Accept + Reject.",
         "The card-local behavior is substantially implemented, including authoritative version retrieval and the acceptance operation.",
         "The canonical AGN-000040 server transport and result-bearing continuation contract is now implemented. Behavior Wired remains false because nuviot/ai-client AgentChatEngine does not yet project ClientDirective values into normalized Client Interaction state, submit ClientDirectiveResult through the canonical continuation lane, apply the resumed response, and expose that state to the consuming Angular chat surface.",
-        "Runtime remains not-run."
+        "Automated client testing is documented in auth-model/CLIENT-INTERACTION-AUTOMATED-TESTING.md. With the purpose-built host running at http://localhost:4200, run the Playwright suite from auth-model/scripts/client-interactions with npm run test:angular.",
+        "Automated evidence is written to auth-model/implementation/client-interaction-runtime/angular-web/. The runner updates runtimeEvidence and runtimeEvidenceReferences here, so the Aptix Client Interactions visualizer reflects the most recent recorded run automatically.",
+        "Runtime remains not-run until the automated suite is executed successfully."
       ]
     }
   ]
