@@ -60,9 +60,10 @@ AGN-000040 owns the transport and runtime concepts used by Client Interactions:
 - `ClientDirective` is the canonical outbound wire instance;
 - `ClientDirectiveResult` is the bounded inbound result;
 - `AgentExecuteResponse.ClientDirectives` is the server-to-client transport;
+- `AgentExecuteResponse.Kind = client_directive_continuation` identifies a result-bearing Client Directive handoff;
 - `AgentExecuteRequest.ClientDirectiveResults` is the dedicated continuation lane for result-bearing directives;
-- `InvokeClientDirective` is the formal RequiresResult invocation path;
-- `InvokeFireAndForgetDirective` is the formal FireAndForget invocation path;
+- `invoke_client_directive` is the formal RequiresResult invocation path;
+- `invoke_fire_and_forget_directive` is the formal FireAndForget invocation path;
 - pending RequiresResult state is persisted on the originating `AgentSessionTurn`;
 - arbitrary structured result payloads are prohibited.
 
@@ -153,7 +154,8 @@ Green when the canonical AGN-000040 shared transport required by the interaction
 
 - `ClientDirective` outbound transport;
 - `ClientDirectiveResult` bounded result transport when applicable;
-- `AgentExecuteResponse.ClientDirectives`; and
+- `AgentExecuteResponse.ClientDirectives`;
+- `client_directive_continuation` response kind for result-bearing handoff; and
 - `AgentExecuteRequest.ClientDirectiveResults` for result-bearing interactions.
 
 This is primarily shared infrastructure. Once proven, many interactions may inherit this check.
@@ -166,11 +168,11 @@ The definition must expose enough server metadata to reconcile invocation mode, 
 
 ### 3. Invocation Wired
 
-Green when the registered definition is enabled/reachable through the formal AGN-000040 invocation path appropriate to its response mode.
+Green when the registered definition is reachable through the formal AGN-000040 invocation path appropriate to its response mode and is visible to the model when Client Directive invocation tools are active.
 
-For RequiresResult interactions this means `InvokeClientDirective` can resolve and issue the directive.
+For RequiresResult interactions this means `invoke_client_directive` can resolve and issue the directive.
 
-For FireAndForget interactions this means `InvokeFireAndForgetDirective` can resolve, issue, and return `submitted` without creating a pending continuation.
+For FireAndForget interactions this means `invoke_fire_and_forget_directive` can resolve, issue, and return `submitted` without creating a pending continuation.
 
 A server-side code path that manually constructs a `ClientDirective` is useful legacy/precursor behavior but does not satisfy this check for an authored Client Interaction unless that direct production is the explicitly approved invocation contract.
 
@@ -181,12 +183,15 @@ Green when the definition's declared completion semantics are fully wired.
 For RequiresResult interactions this includes:
 
 - pending directive state persisted on the originating `AgentSessionTurn`;
-- the next continuation accepts the matching `ClientDirectiveResult`;
+- the next continuation accepts exactly one matching `ClientDirectiveResult`;
+- unrelated normal input or `ToolResults` cannot bypass/mix with that continuation;
 - `DirectiveId` and `Action` are correlated and validated;
 - allowed result/value rules are validated;
 - optional result handler executes deterministically;
 - duplicate submission does not repeat side effects; and
-- the normalized result is returned to the model continuation.
+- the normalized result is translated into the suspended model tool call and model reasoning resumes.
+
+The server may reuse `ToolCallManifest` internally, but Client Directive clients never receive the underlying `ClientToolCall`.
 
 For FireAndForget interactions this check is green when the interaction correctly has no pending continuation/result obligation.
 
@@ -199,7 +204,8 @@ Green when the registered server definition and runtime contract match the autho
 - response mode matches the authored interaction behavior;
 - every server-accepted semantic result is authored;
 - response-value allowance and shape match;
-- Auth Interactions return no value; and
+- Auth Interactions return no value;
+- user-entered general interaction text uses a bounded string Scalar rather than a second free-form channel; and
 - server handling does not introduce hidden workflow semantics outside the authored bounded interaction.
 
 Server is green only at 5/5.
@@ -387,17 +393,17 @@ Current server evidence is stored in:
 
 `auth-model/implementation/client-interaction-conformance/server.json`
 
-At the initial AGN-000040 reconciliation, Terms & Conditions is **Server 1/5**:
+Terms & Conditions is now **Server 5/5**:
 
 - Transport Exists: true
-- Definition Registered: false
-- Invocation Wired: false
-- Completion Wired: false
-- Contract Conforms: false
+- Definition Registered: true
+- Invocation Wired: true
+- Completion Wired: true
+- Contract Conforms: true
 
-This is intentional and useful. The shared canonical transport exists, while the Terms-specific server capability and runtime path remain the next implementation target.
+The reference server implementation uses `client.terms-and-conditions` as the registered action, emits a correlated `ClientDirective`, persists pending state on `AgentSessionTurn`, accepts exactly one matching `ClientDirectiveResult`, validates the four authored outcomes and no-value rule, and resumes the originating model call through the internal continuation machinery.
 
-Angular and React Native already have their canonical interaction surfaces and substantial card-local behavior, but Behavior Wired remains false until the shared `AgentChatEngine` directive projection and continuation path are complete.
+Angular and React Native already have their canonical interaction surfaces and substantial card-local behavior. Each remains Behavior Wired false until the shared `AgentChatEngine` directive projection and `ClientDirectiveResult` continuation path are complete. Runtime remains separate and not-run until the full platform round trip is exercised.
 
 ## How to use this specimen
 
