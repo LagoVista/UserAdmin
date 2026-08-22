@@ -73,7 +73,7 @@ namespace LagoVista.UserAdmin.Managers
             await _repo.UpdateOAuthClientApplicationAsync(client);
 
             if (!String.IsNullOrEmpty(oldSecretId) && oldSecretId != client.ClientSecretId)
-                await _secureStorage.RemoveUserSecretAsync(existingClient.ToEntityHeader(), oldSecretId);
+                await _secureStorage.RemoveSecretAsync(org, oldSecretId);
 
             return InvokeResult.Success;
         }
@@ -87,7 +87,7 @@ namespace LagoVista.UserAdmin.Managers
             await _repo.DeleteOAuthClientApplicationAsync(id);
 
             if (!String.IsNullOrEmpty(client.ClientSecretId))
-                await _secureStorage.RemoveUserSecretAsync(client.ToEntityHeader(), client.ClientSecretId);
+                await _secureStorage.RemoveSecretAsync(org, client.ClientSecretId);
 
             return InvokeResult.Success;
         }
