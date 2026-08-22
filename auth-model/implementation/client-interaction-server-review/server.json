@@ -17,118 +17,29 @@
       "interactionKey": "client.interaction.terms-and-conditions",
       "status": "passed",
       "checks": [
-        {
-          "key": "directive-key",
-          "name": "Directive key matches authored contract",
-          "passed": true,
-          "note": "Server action is exactly client.terms-and-conditions."
-        },
-        {
-          "key": "response-mode",
-          "name": "Response mode is correct",
-          "passed": true,
-          "note": "Terms is registered as RequiresResult."
-        },
-        {
-          "key": "outcomes",
-          "name": "Allowed outcomes exactly match authored outcomes",
-          "passed": true,
-          "note": "accepted, rejected, canceled, and failed are the only allowed results."
-        },
-        {
-          "key": "value-contract",
-          "name": "Result value contract matches authored contract",
-          "passed": true,
-          "note": "ResultValueType and ScalarType are None; no value payload is accepted."
-        },
-        {
-          "key": "registration",
-          "name": "Definition is registered",
-          "passed": true,
-          "note": "TermsAndConditionsClientDirective is registered through AddAgentClientDirective."
-        },
-        {
-          "key": "generic-invocation",
-          "name": "Invocation uses generic Client Directive infrastructure",
-          "passed": true,
-          "note": "RequiresResult invocation is handled by invoke_client_directive rather than a Terms-specific Agent Tool."
-        },
-        {
-          "key": "correlation",
-          "name": "Continuation validates directive correlation",
-          "passed": true,
-          "note": "Continuation requires the persisted pending DirectiveId and Action to match the submitted result."
-        },
-        {
-          "key": "pending-state",
-          "name": "Pending state is persisted on the originating turn",
-          "passed": true,
-          "note": "AgentSessionTurn.PendingClientDirective records DirectiveId, Action, ToolCallId, and IssuedUtc."
-        },
-        {
-          "key": "duplicate-protection",
-          "name": "Duplicate completion cannot execute twice",
-          "passed": true,
-          "note": "Successful continuation clears PendingClientDirective; a replay no longer has pending state and is rejected."
-        },
-        {
-          "key": "lane-validation",
-          "name": "Mixed and malformed continuation lanes are rejected",
-          "passed": true,
-          "note": "Client Directive continuation requires exactly one result and rejects ToolResults and normal user-turn inputs in the same request."
-        },
-        {
-          "key": "resume-path",
-          "name": "Completion resumes the suspended model tool call",
-          "passed": true,
-          "note": "Validated result is written into the suspended AgentToolCallResult and the pipeline resumes through AgentContextLoader."
-        },
-        {
-          "key": "transport-boundary",
-          "name": "Legacy/internal tool transport does not leak to the host client",
-          "passed": true,
-          "note": "The external response kind is client_directive_continuation and suspended internal ClientToolCall state is not exposed as the host contract."
-        }
+        { "key": "directive-key", "name": "Directive key matches authored contract", "passed": true, "note": "Server action is exactly client.terms-and-conditions." },
+        { "key": "response-mode", "name": "Response mode is correct", "passed": true, "note": "Terms is registered as RequiresResult." },
+        { "key": "outcomes", "name": "Allowed outcomes exactly match authored outcomes", "passed": true, "note": "accepted, rejected, canceled, and failed are the only allowed results." },
+        { "key": "value-contract", "name": "Result value contract matches authored contract", "passed": true, "note": "ResultValueType and ScalarType are None; no value payload is accepted." },
+        { "key": "registration", "name": "Definition is registered", "passed": true, "note": "TermsAndConditionsClientDirective is registered through AddAgentClientDirective." },
+        { "key": "generic-invocation", "name": "Invocation uses generic Client Directive infrastructure", "passed": true, "note": "RequiresResult invocation is handled by invoke_client_directive rather than a Terms-specific Agent Tool." },
+        { "key": "correlation", "name": "Continuation validates directive correlation", "passed": true, "note": "Continuation requires the persisted pending DirectiveId and Action to match the submitted result." },
+        { "key": "pending-state", "name": "Pending state is persisted on the originating turn", "passed": true, "note": "AgentSessionTurn.PendingClientDirective records DirectiveId, Action, ToolCallId, and IssuedUtc." },
+        { "key": "duplicate-protection", "name": "Duplicate completion cannot execute twice", "passed": true, "note": "Successful continuation clears PendingClientDirective; a replay no longer has pending state and is rejected." },
+        { "key": "lane-validation", "name": "Mixed and malformed continuation lanes are rejected", "passed": true, "note": "Client Directive continuation requires exactly one result and rejects ToolResults and normal user-turn inputs in the same request." },
+        { "key": "resume-path", "name": "Completion resumes the suspended model tool call", "passed": true, "note": "Validated result is written into the suspended AgentToolCallResult and the pipeline resumes through AgentContextLoader." },
+        { "key": "transport-boundary", "name": "Legacy/internal tool transport does not leak to the host client", "passed": true, "note": "The external response kind is client_directive_continuation and suspended internal ClientToolCall state is not exposed as the host contract." }
       ],
       "sourceEvidence": [
-        {
-          "repository": "LagoVista/AI",
-          "path": "src/LagoVista.AI/Services/ClientDirectives/TermsAndConditionsClientDirective.cs",
-          "symbol": "TermsAndConditionsClientDirective",
-          "note": "Terms-specific definition: action, RequiresResult mode, exact outcomes, empty payload schema, and no result value."
-        },
-        {
-          "repository": "LagoVista/AI",
-          "path": "src/LagoVista.AI/Services/Tools/InvokeClientDirectiveTool.cs",
-          "symbol": "InvokeClientDirectiveTool",
-          "note": "Generic RequiresResult invocation, server-generated directive id, payload validation, and pending-turn persistence."
-        },
-        {
-          "repository": "LagoVista/AI",
-          "path": "src/LagoVista.AI/Services/Pipeline/ClientDirectiveContinuationPipelineStep.cs",
-          "symbol": "ClientDirectiveContinuationPipelineStep",
-          "note": "Continuation lane validation, correlation, contract validation, duplicate protection, tool result application, and resume path."
-        },
-        {
-          "repository": "LagoVista/AI",
-          "path": "src/LagoVista.AI/Services/Pipeline/AgentExecuteResponseBuilder.cs",
-          "symbol": "AgentExecuteResponseBuilder",
-          "note": "Translates the suspended internal tool state to the dedicated external Client Directive continuation response."
-        },
-        {
-          "repository": "LagoVista/Core",
-          "path": "src/LagoVista.Core.AI/Models/ClientDirective.cs",
-          "symbol": "ClientDirectiveResult",
-          "note": "Canonical bounded client result transport."
-        }
+        { "repository": "LagoVista/AI", "path": "src/LagoVista.AI/Services/ClientDirectives/TermsAndConditionsClientDirective.cs", "symbol": "TermsAndConditionsClientDirective", "note": "Terms-specific definition: action, RequiresResult mode, exact outcomes, empty payload schema, and no result value." },
+        { "repository": "LagoVista/AI", "path": "src/LagoVista.AI/Services/Tools/InvokeClientDirectiveTool.cs", "symbol": "InvokeClientDirectiveTool", "note": "Generic RequiresResult invocation, server-generated directive id, payload validation, and pending-turn persistence." },
+        { "repository": "LagoVista/AI", "path": "src/LagoVista.AI/Services/Pipeline/ClientDirectiveContinuationPipelineStep.cs", "symbol": "ClientDirectiveContinuationPipelineStep", "note": "Continuation lane validation, correlation, contract validation, duplicate protection, tool result application, and resume path." },
+        { "repository": "LagoVista/AI", "path": "src/LagoVista.AI/Services/Pipeline/AgentExecuteResponseBuilder.cs", "symbol": "AgentExecuteResponseBuilder", "note": "Translates the suspended internal tool state to the dedicated external Client Directive continuation response." },
+        { "repository": "LagoVista/Core", "path": "src/LagoVista.Core/AI/Models/ClientDirectiveModels.cs", "symbol": "ClientDirectiveResult", "note": "Canonical bounded client result transport." }
       ],
       "supportingTests": [
-        {
-          "repository": "LagoVista/AI",
-          "path": "tests/LagoVista.AI.Tests/Services/ClientDirectives/TermsAndConditionsClientDirectiveTests.cs",
-          "status": "source-present",
-          "note": "Definition-level tests exist for action, response mode, exact outcomes, no-value contract, accepted outcomes, scalar rejection, and unknown outcome rejection. Execution status is intentionally not inferred from source presence."
-        }
+        { "repository": "LagoVista/AI", "path": "tests/LagoVista.AI.Tests/Services/ClientDirectives/TermsAndConditionsClientDirectiveTests.cs", "status": "source-present", "note": "Definition-level tests exist for action, response mode, exact outcomes, no-value contract, accepted outcomes, scalar rejection, and unknown outcome rejection. Execution status is intentionally not inferred from source presence." },
+        { "repository": "LagoVista/Core", "path": "tests/LagoVista.Core.Tests/AI/ClientDirectiveContractTests.cs", "status": "source-present", "note": "Generic Core contract tests exercise bounded ClientDirectiveResult shape validation. Execution status is intentionally not inferred from source presence." }
       ],
       "notes": [
         "Final server sign-off is a source-backed code review. Unit tests are supporting evidence, not a mandatory per-interaction gate.",
