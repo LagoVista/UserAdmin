@@ -84,13 +84,13 @@
       "status": "partial",
       "repository": "softwarelogistics/nuviot-ui-shared",
       "component": "ClientInteractionHostComponent -> TermsAndConditionsInteractionComponent",
-      "notes": "The stable Angular implementation has the platform host, authored controls, authoritative version retrieval, acceptance mutation, client-local continuity propagation, and local outcome mapping. It is not yet fully implemented as an agent interaction because nuviot/ai-client does not yet project Client Directives into shared interaction state or submit interaction completions through a canonical agent continuation path."
+      "notes": "The stable Angular implementation has the platform host, authored controls, authoritative version retrieval, acceptance mutation, client-local continuity propagation, and local outcome mapping. The canonical AGN-000040 server transport and continuation contract now exists; remaining work is the shared nuviot/ai-client projection/submission seam and consuming chat-surface wiring."
     },
     "reactNative": {
       "status": "partial",
       "repository": "nuviot/vtm-client",
       "component": "ClientInteractionHost -> TermsAndConditionsInteraction",
-      "notes": "The stable React Native implementation has the platform host, authored controls, authoritative version retrieval, acceptance mutation, client-local continuity propagation, and local outcome mapping. It is not yet fully implemented as an agent interaction because nuviot/ai-client does not yet project Client Directives into shared interaction state or submit interaction completions through a canonical agent continuation path."
+      "notes": "The stable React Native implementation has the platform host, authored controls, authoritative version retrieval, acceptance mutation, client-local continuity propagation, and local outcome mapping. The canonical AGN-000040 server transport and continuation contract now exists; remaining work is the shared nuviot/ai-client projection/submission seam and consuming chat-surface wiring."
     }
   },
   "sourceReferences": [
@@ -100,19 +100,29 @@
       "note": "Defines the one-directive, one-card, bounded-response contract."
     },
     {
-      "sourceType": "code",
-      "reference": "LagoVista/Core src/LagoVista.Core/AI/Models/AgentExecuteResponse.cs",
-      "note": "Current backend response contract already carries AgentClientDirective values through AgentExecuteResponse.ClientDirectives; the legacy directive shape has action/args/payload/message and no interactionId."
+      "sourceType": "decision",
+      "reference": "LagoVista/AI ddrs/AGN-000040 - Agent Client Directive.md",
+      "note": "Defines the canonical registered Client Directive, bounded result, durable continuation, and model-invocation contract."
     },
     {
       "sourceType": "code",
-      "reference": "LagoVista/AI src/LagoVista.AI/Models/AgentPipelineContext.cs",
-      "note": "Current AI pipeline accumulates server-produced AgentClientDirective values through AddClientDirective."
+      "reference": "LagoVista/Core src/LagoVista.Core/AI/Models/ClientDirectiveModels.cs",
+      "note": "Defines canonical ClientDirective and ClientDirectiveResult transport with DirectiveId correlation and bounded response values."
     },
     {
       "sourceType": "code",
-      "reference": "LagoVista/AI src/LagoVista.AI/Helpers/AgentExecuteResponseBuilder.cs",
-      "note": "Current response builder publishes accumulated Client Directives on AgentExecuteResponse."
+      "reference": "LagoVista/Core src/LagoVista.Core/AI/Models/AgentExecuteRequest.cs",
+      "note": "Defines ClientDirectiveResults as the dedicated Client Directive continuation request lane."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/AI src/LagoVista.AI/Services/ClientDirectives/TermsAndConditionsClientDirective.cs",
+      "note": "Registers client.terms-and-conditions as RequiresResult with the authored accepted, rejected, canceled, and failed outcomes and no response value."
+    },
+    {
+      "sourceType": "code",
+      "reference": "LagoVista/AI src/LagoVista.AI/Services/Pipeline/ClientDirectiveContinuationPipelineStep.cs",
+      "note": "Validates the correlated ClientDirectiveResult and resumes the originating suspended model tool call."
     },
     {
       "sourceType": "discussion",
@@ -127,7 +137,7 @@
     {
       "sourceType": "discussion",
       "reference": "ChatGPT conversation 2026-08-21",
-      "note": "Formalized nuviot/ai-client AgentChatEngine as the shared Client Interaction behavior seam and interactionId as the intended instance identity for the future completion round trip."
+      "note": "Formalized nuviot/ai-client AgentChatEngine as the shared Client Interaction behavior seam."
     }
   ]
 }
