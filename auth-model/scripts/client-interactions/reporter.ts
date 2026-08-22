@@ -17,7 +17,8 @@ export default class ClientInteractionEvidenceReporter implements Reporter {
   }
 
   onEnd(result: FullResult): void {
-    const outputRoot = path.resolve(process.cwd(), '../../implementation/client-interaction-runtime/angular-web');
+    const authModelRoot = path.resolve(__dirname, '../..');
+    const outputRoot = path.join(authModelRoot, 'implementation/client-interaction-runtime/angular-web');
     fs.mkdirSync(outputRoot, { recursive: true });
     const executedUtc = new Date().toISOString();
     const interactions: Array<{ interactionKey: string; status: 'passed' | 'failed'; evidencePath: string }> = [];
@@ -29,5 +30,20 @@ export default class ClientInteractionEvidenceReporter implements Reporter {
       interactions.push({ interactionKey, status, evidencePath: fileName });
     }
     fs.writeFileSync(path.join(outputRoot, 'latest.json'), `${JSON.stringify({ generatedUtc: executedUtc, platform: 'angular-web', status: result.status, interactions }, null, 2)}\n`, 'utf8');
+    this.updateConformanceManifest(authModelRoot, interactions, executedUtc);
+  }
+
+  private updateConformanceManifest(authModelRoot: string, interactions: Array<{ interactionKey: string; status: 'passed' | 'failed'; evidencePath: string }>, executedUtc: string): void {
+    const manifestPath = path.join(authModelRoot, 'implementation/client-interaction-conformance/angular-web.json');
+    if (!fs.existsSync(manifestPath)) return;
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8')) as any;
+    manifest.generatedUtc = executedUtc;
+    for (const runtime of interactions) {
+      const observation = manifest.interactions?.find((item: any) => item.interactionKey === runtime.interactionKey);
+      if (!observation) continue;
+      observation.runtimeEvidence = runtime.status;
+      observation.runtimeEvidenceReferences = [`auth-model/implementation/client-interaction-runtime/angular-web/${runtime.evidencePath}`];
+    }
+    fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
   }
 }
