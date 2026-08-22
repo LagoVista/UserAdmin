@@ -36,7 +36,7 @@ namespace LagoVista.UserAdmin.Managers
 
             if (!String.IsNullOrEmpty(client.ClientSecret))
             {
-                var secretResult = await _secureStorage.AddUserSecretAsync(client.ToEntityHeader(), client.ClientSecret);
+                var secretResult = await _secureStorage.AddSecretAsync(org, client.ClientSecret);
                 if (!secretResult.Successful)
                     return secretResult.ToInvokeResult();
 
@@ -62,7 +62,7 @@ namespace LagoVista.UserAdmin.Managers
             var oldSecretId = existingClient.ClientSecretId;
             if (!String.IsNullOrEmpty(client.ClientSecret))
             {
-                var secretResult = await _secureStorage.AddUserSecretAsync(client.ToEntityHeader(), client.ClientSecret);
+                var secretResult = await _secureStorage.AddSecretAsync(org, client.ClientSecret);
                 if (!secretResult.Successful)
                     return secretResult.ToInvokeResult();
 
