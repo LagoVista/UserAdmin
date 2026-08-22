@@ -1,10 +1,10 @@
 {
   "$schema": "../../schemas/client-interaction-server-conformance-manifest.schema.json",
   "schemaVersion": "1.0",
-  "generatedUtc": "2026-08-22T23:58:00Z",
+  "generatedUtc": "2026-08-23T00:05:00Z",
   "inspectedRepositories": [
     { "repository": "LagoVista/Core", "inspectedCommit": "a0dd6a1c3d4f5675e441a5c4cbf51415f6d59951" },
-    { "repository": "LagoVista/ai", "inspectedCommit": "15f6769b72ddd6f226f80ca5a960a16ff8deebfb" }
+    { "repository": "LagoVista/ai", "inspectedCommit": "011c32f0c85c3685f062138e8347612a998a462d" }
   ],
   "interactions": [
     {
@@ -29,18 +29,15 @@
       "definitionRegistered": true,
       "invocationWired": true,
       "completionWired": true,
-      "contractConforms": false,
+      "contractConforms": true,
       "sourceEvidence": [
-        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/ClientDirectives/UserRegistrationClientDirective.cs", "symbol": "UserRegistrationClientDirective", "note": "Registered zero-payload RequiresResult definition with succeeded/canceled/failed and String Scalar result support." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/ClientDirectives/UserRegistrationClientDirective.cs", "symbol": "UserRegistrationClientDirective", "note": "Registered zero-payload RequiresResult definition with succeeded/canceled/failed and an optional String Scalar permitted only on succeeded." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Models/AgentClientDirectiveDefinition.cs", "symbol": "ResultValueAllowedResults / ResultValueRequiredResults", "note": "Generic definition models result-value presence rules per terminal outcome." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/AgentClientDirectiveContractValidator.cs", "symbol": "ValidateResult", "note": "Generic validation allows an optional user id only on succeeded and rejects values on canceled/failed." },
         { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/Tools/Startup.cs", "symbol": "ConfigureServices", "note": "Registers UserRegistrationClientDirective with the generic Client Directive registry." },
-        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/Tools/InvokeClientDirectiveTool.cs", "symbol": "InvokeClientDirectiveTool", "note": "Generic invocation issues the directive and persists pending state." },
-        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/Pipeline/ClientDirectiveContinuationPipelineStep.cs", "symbol": "ClientDirectiveContinuationPipelineStep", "note": "Generic completion lane handles correlation, validation, and resume." }
+        { "repository": "LagoVista/ai", "path": "tests/LagoVista.AI.Tests/Services/ClientDirectives/ClientDirectiveOutcomeValueContractTests.cs", "symbol": "ClientDirectiveOutcomeValueContractTests", "note": "Source-present tests pin optional-success value semantics; execution status is not inferred." }
       ],
-      "notes": [
-        "Server is intentionally 4/5, not green.",
-        "The authored result permits an optional user-id Scalar only for succeeded. The current AgentClientDirectiveDefinition models Scalar allowance at the interaction level, so the server does not yet express that per-outcome value constraint.",
-        "The registration auth API contract also still needs Phone and Company support before the client can complete the intended operation."
-      ]
+      "notes": ["Server is 5/5 for the Client Directive contract. The separate Angular/auth endpoint integration is still incomplete because the current RegisterUser API model lacks Phone and Company; that client/business-operation gap does not reduce Agent server conformance."]
     },
     {
       "interactionKey": "client.interaction.yes-no-confirmation",
@@ -55,21 +52,25 @@
         { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/Tools/Startup.cs", "symbol": "ConfigureServices", "note": "Registers YesNoConfirmationClientDirective." },
         { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/Pipeline/ClientDirectiveContinuationPipelineStep.cs", "symbol": "ClientDirectiveContinuationPipelineStep", "note": "Shared continuation provides durable pending state, exact correlation, validation, and resume." }
       ],
-      "notes": ["Server is 5/5 from current source inspection. Final server sign-off still requires the explicit code-review artifact; this conformance score does not substitute for that review."]
+      "notes": ["Server is 5/5 from current source inspection. Final server sign-off is captured separately by the explicit code-review artifact."]
     },
     {
       "interactionKey": "client.interaction.enum-picker",
       "directiveKey": "client.enum-picker",
       "transportExists": true,
-      "definitionRegistered": false,
-      "invocationWired": false,
+      "definitionRegistered": true,
+      "invocationWired": true,
       "completionWired": true,
-      "contractConforms": false,
+      "contractConforms": true,
       "sourceEvidence": [
-        { "repository": "LagoVista/Core", "path": "src/LagoVista.Core/AI/Models/ClientDirectiveModels.cs", "symbol": "ClientDirective / ClientDirectiveResult", "note": "Transport already supports a String Scalar result." },
-        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/Pipeline/ClientDirectiveContinuationPipelineStep.cs", "symbol": "ClientDirectiveContinuationPipelineStep", "note": "Generic result continuation infrastructure already exists." }
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/ClientDirectives/EnumPickerClientDirective.cs", "symbol": "EnumPickerClientDirective", "note": "Registered typed-payload RequiresResult definition requires one or more bounded { value, label } options and selected/canceled/failed outcomes." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Models/OpenAITools.cs", "symbol": "JsonSchemaExtensions.ObjectArray", "note": "Typed options payload is expressed as a closed required object array with required value and label strings." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Models/AgentClientDirectiveDefinition.cs", "symbol": "ResultValueAllowedResults / ResultValueRequiredResults", "note": "selected is the only outcome allowed and required to carry a result value." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/AgentClientDirectiveContractValidator.cs", "symbol": "ValidateResult", "note": "Generic validator requires the String Scalar on selected and rejects values on canceled/failed." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/Tools/Startup.cs", "symbol": "ConfigureServices", "note": "Registers EnumPickerClientDirective." },
+        { "repository": "LagoVista/ai", "path": "tests/LagoVista.AI.Tests/Services/ClientDirectives/ClientDirectiveOutcomeValueContractTests.cs", "symbol": "ClientDirectiveOutcomeValueContractTests", "note": "Source-present tests pin required-selected and no-value-canceled semantics; execution status is not inferred." }
       ],
-      "notes": ["Typed picker payload definition/registration remains to be implemented. The client implementation currently expects payload.options as bounded { value, label } choices."]
+      "notes": ["Server is 5/5 from current source inspection. The client-only Playwright test is authored but remains not-run until executed by the user."]
     }
   ]
 }
