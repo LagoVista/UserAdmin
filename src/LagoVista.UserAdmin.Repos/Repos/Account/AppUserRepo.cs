@@ -288,60 +288,67 @@ namespace LagoVista.UserAdmin.Repos.Users
                 hex.AppendFormat("{0:x2}", b);
             return hex.ToString();
         }
-
-        public async Task<IEnumerable<UserInfoSummary>> GetUserSummaryForListAsync(IEnumerable<OrgUser> orgUsers, bool useCache = true)
+        public async Task<IEnumerable<UserInfoSummary>> GetUserSummaryForListAsync(
+            IEnumerable<OrgUser> orgUsers,
+            bool useCache = true)
         {
-            var sqlParams = string.Empty;
-            var idx = 0;
-            var parameters  = new List<QueryParameter>();
-            var userIds = String.Empty;
-            foreach (var orgUser in orgUsers)
-            {
-                if (!String.IsNullOrEmpty(sqlParams))
-                {
-                    sqlParams += ",";
-                }
-                var paramName = $"@userId{idx++}";
+            var orgUserList = orgUsers?
+                .Where(orgUser => !String.IsNullOrEmpty(orgUser.UserId))
+                .ToList() ?? new List<OrgUser>();
 
-                sqlParams += paramName;
-                parameters.Add(new QueryParameter(paramName, orgUser.UserId));
-                userIds += orgUser.UserId;
+            if (!orgUserList.Any())
+            {
+                return Enumerable.Empty<UserInfoSummary>();
             }
 
+            var userIds = orgUserList
+                .Select(orgUser => orgUser.UserId)
+                .Distinct()
+                .ToList();
+
             var sw = Stopwatch.StartNew();
-            
 
             using (var md5 = MD5.Create())
             {
-                sqlParams.TrimEnd(',');
-                var buffer = System.Text.ASCIIEncoding.ASCII.GetBytes(userIds);
+                // Stable regardless of incoming OrgUser ordering, and delimiters
+                // prevent ambiguous concatenations such as ["ab","c"] vs ["a","bc"].
+                var cacheKeySource = String.Join(
+                 "|",
+                 userIds
+                     .Select(userId => userId.ToString())
+                     .OrderBy(userId => userId, StringComparer.Ordinal));
+
+                var buffer = Encoding.ASCII.GetBytes(cacheKeySource);
                 var hash = md5.ComputeHash(buffer);
                 var key = ByteArrayToString(hash);
+
                 var json = await _cacheProvider.GetAsync(key);
                 if (!String.IsNullOrEmpty(json) && useCache)
                 {
                     return JsonConvert.DeserializeObject<IEnumerable<UserInfoSummary>>(json);
                 }
-               else
-                {
-                    //TODO: This seems kind of ugly...need to put more thought into this, this shouldn't be a query that is hit very often
-                    var query = $"SELECT * FROM c where c.id in ({sqlParams})";
 
-                    /* this sorta sux, but oh well */
-                    var appUsers = await QueryAsync(query, parameters.ToArray());
-                    var userSummaries = from appUser
-                                        in appUsers
-                                        join orgUser
-                                        in orgUsers on appUser.Id equals orgUser.UserId
-                                        select appUser.CreateSummary(orgUser.IsOrgAdmin, orgUser.IsAppBuilder);
+                var appUsers = await QueryAsync(appUser => userIds.Contains(appUser.Id));
 
-                    json = JsonConvert.SerializeObject(userSummaries);
-                    await _cacheProvider.AddAsync(key, json, TimeSpan.FromDays(1));
-                    _adminLogger.Trace($"[AppUserRepo__GetUserSummaryForListAsync] - Cache Miss, get and process all users in {sw.Elapsed.TotalMilliseconds}ms");
-                    return userSummaries;
-                }
+                var userSummaries =
+                    (from appUser in appUsers
+                     join orgUser in orgUserList
+                         on appUser.Id equals orgUser.UserId
+                     select appUser.CreateSummary(
+                         orgUser.IsOrgAdmin,
+                         orgUser.IsAppBuilder))
+                    .ToList();
+
+                json = JsonConvert.SerializeObject(userSummaries);
+                await _cacheProvider.AddAsync(key, json, TimeSpan.FromDays(1));
+
+                _adminLogger.Trace(
+                    $"[AppUserRepo__GetUserSummaryForListAsync] - Cache Miss, get and process all users in {sw.Elapsed.TotalMilliseconds}ms");
+
+                return userSummaries;
             }
         }
+
 
         public async Task<ListResponse<UserInfoSummary>> GetAllUsersAsync(ListRequest listRequest)
         {
