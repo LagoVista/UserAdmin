@@ -5,7 +5,7 @@ import * as path from 'path';
 interface TestEvidence { name: string; status: string; durationMs: number; error?: string; }
 interface InteractionEvidence { interactionKey: string; platform: 'angular-web'; status: 'passed' | 'failed'; executedUtc: string; testHost: string; tests: TestEvidence[]; }
 
-export class ClientInteractionEvidenceReporter implements Reporter {
+export default class ClientInteractionEvidenceReporter implements Reporter {
   private readonly tests = new Map<string, TestEvidence[]>();
 
   onTestEnd(test: TestCase, result: TestResult): void {
