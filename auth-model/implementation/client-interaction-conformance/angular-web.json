@@ -4,8 +4,8 @@
   "clientKey": "angular-web",
   "platform": "web",
   "repository": "softwarelogistics/nuviot-ui-shared",
-  "inspectedCommit": "ff0e17c6d3d5038fb9a5ca22287e6a17ba465927",
-  "generatedUtc": "2026-08-22T20:53:57.762Z",
+  "inspectedCommit": "966ca327536afef5a07f830679a724b98113ef23",
+  "generatedUtc": "2026-08-22T23:55:00Z",
   "interactions": [
     {
       "interactionKey": "client.interaction.terms-and-conditions",
@@ -14,42 +14,65 @@
       "behaviorWired": false,
       "runtimeEvidence": "passed",
       "component": "ClientInteractionHostComponent -> TermsAndConditionsInteractionComponent",
-      "observedControlFinders": [
-        "display:terms-version"
-      ],
-      "observedActionFinders": [
-        "action:view-terms",
-        "action:accept",
-        "action:reject"
-      ],
+      "observedControlFinders": ["display:terms-version"],
+      "observedActionFinders": ["action:view-terms", "action:accept", "action:reject"],
       "sourceEvidence": [
-        {
-          "path": "client-interactions/client-interaction-host.component.ts",
-          "symbol": "ClientInteractionHostComponent",
-          "note": "Recognizes client.terms-and-conditions, loads the authoritative current version through ServiceContext.clients.user.getContinuityPromotion(), submits acceptance through createContinuityPromotion(), keeps the returned continuity session client-local, and maps local accepted/rejected/failed completion paths."
-        },
-        {
-          "path": "client-interactions/handlers/terms-and-conditions/terms-and-conditions-interaction.component.ts",
-          "symbol": "TermsAndConditionsInteractionComponent",
-          "note": "Owns the canonical Termly destination and current-version presentation input."
-        },
-        {
-          "path": "client-interactions/handlers/terms-and-conditions/terms-and-conditions-interaction.component.html",
-          "note": "Exposes display:terms-version, action:view-terms, action:accept, and action:reject."
-        }
+        { "path": "client-interactions/client-interaction-host.component.ts", "symbol": "ClientInteractionHostComponent", "note": "Recognizes client.terms-and-conditions, loads the authoritative current version, submits acceptance, and maps terminal outcomes." },
+        { "path": "client-interactions/handlers/terms-and-conditions/terms-and-conditions-interaction.component.ts", "symbol": "TermsAndConditionsInteractionComponent", "note": "Owns canonical Terms presentation." }
       ],
-      "runtimeEvidenceReferences": [
-        "auth-model/implementation/client-interaction-runtime/angular-web/client.interaction.terms-and-conditions.json"
+      "runtimeEvidenceReferences": ["auth-model/implementation/client-interaction-runtime/angular-web/client.interaction.terms-and-conditions.json"],
+      "notes": ["Behavior Wired remains false until production AgentChatEngine projection and continuation are wired."]
+    },
+    {
+      "interactionKey": "client.interaction.user-registration",
+      "exists": false,
+      "controlsConform": true,
+      "behaviorWired": false,
+      "runtimeEvidence": "not-run",
+      "component": "UserRegistrationInteractionComponent",
+      "observedControlFinders": ["input:first-name", "input:last-name", "input:email", "input:phone", "input:company"],
+      "observedActionFinders": ["action:submit", "action:cancel"],
+      "sourceEvidence": [
+        { "path": "client-interactions/handlers/user-registration/user-registration-interaction.component.ts", "symbol": "UserRegistrationInteractionComponent", "note": "Client-owned registration form model with First Name, Last Name, Email, Phone, and Company." },
+        { "path": "client-interactions/handlers/user-registration/user-registration-interaction.component.html", "note": "Implements the five authored fields plus Register and Cancel actions." }
       ],
       "notes": [
-        "Exists is green because the stable shared Angular client has a platform dispatcher for client.terms-and-conditions and the intended handler.",
-        "Controls conform to authored version 2: current version + View Terms + Accept + Reject.",
-        "The card-local behavior is substantially implemented, including authoritative version retrieval and the acceptance operation.",
-        "The canonical AGN-000040 server transport and result-bearing continuation contract is now implemented. Behavior Wired remains false because nuviot/ai-client AgentChatEngine does not yet project ClientDirective values into normalized Client Interaction state, submit ClientDirectiveResult through the canonical continuation lane, apply the resumed response, and expose that state to the consuming Angular chat surface.",
-        "Automated client testing is documented in auth-model/CLIENT-INTERACTION-AUTOMATED-TESTING.md. With the purpose-built host running at http://localhost:4200, run the Playwright suite from auth-model/scripts/client-interactions with npm run test:angular.",
-        "Automated evidence is written to auth-model/implementation/client-interaction-runtime/angular-web/. The runner updates runtimeEvidence and runtimeEvidenceReferences here, so the Aptix Client Interactions visualizer reflects the most recent recorded run automatically.",
-        "Runtime remains not-run until the automated suite is executed successfully."
+        "Controls Conform is green from the purpose-built Angular component.",
+        "Exists remains false because ClientInteractionHost does not dispatch client.user-registration yet.",
+        "The generated User client exposes POST /api/user/register through createRegister(RegisterUser), but the current RegisterUser contract does not contain Phone or Company. Production host wiring is intentionally deferred until that authoritative API contract is extended or an approved registration endpoint is identified.",
+        "Behavior Wired and runtime evidence remain false/not-run."
       ]
+    },
+    {
+      "interactionKey": "client.interaction.yes-no-confirmation",
+      "exists": true,
+      "controlsConform": true,
+      "behaviorWired": false,
+      "runtimeEvidence": "not-run",
+      "component": "ClientInteractionHostComponent -> YesNoConfirmationInteractionComponent",
+      "observedControlFinders": ["display:prompt"],
+      "observedActionFinders": ["action:yes", "action:no", "action:cancel"],
+      "sourceEvidence": [
+        { "path": "client-interactions/client-interaction-host.component.ts", "symbol": "ClientInteractionHostComponent", "note": "Dispatches client.yes-no-confirmation and maps Yes, No, and Cancel directly to bounded completion outcomes." },
+        { "path": "client-interactions/handlers/yes-no-confirmation/yes-no-confirmation-interaction.component.html", "note": "Renders the preamble plus semantic Yes, No, and Cancel actions." }
+      ],
+      "notes": ["A deterministic client-only Playwright proof is authored but runtime remains not-run until executed.", "Behavior Wired remains false until production AgentChatEngine projection and continuation are wired."]
+    },
+    {
+      "interactionKey": "client.interaction.enum-picker",
+      "exists": true,
+      "controlsConform": true,
+      "behaviorWired": false,
+      "runtimeEvidence": "not-run",
+      "component": "ClientInteractionHostComponent -> EnumPickerInteractionComponent",
+      "observedControlFinders": ["select:selection"],
+      "observedActionFinders": ["action:submit", "action:cancel"],
+      "sourceEvidence": [
+        { "path": "client-interactions/client-interaction-host.component.ts", "symbol": "ClientInteractionHostComponent", "note": "Dispatches client.enum-picker, validates the supplied option list structurally, and returns the selected bounded value." },
+        { "path": "client-interactions/handlers/enum-picker/enum-picker-interaction.component.ts", "symbol": "EnumPickerInteractionComponent", "note": "Rejects submission unless the selected value exists in the supplied bounded option set." },
+        { "path": "client-interactions/handlers/enum-picker/enum-picker-interaction.component.html", "note": "Renders one bounded single-selection control and Select/Cancel actions." }
+      ],
+      "notes": ["A deterministic client-only Playwright proof is authored and verifies the selected value is encoded into ClientDirectiveResult.Scalar, but runtime remains not-run until executed.", "Server typed payload registration is not yet complete, so this is not ready for final sign-off.", "Behavior Wired remains false until production AgentChatEngine projection and continuation are wired."]
     }
   ]
 }
