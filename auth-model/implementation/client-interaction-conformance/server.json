@@ -1,10 +1,10 @@
 {
   "$schema": "../../schemas/client-interaction-server-conformance-manifest.schema.json",
   "schemaVersion": "1.0",
-  "generatedUtc": "2026-08-23T00:05:00Z",
+  "generatedUtc": "2026-08-23T00:08:00Z",
   "inspectedRepositories": [
     { "repository": "LagoVista/Core", "inspectedCommit": "a0dd6a1c3d4f5675e441a5c4cbf51415f6d59951" },
-    { "repository": "LagoVista/ai", "inspectedCommit": "011c32f0c85c3685f062138e8347612a998a462d" }
+    { "repository": "LagoVista/ai", "inspectedCommit": "35ae92d684b1f06f2086cdc3b231fa2276ea99b2" }
   ],
   "interactions": [
     {
@@ -37,7 +37,7 @@
         { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/Tools/Startup.cs", "symbol": "ConfigureServices", "note": "Registers UserRegistrationClientDirective with the generic Client Directive registry." },
         { "repository": "LagoVista/ai", "path": "tests/LagoVista.AI.Tests/Services/ClientDirectives/ClientDirectiveOutcomeValueContractTests.cs", "symbol": "ClientDirectiveOutcomeValueContractTests", "note": "Source-present tests pin optional-success value semantics; execution status is not inferred." }
       ],
-      "notes": ["Server is 5/5 for the Client Directive contract. The separate Angular/auth endpoint integration is still incomplete because the current RegisterUser API model lacks Phone and Company; that client/business-operation gap does not reduce Agent server conformance."]
+      "notes": ["Server is 5/5 for the Client Directive contract. The separate Angular/auth endpoint integration is incomplete because the current RegisterUser API model lacks Phone and Company; that client/business-operation gap does not reduce Agent server conformance."]
     },
     {
       "interactionKey": "client.interaction.yes-no-confirmation",
@@ -61,16 +61,16 @@
       "definitionRegistered": true,
       "invocationWired": true,
       "completionWired": true,
-      "contractConforms": true,
+      "contractConforms": false,
       "sourceEvidence": [
-        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/ClientDirectives/EnumPickerClientDirective.cs", "symbol": "EnumPickerClientDirective", "note": "Registered typed-payload RequiresResult definition requires one or more bounded { value, label } options and selected/canceled/failed outcomes." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/ClientDirectives/EnumPickerClientDirective.cs", "symbol": "EnumPickerClientDirective", "note": "Registered typed-payload RequiresResult definition declares one or more bounded { value, label } options and selected/canceled/failed outcomes." },
         { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Models/OpenAITools.cs", "symbol": "JsonSchemaExtensions.ObjectArray", "note": "Typed options payload is expressed as a closed required object array with required value and label strings." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/AgentClientDirectiveContractValidator.cs", "symbol": "ValidatePayload", "note": "Current generic payload validation checks top-level required and additional properties but does not recursively validate object-array item shape." },
         { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Models/AgentClientDirectiveDefinition.cs", "symbol": "ResultValueAllowedResults / ResultValueRequiredResults", "note": "selected is the only outcome allowed and required to carry a result value." },
-        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/AgentClientDirectiveContractValidator.cs", "symbol": "ValidateResult", "note": "Generic validator requires the String Scalar on selected and rejects values on canceled/failed." },
-        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/Tools/Startup.cs", "symbol": "ConfigureServices", "note": "Registers EnumPickerClientDirective." },
-        { "repository": "LagoVista/ai", "path": "tests/LagoVista.AI.Tests/Services/ClientDirectives/ClientDirectiveOutcomeValueContractTests.cs", "symbol": "ClientDirectiveOutcomeValueContractTests", "note": "Source-present tests pin required-selected and no-value-canceled semantics; execution status is not inferred." }
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/AgentClientDirectiveContractValidator.cs", "symbol": "ValidateResult", "note": "Result validator requires the String Scalar on selected and rejects values on canceled/failed." },
+        { "repository": "LagoVista/ai", "path": "tests/LagoVista.AI.Tests/Services/ClientDirectives/ClientDirectiveOutcomeValueContractTests.cs", "symbol": "ClientDirectiveOutcomeValueContractTests", "note": "Source-present tests pin selected/canceled result-value semantics; execution status is not inferred." }
       ],
-      "notes": ["Server is 5/5 from current source inspection. The client-only Playwright test is authored but remains not-run until executed by the user."]
+      "notes": ["Server is deliberately 4/5. The typed payload schema is declared, registered, and model-visible, but runtime payload validation is not yet recursive enough to independently enforce each options[] item as { value:string, label:string }. Do not mark Contract Conforms green until that generic validator is hardened and tested."]
     }
   ]
 }
