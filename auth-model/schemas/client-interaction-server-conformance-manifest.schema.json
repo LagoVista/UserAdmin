@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lagovista.com/auth/client-interaction-server-conformance-manifest.schema.json",
+  "title": "Client Interaction Server Conformance Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "generatedUtc", "inspectedRepositories", "interactions"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "1.0" },
+    "generatedUtc": { "type": "string", "format": "date-time" },
+    "inspectedRepositories": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["repository", "inspectedCommit"],
+        "properties": {
+          "repository": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+          "inspectedCommit": { "type": "string", "pattern": "^[a-f0-9]{40}$" }
+        }
+      }
+    },
+    "interactions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/serverObservation" }
+    }
+  },
+  "$defs": {
+    "serverObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["interactionKey", "directiveKey", "transportExists", "definitionRegistered", "invocationWired", "completionWired", "contractConforms", "sourceEvidence"],
+      "properties": {
+        "interactionKey": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}(\\.[a-z][a-z0-9-]{1,63})+$" },
+        "directiveKey": { "type": "string", "minLength": 1 },
+        "transportExists": { "type": "boolean" },
+        "definitionRegistered": { "type": "boolean" },
+        "invocationWired": { "type": "boolean" },
+        "completionWired": { "type": "boolean" },
+        "contractConforms": { "type": "boolean" },
+        "observedResponseMode": { "enum": ["fire-and-forget", "requires-result"] },
+        "definitionType": { "type": "string", "minLength": 1 },
+        "sourceEvidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["repository", "path"],
+            "properties": {
+              "repository": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+              "path": { "type": "string", "minLength": 1 },
+              "symbol": { "type": "string" },
+              "note": { "type": "string" }
+            }
+          }
+        },
+        "notes": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    }
+  }
+}

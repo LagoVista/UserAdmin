@@ -73,12 +73,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
 
         public async Task<ListResponse<DeviceOwnerUser>> GetDeviceOwnersForDeviceAsync(string ownedDeviceId, ListRequest listRequest)
         {
-            var query = @"SELECT *
-                            FROM c
-                            WHERE ARRAY_CONTAINS(c.Devices, {Device:{Id:@id}}, true)
-                              AND c.EntityType = 'DeviceOwnerUser'";
-
-            return await QueryAsync(query, listRequest, new CloudStorage.QueryParameter("@id", ownedDeviceId));
+            return await QueryAsync(
+                owner => owner.Devices.Any(device => device.Device != null && device.Device.Id == ownedDeviceId),
+                listRequest);
         }
 
         public async Task<DeviceOwnerUser> RemoveOwnedDeviceAsync(string orgId, string ownerId, string id)
@@ -98,7 +95,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
             var existing = owner.Devices.SingleOrDefault(dev => dev.Id == device.Id);
 
             await _relationalRepo.UpdateOwnedDeviceAsync(orgId,  device);
-            return owner;
+            return owner;      
         }
 
         public async Task<InvokeResult> UpdateUserAsync(DeviceOwnerUser user)
