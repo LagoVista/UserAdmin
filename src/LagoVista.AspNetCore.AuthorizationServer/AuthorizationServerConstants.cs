@@ -13,5 +13,9 @@ namespace LagoVista.AspNetCore.AuthorizationServer
 
         public const string ScopeOpenId = "openid";
         public const string ScopeOfflineAccess = "offline_access";
+        public const string ScopeTeamRole = "team_role";
+
+        public const string ClaimTeamRole = "team_role";
+        public const string TeamRoleOwner = "Owner";
     }
 }
