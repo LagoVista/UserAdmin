@@ -56,6 +56,9 @@ namespace LagoVista.AspNetCore.AuthorizationServer
 
                         options.ClientAuthenticationMethods.Add(
                             OpenIddictConstants.ClientAuthenticationMethods.None);
+
+                        options.ClientAuthenticationMethods.Add(
+                            OpenIddictConstants.ClientAuthenticationMethods.ClientSecretPost);
                     });
 
                     if (settings.Issuer != null)
