@@ -1,0 +1,64 @@
+{
+  "$schema": "../../schemas/client-interaction-server-conformance-manifest.schema.json",
+  "schemaVersion": "1.0",
+  "generatedUtc": "2026-08-22T14:08:00-04:00",
+  "inspectedRepositories": [
+    {
+      "repository": "LagoVista/Core",
+      "inspectedCommit": "17fa08310bc183fac40160ca179f5b27ec524180"
+    },
+    {
+      "repository": "LagoVista/ai",
+      "inspectedCommit": "f1b0fc122b04f8f477ef3c8c03a5cf558c6a8b8d"
+    }
+  ],
+  "interactions": [
+    {
+      "interactionKey": "client.interaction.terms-and-conditions",
+      "directiveKey": "client.terms-and-conditions",
+      "transportExists": true,
+      "definitionRegistered": false,
+      "invocationWired": false,
+      "completionWired": false,
+      "contractConforms": false,
+      "sourceEvidence": [
+        {
+          "repository": "LagoVista/Core",
+          "path": "src/LagoVista.Core/AI/Models/ClientDirectiveModels.cs",
+          "symbol": "ClientDirective / ClientDirectiveResult",
+          "note": "Canonical AGN-000040 outbound and bounded inbound transport contracts exist."
+        },
+        {
+          "repository": "LagoVista/Core",
+          "path": "src/LagoVista.Core/AI/Models/AgentExecuteRequest.cs",
+          "symbol": "ClientDirectiveResults",
+          "note": "Client Directive completion is modeled as a dedicated third request lane rather than ToolResults or normal user input."
+        },
+        {
+          "repository": "LagoVista/Core",
+          "path": "src/LagoVista.Core/AI/Models/AgentExecuteResponse.cs",
+          "symbol": "ClientDirectives",
+          "note": "Agent responses carry canonical ClientDirective instances; the legacy AgentClientDirective transport type has been removed."
+        },
+        {
+          "repository": "LagoVista/ai",
+          "path": "src/LagoVista.AI/Models/AgentClientDirectiveDefinition.cs",
+          "symbol": "AgentClientDirectiveDefinition",
+          "note": "Code-registered Client Directive capability metadata exists, but no client.terms-and-conditions definition is registered yet."
+        },
+        {
+          "repository": "LagoVista/ai",
+          "path": "ddrs/AGN-000040 - Agent Client Directive.md",
+          "note": "Approved server contract defines registration, invocation, transport, continuation, handlers, and validation semantics."
+        }
+      ],
+      "notes": [
+        "Server is currently 1/5 for this interaction: the canonical transport exists, but the interaction-specific definition and runtime wiring have not yet been implemented.",
+        "Definition Registered becomes true only when client.terms-and-conditions exists as a registered AgentClientDirectiveDefinition and its response mode/result contract can be inspected from source.",
+        "Invocation Wired remains false until the formal Client Directive invocation tools can resolve and emit this authored directive.",
+        "Completion Wired remains false until RequiresResult persistence, ClientDirectiveResult validation, result handling, and model continuation are implemented for this interaction.",
+        "Contract Conforms remains false until the registered server definition is compared against the authored invocation, outcomes, and responseContract."
+      ]
+    }
+  ]
+}
