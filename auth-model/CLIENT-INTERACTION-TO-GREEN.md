@@ -2,27 +2,27 @@
 
 ## Purpose
 
-This process defines how to take one Client Interaction or Auth Interaction from an authored definition to a trustworthy client implementation across Angular Web and React Native.
+This process defines how to take one Client Interaction or Auth Interaction from authored truth to a trustworthy end-to-end implementation across the Aptix agent server, shared agent/chat behavior, Angular Web, and React Native.
 
 This process is intentionally narrower than `CATEGORY-TO-GREEN.md`.
 
-For Client Interactions, the authoritative backend operation performed by the card is assumed to already exist and behave correctly. The purpose of this process is to prove that the interaction definition is complete, both clients render the authored surface, the shared agent/chat behavior actually routes the interaction, and runtime evidence proves the round trip.
+For Client Interactions, the authoritative business operation performed by the interaction is assumed to already exist and behave correctly. This process proves the interaction definition, Client Directive server contract, client implementations, shared agent/chat wiring, and runtime round trip.
 
-For Auth Interactions, the existing canonical authentication model remains authoritative for authentication behavior, guards, transitions, and server-side effects. This process verifies only that the Auth Interaction is correctly bound to that existing truth and correctly integrated into the shared Client Interaction runtime.
+For Auth Interactions, the canonical authentication model remains authoritative for guards, transitions, state mutation, and server-side effects. This process verifies that the Auth Interaction binds correctly to that truth and participates correctly in the Client Interaction runtime.
 
 ## North star
 
-A Client Interaction is green when:
+A general Client Interaction is green when:
 
 1. its authored definition is complete and valid;
-2. Angular Web implements the interaction and conforms to the authored contract;
-3. React Native implements the interaction and conforms to the authored contract;
-4. the shared agent/chat behavior routes the directive into the correct interaction and routes its terminal completion back into the agent continuation path; and
-5. current runtime evidence proves that complete round trip.
+2. its server-side Client Directive implementation conforms to the authored definition and is 5/5;
+3. Angular Web is 3/3;
+4. React Native is 3/3; and
+5. current runtime evidence proves the complete round trip on every required platform.
 
-An Auth Interaction has one additional requirement: its canonical authentication bindings resolve and remain valid.
+An Auth Interaction has one additional requirement: its canonical Auth Bindings resolve and remain valid.
 
-Backend implementation completeness for the business/auth operation invoked by the card is not part of the Client Interaction green score. The backend/client-directive transport and continuation seam is part of the green score because without it the card is not actually connected to the agent.
+Backend implementation completeness for the business/auth operation invoked by the interaction is not part of this green score. The Client Directive transport, invocation, continuation, and result seam is part of the score because without it the interaction is not actually connected to the agent.
 
 ## Green dimensions
 
@@ -30,56 +30,56 @@ Track these dimensions independently:
 
 - Definition
 - Auth Bindings, for Auth Interactions only
+- Server
 - Angular Web
 - React Native
 - Runtime Evidence
 
-Each supported client is evaluated using exactly three conformance checks:
-
-- Exists
-- Controls Conform
-- Behavior Wired
-
 A useful visual summary is:
 
-`Definition -> Auth Bindings -> Angular 3/3 -> React Native 3/3 -> Runtime`
+`Definition -> [Auth Bindings] -> Server 5/5 -> Angular 3/3 -> React Native 3/3 -> Runtime`
 
 For a general Client Interaction, omit Auth Bindings.
 
+## Authoritative contracts
+
+Client Interactions are authored in `LagoVista/UserAdmin/auth-model`.
+
+The bounded interaction rules are defined by:
+
+- `auth-model/CLIENT-CARD-CONTRACT.md`
+- the appropriate Client Interaction/Auth Interaction JSON schema
+
+The canonical server-side Client Directive architecture is defined by:
+
+- `LagoVista/ai/ddrs/AGN-000040 - Agent Client Directive.md`
+
+AGN-000040 owns the transport and runtime concepts used by Client Interactions:
+
+- `AgentClientDirectiveDefinition` is the registered reusable server capability;
+- `ClientDirective` is the canonical outbound wire instance;
+- `ClientDirectiveResult` is the bounded inbound result;
+- `AgentExecuteResponse.ClientDirectives` is the server-to-client transport;
+- `AgentExecuteRequest.ClientDirectiveResults` is the dedicated continuation lane for result-bearing directives;
+- `InvokeClientDirective` is the formal RequiresResult invocation path;
+- `InvokeFireAndForgetDirective` is the formal FireAndForget invocation path;
+- pending RequiresResult state is persisted on the originating `AgentSessionTurn`;
+- arbitrary structured result payloads are prohibited.
+
+The pre-AGN-000040 `AgentClientDirective` transport and model-text directive envelope no longer exist and MUST NOT be used as compatibility paths.
+
+## Identity mapping
+
+The authored Client Interaction model and AGN-000040 use slightly different names for the same concepts. The mapping is explicit:
+
+- authored `directiveKey` -> server `AgentClientDirectiveDefinition.Action` -> outbound `ClientDirective.Action`
+- authored interaction instance/correlation id -> outbound/inbound `DirectiveId`
+- authored terminal `outcome` -> inbound `ClientDirectiveResult.Result`
+- authored bounded response value -> exactly one allowed `ClientDirectiveResult` value form
+
+Do not create a second parallel identity field on the wire. `DirectiveId` is the canonical issued-instance correlation identifier.
+
 ## Shared agent integration seam
-
-Client Interactions have one shared behavioral seam for Angular Web and React Native.
-
-### Backend source of directives
-
-The canonical agent response contract is owned in `LagoVista/Core`:
-
-`src/LagoVista.Core/AI/Models/AgentExecuteResponse.cs`
-
-`AgentExecuteResponse` already contains:
-
-`ClientDirectives : List<AgentClientDirective>`
-
-The legacy `AgentClientDirective` shape currently contains:
-
-- `action`
-- `args`
-- `payload`
-- `message`
-
-It does **not** currently contain a dedicated interaction/correlation identifier.
-
-The `LagoVista/AI` pipeline already owns collection and delivery of these directives:
-
-- `src/LagoVista.AI/Models/AgentPipelineContext.cs`
-  - `AddClientDirective(...)` collects directives during an agent turn.
-- `src/LagoVista.AI/Helpers/AgentExecuteResponseBuilder.cs`
-  - copies `ctx.ClientDirectives` into `AgentExecuteResponse.ClientDirectives`.
-- server-side tools may add directives directly. `EaCreateVtmMeetingTool` is a concrete current example which emits `enter_vtm_meeting` plus `vtmMeetingId` arguments.
-
-Therefore Client Interaction work must build on `AgentExecuteResponse.ClientDirectives`; it must not introduce a second unrelated server-to-client signaling channel.
-
-### Shared client behavior
 
 Repository:
 
@@ -89,444 +89,329 @@ Canonical seam:
 
 `agent-chat/AgentChatEngine`
 
-Both stable client applications consume `AgentChatEngine`/`AgentChatViewModel`. Every completed agent response already passes through `AgentChatEngine.applyFinalResult()`.
+Both stable client applications consume `AgentChatEngine` / `AgentChatViewModel`. Every completed agent response already passes through `AgentChatEngine.applyFinalResult()`.
 
-The shared behavior must therefore live here once, rather than being independently implemented in Angular and React Native.
+Shared Client Interaction behavior therefore belongs here once, rather than being independently reimplemented by Angular and React Native.
 
-The target responsibility is:
+Target shared responsibilities are:
 
-1. inspect `AgentExecuteResponse.clientDirectives` when a final agent response is applied;
-2. normalize supported directives into explicit Client Interaction view-model state;
+1. inspect `AgentExecuteResponse.clientDirectives`;
+2. project a supported directive into normalized Client Interaction view-model state;
 3. expose the active/pending interaction through `AgentChatViewModel`;
-4. allow the platform UI to submit one modeled terminal completion;
-5. clear/advance the pending interaction state;
-6. submit the completion through the canonical agent continuation contract; and
-7. apply the resumed agent response through the same `AgentChatEngine` pipeline.
+4. accept one modeled terminal completion from the platform interaction host;
+5. construct the canonical `ClientDirectiveResult` submission;
+6. submit that result through `AgentExecuteRequest.clientDirectiveResults`;
+7. apply the resumed agent response through the same `AgentChatEngine` pipeline; and
+8. clear/advance pending interaction state only after the continuation is resolved.
 
-Angular and React Native must not parse raw `AgentExecuteResponse.clientDirectives` independently.
+Angular and React Native MUST NOT parse raw `AgentExecuteResponse.clientDirectives` independently or construct agent continuation requests independently.
 
-### Platform responsibility
+## Platform responsibility
 
-Angular Web and React Native remain responsible for presentation and client-local side effects only.
+Angular Web and React Native own presentation and client-local side effects only.
 
 Each platform:
 
-1. observes the normalized Client Interaction state exposed by `AgentChatViewModel`;
-2. passes the directive to its `ClientInteractionHost`;
+1. observes normalized Client Interaction state from `AgentChatViewModel`;
+2. passes it to its `ClientInteractionHost`;
 3. renders the canonical interaction handler;
 4. performs the interaction-specific client/backend operation;
 5. keeps authoritative session/token/account results client-local; and
-6. returns only the modeled Client Interaction completion to the shared `AgentChatEngine`.
+6. returns only the authored terminal outcome and any permitted bounded value to `AgentChatEngine`.
 
-The UI layer does not decide how an agent continuation is constructed.
-
-## Directive identity and completion contract
-
-The existing Client Directive mechanism predates this formal Client Interaction model. It has an `action` but no dedicated identifier for one concrete interaction instance.
-
-Neighboring agent contracts already demonstrate the distinction we need:
-
-- client tool calls use `toolCallId`;
-- ACP intents/calls use `intentId` / `interactionId`.
-
-For Client Interactions, use these two identities distinctly:
-
-- **directiveKey** identifies the reusable authored interaction type, for example `client.terms-and-conditions`;
-- **interactionId** identifies one concrete issued interaction instance and is returned unchanged with its completion.
-
-`interactionId` is the preferred formal term for this model. Do not overload the agent pipeline's internal `CorrelationId`, session id, or turn id for this purpose.
-
-The current legacy `AgentClientDirective.action` is the historical directive selector. As interactions are reconciled, authored `directiveKey` is the canonical selector. Legacy actions may require an explicit compatibility mapping while they are migrated.
-
-### Target outbound shape
-
-The formal Client Interaction transport should provide, at minimum:
-
-- `interactionId`
-- `directiveKey`
-- optional bounded invocation payload
-- optional user-facing message/hints when genuinely needed
-
-Do not send credentials, secrets, authoritative account state, or arbitrary form-shaped payloads in the directive.
-
-### Target completion shape
-
-A general Client Interaction completion contains:
-
-- `interactionId`
-- authored terminal `outcome`
-- optional bounded response value only when the authored response contract permits it
-
-An Auth Interaction completion contains only:
-
-- `interactionId`
-- authored terminal `outcome`
-
-Auth Interactions never return a response value.
-
-### Current backend gap
-
-`AgentExecuteRequest` currently supports user-turn requests and client-tool continuation submissions. It does not currently expose a Client Interaction/Client Directive completion submission field.
-
-An `AcpResultSubmission` model exists in the request source, but Client Interaction completion is not currently part of `AgentExecuteRequest` validation/routing.
-
-Until a canonical Client Interaction completion/continuation contract exists and `AgentChatEngine` uses it, **Behavior Wired cannot be green**, even when an individual card component can perform its backend operation correctly.
-
-This is an intentional distinction between "the card works if manually invoked" and "the card is wired into agent behavior."
+The UI layer does not decide how agent continuation is constructed.
 
 ## Evidence storage contract
 
-Authored interaction definitions remain in:
+Authored truth remains in:
 
 - `auth-model/client-interactions/*.json`
 - `auth-model/auth-interactions/*.json`
 
-Current client implementation observations are stored separately from authored interaction truth:
+Implementation evidence is stored separately:
 
+- Server: `auth-model/implementation/client-interaction-conformance/server.json`
 - Angular Web: `auth-model/implementation/client-interaction-conformance/angular-web.json`
 - React Native: `auth-model/implementation/client-interaction-conformance/react-native.json`
 
-Both manifests validate against:
+Schemas:
 
-- `auth-model/schemas/client-interaction-conformance-manifest.schema.json`
+- Server: `auth-model/schemas/client-interaction-server-conformance-manifest.schema.json`
+- Clients: `auth-model/schemas/client-interaction-conformance-manifest.schema.json`
 
-Each manifest records the exact inspected repository and commit SHA, one observation per reconciled interaction, the three client checks, runtime-evidence status, component/directive-handler identity when found, observed semantic finders, source evidence, and concrete notes explaining gaps or drift.
+These manifests record observed implementation facts. They are not authored product truth. Do not edit a Client Interaction definition merely to make an implementation observation green.
 
-These manifests are implementation evidence, not authored product truth. Do not edit the interaction definition merely to make a client observation green.
+Aptix derives progress indicators by combining the authored definition, server evidence, client evidence, Auth Bindings where applicable, and runtime evidence.
 
-Aptix derives progress indicators from the interaction definition plus these evidence manifests.
+## Server 5/5
+
+The server dimension is evaluated using five independent evidence-backed checks.
+
+### 1. Transport Exists
+
+Green when the canonical AGN-000040 shared transport required by the interaction exists:
+
+- `ClientDirective` outbound transport;
+- `ClientDirectiveResult` bounded result transport when applicable;
+- `AgentExecuteResponse.ClientDirectives`; and
+- `AgentExecuteRequest.ClientDirectiveResults` for result-bearing interactions.
+
+This is primarily shared infrastructure. Once proven, many interactions may inherit this check.
+
+### 2. Definition Registered
+
+Green when the interaction's authored `directiveKey` exists as a registered `AgentClientDirectiveDefinition.Action` and its source definition can be identified.
+
+The definition must expose enough server metadata to reconcile invocation mode, allowed outcomes/results, bounded response type, payload contract, and optional deterministic handlers.
+
+### 3. Invocation Wired
+
+Green when the registered definition is enabled/reachable through the formal AGN-000040 invocation path appropriate to its response mode.
+
+For RequiresResult interactions this means `InvokeClientDirective` can resolve and issue the directive.
+
+For FireAndForget interactions this means `InvokeFireAndForgetDirective` can resolve, issue, and return `submitted` without creating a pending continuation.
+
+A server-side code path that manually constructs a `ClientDirective` is useful legacy/precursor behavior but does not satisfy this check for an authored Client Interaction unless that direct production is the explicitly approved invocation contract.
+
+### 4. Completion Wired
+
+Green when the definition's declared completion semantics are fully wired.
+
+For RequiresResult interactions this includes:
+
+- pending directive state persisted on the originating `AgentSessionTurn`;
+- the next continuation accepts the matching `ClientDirectiveResult`;
+- `DirectiveId` and `Action` are correlated and validated;
+- allowed result/value rules are validated;
+- optional result handler executes deterministically;
+- duplicate submission does not repeat side effects; and
+- the normalized result is returned to the model continuation.
+
+For FireAndForget interactions this check is green when the interaction correctly has no pending continuation/result obligation.
+
+### 5. Contract Conforms
+
+Green when the registered server definition and runtime contract match the authored interaction definition semantically:
+
+- authored `directiveKey` matches server `Action`;
+- invocation payload shape matches;
+- response mode matches the authored interaction behavior;
+- every server-accepted semantic result is authored;
+- response-value allowance and shape match;
+- Auth Interactions return no value; and
+- server handling does not introduce hidden workflow semantics outside the authored bounded interaction.
+
+Server is green only at 5/5.
+
+## Client 3/3
+
+Each required client is evaluated using exactly three checks.
+
+### Exists
+
+The normalized authored interaction can be dispatched by the platform `ClientInteractionHost` into the intended handler and has identifiable source evidence.
+
+A presentational component by itself does not satisfy Exists. The platform host-to-handler dispatch path must exist.
+
+### Controls Conform
+
+Required controls, actions, semantic finders, control types, required/optional behavior, and sensitivity boundaries match the authored definition semantically.
+
+Visual styling may differ across platforms.
+
+### Behavior Wired
+
+Behavior Wired is an end-to-end source-integration check from normalized shared interaction state through platform behavior and back to the shared continuation seam.
+
+Confirm from source that:
+
+1. `AgentChatEngine` projects the authored directive into normalized Client Interaction state;
+2. the platform consuming surface observes that state and mounts `ClientInteractionHost`;
+3. the host launches the intended handler;
+4. authored actions invoke the intended client/service behavior;
+5. terminal paths map to authored outcomes;
+6. the original `DirectiveId` is preserved;
+7. completion obeys the authored response-value/security contract;
+8. `AgentChatEngine` submits the canonical `ClientDirectiveResult`; and
+9. the resumed agent response returns through the normal `AgentChatEngine` pipeline.
+
+The server's own 5/5 proof is not duplicated inside each client observation. Client Behavior Wired depends on that seam operationally but proves the client/shared-agent portion of the source path.
 
 ## Stable client implementation homes
 
-Client Interaction implementations have dedicated homes in both stable clients. Do not scatter new handlers through route-specific auth folders or application-specific chat surfaces.
-
 ### Angular Web
 
-Repository:
+Repository: `softwarelogistics/nuviot-ui-shared`
 
-`softwarelogistics/nuviot-ui-shared`
+Canonical root: `client-interactions/`
 
-Canonical feature root:
+- `client-interactions/shared/` - reusable presentation primitives
+- `client-interactions/handlers/` - one folder per interaction
+- `client-interactions/client-interaction.types.ts` - protocol-facing client types
+- `client-interactions/client-interactions.module.ts` - module exports
+- `client-interactions/ClientInteractionHostComponent` - platform dispatcher
 
-`client-interactions/`
-
-Structure:
-
-- `client-interactions/shared/` - reusable Client Interaction presentation primitives;
-- `client-interactions/handlers/` - one folder per canonical interaction handler;
-- `client-interactions/client-interaction.types.ts` - shared protocol-facing client types;
-- `client-interactions/client-interactions.module.ts` - Angular module exporting the shared shell and handlers.
-
-The reusable shell is:
+Reusable shell:
 
 `client-interactions/shared/client-interaction-shell/ClientInteractionShellComponent`
 
-The shell owns the common card hierarchy and CSS custom properties prefixed with `--nuv-client-interaction-`. Individual handlers should use the shell rather than inventing their own card layout and action styling.
-
-The platform dispatcher is:
-
-`client-interactions/ClientInteractionHostComponent`
-
-It maps normalized Client Interaction state to the authored handler. It is not responsible for parsing raw agent responses or constructing agent continuation requests.
-
 ### React Native
 
-Repository:
+Repository: `nuviot/vtm-client`
 
-`nuviot/vtm-client`
+Canonical root: `src/features/client-interactions/`
 
-Canonical feature root:
+- `components/` - reusable presentation primitives
+- `handlers/` - one folder per interaction
+- `client-interaction-types.ts` - protocol-facing client types
+- `index.ts` - feature exports
+- `ClientInteractionHost` - platform dispatcher
 
-`src/features/client-interactions/`
+Reusable presentation:
 
-Structure:
+- `components/ClientInteractionShell`
+- `components/ClientInteractionButton`
 
-- `src/features/client-interactions/components/` - reusable Client Interaction presentation primitives;
-- `src/features/client-interactions/handlers/` - one folder per canonical interaction handler;
-- `src/features/client-interactions/client-interaction-types.ts` - shared protocol-facing client types;
-- `src/features/client-interactions/index.ts` - feature exports.
+## Runtime evidence
 
-The reusable shell is:
+Runtime evidence proves that the source wiring actually works.
 
-`src/features/client-interactions/components/ClientInteractionShell`
+For each required platform prove:
 
-Shared action styling is provided by:
+1. a real agent response contains the expected `ClientDirective` with a `DirectiveId` and authored action;
+2. `AgentChatEngine` exposes the normalized interaction;
+3. the platform mounts the intended handler;
+4. the interaction is usable;
+5. the expected client/service behavior occurs;
+6. a modeled terminal outcome is produced;
+7. the completion returns the original `DirectiveId`;
+8. any permitted response value has the authored bounded shape;
+9. Auth Interactions return no response value;
+10. the continuation is submitted and resumes successfully for RequiresResult interactions; and
+11. the interaction terminates/closes correctly.
 
-`src/features/client-interactions/components/ClientInteractionButton`
-
-The platform dispatcher is:
-
-`src/features/client-interactions/ClientInteractionHost`
-
-React Native uses the existing `AppTheme` tokens rather than a second Client Interaction color system.
-
-### Shared visual vocabulary
-
-Angular and React Native do not share rendering code, but every interaction should preserve the same semantic visual hierarchy:
-
-- eyebrow;
-- title;
-- summary;
-- body;
-- status/error region;
-- primary action;
-- secondary action.
-
-Platform-specific presentation differences are allowed. The cards should nevertheless look and behave like members of the same product family.
-
-## Status values
-
-The three client checks are evidence-backed booleans. Runtime evidence uses:
+Runtime evidence status remains:
 
 - `not-run`
 - `passed`
 - `failed`
 
-A client is green when Exists, Controls Conform, and Behavior Wired are all true.
+## Process
 
-An interaction is fully green when every required client is green, required runtime evidence passes, and Auth Bindings are valid when applicable.
+### 1. Author the interaction definition
 
-If implementation exists but does not match authored truth, treat it as drift/in-progress rather than redefining the interaction to match the implementation.
+Confirm one bounded purpose, stable interaction key, stable `directiveKey`, invocation payload contract, controls, actions, presentation states, terminal outcomes, response-value contract, and required platforms.
 
-## 1. Author the interaction definition
+The interaction must satisfy `CLIENT-CARD-CONTRACT.md`.
 
-Confirm that the interaction represents exactly one bounded client capability.
+### 2. Validate Auth Bindings
 
-The definition must establish a stable interaction key, stable ClientDirective key, one bounded purpose, invocation payload contract, controls, actions, allowed local presentation states, terminal outcomes, response-value contract, and supported client platforms.
+Auth Interactions only. Confirm every referenced Behavior, Scenario, Action, Transition, and AuthView resolves to current authored authentication truth.
 
-The interaction must satisfy `CLIENT-CARD-CONTRACT.md`. In particular:
+### 3. Reconcile / implement Server 5/5
 
-- one ClientDirective maps to one interaction;
-- each issued interaction has one stable `interactionId` for its round trip;
-- the interaction does not navigate directly to another interaction;
-- arbitrary structured response payloads are prohibited;
-- response values are limited to the contract-approved scalar, EntityHeader, or homogeneous multi-select shapes;
-- Auth Interactions return no response value of any kind.
+Inspect the current `LagoVista/Core` and `LagoVista/ai` default branches, record exact commit SHAs in `server.json`, and evaluate the five server checks using source evidence.
 
-Definition is complete when the JSON validates against the correct schema, required fields are present, response rules are explicit, supported platforms are declared honestly, and no unresolved authored ambiguity remains about what the client must render or return.
+Implement gaps against AGN-000040 rather than adding interaction-specific transport shortcuts.
 
-## 2. Validate Auth bindings
+### 4. Reconcile Angular Web 3/3
 
-This phase applies only to Auth Interactions.
+Inspect the stable Angular repository and update `angular-web.json` with source-supported facts.
 
-Confirm that every declared canonical authentication reference resolves to current authored authentication truth. Bindings may include Behaviors, Scenarios, Actions, Transitions, and AuthViews where presentation semantics are intentionally reused.
+### 5. Reconcile React Native 3/3
 
-The Auth Interaction must not invent authentication guards, transitions, postconditions, or authoritative account state.
+Inspect the stable React Native repository and update `react-native.json` with source-supported facts.
 
-## 3. Reconcile Angular Web
+### 6. Wire shared AgentChatEngine behavior
 
-Inspect the current stable Angular implementation repository and record its exact commit SHA in `implementation/client-interaction-conformance/angular-web.json`.
+Implement directive projection and completion/resume once in `nuviot/ai-client`. Then reconcile each platform's Behavior Wired evidence from the complete source path.
 
-Evaluate exactly three checks.
+### 7. Capture runtime evidence
 
-### Exists
+Execute the complete interaction on every required platform and record current evidence references.
 
-Confirm that the normalized authored Client Interaction can be dispatched by the platform `ClientInteractionHost` into the intended interaction component/card and has identifiable source evidence.
+### 8. Determine final green state
 
-A presentational component by itself does not satisfy Exists. The platform host-to-handler dispatch path must be wired.
+A general Client Interaction is green when:
 
-Exists does not require the shared `AgentChatEngine` seam to be complete; that requirement belongs to Behavior Wired.
+`Definition ✓   Server 5/5   Angular 3/3   React Native 3/3   Runtime ✓`
 
-### Controls Conform
+An Auth Interaction is green when:
 
-Compare the rendered interaction to the authored definition. Required controls, actions, semantic finders, control types, required/optional behavior, and sensitivity boundaries must match semantically.
+`Definition ✓   Auth Bindings ✓   Server 5/5   Angular 3/3   React Native 3/3   Runtime ✓`
 
-Visual styling does not need to be identical across platforms.
-
-### Behavior Wired
-
-Behavior Wired is intentionally an end-to-end **source integration** check, not merely a card-internal check.
-
-Confirm from source that:
-
-1. the backend response can carry the authored directive;
-2. `AgentChatEngine` projects that directive into normalized Client Interaction view-model state;
-3. the Angular consuming surface observes that state and mounts `ClientInteractionHost`;
-4. the host launches the intended handler;
-5. authored actions invoke the intended client/service behavior;
-6. terminal paths map to authored outcomes;
-7. the same `interactionId` is returned;
-8. the completion obeys the authored response-value/security contract; and
-9. `AgentChatEngine` submits the completion through the canonical continuation path and applies the resumed agent response.
-
-For this process, do not re-prove the backend business/auth operation behind the card action.
-
-Angular is green when all three checks are true.
-
-## 4. Reconcile React Native
-
-Inspect the current stable React Native implementation repository and record its exact commit SHA in `implementation/client-interaction-conformance/react-native.json`.
-
-Apply the same three checks:
-
-- Exists
-- Controls Conform
-- Behavior Wired
-
-A presentational component by itself does not satisfy Exists. The platform host-to-handler dispatch path must be wired.
-
-Behavior Wired requires the same shared `AgentChatEngine` directive projection and continuation path used by Angular. Do not create a separate RN protocol.
-
-The semantic interaction contract must match Angular even when native presentation differs.
-
-React Native is green when all three checks are true.
-
-## 5. Runtime evidence
-
-Runtime evidence proves that the source wiring described above actually works when executed.
-
-For each required platform prove:
-
-1. a real agent response contains the expected Client Interaction directive;
-2. `AgentChatEngine` exposes the normalized interaction;
-3. the platform mounts the intended interaction;
-4. the interaction is usable;
-5. the expected client/service behavior is invoked;
-6. a modeled terminal outcome is produced;
-7. the completion returns the original `interactionId`;
-8. the agent continuation is submitted and resumes successfully;
-9. the interaction terminates/closes;
-10. any allowed response value has the authored shape; and
-11. Auth Interactions return no value.
-
-Record runtime status and evidence references on that platform's conformance observation.
-
-Do not duplicate existing backend business-operation integration evidence unless a failure suggests the backend assumption is invalid.
-
-## 6. Determine final green state
-
-A general Client Interaction is green when Definition is valid, every required client is 3/3, and required runtime evidence passes.
-
-An Auth Interaction additionally requires valid canonical Auth Bindings.
-
-Unsupported or explicitly not-applicable platforms do not block green. Planned platforms do block full green until implemented or intentionally reclassified.
+Unsupported or explicitly not-applicable platforms do not block green. Planned platforms do.
 
 ## Aptix visualization
 
-The Client Interactions visualizer should project the evidence as clear progress indicators.
+The Client Interactions visualizer SHOULD project these dimensions directly rather than infer one opaque percentage.
 
-General interaction example:
+General example:
 
-`Definition ✓   Angular 2/3   React Native 2/3   Runtime ○`
+`Definition ✓   Server 4/5   Angular 2/3   React Native 2/3   Runtime ○`
 
-Auth interaction example:
+Auth example:
 
-`Definition ✓   Auth Bindings ✓   Angular 3/3   React Native 3/3   Runtime ✓`
+`Definition ✓   Auth Bindings ✓   Server 5/5   Angular 3/3   React Native 3/3   Runtime ✓`
 
-Each client expands to show Exists, Controls, Behavior, inspected commit, source evidence, and runtime evidence.
+The Server dimension expands to:
 
-Aptix is a projection. The JSON definitions and evidence manifests remain authoritative.
+- Transport Exists
+- Definition Registered
+- Invocation Wired
+- Completion Wired
+- Contract Conforms
+
+Each client expands to Exists, Controls Conform, Behavior Wired, inspected commit, source evidence, and runtime evidence.
+
+Aptix is a projection. Authored JSON and evidence manifests remain authoritative.
 
 ## Reference specimen: Accept or Reject Terms and Conditions
 
-Use `client.interaction.terms-and-conditions` as the reference specimen for this process.
+Use `client.interaction.terms-and-conditions` as the reference specimen.
 
-### Authored definition
+Authored definition:
 
 `auth-model/client-interactions/accept-reject-terms-and-conditions.json`
 
 The authored interaction requires:
 
 - directive `client.terms-and-conditions`;
-- current authoritative Terms and Conditions version display;
-- canonical View Terms action;
-- explicit Accept action;
-- explicit Reject action;
+- authoritative current Terms and Conditions version display resolved by the client through normal APIs;
+- View Terms, Accept, and Reject actions;
 - terminal outcomes `accepted`, `rejected`, `canceled`, and `failed`;
 - no response value.
 
-### Angular reference location
+Current server evidence is stored in:
 
-Stable repository:
+`auth-model/implementation/client-interaction-conformance/server.json`
 
-`softwarelogistics/nuviot-ui-shared`
+At the initial AGN-000040 reconciliation, Terms & Conditions is **Server 1/5**:
 
-Platform dispatcher:
+- Transport Exists: true
+- Definition Registered: false
+- Invocation Wired: false
+- Completion Wired: false
+- Contract Conforms: false
 
-`client-interactions/ClientInteractionHostComponent`
+This is intentional and useful. The shared canonical transport exists, while the Terms-specific server capability and runtime path remain the next implementation target.
 
-Reference handler:
+Angular and React Native already have their canonical interaction surfaces and substantial card-local behavior, but Behavior Wired remains false until the shared `AgentChatEngine` directive projection and continuation path are complete.
 
-`client-interactions/handlers/terms-and-conditions/TermsAndConditionsInteractionComponent`
-
-Shared shell:
-
-`client-interactions/shared/client-interaction-shell/ClientInteractionShellComponent`
-
-Current reference state:
-
-- Exists: true;
-- Controls Conform: true;
-- Behavior Wired: false;
-- Runtime: not-run.
-
-The platform dispatcher recognizes `client.terms-and-conditions`; the handler fetches the authoritative version, opens the canonical Termly document, performs the existing promotion/acceptance operation, and maps local Accept/Reject/Fail paths.
-
-Behavior remains false because the shared `AgentChatEngine` does not yet project `AgentExecuteResponse.clientDirectives` into Client Interaction view-model state and there is no canonical Client Interaction completion submission/continuation contract yet.
-
-The older `softwarelogistics/workforce-ui` `PromotionDirectiveComponent` remains useful precursor evidence for the real promotion/T&C backend path, but it is no longer the canonical Client Interaction implementation home.
-
-### React Native reference location
-
-Stable repository:
-
-`nuviot/vtm-client`
-
-Platform dispatcher:
-
-`src/features/client-interactions/ClientInteractionHost`
-
-Reference handler:
-
-`src/features/client-interactions/handlers/terms-and-conditions/TermsAndConditionsInteraction`
-
-Shared presentation:
-
-- `src/features/client-interactions/components/ClientInteractionShell`;
-- `src/features/client-interactions/components/ClientInteractionButton`.
-
-Current reference state:
-
-- Exists: true;
-- Controls Conform: true;
-- Behavior Wired: false;
-- Runtime: not-run.
-
-The same shared-agent seam blocks Behavior Wired: RN must consume normalized Client Interaction state from `AgentChatEngine`, not parse the raw backend directive itself, and its completion must return through that same shared continuation path.
-
-### Current shared seam state
-
-Already present:
-
-- `LagoVista/Core` response contract carries `clientDirectives`;
-- `LagoVista/AI` pipeline collects Client Directives;
-- `LagoVista/AI` response builder publishes Client Directives;
-- `nuviot/ai-client` has the shared `AgentChatEngine` through which all final responses already pass;
-- Angular and RN have canonical Client Interaction hosts and the T&C card surface/backend action.
-
-Still required:
-
-- formal `interactionId` on issued Client Interactions;
-- canonical `directiveKey` transport/mapping from the legacy directive action shape;
-- `AgentChatEngine` projection of pending Client Interactions;
-- Client Interaction completion submission contract on the agent request/continuation path;
-- `AgentChatEngine` completion/resume behavior;
-- Angular and RN consuming surfaces mounting their Client Interaction hosts from the shared view model;
-- runtime evidence on both platforms.
-
-### How to use this specimen
+## How to use this specimen
 
 When implementing a new Client Interaction:
 
 1. author the definition;
-2. create the handler in the stable client home for each required platform using the shared shell;
-3. add host-to-handler dispatch in each platform;
-4. add or update its Angular observation;
-5. add or update its React Native observation;
-6. let Aptix expose Exists and Controls as soon as evidence supports them;
-7. wire the directive and completion through the shared `AgentChatEngine` seam;
-8. mark Behavior Wired only when the complete source path exists;
-9. execute each client and attach runtime evidence;
+2. create/update its Server observation and make Server 5/5 using AGN-000040;
+3. create the handler in each required stable client home;
+4. add host-to-handler dispatch;
+5. update Angular and React Native observations;
+6. expose Exists and Controls as soon as evidence supports them;
+7. wire shared `AgentChatEngine` projection/completion behavior;
+8. mark Behavior Wired only when the complete shared/client source path exists;
+9. execute each required platform and attach runtime evidence; and
 10. mark Runtime passed only from current evidence.
 
-This Terms and Conditions interaction is the template for where definitions, backend directive transport, shared agent behavior, client handlers, shared presentation, client observations, source evidence, and runtime evidence belong. Future Client and Auth Interactions should follow the same layout.
+The Terms and Conditions interaction is the reference layout for authored truth, server directive implementation, shared agent behavior, platform handlers, conformance evidence, and runtime proof.
