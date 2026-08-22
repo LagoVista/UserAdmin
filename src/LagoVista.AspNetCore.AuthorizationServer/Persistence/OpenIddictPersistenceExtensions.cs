@@ -18,6 +18,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Persistence
             {
                 options.SetDefaultApplicationEntity<OAuthClientApplication>();
                 options.ReplaceApplicationStore<OAuthClientApplication, OpenIddictOAuthClientApplicationStore>();
+                options.ReplaceApplicationManager<OAuthClientApplication, LagoVistaOpenIddictApplicationManager>();
 
                 options.SetDefaultTokenEntity<OpenIddictTableToken>();
                 options.ReplaceTokenStore<OpenIddictTableToken, OpenIddictTableTokenStore>();
