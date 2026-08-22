@@ -1,0 +1,14 @@
+{
+  "interactionKey": "client.interaction.terms-and-conditions",
+  "platform": "angular-web",
+  "status": "passed",
+  "executedUtc": "2026-08-22T20:53:57.762Z",
+  "testHost": "http://localhost:4200",
+  "tests": [
+    {
+      "name": "accept",
+      "status": "passed",
+      "durationMs": 572
+    }
+  ]
+}

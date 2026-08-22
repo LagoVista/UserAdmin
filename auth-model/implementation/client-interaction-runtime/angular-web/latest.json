@@ -1,0 +1,12 @@
+{
+  "generatedUtc": "2026-08-22T20:53:57.762Z",
+  "platform": "angular-web",
+  "status": "passed",
+  "interactions": [
+    {
+      "interactionKey": "client.interaction.terms-and-conditions",
+      "status": "passed",
+      "evidencePath": "client.interaction.terms-and-conditions.json"
+    }
+  ]
+}

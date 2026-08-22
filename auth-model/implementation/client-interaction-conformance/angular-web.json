@@ -5,14 +5,14 @@
   "platform": "web",
   "repository": "softwarelogistics/nuviot-ui-shared",
   "inspectedCommit": "ff0e17c6d3d5038fb9a5ca22287e6a17ba465927",
-  "generatedUtc": "2026-08-21T08:43:00-04:00",
+  "generatedUtc": "2026-08-22T20:53:57.762Z",
   "interactions": [
     {
       "interactionKey": "client.interaction.terms-and-conditions",
       "exists": true,
       "controlsConform": true,
       "behaviorWired": false,
-      "runtimeEvidence": "not-run",
+      "runtimeEvidence": "passed",
       "component": "ClientInteractionHostComponent -> TermsAndConditionsInteractionComponent",
       "observedControlFinders": [
         "display:terms-version"
@@ -38,7 +38,9 @@
           "note": "Exposes display:terms-version, action:view-terms, action:accept, and action:reject."
         }
       ],
-      "runtimeEvidenceReferences": [],
+      "runtimeEvidenceReferences": [
+        "auth-model/implementation/client-interaction-runtime/angular-web/client.interaction.terms-and-conditions.json"
+      ],
       "notes": [
         "Exists is green because the stable shared Angular client has a platform dispatcher for client.terms-and-conditions and the intended handler.",
         "Controls conform to authored version 2: current version + View Terms + Accept + Reject.",

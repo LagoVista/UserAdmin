@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.AspNetCore.AuthorizationServer</id>
-    <version>3.0.3381.1143</version>
+    <version>3.0.3384.1545</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <title>LagoVista User Administration</title>
@@ -14,7 +14,7 @@
     <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT Devices NuvIoT LagoVista</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 8/19/2026 3:43:09 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 8/22/2026 7:45:36 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net9.0">
@@ -22,9 +22,9 @@
         <dependency id="OpenIddict.Server.AspNetCore" version="7.6.0" />
         <dependency id="OpenIddict.Validation.ServerIntegration" version="7.6.0" />
         <dependency id="OpenIddict.Validation.AspNetCore" version="7.6.0" />
-        <dependency id="LagoVista.AspNetCore.Identity" version="3.0.3381.1143" />
-        <dependency id="LagoVista.UserAdmin" version="3.0.3381.1143" />
-        <dependency id="LagoVista.UserAdmin.Repos" version="3.0.3381.1143" />
+        <dependency id="LagoVista.AspNetCore.Identity" version="3.0.3384.1545" />
+        <dependency id="LagoVista.UserAdmin" version="3.0.3384.1545" />
+        <dependency id="LagoVista.UserAdmin.Repos" version="3.0.3384.1545" />
       </group>
     </dependencies>
   </metadata>
