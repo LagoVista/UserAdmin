@@ -1,4 +1,3 @@
-using LagoVista.AspNetCore.AuthorizationServer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
@@ -15,10 +14,9 @@ namespace LagoVista.UserAdmin.Auth.Tests
         {
             var services = new ServiceCollection();
 
-            Startup.ConfigureServices(services, options =>
-            {
-                options.UseDevelopmentCertificates = true;
-            });
+            LagoVista.AspNetCore.AuthorizationServer.Startup.ConfigureServices(
+                services,
+                options => options.UseDevelopmentCertificates = true);
 
             using var provider = services.BuildServiceProvider();
             var options = provider.GetRequiredService<IOptions<OpenIddictServerOptions>>().Value;
