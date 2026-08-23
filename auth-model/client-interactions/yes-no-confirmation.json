@@ -1,0 +1,39 @@
+{
+  "$schema": "../schemas/client-interaction-card.schema.json",
+  "schemaVersion": "1.0",
+  "key": "client.interaction.yes-no-confirmation",
+  "name": "Yes or No Confirmation",
+  "summary": "Ask the client to present a simple confirmation prompt and return the person's explicit yes, no, or canceled outcome to the agent.",
+  "version": 1,
+  "maturity": "proposed",
+  "cardType": "general",
+  "directiveKey": "client.yes-no-confirmation",
+  "invocation": {
+    "payloadMode": "none",
+    "notes": "The confirmation prompt is carried by the normal ClientDirective preamble/prompt surface. The client owns presentation and does not receive a remote form description."
+  },
+  "actions": [
+    { "id": "yes", "name": "Yes", "actionType": "button", "finder": "action:yes" },
+    { "id": "no", "name": "No", "actionType": "button", "finder": "action:no" },
+    { "id": "cancel", "name": "Cancel", "actionType": "button", "finder": "action:cancel" }
+  ],
+  "presentationStates": ["ready"],
+  "outcomes": [
+    { "key": "yes", "name": "Yes", "summary": "The person explicitly confirmed yes.", "terminal": true },
+    { "key": "no", "name": "No", "summary": "The person explicitly confirmed no.", "terminal": true },
+    { "key": "canceled", "name": "Canceled", "summary": "The person dismissed the confirmation without choosing yes or no.", "terminal": true }
+  ],
+  "responseContract": {
+    "allowValue": false,
+    "allowedValueShapes": [],
+    "notes": "The terminal yes/no/canceled outcome fully expresses the response. No duplicate boolean value is returned."
+  },
+  "platforms": {
+    "angularWeb": { "status": "planned", "repository": "softwarelogistics/nuviot-ui-shared", "notes": "Planned reusable confirmation handler." },
+    "reactNative": { "status": "planned", "repository": "nuviot/vtm-client", "notes": "Planned platform-native confirmation handler." }
+  },
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "auth-model/CLIENT-CARD-CONTRACT.md", "note": "Defines one semantic directive mapped to one bounded client interaction." },
+    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-22", "note": "Identified a reusable Yes/No Confirm interaction as the next Client Directive primitive." }
+  ]
+}

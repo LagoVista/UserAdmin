@@ -1,16 +1,10 @@
 {
   "$schema": "../../schemas/client-interaction-server-conformance-manifest.schema.json",
   "schemaVersion": "1.0",
-  "generatedUtc": "2026-08-22T14:19:00-04:00",
+  "generatedUtc": "2026-08-23T00:08:00Z",
   "inspectedRepositories": [
-    {
-      "repository": "LagoVista/Core",
-      "inspectedCommit": "a0dd6a1c3d4f5675e441a5c4cbf51415f6d59951"
-    },
-    {
-      "repository": "LagoVista/ai",
-      "inspectedCommit": "d26b6adc150651ca432ea9019b847b889ee3da4a"
-    }
+    { "repository": "LagoVista/Core", "inspectedCommit": "a0dd6a1c3d4f5675e441a5c4cbf51415f6d59951" },
+    { "repository": "LagoVista/ai", "inspectedCommit": "35ae92d684b1f06f2086cdc3b231fa2276ea99b2" }
   ],
   "interactions": [
     {
@@ -22,80 +16,61 @@
       "completionWired": true,
       "contractConforms": true,
       "sourceEvidence": [
-        {
-          "repository": "LagoVista/Core",
-          "path": "src/LagoVista.Core/AI/Models/ClientDirectiveModels.cs",
-          "symbol": "ClientDirective / ClientDirectiveResult",
-          "note": "Canonical AGN-000040 outbound and bounded inbound transport contracts exist; results are limited to one authored outcome plus zero or one bounded value shape."
-        },
-        {
-          "repository": "LagoVista/Core",
-          "path": "src/LagoVista.Core/AI/Models/AgentExecuteRequest.cs",
-          "symbol": "ClientDirectiveResults",
-          "note": "Client Directive completion is modeled as a dedicated third request lane rather than ToolResults or normal user input."
-        },
-        {
-          "repository": "LagoVista/Core",
-          "path": "src/LagoVista.Core/AI/Models/AgentExecuteResponse.cs",
-          "symbol": "ClientDirectives / ClientDirectiveContinuation",
-          "note": "Agent responses carry canonical ClientDirective instances and expose a dedicated client_directive_continuation response kind without leaking internal Client Tool calls."
-        },
-        {
-          "repository": "LagoVista/ai",
-          "path": "src/LagoVista.AI/Services/ClientDirectives/TermsAndConditionsClientDirective.cs",
-          "symbol": "TermsAndConditionsClientDirective",
-          "note": "Registers client.terms-and-conditions as RequiresResult with authored terminal outcomes accepted, rejected, canceled, and failed and no response value."
-        },
-        {
-          "repository": "LagoVista/ai",
-          "path": "src/LagoVista.AI/Services/Tools/InvokeClientDirectiveTool.cs",
-          "symbol": "InvokeClientDirectiveTool",
-          "note": "Formal result-bearing invocation resolves the registered definition, validates/builds payload, emits ClientDirective, and persists the pending directive on the originating turn."
-        },
-        {
-          "repository": "LagoVista/ai",
-          "path": "src/LagoVista.AI/Services/PromptKnowledgeContributors/ClientDirectiveCatalogPromptKnowledgeContributor.cs",
-          "symbol": "ClientDirectiveCatalogPromptKnowledgeContributor",
-          "note": "When Client Directive invocation tools are active, the model receives the registered directive catalog including action, response mode, usage guidance, and allowed outcomes."
-        },
-        {
-          "repository": "LagoVista/ai",
-          "path": "src/LagoVista.AI.Models/AgentSession.cs",
-          "symbol": "AgentSessionTurn.PendingClientDirective",
-          "note": "The originating AgentSessionTurn durably owns pending Client Directive correlation state across requests."
-        },
-        {
-          "repository": "LagoVista/ai",
-          "path": "src/LagoVista.AI/Services/Pipeline/ClientDirectiveContinuationPipelineStep.cs",
-          "symbol": "ClientDirectiveContinuationPipelineStep",
-          "note": "Continuation restores the pending turn, enforces the dedicated request lane, validates DirectiveId, Action, authored result/value rules, rejects duplicates, runs an optional result handler, and resumes the suspended model tool call."
-        },
-        {
-          "repository": "LagoVista/ai",
-          "path": "src/LagoVista.AI/Helpers/AgentExecuteResponseBuilder.cs",
-          "symbol": "AgentExecuteResponseBuilder",
-          "note": "Result-bearing handoff emits client_directive_continuation with ClientDirectives while keeping internal ToolCallManifest continuation details off the client wire."
-        },
-        {
-          "repository": "LagoVista/ai",
-          "path": "tests/LagoVista.AI.Tests/Services/ClientDirectives/TermsAndConditionsClientDirectiveTests.cs",
-          "symbol": "TermsAndConditionsClientDirectiveTests",
-          "note": "Executable contract tests pin the authored action, RequiresResult mode, four terminal outcomes, no-value rule, and rejection of unknown outcomes."
-        },
-        {
-          "repository": "LagoVista/ai",
-          "path": "ddrs/AGN-000040 - Agent Client Directive.md",
-          "note": "Approved server contract is reconciled to the implemented dotted action identity, bounded result contract, durable continuation, and internal ToolCallManifest reuse."
-        }
+        { "repository": "LagoVista/Core", "path": "src/LagoVista.Core/AI/Models/ClientDirectiveModels.cs", "symbol": "ClientDirective / ClientDirectiveResult", "note": "Canonical bounded transport." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/ClientDirectives/TermsAndConditionsClientDirective.cs", "symbol": "TermsAndConditionsClientDirective", "note": "Registered RequiresResult definition matches authored Terms contract." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/Pipeline/ClientDirectiveContinuationPipelineStep.cs", "symbol": "ClientDirectiveContinuationPipelineStep", "note": "Generic correlated continuation and duplicate protection." }
       ],
-      "notes": [
-        "Server is 5/5 for client.interaction.terms-and-conditions from current source evidence.",
-        "Transport Exists: Core exposes canonical ClientDirective, ClientDirectiveResult, the dedicated request lane, and client_directive_continuation response kind.",
-        "Definition Registered: client.terms-and-conditions is registered as a RequiresResult AgentClientDirectiveDefinition.",
-        "Invocation Wired: the model-facing catalog and invoke_client_directive tool can resolve and emit the authored interaction.",
-        "Completion Wired: pending state is persisted on AgentSessionTurn and ClientDirectiveResult is validated and translated back into the suspended model tool call for continuation.",
-        "Contract Conforms: the server definition and tests match the authored no-payload, accepted/rejected/canceled/failed, no-response-value contract."
-      ]
+      "notes": ["Server remains 5/5 for Terms and Conditions."]
+    },
+    {
+      "interactionKey": "client.interaction.user-registration",
+      "directiveKey": "client.user-registration",
+      "transportExists": true,
+      "definitionRegistered": true,
+      "invocationWired": true,
+      "completionWired": true,
+      "contractConforms": true,
+      "sourceEvidence": [
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/ClientDirectives/UserRegistrationClientDirective.cs", "symbol": "UserRegistrationClientDirective", "note": "Registered zero-payload RequiresResult definition with succeeded/canceled/failed and an optional String Scalar permitted only on succeeded." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Models/AgentClientDirectiveDefinition.cs", "symbol": "ResultValueAllowedResults / ResultValueRequiredResults", "note": "Generic definition models result-value presence rules per terminal outcome." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/AgentClientDirectiveContractValidator.cs", "symbol": "ValidateResult", "note": "Generic validation allows an optional user id only on succeeded and rejects values on canceled/failed." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/Tools/Startup.cs", "symbol": "ConfigureServices", "note": "Registers UserRegistrationClientDirective with the generic Client Directive registry." },
+        { "repository": "LagoVista/ai", "path": "tests/LagoVista.AI.Tests/Services/ClientDirectives/ClientDirectiveOutcomeValueContractTests.cs", "symbol": "ClientDirectiveOutcomeValueContractTests", "note": "Source-present tests pin optional-success value semantics; execution status is not inferred." }
+      ],
+      "notes": ["Server is 5/5 for the Client Directive contract. The separate Angular/auth endpoint integration is incomplete because the current RegisterUser API model lacks Phone and Company; that client/business-operation gap does not reduce Agent server conformance."]
+    },
+    {
+      "interactionKey": "client.interaction.yes-no-confirmation",
+      "directiveKey": "client.yes-no-confirmation",
+      "transportExists": true,
+      "definitionRegistered": true,
+      "invocationWired": true,
+      "completionWired": true,
+      "contractConforms": true,
+      "sourceEvidence": [
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/ClientDirectives/YesNoConfirmationClientDirective.cs", "symbol": "YesNoConfirmationClientDirective", "note": "Registered zero-payload RequiresResult definition with exactly yes/no/canceled and no response value." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/Tools/Startup.cs", "symbol": "ConfigureServices", "note": "Registers YesNoConfirmationClientDirective." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/Pipeline/ClientDirectiveContinuationPipelineStep.cs", "symbol": "ClientDirectiveContinuationPipelineStep", "note": "Shared continuation provides durable pending state, exact correlation, validation, and resume." }
+      ],
+      "notes": ["Server is 5/5 from current source inspection. Final server sign-off is captured separately by the explicit code-review artifact."]
+    },
+    {
+      "interactionKey": "client.interaction.enum-picker",
+      "directiveKey": "client.enum-picker",
+      "transportExists": true,
+      "definitionRegistered": true,
+      "invocationWired": true,
+      "completionWired": true,
+      "contractConforms": false,
+      "sourceEvidence": [
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/ClientDirectives/EnumPickerClientDirective.cs", "symbol": "EnumPickerClientDirective", "note": "Registered typed-payload RequiresResult definition declares one or more bounded { value, label } options and selected/canceled/failed outcomes." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Models/OpenAITools.cs", "symbol": "JsonSchemaExtensions.ObjectArray", "note": "Typed options payload is expressed as a closed required object array with required value and label strings." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/AgentClientDirectiveContractValidator.cs", "symbol": "ValidatePayload", "note": "Current generic payload validation checks top-level required and additional properties but does not recursively validate object-array item shape." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Models/AgentClientDirectiveDefinition.cs", "symbol": "ResultValueAllowedResults / ResultValueRequiredResults", "note": "selected is the only outcome allowed and required to carry a result value." },
+        { "repository": "LagoVista/ai", "path": "src/LagoVista.AI/Services/AgentClientDirectiveContractValidator.cs", "symbol": "ValidateResult", "note": "Result validator requires the String Scalar on selected and rejects values on canceled/failed." },
+        { "repository": "LagoVista/ai", "path": "tests/LagoVista.AI.Tests/Services/ClientDirectives/ClientDirectiveOutcomeValueContractTests.cs", "symbol": "ClientDirectiveOutcomeValueContractTests", "note": "Source-present tests pin selected/canceled result-value semantics; execution status is not inferred." }
+      ],
+      "notes": ["Server is deliberately 4/5. The typed payload schema is declared, registered, and model-visible, but runtime payload validation is not yet recursive enough to independently enforce each options[] item as { value:string, label:string }. Do not mark Contract Conforms green until that generic validator is hardened and tested."]
     }
   ]
 }

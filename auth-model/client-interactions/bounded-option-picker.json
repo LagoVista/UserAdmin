@@ -1,0 +1,42 @@
+{
+  "$schema": "../schemas/client-interaction-card.schema.json",
+  "schemaVersion": "1.0",
+  "key": "client.interaction.enum-picker",
+  "name": "Enum Picker",
+  "summary": "Ask the client to render a single-selection picker from a bounded set of options and return the selected value to the agent.",
+  "version": 1,
+  "maturity": "proposed",
+  "cardType": "general",
+  "directiveKey": "client.enum-picker",
+  "invocation": {
+    "payloadMode": "typed",
+    "payloadSchemaReference": "client.enum-picker.v1",
+    "notes": "The payload supplies the bounded choices needed for the interaction. The client owns visual presentation and control implementation."
+  },
+  "controls": [
+    { "id": "selection", "name": "Selection", "controlType": "select", "finder": "select:selection", "required": true, "sensitivity": "public" }
+  ],
+  "actions": [
+    { "id": "submit", "name": "Select", "actionType": "button", "finder": "action:submit" },
+    { "id": "cancel", "name": "Cancel", "actionType": "button", "finder": "action:cancel" }
+  ],
+  "presentationStates": ["ready"],
+  "outcomes": [
+    { "key": "selected", "name": "Selected", "summary": "The person selected one of the supplied bounded options.", "terminal": true },
+    { "key": "canceled", "name": "Canceled", "summary": "The person dismissed the picker without choosing a value.", "terminal": true },
+    { "key": "failed", "name": "Failed", "summary": "The client could not complete the picker interaction.", "terminal": true }
+  ],
+  "responseContract": {
+    "allowValue": true,
+    "allowedValueShapes": ["string"],
+    "notes": "The selected option value is returned as a string Scalar. The client must return a value from the bounded options supplied for the interaction."
+  },
+  "platforms": {
+    "angularWeb": { "status": "planned", "repository": "softwarelogistics/nuviot-ui-shared", "notes": "Planned reusable bounded-option picker handler." },
+    "reactNative": { "status": "planned", "repository": "nuviot/vtm-client", "notes": "Planned platform-native bounded-option picker handler." }
+  },
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "auth-model/CLIENT-CARD-CONTRACT.md", "note": "Defines bounded Client Interaction payload and response contracts." },
+    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-22", "note": "Identified a reusable picker sourced from a bounded enum as the next Client Directive primitive." }
+  ]
+}

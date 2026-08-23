@@ -1,0 +1,45 @@
+{
+  "$schema": "../schemas/client-interaction-card.schema.json",
+  "schemaVersion": "1.0",
+  "key": "client.interaction.user-registration",
+  "name": "User Registration",
+  "summary": "Ask the client to present its canonical user registration experience, submit the entered registration data through the authoritative authentication API, and return only the bounded registration outcome to the agent.",
+  "version": 1,
+  "maturity": "proposed",
+  "cardType": "general",
+  "directiveKey": "client.user-registration",
+  "invocation": {
+    "payloadMode": "none",
+    "notes": "The directive identifies the registration interaction only. Form fields, labels, validation, layout, and the authoritative registration API contract are owned by each client implementation and are not transported by the agent."
+  },
+  "controls": [
+    { "id": "first-name", "name": "First Name", "controlType": "text-input", "finder": "input:first-name", "required": true, "sensitivity": "personal" },
+    { "id": "last-name", "name": "Last Name", "controlType": "text-input", "finder": "input:last-name", "required": true, "sensitivity": "personal" },
+    { "id": "email", "name": "Email", "controlType": "email-input", "finder": "input:email", "required": true, "sensitivity": "personal" },
+    { "id": "phone", "name": "Phone", "controlType": "text-input", "finder": "input:phone", "required": false, "sensitivity": "personal" },
+    { "id": "company", "name": "Company", "controlType": "text-input", "finder": "input:company", "required": false, "sensitivity": "personal" }
+  ],
+  "actions": [
+    { "id": "submit", "name": "Register", "actionType": "button", "finder": "action:submit" },
+    { "id": "cancel", "name": "Cancel", "actionType": "button", "finder": "action:cancel" }
+  ],
+  "presentationStates": ["ready", "submitting", "failed"],
+  "outcomes": [
+    { "key": "succeeded", "name": "Succeeded", "summary": "The authoritative registration operation completed successfully.", "terminal": true },
+    { "key": "canceled", "name": "Canceled", "summary": "The person abandoned the registration interaction before completion.", "terminal": true },
+    { "key": "failed", "name": "Failed", "summary": "The client could not complete the authoritative registration operation.", "terminal": true }
+  ],
+  "responseContract": {
+    "allowValue": true,
+    "allowedValueShapes": ["string"],
+    "notes": "A successful registration may return the created user identifier as a string Scalar. Registration form values and other personal information are never returned to the agent through ClientDirectiveResult."
+  },
+  "platforms": {
+    "angularWeb": { "status": "planned", "repository": "softwarelogistics/nuviot-ui-shared", "notes": "Angular owns the canonical registration form and authoritative auth API submission." },
+    "reactNative": { "status": "planned", "repository": "nuviot/vtm-client", "notes": "React Native will provide its platform-native registration experience under the same semantic directive contract." }
+  },
+  "sourceReferences": [
+    { "sourceType": "decision", "reference": "auth-model/CLIENT-CARD-CONTRACT.md", "note": "Defines semantic Client Interactions with bounded results rather than remotely described forms." },
+    { "sourceType": "discussion", "reference": "ChatGPT conversation 2026-08-22", "note": "Registration directive carries only the registration intent; Angular defines First Name, Last Name, Email, Phone, and Company and posts to the auth endpoint." }
+  ]
+}
