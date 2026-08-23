@@ -85,11 +85,12 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                                .SetOrder(Int32.MaxValue - 100_000));
 
                     // IdentityModel reconstructs a one-value JSON array from the authorization code
-                    // as a scalar string claim. Restore the DOKS team_role array immediately before
-                    // OpenIddict serializes the final identity token.
+                    // as a scalar string claim. Restore the DOKS team_role array before OpenIddict
+                    // clones the principal into SecurityTokenDescriptor.Subject. Mutating the principal
+                    // after AttachTokenSubject is too late because the final JWT serializes that clone.
                     options.AddEventHandler<GenerateTokenContext>(builder =>
                         builder.UseSingletonHandler<OidcTeamRoleArrayTokenHandler>()
-                               .SetOrder(OpenIddictServerHandlers.Protection.GenerateIdentityModelToken.Descriptor.Order - 100));
+                               .SetOrder(OpenIddictServerHandlers.Protection.AttachTokenSubject.Descriptor.Order - 100));
 
                     options.UseAspNetCore()
                            .EnableStatusCodePagesIntegration()
