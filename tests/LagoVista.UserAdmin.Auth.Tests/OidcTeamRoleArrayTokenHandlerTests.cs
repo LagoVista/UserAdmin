@@ -38,7 +38,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(parts.Length, Is.EqualTo(3));
 
             var payload = parts[1].Replace('-', '+').Replace('_', '/');
-            payload += payload.Length % 4 switch
+            payload += (payload.Length % 4) switch
             {
                 0 => String.Empty,
                 2 => "==",
