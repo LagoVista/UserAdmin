@@ -14,6 +14,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer
         public bool RequireConsent { get; set; }
         public string ClientSecretId { get; set; }
         public int? AccessTokenLifetimeMinutes { get; set; }
+        public int? IdentityTokenLifetimeMinutes { get; set; }
         public int? RefreshTokenLifetimeDays { get; set; }
         public IReadOnlyCollection<string> RedirectUris { get; set; } = Array.Empty<string>();
         public IReadOnlyCollection<string> PostLogoutRedirectUris { get; set; } = Array.Empty<string>();
