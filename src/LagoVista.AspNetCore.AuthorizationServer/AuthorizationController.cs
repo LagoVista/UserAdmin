@@ -8,6 +8,7 @@ using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -121,7 +122,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             var teamRole = OidcTeamRoleProjection.GetTeamRole(scopes, projectedClaims.IsSystemAdmin);
             if (!String.IsNullOrWhiteSpace(teamRole))
             {
-                identity.SetClaims(AuthorizationServerConstants.ClaimTeamRole, new[] { teamRole });
+                identity.SetClaims(AuthorizationServerConstants.ClaimTeamRole, ImmutableArray.Create(teamRole));
                 foreach (var claim in identity.FindAll(AuthorizationServerConstants.ClaimTeamRole))
                 {
                     claim.SetDestinations(Destinations.AccessToken, Destinations.IdentityToken);
