@@ -131,6 +131,11 @@ namespace LagoVista.UserAdmin.Models.Auth
             FieldType: FieldTypes.Integer, ResourceType: typeof(OAuthClientResources))]
         public int? AccessTokenLifetimeMinutes { get; set; }
 
+        [FormField(LabelResource: "OAuthClientApplication_IdentityTokenLifetimeMinutes",
+            HelpResource: "OAuthClientApplication_IdentityTokenLifetimeMinutes_Help",
+            FieldType: FieldTypes.Integer, ResourceType: typeof(OAuthClientResources))]
+        public int? IdentityTokenLifetimeMinutes { get; set; }
+
         [FormField(LabelResource: OAuthClientResources.Names.OAuthClientApplication_RefreshTokenLifetimeDays,
             HelpResource: OAuthClientResources.Names.OAuthClientApplication_RefreshTokenLifetimeDays_Help,
             FieldType: FieldTypes.Integer, ResourceType: typeof(OAuthClientResources))]
@@ -201,7 +206,7 @@ namespace LagoVista.UserAdmin.Models.Auth
                 nameof(Name), nameof(Key), nameof(Description), nameof(ClientId), nameof(ClientType), nameof(Status),
                 nameof(ClientSecret), nameof(RedirectUris), nameof(PostLogoutRedirectUris), nameof(AllowedGrantTypes),
                 nameof(AllowedScopes), nameof(AllowedResources), nameof(RequirePkce), nameof(RequireConsent),
-                nameof(AccessTokenLifetimeMinutes), nameof(RefreshTokenLifetimeDays), nameof(LogoUrl),
+                nameof(AccessTokenLifetimeMinutes), nameof(IdentityTokenLifetimeMinutes), nameof(RefreshTokenLifetimeDays), nameof(LogoUrl),
                 nameof(PrivacyPolicyUrl), nameof(TermsOfServiceUrl),
             };
         }
