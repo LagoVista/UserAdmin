@@ -3,6 +3,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
@@ -121,7 +122,10 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             var teamRole = OidcTeamRoleProjection.GetTeamRole(scopes, projectedClaims.IsSystemAdmin);
             if (!String.IsNullOrWhiteSpace(teamRole))
             {
-                identity.AddClaim(new Claim(AuthorizationServerConstants.ClaimTeamRole, teamRole)
+                identity.AddClaim(new Claim(
+                    AuthorizationServerConstants.ClaimTeamRole,
+                    $"[\"{teamRole}\"]",
+                    JsonClaimValueTypes.JsonArray)
                     .SetDestinations(Destinations.AccessToken, Destinations.IdentityToken));
             }
 
