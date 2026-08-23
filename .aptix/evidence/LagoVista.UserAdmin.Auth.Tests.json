@@ -3,17 +3,17 @@
   "ProjectName": "LagoVista.UserAdmin.Auth.Tests",
   "ProjectPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj",
   "AssemblyPath": "Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
-  "RunId": "43ca3691-d30c-438e-9e1b-ba9b2fd2b65f",
-  "StartedUtc": "2026-08-20T23:09:06.7423879Z",
-  "CompletedUtc": "2026-08-20T23:09:18.7134387Z",
+  "RunId": "71d5334c-7b55-4ae7-8903-fabf2be0b7b0",
+  "StartedUtc": "2026-08-21T20:11:29.1279613Z",
+  "CompletedUtc": "2026-08-21T20:11:44.6324369Z",
   "ExitCode": 0,
   "Outcome": "Passed",
   "Summary": {
-    "Total": 156,
-    "Passed": 156,
+    "Total": 158,
+    "Passed": 158,
     "Failed": 0,
     "Skipped": 0,
-    "DurationMilliseconds": 11971
+    "DurationMilliseconds": 15504
   },
   "Tests": [
     {
@@ -1266,20 +1266,21 @@
   "Issues": [],
   "StandardOutput": [
     "  Determining projects to restore...",
-    "  Restored D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj (in 410 ms).",
-    "  3 of 4 projects are up-to-date for restore.",
+    "  Restored D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\LagoVista.UserAdmin.Auth.Tests.csproj (in 517 ms).",
+    "  5 of 6 projects are up-to-date for restore.",
     "  LagoVista.UserAdmin.Models -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin.Models\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.Models.dll",
-    "CSC : warning CS8002: Referenced assembly \u0027RingCentral.Net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0027 does not have a strong name. [D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\LagoVista.UserAdmin.csproj]",
     "  LagoVista.UserAdmin -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin\\bin\\Debug\\netstandard2.1\\LagoVista.UserAdmin.dll",
+    "  LagoVista.UserAdmin.Repos -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.UserAdmin.Repos\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Repos.dll",
     "  LagoVista.AspNetCore.Identity -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.AspNetCore.Identity\\bin\\Debug\\net9.0\\LagoVista.AspNetCore.Identity.dll",
+    "  LagoVista.AspNetCore.AuthorizationServer -\u003E D:\\NuvIoT\\ua.UserAdmin\\src\\LagoVista.AspNetCore.AuthorizationServer\\bin\\Debug\\net9.0\\LagoVista.AspNetCore.AuthorizationServer.dll",
     "  LagoVista.UserAdmin.Auth.Tests -\u003E D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll",
     "Test run for D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\bin\\Debug\\net9.0\\LagoVista.UserAdmin.Auth.Tests.dll (.NETCoreApp,Version=v9.0)",
     "A total of 1 test files matched the specified pattern.",
     "",
-    "Passed!  - Failed:     0, Passed:   156, Skipped:     0, Total:   156, Duration: 2 s - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
+    "Passed!  - Failed:     0, Passed:   158, Skipped:     0, Total:   158, Duration: 2 s - LagoVista.UserAdmin.Auth.Tests.dll (net9.0)",
     "",
     "Attachments:",
-    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\508af2b3-9f94-4c4c-8f6b-32759085abe4\\coverage.cobertura.xml"
+    "  D:\\NuvIoT\\ua.UserAdmin\\Tests\\LagoVista.UserAdmin.Auth.Tests\\TestResults\\d6be03f4-fb4d-41f5-9c7c-841edd342b05\\coverage.cobertura.xml"
   ],
   "StandardError": []
 }
