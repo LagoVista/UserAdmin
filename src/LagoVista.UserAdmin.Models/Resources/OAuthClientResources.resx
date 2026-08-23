@@ -39,6 +39,8 @@
   <data name="OAuthClientApplication_RequireConsent_Help" xml:space="preserve"><value>Requires the user to approve the requested access.</value></data>
   <data name="OAuthClientApplication_AccessTokenLifetimeMinutes" xml:space="preserve"><value>Access Token Lifetime (Minutes)</value></data>
   <data name="OAuthClientApplication_AccessTokenLifetimeMinutes_Help" xml:space="preserve"><value>Optional client-specific access-token lifetime.</value></data>
+  <data name="OAuthClientApplication_IdentityTokenLifetimeMinutes" xml:space="preserve"><value>Identity Token Lifetime (Minutes)</value></data>
+  <data name="OAuthClientApplication_IdentityTokenLifetimeMinutes_Help" xml:space="preserve"><value>Optional client-specific ID-token lifetime. Leave empty to use the authorization server default.</value></data>
   <data name="OAuthClientApplication_RefreshTokenLifetimeDays" xml:space="preserve"><value>Refresh Token Lifetime (Days)</value></data>
   <data name="OAuthClientApplication_RefreshTokenLifetimeDays_Help" xml:space="preserve"><value>Optional client-specific refresh-token lifetime.</value></data>
   <data name="OAuthClientApplication_LogoUrl" xml:space="preserve"><value>Logo URL</value></data>
