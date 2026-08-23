@@ -35,6 +35,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                 RequireConsent = client.RequireConsent,
                 ClientSecretId = client.ClientSecretId,
                 AccessTokenLifetimeMinutes = client.AccessTokenLifetimeMinutes,
+                IdentityTokenLifetimeMinutes = client.IdentityTokenLifetimeMinutes,
                 RefreshTokenLifetimeDays = client.RefreshTokenLifetimeDays,
                 RedirectUris = GetValues(client.RedirectUris),
                 PostLogoutRedirectUris = GetValues(client.PostLogoutRedirectUris),
