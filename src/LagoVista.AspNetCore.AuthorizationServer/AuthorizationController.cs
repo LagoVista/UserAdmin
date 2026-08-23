@@ -142,6 +142,9 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             if (policy.AccessTokenLifetimeMinutes.HasValue && policy.AccessTokenLifetimeMinutes.Value > 0)
                 principal.SetAccessTokenLifetime(TimeSpan.FromMinutes(policy.AccessTokenLifetimeMinutes.Value));
 
+            if (policy.IdentityTokenLifetimeMinutes.HasValue && policy.IdentityTokenLifetimeMinutes.Value > 0)
+                principal.SetIdentityTokenLifetime(TimeSpan.FromMinutes(policy.IdentityTokenLifetimeMinutes.Value));
+
             return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
