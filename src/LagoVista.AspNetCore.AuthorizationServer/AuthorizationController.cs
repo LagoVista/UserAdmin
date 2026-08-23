@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
@@ -17,6 +18,8 @@ namespace LagoVista.AspNetCore.AuthorizationServer
 {
     public class AuthorizationController : Controller
     {
+        private const string BuildVersionClaim = "com.lagovista.buildversion";
+
         private readonly IOAuthClientPolicyResolver _policyResolver;
         private readonly IOAuthClientPolicyValidator _policyValidator;
 
@@ -125,6 +128,10 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                     .SetDestinations(Destinations.AccessToken, Destinations.IdentityToken));
             }
 
+            // TEMPORARY DIAGNOSTIC: proves which published host build issued the ID token.
+            identity.AddClaim(new Claim(BuildVersionClaim, GetBuildVersion())
+                .SetDestinations(Destinations.IdentityToken));
+
             identity.AddClaim(new Claim(Claims.ClientId, policy.ClientId).SetDestinations(Destinations.AccessToken));
 
             var principal = new ClaimsPrincipal(identity);
@@ -157,6 +164,19 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             await HttpContext.SignOutAsync();
 
             return SignOut(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
+
+        private static string GetBuildVersion()
+        {
+            const string versionFile = "version.json";
+            if (!System.IO.File.Exists(versionFile))
+                return "????";
+
+            using var document = JsonDocument.Parse(System.IO.File.ReadAllText(versionFile));
+            if (document.RootElement.TryGetProperty("Version", out var version))
+                return version.GetString() ?? "????";
+
+            return "????";
         }
 
         private IActionResult Reject(string error, string description)
