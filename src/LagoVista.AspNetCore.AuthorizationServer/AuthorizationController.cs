@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text.Json;
 using System.Threading.Tasks;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
@@ -172,11 +172,14 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             if (!System.IO.File.Exists(versionFile))
                 return "????";
 
-            using var document = JsonDocument.Parse(System.IO.File.ReadAllText(versionFile));
-            if (document.RootElement.TryGetProperty("Version", out var version))
-                return version.GetString() ?? "????";
+            var versionFileContents = System.IO.File.ReadAllText(versionFile);
+            return JsonConvert.DeserializeObject<DiagnosticHostVersion>(versionFileContents)?.Version ?? "????";
+        }
 
-            return "????";
+        private sealed class DiagnosticHostVersion
+        {
+            public string Version { get; set; }
+            public string BuildDate { get; set; }
         }
 
         private IActionResult Reject(string error, string description)
