@@ -84,6 +84,13 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                         builder.UseScopedHandler<OAuthTokenRequestValidationHandler>()
                                .SetOrder(Int32.MaxValue - 100_000));
 
+                    // IdentityModel reconstructs a one-value JSON array from the authorization code
+                    // as a scalar string claim. Restore the DOKS team_role array immediately before
+                    // OpenIddict serializes the final identity token.
+                    options.AddEventHandler<GenerateTokenContext>(builder =>
+                        builder.UseSingletonHandler<OidcTeamRoleArrayTokenHandler>()
+                               .SetOrder(OpenIddictServerHandlers.Protection.GenerateIdentityModelToken.Descriptor.Order - 100));
+
                     options.UseAspNetCore()
                            .EnableStatusCodePagesIntegration()
                            .EnableAuthorizationEndpointPassthrough()
