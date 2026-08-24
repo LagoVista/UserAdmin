@@ -112,7 +112,12 @@ namespace LagoVista.UserAdmin.Managers
         {
             var fromUtc = ParseRunTime(run.Started, DateTime.UtcNow.AddMinutes(-5)).AddSeconds(-5);
             var toUtc = ParseRunTime(run.Finished, DateTime.UtcNow).AddSeconds(5);
-            var request = new ListRequest { PageSize = 100 };
+            var request = new ListRequest
+            {
+                PageSize = 100,
+                StartDate = CalendarDate.Create(fromUtc.Year, fromUtc.Month, fromUtc.Day),
+                EndDate = CalendarDate.Create(toUtc.Year, toUtc.Month, toUtc.Day)
+            };
 
             var byUserId = await _authLogMgr.GetForUserIdAsync(TestUserSeed.User.Id, request, org, user);
             var byUserName = await _authLogMgr.GetForUserNameAsync(TestUserSeed.Email.ToLowerInvariant(), request, org, user);
