@@ -48,9 +48,9 @@ namespace LagoVista.UserAdmin.Managers
             {
                 UserId = userId,
                 UserName = userName.ToLower(),
-                OrgId = orgId,
+                OrganizationId = orgId,
                 IPAddress = ip,
-                OrgName = orgName,
+                Organization = orgName,
                 Errors = errors,
                 Extras = extras,
                 InviteId  = inviteId,
@@ -118,7 +118,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public Task<ListResponse<AuthenticationLog>> GetAllAsync(ListRequest listRequest, EntityHeader org, EntityHeader user)
         {
-            return _authLogRepo.GetAllAsync(listRequest);
+            return _authLogRepo.GetAllAsync(RequireOrganizationId(org), listRequest);
         }
 
         public Task<ListResponse<AuthenticationLog>> GetAllAsync(string orgId, ListRequest listRequest, EntityHeader org, EntityHeader user)
@@ -128,22 +128,32 @@ namespace LagoVista.UserAdmin.Managers
 
         public Task<ListResponse<AuthenticationLog>> GetForUserIdAsync(string userId, ListRequest listRequest, EntityHeader org, EntityHeader user)
         {
-            return _authLogRepo.GetForUserIdAsync(userId, listRequest);
+            return _authLogRepo.GetForUserIdAsync(RequireOrganizationId(org), userId, listRequest);
         }
 
-        public Task<ListResponse<AuthenticationLog>> GetForUserNameAsync(string userId, ListRequest listRequest, EntityHeader org, EntityHeader user)
+        public Task<ListResponse<AuthenticationLog>> GetForUserNameAsync(string userName, ListRequest listRequest, EntityHeader org, EntityHeader user)
         {
-            return _authLogRepo.GetForUserNameAsync(userId, listRequest);
+            return _authLogRepo.GetForUserNameAsync(RequireOrganizationId(org), userName, listRequest);
         }
 
         public Task<ListResponse<AuthenticationLog>> GetAsync(AuthLogTypes type, ListRequest listRequest, EntityHeader org, EntityHeader user)
         {
-            return _authLogRepo.GetAsync(type, listRequest);
+            return _authLogRepo.GetAsync(RequireOrganizationId(org), type, listRequest);
         }
 
         public Task<ListResponse<AuthenticationLog>> GetAsync(string orgId, AuthLogTypes type, ListRequest listRequest, EntityHeader org, EntityHeader user)
         {
             return _authLogRepo.GetAsync(orgId, type, listRequest);
+        }
+
+        private static string RequireOrganizationId(EntityHeader organization)
+        {
+            if (organization == null || String.IsNullOrWhiteSpace(organization.Id))
+            {
+                throw new ArgumentNullException(nameof(organization), "Authentication log queries require an organization context.");
+            }
+
+            return organization.Id;
         }
     }
 }
