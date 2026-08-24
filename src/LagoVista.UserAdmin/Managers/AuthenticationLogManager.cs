@@ -15,6 +15,9 @@ namespace LagoVista.UserAdmin.Managers
 {
     public class AuthenticationLogManager : IAuthenticationLogManager
     {
+        private const string AnonymousOrganizationId = "anonymous";
+        private const string AnonymousOrganizationName = "Anonymous";
+
         private IAuthenticationLogRepo _authLogRepo;
         private IAdminLogger _adminLogger;
 
@@ -36,13 +39,19 @@ namespace LagoVista.UserAdmin.Managers
             });
         }
 
-        public Task AddAsync(AuthLogTypes type, string userId = "?", string userName = "?", string orgId = "?", string orgName = "?", string oauthProvider = "", 
+        public Task AddAsync(AuthLogTypes type, string userId = "?", string userName = "?", string orgId = AnonymousOrganizationId, string orgName = AnonymousOrganizationName, string oauthProvider = "", 
         string errors = "", string extras = "", string redirectUri = "none", string inviteId = "none", string credentialId = "none", string challengeId = "none", string assertionId = "none")
         {
             String ip = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
 
             if (userName == null)
                 userName = "?";
+
+            if (String.IsNullOrWhiteSpace(orgId) || orgId == "?")
+                orgId = AnonymousOrganizationId;
+
+            if (String.IsNullOrWhiteSpace(orgName) || orgName == "?")
+                orgName = AnonymousOrganizationName;
 
             var auth = new AuthenticationLog(type)
             {
@@ -72,8 +81,8 @@ namespace LagoVista.UserAdmin.Managers
         public Task AddAsync(AuthLogTypes type, EntityHeader user = null, EntityHeader org = null, string oauthProvider = "", string errors = "", string extras = "", 
         string redirectUri = "", string inviteId = "none", string credentialId = "none", string challengeId = "none", string assertionId = "none")
         {
-            var orgId = org == null ? "?" : org.Id;
-            var orgName = org == null ? "?" : org.Text;
+            var orgId = org == null ? AnonymousOrganizationId : org.Id;
+            var orgName = org == null ? AnonymousOrganizationName : org.Text;
 
             var userId = user == null ? "?" : user.Id;
             var userName = user == null ? "?" : user.Text;
@@ -98,8 +107,8 @@ namespace LagoVista.UserAdmin.Managers
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
 
-            var orgId = user.CurrentOrganization == null ? Guid.Empty.ToId() : user.CurrentOrganization.Id;
-            var orgName = user.CurrentOrganization == null ? "?" : user.CurrentOrganization.Text;
+            var orgId = user.CurrentOrganization == null ? AnonymousOrganizationId : user.CurrentOrganization.Id;
+            var orgName = user.CurrentOrganization == null ? AnonymousOrganizationName : user.CurrentOrganization.Text;
 
             return AddAsync(type,
                 userId: user.Id,
