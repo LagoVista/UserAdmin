@@ -3,6 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.UserAdmin.Models.Security;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,8 +13,17 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
     {
         Task AddActivityAsync(AccessLog accessLog);
         void AddActivity(AccessLog accessLog);
-        Task<IEnumerable<AccessLog>> GetForResourceAsync(string resourceId);
 
-        Task<IEnumerable<AccessLog>> GetForResourceAsync(string resourceId, string startTimeStamp, string endTimeStamp);
+        Task<IEnumerable<AccessLog>> GetForResourceAsync(
+            string organizationId,
+            string resourceId,
+            DateTime start,
+            DateTime end);
+
+        Task<IEnumerable<AccessLog>> GetForUserAsync(
+            string organizationId,
+            string userId,
+            DateTime start,
+            DateTime end);
     }
 }
