@@ -2,9 +2,8 @@
 // ContentHash: cb4a70640bacc88ce8a8f19f03f7e50c160ad4ba6612ef3e2d84b073d280c16f
 // IndexVersion: 2
 // --- END CODE INDEX META ---
-using LagoVista.Core;
+using LagoVista.CloudStorage.Storage;
 using LagoVista.Core.Attributes;
-using LagoVista.Core.Models;
 using LagoVista.IoT.Logging.Resources;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
@@ -56,7 +55,7 @@ namespace LagoVista.UserAdmin.Models.Security
         OAuthAccessDefined,
         OAuthFault,
         OAuthAccessTicketReceived,
-        OAuthCreatingTicket,        
+        OAuthCreatingTicket,
         OAuthBackChannelHandler,
         OAuthBackChannelHandlerSuccess,
         OAuthBackChannelHandlerFailure,
@@ -69,7 +68,6 @@ namespace LagoVista.UserAdmin.Models.Security
         ChangePasswordFailed,
         InviteUser,
         RegisterUser,
-
 
         InviteAcceptanceStarted,
         InviteAcceptanceSucceeded,
@@ -237,41 +235,33 @@ namespace LagoVista.UserAdmin.Models.Security
         Icon: "icon-ae-coding-laptop", ClusterKey: "audit", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact,
         Lifecycle: EntityDescriptionAttribute.Lifecycles.Audit, Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: false,
         IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude, IndexPriority: 10, IndexTagsCsv: "securitydomain,audit,runtimeartifact")]
-    public class AuthenticationLog : TableStorageEntity
+    public class AuthenticationLog : IActivityRecord
     {
-        public AuthenticationLog(AuthLogTypes authType)
-        {
-            AuthType = authType.ToString();
-            PartitionKey = (500000 - (Convert.ToInt32(DateTime.UtcNow.ToDateOnly().Replace("-", String.Empty).Replace("/",String.Empty)) - 200000000)).ToString();
-          
-            RowKey = DateTime.Now.ToInverseTicksRowKey();
-            TimeStamp = DateTime.UtcNow.ToJSONString();
-        }
-
         public AuthenticationLog()
         {
-
+            Id = Guid.NewGuid().ToString("N");
+            CreationDate = DateTime.UtcNow;
         }
 
+        public AuthenticationLog(AuthLogTypes authType) : this()
+        {
+            AuthType = authType.ToString();
+        }
+
+        public string Id { get; set; }
+        public string OrganizationId { get; set; }
+        public string Organization { get; set; }
+        public DateTime CreationDate { get; set; }
+
         public string IPAddress { get; set; }
-
         public string InviteId { get; set; }
-
         public string RedirectUri { get; set; }
-
         public string UserName { get; set; }
         public string UserId { get; set; }
-        public string TimeStamp { get; set; }
-
-        public string OrgId { get; set; }
-        public string OrgName { get; set; }
-
         public string AuthType { get; set; }
-
         public string ChallengeId { get; set; }
         public string CredentialId { get; set; }
         public string AssertionId { get; set; }
-
         public string OAuthProvider { get; set; }
         public string Extras { get; set; }
         public string Errors { get; set; }
