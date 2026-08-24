@@ -3,6 +3,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using LagoVista.Core.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using OpenIddict.Abstractions;
@@ -22,10 +23,12 @@ namespace LagoVista.AspNetCore.AuthorizationServer
 
         private readonly IOAuthClientPolicyResolver _policyResolver;
         private readonly IOAuthClientPolicyValidator _policyValidator;
+        private readonly IVersionProvider _versionProvider;
 
-        public AuthorizationController(IOAuthClientPolicyResolver policyResolver, IOAuthClientPolicyValidator policyValidator)
+        public AuthorizationController(IOAuthClientPolicyResolver policyResolver, IVersionProvider versionProvider, IOAuthClientPolicyValidator policyValidator)
         {
             _policyResolver = policyResolver ?? throw new ArgumentNullException(nameof(policyResolver));
+            _versionProvider = versionProvider ?? throw new ArgumentNullException(nameof(versionProvider));
             _policyValidator = policyValidator ?? throw new ArgumentNullException(nameof(policyValidator));
         }
 
@@ -128,8 +131,10 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                     .SetDestinations(Destinations.AccessToken, Destinations.IdentityToken));
             }
 
+           var version = _versionProvider.GetHostVersion().Version; 
+
             // TEMPORARY DIAGNOSTIC: proves which published host build issued the ID token.
-            identity.AddClaim(new Claim(BuildVersionClaim, GetBuildVersion())
+            identity.AddClaim(new Claim(BuildVersionClaim, version)
                 .SetDestinations(Destinations.IdentityToken));
 
             identity.AddClaim(new Claim(Claims.ClientId, policy.ClientId).SetDestinations(Destinations.AccessToken));
@@ -169,21 +174,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             return SignOut(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
-        private static string GetBuildVersion()
-        {
-            const string versionFile = "version.json";
-            if (!System.IO.File.Exists(versionFile))
-                return "????";
 
-            var versionFileContents = System.IO.File.ReadAllText(versionFile);
-            return JsonConvert.DeserializeObject<DiagnosticHostVersion>(versionFileContents)?.Version ?? "????";
-        }
-
-        private sealed class DiagnosticHostVersion
-        {
-            public string Version { get; set; }
-            public string BuildDate { get; set; }
-        }
 
         private IActionResult Reject(string error, string description)
         {

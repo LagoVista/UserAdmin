@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageReference Include="LagoVista.Core.TestBase" Version="3.0.3384.1545" />
+    <PackageReference Include="LagoVista.Core.TestBase" Version="3.0.3385.1845" />
     <PackageReference Include="NUnit3TestAdapter" Version="6.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
