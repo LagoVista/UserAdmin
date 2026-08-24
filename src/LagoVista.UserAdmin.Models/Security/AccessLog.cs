@@ -2,9 +2,8 @@
 // ContentHash: 56c8d8aac08af0411f7cbb9b7afd19997ee9188d9b714fad03878b87dcba69f2
 // IndexVersion: 2
 // --- END CODE INDEX META ---
-using LagoVista.Core;
+using LagoVista.CloudStorage.Storage;
 using LagoVista.Core.Attributes;
-using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
 
@@ -17,22 +16,27 @@ namespace LagoVista.UserAdmin.Models.Security
         ClusterKey: "audit", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact, Lifecycle: EntityDescriptionAttribute.Lifecycles.Audit,
         Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: false, IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude,
         IndexPriority: 10, IndexTagsCsv: "securitydomain,audit,runtimeartifact")]
-    public class AccessLog : TableStorageEntity
+    public class AccessLog : IActivityRecord
     {
-        public AccessLog(string resource, string resourceId)
+        public AccessLog()
         {
-            RowKey = DateTime.Now.ToInverseTicksRowKey();
-            Resource = resource;
-            PartitionKey = resourceId.Replace("-", "");
-            ResourceId = resourceId;
-            DateStamp = DateTime.Now.ToJSONString();
         }
 
-        public string DateStamp { get; set; }
+        public AccessLog(string resource, string resourceId)
+        {
+            Id = Guid.NewGuid().ToString("N");
+            CreationDate = DateTime.UtcNow;
+            Resource = resource;
+            ResourceId = resourceId;
+        }
+
+        public string Id { get; set; }
+        public string OrganizationId { get; set; }
+        public string Organization { get; set; }
+        public DateTime CreationDate { get; set; }
+
         public string Resource { get; set; }
         public string ResourceId { get; set; }
-        public string OrgName { get; set; }
-        public string OrgId { get; set; }
         public string UserId { get; set; }
         public string UserName { get; set; }
         public string Action { get; set; }
