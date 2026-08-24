@@ -3289,50 +3289,48 @@
     <value>The icon namespace is used to develop a namespace that will be used to generate stable icon paths, this is helpful when the same organization is used across environments.</value>
   </data>
   <data name="Organization_VimeoEnabled" xml:space="preserve">
-  <value>Enable Vimeo Integration</value>
-</data>
+    <value>Enable Vimeo Integration</value>
+  </data>
   <data name="Organization_VimeoEnabled_Help" xml:space="preserve">
-  <value>Enables Vimeo video publishing and management for this organization.</value>
-</data>
-
+    <value>Enables Vimeo video publishing and management for this organization.</value>
+  </data>
   <data name="Organization_VimeoAccessTokenSecretId" xml:space="preserve">
-  <value>Vimeo Access Token Secret</value>
-</data>
+    <value>Vimeo Access Token Secret</value>
+  </data>
   <data name="Organization_VimeoAccessTokenSecretId_Help" xml:space="preserve">
-  <value>The secure secret identifier containing the Vimeo access token used by this organization.</value>
-</data>
-
+    <value>The secure secret identifier containing the Vimeo access token used by this organization.</value>
+  </data>
   <data name="Organization_VimeoDefaultFolderUri" xml:space="preserve">
-  <value>Default Vimeo Folder URI</value>
-</data>
+    <value>Default Vimeo Folder URI</value>
+  </data>
   <data name="Organization_VimeoDefaultFolderUri_Help" xml:space="preserve">
-  <value>The Vimeo folder URI where videos created by this organization should be uploaded by default.</value>
-</data>
-
+    <value>The Vimeo folder URI where videos created by this organization should be uploaded by default.</value>
+  </data>
   <data name="Organization_VimeoDefaultPrivacy" xml:space="preserve">
-  <value>Default Vimeo Privacy</value>
-</data>
+    <value>Default Vimeo Privacy</value>
+  </data>
   <data name="Organization_VimeoDefaultPrivacy_Help" xml:space="preserve">
-  <value>The default Vimeo privacy setting applied to uploaded videos, such as private, unlisted, or public.</value>
-</data>
-
+    <value>The default Vimeo privacy setting applied to uploaded videos, such as private, unlisted, or public.</value>
+  </data>
   <data name="Organization_VimeoPublic" xml:space="preserve">
-  <value>Public</value>
-</data>
-
+    <value>Public</value>
+  </data>
   <data name="Organization_VimeoPrivate" xml:space="preserve">
-  <value>Private</value>
-</data>
-
+    <value>Private</value>
+  </data>
   <data name="Organization_VimeoUnlisted" xml:space="preserve">
-  <value>Unlisted</value>
-</data>
-
+    <value>Unlisted</value>
+  </data>
   <data name="Organization_VimeoPassword" xml:space="preserve">
-  <value>Password Protected</value>
-</data>
-
+    <value>Password Protected</value>
+  </data>
   <data name="Organization_VimeoHideFromVimeo" xml:space="preserve">
-  <value>Hide from Vimeo</value>
-</data>
+    <value>Hide from Vimeo</value>
+  </data>
+  <data name="OAuthClientApplication_IdentityTokenLifetimeMinutes" xml:space="preserve">
+    <value>Identity Token Lifetime (Minutes)</value>
+  </data>
+  <data name="OAuthClientApplication_IdentityTokenLifetimeMinutes_Help" xml:space="preserve">
+    <value>Number of minutes identity token should TTL in minutes</value>
+  </data>
 </root>

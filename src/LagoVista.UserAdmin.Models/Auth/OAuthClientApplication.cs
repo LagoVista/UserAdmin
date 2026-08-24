@@ -131,8 +131,8 @@ namespace LagoVista.UserAdmin.Models.Auth
             FieldType: FieldTypes.Integer, ResourceType: typeof(OAuthClientResources))]
         public int? AccessTokenLifetimeMinutes { get; set; }
 
-        [FormField(LabelResource: "OAuthClientApplication_IdentityTokenLifetimeMinutes",
-            HelpResource: "OAuthClientApplication_IdentityTokenLifetimeMinutes_Help",
+        [FormField(LabelResource: OAuthClientResources.Names.OAuthClientApplication_IdentityTokenLifetimeMinutes,
+            HelpResource: OAuthClientResources.Names.OAuthClientApplication_IdentityTokenLifetimeMinutes_Help,
             FieldType: FieldTypes.Integer, ResourceType: typeof(OAuthClientResources))]
         public int? IdentityTokenLifetimeMinutes { get; set; }
 

@@ -1,4 +1,4 @@
-﻿/*8/1/2026 1:03:29 PM*/
+﻿/*8/24/2026 4:38:05 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -111,6 +111,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:OAuthClientResources:OAuthClientApplication_Help
 
 		public static string OAuthClientApplication_Help { get { return GetResourceString("OAuthClientApplication_Help"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_IdentityTokenLifetimeMinutes
+
+		public static string OAuthClientApplication_IdentityTokenLifetimeMinutes { get { return GetResourceString("OAuthClientApplication_IdentityTokenLifetimeMinutes"); } }
+//Resources:OAuthClientResources:OAuthClientApplication_IdentityTokenLifetimeMinutes_Help
+
+		public static string OAuthClientApplication_IdentityTokenLifetimeMinutes_Help { get { return GetResourceString("OAuthClientApplication_IdentityTokenLifetimeMinutes_Help"); } }
 //Resources:OAuthClientResources:OAuthClientApplication_LogoUrl
 
 		public static string OAuthClientApplication_LogoUrl { get { return GetResourceString("OAuthClientApplication_LogoUrl"); } }
@@ -206,6 +212,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string OAuthClientApplication_ClientType_Select = "OAuthClientApplication_ClientType_Select";
 			public const string OAuthClientApplication_Description = "OAuthClientApplication_Description";
 			public const string OAuthClientApplication_Help = "OAuthClientApplication_Help";
+			public const string OAuthClientApplication_IdentityTokenLifetimeMinutes = "OAuthClientApplication_IdentityTokenLifetimeMinutes";
+			public const string OAuthClientApplication_IdentityTokenLifetimeMinutes_Help = "OAuthClientApplication_IdentityTokenLifetimeMinutes_Help";
 			public const string OAuthClientApplication_LogoUrl = "OAuthClientApplication_LogoUrl";
 			public const string OAuthClientApplication_PostLogoutRedirectUris = "OAuthClientApplication_PostLogoutRedirectUris";
 			public const string OAuthClientApplication_PostLogoutRedirectUris_Help = "OAuthClientApplication_PostLogoutRedirectUris_Help";
@@ -2224,6 +2232,12 @@ namespace LagoVista.UserAdmin.Models.Resources
 //Resources:UserAdminResources:NotificationContact_Name
 
 		public static string NotificationContact_Name { get { return GetResourceString("NotificationContact_Name"); } }
+//Resources:UserAdminResources:OAuthClientApplication_IdentityTokenLifetimeMinutes
+
+		public static string OAuthClientApplication_IdentityTokenLifetimeMinutes { get { return GetResourceString("OAuthClientApplication_IdentityTokenLifetimeMinutes"); } }
+//Resources:UserAdminResources:OAuthClientApplication_IdentityTokenLifetimeMinutes_Help
+
+		public static string OAuthClientApplication_IdentityTokenLifetimeMinutes_Help { get { return GetResourceString("OAuthClientApplication_IdentityTokenLifetimeMinutes_Help"); } }
 //Resources:UserAdminResources:Organization
 
 		public static string Organization { get { return GetResourceString("Organization"); } }
@@ -4132,6 +4146,8 @@ namespace LagoVista.UserAdmin.Models.Resources
 			public const string NotificationContact_Description = "NotificationContact_Description";
 			public const string NotificationContact_Help = "NotificationContact_Help";
 			public const string NotificationContact_Name = "NotificationContact_Name";
+			public const string OAuthClientApplication_IdentityTokenLifetimeMinutes = "OAuthClientApplication_IdentityTokenLifetimeMinutes";
+			public const string OAuthClientApplication_IdentityTokenLifetimeMinutes_Help = "OAuthClientApplication_IdentityTokenLifetimeMinutes_Help";
 			public const string Organization = "Organization";
 			public const string Organization_AccentColor = "Organization_AccentColor";
 			public const string Organization_AccountingContact = "Organization_AccountingContact";
