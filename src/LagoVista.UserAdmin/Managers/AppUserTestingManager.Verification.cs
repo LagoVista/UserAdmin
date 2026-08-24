@@ -119,11 +119,7 @@ namespace LagoVista.UserAdmin.Managers
 
             return (byUserId.Model ?? Enumerable.Empty<AuthenticationLog>())
                 .Concat(byUserName.Model ?? Enumerable.Empty<AuthenticationLog>())
-                .Where(log =>
-                {
-                    var timestamp = ParseRunTime(log.TimeStamp, DateTime.MinValue);
-                    return timestamp >= fromUtc && timestamp <= toUtc;
-                })
+                .Where(log => log.CreationDate >= fromUtc && log.CreationDate <= toUtc)
                 .Select(log => log.AuthType)
                 .Where(authType => !String.IsNullOrWhiteSpace(authType))
                 .Distinct(StringComparer.OrdinalIgnoreCase)
