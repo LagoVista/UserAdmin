@@ -2,8 +2,8 @@
 // ContentHash: cb4a70640bacc88ce8a8f19f03f7e50c160ad4ba6612ef3e2d84b073d280c16f
 // IndexVersion: 2
 // --- END CODE INDEX META ---
-using LagoVista.CloudStorage.Storage;
 using LagoVista.Core.Attributes;
+using LagoVista.Core.Interfaces;
 using LagoVista.IoT.Logging.Resources;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
@@ -16,19 +16,16 @@ namespace LagoVista.UserAdmin.Models.Security
         PasswordAuthenticationSucceeded,
         PasswordAuthenticationFailed,
         PasswordAuthUserNotFound,
-
         PasswordRecoveryRequested,
         PasswordRecoveryCodeGenerated,
         PasswordRecoveryMessageSent,
         PasswordRecoveryCodeVerified,
         PasswordRecoveryCodeVerificationFailed,
         PasswordRecoveryCompleted,
-       
         CreateEmailUser,
         ExternalLoginUserCreationStarted,
         CreateUserSuccess,
         CreateUserError,
-
         ManualApproveUser,
         EmailValidated,
         PhoneValidated,
@@ -68,18 +65,14 @@ namespace LagoVista.UserAdmin.Models.Security
         ChangePasswordFailed,
         InviteUser,
         RegisterUser,
-
         InviteAcceptanceStarted,
         InviteAcceptanceSucceeded,
         InviteAcceptanceFailed,
-        
         UserDeletionStarted,
         UserDeletionFailed,
         UserDeletionSucceeded,
-
         OrganizationDeletionStarted,
         OrganizationDeletionSucceeded,
-
         RemoveUserFromOrg,
         DisableUser,
         AcceptTermsAndConditions,
@@ -95,126 +88,95 @@ namespace LagoVista.UserAdmin.Models.Security
         ResetPasswordFailed,
         SetSystemAdminNotAuthorized,
         SetSystemAdmin,
-
         GenerateRefreshToken,
         GenerateRefreshTokenSuccess,
         GenerateRefreshTokenFailed,
-
         RenewRefreshToken,
         RenewRefreshTokenSuccess,
         RenewRefreshTokenFailed,
-
         AccessTokenGrant,
         AccessTokenGrantSuccess,
         AccessTokenGrantFailure,
-
         SingleUseTokenGrant,
         SingleUseTokenGrantSuccess,
         SingleUseTokenGrantFailure,
-
         RefreshTokenGrant,
         RefreshTokenGrantSuccess,
         RefreshTokenGrantFailed,
-
         AddSubscription,
         RemoveSubscription,
         RemovingAllSubscriptionsForOrg,
         RemovedAllSubscriptionsForOrg,
-
         SendingEmailConfirm,
         SendEmailConfirmSuccess,
         SendEmailConfirmFailed,
-
         EmailConfirmSuccess,
         EmailConfirmFailed,
-
         SendSMSConfirmSuccess,
         SendSMSConfirmFailed,
-
         SMSConfirmedBypass,
         SMSConfirmSuccess,
         SMSConfirmFailed,
-
         SendingOrgInvitation,
         SendOrgInvitationSuccess,
         SendOrgInvitationFailed,
-
         ResendOrgInvitation,
         ResendOrgInvitationSuccess,
         ResendOrgInvitationFailed,
-
         SysAdminGetAllOrgs,
         SysAdminSearchAllOrgs,
         SysAdminGetOwnedObjects,
         SysAdminGetOrg,
         SysAdminUpdateOrg,
-
         UnauthorizedCall,
-
         PasskeyBeginRegistrationStart,
         PasskeyBeginRegistrationSuccess,
         PasskeyBeginRegistrationFailed,
-
         PasskeyCompleteRegistrationStart,
         PasskeyCompleteRegistrationSuccess,
         PasskeyCompleteRegistrationFailed,
-
         PasskeySetupStarted,
         PasskeySetupSucceeded,
         PasskeySetupFailed,
-
         PasskeyAuthenticationOptionsSent,
         PasskeyAuthenticationOptionsBeginSent,
         PasskeyAuthenticationOptionsBeginFailed,
-
         PasskeyCompleteAuthenticationStart,
         PasskeyCompleteAuthenticationSuccess,
         PasskeyCompleteAuthenticationFailed,
-
         PasskeyBeginPasswordlessRegistrationStart,
         PasskeyBeginPasswordlessRegistrationFailed,
         PasskeyBeginPasswordlessRegistrationSuccess,
-
         PasskeyCompletePasswordlessRegistrationStart,
         PasskeyCompletePasswordlessRegistrationFailed,
         PasskeyCompletePasswordlessRegistrationSuccess,
-
         PasskeyBeginPasswordlessAuthenticationStart,
         PasskeyBeginPasswordlessAuthenticationFailed,
         PasskeyBeginPasswordlessAuthenticationSuccess,
-    
         PasskeyCompletePasswordlessAuthenticationStart,
         PasskeyCompletePasswordlessAuthenticationFailed,
         PasskeyCompletePasswordlessAuthenticationSuccess,
-
         TotpBeginEnrollmentStart,
         TotpBeginEnrollmentFailed,
         TotpBeginEnrollmentSuccess,
-    
         TotpConfirmEnrollmentStart,
         TotpConfirmEnrollmentFailed,
         TotpConfirmEnrollmentSuccess,
-
         TotpVerifyStart,
         TotpVerifyFailed,
         TotpVerifySuccess,
-
         TotpRotateRecoveryCodesStart,
         TotpRotateRecoveryCodesFailed,
         TotpRotateRecoveryCodesSuccess,
-
         TotpConsumeRecoveryCodeStart,
         TotpConsumeRecoveryCodeFailed,
         TotpConsumeRecoveryCodeSuccess,
-
         TotpDisableMfaStart,
         TotpDisableMfaFailed,
         TotpDisableMfaSuccess,
-
         TotpAdministrativeResetStart,
         TotpAdministrativeResetFailed,
         TotpAdministrativeResetSuccess,
-
         MagicLinkRequested,
         MagicLinkSent,
         MagicLinkConsumed,
@@ -227,11 +189,8 @@ namespace LagoVista.UserAdmin.Models.Security
     [EntityDescription(
         Domains.SecurityDomain, UserAdminResources.Names.AuthenticationLogs_Title, LoggingResources.Names.LogRecord_Description,
         UserAdminResources.Names.AuthenticationLogs_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources),
-
         GetListUrl: "/sys/auth/log",
-
         ListUIUrl: "/sysadmin/areas/logs",
-
         Icon: "icon-ae-coding-laptop", ClusterKey: "audit", ModelType: EntityDescriptionAttribute.ModelTypes.RuntimeArtifact,
         Lifecycle: EntityDescriptionAttribute.Lifecycles.Audit, Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: false,
         IndexTier: EntityDescriptionAttribute.IndexTiers.Exclude, IndexPriority: 10, IndexTagsCsv: "securitydomain,audit,runtimeartifact")]
@@ -252,7 +211,6 @@ namespace LagoVista.UserAdmin.Models.Security
         public string OrganizationId { get; set; }
         public string Organization { get; set; }
         public DateTime CreationDate { get; set; }
-
         public string IPAddress { get; set; }
         public string InviteId { get; set; }
         public string RedirectUri { get; set; }
