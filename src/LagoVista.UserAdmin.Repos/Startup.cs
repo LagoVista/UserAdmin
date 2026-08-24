@@ -1,3 +1,4 @@
+using LagoVista.CloudStorage.Storage;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Repos;
@@ -15,6 +16,7 @@ using LagoVista.UserAdmin.Interfaces.Repos.Users;
 using LagoVista.UserAdmin.Interfaces.REpos.Account;
 using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Orgs;
+using LagoVista.UserAdmin.Models.Security;
 using LagoVista.UserAdmin.Models.Testing;
 using LagoVista.UserAdmin.Repos.Account;
 using LagoVista.UserAdmin.Repos.Orgs;
@@ -46,6 +48,10 @@ namespace LagoVista.UserAdmin.Repos
     {
         public static void ConfigureServices(IServiceCollection services)
         {
+            services.AddCassandraStorageConnection();
+            services.AddActivityRecordStore<AccessLog, CassandraActivityRecordStore<AccessLog>>(AccessLogRepo.ConfigureStorage);
+            services.AddActivityRecordStore<AuthenticationLog, CassandraActivityRecordStore<AuthenticationLog>>(AuthenticationLogRepo.ConfigureStorage);
+
             services.AddScoped<IAppUserLoaderRepo, AppUserLoadRepo>();
             services.AddScoped<ILocationUserRepo, LocationUserRepo>();
             services.AddScoped<IRefreshTokenRepo, RefreshTokenRepo>();
