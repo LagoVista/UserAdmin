@@ -2,8 +2,8 @@
 // ContentHash: 56c8d8aac08af0411f7cbb9b7afd19997ee9188d9b714fad03878b87dcba69f2
 // IndexVersion: 2
 // --- END CODE INDEX META ---
-using LagoVista.CloudStorage.Storage;
 using LagoVista.Core.Attributes;
+using LagoVista.Core.Interfaces;
 using LagoVista.UserAdmin.Models.Resources;
 using System;
 
