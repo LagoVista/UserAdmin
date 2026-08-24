@@ -4,57 +4,137 @@
 // --- END CODE INDEX META ---
 using LagoVista.CloudStorage.Storage;
 using LagoVista.Core.Models.UIMetaData;
-using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Security;
 using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Security
 {
-    public class AuthenticationLogRepo : TableStorageBase<AuthenticationLog>, IAuthenticationLogRepo
+    public class AuthenticationLogRepo : IAuthenticationLogRepo
     {
-        public AuthenticationLogRepo(IUserAdminSettings settings, IAdminLogger logger) :
-            base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
-        {}
+        private const string CassandraCursorMarker = "cassandra";
+        private readonly IActivityRecordStore<AuthenticationLog> _store;
+
+        public AuthenticationLogRepo(IActivityRecordStore<AuthenticationLog> store)
+        {
+            _store = store ?? throw new ArgumentNullException(nameof(store));
+        }
+
+        public static void ConfigureStorage(FlatStorageDefinition<AuthenticationLog> definition)
+        {
+            if (definition == null) throw new ArgumentNullException(nameof(definition));
+
+            definition
+                .PartitionBy(log => log.OrganizationId)
+                .BucketBy(StoragePeriod.Month)
+                .Index(log => log.UserId)
+                .Index(log => log.UserName)
+                .Index(log => log.AuthType);
+        }
 
         public Task AddAsync(AuthenticationLog authLog)
         {
-            return InsertAsync(authLog);
+            PrepareForInsert(authLog);
+            return _store.InsertAsync(authLog);
         }
 
-        public Task<ListResponse<AuthenticationLog>> GetAllAsync(ListRequest listRequest)
+        public Task<ListResponse<AuthenticationLog>> GetAllAsync(string organizationId, ListRequest listRequest)
         {
-            return base.GetPagedResultsAsync(listRequest);
+            return QueryAsync(organizationId, listRequest, null, null);
         }
 
-        public Task<ListResponse<AuthenticationLog>> GetAllAsync(string orgId, ListRequest listRequest)
+        public Task<ListResponse<AuthenticationLog>> GetAsync(string organizationId, AuthLogTypes type, ListRequest listRequest)
         {
-            return base.GetPagedResultsAsync(listRequest, FilterOptions.Create( nameof(AuthenticationLog.OrgId), FilterOptions.Operators.Equals, orgId));
+            return QueryAsync(organizationId, listRequest, nameof(AuthenticationLog.AuthType), type.ToString());
         }
 
-        public Task<ListResponse<AuthenticationLog>> GetAsync(AuthLogTypes type, ListRequest listRequest)
+        public Task<ListResponse<AuthenticationLog>> GetForUserIdAsync(string organizationId, string userId, ListRequest listRequest)
         {
-            return base.GetPagedResultsAsync(Enum.GetName(typeof(AuthLogTypes), type).ToString().ToLower(), listRequest);
+            return QueryAsync(organizationId, listRequest, nameof(AuthenticationLog.UserId), userId);
         }
 
-        public Task<ListResponse<AuthenticationLog>> GetAsync(string orgId, AuthLogTypes type, ListRequest listRequest)
+        public Task<ListResponse<AuthenticationLog>> GetForUserNameAsync(string organizationId, string userName, ListRequest listRequest)
         {
-            return base.GetPagedResultsAsync(Enum.GetName(typeof(AuthLogTypes), type).ToString().ToLower(), listRequest, FilterOptions.Create(nameof(AuthenticationLog.OrgId), FilterOptions.Operators.Equals, orgId));
+            return QueryAsync(organizationId, listRequest, nameof(AuthenticationLog.UserName), userName);
         }
 
-        public Task<ListResponse<AuthenticationLog>> GetForUserIdAsync(string userId, ListRequest listRequest)
+        private async Task<ListResponse<AuthenticationLog>> QueryAsync(
+            string organizationId,
+            ListRequest listRequest,
+            string indexedField,
+            string indexedValue)
         {
-            return base.GetPagedResultsAsync(listRequest, FilterOptions.Create(nameof(AuthenticationLog.UserId), FilterOptions.Operators.Equals, userId));
+            if (String.IsNullOrWhiteSpace(organizationId)) throw new ArgumentNullException(nameof(organizationId));
+            if (listRequest == null) throw new ArgumentNullException(nameof(listRequest));
+
+            if (!listRequest.TryGetDateRange(out var start, out var endExclusive, out var error))
+            {
+                return ListResponse<AuthenticationLog>.FromError(error);
+            }
+
+            if (!start.HasValue || !endExclusive.HasValue)
+            {
+                return ListResponse<AuthenticationLog>.FromError(
+                    "Authentication log queries require both StartDate and EndDate because the Cassandra activity store is month bucketed.");
+            }
+
+            string continuationToken = null;
+            if (listRequest.HasCursor)
+            {
+                if (!String.Equals(listRequest.NextPartitionKey, CassandraCursorMarker, StringComparison.Ordinal))
+                {
+                    return ListResponse<AuthenticationLog>.FromError("The authentication log continuation cursor is not a Cassandra cursor.");
+                }
+
+                continuationToken = listRequest.NextRowKey;
+            }
+
+            var pageSize = listRequest.PageSize <= 0 ? 100 : Math.Min(listRequest.PageSize, 1000);
+            var query = new HistoryQuery<AuthenticationLog>()
+                .Where(log => log.OrganizationId, StorageFilterOperator.Equal, organizationId)
+                .Between(start.Value, endExclusive.Value.AddTicks(-1))
+                .WithPage(new StoragePageRequest(pageSize, continuationToken));
+
+            if (!String.IsNullOrWhiteSpace(indexedField))
+            {
+                if (String.Equals(indexedField, nameof(AuthenticationLog.UserId), StringComparison.Ordinal))
+                {
+                    query.Where(log => log.UserId, StorageFilterOperator.Equal, indexedValue);
+                }
+                else if (String.Equals(indexedField, nameof(AuthenticationLog.UserName), StringComparison.Ordinal))
+                {
+                    query.Where(log => log.UserName, StorageFilterOperator.Equal, indexedValue);
+                }
+                else if (String.Equals(indexedField, nameof(AuthenticationLog.AuthType), StringComparison.Ordinal))
+                {
+                    query.Where(log => log.AuthType, StorageFilterOperator.Equal, indexedValue);
+                }
+                else
+                {
+                    throw new NotSupportedException($"Authentication log index {indexedField} is not registered.");
+                }
+            }
+
+            var result = await _store.QueryAsync(query).ConfigureAwait(false);
+            return ListResponse<AuthenticationLog>.Create(
+                result.Items,
+                listRequest,
+                result.HasMoreRecords,
+                result.HasMoreRecords ? CassandraCursorMarker : null,
+                result.ContinuationToken);
         }
 
-        public Task<ListResponse<AuthenticationLog>> GetForUserNameAsync(string userName, ListRequest listRequest)
+        private static void PrepareForInsert(AuthenticationLog authLog)
         {
-            return base.GetPagedResultsAsync(listRequest, FilterOptions.Create(nameof(AuthenticationLog.UserName), FilterOptions.Operators.Equals, userName));
-        }
+            if (authLog == null) throw new ArgumentNullException(nameof(authLog));
+            if (String.IsNullOrWhiteSpace(authLog.OrganizationId))
+            {
+                throw new InvalidOperationException("AuthenticationLog requires OrganizationId before it can be persisted.");
+            }
 
+            if (String.IsNullOrWhiteSpace(authLog.Id)) authLog.Id = Guid.NewGuid().ToString("N");
+            if (authLog.CreationDate == default) authLog.CreationDate = DateTime.UtcNow;
+        }
     }
 }
