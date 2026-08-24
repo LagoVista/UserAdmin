@@ -107,7 +107,7 @@ namespace LagoVista.UserAdmin.Managers
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
 
-            var orgId = user.CurrentOrganization == null ? AnonymousOrganizationId : user.CurrentOrganization.Id;
+            var orgId = user.CurrentOrganization == null ? AnonymousOrganizationId : user.CurrentOrganization.Id.Value;
             var orgName = user.CurrentOrganization == null ? AnonymousOrganizationName : user.CurrentOrganization.Text;
 
             return AddAsync(type,
