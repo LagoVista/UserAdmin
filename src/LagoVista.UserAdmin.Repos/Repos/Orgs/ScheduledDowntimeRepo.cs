@@ -14,8 +14,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
 {
     public class ScheduledDowntimeRepo : DocumentDBRepoBase<ScheduledDowntime>, IScheduledDowntimeRepo
     {
-        public ScheduledDowntimeRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
+        public ScheduledDowntimeRepo(IDocumentCloudCachedServices services) :
+            base(services)
         {
         }
 

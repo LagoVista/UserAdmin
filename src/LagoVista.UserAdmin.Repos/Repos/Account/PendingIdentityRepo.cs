@@ -9,8 +9,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
 {
     public class PendingIdentityRepo : DocumentDBRepoBase<PendingIdentity>, IPendingIdentityRepo
     {
-        public PendingIdentityRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
+        public PendingIdentityRepo(IDocumentCloudCachedServices services) :
+            base(services)
         {
         }
 

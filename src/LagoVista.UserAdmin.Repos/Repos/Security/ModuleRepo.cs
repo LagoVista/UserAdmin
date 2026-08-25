@@ -26,8 +26,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
         private ICacheProvider _cacheProvider;
         private IAdminLogger _adminLogger;
 
-        public ModuleRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName,services)
+        public ModuleRepo(IDocumentCloudCachedServices services) :
+            base(services)
         {
             this._cacheProvider = services.CacheProvider;
             this._adminLogger = services.AdminLogger;

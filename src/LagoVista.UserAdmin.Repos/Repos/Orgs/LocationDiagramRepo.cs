@@ -13,8 +13,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
 {
     public class LocationDiagramRepo : DocumentDBRepoBase<LocationDiagram>, ILocationDiagramRepo
     {
-        public LocationDiagramRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
+        public LocationDiagramRepo(IDocumentCloudCachedServices services) :
+            base(services)
         {
         }
 

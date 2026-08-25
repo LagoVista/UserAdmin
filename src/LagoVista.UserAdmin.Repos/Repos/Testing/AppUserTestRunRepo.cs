@@ -10,8 +10,8 @@ namespace LagoVista.UserAdmin.Repos.Testing
 {
     public class AppUserTestRunRepo : DocumentDBRepoBase<AppUserTestRun>, IAppUserTestRunRepo
     {
-        public AppUserTestRunRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger)
+        public AppUserTestRunRepo(IDocumentCloudCachedServices services) :
+            base(services)
         {
         }
 

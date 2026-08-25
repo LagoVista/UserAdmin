@@ -19,8 +19,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Calendar
 {
     public class CalendarRepo : DocumentDBRepoBase<CalendarEvent>, ICalendarRepo
     {
-        public CalendarRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
+        public CalendarRepo(IDocumentCloudCachedServices services) :
+            base(services)
         {
         }
 

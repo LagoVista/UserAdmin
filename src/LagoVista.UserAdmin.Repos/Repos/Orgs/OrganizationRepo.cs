@@ -27,8 +27,8 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 {
     public class OrganizationLoaderRepo : DocumentDBRepoBase<Organization>, IOrganizationLoaderRepo
     {
-        public OrganizationLoaderRepo(IUserAdminSettings settings, IAdminLogger logger, ICacheProvider cacheProvider) : 
-            base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, cacheProvider)
+        public OrganizationLoaderRepo(IDocumentCloudCachedServices services) : 
+            base(services)
         {
         }
 
@@ -59,7 +59,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         private readonly IAppUserRelationalRepo _appUserRelationalRepo;
 
         public OrganizationRepo(IUserAdminSettings userAdminSettings, IOrganizationRelationalRepo relationalRepo, IAppUserRelationalRepo appUserRelationalRepo, IDocumentCloudCachedServices services, ISystemUsers systemUsers, ILagoVistaAutoMapper autoMapper) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
+            base(services)
         {
             _relationalRepo = relationalRepo ?? throw new ArgumentNullException(nameof(relationalRepo));
             _cacheProvider = services.CacheProvider;

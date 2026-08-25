@@ -26,8 +26,8 @@ namespace LagoVista.UserAdmin.Repos.Security
        
         private readonly ICacheProvider _cacheProvider;
 
-        public RoleRepo(IUserAdminSettings settings, IDefaultRoleList defaultRoleList, IDocumentCloudCachedServices services) : 
-            base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, services)
+        public RoleRepo(IDefaultRoleList defaultRoleList, IDocumentCloudCachedServices services) : 
+            base(services)
         {
             _defaultRoleList = defaultRoleList;
             _cacheProvider = services.CacheProvider;

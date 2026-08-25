@@ -12,8 +12,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
 {
     public class OwnedObjectRepo : DocumentDBRepoBase<OwnedObject>, IOwnedObjectRepo
     {
-        public OwnedObjectRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
-                  base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
+        public OwnedObjectRepo(IDocumentCloudCachedServices services) :
+                  base(services)
         {
         }
 

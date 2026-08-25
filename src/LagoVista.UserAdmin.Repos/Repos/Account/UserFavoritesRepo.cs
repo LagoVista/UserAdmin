@@ -3,8 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.CloudStorage.DocumentDB;
-using LagoVista.Core.Interfaces;
-using LagoVista.IoT.Logging.Loggers;
+using LagoVista.CloudStorage.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Repos.Account;
 using LagoVista.UserAdmin.Models.Users;
 using System;
@@ -14,10 +13,10 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
 {
     public class UserFavoritesRepo : DocumentDBRepoBase<UserFavorites>, IUserFavoritesRepo
     {
-        public UserFavoritesRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider)
-        {
-        }
+            public UserFavoritesRepo(IDocumentCloudCachedServices services) :
+                base(services)
+            {
+            }
 
         public Task UpdateUserFavoritesAsync(UserFavorites userFavorite)
         {

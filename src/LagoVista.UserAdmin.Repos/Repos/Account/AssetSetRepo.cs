@@ -15,8 +15,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Users
 {
     public class AssetSetRepo : DocumentDBRepoBase<AssetSet>, IAssetSetRepo
     {
-        public AssetSetRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
+        public AssetSetRepo( IDocumentCloudCachedServices services) :
+            base(services)
         {
         }
 

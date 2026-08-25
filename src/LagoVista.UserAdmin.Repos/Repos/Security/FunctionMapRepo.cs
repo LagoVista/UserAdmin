@@ -5,8 +5,6 @@
 using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.CloudStorage.Interfaces;
 using LagoVista.Core.Interfaces;
-using LagoVista.IoT.Logging.Loggers;
-using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Models.Security;
 using Newtonsoft.Json;
@@ -19,11 +17,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
     public class FunctionMapRepo : DocumentDBRepoBase<FunctionMap>, IFunctionMapRepo
     {
         private ICacheProvider _cacheProvider;
-        private IAdminLogger _adminLogger;
-        public FunctionMapRepo(IUserAdminSettings settings, IDefaultRoleList defaultRoleList, IDocumentCloudCachedServices services) :
-           base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, services)
+        public FunctionMapRepo(IDocumentCloudCachedServices services) :
+           base(services)
         {
-            _adminLogger = services.AdminLogger;   
             _cacheProvider =  services.CacheProvider;
         }
 

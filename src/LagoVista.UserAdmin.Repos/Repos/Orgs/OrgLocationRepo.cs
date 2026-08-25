@@ -16,8 +16,8 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 {
     public class OrgLocationRepo : DocumentDBRepoBase<OrgLocation>, IOrgLocationRepo
     {
-        public OrgLocationRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
+        public OrgLocationRepo(IDocumentCloudCachedServices services) :
+            base(services)
         {
         }
 

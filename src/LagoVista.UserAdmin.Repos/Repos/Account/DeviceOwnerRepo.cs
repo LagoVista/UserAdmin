@@ -15,8 +15,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
     {
         private IDeviceOwnerRelationalRepo _relationalRepo;
 
-        public DeviceOwnerRepo(IDeviceOwnerRelationalRepo relationalRepo, IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services)
-            : base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
+        public DeviceOwnerRepo(IDeviceOwnerRelationalRepo relationalRepo, IDocumentCloudCachedServices services)
+            : base( services)
         {
             _relationalRepo = relationalRepo ?? throw new ArgumentNullException(nameof(relationalRepo));    
         }

@@ -37,8 +37,8 @@ namespace LagoVista.UserAdmin.Repos.Users
     {
         private readonly IUserRoleRepo _userRoleRepo;
 
-        public AppUserLoadRepo(IUserAdminSettings settings, IUserRoleRepo userRoleRepo, IAdminLogger logger, IAppConfig appConfig, ICacheProvider cacheProvider, IFkIndexTableWriterBatched fkWriter) : 
-            base(settings.UserStorage.Uri, settings.UserStorage.AccessKey, settings.UserStorage.ResourceName, logger, cacheProvider, fkWriter: fkWriter)
+        public AppUserLoadRepo(IUserAdminSettings settings, IUserRoleRepo userRoleRepo, IDocumentCloudCachedServices services) : 
+            base(services)
         {
             _userRoleRepo = userRoleRepo ?? throw new ArgumentNullException(nameof(userRoleRepo));
         }
@@ -70,16 +70,16 @@ namespace LagoVista.UserAdmin.Repos.Users
         private readonly ISystemUsers _systemUsers;
 
 
-        public AppUserRepo(IUserRoleRepo userRoleRepo, IAppUserRelationalRepo userRelationalRepo, IUserAdminSettings userAdminSettings, ISystemUsers systemUers,  IAuthenticationLogManager authLogMgr, IAdminLogger logger, ICacheProvider cacheProvider, IFkIndexTableWriterBatched fkWriter) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider, fkWriter: fkWriter)
+        public AppUserRepo(IUserRoleRepo userRoleRepo, IAppUserRelationalRepo userRelationalRepo, ISystemUsers systemUsers, IUserAdminSettings userAdminSettings, IAuthenticationLogManager logManager, IDocumentCloudCachedServices services) :
+            base(services)
         {
             _adminSettings = userAdminSettings;
             _userRelationalRepo = userRelationalRepo;
             _userRoleRepo = userRoleRepo;
-            _adminLogger = logger;
-            _cacheProvider = cacheProvider;
-            _systemUsers = systemUers ?? throw new ArgumentNullException(nameof(systemUers));
-            _authLogMgr = authLogMgr ?? throw new ArgumentNullException(nameof(authLogMgr));
+            _adminLogger = services.AdminLogger;
+            _cacheProvider = services.CacheProvider;
+            _systemUsers = systemUsers ?? throw new ArgumentNullException(nameof(systemUsers));
+            _authLogMgr = logManager ?? throw new ArgumentNullException(nameof(logManager));
         }
 
         public async Task CreateAsync(AppUser user)

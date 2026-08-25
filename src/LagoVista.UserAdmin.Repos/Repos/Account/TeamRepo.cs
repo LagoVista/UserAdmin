@@ -10,8 +10,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Users
 {
     public class TeamRepo : DocumentDBRepoBase<Team>, ITeamRepo
     {
-        public TeamRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) : 
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
+        public TeamRepo(IDocumentCloudCachedServices services) : 
+            base(services)
         {
         }
 

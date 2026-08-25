@@ -11,8 +11,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
 {
     public class OAuthClientApplicationRepo : DocumentDBRepoBase<OAuthClientApplication>, IOAuthClientApplicationRepo
     {
-        public OAuthClientApplicationRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
+        public OAuthClientApplicationRepo(IDocumentCloudCachedServices services) :
+            base(services)
         {
         }
 

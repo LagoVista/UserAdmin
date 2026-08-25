@@ -15,8 +15,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
 {
     public class DistributionListRepo : DocumentDBRepoBase<DistroList>, IDistributionListRepo
     {
-        public DistributionListRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
+        public DistributionListRepo(IDocumentCloudCachedServices services) :
+            base(services)
         {
         }
 

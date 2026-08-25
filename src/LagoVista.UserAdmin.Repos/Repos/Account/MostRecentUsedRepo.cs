@@ -1,4 +1,5 @@
 using LagoVista.CloudStorage.DocumentDB;
+using LagoVista.CloudStorage.Interfaces;
 using LagoVista.Core.Interfaces;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Account;
@@ -9,8 +10,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
 {
     public class MostRecentUsedRepo : DocumentDBRepoBase<MostRecentlyUsed>, IMostRecentlyUsedRepo
     {
-        public MostRecentUsedRepo(IUserAdminSettings userAdminSettings, IAdminLogger logger, ICacheProvider cacheProvider) :
-            base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, logger, cacheProvider)
+        public MostRecentUsedRepo(IDocumentCloudCachedServices services) :
+            base(services)
         {
         }
 

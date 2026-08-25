@@ -17,8 +17,8 @@ namespace LagoVista.UserAdmin.Repos.Repos.Orgs
 {
     public class SubscriptionResourceRepo : DocumentDBRepoBase<SubscriptionResource>, ISubscriptionResourceRepo
     {
-        public SubscriptionResourceRepo(IUserAdminSettings userAdminSettings, IDocumentCloudCachedServices services) :
-                base(userAdminSettings.UserStorage.Uri, userAdminSettings.UserStorage.AccessKey, userAdminSettings.UserStorage.ResourceName, services)
+        public SubscriptionResourceRepo(IDocumentCloudCachedServices services) :
+                base(services)
         {
         }
 

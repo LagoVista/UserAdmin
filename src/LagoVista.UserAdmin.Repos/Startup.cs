@@ -48,7 +48,6 @@ namespace LagoVista.UserAdmin.Repos
     {
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddCassandraStorageConnection();
             services.AddActivityRecordStore<AccessLog, CassandraActivityRecordStore<AccessLog>>(AccessLogRepo.ConfigureStorage);
             services.AddActivityRecordStore<AuthenticationLog, CassandraActivityRecordStore<AuthenticationLog>>(AuthenticationLogRepo.ConfigureStorage);
 
