@@ -25,11 +25,12 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.Orgs
 {
-    public class OrganizationLoaderRepo : DocumentDBRepoBase<Organization>, IOrganizationLoaderRepo
+    public class OrganizationLoaderRepo : IOrganizationLoaderRepo
     {
-        public OrganizationLoaderRepo(IDocumentCloudCachedServices services) : 
-            base(services)
+        IDocumentStorageClient _client;
+        public OrganizationLoaderRepo(IDocumentStorageClientProvider provider) 
         {
+            _client = provider.GetClient();
         }
 
         public async Task<EntityHeader> GetDefaultDescriptionForForAsync(string orgId)
@@ -46,7 +47,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 
         public Task<Organization> GetOrganizationAsync(string id)
         {
-            return GetDocumentAsync(id);
+            return _client.GetDocumentAsync<Organization>(id);
         }
     }
 

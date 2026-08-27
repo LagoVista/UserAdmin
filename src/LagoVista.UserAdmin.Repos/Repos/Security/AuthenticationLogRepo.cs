@@ -21,7 +21,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             _store = store ?? throw new ArgumentNullException(nameof(store));
         }
 
-        public static void ConfigureStorage(FlatStorageDefinition<AuthenticationLog> definition)
+        public static void ConfigureStorage(StorageDefinition<AuthenticationLog> definition)
         {
             if (definition == null) throw new ArgumentNullException(nameof(definition));
 

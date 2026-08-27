@@ -29,7 +29,7 @@ namespace LagoVista.UserAdmin.Repos.Repos.Security
             _adminLogger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public static void ConfigureStorage(FlatStorageDefinition<AccessLog> definition)
+        public static void ConfigureStorage(StorageDefinition<AccessLog> definition)
         {
             if (definition == null) throw new ArgumentNullException(nameof(definition));
 

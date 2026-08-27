@@ -33,18 +33,19 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.Users
 {
-    public class AppUserLoadRepo : DocumentDBRepoBase<AppUser>, IAppUserLoaderRepo
+    public class AppUserLoadRepo : IAppUserLoaderRepo
     {
         private readonly IUserRoleRepo _userRoleRepo;
+        IDocumentStorageClient _client;
 
-        public AppUserLoadRepo(IUserAdminSettings settings, IUserRoleRepo userRoleRepo, IDocumentCloudCachedServices services) : 
-            base(services)
+        public AppUserLoadRepo(IUserAdminSettings settings, IUserRoleRepo userRoleRepo, IDocumentStorageClientProvider provider)
         {
+            _client = provider.GetClient();
             _userRoleRepo = userRoleRepo ?? throw new ArgumentNullException(nameof(userRoleRepo));
         }
         public async Task<AppUser> FindByIdAsync(string userId)
         {
-            var appUser = await GetDocumentAsync(userId, false);
+            var appUser = await _client.GetDocumentAsync<AppUser>(userId, false);
             if (appUser == null)
                 return null;
 
