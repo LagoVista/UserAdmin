@@ -41,6 +41,7 @@ using LagoVista.UserAdmin.Repos.Users;
 using LagoVista.UserAdmin.Resources;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using LagoVista.CloudStorage.Storage.StorageProviders.Cassandra;
 
 namespace LagoVista.UserAdmin.Repos
 {

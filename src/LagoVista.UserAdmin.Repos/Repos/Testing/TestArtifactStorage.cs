@@ -1,4 +1,4 @@
-﻿using LagoVista.CloudStorage.Storage;
+﻿using LagoVista.CloudStorage.Interfaces;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces.Repos.Testing;
@@ -7,23 +7,24 @@ using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Testing
 {
-    public class TestArtifactStorage : CloudFileStorage, ITestArtifactStorage
+    public class TestArtifactStorage :ITestArtifactStorage
     {
-        public TestArtifactStorage(IUserAdminSettings settings, IAdminLogger adminLogger)
-            : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey,"testingartifact", adminLogger)
+        private ICloudFileStorageClient _fileStorage;
+        public TestArtifactStorage(ICloudFileStorageClient fileStorage, IAdminLogger adminLogger)
         {
+            _fileStorage = fileStorage ?? throw new ArgumentNullException(nameof(fileStorage));
         }
 
         public Task<InvokeResult<byte[]>> GetArtifactAsync(string fileName)
         {
-            return GetFileAsync(fileName);
+            return  _fileStorage.GetFileAsync(fileName);
         }
 
         public async Task<string> SaveArtifactAsync(string orgId, string runId, string artifactName, string contentType, byte[] artifactData)
         {
             var now = DateTime.UtcNow;
             var fileName = $"{orgId}/{now.Year:0000}{now.Month:00}{now.Day:00}/{runId}.{artifactName}";
-            await AddFileAsync(fileName, artifactData, contentType);
+            await _fileStorage.AddFileAsync(fileName, artifactData, contentType);
             return fileName;
         }
     }
