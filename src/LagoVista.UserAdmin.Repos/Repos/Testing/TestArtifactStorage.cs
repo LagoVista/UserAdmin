@@ -17,14 +17,14 @@ namespace LagoVista.UserAdmin.Repos.Repos.Testing
 
         public Task<InvokeResult<byte[]>> GetArtifactAsync(string fileName)
         {
-            return  _fileStorage.GetFileAsync(fileName);
+            return  _fileStorage.GetFileAsync("SomeContainer", fileName);
         }
 
         public async Task<string> SaveArtifactAsync(string orgId, string runId, string artifactName, string contentType, byte[] artifactData)
         {
             var now = DateTime.UtcNow;
             var fileName = $"{orgId}/{now.Year:0000}{now.Month:00}{now.Day:00}/{runId}.{artifactName}";
-            await _fileStorage.AddFileAsync(fileName, artifactData, contentType);
+            await _fileStorage.AddFileAsync("SomeContainer", fileName, artifactData, contentType);
             return fileName;
         }
     }
