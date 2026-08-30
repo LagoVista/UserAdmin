@@ -26,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.UserAdmin.Tests",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.UserAdmin.Models", "src\LagoVista.UserAdmin.Models\LagoVista.UserAdmin.Models.csproj", "{90D2B8E5-55D1-4CE3-B951-5F9EBC04E2BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingCentralIntegrationTests", "Tests\RingCentralIntegrationTests\RingCentralIntegrationTests.csproj", "{C112D810-FE25-4A48-B564-A1F7496356EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingCentralIntegrationTests", "tests\RingCentralIntegrationTests\RingCentralIntegrationTests.csproj", "{C112D810-FE25-4A48-B564-A1F7496356EF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserAdmin.RepoTest", "tests\UserAdmin.RepoTests\UserAdmin.RepoTest.csproj", "{D438312C-0A1B-4ED9-48CF-B331A19D92FF}"
 EndProject
