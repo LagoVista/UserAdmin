@@ -5,11 +5,11 @@
     <AssemblyOriginatorKeyFile>LagoVista.UserAdmin.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core.Authentication" Version="3.0.3387.1900" />
-    <PackageReference Include="LagoVista.PDFServices" Version="3.0.3387.1900" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.9" />
-    <PackageReference Include="Otp.NET" Version="1.4.1" />
-    <PackageReference Include="RingCentral.Net" Version="6.4.2" />
+    <PackageReference Include="LagoVista.Core.Authentication" />
+    <PackageReference Include="LagoVista.PDFServices" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" />
+    <PackageReference Include="Otp.NET" />
+    <PackageReference Include="RingCentral.Net" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.UserAdmin.Models\LagoVista.UserAdmin.Models.csproj" />

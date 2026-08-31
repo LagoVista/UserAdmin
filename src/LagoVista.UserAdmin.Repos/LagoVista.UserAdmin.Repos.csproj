@@ -3,27 +3,15 @@
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.CloudStorage" Version="3.0.3387.1900" />
-    <PackageReference Include="LagoVista.Relational" Version="3.0.3387.1900" />
-    <PackageReference Include="LagoVista.Core.Configuration" Version="3.0.3387.1900" />
+    <PackageReference Include="LagoVista.CloudStorage" />
+    <PackageReference Include="LagoVista.Relational" />
+    <PackageReference Include="LagoVista.Core.Configuration" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.UserAdmin\LagoVista.UserAdmin.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\auth-model\scenarios-v2\**\*.json"
-             Link="auth-model\scenarios-v2\%(RecursiveDir)%(Filename)%(Extension)"
-             CopyToOutputDirectory="PreserveNewest"
-             CopyToPublishDirectory="PreserveNewest"
-             Pack="true"
-             PackagePath="contentFiles\any\any\auth-model\scenarios-v2\%(RecursiveDir)%(Filename)%(Extension)"
-             PackageCopyToOutput="true" />
-    <Content Include="..\..\auth-model\auth-views\*.json"
-             Link="auth-model\auth-views\%(Filename)%(Extension)"
-             CopyToOutputDirectory="PreserveNewest"
-             CopyToPublishDirectory="PreserveNewest"
-             Pack="true"
-             PackagePath="contentFiles\any\any\auth-model\auth-views\%(Filename)%(Extension)"
-             PackageCopyToOutput="true" />
+    <Content Include="..\..\auth-model\scenarios-v2\**\*.json" Link="auth-model\scenarios-v2\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Pack="true" PackagePath="contentFiles\any\any\auth-model\scenarios-v2\%(RecursiveDir)%(Filename)%(Extension)" PackageCopyToOutput="true" />
+    <Content Include="..\..\auth-model\auth-views\*.json" Link="auth-model\auth-views\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Pack="true" PackagePath="contentFiles\any\any\auth-model\auth-views\%(Filename)%(Extension)" PackageCopyToOutput="true" />
   </ItemGroup>
 </Project>

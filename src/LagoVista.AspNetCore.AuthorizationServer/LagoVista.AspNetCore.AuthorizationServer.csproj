@@ -4,10 +4,10 @@
     <OutputType>Library</OutputType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="OpenIddict.Core" Version="7.6.0" />
-    <PackageReference Include="OpenIddict.Server.AspNetCore" Version="7.6.0" />
-    <PackageReference Include="OpenIddict.Validation.ServerIntegration" Version="7.6.0" />
-    <PackageReference Include="OpenIddict.Validation.AspNetCore" Version="7.6.0" />
+    <PackageReference Include="OpenIddict.Core" />
+    <PackageReference Include="OpenIddict.Server.AspNetCore" />
+    <PackageReference Include="OpenIddict.Validation.ServerIntegration" />
+    <PackageReference Include="OpenIddict.Validation.AspNetCore" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.AspNetCore.Identity\LagoVista.AspNetCore.Identity.csproj" />

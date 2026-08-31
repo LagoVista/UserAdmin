@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <id>LagoVista.AspNetCore.AuthorizationServer</id>
-    <version>3.0.3387.1900</version>
+    <version>6.0.0</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <title>LagoVista User Administration</title>
@@ -22,15 +22,15 @@
         <dependency id="OpenIddict.Server.AspNetCore" version="7.6.0" />
         <dependency id="OpenIddict.Validation.ServerIntegration" version="7.6.0" />
         <dependency id="OpenIddict.Validation.AspNetCore" version="7.6.0" />
-        <dependency id="LagoVista.AspNetCore.Identity" version="3.0.3387.1900" />
-        <dependency id="LagoVista.UserAdmin" version="3.0.3387.1900" />
-        <dependency id="LagoVista.UserAdmin.Repos" version="3.0.3387.1900" />
+        <dependency id="LagoVista.AspNetCore.Identity" version="6.0.0" />
+        <dependency id="LagoVista.UserAdmin" version="6.0.0" />
+        <dependency id="LagoVista.UserAdmin.Repos" version="6.0.0" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
-    <file src="bin\release\net9.0\LagoVista.AspNetCore.AuthorizationServer.dll" target="lib\net9.0\LagoVista.AspNetCore.AuthorizationServer.dll" />
-    <file src="bin\release\net9.0\LagoVista.AspNetCore.AuthorizationServer.pdb" target="lib\net9.0\LagoVista.AspNetCore.AuthorizationServer.pdb" />
+    <file src="bin/Release/net9.0/LagoVista.AspNetCore.AuthorizationServer.dll" target="lib/net9.0/LagoVista.AspNetCore.AuthorizationServer.dll" />
+    <file src="bin/Release/net9.0/LagoVista.AspNetCore.AuthorizationServer.pdb" target="lib/net9.0/LagoVista.AspNetCore.AuthorizationServer.pdb" />
   </files>
 </package>

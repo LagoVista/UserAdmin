@@ -1,0 +1,34 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Azure.Identity" Version="1.17.1" />
+    <PackageVersion Include="Fido2" Version="4.0.0" />
+    <PackageVersion Include="Fido2.AspNet" Version="4.0.0" />
+    <PackageVersion Include="LagoVista.CloudStorage" Version="6.0.0" />
+    <PackageVersion Include="LagoVista.Core.Authentication" Version="6.0.9" />
+    <PackageVersion Include="LagoVista.Core.Configuration" Version="6.0.9" />
+    <PackageVersion Include="LagoVista.Core.TestBase" Version="6.0.9" />
+    <PackageVersion Include="LagoVista.IoT.Logging" Version="6.0.0" />
+    <PackageVersion Include="LagoVista.PDFServices" Version="6.0.9" />
+    <PackageVersion Include="LagoVista.Relational" Version="6.0.0" />
+    <PackageVersion Include="LagoVista.Relational.Tests.Core" Version="6.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="9.0.13" />
+    <PackageVersion Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.9" />
+    <PackageVersion Include="Microsoft.Graph" Version="5.92.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageVersion Include="Moq" Version="4.20.72" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="5.1.0" />
+    <PackageVersion Include="OpenIddict.Core" Version="7.6.0" />
+    <PackageVersion Include="OpenIddict.Server.AspNetCore" Version="7.6.0" />
+    <PackageVersion Include="OpenIddict.Validation.AspNetCore" Version="7.6.0" />
+    <PackageVersion Include="OpenIddict.Validation.ServerIntegration" Version="7.6.0" />
+    <PackageVersion Include="Otp.NET" Version="1.4.1" />
+    <PackageVersion Include="prometheus-net" Version="8.2.1" />
+    <PackageVersion Include="RingCentral.Net" Version="6.4.2" />
+    <PackageVersion Include="SendGrid" Version="9.29.3" />
+    <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageVersion Include="Twilio" Version="7.13.0" />
+  </ItemGroup>
+</Project>

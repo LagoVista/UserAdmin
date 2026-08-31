@@ -1,18 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>disable</Nullable>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core.TestBase" Version="3.0.3387.1900" />
+    <PackageReference Include="LagoVista.Core.TestBase" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\src\LagoVista.UserAdmin\LagoVista.UserAdmin.csproj" />
   </ItemGroup>
-
 </Project>

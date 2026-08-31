@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <id>LagoVista.UserAdmin</id>
-    <version>3.0.3387.1900</version>
+    <version>6.0.0</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <title>LagoVista User Administration</title>
@@ -23,13 +23,13 @@
         <dependency id="Microsoft.AspNetCore.Http.Abstractions" version="2.3.9" />
         <dependency id="Otp.NET" version="1.4.1" />
         <dependency id="RingCentral.Net" version="6.4.2" />
-        <dependency id="LagoVista.UserAdmin.Models" version="3.0.3387.1900" />
+        <dependency id="LagoVista.UserAdmin.Models" version="6.0.0" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
-    <file src="bin\release\netstandard2.1\LagoVista.UserAdmin.dll" target="lib\netstandard2.1\LagoVista.UserAdmin.dll" />
-    <file src="bin\release\netstandard2.1\LagoVista.UserAdmin.pdb" target="lib\netstandard2.1\LagoVista.UserAdmin.pdb" />
+    <file src="bin/Release/netstandard2.1/LagoVista.UserAdmin.dll" target="lib/netstandard2.1/LagoVista.UserAdmin.dll" />
+    <file src="bin/Release/netstandard2.1/LagoVista.UserAdmin.pdb" target="lib/netstandard2.1/LagoVista.UserAdmin.pdb" />
   </files>
 </package>
