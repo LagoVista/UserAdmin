@@ -3,7 +3,7 @@
   <metadata>
     <id>LagoVista.AspNetCore.Identity</id>
     <title>LagoVista ASP.NET Core Identity Provider</title>
-    <version>6.0.0</version>
+    <version>6.0.1</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -20,15 +20,15 @@
       <group targetFramework="net9.0">
         <dependency id="Fido2" version="4.0.0" />
         <dependency id="Fido2.AspNet" version="4.0.0" />
-        <dependency id="LagoVista.IoT.Logging" version="3.0.3387.1900" />
+        <dependency id="LagoVista.Core.Authentication" version="6.0.10" />
+        <dependency id="LagoVista.Core.Configuration" version="6.0.10" />
+        <dependency id="LagoVista.IoT.Logging" version="6.0.3" />
+        <dependency id="LagoVista.UserAdmin" version="6.0.1" />
+        <dependency id="Microsoft.AspNetCore.Authentication.Twitter" version="9.0.13" />
+        <dependency id="prometheus-net" version="8.2.1" />
         <dependency id="SendGrid" version="9.29.3" />
         <dependency id="System.ComponentModel.Annotations" version="5.0.0" />
         <dependency id="Twilio" version="7.13.0" />
-        <dependency id="Microsoft.AspNetCore.Authentication.Twitter" version="9.0.13" />
-        <dependency id="LagoVista.Core.Authentication" version="3.0.3387.1900" />
-        <dependency id="LagoVista.Core.Configuration" version="3.0.3387.1900" />
-        <dependency id="prometheus-net" version="8.2.1" />
-        <dependency id="LagoVista.UserAdmin" version="6.0.0" />
       </group>
     </dependencies>
   </metadata>

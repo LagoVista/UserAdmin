@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.UserAdmin</id>
-    <version>6.0.0</version>
+    <version>6.0.1</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <title>LagoVista User Administration</title>
@@ -18,12 +18,12 @@
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1">
-        <dependency id="LagoVista.Core.Authentication" version="3.0.3387.1900" />
-        <dependency id="LagoVista.PDFServices" version="3.0.3387.1900" />
+        <dependency id="LagoVista.Core.Authentication" version="6.0.10" />
+        <dependency id="LagoVista.PDFServices" version="6.0.10" />
+        <dependency id="LagoVista.UserAdmin.Models" version="6.0.1" />
         <dependency id="Microsoft.AspNetCore.Http.Abstractions" version="2.3.9" />
         <dependency id="Otp.NET" version="1.4.1" />
         <dependency id="RingCentral.Net" version="6.4.2" />
-        <dependency id="LagoVista.UserAdmin.Models" version="6.0.0" />
       </group>
     </dependencies>
   </metadata>
