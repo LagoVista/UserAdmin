@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.AspNetCore.AuthorizationServer</id>
-    <version>6.0.2</version>
+    <version>7.0.0</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <title>LagoVista User Administration</title>
@@ -18,9 +18,9 @@
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net9.0">
-        <dependency id="LagoVista.AspNetCore.Identity" version="6.0.2" />
-        <dependency id="LagoVista.UserAdmin" version="6.0.2" />
-        <dependency id="LagoVista.UserAdmin.Repos" version="6.0.2" />
+        <dependency id="LagoVista.AspNetCore.Identity" version="7.0.0" />
+        <dependency id="LagoVista.UserAdmin" version="7.0.0" />
+        <dependency id="LagoVista.UserAdmin.Repos" version="7.0.0" />
         <dependency id="OpenIddict.Core" version="7.6.0" />
         <dependency id="OpenIddict.Server.AspNetCore" version="7.6.0" />
         <dependency id="OpenIddict.Validation.AspNetCore" version="7.6.0" />
