@@ -6,14 +6,14 @@
     <PackageVersion Include="Azure.Identity" Version="1.17.1" />
     <PackageVersion Include="Fido2" Version="4.0.0" />
     <PackageVersion Include="Fido2.AspNet" Version="4.0.0" />
-    <PackageVersion Include="LagoVista.CloudStorage" Version="7.0.1" />
-    <PackageVersion Include="LagoVista.Core.Authentication" Version="7.0.1" />
-    <PackageVersion Include="LagoVista.Core.Configuration" Version="7.0.1" />
-    <PackageVersion Include="LagoVista.Core.TestBase" Version="7.0.1" />
-    <PackageVersion Include="LagoVista.IoT.Logging" Version="7.0.1" />
-    <PackageVersion Include="LagoVista.PDFServices" Version="7.0.1" />
-    <PackageVersion Include="LagoVista.Relational" Version="7.0.1" />
-    <PackageVersion Include="LagoVista.Relational.Tests.Core" Version="7.0.1" />
+    <PackageVersion Include="LagoVista.CloudStorage" Version="7.0.2" />
+    <PackageVersion Include="LagoVista.Core.Authentication" Version="7.0.2" />
+    <PackageVersion Include="LagoVista.Core.Configuration" Version="7.0.2" />
+    <PackageVersion Include="LagoVista.Core.TestBase" Version="7.0.2" />
+    <PackageVersion Include="LagoVista.IoT.Logging" Version="7.0.2" />
+    <PackageVersion Include="LagoVista.PDFServices" Version="7.0.2" />
+    <PackageVersion Include="LagoVista.Relational" Version="7.0.2" />
+    <PackageVersion Include="LagoVista.Relational.Tests.Core" Version="7.0.2" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="9.0.13" />
     <PackageVersion Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.9" />
     <PackageVersion Include="Microsoft.Graph" Version="5.92.0" />
