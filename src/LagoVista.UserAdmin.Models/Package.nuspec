@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.UserAdmin.Models</id>
-    <version>7.0.3</version>
+    <version>7.0.4</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <title>LagoVista User Models</title>
@@ -18,8 +18,8 @@
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1">
-        <dependency id="LagoVista.Core.Authentication" version="7.0.3" />
-        <dependency id="LagoVista.IoT.Logging" version="7.0.3" />
+        <dependency id="LagoVista.Core.Authentication" version="7.0.4" />
+        <dependency id="LagoVista.IoT.Logging" version="7.0.4" />
       </group>
     </dependencies>
   </metadata>
