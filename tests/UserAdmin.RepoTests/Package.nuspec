@@ -18,7 +18,7 @@
       <group targetFramework="net9.0">
         <dependency id="LagoVista.Core.TestBase" version="7.0.12" />
         <dependency id="LagoVista.Relational.Tests.Core" version="7.0.9" />
-        <dependency id="LagoVista.UserAdmin.Repos" version="7.0.5" />
+        <dependency id="LagoVista.UserAdmin.Repos" version="7.0.6" />
       </group>
     </dependencies>
   </metadata>
