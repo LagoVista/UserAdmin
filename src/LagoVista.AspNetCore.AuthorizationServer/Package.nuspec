@@ -18,9 +18,10 @@
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net9.0">
-        <dependency id="LagoVista.AspNetCore.Identity" version="7.0.4" />
-        <dependency id="LagoVista.UserAdmin" version="7.0.4" />
-        <dependency id="LagoVista.UserAdmin.Repos" version="7.0.4" />
+        <dependency id="LagoVista.AspNetCore.Identity" version="7.0.5" />
+        <dependency id="LagoVista.CloudStorage" version="7.0.9" />
+        <dependency id="LagoVista.UserAdmin" version="7.0.5" />
+        <dependency id="LagoVista.UserAdmin.Repos" version="7.0.5" />
         <dependency id="OpenIddict.Core" version="7.6.0" />
         <dependency id="OpenIddict.Server.AspNetCore" version="7.6.0" />
         <dependency id="OpenIddict.Validation.AspNetCore" version="7.6.0" />
