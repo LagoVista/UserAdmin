@@ -92,8 +92,11 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Persistence.TableStorage
         public async ValueTask<OpenIddictTableToken> FindByReferenceIdAsync(string identifier, CancellationToken cancellationToken)
         {
             if (String.IsNullOrWhiteSpace(identifier)) throw new ArgumentNullException(nameof(identifier));
-            return (await LoadAllAsync(cancellationToken))
-                .FirstOrDefault(token => String.Equals(token.ReferenceId, identifier, StringComparison.Ordinal));
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return await FindAsync(
+                OpenIddictTableToken.StorePartitionKey,
+                FilterOptions.Create(nameof(OpenIddictTableToken.ReferenceId), FilterOptions.Operators.Equals, identifier));
         }
 
         public IAsyncEnumerable<OpenIddictTableToken> FindBySubjectAsync(string subject, CancellationToken cancellationToken)
