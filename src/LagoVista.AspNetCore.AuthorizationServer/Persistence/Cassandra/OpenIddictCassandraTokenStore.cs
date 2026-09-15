@@ -478,7 +478,7 @@ CREATE TABLE IF NOT EXISTS {TableName} (
             return new ValueTask<T>(value);
         }
 
-        private static ValueTask SetValue(OpenIddictTableToken token, Action setter, CancellationToken cancellationToken)
+        private static ValueTask SetValue(OpenIddictProtocolToken token, Action setter, CancellationToken cancellationToken)
         {
             if (token == null) throw new ArgumentNullException(nameof(token));
             cancellationToken.ThrowIfCancellationRequested();
