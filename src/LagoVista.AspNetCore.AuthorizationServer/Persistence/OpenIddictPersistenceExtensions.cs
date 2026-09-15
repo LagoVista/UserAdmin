@@ -1,4 +1,3 @@
-using LagoVista.AspNetCore.AuthorizationServer.Persistence.TableStorage;
 using LagoVista.AspNetCore.AuthorizationServer.Persistence.Cassandra;
 using LagoVista.AspNetCore.AuthorizationServer.Persistence.UserAdmin;
 using LagoVista.UserAdmin.Models.Auth;
@@ -21,8 +20,8 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Persistence
                 options.ReplaceApplicationStore<OAuthClientApplication, OpenIddictOAuthClientApplicationStore>();
                 options.ReplaceApplicationManager<OAuthClientApplication, LagoVistaOpenIddictApplicationManager>();
 
-                options.SetDefaultTokenEntity<OpenIddictTableToken>();
-                options.ReplaceTokenStore<OpenIddictTableToken, OpenIddictCassandraTokenStore>();
+                options.SetDefaultTokenEntity<OpenIddictProtocolToken>();
+                options.ReplaceTokenStore<OpenIddictProtocolToken, OpenIddictCassandraTokenStore>();
             });
 
             return builder;
