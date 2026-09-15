@@ -185,12 +185,12 @@ USING TTL ?").ConfigureAwait(false);
         public ValueTask<OpenIddictProtocolToken> InstantiateAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return new ValueTask<OpenIddictTableToken>(new OpenIddictTableToken());
+            return new ValueTask<OpenIddictProtocolToken>(new OpenIddictProtocolToken());
         }
 
-        public async IAsyncEnumerable<OpenIddictTableToken> ListAsync(int? count, int? offset, [EnumeratorCancellation] CancellationToken cancellationToken)
+        public async IAsyncEnumerable<OpenIddictProtocolToken> ListAsync(int? count, int? offset, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            IEnumerable<OpenIddictTableToken> tokens = await LoadAllAsync(cancellationToken).ConfigureAwait(false);
+            IEnumerable<OpenIddictProtocolToken> tokens = await LoadAllAsync(cancellationToken).ConfigureAwait(false);
             if (offset.HasValue) tokens = tokens.Skip(offset.Value);
             if (count.HasValue) tokens = tokens.Take(count.Value);
 
@@ -198,7 +198,7 @@ USING TTL ?").ConfigureAwait(false);
                 yield return token;
         }
 
-        public async IAsyncEnumerable<TResult> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictTableToken>, TState, IQueryable<TResult>> query, TState state, [EnumeratorCancellation] CancellationToken cancellationToken)
+        public async IAsyncEnumerable<TResult> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictProtocolToken>, TState, IQueryable<TResult>> query, TState state, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             if (query == null) throw new ArgumentNullException(nameof(query));
             foreach (var item in query((await LoadAllAsync(cancellationToken).ConfigureAwait(false)).AsQueryable(), state))
@@ -236,40 +236,40 @@ USING TTL ?").ConfigureAwait(false);
         public ValueTask<long> RevokeBySubjectAsync(string subject, CancellationToken cancellationToken = default)
             => RevokeWhereAsync(token => String.Equals(token.Subject, subject, StringComparison.Ordinal), cancellationToken);
 
-        public ValueTask SetApplicationIdAsync(OpenIddictTableToken token, string identifier, CancellationToken cancellationToken)
+        public ValueTask SetApplicationIdAsync(OpenIddictProtocolToken token, string identifier, CancellationToken cancellationToken)
             => SetValue(token, () => token.ApplicationId = identifier, cancellationToken);
 
-        public ValueTask SetAuthorizationIdAsync(OpenIddictTableToken token, string identifier, CancellationToken cancellationToken)
+        public ValueTask SetAuthorizationIdAsync(OpenIddictProtocolToken token, string identifier, CancellationToken cancellationToken)
             => SetValue(token, () => token.AuthorizationId = identifier, cancellationToken);
 
-        public ValueTask SetCreationDateAsync(OpenIddictTableToken token, DateTimeOffset? date, CancellationToken cancellationToken)
+        public ValueTask SetCreationDateAsync(OpenIddictProtocolToken token, DateTimeOffset? date, CancellationToken cancellationToken)
             => SetValue(token, () => token.CreationDateUtc = FormatDate(date), cancellationToken);
 
-        public ValueTask SetExpirationDateAsync(OpenIddictTableToken token, DateTimeOffset? date, CancellationToken cancellationToken)
+        public ValueTask SetExpirationDateAsync(OpenIddictProtocolToken token, DateTimeOffset? date, CancellationToken cancellationToken)
             => SetValue(token, () => token.ExpirationDateUtc = FormatDate(date), cancellationToken);
 
-        public ValueTask SetPayloadAsync(OpenIddictTableToken token, string payload, CancellationToken cancellationToken)
+        public ValueTask SetPayloadAsync(OpenIddictProtocolToken token, string payload, CancellationToken cancellationToken)
             => SetValue(token, () => token.Payload = payload, cancellationToken);
 
-        public ValueTask SetPropertiesAsync(OpenIddictTableToken token, ImmutableDictionary<string, JsonElement> properties, CancellationToken cancellationToken)
+        public ValueTask SetPropertiesAsync(OpenIddictProtocolToken token, ImmutableDictionary<string, JsonElement> properties, CancellationToken cancellationToken)
             => SetValue(token, () => token.PropertiesJson = properties == null || properties.Count == 0 ? null : JsonSerializer.Serialize(properties, _jsonOptions), cancellationToken);
 
-        public ValueTask SetRedemptionDateAsync(OpenIddictTableToken token, DateTimeOffset? date, CancellationToken cancellationToken)
+        public ValueTask SetRedemptionDateAsync(OpenIddictProtocolToken token, DateTimeOffset? date, CancellationToken cancellationToken)
             => SetValue(token, () => token.RedemptionDateUtc = FormatDate(date), cancellationToken);
 
-        public ValueTask SetReferenceIdAsync(OpenIddictTableToken token, string identifier, CancellationToken cancellationToken)
+        public ValueTask SetReferenceIdAsync(OpenIddictProtocolToken token, string identifier, CancellationToken cancellationToken)
             => SetValue(token, () => token.ReferenceId = identifier, cancellationToken);
 
-        public ValueTask SetStatusAsync(OpenIddictTableToken token, string status, CancellationToken cancellationToken)
+        public ValueTask SetStatusAsync(OpenIddictProtocolToken token, string status, CancellationToken cancellationToken)
             => SetValue(token, () => token.Status = status, cancellationToken);
 
-        public ValueTask SetSubjectAsync(OpenIddictTableToken token, string subject, CancellationToken cancellationToken)
+        public ValueTask SetSubjectAsync(OpenIddictProtocolToken token, string subject, CancellationToken cancellationToken)
             => SetValue(token, () => token.Subject = subject, cancellationToken);
 
-        public ValueTask SetTypeAsync(OpenIddictTableToken token, string type, CancellationToken cancellationToken)
+        public ValueTask SetTypeAsync(OpenIddictProtocolToken token, string type, CancellationToken cancellationToken)
             => SetValue(token, () => token.Type = type, cancellationToken);
 
-        public async ValueTask UpdateAsync(OpenIddictTableToken token, CancellationToken cancellationToken)
+        public async ValueTask UpdateAsync(OpenIddictProtocolToken token, CancellationToken cancellationToken)
         {
             ValidateToken(token, cancellationToken);
             var expectedVersion = token.Version;
@@ -351,7 +351,7 @@ CREATE TABLE IF NOT EXISTS {TableName} (
             return session;
         }
 
-        private async Task<IReadOnlyList<OpenIddictTableToken>> LoadAllAsync(CancellationToken cancellationToken)
+        private async Task<IReadOnlyList<OpenIddictProtocolToken>> LoadAllAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var session = await GetReadySessionAsync().ConfigureAwait(false);
@@ -360,7 +360,7 @@ CREATE TABLE IF NOT EXISTS {TableName} (
             return rows.Select(ReadToken).Where(token => token != null).ToList();
         }
 
-        private async IAsyncEnumerable<OpenIddictTableToken> QueryColumnAsync(string column, string value, [EnumeratorCancellation] CancellationToken cancellationToken)
+        private async IAsyncEnumerable<OpenIddictProtocolToken> QueryColumnAsync(string column, string value, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             if (String.IsNullOrWhiteSpace(value)) yield break;
             var session = await GetReadySessionAsync().ConfigureAwait(false);
@@ -372,7 +372,7 @@ CREATE TABLE IF NOT EXISTS {TableName} (
                 yield return ReadToken(row);
         }
 
-        private async IAsyncEnumerable<OpenIddictTableToken> QueryAsync(string subject, string client, string status, string type, [EnumeratorCancellation] CancellationToken cancellationToken)
+        private async IAsyncEnumerable<OpenIddictProtocolToken> QueryAsync(string subject, string client, string status, string type, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var filters = new List<(string Column, string Value)>();
             if (!String.IsNullOrWhiteSpace(subject)) filters.Add(("subject", subject));
@@ -397,7 +397,7 @@ CREATE TABLE IF NOT EXISTS {TableName} (
                 yield return ReadToken(row);
         }
 
-        private async ValueTask<long> RevokeWhereAsync(Func<OpenIddictTableToken, bool> predicate, CancellationToken cancellationToken)
+        private async ValueTask<long> RevokeWhereAsync(Func<OpenIddictProtocolToken, bool> predicate, CancellationToken cancellationToken)
         {
             long count = 0;
             foreach (var token in await LoadAllAsync(cancellationToken).ConfigureAwait(false))
@@ -427,8 +427,6 @@ CREATE TABLE IF NOT EXISTS {TableName} (
             return new OpenIddictTableToken
             {
                 Id = id,
-                PartitionKey = OpenIddictTableToken.StorePartitionKey,
-                RowKey = OpenIddictTableToken.CreateRowKey(id),
                 ApplicationId = GetString(row, "application_id"),
                 AuthorizationId = GetString(row, "authorization_id"),
                 Subject = GetString(row, "subject"),
