@@ -89,7 +89,7 @@ USING TTL ?").ConfigureAwait(false);
 
         public async ValueTask DeleteAsync(OpenIddictProtocolToken token, CancellationToken cancellationToken)
         {
-            ValidateToken(token, cancellationToken);
+            ValidatePersistedToken(token, cancellationToken);
             var session = await GetReadySessionAsync().ConfigureAwait(false);
             var prepared = await session.PrepareAsync($"DELETE FROM {TableName} WHERE id = ?").ConfigureAwait(false);
             await session.ExecuteAsync(prepared.Bind(token.Id)).ConfigureAwait(false);
@@ -158,7 +158,7 @@ USING TTL ?").ConfigureAwait(false);
 
         public ValueTask<ImmutableDictionary<string, JsonElement>> GetPropertiesAsync(OpenIddictProtocolToken token, CancellationToken cancellationToken)
         {
-            ValidateToken(token, cancellationToken);
+            ValidateTokenInstance(token, cancellationToken);
             if (String.IsNullOrWhiteSpace(token.PropertiesJson))
                 return new ValueTask<ImmutableDictionary<string, JsonElement>>(ImmutableDictionary<string, JsonElement>.Empty);
 
@@ -271,7 +271,7 @@ USING TTL ?").ConfigureAwait(false);
 
         public async ValueTask UpdateAsync(OpenIddictProtocolToken token, CancellationToken cancellationToken)
         {
-            ValidateToken(token, cancellationToken);
+            ValidatePersistedToken(token, cancellationToken);
             var expectedVersion = token.Version;
             var nextVersion = expectedVersion + 1;
             var session = await GetReadySessionAsync().ConfigureAwait(false);
@@ -465,16 +465,21 @@ CREATE TABLE IF NOT EXISTS {TableName} (
                 : (DateTimeOffset?)null;
         }
 
-        private static void ValidateToken(OpenIddictProtocolToken token, CancellationToken cancellationToken)
+        private static void ValidateTokenInstance(OpenIddictProtocolToken token, CancellationToken cancellationToken)
         {
             if (token == null) throw new ArgumentNullException(nameof(token));
-            if (String.IsNullOrWhiteSpace(token.Id)) throw new InvalidOperationException("An OpenIddict token cannot be persisted without an identifier.");
             cancellationToken.ThrowIfCancellationRequested();
+        }
+
+        private static void ValidatePersistedToken(OpenIddictProtocolToken token, CancellationToken cancellationToken)
+        {
+            ValidateTokenInstance(token, cancellationToken);
+            if (String.IsNullOrWhiteSpace(token.Id)) throw new InvalidOperationException("An OpenIddict token cannot be persisted without an identifier.");
         }
 
         private static ValueTask<T> FromValue<T>(OpenIddictProtocolToken token, T value, CancellationToken cancellationToken)
         {
-            ValidateToken(token, cancellationToken);
+            ValidateTokenInstance(token, cancellationToken);
             return new ValueTask<T>(value);
         }
 
