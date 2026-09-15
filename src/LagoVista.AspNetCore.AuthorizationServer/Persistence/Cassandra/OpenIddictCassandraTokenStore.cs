@@ -410,7 +410,7 @@ CREATE TABLE IF NOT EXISTS {TableName} (
             return count;
         }
 
-        private int GetTtlSeconds(OpenIddictTableToken token)
+        private int GetTtlSeconds(OpenIddictProtocolToken token)
         {
             var retentionSeconds = Math.Max(60, (int)Math.Ceiling(_options.ProtocolTokenRetention.TotalSeconds));
             var expiration = ParseDate(token.ExpirationDateUtc);
@@ -420,11 +420,11 @@ CREATE TABLE IF NOT EXISTS {TableName} (
             return Math.Max(retentionSeconds, (int)Math.Ceiling(untilExpirationAndGrace.TotalSeconds));
         }
 
-        private static OpenIddictTableToken ReadToken(Row row)
+        private static OpenIddictProtocolToken ReadToken(Row row)
         {
             if (row == null) return null;
             var id = row.GetValue<string>("id");
-            return new OpenIddictTableToken
+            return new OpenIddictProtocolToken
             {
                 Id = id,
                 ApplicationId = GetString(row, "application_id"),
@@ -465,14 +465,14 @@ CREATE TABLE IF NOT EXISTS {TableName} (
                 : (DateTimeOffset?)null;
         }
 
-        private static void ValidateToken(OpenIddictTableToken token, CancellationToken cancellationToken)
+        private static void ValidateToken(OpenIddictProtocolToken token, CancellationToken cancellationToken)
         {
             if (token == null) throw new ArgumentNullException(nameof(token));
             if (String.IsNullOrWhiteSpace(token.Id)) throw new InvalidOperationException("An OpenIddict token cannot be persisted without an identifier.");
             cancellationToken.ThrowIfCancellationRequested();
         }
 
-        private static ValueTask<T> FromValue<T>(OpenIddictTableToken token, T value, CancellationToken cancellationToken)
+        private static ValueTask<T> FromValue<T>(OpenIddictProtocolToken token, T value, CancellationToken cancellationToken)
         {
             ValidateToken(token, cancellationToken);
             return new ValueTask<T>(value);
