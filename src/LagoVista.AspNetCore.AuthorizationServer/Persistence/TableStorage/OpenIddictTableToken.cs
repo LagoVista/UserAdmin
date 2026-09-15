@@ -25,6 +25,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Persistence.TableStorage
         public string CreationDateUtc { get; set; }
         public string ExpirationDateUtc { get; set; }
         public string RedemptionDateUtc { get; set; }
+        public long Version { get; set; }
 
         public static string CreateRowKey(string id)
         {

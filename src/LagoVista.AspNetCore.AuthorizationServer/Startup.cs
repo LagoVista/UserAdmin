@@ -1,5 +1,6 @@
 using LagoVista.AspNetCore.AuthorizationServer.Persistence;
 using LagoVista.AspNetCore.AuthorizationServer.Security;
+using LagoVista.CloudStorage.Storage.StorageProviders.Cassandra;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
@@ -23,6 +24,9 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             services.AddScoped<IOAuthClientPolicyResolver, OAuthClientPolicyResolver>();
             services.AddScoped<IOAuthClientPolicyValidator, OAuthClientPolicyValidator>();
 
+            if (settings.UseCassandraTokenStore)
+                services.AddSingleton<ICassandraSessionFactory, CassandraSessionFactory>();
+
             if (!settings.UseDevelopmentCertificates)
             {
                 services.AddSingleton<IConfigureOptions<OpenIddictServerOptions>, OpenIddictSecureStorageCredentialConfigurator>();
@@ -32,7 +36,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                 .AddApplicationPart(typeof(AuthorizationController).Assembly);
 
             services.AddOpenIddict()
-                .AddLagoVistaPersistence()
+                .AddLagoVistaPersistence(settings.UseCassandraTokenStore)
                 .AddServer(options =>
                 {
                     options.DisableAuthorizationStorage();

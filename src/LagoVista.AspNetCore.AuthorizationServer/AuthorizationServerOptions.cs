@@ -8,6 +8,8 @@ namespace LagoVista.AspNetCore.AuthorizationServer
         public Uri Issuer { get; set; }
         public bool UseDevelopmentCertificates { get; set; } = true;
         public bool DisableAccessTokenEncryption { get; set; } = true;
+        public bool UseCassandraTokenStore { get; set; }
+        public TimeSpan ProtocolTokenRetention { get; set; } = TimeSpan.FromMinutes(15);
 
         /// <summary>
         /// Secret id used to persist the shared OpenIddict signing/encryption certificate

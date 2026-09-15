@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="OpenIddict.Core" />
+    <PackageReference Include="LagoVista.CloudStorage" />
     <PackageReference Include="OpenIddict.Server.AspNetCore" />
     <PackageReference Include="OpenIddict.Validation.ServerIntegration" />
     <PackageReference Include="OpenIddict.Validation.AspNetCore" />
