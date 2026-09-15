@@ -24,8 +24,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             services.AddScoped<IOAuthClientPolicyResolver, OAuthClientPolicyResolver>();
             services.AddScoped<IOAuthClientPolicyValidator, OAuthClientPolicyValidator>();
 
-            if (settings.UseCassandraTokenStore)
-                services.AddSingleton<ICassandraSessionFactory, CassandraSessionFactory>();
+            services.AddSingleton<ICassandraSessionFactory, CassandraSessionFactory>();
 
             if (!settings.UseDevelopmentCertificates)
             {
@@ -36,7 +35,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                 .AddApplicationPart(typeof(AuthorizationController).Assembly);
 
             services.AddOpenIddict()
-                .AddLagoVistaPersistence(settings.UseCassandraTokenStore)
+                .AddLagoVistaPersistence()
                 .AddServer(options =>
                 {
                     options.DisableAuthorizationStorage();

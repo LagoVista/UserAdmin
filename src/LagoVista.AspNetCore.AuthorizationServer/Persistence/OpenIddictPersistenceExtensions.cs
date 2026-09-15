@@ -11,9 +11,9 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Persistence
         /// <summary>
         /// Registers the LagoVista-owned OpenIddict persistence boundary:
         /// UserAdmin remains authoritative for OAuth client configuration while
-        /// OpenIddict protocol token persistence can use Table Storage or Cassandra.
+        /// OpenIddict protocol tokens/codes are persisted in Cassandra with bounded retention.
         /// </summary>
-        public static OpenIddictBuilder AddLagoVistaPersistence(this OpenIddictBuilder builder, bool useCassandraTokenStore = false)
+        public static OpenIddictBuilder AddLagoVistaPersistence(this OpenIddictBuilder builder)
         {
             builder.AddCore(options =>
             {
@@ -22,10 +22,7 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Persistence
                 options.ReplaceApplicationManager<OAuthClientApplication, LagoVistaOpenIddictApplicationManager>();
 
                 options.SetDefaultTokenEntity<OpenIddictTableToken>();
-                if (useCassandraTokenStore)
-                    options.ReplaceTokenStore<OpenIddictTableToken, OpenIddictCassandraTokenStore>();
-                else
-                    options.ReplaceTokenStore<OpenIddictTableToken, OpenIddictTableTokenStore>();
+                options.ReplaceTokenStore<OpenIddictTableToken, OpenIddictCassandraTokenStore>();
             });
 
             return builder;
