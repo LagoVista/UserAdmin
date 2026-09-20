@@ -87,31 +87,31 @@ namespace LagoVista.UserAdmin.Models.Auth
         public string ClientSecretId { get; set; }
 
         [FormField(LabelResource: OAuthClientResources.Names.OAuthClientApplication_RedirectUris,
-            HelpResource: OAuthClientResources.Names.OAuthClientApplication_RedirectUris_Help,
+            HelpResource: OAuthClientResources.Names.OAuthClientApplication_RedirectUris_Help, ChildListDisplayMember: nameof(OAuthClientSettingValue.Value),
             FieldType: FieldTypes.ChildListInline, FactoryUrl: "/api/oauth/client/value/factory",
             ResourceType: typeof(OAuthClientResources), IsRequired: true)]
         public List<OAuthClientSettingValue> RedirectUris { get; set; }
 
         [FormField(LabelResource: OAuthClientResources.Names.OAuthClientApplication_PostLogoutRedirectUris,
-            HelpResource: OAuthClientResources.Names.OAuthClientApplication_PostLogoutRedirectUris_Help,
+            HelpResource: OAuthClientResources.Names.OAuthClientApplication_PostLogoutRedirectUris_Help, ChildListDisplayMember: nameof(OAuthClientSettingValue.Value),
             FieldType: FieldTypes.ChildListInline, FactoryUrl: "/api/oauth/client/value/factory",
             ResourceType: typeof(OAuthClientResources))]
         public List<OAuthClientSettingValue> PostLogoutRedirectUris { get; set; }
 
         [FormField(LabelResource: OAuthClientResources.Names.OAuthClientApplication_AllowedGrantTypes,
-            HelpResource: OAuthClientResources.Names.OAuthClientApplication_AllowedGrantTypes_Help,
+            HelpResource: OAuthClientResources.Names.OAuthClientApplication_AllowedGrantTypes_Help, ChildListDisplayMember: nameof(OAuthClientSettingValue.Value),
             FieldType: FieldTypes.ChildListInline, FactoryUrl: "/api/oauth/client/value/factory",
             ResourceType: typeof(OAuthClientResources), IsRequired: true)]
         public List<OAuthClientSettingValue> AllowedGrantTypes { get; set; }
 
         [FormField(LabelResource: OAuthClientResources.Names.OAuthClientApplication_AllowedScopes,
-            HelpResource: OAuthClientResources.Names.OAuthClientApplication_AllowedScopes_Help,
+            HelpResource: OAuthClientResources.Names.OAuthClientApplication_AllowedScopes_Help, ChildListDisplayMember: nameof(OAuthClientSettingValue.Value),
             FieldType: FieldTypes.ChildListInline, FactoryUrl: "/api/oauth/client/value/factory",
             ResourceType: typeof(OAuthClientResources), IsRequired: true)]
         public List<OAuthClientSettingValue> AllowedScopes { get; set; }
 
         [FormField(LabelResource: OAuthClientResources.Names.OAuthClientApplication_AllowedResources,
-            HelpResource: OAuthClientResources.Names.OAuthClientApplication_AllowedResources_Help,
+            HelpResource: OAuthClientResources.Names.OAuthClientApplication_AllowedResources_Help, ChildListDisplayMember: nameof(OAuthClientSettingValue.Value),
             FieldType: FieldTypes.ChildListInline, FactoryUrl: "/api/oauth/client/value/factory",
             ResourceType: typeof(OAuthClientResources), IsRequired: true)]
         public List<OAuthClientSettingValue> AllowedResources { get; set; }
