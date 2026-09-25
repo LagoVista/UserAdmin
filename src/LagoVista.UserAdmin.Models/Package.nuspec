@@ -19,7 +19,7 @@
     <dependencies>
       <group targetFramework="netstandard2.1">
         <dependency id="LagoVista.Core.Authentication" version="7.0.12" />
-        <dependency id="LagoVista.IoT.Logging" version="7.0.4" />
+        <dependency id="LagoVista.IoT.Logging" version="7.0.8" />
       </group>
     </dependencies>
   </metadata>
