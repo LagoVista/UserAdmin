@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <id>UserAdmin.RepoTest</id>
@@ -17,7 +17,7 @@
     <dependencies>
       <group targetFramework="net9.0">
         <dependency id="LagoVista.Core.TestBase" version="7.0.12" />
-        <dependency id="LagoVista.Relational.Tests.Core" version="7.0.30" />
+        <dependency id="LagoVista.Relational.Tests.Core" version="7.0.54" />
         <dependency id="LagoVista.UserAdmin.Repos" version="7.0.10" />
       </group>
     </dependencies>

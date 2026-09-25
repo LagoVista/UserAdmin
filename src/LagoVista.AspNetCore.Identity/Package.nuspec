@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <id>LagoVista.AspNetCore.Identity</id>
@@ -22,7 +22,7 @@
         <dependency id="Fido2.AspNet" version="4.0.0" />
         <dependency id="LagoVista.Core.Authentication" version="7.0.12" />
         <dependency id="LagoVista.Core.Configuration" version="7.0.12" />
-        <dependency id="LagoVista.IoT.Logging" version="7.0.4" />
+        <dependency id="LagoVista.IoT.Logging" version="7.0.8" />
         <dependency id="LagoVista.UserAdmin" version="7.0.10" />
         <dependency id="Microsoft.AspNetCore.Authentication.Twitter" version="9.0.13" />
         <dependency id="prometheus-net" version="8.2.1" />
