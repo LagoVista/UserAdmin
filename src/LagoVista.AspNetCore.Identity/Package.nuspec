@@ -23,7 +23,7 @@
         <dependency id="LagoVista.Core.Authentication" version="7.0.12" />
         <dependency id="LagoVista.Core.Configuration" version="7.0.12" />
         <dependency id="LagoVista.IoT.Logging" version="7.0.4" />
-        <dependency id="LagoVista.UserAdmin" version="7.0.10" />
+        <dependency id="LagoVista.UserAdmin" version="7.0.11-ws-c-dd43eb74" />
         <dependency id="Microsoft.AspNetCore.Authentication.Twitter" version="9.0.13" />
         <dependency id="prometheus-net" version="8.2.1" />
         <dependency id="SendGrid" version="9.29.3" />
