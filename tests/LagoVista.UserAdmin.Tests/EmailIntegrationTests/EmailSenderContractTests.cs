@@ -51,6 +51,7 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
             Assert.AreEqual(verified, summary.Verified);
         }
 
+        // Representative SendGrid sender payload used to prove both verification states.
         private static string CreateSenderJson(bool verified)
         {
             return $@"{{
