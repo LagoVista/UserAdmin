@@ -185,6 +185,9 @@ namespace LagoVista.UserAdmin.Models.Contacts
         [JsonProperty("country")]
         [FormField(LabelResource:UserAdminResources.Names.Common_Country, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string Country { get; set; }
+        [JsonProperty("verified")]
+        public bool Verified { get; set; }
+
         [JsonProperty("updated_at")]
 
         public ulong UpdatedAt { get; set; }
@@ -201,6 +204,7 @@ namespace LagoVista.UserAdmin.Models.Contacts
                 Name = NickName,
                 Key = From.Email,
                 Icon = "icon-pz-programmer",
+                Verified = Verified,
             };
         }
 
@@ -228,7 +232,6 @@ namespace LagoVista.UserAdmin.Models.Contacts
       SaveUrl: "/api/email/sender", GetUrl: "/api/email/sender/{id}", GetListUrl: "/api/email/senders", DeleteUrl: "/api/email/sender/{id}", FactoryUrl: "/api/email/sender/factory")]
     public class EmailSenderSummary : SummaryData
     {
-
-
+        public bool Verified { get; set; }
     }
 }
