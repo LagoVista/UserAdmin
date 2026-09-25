@@ -185,6 +185,9 @@ namespace LagoVista.UserAdmin.Models.Contacts
         [JsonProperty("country")]
         [FormField(LabelResource:UserAdminResources.Names.Common_Country, FieldType: FieldTypes.Text, IsRequired: true, ResourceType: typeof(UserAdminResources))]
         public string Country { get; set; }
+        [JsonProperty("verified")]
+        public bool Verified { get; set; }
+
         [JsonProperty("updated_at")]
 
         public ulong UpdatedAt { get; set; }
@@ -201,6 +204,7 @@ namespace LagoVista.UserAdmin.Models.Contacts
                 Name = NickName,
                 Key = From.Email,
                 Icon = "icon-pz-programmer",
+                Verified = Verified,
             };
         }
 
@@ -226,9 +230,12 @@ namespace LagoVista.UserAdmin.Models.Contacts
     [EntityDescription(Domains.EmailServicesDomain, UserAdminResources.Names.EmailSenders_Title, UserAdminResources.Names.EmailSender_Description, UserAdminResources.Names.EmailSender_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources),
       Icon: "icon-pz-programmer", EditUIUrl: "/marketing/emailcampaigns/sender/{id|", CreateUIUrl: "/marketing/emailcampaigns/sender/add", ListUIUrl: "/marketing/emailcampaigns/senders",
       SaveUrl: "/api/email/sender", GetUrl: "/api/email/sender/{id}", GetListUrl: "/api/email/senders", DeleteUrl: "/api/email/sender/{id}", FactoryUrl: "/api/email/sender/factory")]
-    public class EmailSenderSummary : SummaryData
+    public class EmailSenderSummary
     {
-
-
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Key { get; set; }
+        public string Icon { get; set; }
+        public bool Verified { get; set; }
     }
 }
