@@ -28,7 +28,7 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
         [TestMethod]
         [DataRow(true)]
         [DataRow(false)]
-        public void CreateSummaryPreservesVerifiedAndExistingFields(bool verified)
+        public void CreateSummaryPreservesVerifiedAndExistingSummaryFields(bool verified)
         {
             var sender = new EmailSender
             {
