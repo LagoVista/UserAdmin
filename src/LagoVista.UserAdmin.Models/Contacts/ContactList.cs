@@ -230,8 +230,12 @@ namespace LagoVista.UserAdmin.Models.Contacts
     [EntityDescription(Domains.EmailServicesDomain, UserAdminResources.Names.EmailSenders_Title, UserAdminResources.Names.EmailSender_Description, UserAdminResources.Names.EmailSender_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(UserAdminResources),
       Icon: "icon-pz-programmer", EditUIUrl: "/marketing/emailcampaigns/sender/{id|", CreateUIUrl: "/marketing/emailcampaigns/sender/add", ListUIUrl: "/marketing/emailcampaigns/senders",
       SaveUrl: "/api/email/sender", GetUrl: "/api/email/sender/{id}", GetListUrl: "/api/email/senders", DeleteUrl: "/api/email/sender/{id}", FactoryUrl: "/api/email/sender/factory")]
-    public class EmailSenderSummary : SummaryData
+    public class EmailSenderSummary
     {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Key { get; set; }
+        public string Icon { get; set; }
         public bool Verified { get; set; }
     }
 }
