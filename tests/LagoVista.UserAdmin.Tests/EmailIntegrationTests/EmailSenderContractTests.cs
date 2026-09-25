@@ -25,7 +25,7 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
             Assert.IsFalse(sender.Verified);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true)]
         [DataRow(false)]
         public void CreateSummaryPreservesVerifiedAndExistingFields(bool verified)
@@ -44,10 +44,10 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
 
             var summary = sender.CreateSummary();
 
-            Assert.AreEqual("42", summary.Id);
+            Assert.AreEqual<string>("42", summary.Id);
             Assert.AreEqual("Transactional Sender", summary.Name);
-            Assert.AreEqual("sender@example.com", summary.Key);
-            Assert.AreEqual("icon-pz-programmer", summary.Icon);
+            Assert.AreEqual<string>("sender@example.com", summary.Key);
+            Assert.AreEqual<string>("icon-pz-programmer", summary.Icon);
             Assert.AreEqual(verified, summary.Verified);
         }
 
