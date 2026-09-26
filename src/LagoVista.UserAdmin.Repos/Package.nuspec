@@ -19,7 +19,7 @@
         <dependency id="LagoVista.CloudStorage" version="7.0.54" />
         <dependency id="LagoVista.Core.Configuration" version="7.0.12" />
         <dependency id="LagoVista.Relational" version="7.0.54" />
-        <dependency id="LagoVista.UserAdmin" version="7.0.11" />
+        <dependency id="LagoVista.UserAdmin" version="7.0.12" />
       </group>
     </dependencies>
   </metadata>
