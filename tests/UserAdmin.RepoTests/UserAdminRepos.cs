@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Interfaces;
+﻿using System;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Interfaces.AutoMapper;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Relational.DataContexts;
@@ -40,7 +41,23 @@ namespace UserAdmin.RepoTest
             _systemUsers = new RelationalTestSystemUsers();
             _appConfig = new TestAppConfig();
 
-            _billingFactory.Setup(f => f.CreateDbContext()).Returns(billing);
+            _billingFactory.Setup(f => f.CreateDbContext()).Returns(() =>
+            {
+                var builder = new DbContextOptionsBuilder<BillingDataContext>();
+                var provider = billing.Database.ProviderName ?? String.Empty;
+                var connection = billing.Database.GetDbConnection();
+
+                if (provider.Contains("Sqlite", StringComparison.OrdinalIgnoreCase))
+                    builder.UseSqlite(connection);
+                else if (provider.Contains("SqlServer", StringComparison.OrdinalIgnoreCase))
+                    builder.UseSqlServer(connection);
+                else if (provider.Contains("Npgsql", StringComparison.OrdinalIgnoreCase))
+                    builder.UseNpgsql(connection);
+                else
+                    throw new NotSupportedException($"Unsupported test provider '{provider}'.");
+
+                return new BillingDataContext(builder.Options);
+            });
         }
 
 
