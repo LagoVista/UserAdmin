@@ -34,6 +34,7 @@ namespace LagoVista.AspNetCore.Identity
 
             services.AddScoped<ICoreEmailServices, SendGridEmailService>();
             services.AddScoped<IEmailSender, SendGridEmailService>();
+            services.AddScoped<ISendGridMetricsClient, SendGridMetricsClient>();
             services.AddScoped<ISmsSender, TwilioSMSSender>();
 
             services.AddScoped<IClaimsFactory, ClaimsFactory>();
