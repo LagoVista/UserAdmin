@@ -66,11 +66,6 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
             return (await QueryAsync(own => own.PhoneNumber == phone.CleanPhoneNumber())).SingleOrDefault();
         }
 
-        public Task<ListResponse<DeviceOwnerUserSummary>> GetAllForOrgAsync(string orgId, ListRequest listRequest)
-        {
-            return QuerySummaryAsync<DeviceOwnerUserSummary, DeviceOwnerUser>(rec => rec.OwnerOrganization != null && rec.OwnerOrganization.Id == orgId, rec => rec.Name, listRequest);
-        }
-
         public Task<ListResponse<DeviceOwnerUserSummary>> GetAllAsync(ListRequest listRequest)
         {
             return QuerySummaryAsync<DeviceOwnerUserSummary, DeviceOwnerUser>(rec => true, rec => rec.Name, listRequest);
