@@ -35,9 +35,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Relational
         {
             var dto = new OwnedDeviceDTO()
             {
-                Id = GuidString36.Factory(),
-                DeviceUniqueId = device.Id,
-                DeviceId = device.Id,
+                Id = device.Id,
+                DeviceUniqueId = device.Device.Id,
+                DeviceId = device.DeviceId,
                 DeviceName = device.Device.Text,
                 Discount = 0,
                 DeviceOwnerUserId = userId,
@@ -67,10 +67,14 @@ namespace LagoVista.UserAdmin.Repos.Repos.Relational
         }
 
 
-        public Task DeleteUserAsync(NormalizedId32 id)
+        public async Task DeleteUserAsync(NormalizedId32 id)
         {
-            return _context.DeviceOwnerUserDevices
-                    .Where(x => x.Id == id)
+            await _context.DeviceOwnerUserDevices
+                    .Where(x => x.DeviceOwnerUserId == id)
+                    .ExecuteDeleteAsync();
+
+            await _context.DeviceOwnerUser
+                    .Where(x => x.DeviceOwnerUserId == id)
                     .ExecuteDeleteAsync();
         }
 
@@ -111,9 +115,12 @@ namespace LagoVista.UserAdmin.Repos.Repos.Relational
         public Task UpdateOwnedDeviceAsync(NormalizedId32 orgId, DeviceOwnerDevices device)
         {
             return _context.DeviceOwnerUserDevices
-                   .Where(x => x.DeviceOwnerUserId == device.Id)
+                   .Where(x => x.Id == device.Id)
                    .ExecuteUpdateAsync(setters => setters
-                   .SetProperty(x => x.DeviceName, device.Device.Text));
+                   .SetProperty(x => x.DeviceUniqueId, device.Device.Id)
+                   .SetProperty(x => x.DeviceId, device.DeviceId)
+                   .SetProperty(x => x.DeviceName, device.Device.Text)
+                   .SetProperty(x => x.ProductId, Guid.Parse(device.Product.Id)));
         }
 
         public Task UpdateUserAsync(DeviceOwnerUser deviceOwner)

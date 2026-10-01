@@ -66,6 +66,11 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
             return (await QueryAsync(own => own.PhoneNumber == phone.CleanPhoneNumber())).SingleOrDefault();
         }
 
+        public Task<ListResponse<DeviceOwnerUserSummary>> GetAllForOrgAsync(string orgId, ListRequest listRequest)
+        {
+            return QuerySummaryAsync<DeviceOwnerUserSummary, DeviceOwnerUser>(rec => rec.OwnerOrganization != null && rec.OwnerOrganization.Id == orgId, rec => rec.Name, listRequest);
+        }
+
         public Task<ListResponse<DeviceOwnerUserSummary>> GetAllAsync(ListRequest listRequest)
         {
             return QuerySummaryAsync<DeviceOwnerUserSummary, DeviceOwnerUser>(rec => true, rec => rec.Name, listRequest);
@@ -82,6 +87,9 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
         {
             var owner = await FindByIdAsync(ownerId);
             var existing = owner.Devices.SingleOrDefault(dev => dev.Id == id);
+            if (existing == null)
+                return owner;
+
             owner.Devices.Remove(existing);
             await UpdateUserAsync(owner);
             await _relationalRepo.RemoveOwnedDeviceAsync(orgId, id);
@@ -93,8 +101,13 @@ namespace LagoVista.UserAdmin.Repos.Repos.Account
         {
             var owner = await FindByIdAsync(ownerId);
             var existing = owner.Devices.SingleOrDefault(dev => dev.Id == device.Id);
+            if (existing == null)
+                return owner;
 
-            await _relationalRepo.UpdateOwnedDeviceAsync(orgId,  device);
+            var index = owner.Devices.IndexOf(existing);
+            owner.Devices[index] = device;
+            await UpsertDocumentAsync(owner);
+            await _relationalRepo.UpdateOwnedDeviceAsync(orgId, device);
             return owner;      
         }
 
