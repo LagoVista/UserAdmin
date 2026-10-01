@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 namespace LagoVista.UserAdmin.Auth.Tests
 {
     [TestFixture]
+    [Category("Integration")]
     public class InvitationAcceptanceServiceIntegrationTests
     {
         private const string InvitationAcceptanceEvidence = "auth|auth.test-binding.invitation.accept|auth.flow.invitation.accept|auth.transition.invitation.accept";

@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 namespace LagoVista.UserAdmin.Auth.Tests
 {
     [TestFixture]
+    [Category("Integration")]
     public class AppUserPasskeyMfaIntegrationTests
     {
         private const string Evidence = "auth|auth.test-binding.passkey-sign-in.mfa|auth.behavior.passkey.mfa-sign-in|auth.transition.passkey.complete-mfa";

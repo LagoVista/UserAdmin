@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 namespace LagoVista.UserAdmin.Auth.Tests
 {
     [TestFixture]
+    [Category("Integration")]
     public class SignOutFlowIntegrationTests
     {
         private const string Evidence = "auth|auth.test-binding.session-sign-out|auth.flow.session-sign-out|auth.transition.session.sign-out-success";

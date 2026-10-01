@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 namespace LagoVista.UserAdmin.Auth.Tests
 {
     [TestFixture]
+    [Category("Integration")]
     public class RecoveryCodeAuthenticationFlowIntegrationTests
     {
         private const string SuccessEvidence = "auth|auth.test-binding.totp-sign-in.recovery-code|auth.flow.totp-recovery-sign-in|auth.transition.totp-recovery-sign-in.success";

@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 namespace LagoVista.UserAdmin.Auth.Tests
 {
     [TestFixture]
+    [Category("Integration")]
     public class AppUserPasskeyManagementIntegrationTests
     {
         private const string AddEvidence = "auth|auth.test-binding.passkey-management|auth.behavior.passkey.add-success|auth.transition.passkey.begin-existing-user-registration|auth.transition.passkey.complete-existing-user-registration";

@@ -29,6 +29,7 @@ using LagoVistaSignInManager = LagoVista.AspNetCore.Identity.Managers.SignInMana
 namespace LagoVista.UserAdmin.Auth.Tests
 {
     [TestFixture]
+    [Category("Integration")]
     public class PasswordLoginFlowIntegrationTests
     {
         private const string SuccessEvidence = "auth|auth.test-binding.password-sign-in|auth.flow.password-sign-in|auth.transition.password-sign-in.success";
