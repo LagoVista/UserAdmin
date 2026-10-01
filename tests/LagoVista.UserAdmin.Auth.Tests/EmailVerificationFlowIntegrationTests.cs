@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 namespace LagoVista.UserAdmin.Auth.Tests
 {
     [TestFixture]
+    [Category("Integration")]
     public class EmailVerificationFlowIntegrationTests
     {
         private const string AcceptedVerificationEvidence = "auth|auth.test-binding.email-verification.verify-code|auth.flow.email-verification.verify-code|auth.transition.email-verification.code-accepted";

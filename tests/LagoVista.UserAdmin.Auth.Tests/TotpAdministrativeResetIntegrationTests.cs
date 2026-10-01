@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 namespace LagoVista.UserAdmin.Auth.Tests
 {
     [TestFixture]
+    [Category("Integration")]
     public class TotpAdministrativeResetIntegrationTests
     {
         private const string Evidence = "auth|auth.test-binding.totp-management.admin-reset|auth.transition.totp-management.admin-reset-success";

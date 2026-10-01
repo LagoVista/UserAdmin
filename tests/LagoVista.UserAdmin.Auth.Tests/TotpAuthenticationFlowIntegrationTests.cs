@@ -33,6 +33,7 @@ using LagoVistaSignInManager = LagoVista.AspNetCore.Identity.Managers.SignInMana
 namespace LagoVista.UserAdmin.Auth.Tests
 {
     [TestFixture]
+    [Category("Integration")]
     public class TotpAuthenticationFlowIntegrationTests
     {
         private const string SuccessEvidence = "auth|auth.test-binding.totp-sign-in|auth.flow.totp-sign-in|auth.transition.totp-sign-in.success";

@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 namespace LagoVista.UserAdmin.Auth.Tests
 {
     [TestFixture]
+    [Category("Integration")]
     public class PasswordRecoveryCompletionFlowIntegrationTests
     {
         private const string RecoveryCompletionSuccessEvidence = "auth|auth.test-binding.recovery.complete|auth.flow.recovery.complete|auth.transition.password-recovery.completed";
