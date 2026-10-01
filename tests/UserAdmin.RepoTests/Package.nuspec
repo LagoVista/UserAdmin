@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>UserAdmin.RepoTest</id>
-    <version>7.0.13</version>
+    <version>7.0.15</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
