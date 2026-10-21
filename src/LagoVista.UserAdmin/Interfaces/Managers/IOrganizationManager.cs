@@ -21,7 +21,8 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
 
     public interface IOrganizationManager : IOrgInformationSource
     {
-        Task<InvokeResult> AddUserToOrgAsync(String orgId, String userId, EntityHeader userOrg, EntityHeader addedBy);
+        Task<InvokeResult> AddUserToOrgAsync(String orgId, String userId, EntityHeader userOrg, EntityHeader addedBy, bool setCurrentOrganizationIfMissing = true);
+        Task<InvokeResult> AddUserToOrgByEmailAsync(string orgId, string email, EntityHeader userOrg, EntityHeader addedBy);
         Task<InvokeResult> AddUserToOrgAsync(AppUser appUser, EntityHeader org, EntityHeader addedBy, bool isOrgAdmin = false, bool isAppBuilder = false);
         Task<InvokeResult> AddUserToOrgAsync(EntityHeader userToAdd, EntityHeader org, EntityHeader addedBy, bool isOrgAdmin = false, bool isAppBuilder = false);
        

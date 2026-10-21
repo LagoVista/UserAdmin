@@ -941,7 +941,19 @@ namespace LagoVista.UserAdmin.Managers
             await _authLogMgr.AddAsync(AuthLogTypes.AddUserToOrg, orgUser.UserId, orgUser.UserName, userOrg.Id, userOrg.Text, extras: $"removed default role by id: {setByUser.Id}, name: {setByUser.Text}");
         }
 
-        public async Task<InvokeResult> AddUserToOrgAsync(string orgId, string userId, EntityHeader userOrg, EntityHeader addedBy)
+        public async Task<InvokeResult> AddUserToOrgByEmailAsync(string orgId, string email, EntityHeader userOrg, EntityHeader addedBy)
+        {
+            if (String.IsNullOrWhiteSpace(email))
+                return InvokeResult.FromError("An email address is required to add a user to an organization.");
+
+            var appUser = await _appUserRepo.FindByEmailAsync(email.Trim());
+            if (appUser == null)
+                return InvokeResult.FromError($"Could not find an existing user with email address [{email.Trim()}].");
+
+            return await AddUserToOrgAsync(orgId, appUser.Id, userOrg, addedBy, setCurrentOrganizationIfMissing: false);
+        }
+
+        public async Task<InvokeResult> AddUserToOrgAsync(string orgId, string userId, EntityHeader userOrg, EntityHeader addedBy, bool setCurrentOrganizationIfMissing = true)
         {
             var timeStamp = UtcTimestamp.Now;
 
@@ -988,7 +1000,7 @@ namespace LagoVista.UserAdmin.Managers
             await _orgUserRepo.AddOrgUserAsync(user);
             await _authLogMgr.AddAsync(AuthLogTypes.AddUserToOrg, appUser.Id, appUser.Name, org.Id, org.Name, extras: $"added by id: {addedBy.Id}, name: {addedBy.Text}");
 
-            if (null == appUser.CurrentOrganization)
+            if (setCurrentOrganizationIfMissing && null == appUser.CurrentOrganization)
             {
                 var orgDetail = await _organizationRepo.GetOrganizationAsync(org.Id);
                 appUser.CurrentOrganization = orgDetail.CreateSummary();
