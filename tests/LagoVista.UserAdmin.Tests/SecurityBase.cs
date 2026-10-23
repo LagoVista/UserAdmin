@@ -195,6 +195,7 @@ namespace LagoVista.UserAdmin.Tests
         public void Init()
         {
             _accessManager = new UserAccessManager(_userSecurityService.Object, _orgRepo.Object, _moduleRepo,  new AdminLogger(new ConsoleLogWriter()));
+            _orgRepo.Setup(org => org.GetOrganizationAsync(ORG_ID)).ReturnsAsync(new LagoVista.UserAdmin.Models.Orgs.Organization { Id = ORG_ID, IsForProductLine = false });
 
             _mod1 = AddModule("mod1-restrict", true, 1);
             _mod2 = AddModule("mod2-restrict", true, 2);
