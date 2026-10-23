@@ -195,62 +195,62 @@ namespace LagoVista.UserAdmin.Tests
         {
             _accessManager = new UserAccessManager(_userSecurityService.Object, _orgRepo.Object, _moduleRepo,  new AdminLogger(new ConsoleLogWriter()));
 
-            _mod1 = AddModule("mod1_restrict", true, 1);
-            _mod2 = AddModule("mod2_restrict", true, 2);
-            _mod3 = AddModule("mod3_restrict", true, 3);
-            _mod4 = AddModule("mod4_restrict", true, 4);
-            _mod5 = AddModule("mod5_non_restrict", false, 5);
+            _mod1 = AddModule("mod1-restrict", true, 1);
+            _mod2 = AddModule("mod2-restrict", true, 2);
+            _mod3 = AddModule("mod3-restrict", true, 3);
+            _mod4 = AddModule("mod4-restrict", true, 4);
+            _mod5 = AddModule("mod5-non-restrict", false, 5);
             _modules = new List<Module>() { _mod1, _mod2, _mod3, _mod4, _mod5 };
 
             var area = AddArea(_mod1, "area1");
-            var page = AddPage(area, $"{area.Key}_page1");
+            var page = AddPage(area, $"{area.Key}-page1");
             AddFeature(page, $"{area.Key}_{page.Key}_f1");
             AddFeature(page, $"{area.Key}_{page.Key}_f2");
-            page = AddPage(area, $"{area.Key}_page2");
+            page = AddPage(area, $"{area.Key}-page2");
             AddFeature(page, $"{area.Key}_{page.Key}_f1");
-            page = AddPage(area, $"{area.Key}_page3");
+            page = AddPage(area, $"{area.Key}-page3");
             AddFeature(page, $"{area.Key}_{page.Key}_f1");
-            page = AddPage(area, $"{area.Key}_page4");
+            page = AddPage(area, $"{area.Key}-page4");
             AddFeature(page, $"{area.Key}_{page.Key}_f1");
             AddFeature(page, $"{area.Key}_{page.Key}_f2");
 
             area = AddArea(_mod1, "area2");
-            page = AddPage(area, $"{area.Key}_page1");
-            page = AddPage(area, $"{area.Key}_page2");
+            page = AddPage(area, $"{area.Key}-page1");
+            page = AddPage(area, $"{area.Key}-page2");
             AddFeature(page, $"{area.Key}_{page.Key}_f1");
-            page = AddPage(area, $"{area.Key}_page3");
+            page = AddPage(area, $"{area.Key}-page3");
             AddFeature(page, $"{area.Key}_{page.Key}_f1");
             AddFeature(page, $"{area.Key}_{page.Key}_f2");
-            page = AddPage(area, $"{area.Key}_page4`");
-            page = AddPage(area, $"{area.Key}_page5`");
+            page = AddPage(area, $"{area.Key}-page4");
+            page = AddPage(area, $"{area.Key}-page5");
             AddFeature(page, $"{area.Key}_{page.Key}_f1");
-            page = AddPage(area, $"{area.Key}_page6");
+            page = AddPage(area, $"{area.Key}-page6");
             AddFeature(page, $"{area.Key}_{page.Key}_f1");
-            page = AddPage(area, $"{area.Key}_page7`");
+            page = AddPage(area, $"{area.Key}-page7");
             AddFeature(page, $"{area.Key}_{page.Key}_f1");
             AddFeature(page, $"{area.Key}_{page.Key}_f2");
             AddFeature(page, $"{area.Key}_{page.Key}_f3");
             AddFeature(page, $"{area.Key}_{page.Key}_f4");
 
             area = AddArea(_mod1, "area3");
-            page = AddPage(area, $"{area.Key}_page1");
+            page = AddPage(area, $"{area.Key}-page1");
             AddFeature(page, $"{area.Key}_{page.Key}_f1");
             AddFeature(page, $"{area.Key}_{page.Key}_f2");
-            page = AddPage(area, $"{area.Key}_page2");
+            page = AddPage(area, $"{area.Key}-page2");
             AddFeature(page, $"{area.Key}_{page.Key}_f1");
 
             area = AddArea(_mod1, "area4");
-            page = AddPage(area, $"{area.Key}_page1");
+            page = AddPage(area, $"{area.Key}-page1");
             AddFeature(page, $"{area.Key}_{page.Key}_f1");
-            page = AddPage(area, $"{area.Key}_page2");
+            page = AddPage(area, $"{area.Key}-page2");
             AddFeature(page, $"{area.Key}_{page.Key}_f1");
             AddFeature(page, $"{area.Key}_{page.Key}_f2");
 
             area = AddArea(_mod1, "area5");
-            page = AddPage(area, $"{area.Key}_page1");
+            page = AddPage(area, $"{area.Key}-page1");
             AddFeature(page, $"{area.Key}_{page.Key}_f1");
             AddFeature(page, $"{area.Key}_{page.Key}_f2");
-            page = AddPage(area, $"{area.Key}_page2");
+            page = AddPage(area, $"{area.Key}-page2");
             AddFeature(page, $"{area.Key}_{page.Key}_f1");
             AddFeature(page, $"{area.Key}_{page.Key}_f2");
 
