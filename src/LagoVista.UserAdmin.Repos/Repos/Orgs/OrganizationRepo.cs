@@ -183,7 +183,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         {
             try
             {
-                var organization = (await QueryAsync(org => org.Namespace == namespaceText));
+                var organization = (await QueryAsync(org => org.Namespace.Value == namespaceText));
                 var list = organization.ToList();
                 return list.Any();
             }
