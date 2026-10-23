@@ -118,53 +118,65 @@ namespace LagoVista.UserAdmin.Managers
                 return module;
             }
 
-            var originalAreas = new List<Area>(module.Areas);
-            var userAccessList = await _userSecurityService.GetModuleRoleAccessForUserAsync(module.Id, userId, orgId);
+            var originalAreas = new List<Area>(module.Areas);var userAccessList = await _userSecurityService.GetModuleRoleAccessForUserAsync(module.Id, userId, orgId);
             
             foreach (var area in module.Areas)
             {
-                if (!area.RestrictByDefault || userAccessList.Where(ual=>ual.Area?.Id == area.Id).Any())
+                var areaAccess = userAccessList.Where(ual => ual.Area?.Id == area.Id).ToList();
+                var hasAccessiblePage = area.Pages.Any(page =>
+                    !page.RestrictByDefault ||
+                    page.Features.Any(feature => !feature.RestrictByDefault) ||
+                    userAccessList.Any(ual => ual.Area?.Id == area.Id && ual.Page?.Id == page.Id));
+
+                if (area.RestrictByDefault && areaAccess.Count == 0 && !hasAccessiblePage)
+                    continue;
+
+                if (!area.RestrictByDefault)
                 {
                     if (module.UserAccess == null)
                         module.UserAccess = new UserAccess() { Read = UserAccess.Grant };
 
                     area.UserAccess = UserAccess.GetFullAccess();
+                }
 
-                    foreach (var page in area.Pages)
+                foreach (var page in area.Pages)
+                {
+                    var pageHasAccess = userAccessList.Any(ual => ual.Area?.Id == area.Id && ual.Page?.Id == page.Id);
+                    var hasAccessibleFeature = page.Features.Any(feature => !feature.RestrictByDefault);
+                    if (page.RestrictByDefault && !pageHasAccess && !hasAccessibleFeature)
+                        continue;
+
+                    if (!page.RestrictByDefault)
                     {
-                        if (!page.RestrictByDefault)
+                        if (module.UserAccess == null)
+                            module.UserAccess = new UserAccess() { Read = UserAccess.Grant };
+
+                        if (area.UserAccess == null)
+                            area.UserAccess = new UserAccess() { Read = UserAccess.Grant };
+
+                        page.UserAccess = UserAccess.GetFullAccess();
+                    }
+
+                    foreach (var feature in page.Features)
+                    {
+                        if (!feature.RestrictByDefault)
                         {
-                            if (module.UserAccess == null)
-                                module.UserAccess = new UserAccess() { Read = UserAccess.Grant };
+                            if (page.UserAccess == null)
+                                page.UserAccess = new UserAccess() { Read = UserAccess.Grant };
 
                             if (area.UserAccess == null)
                                 area.UserAccess = new UserAccess() { Read = UserAccess.Grant };
 
-                            page.UserAccess = UserAccess.GetFullAccess();
+                            if (module.UserAccess == null)
+                                module.UserAccess = new UserAccess() { Read = UserAccess.Grant };
 
-                            foreach (var feature in page.Features)
-                            {
-                                if (!feature.RestrictByDefault)
-                                {
-                                    if (page.UserAccess == null)
-                                        page.UserAccess = new UserAccess() { Read = UserAccess.Grant };
-
-                                    if (area.UserAccess == null)
-                                        area.UserAccess = new UserAccess() { Read = UserAccess.Grant };
-
-                                    if (module.UserAccess == null)
-                                        module.UserAccess = new UserAccess() { Read = UserAccess.Grant };
-
-                                    feature.UserAccess = UserAccess.GetFullAccess();
-                                }
-                            }
+                            feature.UserAccess = UserAccess.GetFullAccess();
                         }
                     }
                 }
             }
-
-
-#if VERBOSE
+            
+            #if VERBOSE
             _adminLogger.Trace($"Evaluating User Access List, Count: {userAccessList.Count} - Module Areas Count: {originalAreas.Count}");
 #endif
 
