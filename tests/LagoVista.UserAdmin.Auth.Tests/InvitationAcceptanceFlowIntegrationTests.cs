@@ -11,6 +11,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
 {
     [TestFixture]
     [Category("Integration")]
+    [Property("TestCategory", "Integration")]
     public class InvitationAcceptanceFlowIntegrationTests
     {
         private const string InvitationAcceptanceEvidence = "auth|auth.test-binding.invitation.accept|auth.flow.invitation.accept|auth.transition.invitation.accept";

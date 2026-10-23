@@ -26,6 +26,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
 {
     [TestFixture]
     [Category("Integration")]
+    [Property("TestCategory", "Integration")]
     public class PasswordChangeFlowIntegrationTests
     {
         private const string SuccessEvidence = "auth|auth.test-binding.password-management.change|auth.flow.password-management.change|auth.transition.password-management.change-success";
