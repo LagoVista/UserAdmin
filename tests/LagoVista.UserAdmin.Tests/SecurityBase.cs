@@ -58,6 +58,7 @@ namespace LagoVista.UserAdmin.Tests
                 Key = key,
                 Id = Guid.NewGuid().ToString("N").ToUpperInvariant(),
                 Name = key,
+                OwnerOrganization = EntityHeader.Create(ORG_ID, "organization", "Organization"),
                 SortOrder = sortOrder,
                 RestrictByDefault = restrictByDefault
             };

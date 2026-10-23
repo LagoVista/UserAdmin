@@ -23,7 +23,7 @@ namespace LagoVista.UserAdmin.Tests.User
             var pg1 = _mod1.Areas[0].Pages[0];
             pg1.RestrictByDefault = false;
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             Assert.AreEqual(0, module.Areas[0].Pages[0].Features.Count);
         }
 
@@ -33,7 +33,7 @@ namespace LagoVista.UserAdmin.Tests.User
             var ft1 = _mod1.Areas[0].Pages[0].Features[0];
             ft1.RestrictByDefault = false;
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             ValidateUserAccess(module.UserAccess, UserAccess.Revoke, UserAccess.Grant, UserAccess.Revoke, UserAccess.Revoke);
         }
 
@@ -43,7 +43,7 @@ namespace LagoVista.UserAdmin.Tests.User
             var ft1 = _mod1.Areas[0].Pages[0].Features[0];
             ft1.RestrictByDefault = false;
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             ValidateUserAccess(module.Areas[0].UserAccess, UserAccess.Revoke, UserAccess.Grant, UserAccess.Revoke, UserAccess.Revoke);
         }
 
@@ -53,7 +53,7 @@ namespace LagoVista.UserAdmin.Tests.User
             var ft1 = _mod1.Areas[0].Pages[0].Features[0];
             ft1.RestrictByDefault = false;
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             ValidateUserAccess(module.Areas[0].Pages[0].UserAccess, UserAccess.Revoke, UserAccess.Grant, UserAccess.Revoke, UserAccess.Revoke);
         }
 
@@ -63,7 +63,7 @@ namespace LagoVista.UserAdmin.Tests.User
             var ft1 = _mod1.Areas[0].Pages[0].Features[0];
             ft1.RestrictByDefault = false;
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             ValidateUserAccess(module.Areas[0].Pages[0].Features[0].UserAccess, UserAccess.Grant, UserAccess.Grant, UserAccess.Grant, UserAccess.Grant);
         }
 
@@ -72,7 +72,7 @@ namespace LagoVista.UserAdmin.Tests.User
         {
             AddFeatureAccess(_role1, _mod1, _mod1.Areas[0], _mod1.Areas[0].Pages[0], _mod1.Areas[0].Pages[0].Features[0], UserAccess.Grant);
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             ValidateUserAccess(module.UserAccess, UserAccess.Revoke, UserAccess.Grant, UserAccess.Revoke, UserAccess.Revoke);
         }
 
@@ -81,7 +81,7 @@ namespace LagoVista.UserAdmin.Tests.User
         {
             AddFeatureAccess(_role1, _mod1, _mod1.Areas[0], _mod1.Areas[0].Pages[0], _mod1.Areas[0].Pages[0].Features[0], UserAccess.Grant);
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             ValidateUserAccess(module.Areas[0].UserAccess, UserAccess.Revoke, UserAccess.Grant, UserAccess.Revoke, UserAccess.Revoke);
         }
 
@@ -90,7 +90,7 @@ namespace LagoVista.UserAdmin.Tests.User
         {
             AddFeatureAccess(_role1, _mod1, _mod1.Areas[0], _mod1.Areas[0].Pages[0], _mod1.Areas[0].Pages[0].Features[0], UserAccess.Grant);
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             ValidateUserAccess(module.Areas[0].Pages[0].UserAccess, UserAccess.Revoke, UserAccess.Grant, UserAccess.Revoke, UserAccess.Revoke);
         }
 
@@ -99,7 +99,7 @@ namespace LagoVista.UserAdmin.Tests.User
         {
             AddFeatureAccess(_role1, _mod1, _mod1.Areas[0], _mod1.Areas[0].Pages[0], _mod1.Areas[0].Pages[0].Features[0], UserAccess.Grant);
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             ValidateUserAccess(module.Areas[0].Pages[0].Features[0].UserAccess, UserAccess.Revoke, UserAccess.Grant, UserAccess.Revoke, UserAccess.Revoke);
         }
 
@@ -109,7 +109,7 @@ namespace LagoVista.UserAdmin.Tests.User
         {
             AddFeatureAccess(_role1, _mod1, _mod1.Areas[0], _mod1.Areas[0].Pages[0], _mod1.Areas[0].Pages[0].Features[0], UserAccess.Grant, UserAccess.Grant, UserAccess.Grant, UserAccess.Grant);
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             ValidateUserAccess(module.Areas[0].Pages[0].Features[0].UserAccess, UserAccess.Grant, UserAccess.Grant, UserAccess.Grant, UserAccess.Grant);
         }
     }

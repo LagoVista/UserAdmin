@@ -16,7 +16,7 @@ namespace LagoVista.UserAdmin.Tests.User
         public async Task Should_Have_No_Area_Access()
         {
             _mod1.RestrictByDefault = false;
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             Assert.AreEqual(0, module.Areas.Count);
         }
 
@@ -31,7 +31,7 @@ namespace LagoVista.UserAdmin.Tests.User
             var nr2 = _mod1.Areas[3];
             nr2.RestrictByDefault = false;
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             Assert.IsNotNull(module.Areas.SingleOrDefault(ar => ar.Id == nr1.Id));
             Assert.IsNotNull(module.Areas.SingleOrDefault(ar => ar.Id == nr2.Id));
 
@@ -55,7 +55,7 @@ namespace LagoVista.UserAdmin.Tests.User
             var added2 = _mod1.Areas[2];
             AddAreaAccess(_role1, _mod1, added2);
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             Assert.IsNotNull(module.Areas.SingleOrDefault(ar => ar.Id == added2.Id));
 
             ValidateUserAccess(module.UserAccess, UserAccess.Revoke, UserAccess.Grant, UserAccess.Revoke, UserAccess.Revoke);
@@ -72,7 +72,7 @@ namespace LagoVista.UserAdmin.Tests.User
 
             AddAreaAccess(_role1, _mod1, added2);
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             var addedArea = module.Areas.SingleOrDefault(ar => ar.Id == added2.Id);
 
             Assert.AreEqual(1, module.Areas.Count);
@@ -89,7 +89,7 @@ namespace LagoVista.UserAdmin.Tests.User
 
             AddAreaAccess(_role1, _mod1, added2, UserAccess.Grant, UserAccess.Grant, UserAccess.Grant, UserAccess.Grant);
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
           
             var addedArea = module.Areas.SingleOrDefault(ar => ar.Id == added2.Id);
 
@@ -105,7 +105,7 @@ namespace LagoVista.UserAdmin.Tests.User
 
             AddAreaAccess(_role1, _mod1, added2, UserAccess.Grant, UserAccess.Grant, UserAccess.Grant, UserAccess.Grant);
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
 
             var addedArea = module.Areas.SingleOrDefault(ar => ar.Id == added2.Id);
 
@@ -122,7 +122,7 @@ namespace LagoVista.UserAdmin.Tests.User
 
             AddAreaAccess(_role1, _mod1, added2, UserAccess.Revoke, UserAccess.Revoke, UserAccess.Revoke, UserAccess.Revoke);
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             ValidateUserAccess(module.UserAccess, UserAccess.Revoke, UserAccess.Revoke, UserAccess.Revoke, UserAccess.Revoke);
             Assert.AreEqual(0, module.Areas.Count);
         }
