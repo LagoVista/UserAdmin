@@ -80,7 +80,7 @@ namespace LagoVista.UserAdmin.Tests.Distribution
 
             var appUser = new AppUser()
             {
-                Id = $"USERID{_index}",
+                Id = Guid.NewGuid().ToString("N").ToUpperInvariant(),
                 FirstName = $"FN_{_index}",
                 LastName = $"FN_{_index}",
                 PhoneNumber = $"6125551{_index}",
