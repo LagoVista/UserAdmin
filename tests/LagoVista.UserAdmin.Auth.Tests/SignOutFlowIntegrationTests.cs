@@ -15,7 +15,6 @@ namespace LagoVista.UserAdmin.Auth.Tests
 {
     [TestFixture]
     [Category("Integration")]
-    [Property("TestCategory", "Integration")]
     public class SignOutFlowIntegrationTests
     {
         private const string Evidence = "auth|auth.test-binding.session-sign-out|auth.flow.session-sign-out|auth.transition.session.sign-out-success";
