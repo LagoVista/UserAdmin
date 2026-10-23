@@ -34,6 +34,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
 {
     [TestFixture]
     [Category("Integration")]
+    [Property("TestCategory", "Integration")]
     public class TotpAuthenticationFlowIntegrationTests
     {
         private const string SuccessEvidence = "auth|auth.test-binding.totp-sign-in|auth.flow.totp-sign-in|auth.transition.totp-sign-in.success";

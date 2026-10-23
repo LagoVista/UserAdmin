@@ -18,6 +18,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
 {
     [TestFixture]
     [Category("Integration")]
+    [Property("TestCategory", "Integration")]
     public class TotpManagementFlowIntegrationTests
     {
         private const string TurnOffEvidence = "auth|auth.test-binding.totp-management.maintenance|auth.flow.totp-management.turn-off|auth.transition.totp-management.disable-success";

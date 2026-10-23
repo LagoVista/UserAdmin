@@ -19,6 +19,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
 {
     [TestFixture]
     [Category("Integration")]
+    [Property("TestCategory", "Integration")]
     public class TotpEnrollmentFlowIntegrationTests
     {
         private const string BeginEvidence = "auth|auth.test-binding.totp-enrollment.success|auth.flow.totp-enrollment.begin|auth.transition.totp-enrollment.begin";

@@ -20,6 +20,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
 {
     [TestFixture]
     [Category("Integration")]
+    [Property("TestCategory", "Integration")]
     public class PasswordRecoveryRequestFlowIntegrationTests
     {
         private const string RecoveryRequestEvidence = "auth|auth.test-binding.recovery.request|auth.flow.recovery.request|auth.transition.password-recovery.request-accepted";
