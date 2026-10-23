@@ -21,7 +21,7 @@ namespace LagoVista.UserAdmin.Tests.User
             var nr1 = _mod1.Areas[0];
             nr1.RestrictByDefault = false;
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             Assert.IsNotNull(module.Areas.SingleOrDefault(ar => ar.Id == nr1.Id));
             Assert.AreEqual(0, module.Areas.SingleOrDefault(ar => ar.Id == nr1.Id).Pages.Count);
         }
@@ -32,7 +32,7 @@ namespace LagoVista.UserAdmin.Tests.User
             var pg1 = _mod1.Areas[0].Pages[0];
             pg1.RestrictByDefault = false;
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             ValidateUserAccess(module.UserAccess, UserAccess.Revoke, UserAccess.Grant, UserAccess.Revoke, UserAccess.Revoke);
         }
 
@@ -42,7 +42,7 @@ namespace LagoVista.UserAdmin.Tests.User
             var pg1 = _mod1.Areas[0].Pages[0];
             pg1.RestrictByDefault = false;
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             ValidateUserAccess(module.Areas[0].UserAccess, UserAccess.Revoke, UserAccess.Grant, UserAccess.Revoke, UserAccess.Revoke);
         }
 
@@ -57,7 +57,7 @@ namespace LagoVista.UserAdmin.Tests.User
             pg2.RestrictByDefault = false;
             pg3.RestrictByDefault = false;
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
             ValidateUserAccess(module.UserAccess, UserAccess.Revoke, UserAccess.Grant, UserAccess.Revoke, UserAccess.Revoke);
 
             ValidateUserAccess(module.Areas.Single(ar => ar.Id == _mod1.Areas[0].Id).UserAccess, UserAccess.Revoke, UserAccess.Grant, UserAccess.Revoke, UserAccess.Revoke);
@@ -76,7 +76,7 @@ namespace LagoVista.UserAdmin.Tests.User
             var pg1 = _mod1.Areas[0].Pages[2];
             AddPageAccess(_role1, _mod1, _mod1.Areas[0], pg1, UserAccess.Grant, UserAccess.Revoke, UserAccess.Revoke, UserAccess.Revoke);
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
 
             Assert.AreEqual(1, module.Areas.Count);
             Assert.AreEqual(1, module.Areas[0].Pages.Count);
@@ -99,7 +99,7 @@ namespace LagoVista.UserAdmin.Tests.User
             var pg3 = _mod1.Areas[4].Pages[0];
             AddPageAccess(_role1, _mod1, _mod1.Areas[4], pg3, UserAccess.Grant, UserAccess.Revoke, UserAccess.Revoke, UserAccess.Revoke);
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
 
             Assert.AreEqual(3, module.Areas.Count);
             Assert.AreEqual(1, module.Areas[0].Pages.Count);
@@ -126,7 +126,7 @@ namespace LagoVista.UserAdmin.Tests.User
             var pg1 = _mod1.Areas[0].Pages[2];
             AddPageAccess(_role1, _mod1, _mod1.Areas[0], pg1, UserAccess.Grant, UserAccess.Grant, UserAccess.Grant, UserAccess.Grant);
 
-            var module = await AccessManager.GetUserModuleAsync(_mod1.Id, USER_ID, ORG_ID);
+            var module = await AccessManager.GetUserModuleAsync(_mod1.Key, USER_ID, ORG_ID);
 
             Assert.AreEqual(1, module.Areas.Count);
             Assert.AreEqual(1, module.Areas[0].Pages.Count);

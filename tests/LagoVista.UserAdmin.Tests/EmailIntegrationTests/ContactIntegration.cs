@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
 {
     [TestClass]
+    [TestCategory("Integration")]
     public class ContactIntegration
     {
         IEmailSender _emailSenderService;
@@ -47,7 +48,7 @@ namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
             var company = new Company()
             {
                 Name = "SL",
-                Id = "DEF456",
+                Id = "DEF45600000000000000000000000000",
                 Industry = EntityHeader.Create("tech", "Technology"),
                 OwnerOrganization = EntityHeader.Create("ABC","SL"),
                 City = "Tampa",

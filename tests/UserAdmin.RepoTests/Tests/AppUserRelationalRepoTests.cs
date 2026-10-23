@@ -62,7 +62,7 @@ namespace UserAdmin.RepoTests
 
     #region Provider Test Fixtures
 #if TEST_PROVIDER_SQLITE
-    [TestFixture]
+    [TestFixture, Category("Integration")]
     public sealed class AppUserRelationalRepo_Sqlite : AppUserRelationalRepoTests
     {
         protected override EfTestProvider Provider => EfTestProvider.SqliteInMemory;
@@ -70,7 +70,7 @@ namespace UserAdmin.RepoTests
 #endif
 
 #if TEST_PROVIDER_SQL
-    [TestFixture]
+    [TestFixture, Category("Integration")]
     public sealed class AppUserRelationalRepo_SqlServer : AppUserRelationalRepoTests
     {
         protected override EfTestProvider Provider => EfTestProvider.SqlServer;
@@ -78,7 +78,7 @@ namespace UserAdmin.RepoTests
 #endif
 
 #if TEST_PROVIDER_POSTGRES
-    [TestFixture, Category("Provider:Postgres")]
+    [TestFixture, Category("Integration"), Category("Provider:Postgres")]
     public sealed class AppUserRelationalRepo_Postgres : AppUserRelationalRepoTests
     {
         protected override EfTestProvider Provider => EfTestProvider.Postgres;

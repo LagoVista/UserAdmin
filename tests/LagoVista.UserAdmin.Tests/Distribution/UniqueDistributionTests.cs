@@ -80,7 +80,7 @@ namespace LagoVista.UserAdmin.Tests.Distribution
 
             var appUser = new AppUser()
             {
-                Id = $"USERID{_index}",
+                Id = Guid.NewGuid().ToString("N").ToUpperInvariant(),
                 FirstName = $"FN_{_index}",
                 LastName = $"FN_{_index}",
                 PhoneNumber = $"6125551{_index}",
@@ -126,9 +126,9 @@ namespace LagoVista.UserAdmin.Tests.Distribution
 
             var contacts = new System.Collections.Generic.List<ExternalContact>() { ec1, ec2, ec3, ec4, ec5 };
 
-            AddDistributionList("dist1", "Distro List 1", users, contacts);
+            AddDistributionList("D1570000000000000000000000000001", "Distro List 1", users, contacts);
 
-            var allContacts = await _distorMgr.GetAllContactsAsync("dist1");
+            var allContacts = await _distorMgr.GetAllContactsAsync("D1570000000000000000000000000001");
             Assert.AreEqual(9, allContacts.Count);
             foreach(var contact in allContacts)
             {
@@ -157,11 +157,11 @@ namespace LagoVista.UserAdmin.Tests.Distribution
 
             var contacts = new System.Collections.Generic.List<ExternalContact>() { ec1, ec2, ec3, ec4, ec5 };
 
-            AddDistributionList("dist1", "Distro List 1", userListOne, contacts);
-            AddDistributionList("dist2", "Distro List 1", userListTwo, new System.Collections.Generic.List<ExternalContact>());
+            AddDistributionList("D1570000000000000000000000000001", "Distro List 1", userListOne, contacts);
+            AddDistributionList("D1570000000000000000000000000002", "Distro List 1", userListTwo, new System.Collections.Generic.List<ExternalContact>());
 
-            var allContacts = await _distorMgr.GetAllContactsAsync("dist1");
-            allContacts = await _distorMgr.GetAllContactsAsync("dist2", allContacts);
+            var allContacts = await _distorMgr.GetAllContactsAsync("D1570000000000000000000000000001");
+            allContacts = await _distorMgr.GetAllContactsAsync("D1570000000000000000000000000002", allContacts);
             Assert.AreEqual(11, allContacts.Count);
             foreach (var contact in allContacts)
             {
