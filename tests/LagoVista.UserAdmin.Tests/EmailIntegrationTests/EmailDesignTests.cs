@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 namespace LagoVista.UserAdmin.Tests.EmailIntegrationTests
 {
     [TestClass]
+    [TestCategory("Integration")]
     public class EmailDesignTests
     {
         IEmailSender _emailSenderService;
