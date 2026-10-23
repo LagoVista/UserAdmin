@@ -56,7 +56,7 @@ namespace LagoVista.UserAdmin.Tests
             return new Module()
             {
                 Key = key,
-                Id = key,
+                Id = Guid.NewGuid().ToString("N").ToUpperInvariant(),
                 Name = key,
                 SortOrder = sortOrder,
                 RestrictByDefault = restrictByDefault
@@ -69,7 +69,7 @@ namespace LagoVista.UserAdmin.Tests
             {
                 Pages = new List<Page>(),
                 Key = key,
-                Id = key,
+                Id = Guid.NewGuid().ToString("N").ToUpperInvariant(),
                 Name = key,
                 RestrictByDefault = true,
             };
@@ -85,7 +85,7 @@ namespace LagoVista.UserAdmin.Tests
             {
                 Features = new List<Feature>(),
                 Key = pageKey,
-                Id = pageKey,
+                Id = Guid.NewGuid().ToString("N").ToUpperInvariant(),
                 Name = pageKey,
                 RestrictByDefault = true,
             };
@@ -100,7 +100,7 @@ namespace LagoVista.UserAdmin.Tests
             var feature = new Feature()
             {
                 Key = featureKey,
-                Id = featureKey,
+                Id = Guid.NewGuid().ToString("N").ToUpperInvariant(),
                 Name = featureKey,
                 RestrictByDefault = true,
             };
@@ -128,7 +128,7 @@ namespace LagoVista.UserAdmin.Tests
             return new Role()
             {
                 Key = key,
-                Id = key,
+                Id = Guid.NewGuid().ToString("N").ToUpperInvariant(),
                 Name = key
             };
         }
