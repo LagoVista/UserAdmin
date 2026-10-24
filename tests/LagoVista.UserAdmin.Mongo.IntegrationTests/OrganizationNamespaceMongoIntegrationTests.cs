@@ -170,7 +170,7 @@ public sealed class OrganizationNamespaceMongoIntegrationTests
     [SetUp]
     public void SetUp()
     {
-        _databaseName = $"useradmin_namespace_{MongoAssemblyFixture.RunId}_{Guid.NewGuid():N}";
+        _databaseName = $"ua_ns_{Guid.NewGuid():N}";
 
         var settings = new MongoDocumentStorageConnectionSettings
         {
