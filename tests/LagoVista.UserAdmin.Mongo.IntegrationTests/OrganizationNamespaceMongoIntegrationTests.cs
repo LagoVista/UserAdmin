@@ -57,6 +57,13 @@ public sealed class MongoAssemblyFixture
             $"-v {_volumeName}:/data/db " +
             $"--name {_containerName} public.ecr.aws/docker/library/mongo:8.0");
 
+        Assert.That(RunDocker($"inspect --format={{.HostConfig.Memory}} {_containerName}").Output.Trim(),
+            Is.EqualTo("536870912"), "Mongo integration container must be limited to 512 MB.");
+        Assert.That(RunDocker($"inspect --format={{.HostConfig.NanoCpus}} {_containerName}").Output.Trim(),
+            Is.EqualTo("1000000000"), "Mongo integration container must be limited to one CPU.");
+        Assert.That(RunDocker($"inspect --format={{.HostConfig.RestartPolicy.Name}} {_containerName}").Output.Trim(),
+            Is.EqualTo("no"), "Mongo integration container must never restart automatically.");
+
         StartExternalWatchdog(_containerName, _volumeName);
 
         for (var attempt = 0; attempt < 45; attempt++)
@@ -87,6 +94,23 @@ public sealed class MongoAssemblyFixture
 
         if (!String.IsNullOrWhiteSpace(_volumeName))
             RunDocker($"volume rm -f {_volumeName}", throwOnError: false);
+
+        if (!String.IsNullOrWhiteSpace(_containerName))
+        {
+            var containerInspect = RunDocker($"inspect {_containerName}", throwOnError: false);
+            Assert.That(containerInspect.ExitCode, Is.Not.EqualTo(0),
+                "Mongo integration container must not remain after the test invocation.");
+        }
+
+        if (!String.IsNullOrWhiteSpace(_volumeName))
+        {
+            var volumeInspect = RunDocker($"volume inspect {_volumeName}", throwOnError: false);
+            Assert.That(volumeInspect.ExitCode, Is.Not.EqualTo(0),
+                "Mongo integration volume must not remain after the test invocation.");
+        }
+
+        TestContext.Progress.WriteLine(
+            $"Mongo integration cleanup verified for run {RunId}: container and disposable volume removed.");
     }
 
     private static void StartExternalWatchdog(string containerName, string volumeName)
