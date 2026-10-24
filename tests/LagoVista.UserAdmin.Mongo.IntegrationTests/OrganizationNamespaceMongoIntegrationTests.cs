@@ -113,9 +113,8 @@ public sealed class MongoAssemblyFixture
             $"Mongo integration cleanup verified for run {RunId}: container and disposable volume removed.");
     }
 
-    private static void StartExternalWatchdog(string containerName, string volumeName)
+    private static void StartExternalWatchdog(string containerName, string volumeName, int lifetimeSeconds = 180)
     {
-        const int lifetimeSeconds = 180;
 
         if (OperatingSystem.IsWindows())
         {
@@ -149,7 +148,52 @@ public sealed class MongoAssemblyFixture
         }
     }
 
-    private static DockerResult RunDocker(string arguments, bool throwOnError = true)
+    internal static void VerifyIndependentWatchdogCleanup()
+    {
+        var probeId = $"watchdog-{Guid.NewGuid():N}";
+        var containerName = $"nuviot-useradmin-{probeId}";
+        var volumeName = $"nuviot-useradmin-{probeId}-data";
+        var sentinelVolumeName = $"nuviot-useradmin-{probeId}-sentinel";
+
+        try
+        {
+            RunDocker($"volume create --label {LabelKey}={probeId} {volumeName}");
+            RunDocker($"volume create {sentinelVolumeName}");
+            RunDocker(
+                "run -d --rm --restart=no --memory=64m --cpus=0.25 " +
+                $"--label {LabelKey}={probeId} " +
+                $"-v {volumeName}:/probe " +
+                $"--name {containerName} --entrypoint sh public.ecr.aws/docker/library/mongo:8.0 -c \"sleep 60\"");
+
+            StartExternalWatchdog(containerName, volumeName, lifetimeSeconds: 3);
+
+            var removed = false;
+            for (var attempt = 0; attempt < 15; attempt++)
+            {
+                Thread.Sleep(TimeSpan.FromSeconds(1));
+                var containerInspect = RunDocker($"inspect {containerName}", throwOnError: false);
+                var volumeInspect = RunDocker($"volume inspect {volumeName}", throwOnError: false);
+                if (containerInspect.ExitCode != 0 && volumeInspect.ExitCode != 0)
+                {
+                    removed = true;
+                    break;
+                }
+            }
+
+            Assert.That(removed, Is.True,
+                "External watchdog must remove an orphaned probe container and its disposable volume after the bounded lifetime.");
+            Assert.That(RunDocker($"volume inspect {sentinelVolumeName}", throwOnError: false).ExitCode, Is.EqualTo(0),
+                "Watchdog cleanup must not remove an unrelated sentinel volume.");
+        }
+        finally
+        {
+            RunDocker($"rm -f {containerName}", throwOnError: false);
+            RunDocker($"volume rm -f {volumeName}", throwOnError: false);
+            RunDocker($"volume rm -f {sentinelVolumeName}", throwOnError: false);
+        }
+    }
+
+    internal static DockerResult RunDocker(string arguments, bool throwOnError = true)
     {
         using var process = Process.Start(new ProcessStartInfo
         {
@@ -176,7 +220,7 @@ public sealed class MongoAssemblyFixture
         return new DockerResult(process.ExitCode, output, error);
     }
 
-    private sealed record DockerResult(int ExitCode, string Output, string Error);
+    internal sealed record DockerResult(int ExitCode, string Output, string Error);
 }
 
 [TestFixture]
@@ -283,5 +327,57 @@ public sealed class OrganizationNamespaceMongoIntegrationTests
             "Existing namespace persisted by the Mongo provider must be found through OrganizationRepo.QueryNamespaceInUseAsync.");
         Assert.That(missingInUse, Is.False,
             "A valid namespace that is not persisted must not be reported as in use.");
+    }
+}
+
+[TestFixture]
+[Category("Integration")]
+[Category("MongoIntegration")]
+[Explicit("Opt-in Docker-backed Mongo integration suite.")]
+[NonParallelizable]
+public sealed class MongoAssemblyFixtureSharingIntegrationTests
+{
+    [Test]
+    public async Task SecondTestClass_ReusesRunScopedMongo_AndKeepsDatabaseIsolated()
+    {
+        var runId = MongoAssemblyFixture.RunId;
+        Assert.That(runId, Is.Not.Null.And.Not.Empty,
+            "Assembly fixture must have started exactly one run-scoped Mongo service before this test class executes.");
+        Assert.That(MongoAssemblyFixture.HostPort, Is.GreaterThan(0));
+
+        var settings = new MongoDocumentStorageConnectionSettings
+        {
+            Hosts = new List<string> { "localhost" }.AsReadOnly(),
+            Port = MongoAssemblyFixture.HostPort,
+            UserName = "nuviot-test",
+            Password = "nuviot-test-password",
+            AuthenticationDatabase = "admin",
+            DatabaseName = $"ua_share_{Guid.NewGuid():N}"
+        };
+
+        var client = new MongoClient(settings.BuildConnectionString());
+        var database = client.GetDatabase(settings.DatabaseName);
+        try
+        {
+            var command = new MongoDB.Bson.BsonDocument("ping", 1);
+            var ping = await database.RunCommandAsync<MongoDB.Bson.BsonDocument>(command);
+            Assert.That(ping["ok"].ToDouble(), Is.EqualTo(1.0));
+
+            var collection = database.GetCollection<MongoDB.Bson.BsonDocument>("fixture-sharing");
+            await collection.InsertOneAsync(new MongoDB.Bson.BsonDocument("runId", runId));
+            Assert.That(await collection.CountDocumentsAsync(MongoDB.Bson.BsonDocument.Parse("{ }")), Is.EqualTo(1));
+            Assert.That(MongoAssemblyFixture.RunId, Is.EqualTo(runId),
+                "Both integration test classes must share the same assembly-scoped Mongo run.");
+        }
+        finally
+        {
+            await client.DropDatabaseAsync(settings.DatabaseName);
+        }
+    }
+
+    [Test]
+    public void ExternalWatchdog_RemovesOrphanedProbe_WithoutTouchingUnrelatedResource()
+    {
+        MongoAssemblyFixture.VerifyIndependentWatchdogCleanup();
     }
 }
