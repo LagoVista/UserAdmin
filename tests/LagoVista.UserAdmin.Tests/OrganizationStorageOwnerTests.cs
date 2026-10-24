@@ -47,7 +47,7 @@ namespace LagoVista.UserAdmin.Tests
         public void BlankOwnerIdDefaultsToSelf()
         {
             var org = new Organization { Id = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", Name = "Test Organization" };
-            org.OwnerOrganization = EntityHeader.Create("", "Unassigned");
+            org.OwnerOrganization = new EntityHeader { Id = "", Text = "Unassigned" };
 
             Normalize(org);
 
@@ -61,7 +61,7 @@ namespace LagoVista.UserAdmin.Tests
             org.OwnerOrganization = null;
 
             var exception = Assert.Throws<TargetInvocationException>(() => Normalize(org));
-            Assert.That(exception.InnerException, Is.TypeOf<InvalidOperationException>());
+            Assert.That(exception.InnerException, Is.TypeOf<ArgumentNullException>());
         }
     }
 }
