@@ -57,11 +57,11 @@ public sealed class MongoAssemblyFixture
             $"-v {_volumeName}:/data/db " +
             $"--name {_containerName} public.ecr.aws/docker/library/mongo:8.0");
 
-        Assert.That(RunDocker($"inspect --format={{.HostConfig.Memory}} {_containerName}").Output.Trim(),
+        Assert.That(RunDocker($"inspect --format={{{{.HostConfig.Memory}}}} {_containerName}").Output.Trim(),
             Is.EqualTo("536870912"), "Mongo integration container must be limited to 512 MB.");
-        Assert.That(RunDocker($"inspect --format={{.HostConfig.NanoCpus}} {_containerName}").Output.Trim(),
+        Assert.That(RunDocker($"inspect --format={{{{.HostConfig.NanoCpus}}}} {_containerName}").Output.Trim(),
             Is.EqualTo("1000000000"), "Mongo integration container must be limited to one CPU.");
-        Assert.That(RunDocker($"inspect --format={{.HostConfig.RestartPolicy.Name}} {_containerName}").Output.Trim(),
+        Assert.That(RunDocker($"inspect --format={{{{.HostConfig.RestartPolicy.Name}}}} {_containerName}").Output.Trim(),
             Is.EqualTo("no"), "Mongo integration container must never restart automatically.");
 
         StartExternalWatchdog(_containerName, _volumeName);
