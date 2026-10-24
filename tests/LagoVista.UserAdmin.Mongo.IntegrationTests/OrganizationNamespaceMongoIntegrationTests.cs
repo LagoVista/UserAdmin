@@ -2,6 +2,7 @@ using LagoVista.CloudStorage.Interfaces;
 using LagoVista.CloudStorage.Storage.ConnectionSettings;
 using LagoVista.CloudStorage.Storage.StorageProviders;
 using LagoVista.CloudStorage.Storage.StorageProviders.Mongo;
+using LagoVista.Core.AI.Interfaces;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Interfaces.AutoMapper;
 using LagoVista.Core.Models;
@@ -10,11 +11,16 @@ using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Repos.Orgs;
+using LagoVista.UserAdmin.Repos;
+using LagoVista.Models;
 using Moq;
 using MongoDB.Driver;
+using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Mongo.IntegrationTests;
@@ -195,7 +201,7 @@ public sealed class OrganizationNamespaceMongoIntegrationTests
         services.SetupGet(service => service.FkIndexTableWriter).Returns((IFkIndexTableWriterBatched)null);
         services.SetupGet(service => service.ProducedArtifactService).Returns((IProducedArtifactService)null);
         services.SetupGet(service => service.UserNotificationService).Returns((IUserNotificationService)null);
-        services.SetupGet(service => service.RagIndexingServices).Returns((LagoVista.Core.AI.Interfaces.IRagIndexingServices)null);
+        services.SetupGet(service => service.RagIndexingServices).Returns((IRagIndexingServices)null);
         services.SetupGet(service => service.SystemUsers).Returns(new Mock<ISystemUsers>().Object);
 
         _repo = new OrganizationRepo(
