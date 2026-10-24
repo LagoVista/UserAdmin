@@ -14,6 +14,8 @@ using Moq;
 using MongoDB.Driver;
 using NUnit.Framework;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LagoVista.UserAdmin.Mongo.IntegrationTests;
 
@@ -225,10 +227,13 @@ public sealed class OrganizationNamespaceMongoIntegrationTests
 
         await _storageClient.CreateDocumentAsync(org);
 
-        var rawCollection = _cleanupClient
-            .GetDatabase(_databaseName)
-            .GetCollection<MongoDB.Bson.BsonDocument>("organization");
+        var database = _cleanupClient.GetDatabase(_databaseName);
+        using var collectionCursor = await database.ListCollectionNamesAsync();
+        var collectionNames = await collectionCursor.ToListAsync();
+        Assert.That(collectionNames, Has.Count.EqualTo(1),
+            $"Expected exactly one collection after persisting the test Organization, found: {String.Join(", ", collectionNames)}.");
 
+        var rawCollection = database.GetCollection<MongoDB.Bson.BsonDocument>(collectionNames.Single());
         var persisted = await rawCollection.Find(MongoDB.Bson.BsonDocument.Parse("{ }")).FirstOrDefaultAsync();
         Assert.That(persisted, Is.Not.Null, "Expected real BSON to be persisted before exercising OrganizationRepo.");
         Assert.That(persisted["Namespace"].IsString, Is.True,
