@@ -253,7 +253,9 @@ public sealed class OrganizationNamespaceMongoIntegrationTests
             Id = "A1234567890B1234567890C123456789",
             Name = "Namespace Integration Test",
             Namespace = OrgNamespace.Parse("namespaceintegration"),
-            OwnerOrganization = EntityHeader.Create("A1234567890B1234567890C123456789", "Namespace Integration Test")
+            OwnerOrganization = EntityHeader.Create("A1234567890B1234567890C123456789", "Namespace Integration Test"),
+            DatabaseName = _databaseName,
+            EntityType = nameof(Organization)
         };
 
         await _storageClient.CreateDocumentAsync(org);
@@ -269,6 +271,10 @@ public sealed class OrganizationNamespaceMongoIntegrationTests
         Assert.That(persisted, Is.Not.Null, "Expected real BSON to be persisted before exercising OrganizationRepo.");
         Assert.That(persisted["Namespace"].IsString, Is.True,
             $"Expected Namespace to be serialized as a BSON string but got: {persisted["Namespace"].BsonType}.");
+        Assert.That(persisted["Namespace"].AsString, Is.EqualTo("namespaceintegration"),
+            "Expected the stored Namespace BSON scalar to contain the canonical namespace value.");
+        Assert.That(persisted["EntityType"].AsString, Is.EqualTo(nameof(Organization)),
+            "The integration document must carry the same EntityType metadata produced by DocumentDBRepoBase before querying it.");
 
         var existingInUse = await _repo.QueryNamespaceInUseAsync("namespaceintegration");
         var missingInUse = await _repo.QueryNamespaceInUseAsync("anothernamespace");
