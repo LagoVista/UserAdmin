@@ -6,6 +6,7 @@ using LagoVista.Core.AI.Interfaces;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Interfaces.AutoMapper;
 using LagoVista.Core.Models;
+using LagoVista.Core.Repos;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
