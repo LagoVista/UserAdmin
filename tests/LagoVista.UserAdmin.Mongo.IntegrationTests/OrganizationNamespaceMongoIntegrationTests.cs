@@ -55,7 +55,7 @@ public sealed class MongoAssemblyFixture
             $"-e MONGO_INITDB_ROOT_PASSWORD={Password} " +
             "-p 127.0.0.1::27017 " +
             $"-v {_volumeName}:/data/db " +
-            $"--name {_containerName} mongo:8.0");
+            $"--name {_containerName} public.ecr.aws/docker/library/mongo:8.0");
 
         StartExternalWatchdog(_containerName, _volumeName);
 
