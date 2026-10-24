@@ -75,8 +75,18 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         }
 
    
+        private static void EnsureOrganizationStorageOwner(Organization org)
+        {
+            if (org == null) throw new ArgumentNullException(nameof(org));
+            if (org.OwnerOrganization != null && !String.IsNullOrWhiteSpace(org.OwnerOrganization.Id)) return;
+            if (String.IsNullOrWhiteSpace(org.Id))
+                throw new InvalidOperationException("Organization requires a valid Id before storage ownership can be assigned.");
+            org.OwnerOrganization = EntityHeader.Create(org.Id, org.Name);
+        }
+
         public async Task AddOrganizationAsync(Organization org)
         {
+            EnsureOrganizationStorageOwner(org);
             var dto = await _autoMapper.CreateAsync<Organization, OrganizationDTO>(org, _systemUsers.SystemOrg, _systemUsers.HostUser);
             await CreateDocumentAsync(org);
             await _relationalRepo.AddOrganizationAsync(dto, _systemUsers.SystemOrg, _systemUsers.HostUser);
@@ -201,6 +211,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
 
         public async Task UpdateOrganizationAsync(Organization org)
         {
+            EnsureOrganizationStorageOwner(org);
             var dto = await _autoMapper.CreateAsync<Organization, OrganizationDTO>(org, _systemUsers.SystemOrg, _systemUsers.HostUser);
             await _relationalRepo.UpdateOrganizationAsync(dto, org.ToEntityHeader(), _systemUsers.HostUser);
             await UpsertDocumentAsync(org);
