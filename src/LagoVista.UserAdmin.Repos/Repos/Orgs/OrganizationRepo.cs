@@ -58,6 +58,13 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         private readonly ILagoVistaAutoMapper _autoMapper;
         private readonly ISystemUsers _systemUsers;
         private readonly IAppUserRelationalRepo _appUserRelationalRepo;
+        private readonly IDocumentStorageClient _documentStorageClient;
+
+        private sealed class OrganizationNamespaceProjection
+        {
+            public string EntityType { get; set; }
+            public string Namespace { get; set; }
+        }
 
         public OrganizationRepo(IUserAdminSettings userAdminSettings, IOrganizationRelationalRepo relationalRepo, IAppUserRelationalRepo appUserRelationalRepo, IDocumentCloudCachedServices services, ISystemUsers systemUsers, ILagoVistaAutoMapper autoMapper) :
             base(services)
@@ -67,6 +74,7 @@ namespace LagoVista.UserAdmin.Repos.Orgs
             _autoMapper = autoMapper ?? throw new ArgumentNullException(nameof(autoMapper));
             _systemUsers = systemUsers ?? throw new ArgumentNullException(nameof(systemUsers));
             _appUserRelationalRepo = appUserRelationalRepo ?? throw new ArgumentNullException(nameof(appUserRelationalRepo));
+            _documentStorageClient = services.DocumentStorageClientProvider.GetClient();
         }
 
         private string GetCacheKey(String orgId)
@@ -183,9 +191,10 @@ namespace LagoVista.UserAdmin.Repos.Orgs
         {
             try
             {
-                var organization = (await QueryAsync(org => org.Namespace == namespaceText));
-                var list = organization.ToList();
-                return list.Any();
+                var organizations = await _documentStorageClient.GetDocumentProjectionsAsync<OrganizationNamespaceProjection>(
+                    nameof(Organization),
+                    org => org.Namespace == namespaceText);
+                return organizations.Any();
             }
             catch (CosmosException)
             {
