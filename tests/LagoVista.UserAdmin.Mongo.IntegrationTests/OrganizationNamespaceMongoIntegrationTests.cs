@@ -246,7 +246,7 @@ public sealed class OrganizationNamespaceMongoIntegrationTests
     }
 
     [Test]
-    public async Task ExistingNamespace_StoredAsRealBson_IsReportedInUse()
+    public async Task NamespaceLookup_StoredAsRealBson_ReturnsExistingTrueAndMissingFalse()
     {
         var org = new Organization
         {
@@ -270,9 +270,12 @@ public sealed class OrganizationNamespaceMongoIntegrationTests
         Assert.That(persisted["Namespace"].IsString, Is.True,
             $"Expected Namespace to be serialized as a BSON string but got: {persisted["Namespace"].BsonType}.");
 
-        var inUse = await _repo.QueryNamespaceInUseAsync("namespaceintegration");
+        var existingInUse = await _repo.QueryNamespaceInUseAsync("namespaceintegration");
+        var missingInUse = await _repo.QueryNamespaceInUseAsync("anothernamespace");
 
-        Assert.That(inUse, Is.True,
+        Assert.That(existingInUse, Is.True,
             "Existing namespace persisted by the Mongo provider must be found through OrganizationRepo.QueryNamespaceInUseAsync.");
+        Assert.That(missingInUse, Is.False,
+            "A valid namespace that is not persisted must not be reported as in use.");
     }
 }
