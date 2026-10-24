@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.AspNetCore.Author
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.UserAdmin.Auth.Tests", "tests\LagoVista.UserAdmin.Auth.Tests\LagoVista.UserAdmin.Auth.Tests.csproj", "{65B9F161-0036-0778-68A5-E3778017992D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.UserAdmin.Mongo.IntegrationTests", "tests\LagoVista.UserAdmin.Mongo.IntegrationTests\LagoVista.UserAdmin.Mongo.IntegrationTests.csproj", "{A5B9D9D2-7F8E-4A17-9FD3-9CE9C83EFA64}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{65B9F161-0036-0778-68A5-E3778017992D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65B9F161-0036-0778-68A5-E3778017992D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65B9F161-0036-0778-68A5-E3778017992D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5B9D9D2-7F8E-4A17-9FD3-9CE9C83EFA64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5B9D9D2-7F8E-4A17-9FD3-9CE9C83EFA64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5B9D9D2-7F8E-4A17-9FD3-9CE9C83EFA64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5B9D9D2-7F8E-4A17-9FD3-9CE9C83EFA64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +90,7 @@ Global
 		{D438312C-0A1B-4ED9-48CF-B331A19D92FF} = {0D569608-298B-46AE-82D3-8481FE044E10}
 		{1C0DC1A1-0CD8-3D31-5DBD-D77B4B43B2F0} = {68AF24F5-D5E7-40F5-AE0A-594167F89A44}
 		{65B9F161-0036-0778-68A5-E3778017992D} = {0D569608-298B-46AE-82D3-8481FE044E10}
+		{A5B9D9D2-7F8E-4A17-9FD3-9CE9C83EFA64} = {0D569608-298B-46AE-82D3-8481FE044E10}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4D5218A2-6C29-4E31-9F29-C471835EF463}

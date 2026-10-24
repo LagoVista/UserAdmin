@@ -149,6 +149,7 @@ public sealed class MongoAssemblyFixture
 [TestFixture]
 [Category("Integration")]
 [Category("MongoIntegration")]
+[Explicit("Opt-in Docker-backed Mongo integration suite.")]
 [NonParallelizable]
 public sealed class OrganizationNamespaceMongoIntegrationTests
 {
