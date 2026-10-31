@@ -427,6 +427,7 @@ namespace LagoVista.UserAdmin.Models.Orgs
             return new OrganizationSummary()
             {
                 Id = Id,
+                Key = Key,
                 Text = Name,
                 Name = Name,
                 HomePage = HomePage,
