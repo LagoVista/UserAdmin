@@ -328,6 +328,40 @@ public sealed class OrganizationNamespaceMongoIntegrationTests
         Assert.That(missingInUse, Is.False,
             "A valid namespace that is not persisted must not be reported as in use.");
     }
+
+
+    [Test]
+    public async Task NamespaceLookup_LegacyObjectShape_IsResolvedWithoutDataMutation()
+    {
+        var database = _cleanupClient.GetDatabase(_databaseName);
+        var collection = database.GetCollection<MongoDB.Bson.BsonDocument>("Entities");
+
+        var document = new MongoDB.Bson.BsonDocument
+        {
+            { "_id", "AA2C78499D0140A5A9CE4B7581EF9691" },
+            { "StoredId", "AA2C78499D0140A5A9CE4B7581EF9691" },
+            { "EntityType", nameof(Organization) },
+            { "Name", "Software Logistics" },
+            { "Namespace", new MongoDB.Bson.BsonDocument("Value", "softwarelogistics") }
+        };
+
+        await collection.InsertOneAsync(document);
+
+        var orgId = await _repo.GetOrganizationIdForNamespaceAsync("softwarelogistics");
+        var org = await _repo.GetOrganizationFromNamespaceAsync("softwarelogistics");
+
+        Assert.That(orgId, Is.EqualTo("AA2C78499D0140A5A9CE4B7581EF9691"));
+        Assert.That(org, Is.Not.Null);
+        Assert.That(org.Id.ToString(), Is.EqualTo("AA2C78499D0140A5A9CE4B7581EF9691"));
+        Assert.That(org.Namespace.Value, Is.EqualTo("softwarelogistics"));
+
+        var persisted = await collection
+            .Find(Builders<MongoDB.Bson.BsonDocument>.Filter.Eq("_id", "AA2C78499D0140A5A9CE4B7581EF9691"))
+            .FirstOrDefaultAsync();
+
+        Assert.That(persisted["Namespace"].IsBsonDocument, Is.True,
+            "Lookup must not rewrite the legacy Namespace representation.");
+    }
 }
 
 [TestFixture]
