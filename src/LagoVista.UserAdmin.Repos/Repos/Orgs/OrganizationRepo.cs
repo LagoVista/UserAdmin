@@ -234,7 +234,8 @@ namespace LagoVista.UserAdmin.Repos.Orgs
                 return orgId;
             }
 
-            var organization = (await QueryAsync(org => org.Namespace == orgNameSpace)).ToList();
+            var orgNamespace = OrgNamespace.Parse(orgNameSpace);
+            var organization = (await QueryAsync(org => org.Namespace.Equals(orgNamespace))).ToList();
             if (organization.Any())
             {
                 orgId = organization.First().Id;
@@ -257,7 +258,8 @@ namespace LagoVista.UserAdmin.Repos.Orgs
                 return await GetOrganizationAsync(orgId);
             }
 
-            var organization = (await QueryAsync(org => org.Namespace == orgNameSpace)).ToList();
+            var orgNamespace = OrgNamespace.Parse(orgNameSpace);
+            var organization = (await QueryAsync(org => org.Namespace.Equals(orgNamespace))).ToList();
             if (organization.Any())
             {
                 orgId = organization.First().Id;
