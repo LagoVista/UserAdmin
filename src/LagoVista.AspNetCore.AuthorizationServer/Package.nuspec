@@ -19,7 +19,7 @@
     <dependencies>
       <group targetFramework="net9.0">
         <dependency id="LagoVista.AspNetCore.Identity" version="7.0.15" />
-        <dependency id="LagoVista.CloudStorage" version="7.0.72" />
+        <dependency id="LagoVista.CloudStorage" version="7.0.107" />
         <dependency id="LagoVista.UserAdmin" version="7.0.15" />
         <dependency id="LagoVista.UserAdmin.Repos" version="7.0.15" />
         <dependency id="OpenIddict.Core" version="7.6.0" />
