@@ -19,6 +19,11 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 new Claim(ClaimTypes.Email, "KEVINW@SLSYS.NET"),
                 new Claim(ClaimsFactory.CurrentUserName, "kevinw"),
                 new Claim(ClaimsFactory.IsSystemAdmin, "True"),
+                new Claim(ClaimsFactory.CurrentOrgId, "ORG123"),
+                new Claim(ClaimsFactory.CurrentOrgName, "Software Logistics"),
+                new Claim(ClaimsFactory.CurrentOrgNamespace, "softwarelogistics"),
+                new Claim(ClaimsFactory.IsAppBuilder, "True"),
+                new Claim(ClaimsFactory.EmailVerified, "True"),
             }, "test");
 
             var projection = OidcClaimProjection.FromPrincipal(new ClaimsPrincipal(identity));
@@ -28,6 +33,11 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(projection.PreferredUsername, Is.EqualTo("kevinw"));
             Assert.That(projection.Email, Is.EqualTo("KEVINW@SLSYS.NET"));
             Assert.That(projection.IsSystemAdmin, Is.EqualTo("True"));
+            Assert.That(projection.CurrentOrgId, Is.EqualTo("ORG123"));
+            Assert.That(projection.CurrentOrgName, Is.EqualTo("Software Logistics"));
+            Assert.That(projection.CurrentOrgNamespace, Is.EqualTo("softwarelogistics"));
+            Assert.That(projection.IsAppBuilder, Is.EqualTo("True"));
+            Assert.That(projection.EmailVerified, Is.EqualTo("True"));
         }
 
         [Test]
@@ -45,6 +55,21 @@ namespace LagoVista.UserAdmin.Auth.Tests
 
             Assert.That(projection.Name, Is.EqualTo("kevinw"));
             Assert.That(projection.PreferredUsername, Is.EqualTo("kevinw"));
+        }
+
+        [Test]
+        public void FromPrincipal_IgnoresMissingOrPlaceholderOrganization()
+        {
+            var identity = new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, "USER123"),
+                new Claim(ClaimsFactory.CurrentOrgId, ClaimsFactory.None),
+                new Claim(ClaimsFactory.CurrentOrgName, ClaimsFactory.None),
+            }, "test");
+
+            var projection = OidcClaimProjection.FromPrincipal(new ClaimsPrincipal(identity));
+            Assert.That(projection.CurrentOrgId, Is.Null);
+            Assert.That(projection.CurrentOrgName, Is.Null);
         }
 
         [Test]
