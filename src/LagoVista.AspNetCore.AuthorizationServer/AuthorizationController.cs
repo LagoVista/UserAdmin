@@ -98,6 +98,14 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                 identity.AddClaim(new Claim(ClaimsFactory.CurrentUserName, projectedClaims.PreferredUsername)
                     .SetDestinations(Destinations.AccessToken));
 
+            if (!String.IsNullOrWhiteSpace(projectedClaims.GivenName))
+                identity.AddClaim(new Claim(ClaimTypes.GivenName, projectedClaims.GivenName)
+                    .SetDestinations(Destinations.AccessToken));
+
+            if (!String.IsNullOrWhiteSpace(projectedClaims.Surname))
+                identity.AddClaim(new Claim(ClaimTypes.Surname, projectedClaims.Surname)
+                    .SetDestinations(Destinations.AccessToken));
+
             if (!String.IsNullOrWhiteSpace(projectedClaims.CurrentOrgId) &&
                 !String.IsNullOrWhiteSpace(projectedClaims.CurrentOrgName))
             {
