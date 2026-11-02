@@ -9,6 +9,8 @@ namespace LagoVista.AspNetCore.AuthorizationServer
     {
         public string Subject { get; init; }
         public string Name { get; init; }
+        public string GivenName { get; init; }
+        public string Surname { get; init; }
         public string PreferredUsername { get; init; }
         public string Email { get; init; }
         public string IsSystemAdmin { get; init; }
@@ -50,6 +52,8 @@ namespace LagoVista.AspNetCore.AuthorizationServer
             {
                 Subject = subject,
                 Name = displayName,
+                GivenName = givenName,
+                Surname = surname,
                 PreferredUsername = preferredUsername,
                 Email = email,
                 IsSystemAdmin = isSystemAdmin,
