@@ -30,6 +30,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
 
             Assert.That(projection.Subject, Is.EqualTo("USER123"));
             Assert.That(projection.Name, Is.EqualTo("Kevin Wolf"));
+            Assert.That(projection.GivenName, Is.EqualTo("Kevin"));
+            Assert.That(projection.Surname, Is.EqualTo("Wolf"));
             Assert.That(projection.PreferredUsername, Is.EqualTo("kevinw"));
             Assert.That(projection.Email, Is.EqualTo("KEVINW@SLSYS.NET"));
             Assert.That(projection.IsSystemAdmin, Is.EqualTo("True"));
