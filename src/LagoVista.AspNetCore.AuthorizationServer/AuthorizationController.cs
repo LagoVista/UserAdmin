@@ -87,6 +87,38 @@ namespace LagoVista.AspNetCore.AuthorizationServer
 
             identity.AddClaim(new Claim(Claims.Subject, projectedClaims.Subject));
 
+            // Keep the delegated API identity compatible with LagoVistaBaseController.
+            // These claims originate from the authenticated portal principal, never from MCP tool arguments.
+            identity.AddClaim(new Claim(ClaimsFactory.CurrentUserId, projectedClaims.Subject)
+                .SetDestinations(Destinations.AccessToken));
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, projectedClaims.Subject)
+                .SetDestinations(Destinations.AccessToken));
+
+            if (!String.IsNullOrWhiteSpace(projectedClaims.PreferredUsername))
+                identity.AddClaim(new Claim(ClaimsFactory.CurrentUserName, projectedClaims.PreferredUsername)
+                    .SetDestinations(Destinations.AccessToken));
+
+            if (!String.IsNullOrWhiteSpace(projectedClaims.CurrentOrgId) &&
+                !String.IsNullOrWhiteSpace(projectedClaims.CurrentOrgName))
+            {
+                identity.AddClaim(new Claim(ClaimsFactory.CurrentOrgId, projectedClaims.CurrentOrgId)
+                    .SetDestinations(Destinations.AccessToken));
+                identity.AddClaim(new Claim(ClaimsFactory.CurrentOrgName, projectedClaims.CurrentOrgName)
+                    .SetDestinations(Destinations.AccessToken));
+
+                if (!String.IsNullOrWhiteSpace(projectedClaims.CurrentOrgNamespace))
+                    identity.AddClaim(new Claim(ClaimsFactory.CurrentOrgNamespace, projectedClaims.CurrentOrgNamespace)
+                        .SetDestinations(Destinations.AccessToken));
+            }
+
+            if (!String.IsNullOrWhiteSpace(projectedClaims.IsAppBuilder))
+                identity.AddClaim(new Claim(ClaimsFactory.IsAppBuilder, projectedClaims.IsAppBuilder)
+                    .SetDestinations(Destinations.AccessToken));
+
+            if (!String.IsNullOrWhiteSpace(projectedClaims.EmailVerified))
+                identity.AddClaim(new Claim(ClaimsFactory.EmailVerified, projectedClaims.EmailVerified)
+                    .SetDestinations(Destinations.AccessToken));
+
             if (!String.IsNullOrWhiteSpace(projectedClaims.Name))
             {
                 var nameClaim = new Claim(Claims.Name, projectedClaims.Name);
