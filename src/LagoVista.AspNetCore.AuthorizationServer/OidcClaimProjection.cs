@@ -12,6 +12,11 @@ namespace LagoVista.AspNetCore.AuthorizationServer
         public string PreferredUsername { get; init; }
         public string Email { get; init; }
         public string IsSystemAdmin { get; init; }
+        public string CurrentOrgId { get; init; }
+        public string CurrentOrgName { get; init; }
+        public string CurrentOrgNamespace { get; init; }
+        public string IsAppBuilder { get; init; }
+        public string EmailVerified { get; init; }
 
         public static OidcClaimProjection FromPrincipal(ClaimsPrincipal principal)
         {
@@ -35,6 +40,11 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                 displayName = preferredUsername ?? email ?? subject;
 
             var isSystemAdmin = Normalize(principal.FindFirstValue(ClaimsFactory.IsSystemAdmin));
+            var currentOrgId = Normalize(principal.FindFirstValue(ClaimsFactory.CurrentOrgId));
+            var currentOrgName = Normalize(principal.FindFirstValue(ClaimsFactory.CurrentOrgName));
+            var currentOrgNamespace = Normalize(principal.FindFirstValue(ClaimsFactory.CurrentOrgNamespace));
+            var isAppBuilder = Normalize(principal.FindFirstValue(ClaimsFactory.IsAppBuilder));
+            var emailVerified = Normalize(principal.FindFirstValue(ClaimsFactory.EmailVerified));
 
             return new OidcClaimProjection
             {
@@ -43,6 +53,11 @@ namespace LagoVista.AspNetCore.AuthorizationServer
                 PreferredUsername = preferredUsername,
                 Email = email,
                 IsSystemAdmin = isSystemAdmin,
+                CurrentOrgId = currentOrgId,
+                CurrentOrgName = currentOrgName,
+                CurrentOrgNamespace = currentOrgNamespace,
+                IsAppBuilder = isAppBuilder,
+                EmailVerified = emailVerified,
             };
         }
 
