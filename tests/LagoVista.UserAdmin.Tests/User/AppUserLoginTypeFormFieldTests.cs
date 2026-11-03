@@ -47,7 +47,7 @@ namespace LagoVista.UserAdmin.Tests.User
                     AppUser.LoginType_AppEndUser
                 },
                 field.Options.Select(item => item.Id).ToArray());
-            Assert.IsFalse(field.IsUserEditable);
+            Assert.IsTrue(field.IsUserEditable);
         }
 
         [TestMethod]

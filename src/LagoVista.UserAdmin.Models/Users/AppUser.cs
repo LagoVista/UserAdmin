@@ -168,6 +168,7 @@ namespace LagoVista.UserAdmin.Models.Users
             WaterMark: UserAdminResources.Names.AppUser_LoginType_Select,
             EnumType: typeof(LoginTypes), FieldType: FieldTypes.Picker,
             IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
         public EntityHeader<LoginTypes> LoginTypeSelection
         {
             get => EntityHeader<LoginTypes>.Create(LoginType);
