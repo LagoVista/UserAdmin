@@ -20,16 +20,16 @@ namespace LagoVista.UserAdmin.Models.Users
 {
     public enum LoginTypes
     {
-        [EnumLabel(AppUser.LoginType_DeviceOwner, UserAdminResources.Names.AppUser_LoginType_DeviceOwner, typeof(UserAdminResources))]
+        [EnumLabel(global::LagoVista.UserAdmin.Models.Users.AppUser.LoginType_DeviceOwner, UserAdminResources.Names.AppUser_LoginType_DeviceOwner, typeof(UserAdminResources))]
         DeviceOwner,
 
-        [EnumLabel(AppUser.LoginType_AppUser, UserAdminResources.Names.AppUser_LoginType_AppUser, typeof(UserAdminResources))]
+        [EnumLabel(global::LagoVista.UserAdmin.Models.Users.AppUser.LoginType_AppUser, UserAdminResources.Names.AppUser_LoginType_AppUser, typeof(UserAdminResources))]
         AppUser,
 
-        [EnumLabel(AppUser.LoginType_Kiosk, UserAdminResources.Names.AppUser_LoginType_Kiosk, typeof(UserAdminResources))]
+        [EnumLabel(global::LagoVista.UserAdmin.Models.Users.AppUser.LoginType_Kiosk, UserAdminResources.Names.AppUser_LoginType_Kiosk, typeof(UserAdminResources))]
         Kiosk,
 
-        [EnumLabel(AppUser.LoginType_AppEndUser, UserAdminResources.Names.AppUser_LoginType_AppEndUser, typeof(UserAdminResources))]
+        [EnumLabel(global::LagoVista.UserAdmin.Models.Users.AppUser.LoginType_AppEndUser, UserAdminResources.Names.AppUser_LoginType_AppEndUser, typeof(UserAdminResources))]
         AppEndUser,
     }
 
