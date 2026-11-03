@@ -2121,6 +2121,24 @@
   <data name="AppUser_UserName" xml:space="preserve">
     <value>User Name</value>
   </data>
+  <data name="AppUser_LoginType" xml:space="preserve">
+    <value>Login Type</value>
+  </data>
+  <data name="AppUser_LoginType_AppEndUser" xml:space="preserve">
+    <value>Application End User</value>
+  </data>
+  <data name="AppUser_LoginType_AppUser" xml:space="preserve">
+    <value>Application User</value>
+  </data>
+  <data name="AppUser_LoginType_DeviceOwner" xml:space="preserve">
+    <value>Device Owner</value>
+  </data>
+  <data name="AppUser_LoginType_Kiosk" xml:space="preserve">
+    <value>Kiosk</value>
+  </data>
+  <data name="AppUser_LoginType_Select" xml:space="preserve">
+    <value>-select login type-</value>
+  </data>
   <data name="AppUser_Language" xml:space="preserve">
     <value>Language</value>
   </data>

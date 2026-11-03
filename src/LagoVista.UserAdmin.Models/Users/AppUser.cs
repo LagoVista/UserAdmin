@@ -20,9 +20,16 @@ namespace LagoVista.UserAdmin.Models.Users
 {
     public enum LoginTypes
     {
+        [EnumLabel(AppUser.LoginType_DeviceOwner, UserAdminResources.Names.AppUser_LoginType_DeviceOwner, typeof(UserAdminResources))]
         DeviceOwner,
+
+        [EnumLabel(AppUser.LoginType_AppUser, UserAdminResources.Names.AppUser_LoginType_AppUser, typeof(UserAdminResources))]
         AppUser,
+
+        [EnumLabel(AppUser.LoginType_Kiosk, UserAdminResources.Names.AppUser_LoginType_Kiosk, typeof(UserAdminResources))]
         Kiosk,
+
+        [EnumLabel(AppUser.LoginType_AppEndUser, UserAdminResources.Names.AppUser_LoginType_AppEndUser, typeof(UserAdminResources))]
         AppEndUser,
     }
 
@@ -44,6 +51,11 @@ namespace LagoVista.UserAdmin.Models.Users
         IndexPriority: 95, IndexTagsCsv: "userdomain,users,domainentity")]
     public class AppUser : UserAdminModelBase, IKeyedEntity, INamedEntity, IValidateable, IOwnedEntity, ISummaryFactory, IFormDescriptor, IFormDescriptorCol2, IAppUserAuthTenantState
     {
+        public const string LoginType_DeviceOwner = "deviceowner";
+        public const string LoginType_AppUser = "appuser";
+        public const string LoginType_Kiosk = "kiosk";
+        public const string LoginType_AppEndUser = "appenduser";
+
         public AppUser(String email, String createdBy) : this(email, email, createdBy)
         {
 
@@ -150,6 +162,21 @@ namespace LagoVista.UserAdmin.Models.Users
         public string SendGridVerifiedFailedReason { get; set; }
 
         public LoginTypes LoginType { get; set; } = LoginTypes.AppUser;
+
+        // Form-facing picker. Preserve the existing LoginType enum in storage and API contracts.
+        [FormField(LabelResource: UserAdminResources.Names.AppUser_LoginType,
+            WaterMark: UserAdminResources.Names.AppUser_LoginType_Select,
+            EnumType: typeof(LoginTypes), FieldType: FieldTypes.Picker,
+            IsRequired: true, ResourceType: typeof(UserAdminResources))]
+        public EntityHeader<LoginTypes> LoginTypeSelection
+        {
+            get => EntityHeader<LoginTypes>.Create(LoginType);
+            set
+            {
+                if (value != null && !String.IsNullOrWhiteSpace(value.Id))
+                    LoginType = value.Value;
+            }
+        }
 
         public string LoginTypeName
         {
@@ -494,6 +521,7 @@ namespace LagoVista.UserAdmin.Models.Users
             {
                 nameof(Title),
                 nameof(Bio),
+                nameof(LoginTypeSelection),
                 nameof(Language),
                 nameof(TimeZone),
             };

@@ -247,6 +247,18 @@ namespace LagoVista.UserAdmin.Models.Resources
         public static string AppUser_IsSystemAdmin { get { return GetResourceString("AppUser_IsSystemAdmin"); } }
 //Resources:UserAdminResources:AppUser_IsUserDevice
         public static string AppUser_IsUserDevice { get { return GetResourceString("AppUser_IsUserDevice"); } }
+//Resources:UserAdminResources:AppUser_LoginType
+        public static string AppUser_LoginType { get { return GetResourceString("AppUser_LoginType"); } }
+//Resources:UserAdminResources:AppUser_LoginType_AppEndUser
+        public static string AppUser_LoginType_AppEndUser { get { return GetResourceString("AppUser_LoginType_AppEndUser"); } }
+//Resources:UserAdminResources:AppUser_LoginType_AppUser
+        public static string AppUser_LoginType_AppUser { get { return GetResourceString("AppUser_LoginType_AppUser"); } }
+//Resources:UserAdminResources:AppUser_LoginType_DeviceOwner
+        public static string AppUser_LoginType_DeviceOwner { get { return GetResourceString("AppUser_LoginType_DeviceOwner"); } }
+//Resources:UserAdminResources:AppUser_LoginType_Kiosk
+        public static string AppUser_LoginType_Kiosk { get { return GetResourceString("AppUser_LoginType_Kiosk"); } }
+//Resources:UserAdminResources:AppUser_LoginType_Select
+        public static string AppUser_LoginType_Select { get { return GetResourceString("AppUser_LoginType_Select"); } }
 //Resources:UserAdminResources:AppUser_Language
         public static string AppUser_Language { get { return GetResourceString("AppUser_Language"); } }
 //Resources:UserAdminResources:AppUser_Language_Select
@@ -2365,6 +2377,12 @@ namespace LagoVista.UserAdmin.Models.Resources
             public const string Appuser_IsRuntimeUser = "Appuser_IsRuntimeUser";
             public const string AppUser_IsSystemAdmin = "AppUser_IsSystemAdmin";
             public const string AppUser_IsUserDevice = "AppUser_IsUserDevice";
+            public const string AppUser_LoginType = "AppUser_LoginType";
+            public const string AppUser_LoginType_AppEndUser = "AppUser_LoginType_AppEndUser";
+            public const string AppUser_LoginType_AppUser = "AppUser_LoginType_AppUser";
+            public const string AppUser_LoginType_DeviceOwner = "AppUser_LoginType_DeviceOwner";
+            public const string AppUser_LoginType_Kiosk = "AppUser_LoginType_Kiosk";
+            public const string AppUser_LoginType_Select = "AppUser_LoginType_Select";
             public const string AppUser_Language = "AppUser_Language";
             public const string AppUser_Language_Select = "AppUser_Language_Select";
             public const string AppUser_LastName = "AppUser_LastName";
