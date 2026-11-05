@@ -51,6 +51,7 @@ namespace LagoVista.UserAdmin.Models.Security
         Icon: "lago-icon://system/nuvos-semantic-icon/module-default", ClusterKey: "ui", ModelType: EntityDescriptionAttribute.ModelTypes.Taxonomy,
         Lifecycle: EntityDescriptionAttribute.Lifecycles.DesignTime, Sensitivity: EntityDescriptionAttribute.Sensitivities.Internal, IndexInclude: true,
         IndexTier: EntityDescriptionAttribute.IndexTiers.Primary, IndexPriority: 85, IndexTagsCsv: "securitydomain,ui,taxonomy,module")]
+    [ShareableStorageAttribute]
     public class Module : UserAdminModelBase, IKeyedEntity, INamedEntity, IOwnedEntity, IValidateable, IFormDescriptor, IFormDescriptorCol2, IFormDescriptorBottom, ISummaryFactory, IRagableEntity
     {
         public const string ModuleStatus_Development = "development";
