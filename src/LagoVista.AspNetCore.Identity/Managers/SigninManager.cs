@@ -68,7 +68,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
             _userRedirectService = userRedirectService;
             _appConfig = appConfig;
             _orgUserRepo = orgUserRepo;
-            _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[SignInManager__Constructor]", "Created Sign-in manager");
         }
 
         public Task SignInAsync(AppUser user, bool isPersistent = false)

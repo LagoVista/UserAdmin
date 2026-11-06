@@ -38,7 +38,6 @@ namespace LagoVista.UserAdmin.Managers
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
              _appUserManager = appUserManager ?? throw new ArgumentNullException(nameof(appUserManager));
             _admingLogger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _admingLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "[SecureLinkManager__Constructor]", $"Created Secure Link Generator.");
             _organizationRepo = orgRepo ?? throw new ArgumentNullException(nameof(orgRepo));
             _orgUserRepo = orgUserRepo ?? throw new ArgumentNullException(nameof(orgUserRepo));
         }
