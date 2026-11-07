@@ -51,6 +51,8 @@ namespace LagoVista.UserAdmin.Repos
         {
             services.AddActivityRecordStore<AccessLog, CassandraActivityRecordStore<AccessLog>>(AccessLogRepo.ConfigureStorage);
             services.AddActivityRecordStore<AuthenticationLog, CassandraActivityRecordStore<AuthenticationLog>>(AuthenticationLogRepo.ConfigureStorage);
+            services.AddOperationalDataStore<SentEmailXRefOperationalRecord, CassandraOperationalDataStore<SentEmailXRefOperationalRecord>>();
+            services.AddScoped<SentEmailXRefRepo>();
 
             services.AddScoped<IAppUserLoaderRepo, AppUserLoadRepo>();
             services.AddScoped<ILocationUserRepo, LocationUserRepo>();
