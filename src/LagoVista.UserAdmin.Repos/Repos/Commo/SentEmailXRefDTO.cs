@@ -1,13 +1,20 @@
-// --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: 729848587413e9f30a21ef6c24de69b301e94fad2db4bc4e6623820d4b753a87
-// IndexVersion: 2
-// --- END CODE INDEX META ---
-using LagoVista.Core.Models;
+using LagoVista.CloudStorage.Storage;
+using System;
 
 namespace LagoVista.UserAdmin.Repos.Repos.Commo
 {
-    public class SentEmailXRefDTO : TableStorageEntity
+    /// <summary>
+    /// External SendGrid message lookup. The external message ID is the Cassandra
+    /// partition and clustering key so resolving an email does not require a scan
+    /// or knowledge of the recipient's organization.
+    /// </summary>
+    public class SentEmailXRefOperationalRecord : IOperationalDataRecord
     {
+        public string Id { get; set; }
+        public string OrganizationId { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime LastUpdatedDate { get; set; }
+        public string SentEmailOrganizationId { get; set; }
         public string SentEmailRowKey { get; set; }
     }
 
