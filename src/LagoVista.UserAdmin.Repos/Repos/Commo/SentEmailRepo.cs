@@ -25,12 +25,12 @@ namespace LagoVista.UserAdmin.Repos.Repos.Commo
 
         private readonly SentEmailXRefRepo _sentEmailXrefRepo;
 
-        public SentEmailRepo(IUserAdminSettings settings, IAdminLogger logger) :
+        public SentEmailRepo(IUserAdminSettings settings, IAdminLogger logger, SentEmailXRefRepo sentEmailXrefRepo) :
         base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger)
         {
             _adminLogger = logger ?? throw new ArgumentNullException(nameof(logger));
             _userAdminSettings = settings ?? throw new ArgumentNullException(nameof(settings));
-            _sentEmailXrefRepo = new SentEmailXRefRepo(settings, logger);
+            _sentEmailXrefRepo = sentEmailXrefRepo ?? throw new ArgumentNullException(nameof(sentEmailXrefRepo));
         }
 
         public async Task AddSentEmailAsync(SentEmail sentEmail)
