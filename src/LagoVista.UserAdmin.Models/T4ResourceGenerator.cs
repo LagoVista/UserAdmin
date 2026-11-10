@@ -673,6 +673,18 @@ namespace LagoVista.UserAdmin.Models.Resources
         public static string BasicTheme_Name { get { return GetResourceString("BasicTheme_Name"); } }
 //Resources:UserAdminResources:Billing_Contact
         public static string Billing_Contact { get { return GetResourceString("Billing_Contact"); } }
+//Resources:UserAdminResources:BusinessUnit_Description
+        public static string BusinessUnit_Description { get { return GetResourceString("BusinessUnit_Description"); } }
+//Resources:UserAdminResources:BusinessUnit_Help
+        public static string BusinessUnit_Help { get { return GetResourceString("BusinessUnit_Help"); } }
+//Resources:UserAdminResources:BusinessUnit_IsActive
+        public static string BusinessUnit_IsActive { get { return GetResourceString("BusinessUnit_IsActive"); } }
+//Resources:UserAdminResources:BusinessUnit_IsActive_Help
+        public static string BusinessUnit_IsActive_Help { get { return GetResourceString("BusinessUnit_IsActive_Help"); } }
+//Resources:UserAdminResources:BusinessUnit_Title
+        public static string BusinessUnit_Title { get { return GetResourceString("BusinessUnit_Title"); } }
+//Resources:UserAdminResources:BusinessUnits_Title
+        public static string BusinessUnits_Title { get { return GetResourceString("BusinessUnits_Title"); } }
 //Resources:UserAdminResources:Calendar_AllDay
         public static string Calendar_AllDay { get { return GetResourceString("Calendar_AllDay"); } }
 //Resources:UserAdminResources:Calendar_Date
@@ -2590,6 +2602,12 @@ namespace LagoVista.UserAdmin.Models.Resources
             public const string BasicTheme_Help = "BasicTheme_Help";
             public const string BasicTheme_Name = "BasicTheme_Name";
             public const string Billing_Contact = "Billing_Contact";
+            public const string BusinessUnit_Description = "BusinessUnit_Description";
+            public const string BusinessUnit_Help = "BusinessUnit_Help";
+            public const string BusinessUnit_IsActive = "BusinessUnit_IsActive";
+            public const string BusinessUnit_IsActive_Help = "BusinessUnit_IsActive_Help";
+            public const string BusinessUnit_Title = "BusinessUnit_Title";
+            public const string BusinessUnits_Title = "BusinessUnits_Title";
             public const string Calendar_AllDay = "Calendar_AllDay";
             public const string Calendar_Date = "Calendar_Date";
             public const string Calendar_Description = "Calendar_Description";

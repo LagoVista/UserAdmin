@@ -3351,4 +3351,22 @@
   <data name="OAuthClientApplication_IdentityTokenLifetimeMinutes_Help" xml:space="preserve">
     <value>Number of minutes identity token should TTL in minutes</value>
   </data>
+  <data name="BusinessUnit_Description" xml:space="preserve">
+    <value>An optional organizational context for grouping brands, products, and business activities within one organization.</value>
+  </data>
+  <data name="BusinessUnit_Help" xml:space="preserve">
+    <value>Use business units when an organization manages distinct businesses or product portfolios. Organizations without business units continue to work normally.</value>
+  </data>
+  <data name="BusinessUnit_IsActive" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="BusinessUnit_IsActive_Help" xml:space="preserve">
+    <value>Deactivate a business unit when it is no longer used for new work; existing references can remain intact.</value>
+  </data>
+  <data name="BusinessUnit_Title" xml:space="preserve">
+    <value>Business Unit</value>
+  </data>
+  <data name="BusinessUnits_Title" xml:space="preserve">
+    <value>Business Units</value>
+  </data>
 </root>

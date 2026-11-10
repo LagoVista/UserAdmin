@@ -61,6 +61,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<IOrgUserRepo, OrgUserRepo>();
             services.AddScoped<IOwnedObjectRepo, OwnedObjectRepo>();
             services.AddScoped<IOrgLocationRepo, OrgLocationRepo>();
+            services.AddScoped<IBusinessUnitRepo, BusinessUnitRepo>();
             services.AddScoped<IOrganizationRepo, OrganizationRepo>();
             services.AddScoped<IOrganizationLoaderRepo, OrganizationLoaderRepo>();
             services.AddScoped<ISubscriptionResourceRepo, SubscriptionResourceRepo>();
