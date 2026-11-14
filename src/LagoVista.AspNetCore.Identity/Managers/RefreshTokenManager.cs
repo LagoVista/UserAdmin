@@ -108,6 +108,11 @@ namespace LagoVista.AspNetCore.Identity.Managers
                     return InvokeResult<RefreshToken>.FromErrors(UserAdminErrorCodes.AuthRefreshTokenExpired.ToErrorMessage());
                 }
 
+                // Claim the old token atomically BEFORE minting its replacement.
+                // Contention/replay is a normal invalid-token outcome, never a storage exception.
+                if (!await _refreshTokenRepo.TryConsumeRefreshTokenAsync(oldRefreshToken.RowKey, oldRefreshToken.PartitionKey))
+                    return InvokeResult<RefreshToken>.FromErrors(UserAdminErrorCodes.AuthRefreshTokenNotInStorage.ToErrorMessage());
+
                 var newRefreshToken = await GenerateRefreshTokenAsync(oldRefreshToken.AppId, oldRefreshToken.AppInstanceId, oldRefreshToken.PartitionKey);
                 if (newRefreshToken.Successful)
                 {
@@ -118,7 +123,6 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
                     await _authLogManager.AddAsync(UserAdmin.Models.Security.AuthLogTypes.RenewRefreshTokenSuccess, userId: oldRefreshToken.PartitionKey, extras: $"AppId: {oldRefreshToken.AppId}");
 
-                    await _refreshTokenRepo.RemoveRefreshTokenAsync(oldRefreshToken.RowKey, oldRefreshToken.PartitionKey);
                 }
                 else
                 {

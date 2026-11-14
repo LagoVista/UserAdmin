@@ -56,6 +56,8 @@ namespace LagoVista.UserAdmin.Repos
 
             services.AddScoped<IAppUserLoaderRepo, AppUserLoadRepo>();
             services.AddScoped<ILocationUserRepo, LocationUserRepo>();
+            services.AddConditionalOperationalDataStore<RefreshTokenOperationalRecord>(RefreshTokenRepo.ConfigureStorage);
+            services.AddScoped<ILegacyRefreshTokenReader, LegacyRefreshTokenReader>();
             services.AddScoped<IRefreshTokenRepo, RefreshTokenRepo>();
             services.AddScoped<IInviteUserRepo, InviteUserRepo>();
             services.AddScoped<IOrgUserRepo, OrgUserRepo>();

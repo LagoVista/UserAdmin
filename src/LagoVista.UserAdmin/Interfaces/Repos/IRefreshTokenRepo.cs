@@ -11,6 +11,7 @@ namespace LagoVista.UserAdmin.Interfaces.Repos
     {
         Task<RefreshToken> GetRefreshTokenAsync(string tokenId, string userId);
         Task SaveRefreshTokenAsync(RefreshToken token);
+        Task<bool> TryConsumeRefreshTokenAsync(string tokenId, string userId);
         Task RemoveRefreshTokenAsync(string tokenId, string userId);
         Task RemoveAllForUserAsync(string userId);
     }
