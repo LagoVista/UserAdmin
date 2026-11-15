@@ -36,6 +36,7 @@ using LagoVista.UserAdmin.Repos.TableStorage.Passkeys;
 using LagoVista.UserAdmin.Repos.ApplicationData.AnonymousVisitors;
 using LagoVista.UserAdmin.Repos.ApplicationData.ProvisionalEnvironments;
 using LagoVista.UserAdmin.Repos.ApplicationData.AuthCodes;
+using LagoVista.UserAdmin.Repos.ApplicationData.Notifications;
 using LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments;
 using LagoVista.UserAdmin.Repos.TableStorage.ContinuityConversations;
 using LagoVista.UserAdmin.Repos.Testing;
@@ -100,6 +101,14 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<ICalendarRepo, CalendarRepo>();
             services.AddScoped<IMostRecentlyUsedRepo, MostRecentUsedRepo>();
             services.AddScoped<IUserFavoritesRepo, UserFavoritesRepo>();
+            services.ConfigureApplicationData<AppUserInboxRecord>(storage => storage
+                .Index(r => r.PartitionKey)
+                .Index(r => r.RowKey)
+                .Index(r => r.Viewed));
+            services.ConfigureApplicationData<SystemNotificationRecord>(storage => storage
+                .Index(r => r.PartitionKey)
+                .Index(r => r.RowKey)
+                .Index(r => r.Index));
             services.AddScoped<IAppUserInboxRepo, AppUserIndboxRepo>();
             services.AddScoped<IAuthenticationLogRepo, AuthenticationLogRepo>();
             services.AddScoped<ISystemNotificationsRepo, SystemNotificationsRepo>();
