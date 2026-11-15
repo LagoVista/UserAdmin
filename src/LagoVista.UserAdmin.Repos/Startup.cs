@@ -43,7 +43,7 @@ using LagoVista.UserAdmin.Repos.ApplicationData.Associations;
 using LagoVista.UserAdmin.Repos.ApplicationData.AppInstances;
 using LagoVista.UserAdmin.Repos.ApplicationData.OrgMemberships;
 using LagoVista.UserAdmin.Repos.OperationalData.UserRoles;
-using LagoVista.UserAdmin.Repos.OperationalData.RoleAccess;
+using LagoVista.UserAdmin.Repos.OperationalData.RolePermissions;
 using LagoVista.UserAdmin.Repos.OperationalData.LocationAssociations;
 using LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments;
 using LagoVista.UserAdmin.Repos.Testing;

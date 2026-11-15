@@ -3,7 +3,7 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.UserAdmin.Models.DTOs;
-using LagoVista.UserAdmin.Repos.OperationalData.RoleAccess;
+using LagoVista.UserAdmin.Repos.OperationalData.RolePermissions;
 using LagoVista.UserAdmin.Repos.Repos.Security;
 using Moq;
 using NUnit.Framework;

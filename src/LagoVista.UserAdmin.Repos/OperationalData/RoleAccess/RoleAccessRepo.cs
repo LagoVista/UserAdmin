@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LagoVista.UserAdmin.Repos.OperationalData.RoleAccess
+namespace LagoVista.UserAdmin.Repos.OperationalData.RolePermissions
 {
     /// <summary>
     /// Cassandra-authoritative role permissions with scoped and global public

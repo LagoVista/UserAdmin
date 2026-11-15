@@ -2,7 +2,7 @@ using LagoVista.CloudStorage.Storage;
 using LagoVista.UserAdmin.Models.DTOs;
 using System;
 
-namespace LagoVista.UserAdmin.Repos.OperationalData.RoleAccess
+namespace LagoVista.UserAdmin.Repos.OperationalData.RolePermissions
 {
     /// <summary>
     /// Durable role-permission assignment: private rows are partitioned by
