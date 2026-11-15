@@ -33,7 +33,7 @@ using LagoVista.UserAdmin.Repos.Repos.Testing;
 using LagoVista.UserAdmin.Repos.Repos.Users;
 using LagoVista.UserAdmin.Repos.Security;
 using LagoVista.UserAdmin.Repos.TableStorage.Passkeys;
-using LagoVista.UserAdmin.Repos.TableStorage.AnonymousVisitors;
+using LagoVista.UserAdmin.Repos.ApplicationData.AnonymousVisitors;
 using LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments;
 using LagoVista.UserAdmin.Repos.TableStorage.ContinuityConversations;
 using LagoVista.UserAdmin.Repos.Testing;
@@ -103,10 +103,12 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<IPendingIdentityRepo, PendingIdentityRepo>();
             services.AddScoped<IAppUserPasskeyCredentialRepo, PasskeyCredentialRepo>();
             services.AddScoped<IPasskeyCredentialIndexRepo, PasskeyCredentialIndexRepo>();
-            services.AddScoped<IAnonymousVisitorEntityRepo, AnonymousVisitorEntityRepo>();
-            services.AddScoped<IAnonymousVisitorContinuityIndexRepo, AnonymousVisitorContinuityIndexRepo>();
-            services.AddScoped<IAnonymousVisitorInstallationIndexRepo, AnonymousVisitorInstallationIndexRepo>();
-            services.AddScoped<IAnonymousVisitorStateIndexRepo, AnonymousVisitorStateIndexRepo>();
+            services.ConfigureApplicationData<AnonymousVisitorRecord>(storage => storage
+                .Index(r => r.Visitor.ContinuityTokenHash)
+                .Index(r => r.Visitor.InstallationIdHash)
+                .Index(r => r.StateKey)
+                .Index(r => r.LifecycleDueUtc)
+                .RetainFor(AnonymousVisitorRepo.Retention));
             services.AddScoped<IAnonymousVisitorRepo, AnonymousVisitorRepo>();
             services.AddScoped<IContinuityConversationRepo, ContinuityConversationRepo>();
             services.AddScoped<IProvisionalEnvironmentEntityRepo, ProvisionalEnvironmentEntityRepo>();
