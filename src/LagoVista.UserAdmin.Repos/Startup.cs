@@ -42,7 +42,6 @@ using LagoVista.UserAdmin.Repos.ApplicationData.Invitations;
 using LagoVista.UserAdmin.Repos.ApplicationData.Associations;
 using LagoVista.UserAdmin.Repos.OperationalData.LocationAssociations;
 using LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments;
-using LagoVista.UserAdmin.Repos.TableStorage.ContinuityConversations;
 using LagoVista.UserAdmin.Repos.Testing;
 using LagoVista.UserAdmin.Repos.Users;
 using LagoVista.UserAdmin.Resources;
@@ -154,7 +153,6 @@ namespace LagoVista.UserAdmin.Repos
                 .Index(r => r.LifecycleDueUtc)
                 .RetainFor(AnonymousVisitorRepo.Retention));
             services.AddScoped<IAnonymousVisitorRepo, AnonymousVisitorRepo>();
-            services.AddScoped<IContinuityConversationRepo, ContinuityConversationRepo>();
             // Prefer manager archive/accounting/purge. A 180-day TTL is a
             // tracking-record cleanup backstop, not a linked-resource purge.
             services.ConfigureApplicationData<ProvisionalEnvironmentRecord>(storage => storage
