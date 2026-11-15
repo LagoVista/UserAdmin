@@ -75,7 +75,7 @@ namespace LagoVista.UserAdmin.Repos.ApplicationData.Notifications
             string partition, string continuation) where T : class
         {
             var more = !String.IsNullOrWhiteSpace(continuation);
-            return ListResponse<T>.Create(items, request, more,
+            return ListResponse<T>.Create(items.ToList(), request, more,
                 more ? partition : String.Empty, continuation ?? String.Empty);
         }
     }
