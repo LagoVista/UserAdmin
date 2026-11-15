@@ -15,8 +15,9 @@ using System.Threading.Tasks;
 namespace LagoVista.UserAdmin.Repos.ApplicationData.ProvisionalEnvironments
 {
     /// <summary>
-    /// One ApplicationData document per provisional environment. This record is durable
-    /// until the manager completes billing archival, accounting, and organization purge.
+    /// One ApplicationData document per provisional environment. The normal manager
+    /// lifecycle archives and purges linked resources; Mongo TTL is a long-stop
+    /// cleanup of the tracking record, not an organization/subscription purge.
     /// </summary>
     public sealed class ProvisionalEnvironmentRecord : IApplicationDataRecord
     {
@@ -79,6 +80,10 @@ namespace LagoVista.UserAdmin.Repos.ApplicationData.ProvisionalEnvironments
     /// </summary>
     public sealed class ProvisionalEnvironmentRepo : IProvisionalEnvironmentRepo
     {
+        // Align physical cleanup with VisitorConversation's rolling 180-day
+        // retention period. Ordinary activity writes refresh this horizon.
+        public static readonly TimeSpan Retention = TimeSpan.FromDays(180);
+
         private readonly IApplicationDataStore _store;
         private readonly IAppConfig _config;
         private readonly ConditionalWeakTable<ProvisionalEnvironment, ApplicationDataConcurrencyToken> _versions =

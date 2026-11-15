@@ -42,6 +42,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(record.Environment.RecoveryTokenHash, Is.EqualTo("recovery-hash"));
             Assert.That(record.StateKey, Is.EqualTo("Active"));
             Assert.That(record.LifecycleDueUtc, Is.EqualTo(environment.ExpiresUtc));
+            Assert.That(ProvisionalEnvironmentRepo.Retention, Is.EqualTo(TimeSpan.FromDays(180)));
         }
 
         [Test]

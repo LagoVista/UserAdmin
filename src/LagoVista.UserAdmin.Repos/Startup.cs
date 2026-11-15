@@ -112,12 +112,14 @@ namespace LagoVista.UserAdmin.Repos
                 .RetainFor(AnonymousVisitorRepo.Retention));
             services.AddScoped<IAnonymousVisitorRepo, AnonymousVisitorRepo>();
             services.AddScoped<IContinuityConversationRepo, ContinuityConversationRepo>();
-            // Archive-before-purge: no automatic TTL on unarchived provisional workspaces.
+            // Prefer manager archive/accounting/purge. A 180-day TTL is a
+            // tracking-record cleanup backstop, not a linked-resource purge.
             services.ConfigureApplicationData<ProvisionalEnvironmentRecord>(storage => storage
                 .Index(r => r.Environment.RecoveryTokenHash)
                 .Index(r => r.Environment.InstallationIdHash)
                 .Index(r => r.StateKey)
-                .Index(r => r.LifecycleDueUtc));
+                .Index(r => r.LifecycleDueUtc)
+                .RetainFor(ProvisionalEnvironmentRepo.Retention));
             services.AddScoped<IProvisionalEnvironmentRepo, ProvisionalEnvironmentRepo>();
             services.AddScoped<IProvisionalEnvironmentArchiveStore, ProvisionalEnvironmentArchiveStore>();
             services.AddScoped<IProvisionalEnvironmentBillingArchiveRepo, ProvisionalEnvironmentBillingArchiveRepo>();
