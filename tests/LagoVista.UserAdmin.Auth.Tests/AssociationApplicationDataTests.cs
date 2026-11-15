@@ -101,7 +101,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var teams = (await repo.GetMembersTeamsAsync("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")).ToList();
             var members = (await repo.GetTeamMembersAsync("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")).ToList();
 
-            Assert.That(teams.Single().Id, Is.EqualTo("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+            Assert.That(teams.Single().Id.Value, Is.EqualTo("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
             Assert.That(members.Single().Name, Is.EqualTo("Ada"));
             Assert.That(queries.Count, Is.EqualTo(4));
             Assert.That(cursors, Is.EqualTo(new[] { null, "continue", null, "continue" }));
@@ -130,8 +130,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var sets = (await repo.GetAssetSetsForManagedAssetAsync("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")).ToList();
             var assets = (await repo.GetManagedAssetsAsync("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")).ToList();
 
-            Assert.That(sets.Single().Id, Is.EqualTo("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"));
-            Assert.That(assets.Single().Id, Is.EqualTo("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"));
+            Assert.That(sets.Single().Id.Value, Is.EqualTo("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"));
+            Assert.That(assets.Single().Id.Value, Is.EqualTo("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"));
             Assert.That(assets.Single().AssetType, Is.EqualTo("camera"));
             Assert.That(queries[0].Filters.Any(f => f.Field == nameof(ManagedAssetAssociationRecord.AssetId) &&
                 (string)f.Value == "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), Is.True);
