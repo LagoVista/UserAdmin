@@ -38,6 +38,7 @@ using LagoVista.UserAdmin.Repos.ApplicationData.ProvisionalEnvironments;
 using LagoVista.UserAdmin.Repos.ApplicationData.AuthCodes;
 using LagoVista.UserAdmin.Repos.ApplicationData.Notifications;
 using LagoVista.UserAdmin.Repos.OperationalData.SecureLinks;
+using LagoVista.UserAdmin.Repos.ApplicationData.Invitations;
 using LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments;
 using LagoVista.UserAdmin.Repos.TableStorage.ContinuityConversations;
 using LagoVista.UserAdmin.Repos.Testing;
@@ -63,6 +64,13 @@ namespace LagoVista.UserAdmin.Repos
             services.AddConditionalOperationalDataStore<RefreshTokenOperationalRecord>(RefreshTokenRepo.ConfigureStorage);
             services.AddScoped<ILegacyRefreshTokenReader, LegacyRefreshTokenReader>();
             services.AddScoped<IRefreshTokenRepo, RefreshTokenRepo>();
+            services.ConfigureApplicationData<InvitationRecord>(storage => storage
+                .Index(r => r.OrgId)
+                .Index(r => r.EmailKey)
+                .Index(r => r.StatusKey)
+                .Index(r => r.VisibleAsActive)
+                .Index(r => r.IssuedUtc));
+            services.AddScoped<LegacyInvitationReader>();
             services.AddScoped<IInviteUserRepo, InviteUserRepo>();
             services.AddScoped<IOrgUserRepo, OrgUserRepo>();
             services.AddScoped<IOwnedObjectRepo, OwnedObjectRepo>();
