@@ -3,6 +3,7 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
+using LagoVista.UserAdmin.Interfaces;
 using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Repos.Orgs;
 using System;
@@ -221,6 +222,14 @@ namespace LagoVista.UserAdmin.Repos.ApplicationData.OrgMemberships
                 };
             }
             throw new InvalidOperationException("Legacy org membership import exceeded 500000 records.");
+        }
+
+        private EntityHeader RequireOrg()
+        {
+            var org = _config.SystemOwnerOrg;
+            if (org == null || String.IsNullOrWhiteSpace(org.Id))
+                throw new InvalidOperationException("SystemOwnerOrg is required for org membership storage.");
+            return org;
         }
 
         private async Task<OrgMembershipRecord> ImportIfMissingAsync(OrgUser old)
