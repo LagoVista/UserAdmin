@@ -35,6 +35,7 @@ using LagoVista.UserAdmin.Repos.Security;
 using LagoVista.UserAdmin.Repos.TableStorage.Passkeys;
 using LagoVista.UserAdmin.Repos.ApplicationData.AnonymousVisitors;
 using LagoVista.UserAdmin.Repos.ApplicationData.ProvisionalEnvironments;
+using LagoVista.UserAdmin.Repos.ApplicationData.AuthCodes;
 using LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments;
 using LagoVista.UserAdmin.Repos.TableStorage.ContinuityConversations;
 using LagoVista.UserAdmin.Repos.Testing;
@@ -84,6 +85,14 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<IAppInstanceRepo, AppInstanceRepo>();
             services.AddScoped<IUserRoleRepo, UserRoleRepo>();
             services.AddScoped<IRoleAccessRepo, RoleAccessRepo>();
+            // Dedicated short-lived authentication records in Mongo ApplicationData.
+            services.ConfigureApplicationData<SingleUseTokenRecord>(storage => storage
+                .RetainFor(SingleUseTokenRecord.Retention));
+            services.ConfigureApplicationData<VerificationCodeRecord>(storage => storage
+                .Index(r => r.UserId)
+                .Index(r => r.Kind)
+                .Index(r => r.IssuedUtc)
+                .RetainFor(VerificationCodeRecord.Retention));
             services.AddTransient<ISingleUseTokenRepo, SingleUseTokenRepo>();
             services.AddTransient<IPasswordResetCodeRepo, PasswordResetCodeRepo>();
             services.AddTransient<IEmailVerificationCodeRepo, EmailVerificationCodeRepo>();
