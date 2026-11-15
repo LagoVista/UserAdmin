@@ -40,6 +40,7 @@ using LagoVista.UserAdmin.Repos.ApplicationData.Notifications;
 using LagoVista.UserAdmin.Repos.OperationalData.SecureLinks;
 using LagoVista.UserAdmin.Repos.ApplicationData.Invitations;
 using LagoVista.UserAdmin.Repos.ApplicationData.Associations;
+using LagoVista.UserAdmin.Repos.OperationalData.LocationAssociations;
 using LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments;
 using LagoVista.UserAdmin.Repos.TableStorage.ContinuityConversations;
 using LagoVista.UserAdmin.Repos.Testing;
@@ -61,6 +62,8 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<SentEmailXRefRepo>();
 
             services.AddScoped<IAppUserLoaderRepo, AppUserLoadRepo>();
+            // Persistent Cassandra location associations: no Azure read-through and no TTL.
+            services.AddOperationalDataStore<LocationUserOperationalRecord, CassandraOperationalDataStore<LocationUserOperationalRecord>>();
             services.AddScoped<ILocationUserRepo, LocationUserRepo>();
             services.AddConditionalOperationalDataStore<RefreshTokenOperationalRecord>(RefreshTokenRepo.ConfigureStorage);
             services.AddScoped<ILegacyRefreshTokenReader, LegacyRefreshTokenReader>();
@@ -80,6 +83,7 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<IOrganizationRepo, OrganizationRepo>();
             services.AddScoped<IOrganizationLoaderRepo, OrganizationLoaderRepo>();
             services.AddScoped<ISubscriptionResourceRepo, SubscriptionResourceRepo>();
+            services.AddConditionalOperationalDataStore<LocationRoleOperationalRecord>(LocationRoleRepo.ConfigureStorage);
             services.AddScoped<ILocationRoleRepo, LocationRoleRepo>();
             services.AddScoped<IRoleRepo, RoleRepo>();
             services.AddScoped<IUserRoleManager, UserRoleManager>();

@@ -1316,7 +1316,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult> AddUserRoleForLocationAsync(EntityHeader location, EntityHeader user, EntityHeader role, EntityHeader org, EntityHeader addedBy)
         {
-            await AuthorizeOrgAccessAsync(addedBy, org, typeof(LocationUserRole), Actions.Read, new SecurityHelper { LocationId = location.Id, UserId = user.Id, RoleId = role.Id });
+            await AuthorizeOrgAccessAsync(addedBy, org, typeof(LocationUserRole), Actions.Create, new SecurityHelper { LocationId = location.Id, UserId = user.Id, RoleId = role.Id });
             var locationUserRole = new LocationUserRole(location, user)
             {
                 RoleId = role.Id,
@@ -1352,7 +1352,7 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<IEnumerable<LocationUserRole>> GetUserWithRoleInLocationAsync(string locationId, string roleId, EntityHeader org, EntityHeader user)
         {
             await AuthorizeOrgAccessAsync(user, org, typeof(LocationUserRole), Actions.Read, new SecurityHelper { LocationId = locationId, RoleId = roleId });
-            return await _locationRoleRepo.GetUsersInRoleForLocationAsync(locationId, roleId);
+            return await _locationRoleRepo.GetUsersInRoleForLocationAsync(roleId, locationId);
         }
 
         public async Task<InvokeResult> RevokeRoleForUserInLocationAsync(string locationId, string userId, string roleId, EntityHeader org, EntityHeader revokedBy)

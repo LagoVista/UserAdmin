@@ -6,6 +6,7 @@ using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Models.Resources;
 using LagoVista.UserAdmin.Resources;
+using System;
 
 namespace LagoVista.UserAdmin.Models.Security
 {
@@ -42,7 +43,10 @@ namespace LagoVista.UserAdmin.Models.Security
 
         public string GetRowKey()
         {
-            return $"{LocationId}.{UserId}";
+            // Distinct user/role assignments must not share one RowKey.
+            return String.IsNullOrWhiteSpace(RoleId)
+                ? $"{LocationId}.{UserId}"
+                : $"{LocationId}.{UserId}.{RoleId}";
         }
     }
 }
