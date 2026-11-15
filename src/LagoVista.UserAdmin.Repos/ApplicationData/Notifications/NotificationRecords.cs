@@ -72,7 +72,7 @@ namespace LagoVista.UserAdmin.Repos.ApplicationData.Notifications
         }
 
         public static ListResponse<T> PageResponse<T>(IEnumerable<T> items, ListRequest request,
-            string partition, string continuation)
+            string partition, string continuation) where T : class
         {
             var more = !String.IsNullOrWhiteSpace(continuation);
             return ListResponse<T>.Create(items, request, more,
