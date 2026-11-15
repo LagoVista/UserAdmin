@@ -39,6 +39,7 @@ using LagoVista.UserAdmin.Repos.ApplicationData.AuthCodes;
 using LagoVista.UserAdmin.Repos.ApplicationData.Notifications;
 using LagoVista.UserAdmin.Repos.OperationalData.SecureLinks;
 using LagoVista.UserAdmin.Repos.ApplicationData.Invitations;
+using LagoVista.UserAdmin.Repos.ApplicationData.Associations;
 using LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments;
 using LagoVista.UserAdmin.Repos.TableStorage.ContinuityConversations;
 using LagoVista.UserAdmin.Repos.Testing;
@@ -89,6 +90,13 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<IScheduledDowntimeRepo, ScheduledDowntimeRepo>();
             services.AddScoped<IOAuthClientApplicationRepo, OAuthClientApplicationRepo>();
             services.AddScoped<ITeamRepo, TeamRepo>();
+            // These relationships have never been in production: Mongo-only, no legacy readers.
+            services.ConfigureApplicationData<TeamMembershipRecord>(storage => storage
+                .Index(r => r.TeamId)
+                .Index(r => r.UserId));
+            services.ConfigureApplicationData<ManagedAssetAssociationRecord>(storage => storage
+                .Index(r => r.AssetSetId)
+                .Index(r => r.AssetId));
             services.AddScoped<ITeamUserRepo, TeamUserRepo>();
             services.AddScoped<IAssetSetRepo, AssetSetRepo>();
             services.AddScoped<IManagedAssetRepo, ManagedAssetRepo>();
