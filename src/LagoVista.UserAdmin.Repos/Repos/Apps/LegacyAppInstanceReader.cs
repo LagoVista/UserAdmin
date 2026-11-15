@@ -11,7 +11,13 @@ namespace LagoVista.UserAdmin.Repos.Repos.Apps
     /// Read-only Azure compatibility for existing AppInstances. Remove only after
     /// production backfill and count/key reconciliation have been verified.
     /// </summary>
-    public sealed class LegacyAppInstanceReader : TableStorageBase<AppInstance>
+    public interface ILegacyAppInstanceReader
+    {
+        Task<AppInstance> GetLegacyAsync(string userId, string instanceId);
+        Task<IEnumerable<AppInstance>> GetForUserLegacyAsync(string userId);
+    }
+
+    public sealed class LegacyAppInstanceReader : TableStorageBase<AppInstance>, ILegacyAppInstanceReader
     {
         public LegacyAppInstanceReader(IUserAdminSettings settings, IAdminLogger logger)
             : base(settings.UserTableStorage.AccountId, settings.UserTableStorage.AccessKey, logger) { }

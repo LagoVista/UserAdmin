@@ -19,10 +19,10 @@ namespace LagoVista.UserAdmin.Repos.ApplicationData.AppInstances
     {
         private readonly IApplicationDataStore _store;
         private readonly IAppConfig _config;
-        private readonly LegacyAppInstanceReader _legacy;
+        private readonly ILegacyAppInstanceReader _legacy;
 
         public AppInstanceRepo(IApplicationDataStore store, IAppConfig config,
-            LegacyAppInstanceReader legacy)
+            ILegacyAppInstanceReader legacy)
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
             _config = config ?? throw new ArgumentNullException(nameof(config));

@@ -107,7 +107,7 @@ namespace LagoVista.UserAdmin.Repos
             services.ConfigureApplicationData<AppInstanceRecord>(storage => storage
                 .Index(r => r.UserPartition)
                 .Index(r => r.InstanceKey));
-            services.AddScoped<LegacyAppInstanceReader>();
+            services.AddScoped<ILegacyAppInstanceReader, LegacyAppInstanceReader>();
             services.AddScoped<IAppInstanceRepo, AppInstanceRepo>();
             services.AddScoped<IUserRoleRepo, UserRoleRepo>();
             services.AddScoped<IRoleAccessRepo, RoleAccessRepo>();
