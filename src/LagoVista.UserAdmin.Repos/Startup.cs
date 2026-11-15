@@ -40,6 +40,7 @@ using LagoVista.UserAdmin.Repos.ApplicationData.Notifications;
 using LagoVista.UserAdmin.Repos.OperationalData.SecureLinks;
 using LagoVista.UserAdmin.Repos.ApplicationData.Invitations;
 using LagoVista.UserAdmin.Repos.ApplicationData.Associations;
+using LagoVista.UserAdmin.Repos.ApplicationData.AppInstances;
 using LagoVista.UserAdmin.Repos.OperationalData.LocationAssociations;
 using LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments;
 using LagoVista.UserAdmin.Repos.Testing;
@@ -103,6 +104,10 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<ITeamUserRepo, TeamUserRepo>();
             services.AddScoped<IAssetSetRepo, AssetSetRepo>();
             services.AddScoped<IManagedAssetRepo, ManagedAssetRepo>();
+            services.ConfigureApplicationData<AppInstanceRecord>(storage => storage
+                .Index(r => r.UserPartition)
+                .Index(r => r.InstanceKey));
+            services.AddScoped<LegacyAppInstanceReader>();
             services.AddScoped<IAppInstanceRepo, AppInstanceRepo>();
             services.AddScoped<IUserRoleRepo, UserRoleRepo>();
             services.AddScoped<IRoleAccessRepo, RoleAccessRepo>();
