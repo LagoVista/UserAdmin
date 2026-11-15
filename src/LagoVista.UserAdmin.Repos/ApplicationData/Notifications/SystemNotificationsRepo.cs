@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 namespace LagoVista.UserAdmin.Repos.ApplicationData.Notifications
 {
     /// <summary>
-    /// Mongo-backed organization and public notifications. Entries are durable
-    /// and deleted explicitly, matching the previous repository's lifecycle.
+    /// Mongo-backed organization and public notifications. Entries can be
+    /// deleted explicitly and are automatically cleaned up after 365 days.
     /// </summary>
     public sealed class SystemNotificationsRepo : ISystemNotificationsRepo
     {

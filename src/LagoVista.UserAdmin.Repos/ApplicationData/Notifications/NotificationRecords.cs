@@ -82,6 +82,9 @@ namespace LagoVista.UserAdmin.Repos.ApplicationData.Notifications
 
     public sealed class AppUserInboxRecord : IApplicationDataRecord
     {
+        // Rolling physical retention from the most recent ApplicationData write.
+        public static readonly TimeSpan Retention = TimeSpan.FromDays(365);
+
         public NormalizedId32 Id { get; set; }
         public EntityHeader Organization { get; set; }
         public UtcTimestamp CreationDate { get; set; }
@@ -165,6 +168,9 @@ namespace LagoVista.UserAdmin.Repos.ApplicationData.Notifications
 
     public sealed class SystemNotificationRecord : IApplicationDataRecord
     {
+        // Rolling physical retention from the most recent ApplicationData write.
+        public static readonly TimeSpan Retention = TimeSpan.FromDays(365);
+
         public NormalizedId32 Id { get; set; }
         public EntityHeader Organization { get; set; }
         public UtcTimestamp CreationDate { get; set; }

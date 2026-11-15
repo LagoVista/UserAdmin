@@ -26,6 +26,13 @@ namespace LagoVista.UserAdmin.Auth.Tests
         };
 
         [Test]
+        public void Both_Notification_Record_Types_Retain_For_One_Year()
+        {
+            Assert.That(AppUserInboxRecord.Retention, Is.EqualTo(TimeSpan.FromDays(365)));
+            Assert.That(SystemNotificationRecord.Retention, Is.EqualTo(TimeSpan.FromDays(365)));
+        }
+
+        [Test]
         public void Inbox_Record_Retains_Existing_Action_Identifiers_And_Read_State()
         {
             var item = NewInboxItem();

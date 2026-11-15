@@ -104,11 +104,13 @@ namespace LagoVista.UserAdmin.Repos
             services.ConfigureApplicationData<AppUserInboxRecord>(storage => storage
                 .Index(r => r.PartitionKey)
                 .Index(r => r.RowKey)
-                .Index(r => r.Viewed));
+                .Index(r => r.Viewed)
+                .RetainFor(AppUserInboxRecord.Retention));
             services.ConfigureApplicationData<SystemNotificationRecord>(storage => storage
                 .Index(r => r.PartitionKey)
                 .Index(r => r.RowKey)
-                .Index(r => r.Index));
+                .Index(r => r.Index)
+                .RetainFor(SystemNotificationRecord.Retention));
             services.AddScoped<IAppUserInboxRepo, AppUserIndboxRepo>();
             services.AddScoped<IAuthenticationLogRepo, AuthenticationLogRepo>();
             services.AddScoped<ISystemNotificationsRepo, SystemNotificationsRepo>();
