@@ -43,6 +43,7 @@ using LagoVista.UserAdmin.Repos.ApplicationData.Associations;
 using LagoVista.UserAdmin.Repos.ApplicationData.AppInstances;
 using LagoVista.UserAdmin.Repos.ApplicationData.OrgMemberships;
 using LagoVista.UserAdmin.Repos.OperationalData.UserRoles;
+using LagoVista.UserAdmin.Repos.OperationalData.RoleAccess;
 using LagoVista.UserAdmin.Repos.OperationalData.LocationAssociations;
 using LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments;
 using LagoVista.UserAdmin.Repos.Testing;
@@ -120,6 +121,8 @@ namespace LagoVista.UserAdmin.Repos
             services.AddConditionalOperationalDataStore<UserRoleOperationalRecord>(UserRoleRepo.ConfigureStorage);
             services.AddScoped<ILegacyUserRoleReader, LegacyUserRoleReader>();
             services.AddScoped<IUserRoleRepo, UserRoleRepo>();
+            services.AddConditionalOperationalDataStore<RoleAccessOperationalRecord>(RoleAccessRepo.ConfigureStorage);
+            services.AddScoped<ILegacyRoleAccessReader, LegacyRoleAccessReader>();
             services.AddScoped<IRoleAccessRepo, RoleAccessRepo>();
             // Dedicated short-lived authentication records in Mongo ApplicationData.
             services.ConfigureApplicationData<SingleUseTokenRecord>(storage => storage
