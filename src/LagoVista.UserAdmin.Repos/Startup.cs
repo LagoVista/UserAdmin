@@ -41,6 +41,7 @@ using LagoVista.UserAdmin.Repos.OperationalData.SecureLinks;
 using LagoVista.UserAdmin.Repos.ApplicationData.Invitations;
 using LagoVista.UserAdmin.Repos.ApplicationData.Associations;
 using LagoVista.UserAdmin.Repos.ApplicationData.AppInstances;
+using LagoVista.UserAdmin.Repos.ApplicationData.OrgMemberships;
 using LagoVista.UserAdmin.Repos.OperationalData.LocationAssociations;
 using LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments;
 using LagoVista.UserAdmin.Repos.Testing;
@@ -76,6 +77,12 @@ namespace LagoVista.UserAdmin.Repos
                 .Index(r => r.IssuedUtc));
             services.AddScoped<LegacyInvitationReader>();
             services.AddScoped<IInviteUserRepo, InviteUserRepo>();
+            services.ConfigureApplicationData<OrgMembershipRecord>(storage => storage
+                .Index(r => r.OrgId)
+                .Index(r => r.UserId)
+                .Index(r => r.EmailKey)
+                .Index(r => r.IsDeleted));
+            services.AddScoped<ILegacyOrgUserReader, LegacyOrgUserReader>();
             services.AddScoped<IOrgUserRepo, OrgUserRepo>();
             services.AddScoped<IOwnedObjectRepo, OwnedObjectRepo>();
             services.AddScoped<IOrgLocationRepo, OrgLocationRepo>();
