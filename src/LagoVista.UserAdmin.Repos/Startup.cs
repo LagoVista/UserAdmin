@@ -34,6 +34,7 @@ using LagoVista.UserAdmin.Repos.Repos.Users;
 using LagoVista.UserAdmin.Repos.Security;
 using LagoVista.UserAdmin.Repos.TableStorage.Passkeys;
 using LagoVista.UserAdmin.Repos.ApplicationData.AnonymousVisitors;
+using LagoVista.UserAdmin.Repos.ApplicationData.ProvisionalEnvironments;
 using LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments;
 using LagoVista.UserAdmin.Repos.TableStorage.ContinuityConversations;
 using LagoVista.UserAdmin.Repos.Testing;
@@ -111,11 +112,12 @@ namespace LagoVista.UserAdmin.Repos
                 .RetainFor(AnonymousVisitorRepo.Retention));
             services.AddScoped<IAnonymousVisitorRepo, AnonymousVisitorRepo>();
             services.AddScoped<IContinuityConversationRepo, ContinuityConversationRepo>();
-            services.AddScoped<IProvisionalEnvironmentEntityRepo, ProvisionalEnvironmentEntityRepo>();
-            services.AddScoped<IProvisionalEnvironmentRecoveryIndexRepo, ProvisionalEnvironmentRecoveryIndexRepo>();
-            services.AddScoped<IProvisionalEnvironmentInstallationIndexRepo, ProvisionalEnvironmentInstallationIndexRepo>();
-            services.AddScoped<IProvisionalEnvironmentCreationIndexRepo, ProvisionalEnvironmentCreationIndexRepo>();
-            services.AddScoped<IProvisionalEnvironmentStateIndexRepo, ProvisionalEnvironmentStateIndexRepo>();
+            // Archive-before-purge: no automatic TTL on unarchived provisional workspaces.
+            services.ConfigureApplicationData<ProvisionalEnvironmentRecord>(storage => storage
+                .Index(r => r.Environment.RecoveryTokenHash)
+                .Index(r => r.Environment.InstallationIdHash)
+                .Index(r => r.StateKey)
+                .Index(r => r.LifecycleDueUtc));
             services.AddScoped<IProvisionalEnvironmentRepo, ProvisionalEnvironmentRepo>();
             services.AddScoped<IProvisionalEnvironmentArchiveStore, ProvisionalEnvironmentArchiveStore>();
             services.AddScoped<IProvisionalEnvironmentBillingArchiveRepo, ProvisionalEnvironmentBillingArchiveRepo>();
