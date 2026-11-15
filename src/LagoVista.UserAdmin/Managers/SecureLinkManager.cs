@@ -44,6 +44,8 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<InvokeResult<String>> GenerateSecureLinkAsync(string link, EntityHeader forUser, TimeSpan duration, EntityHeader org, EntityHeader user)
         {
+            if (duration <= TimeSpan.Zero || duration > TimeSpan.FromDays(365))
+                return InvokeResult<String>.FromError("Secure links must have a lifetime between one second and 365 days.");
             var record = new SecureLink()
             {
                 RowKey = Guid.NewGuid().ToId(),
@@ -70,6 +72,18 @@ namespace LagoVista.UserAdmin.Managers
         public async Task<InvokeResult<string>> GetSecureLinkAsync(string orgId, string linkId)
         {
            var secureLink = await  _secureLinkRepo.GetSecureLinkAsync(orgId, linkId);
+            if (secureLink == null || secureLink.Expired ||
+                String.IsNullOrWhiteSpace(secureLink.Expires))
+                return InvokeResult<string>.FromError("Secure link is missing, expired or revoked.");
+            try
+            {
+                if (secureLink.Expires.ToDateTime().ToUniversalTime() <= DateTime.UtcNow)
+                    return InvokeResult<string>.FromError("Secure link is missing, expired or revoked.");
+            }
+            catch
+            {
+                return InvokeResult<string>.FromError("Secure link is missing, expired or revoked.");
+            }
 
             secureLink.LastAccess = DateTime.UtcNow.ToString();
             secureLink.AccessCount++;

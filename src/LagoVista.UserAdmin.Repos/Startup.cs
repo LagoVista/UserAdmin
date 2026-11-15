@@ -37,6 +37,7 @@ using LagoVista.UserAdmin.Repos.ApplicationData.AnonymousVisitors;
 using LagoVista.UserAdmin.Repos.ApplicationData.ProvisionalEnvironments;
 using LagoVista.UserAdmin.Repos.ApplicationData.AuthCodes;
 using LagoVista.UserAdmin.Repos.ApplicationData.Notifications;
+using LagoVista.UserAdmin.Repos.OperationalData.SecureLinks;
 using LagoVista.UserAdmin.Repos.TableStorage.ProvisionalEnvironments;
 using LagoVista.UserAdmin.Repos.TableStorage.ContinuityConversations;
 using LagoVista.UserAdmin.Repos.Testing;
@@ -116,6 +117,8 @@ namespace LagoVista.UserAdmin.Repos
             services.AddScoped<ISystemNotificationsRepo, SystemNotificationsRepo>();
             services.AddScoped<ISentEmailRepo, SentEmailRepo>();
             services.AddTransient<ILocationDiagramRepo, LocationDiagramRepo>();
+            services.AddConditionalOperationalDataStore<SecureLinkOperationalRecord>(SecureLinkRepo.ConfigureStorage);
+            services.AddScoped<LegacySecureLinkReader>();
             services.AddScoped<ISecureLinkRepo, SecureLinkRepo>();
             services.AddScoped<IFunctionMapRepo, FunctionMapRepo>();
             services.AddScoped<IAppUserTestingDslRepo, AppUserTestingDslRepo>();
