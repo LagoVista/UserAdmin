@@ -26,16 +26,16 @@ namespace LagoVista.UserAdmin.Auth.Tests
         [Test]
         public void Association_Ids_Are_Deterministic_And_Separate_Both_Scopes()
         {
-            var one = AssociationRecordIdentity.Create("team-user", "team-1", "user-1");
+            var one = AssociationRecordIdentity.Create("team-user", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             Assert.That(one.Value.Length, Is.EqualTo(32));
             Assert.That(one.Value,
-                Is.EqualTo(AssociationRecordIdentity.Create("team-user", "team-1", "user-1").Value));
+                Is.EqualTo(AssociationRecordIdentity.Create("team-user", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB").Value));
             Assert.That(one.Value,
-                Is.Not.EqualTo(AssociationRecordIdentity.Create("team-user", "team-2", "user-1").Value));
+                Is.Not.EqualTo(AssociationRecordIdentity.Create("team-user", "team-2", "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB").Value));
             Assert.That(one.Value,
-                Is.Not.EqualTo(AssociationRecordIdentity.Create("team-user", "team-1", "user-2").Value));
+                Is.Not.EqualTo(AssociationRecordIdentity.Create("team-user", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "user-2").Value));
             Assert.That(one.Value,
-                Is.Not.EqualTo(AssociationRecordIdentity.Create("managed-asset", "team-1", "user-1").Value));
+                Is.Not.EqualTo(AssociationRecordIdentity.Create("managed-asset", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB").Value));
             Assert.That(AssociationRecordIdentity.Create("team-user", "a:b", "c").Value,
                 Is.Not.EqualTo(AssociationRecordIdentity.Create("team-user", "a", "b:c").Value));
         }
@@ -45,11 +45,11 @@ namespace LagoVista.UserAdmin.Auth.Tests
         {
             var member = NewMember();
             var saved = TeamMembershipRecord.FromModel(member, PlatformOrg);
-            Assert.That(saved.TeamId, Is.EqualTo("team-1"));
-            Assert.That(saved.UserId, Is.EqualTo("user-1"));
+            Assert.That(saved.TeamId, Is.EqualTo("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+            Assert.That(saved.UserId, Is.EqualTo("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"));
             Assert.That(saved.Organization.Id, Is.EqualTo(PlatformOrg.Id));
-            Assert.That(saved.Member.PartitionKey, Is.EqualTo("team-1"));
-            Assert.That(saved.Member.RowKey, Is.EqualTo(TeamUser.CreateRowKey("team-1", "user-1")));
+            Assert.That(saved.Member.PartitionKey, Is.EqualTo("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+            Assert.That(saved.Member.RowKey, Is.EqualTo(TeamUser.CreateRowKey("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")));
             Assert.That(saved.Member.CreateSummary().Name, Is.EqualTo("Ada"));
             Assert.That(saved.Member.CreateSummary().ProfileImageUrl, Is.EqualTo("/ada.png"));
         }
@@ -60,11 +60,11 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var member = NewAsset();
             Assert.That(member.PartitionKey, Is.Null.Or.Empty);
             var saved = ManagedAssetAssociationRecord.FromModel(member, PlatformOrg);
-            Assert.That(saved.AssetSetId, Is.EqualTo("set-1"));
-            Assert.That(saved.AssetId, Is.EqualTo("asset-1"));
-            Assert.That(saved.Association.PartitionKey, Is.EqualTo("set-1"));
+            Assert.That(saved.AssetSetId, Is.EqualTo("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"));
+            Assert.That(saved.AssetId, Is.EqualTo("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"));
+            Assert.That(saved.Association.PartitionKey, Is.EqualTo("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"));
             Assert.That(saved.Association.RowKey,
-                Is.EqualTo(ManagedAsset.CreateRowKey("set-1", "asset-1")));
+                Is.EqualTo(ManagedAsset.CreateRowKey("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")));
             Assert.That(saved.Association.CreateSummary().AssetType, Is.EqualTo("camera"));
         }
 
@@ -98,17 +98,17 @@ namespace LagoVista.UserAdmin.Auth.Tests
                         query.Page.ContinuationToken == null ? "continue" : null);
                 });
             var repo = new TeamUserRepo(store.Object, NewConfig().Object);
-            var teams = (await repo.GetMembersTeamsAsync("user-1")).ToList();
-            var members = (await repo.GetTeamMembersAsync("team-1")).ToList();
+            var teams = (await repo.GetMembersTeamsAsync("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")).ToList();
+            var members = (await repo.GetTeamMembersAsync("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")).ToList();
 
-            Assert.That(teams.Single().Id, Is.EqualTo("team-1"));
+            Assert.That(teams.Single().Id, Is.EqualTo("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
             Assert.That(members.Single().Name, Is.EqualTo("Ada"));
             Assert.That(queries.Count, Is.EqualTo(4));
             Assert.That(cursors, Is.EqualTo(new[] { null, "continue", null, "continue" }));
             Assert.That(queries[0].Filters.Any(f => f.Field == nameof(TeamMembershipRecord.UserId) &&
-                (string)f.Value == "user-1"), Is.True);
+                (string)f.Value == "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), Is.True);
             Assert.That(queries[2].Filters.Any(f => f.Field == nameof(TeamMembershipRecord.TeamId) &&
-                (string)f.Value == "team-1"), Is.True);
+                (string)f.Value == "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Is.True);
             Assert.That(queries.All(q => q.Filters.Any(f => f.Field == "Organization.Id" &&
                 (string)f.Value == PlatformOrg.Id)), Is.True);
         }
@@ -127,16 +127,16 @@ namespace LagoVista.UserAdmin.Auth.Tests
                     return new StoragePageResult<ManagedAssetAssociationRecord>(new[] { asset });
                 });
             var repo = new ManagedAssetRepo(store.Object, NewConfig().Object);
-            var sets = (await repo.GetAssetSetsForManagedAssetAsync("asset-1")).ToList();
-            var assets = (await repo.GetManagedAssetsAsync("set-1")).ToList();
+            var sets = (await repo.GetAssetSetsForManagedAssetAsync("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")).ToList();
+            var assets = (await repo.GetManagedAssetsAsync("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")).ToList();
 
-            Assert.That(sets.Single().Id, Is.EqualTo("set-1"));
-            Assert.That(assets.Single().Id, Is.EqualTo("asset-1"));
+            Assert.That(sets.Single().Id, Is.EqualTo("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"));
+            Assert.That(assets.Single().Id, Is.EqualTo("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"));
             Assert.That(assets.Single().AssetType, Is.EqualTo("camera"));
             Assert.That(queries[0].Filters.Any(f => f.Field == nameof(ManagedAssetAssociationRecord.AssetId) &&
-                (string)f.Value == "asset-1"), Is.True);
+                (string)f.Value == "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), Is.True);
             Assert.That(queries[1].Filters.Any(f => f.Field == nameof(ManagedAssetAssociationRecord.AssetSetId) &&
-                (string)f.Value == "set-1"), Is.True);
+                (string)f.Value == "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), Is.True);
         }
 
         [Test]
@@ -144,35 +144,35 @@ namespace LagoVista.UserAdmin.Auth.Tests
         {
             var teamStore = NewStore();
             var teamRepo = new TeamUserRepo(teamStore.Object, NewConfig().Object);
-            await teamRepo.RemoveMemberAsync("team-1", "user-1");
+            await teamRepo.RemoveMemberAsync("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             teamStore.Verify(store => store.DeleteAsync<TeamMembershipRecord>(
                 It.Is<StorageKey>(key =>
-                    key.Id == AssociationRecordIdentity.Create("team-user", "team-1", "user-1").Value &&
+                    key.Id == AssociationRecordIdentity.Create("team-user", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB").Value &&
                     key.Scope == PlatformOrg.Id),
                 It.IsAny<CancellationToken>()), Times.Once());
 
             var assetStore = NewStore();
             var assetRepo = new ManagedAssetRepo(assetStore.Object, NewConfig().Object);
-            await assetRepo.RemoveManagedAssetAsync("set-1", "asset-1");
+            await assetRepo.RemoveManagedAssetAsync("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             assetStore.Verify(store => store.DeleteAsync<ManagedAssetAssociationRecord>(
                 It.Is<StorageKey>(key =>
-                    key.Id == AssociationRecordIdentity.Create("managed-asset", "set-1", "asset-1").Value &&
+                    key.Id == AssociationRecordIdentity.Create("managed-asset", "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD").Value &&
                     key.Scope == PlatformOrg.Id),
                 It.IsAny<CancellationToken>()), Times.Once());
         }
 
         private static TeamUser NewMember()
         {
-            return new TeamUser(EntityHeader.Create("team-1", "Team One"),
-                EntityHeader.Create("user-1", "Ada"))
+            return new TeamUser(EntityHeader.Create("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "Team One"),
+                EntityHeader.Create("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", "Ada"))
             {
                 ProfileImageUrl = "/ada.png"
             };
         }
 
         private static ManagedAsset NewAsset()
-            => new ManagedAsset(EntityHeader.Create("set-1", "Asset Set"),
-                EntityHeader.Create("asset-1", "Camera"), "camera");
+            => new ManagedAsset(EntityHeader.Create("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", "Asset Set"),
+                EntityHeader.Create("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD", "Camera"), "camera");
 
         private static Mock<IApplicationDataStore> NewStore() => new Mock<IApplicationDataStore>();
 
