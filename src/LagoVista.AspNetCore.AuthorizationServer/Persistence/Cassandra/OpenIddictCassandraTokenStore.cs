@@ -1,10 +1,13 @@
 using Cassandra;
 using LagoVista.CloudStorage.Exceptions;
 using LagoVista.CloudStorage.Storage.StorageProviders.Cassandra;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using OpenIddict.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -28,13 +31,16 @@ namespace LagoVista.AspNetCore.AuthorizationServer.Persistence.Cassandra
 
         private readonly ICassandraSessionFactory _sessionFactory;
         private readonly AuthorizationServerOptions _options;
+        private readonly ILogger<OpenIddictCassandraTokenStore> _logger;
         private readonly SemaphoreSlim _schemaLock = new SemaphoreSlim(1, 1);
         private volatile bool _schemaReady;
 
-        public OpenIddictCassandraTokenStore(ICassandraSessionFactory sessionFactory, AuthorizationServerOptions options)
+        public OpenIddictCassandraTokenStore(ICassandraSessionFactory sessionFactory, AuthorizationServerOptions options,
+            ILogger<OpenIddictCassandraTokenStore> logger = null)
         {
             _sessionFactory = sessionFactory ?? throw new ArgumentNullException(nameof(sessionFactory));
             _options = options ?? throw new ArgumentNullException(nameof(options));
+            _logger = logger ?? NullLogger<OpenIddictCassandraTokenStore>.Instance;
         }
 
         public async ValueTask<long> CountAsync(CancellationToken cancellationToken)
@@ -68,22 +74,36 @@ INSERT INTO {TableName}
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 USING TTL ?").ConfigureAwait(false);
 
-            await session.ExecuteAsync(prepared.Bind(
-                token.Id,
-                token.ApplicationId,
-                token.AuthorizationId,
-                token.Subject,
-                token.Type,
-                token.Status,
-                token.ReferenceId,
-                token.Payload,
-                token.PropertiesJson,
-                ToTimestamp(token.CreationDateUtc),
-                ToTimestamp(token.ExpirationDateUtc),
-                ToTimestamp(token.RedemptionDateUtc),
-                token.Version,
-                GetTtlSeconds(token))).ConfigureAwait(false);
+            try
+            {
+                await session.ExecuteAsync(prepared.Bind(
+                    token.Id,
+                    token.ApplicationId,
+                    token.AuthorizationId,
+                    token.Subject,
+                    token.Type,
+                    token.Status,
+                    token.ReferenceId,
+                    token.Payload,
+                    token.PropertiesJson,
+                    ToTimestamp(token.CreationDateUtc),
+                    ToTimestamp(token.ExpirationDateUtc),
+                    ToTimestamp(token.RedemptionDateUtc),
+                    token.Version,
+                    GetTtlSeconds(token))).ConfigureAwait(false);
+            }
+            catch (Exception ex) when (!(ex is OperationCanceledException))
+            {
+                // Only operation metadata is logged: never token identifiers, references, payloads or principals.
+                _logger.LogWarning(
+                    "OpenIddict token create failed. Phase=Create, TraceId={TraceId}, InitialVersion=0, FailureType={FailureType}",
+                    Activity.Current?.TraceId.ToString() ?? "none", ex.GetType().Name);
+                throw;
+            }
 
+            _logger.LogDebug(
+                "OpenIddict token create confirmed. Phase=Create, TraceId={TraceId}, InitialVersion=0",
+                Activity.Current?.TraceId.ToString() ?? "none");
             cancellationToken.ThrowIfCancellationRequested();
         }
 
@@ -281,28 +301,70 @@ application_id = ?, authorization_id = ?, subject = ?, type = ?, status = ?, ref
 creation_date_utc = ?, expiration_date_utc = ?, redemption_date_utc = ?, version = ?
 WHERE id = ? IF version = ?").ConfigureAwait(false);
 
-            var rows = await session.ExecuteAsync(prepared.Bind(
-                GetTtlSeconds(token),
-                token.ApplicationId,
-                token.AuthorizationId,
-                token.Subject,
-                token.Type,
-                token.Status,
-                token.ReferenceId,
-                token.Payload,
-                token.PropertiesJson,
-                ToTimestamp(token.CreationDateUtc),
-                ToTimestamp(token.ExpirationDateUtc),
-                ToTimestamp(token.RedemptionDateUtc),
-                nextVersion,
-                token.Id,
-                expectedVersion)).ConfigureAwait(false);
+            RowSet rows;
+            try
+            {
+                rows = await session.ExecuteAsync(prepared.Bind(
+                    GetTtlSeconds(token),
+                    token.ApplicationId,
+                    token.AuthorizationId,
+                    token.Subject,
+                    token.Type,
+                    token.Status,
+                    token.ReferenceId,
+                    token.Payload,
+                    token.PropertiesJson,
+                    ToTimestamp(token.CreationDateUtc),
+                    ToTimestamp(token.ExpirationDateUtc),
+                    ToTimestamp(token.RedemptionDateUtc),
+                    nextVersion,
+                    token.Id,
+                    expectedVersion)).ConfigureAwait(false);
+            }
+            catch (Exception ex) when (!(ex is OperationCanceledException))
+            {
+                // A SERIAL write timeout has an uncertain outcome. Preserve the original exception;
+                // do not retry a security-sensitive conditional mutation automatically.
+                _logger.LogWarning(
+                    "OpenIddict token update failed before confirmation. Phase=Update, TraceId={TraceId}, ExpectedVersion={ExpectedVersion}, FailureType={FailureType}",
+                    Activity.Current?.TraceId.ToString() ?? "none", expectedVersion, ex.GetType().Name);
+                throw;
+            }
 
             var result = rows.FirstOrDefault();
             if (result == null || !result.GetValue<bool>("[applied]"))
+            {
+                // On failed CAS, Cassandra can return the current version. It may be absent
+                // when the row is missing or the driver returns a partial result. Observe only.
+                long? observedVersion = null;
+                var versionEvidence = result == null ? "no-result" : "unavailable";
+                if (result != null)
+                {
+                    try
+                    {
+                        if (result.IsNull("version"))
+                            versionEvidence = "null";
+                        else
+                        {
+                            observedVersion = result.GetValue<long>("version");
+                            versionEvidence = "present";
+                        }
+                    }
+                    catch (ArgumentException) { }
+                    catch (InvalidOperationException) { }
+                    catch (IndexOutOfRangeException) { }
+                }
+
+                _logger.LogWarning(
+                    "OpenIddict token conditional update rejected. Phase=Update, TraceId={TraceId}, ExpectedVersion={ExpectedVersion}, ObservedVersion={ObservedVersion}, VersionEvidence={VersionEvidence}",
+                    Activity.Current?.TraceId.ToString() ?? "none", expectedVersion, observedVersion, versionEvidence);
                 throw new ContentModifiedException();
+            }
 
             token.Version = nextVersion;
+            _logger.LogDebug(
+                "OpenIddict token conditional update confirmed. Phase=Update, TraceId={TraceId}, PreviousVersion={PreviousVersion}, NewVersion={NewVersion}",
+                Activity.Current?.TraceId.ToString() ?? "none", expectedVersion, nextVersion);
             cancellationToken.ThrowIfCancellationRequested();
         }
 
