@@ -345,6 +345,11 @@ namespace LagoVista.UserAdmin.Models.Orgs
         public EntityHeader DeviceRepository { get; set; }
         public EntityHeader Device { get; set; }
 
+        // Position in the diagram's SVG coordinate system. Null means not yet placed.
+        // Diagram coordinates work without a geographic calibration.
+        public double? X { get; set; }
+        public double? Y { get; set; }
+
         [CustomValidator]
         public void Validate(ValidationResult result, Actions action)
         {
