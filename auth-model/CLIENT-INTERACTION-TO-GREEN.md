@@ -97,15 +97,17 @@ Shared Client Interaction behavior therefore belongs here once, rather than bein
 Target shared responsibilities are:
 
 1. inspect `AgentExecuteResponse.clientDirectives`;
-2. project a supported directive into normalized Client Interaction view-model state;
-3. expose the active/pending interaction through `AgentChatViewModel`;
-4. accept one modeled terminal completion from the platform interaction host;
-5. construct the canonical `ClientDirectiveResult` submission;
-6. submit that result through `AgentExecuteRequest.clientDirectiveResults`;
+2. select the pending result-bearing **canonical generated `ClientDirective`** (not a second view-model DTO);
+3. expose that exact directive through `AgentChatViewModel.activeClientInteraction`;
+4. accept the canonical generated `ClientDirectiveResult` directly from the platform interaction host;
+5. correlate its `directiveId` and `action` against the persisted pending interaction;
+6. submit the unchanged result through `AgentExecuteRequest.clientDirectiveResults`;
 7. apply the resumed agent response through the same `AgentChatEngine` pipeline; and
-8. clear/advance pending interaction state only after the continuation is resolved.
+8. clear/advance pending interaction state only after the continuation is resolved, retaining it on recoverable failure.
 
-Angular and React Native MUST NOT parse raw `AgentExecuteResponse.clientDirectives` independently or construct agent continuation requests independently.
+Angular and React Native MUST NOT parse raw `AgentExecuteResponse.clientDirectives` independently, define parallel transport completion DTOs (`correlationId/outcome/value`), or construct agent continuation requests independently. Authored model names (`directiveKey` and `outcome`) remain valid in product definitions but are **not** alternate runtime wire fields.
+
+The generated `LagoVista.Core` contract owns the wire model in all clients. `AgentChatEngine.completeClientInteraction(ClientDirectiveResult)` owns continuation, and `@nuviot/platform/ai` exposes that method through Angular `AgentChatService`. Platform `ClientInteractionHost` components accept `ClientDirective` and emit `ClientDirectiveResult` without translation layers.
 
 ## Platform responsibility
 
@@ -113,8 +115,8 @@ Angular Web and React Native own presentation and client-local side effects only
 
 Each platform:
 
-1. observes normalized Client Interaction state from `AgentChatViewModel`;
-2. passes it to its `ClientInteractionHost`;
+1. observes the canonical pending `ClientDirective` from `AgentChatViewModel`;
+2. passes it unchanged to its `ClientInteractionHost`;
 3. renders the canonical interaction handler;
 4. performs the interaction-specific client/backend operation;
 5. keeps authoritative session/token/account results client-local; and
