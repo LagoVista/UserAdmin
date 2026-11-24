@@ -540,6 +540,12 @@ namespace LagoVista.UserAdmin.Models.Users
     public class TenantUserPreferences
     {
         public EntityHeader ExecutiveAssistantSession { get; set; }
+
+        /// <summary>Persistent Strategic Advisor relationship for this user and organization.</summary>
+        public EntityHeader StrategicAdvisorSession { get; set; }
+
+        /// <summary>Explicit opt-out from Strategic Advisor time checks; absent values retain reminders.</summary>
+        public bool SuppressStrategicAdvisorTimeChecks { get; set; }
     }
 }
 
