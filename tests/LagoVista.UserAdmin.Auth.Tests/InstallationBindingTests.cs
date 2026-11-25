@@ -209,5 +209,17 @@ namespace LagoVista.UserAdmin.Auth.Tests
             instances.Verify(x => x.AddAppInstanceAsync(It.IsAny<AppInstance>()), Times.Never);
             tokens.Verify(x => x.TryConsumeRefreshTokenAsync(Token, User), grant == "refresh" || grant == "switch-org" ? Times.Once() : Times.Never());
         }
+
+        [Test]
+        public async Task ExistingObjectRenewalOverloadRejectsCallerSubstitutedBinding()
+        {
+            var repo = new Mock<IRefreshTokenRepo>(MockBehavior.Strict);
+            repo.Setup(x => x.GetRefreshTokenAsync(Token, User)).ReturnsAsync(new RefreshToken(User) { RowKey = Token, AppId = App, AppInstanceId = Installation });
+            var manager = new RefreshTokenManager(Mock.Of<ITokenAuthOptions>(), Mock.Of<IAuthenticationLogManager>(), Mock.Of<IAuthRequestValidators>(), repo.Object, Mock.Of<IAdminLogger>());
+            var result = await manager.RenewRefreshTokenAsync(new RefreshToken(User) { RowKey = Token, AppId = App, AppInstanceId = "substituted" });
+            Assert.That(result.Successful, Is.False);
+            repo.Verify(x => x.TryConsumeRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            repo.Verify(x => x.SaveRefreshTokenAsync(It.IsAny<RefreshToken>()), Times.Never);
+        }
     }
 }

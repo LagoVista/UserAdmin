@@ -83,6 +83,15 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public async Task<InvokeResult<RefreshToken>> RenewRefreshTokenAsync(RefreshToken oldRefreshToken)
         {
+            if (oldRefreshToken == null)
+                return await RenewPersistedRefreshTokenAsync(null);
+
+            return await RenewRefreshTokenAsync(oldRefreshToken.RowKey, oldRefreshToken.PartitionKey,
+                oldRefreshToken.AppId, oldRefreshToken.AppInstanceId);
+        }
+
+        private async Task<InvokeResult<RefreshToken>> RenewPersistedRefreshTokenAsync(RefreshToken oldRefreshToken)
+        {
             try
             {
                 if (oldRefreshToken == null)
@@ -155,7 +164,10 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 return InvokeResult<RefreshToken>.FromErrors(UserAdminErrorCodes.AuthRefreshTokenNotInStorage.ToErrorMessage());
             }
 
-            return await RenewRefreshTokenAsync(refreshToken);
+            if (refreshToken.PartitionKey != userId || refreshToken.RowKey != refreshTokenId)
+                return InvokeResult<RefreshToken>.FromError("Invalid refresh token binding.");
+
+            return await RenewPersistedRefreshTokenAsync(refreshToken);
         }
 
         public async Task<InvokeResult<RefreshToken>> RenewRefreshTokenAsync(string refreshTokenId, string userId, string appId, string appInstanceId)
@@ -166,7 +178,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 token.AppId != appId || token.AppInstanceId != appInstanceId)
                 return InvokeResult<RefreshToken>.FromError("Invalid refresh token binding.");
 
-            return await RenewRefreshTokenAsync(token);
+            return await RenewPersistedRefreshTokenAsync(token);
         }
 
         public Task RevokeAllForUserAsync(string userId)

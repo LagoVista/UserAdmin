@@ -15,6 +15,7 @@ namespace LagoVista.UserAdmin
     {
         Task<InvokeResult<AuthResponse>> GenerateAuthResponseAsync(AppUser appUser, AuthRequest authRequest, InvokeResult<RefreshToken> refreshTokenResponse);
         Task<InvokeResult<AuthResponse>> GenerateAuthResponseAsync(AppUser appUser, string appInstanceId, InvokeResult<RefreshToken> refreshTokenResponse);
+        // installationId must come from an authenticated, validated canonical AppInstance, never a request alone.
         string GetJWToken(AppUser user, DateTime accessExpires, string installationId);
         string GetAnonymousVisitorJWToken(AppUser user, string actorId, DateTime accessExpires);
         string GetProvisionalJWToken(AppUser user, string actorId, DateTime accessExpires);
