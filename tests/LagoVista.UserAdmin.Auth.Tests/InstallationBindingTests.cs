@@ -138,9 +138,14 @@ namespace LagoVista.UserAdmin.Auth.Tests
         [TestCase("password")]
         [TestCase("single-use")]
         [TestCase("refresh")]
+        [TestCase("switch-org")]
+        [TestCase("wrong-app")]
+        [TestCase("wrong-token-binding")]
+        [TestCase("revoked")]
+        [TestCase("expired")]
         public async Task RealGrantIssuesSignedCanonicalInstallation(string grant)
         {
-            var user = new AppUser("user@example.com", "test-user", "system") { Id = User, UserName = "user@example.com" };
+            var user = new AppUser("user@example.com", "test-user", "system") { Id = User, UserName = "user@example.com", CurrentOrganization = new OrganizationSummary { Id = User, Text = "Initial organization", Namespace = "initial" } };
             var users = new Mock<IUserManager>();
             users.Setup(x => x.FindByNameAsync(user.UserName)).ReturnsAsync(user);
             users.Setup(x => x.FindByIdAsync(User)).ReturnsAsync(user);
@@ -154,8 +159,8 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var instance = new AppInstance(Installation, User) { AppId = App, UserId = User };
             instances.Setup(x => x.GetAppInstanceAsync(User, Installation)).ReturnsAsync(instance);
             var tokens = new Mock<IRefreshTokenRepo>();
-            var previous = new RefreshToken(User) { RowKey = Token, AppId = App, AppInstanceId = Installation, ExpiresUtc = DateTime.UtcNow.AddHours(1).ToString("O") };
-            tokens.Setup(x => x.GetRefreshTokenAsync(Token, User)).ReturnsAsync(previous);
+            var previous = new RefreshToken(User) { RowKey = Token, AppId = App, AppInstanceId = grant == "wrong-token-binding" ? "other-installation" : Installation, ExpiresUtc = DateTime.UtcNow.AddHours(grant == "expired" ? -1 : 1).ToString("O") };
+            tokens.Setup(x => x.GetRefreshTokenAsync(Token, User)).ReturnsAsync(grant == "revoked" ? null : previous);
             tokens.Setup(x => x.TryConsumeRefreshTokenAsync(Token, User)).ReturnsAsync(true);
             var key = new SymmetricSecurityKey(new byte[32]);
             var options = new Mock<ITokenAuthOptions>();
@@ -166,13 +171,29 @@ namespace LagoVista.UserAdmin.Auth.Tests
             options.SetupGet(x => x.SigningCredentials).Returns(new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
             var claims = new Mock<IClaimsFactory>();
             claims.Setup(x => x.GetClaims(It.IsAny<AppUser>())).Returns(() => new List<Claim> { new Claim(ClaimsFactory.CurrentUserId, User) });
-            var orgs = Mock.Of<IOrganizationManager>();
-            var helper = new TokenHelper(options.Object, Mock.Of<IUserRoleRepo>(), orgs, Mock.Of<IOrgUserRepo>(), claims.Object, log);
+            const string otherOrg = "ACDC3AA7D5244C0D98EA60F77A131CA8";
+            var orgs = new Mock<IOrganizationManager>();
+            orgs.Setup(x => x.GetOrganizationsForUserAsync(User, It.IsAny<EntityHeader>(), It.IsAny<EntityHeader>())).ReturnsAsync(new List<OrgUser> { new OrgUser(otherOrg, User) });
+            var roles = new Mock<IUserRoleRepo>();
+            roles.Setup(x => x.GetRolesForUserAsync(User, otherOrg)).ReturnsAsync(new List<UserRole>());
+            claims.Setup(x => x.GetClaims(It.IsAny<AppUser>(), It.IsAny<EntityHeader>(), false, false)).Returns(() => new List<Claim> { new Claim(ClaimsFactory.CurrentUserId, User), new Claim(ClaimsFactory.CurrentOrgId, otherOrg) });
+            var helper = new TokenHelper(options.Object, roles.Object, orgs.Object, Mock.Of<IOrgUserRepo>(), claims.Object, log);
             var validators = new AuthRequestValidators(log, tokens.Object, users.Object);
-            var manager = new AuthTokenManager(instances.Object, authLog, singleUse.Object, orgs, new RefreshTokenManager(options.Object, authLog, validators, tokens.Object, log), validators, Mock.Of<IOrganizationRepo>(), helper, new AppInstanceManager(instances.Object, log), log, signIn.Object, users.Object);
+            var manager = new AuthTokenManager(instances.Object, authLog, singleUse.Object, orgs.Object, new RefreshTokenManager(options.Object, authLog, validators, tokens.Object, log), validators, Mock.Of<IOrganizationRepo>(), helper, new AppInstanceManager(instances.Object, log), log, signIn.Object, users.Object);
             var request = new AuthRequest { AppId = App, AppInstanceId = Installation, UserId = User, UserName = user.UserName, Email = user.UserName, Password = "password", SingleUseToken = "single", RefreshToken = Token, ClientType = "APP", DeviceId = "device", AuthType = AuthTypes.User };
+            if (grant == "switch-org") { request.OrgId = otherOrg; request.OrgName = "Other organization"; }
+            if (grant == "wrong-app") request.AppId = "wrong-app";
             var response = grant == "password" ? await manager.AccessTokenGrantAsync(request) :
                 grant == "single-use" ? await manager.SingleUseTokenGrantAsync(request) : await manager.RefreshTokenGrantAsync(request);
+            if (grant == "wrong-app" || grant == "wrong-token-binding" || grant == "revoked" || grant == "expired")
+            {
+                Assert.That(response.Successful, Is.False);
+                instances.Verify(x => x.UpdateAppInstanceAsync(It.IsAny<AppInstance>()), Times.Never);
+                instances.Verify(x => x.AddAppInstanceAsync(It.IsAny<AppInstance>()), Times.Never);
+                tokens.Verify(x => x.SaveRefreshTokenAsync(It.IsAny<RefreshToken>()), Times.Never);
+                tokens.Verify(x => x.TryConsumeRefreshTokenAsync(Token, User), Times.Never);
+                return;
+            }
             Assert.That(response.Successful, Is.True, response.ErrorMessage);
             var principal = new JwtSecurityTokenHandler().ValidateToken(response.Result.AccessToken, new TokenValidationParameters
             {
@@ -181,10 +202,11 @@ namespace LagoVista.UserAdmin.Auth.Tests
             }, out _);
             Assert.That(ClaimsFactory.GetAuthenticatedAppInstanceId(principal), Is.EqualTo(Installation));
             Assert.That(response.Result.AppInstanceId, Is.EqualTo(Installation));
+            if (grant == "switch-org") Assert.That(principal.FindFirst(ClaimsFactory.CurrentOrgId).Value, Is.EqualTo(otherOrg));
             tokens.Verify(x => x.SaveRefreshTokenAsync(It.Is<RefreshToken>(t => t.AppId == App && t.AppInstanceId == Installation && t.PartitionKey == User)), Times.Once);
             instances.Verify(x => x.UpdateAppInstanceAsync(instance), Times.Once);
             instances.Verify(x => x.AddAppInstanceAsync(It.IsAny<AppInstance>()), Times.Never);
-            tokens.Verify(x => x.TryConsumeRefreshTokenAsync(Token, User), grant == "refresh" ? Times.Once() : Times.Never());
+            tokens.Verify(x => x.TryConsumeRefreshTokenAsync(Token, User), grant == "refresh" || grant == "switch-org" ? Times.Once() : Times.Never());
         }
     }
 }
