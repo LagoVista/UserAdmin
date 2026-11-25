@@ -15,6 +15,7 @@ using LagoVista.UserAdmin.Interfaces.Managers;
 using LagoVista.UserAdmin.Interfaces.Repos;
 using LagoVista.UserAdmin.Interfaces.Repos.Apps;
 using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
+using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Apps;
 using LagoVista.UserAdmin.Models.Users;
