@@ -18,6 +18,8 @@ using LagoVista.UserAdmin.Interfaces.Repos.Orgs;
 using LagoVista.UserAdmin.Interfaces.Repos.Security;
 using LagoVista.UserAdmin.Managers;
 using LagoVista.UserAdmin.Models.Apps;
+using LagoVista.UserAdmin.Models.Auth;
+using LagoVista.UserAdmin.Models.Orgs;
 using LagoVista.UserAdmin.Models.Users;
 using Microsoft.IdentityModel.Tokens;
 using Moq;
@@ -131,6 +133,58 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(result.Successful, Is.False);
             repo.Verify(x => x.TryConsumeRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             repo.Verify(x => x.SaveRefreshTokenAsync(It.IsAny<RefreshToken>()), Times.Never);
+        }
+
+        [TestCase("password")]
+        [TestCase("single-use")]
+        [TestCase("refresh")]
+        public async Task RealGrantIssuesSignedCanonicalInstallation(string grant)
+        {
+            var user = new AppUser("user@example.com", "test-user", "system") { Id = User, UserName = "user@example.com" };
+            var users = new Mock<IUserManager>();
+            users.Setup(x => x.FindByNameAsync(user.UserName)).ReturnsAsync(user);
+            users.Setup(x => x.FindByIdAsync(User)).ReturnsAsync(user);
+            var signIn = new Mock<ISignInManager>();
+            signIn.Setup(x => x.PasswordSignInAsync(It.IsAny<AuthLoginRequest>())).ReturnsAsync(InvokeResult<AuthenticationResponse>.Create(new AuthenticationResponse { AuthenticationState = AuthenticationResponseState.Authenticated }));
+            var singleUse = new Mock<ISingleUseTokenManager>();
+            singleUse.Setup(x => x.ValidationAsync(User, "single")).ReturnsAsync(InvokeResult.Success);
+            var log = Mock.Of<IAdminLogger>();
+            var authLog = Mock.Of<IAuthenticationLogManager>();
+            var instances = new Mock<IAppInstanceRepo>();
+            var instance = new AppInstance(Installation, User) { AppId = App, UserId = User };
+            instances.Setup(x => x.GetAppInstanceAsync(User, Installation)).ReturnsAsync(instance);
+            var tokens = new Mock<IRefreshTokenRepo>();
+            var previous = new RefreshToken(User) { RowKey = Token, AppId = App, AppInstanceId = Installation, ExpiresUtc = DateTime.UtcNow.AddHours(1).ToString("O") };
+            tokens.Setup(x => x.GetRefreshTokenAsync(Token, User)).ReturnsAsync(previous);
+            tokens.Setup(x => x.TryConsumeRefreshTokenAsync(Token, User)).ReturnsAsync(true);
+            var key = new SymmetricSecurityKey(new byte[32]);
+            var options = new Mock<ITokenAuthOptions>();
+            options.SetupGet(x => x.Issuer).Returns("test-issuer");
+            options.SetupGet(x => x.Audience).Returns("test-audience");
+            options.SetupGet(x => x.AccessExpiration).Returns(TimeSpan.FromMinutes(15));
+            options.SetupGet(x => x.RefreshExpiration).Returns(TimeSpan.FromDays(7));
+            options.SetupGet(x => x.SigningCredentials).Returns(new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
+            var claims = new Mock<IClaimsFactory>();
+            claims.Setup(x => x.GetClaims(It.IsAny<AppUser>())).Returns(() => new List<Claim> { new Claim(ClaimsFactory.CurrentUserId, User) });
+            var orgs = Mock.Of<IOrganizationManager>();
+            var helper = new TokenHelper(options.Object, Mock.Of<IUserRoleRepo>(), orgs, Mock.Of<IOrgUserRepo>(), claims.Object, log);
+            var validators = new AuthRequestValidators(log, tokens.Object, users.Object);
+            var manager = new AuthTokenManager(instances.Object, authLog, singleUse.Object, orgs, new RefreshTokenManager(options.Object, authLog, validators, tokens.Object, log), validators, Mock.Of<IOrganizationRepo>(), helper, new AppInstanceManager(instances.Object, log), log, signIn.Object, users.Object);
+            var request = new AuthRequest { AppId = App, AppInstanceId = Installation, UserId = User, UserName = user.UserName, Email = user.UserName, Password = "password", SingleUseToken = "single", RefreshToken = Token, ClientType = "APP", DeviceId = "device", AuthType = AuthTypes.User };
+            var response = grant == "password" ? await manager.AccessTokenGrantAsync(request) :
+                grant == "single-use" ? await manager.SingleUseTokenGrantAsync(request) : await manager.RefreshTokenGrantAsync(request);
+            Assert.That(response.Successful, Is.True, response.ErrorMessage);
+            var principal = new JwtSecurityTokenHandler().ValidateToken(response.Result.AccessToken, new TokenValidationParameters
+            {
+                ValidIssuer = "test-issuer", ValidAudience = "test-audience",
+                IssuerSigningKey = key, ValidateIssuerSigningKey = true, ValidateLifetime = true
+            }, out _);
+            Assert.That(ClaimsFactory.GetAuthenticatedAppInstanceId(principal), Is.EqualTo(Installation));
+            Assert.That(response.Result.AppInstanceId, Is.EqualTo(Installation));
+            tokens.Verify(x => x.SaveRefreshTokenAsync(It.Is<RefreshToken>(t => t.AppId == App && t.AppInstanceId == Installation && t.PartitionKey == User)), Times.Once);
+            instances.Verify(x => x.UpdateAppInstanceAsync(instance), Times.Once);
+            instances.Verify(x => x.AddAppInstanceAsync(It.IsAny<AppInstance>()), Times.Never);
+            tokens.Verify(x => x.TryConsumeRefreshTokenAsync(Token, User), grant == "refresh" ? Times.Once() : Times.Never());
         }
     }
 }
