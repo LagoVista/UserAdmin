@@ -48,6 +48,12 @@ namespace LagoVista.AspNetCore.Identity.Utils
                 return InvokeResult<AuthResponse>.FromInvokeResult(refreshTokenResponse.ToInvokeResult());
             }
 
+            var binding = refreshTokenResponse.Result;
+            if (binding == null || binding.PartitionKey != appUser.Id ||
+                binding.AppId != authRequest.AppId || binding.AppInstanceId != authRequest.AppInstanceId ||
+                String.IsNullOrWhiteSpace(binding.AppId) || String.IsNullOrWhiteSpace(binding.AppInstanceId))
+                return InvokeResult<AuthResponse>.FromError("Invalid application installation binding.");
+
             var accessExpires = DateTime.UtcNow.AddMinutes(_tokenOptions.AccessExpiration.TotalMinutes);
 
             var authResponse = new AuthResponse()
@@ -89,6 +95,12 @@ namespace LagoVista.AspNetCore.Identity.Utils
             {
                 return Task.FromResult(InvokeResult<AuthResponse>.FromInvokeResult(refreshTokenResponse.ToInvokeResult()));
             }
+
+            var binding = refreshTokenResponse.Result;
+            if (binding == null || binding.PartitionKey != appUser.Id ||
+                binding.AppInstanceId != appInstanceId || String.IsNullOrWhiteSpace(binding.AppId) ||
+                String.IsNullOrWhiteSpace(binding.AppInstanceId))
+                return Task.FromResult(InvokeResult<AuthResponse>.FromError("Invalid application installation binding."));
 
             var accessExpires = DateTime.UtcNow.AddMinutes(_tokenOptions.AccessExpiration!.TotalMinutes);
 

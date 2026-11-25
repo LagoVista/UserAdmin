@@ -31,7 +31,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
         private const string User = "185B3AA7D5244C0D98EA60F77A13ACDC";
         private const string App = "app";
         private const string Installation = "installation";
-        private const string Token = "token";
+        private const string Token = "0123456789012345678.185B3AA7D5244C0D98EA60F77A13ACDC";
 
         [TestCase(false)]
         [TestCase(true)]
@@ -58,6 +58,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             }, out _);
             Assert.That(principal.FindAll(ClaimsFactory.AppInstanceId).Single().Value, Is.EqualTo(Installation));
             Assert.That(principal.FindFirst(ClaimsFactory.CurrentUserId).Value, Is.EqualTo(User));
+            Assert.That(ClaimsFactory.GetAuthenticatedAppInstanceId(principal), Is.EqualTo(Installation));
         }
 
         [TestCase("wrong-app", false)]
@@ -92,6 +93,40 @@ namespace LagoVista.UserAdmin.Auth.Tests
             var repo = new Mock<IRefreshTokenRepo>(MockBehavior.Strict);
             repo.Setup(x => x.GetRefreshTokenAsync(Token, User)).ReturnsAsync(new RefreshToken(storedUser) { RowKey = Token, AppId = storedApp, AppInstanceId = storedInstallation });
             var manager = new RefreshTokenManager(Mock.Of<ITokenAuthOptions>(), Mock.Of<IAuthenticationLogManager>(), Mock.Of<IAuthRequestValidators>(), repo.Object, Mock.Of<IAdminLogger>());
+            var result = await manager.RenewRefreshTokenAsync(Token, User, App, Installation);
+            Assert.That(result.Successful, Is.False);
+            repo.Verify(x => x.TryConsumeRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            repo.Verify(x => x.SaveRefreshTokenAsync(It.IsAny<RefreshToken>()), Times.Never);
+        }
+
+        [TestCase("missing")]
+        [TestCase("duplicate")]
+        [TestCase("unauthenticated")]
+        [TestCase("visitor")]
+        [TestCase("provisional")]
+        public void UntrustedPrincipalCannotEstablishInstallationBinding(string scenario)
+        {
+            var claims = new List<Claim> { new Claim(ClaimsFactory.CurrentUserId, User) };
+            if (scenario != "missing") claims.Add(new Claim(ClaimsFactory.AppInstanceId, Installation));
+            if (scenario == "duplicate") claims.Add(new Claim(ClaimsFactory.AppInstanceId, "another"));
+            if (scenario == "visitor") claims.Add(new Claim(ClaimsFactory.IdentityStage, ClaimsFactory.VisitorIdentityStage));
+            if (scenario == "provisional") claims.Add(new Claim(ClaimsFactory.IdentityStage, ClaimsFactory.ProvisionalIdentityStage));
+            var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, scenario == "unauthenticated" ? null : "Bearer"));
+            Assert.That(ClaimsFactory.GetAuthenticatedAppInstanceId(principal), Is.Null);
+        }
+
+        [TestCase("expired")]
+        [TestCase("revoked")]
+        [TestCase("malformed-expiry")]
+        public async Task RealRefreshValidationRejectsUnavailableOrExpiredTokenBeforeConsumption(string scenario)
+        {
+            var repo = new Mock<IRefreshTokenRepo>();
+            var token = new RefreshToken(User) { RowKey = Token, AppId = App, AppInstanceId = Installation,
+                ExpiresUtc = scenario == "malformed-expiry" ? "invalid" : DateTime.UtcNow.AddMinutes(-5).ToString("O") };
+            repo.Setup(x => x.GetRefreshTokenAsync(Token, User)).ReturnsAsync(scenario == "revoked" ? null : token);
+            var logger = Mock.Of<IAdminLogger>();
+            var validator = new AuthRequestValidators(logger, repo.Object, Mock.Of<IUserManager>());
+            var manager = new RefreshTokenManager(Mock.Of<ITokenAuthOptions>(), Mock.Of<IAuthenticationLogManager>(), validator, repo.Object, logger);
             var result = await manager.RenewRefreshTokenAsync(Token, User, App, Installation);
             Assert.That(result.Successful, Is.False);
             repo.Verify(x => x.TryConsumeRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);

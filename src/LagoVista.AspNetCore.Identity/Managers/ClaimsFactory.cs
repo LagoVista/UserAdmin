@@ -29,6 +29,23 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public const string Logintype = "com.lagovista.iot.logintype";
         public const string InstanceId = "com.lagovista.iot.instanceid";
         public const string AppInstanceId = "com.lagovista.iot.appinstanceid";
+
+        // Call only on a principal authenticated by the host's JWT validation pipeline.
+        // Missing, duplicate or restricted identity claims cannot establish installation authority.
+        public static string GetAuthenticatedAppInstanceId(ClaimsPrincipal principal)
+        {
+            if (principal?.Identity?.IsAuthenticated != true ||
+                principal.HasClaim(Anonymous, Boolean.TrueString) ||
+                principal.HasClaim(IdentityStage, VisitorIdentityStage) ||
+                principal.HasClaim(IdentityStage, ProvisionalIdentityStage))
+                return null;
+
+            var users = principal.FindAll(CurrentUserId).ToArray();
+            var instances = principal.FindAll(AppInstanceId).ToArray();
+            return users.Length == 1 && !String.IsNullOrWhiteSpace(users[0].Value) &&
+                instances.Length == 1 && !String.IsNullOrWhiteSpace(instances[0].Value)
+                ? instances[0].Value : null;
+        }
         public const string InstanceName = "com.lagovista.iot.instancename";
         public const string HostId = "com.lagovista.iot.hostid";
         public const string HostName = "com.lagovista.iot.hostname";

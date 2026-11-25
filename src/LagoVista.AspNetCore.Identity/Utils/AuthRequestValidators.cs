@@ -158,13 +158,13 @@ namespace LagoVista.AspNetCore.Identity.Utils
             if (!validateFormatResult.Successful) return validateFormatResult;
 
             var token = await _refreshTokenRepo.GetRefreshTokenAsync(refreshTokenId, userId);
-            if (token == null)
+            if (token == null || token.PartitionKey != userId || token.RowKey != refreshTokenId)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateRefreshTokenAsync", UserAdminErrorCodes.AuthRefreshTokenNotInStorage.Message, new KeyValuePair<string, string>("refreshtokenid", refreshTokenId));
                 return InvokeResult.FromErrors(UserAdminErrorCodes.AuthRefreshTokenNotInStorage.ToErrorMessage());
             }
 
-            if (token.ExpiresUtc.ToDateTime() < DateTime.UtcNow)
+            if (!DateTimeOffset.TryParse(token.ExpiresUtc, out var expires) || expires <= DateTimeOffset.UtcNow)
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Error, "AuthRequestValidators_ValidateRefreshTokenAsync", UserAdminErrorCodes.AuthRefreshTokenExpired.Message);
                 await _refreshTokenRepo.RemoveRefreshTokenAsync(refreshTokenId, userId);
