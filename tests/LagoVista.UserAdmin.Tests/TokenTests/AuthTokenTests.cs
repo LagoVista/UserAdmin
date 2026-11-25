@@ -32,6 +32,7 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
     public class AuthTokenTests
     {
         Mock<IUserManager> _userManager;
+        Mock<IAppInstanceRepo> _instanceRepo;
         Mock<ISignInManager> _signInManager;
         Mock<IRefreshTokenManager> _refreshTokenManager;
         Mock<ITokenHelper> _tokenHelper;
@@ -53,12 +54,14 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
             _appInstanceManager = new Mock<IAppInstanceManager>();
             _authRequestValidators = new Mock<IAuthRequestValidators>();
 
-            _authTokenManager = new AuthTokenManager(new Mock<IAppInstanceRepo>().Object, new Mock<IAuthenticationLogManager>().Object, new Mock<ISingleUseTokenManager>().Object, _orgManager.Object, _refreshTokenManager.Object,
+            _instanceRepo = new Mock<IAppInstanceRepo>();
+            _instanceRepo.Setup(x => x.GetAppInstanceAsync(It.IsAny<string>(), "INST12")).ReturnsAsync((string user, string id) => new AppInstance(id, user) { UserId = user, AppId = "APP123" });
+            _authTokenManager = new AuthTokenManager(_instanceRepo.Object, new Mock<IAuthenticationLogManager>().Object, new Mock<ISingleUseTokenManager>().Object, _orgManager.Object, _refreshTokenManager.Object,
                 _authRequestValidators.Object, new Mock<IOrganizationRepo>().Object, _tokenHelper.Object, _appInstanceManager.Object,
                 new Mock<IAdminLogger>().Object, _signInManager.Object, _userManager.Object);
 
             _appInstanceManager.Setup(ais => ais.UpdateLastLoginAsync(It.IsAny<string>(), It.IsAny<AuthRequest>())).ReturnsAsync(InvokeResult<AppInstance>.Create(new AppInstance("rowid", "userid")));
-            _appInstanceManager.Setup(ais => ais.UpdateLastAccessTokenRefreshAsync(It.IsAny<string>(), It.IsAny<AuthRequest>())).ReturnsAsync(InvokeResult<AppInstance>.Create(new AppInstance("rowid", "userid")));
+            _appInstanceManager.Setup(ais => ais.UpdateLastAccessTokenRefreshAsync(It.IsAny<string>(), It.IsAny<AuthRequest>())).ReturnsAsync(InvokeResult<AppInstance>.Create(new AppInstance("INST12", "userid")));
 
             _orgManager.Setup(orm => orm.GetOrganizationsForUserAsync(It.IsAny<string>(), It.IsAny<EntityHeader>(), It.IsAny<EntityHeader>())).ReturnsAsync(new List<OrgUser>()
             {
@@ -69,10 +72,11 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
             _userManager.Setup(usm => usm.FindByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { Id = Guid.NewGuid().ToId(), CurrentOrganization = new OrganizationSummary() { Id = ORG_ID, Name = "dontcare", Text = "dontcare" } }));
             _userManager.Setup(usm => usm.FindByNameAsync(It.IsAny<string>())).Returns(Task.FromResult(new AppUser() { Id = Guid.NewGuid().ToId(), FirstName = "Test", LastName = "User", UserName = "test@example.com", CurrentOrganization = new OrganizationSummary() { Id = ORG_ID, Name = "dontcare", Text = "dontcare" } }));
             _refreshTokenManager.Setup(rtm => rtm.GenerateRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task<RefreshToken>.FromResult(InvokeResult<RefreshToken>.Create(new RefreshToken("XXXX"))));
-            _refreshTokenManager.Setup(rtm => rtm.RenewRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(InvokeResult<RefreshToken>.Create(new RefreshToken("XXXX")));
+            _refreshTokenManager.Setup(rtm => rtm.RenewRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>(), "APP123", "INST12")).ReturnsAsync(InvokeResult<RefreshToken>.Create(new RefreshToken("XXXX")));
             _authRequestValidators.Setup(arv => arv.ValidateAuthRequest(It.IsAny<AuthRequest>())).Returns(InvokeResult.Success);
             _authRequestValidators.Setup(arv => arv.ValidateAccessTokenGrant(It.IsAny<AuthRequest>())).Returns(InvokeResult.Success);
             _authRequestValidators.Setup(arv => arv.ValidateRefreshTokenGrant(It.IsAny<AuthRequest>())).Returns(InvokeResult.Success);
+            _authRequestValidators.Setup(arv => arv.ValidateRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(InvokeResult.Success);
             _tokenHelper.Setup(tlp => tlp.GenerateAuthResponseAsync(It.IsAny<AppUser>(), It.IsAny<AuthRequest>(), It.IsAny<InvokeResult<RefreshToken>>())).ReturnsAsync(new InvokeResult<AuthResponse>()
             {
                 Result = new AuthResponse()
@@ -118,6 +122,7 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
                 DeviceId = "DEV001",
                 Email = "email@address.net",
                 GrantType = "refreshtoken",
+                RefreshToken = "test-token",
                 OrgId = ORG_ID,
                 OrgName = "orgname",
                 Password = "pwd",
@@ -129,6 +134,25 @@ namespace LagoVista.UserAdmin.Tests.TokenTests
                 Console.WriteLine(err.Message);
 
             Assert.IsTrue(result.Successful);
+        }
+
+        [TestMethod]
+        public async Task InvalidRefreshTokenDoesNotMutateInstallation()
+        {
+            _authRequestValidators.Setup(x => x.ValidateRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(InvokeResult.FromError("Invalid token"));
+            var result = await _authTokenManager.RefreshTokenGrantAsync(new AuthRequest { AppId = "APP123", AppInstanceId = "INST12", UserName = "test@example.com", RefreshToken = "invalid" });
+            Assert.IsFalse(result.Successful);
+            _appInstanceManager.Verify(x => x.UpdateLastAccessTokenRefreshAsync(It.IsAny<string>(), It.IsAny<AuthRequest>()), Times.Never);
+            _refreshTokenManager.Verify(x => x.RenewRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task MismatchedRefreshBindingDoesNotMutateInstallation()
+        {
+            _refreshTokenManager.Setup(x => x.RenewRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>(), "APP123", "INST12")).ReturnsAsync(InvokeResult<RefreshToken>.FromError("Invalid binding"));
+            var result = await _authTokenManager.RefreshTokenGrantAsync(new AuthRequest { AppId = "APP123", AppInstanceId = "INST12", UserName = "test@example.com", RefreshToken = "test-token" });
+            Assert.IsFalse(result.Successful);
+            _appInstanceManager.Verify(x => x.UpdateLastAccessTokenRefreshAsync(It.IsAny<string>(), It.IsAny<AuthRequest>()), Times.Never);
         }
     }
 }
