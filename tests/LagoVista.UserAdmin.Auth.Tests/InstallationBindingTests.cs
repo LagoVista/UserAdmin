@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using LagoVista.AspNetCore.Identity.Interfaces;
 using LagoVista.AspNetCore.Identity.Managers;
 using LagoVista.AspNetCore.Identity.Utils;
+using LagoVista.Core;
 using LagoVista.Core.Authentication.Models;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
