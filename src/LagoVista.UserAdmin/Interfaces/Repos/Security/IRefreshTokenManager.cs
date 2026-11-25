@@ -17,6 +17,8 @@ namespace LagoVista.UserAdmin.Interfaces.Repos.Security
 
         Task<InvokeResult<RefreshToken>> RenewRefreshTokenAsync(String refreshTokenId, string userId);
 
+        Task<InvokeResult<RefreshToken>> RenewRefreshTokenAsync(string refreshTokenId, string userId, string appId, string appInstanceId);
+
         Task RevokeRefreshTokenAsync(string refreshTokenId, string userId);
 
         Task RevokeAllForUserAsync(string userId);

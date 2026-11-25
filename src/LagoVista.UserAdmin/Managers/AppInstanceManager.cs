@@ -64,6 +64,10 @@ namespace LagoVista.UserAdmin.Managers
                     new KeyValuePair<string, string>("appUserId", appUserId),
                     new KeyValuePair<string, string>("appInstanceId", existingAppInstance.AppInstanceId));
 
+                if (appInstance.UserId != appUserId || appInstance.PartitionKey != appUserId ||
+                    appInstance.RowKey != existingAppInstance.AppInstanceId || appInstance.AppId != existingAppInstance.AppId)
+                    return InvokeResult<AppInstance>.FromError("Invalid application installation binding.");
+
                 appInstance.LastLogin = DateTime.UtcNow.ToJSONString();
                 await _appInstanceRepo.UpdateAppInstanceAsync(appInstance);
                 return InvokeResult<AppInstance>.Create(appInstance);
@@ -79,13 +83,17 @@ namespace LagoVista.UserAdmin.Managers
                     new KeyValuePair<string, string>("appUserId", appUserId),
                     new KeyValuePair<string, string>("appInstanceId", existingAppInstance.AppInstanceId));
 
-                return await CreateForUserAsync(appUserId, existingAppInstance);
+                return InvokeResult<AppInstance>.FromError("Invalid application installation binding.");
             }
             else
             {
                 _adminLogger.AddCustomEvent(Core.PlatformSupport.LogLevel.Message, "AppInstanceManager_UpdateLastAccessTokenRefreshAsync", "Update Last Access Token Refresh",
                     new KeyValuePair<string, string>("appUserId", appUserId),
                     new KeyValuePair<string, string>("appInstanceId", existingAppInstance.AppInstanceId));
+
+                if (appInstance.UserId != appUserId || appInstance.PartitionKey != appUserId ||
+                    appInstance.RowKey != existingAppInstance.AppInstanceId || appInstance.AppId != existingAppInstance.AppId)
+                    return InvokeResult<AppInstance>.FromError("Invalid application installation binding.");
 
                 appInstance.LastAccessTokenRefresh = DateTime.UtcNow.ToJSONString();
                 await _appInstanceRepo.UpdateAppInstanceAsync(appInstance);

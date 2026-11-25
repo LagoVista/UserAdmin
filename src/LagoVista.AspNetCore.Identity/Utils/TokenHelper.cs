@@ -119,6 +119,8 @@ namespace LagoVista.AspNetCore.Identity.Utils
         {
             var now = DateTime.UtcNow;
             var claims = _claimsFactory.GetClaims(user);
+            if (!String.IsNullOrWhiteSpace(installationId))
+                claims.Add(new Claim(LagoVista.AspNetCore.Identity.Managers.ClaimsFactory.AppInstanceId, installationId));
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, NonceGenerator()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64));
 
@@ -165,6 +167,8 @@ namespace LagoVista.AspNetCore.Identity.Utils
         {
             var now = DateTime.UtcNow;
             var claims = _claimsFactory.GetClaims(user, org, isOrgAdmin, isAppBuilder);
+            if (!String.IsNullOrWhiteSpace(installationId))
+                claims.Add(new Claim(LagoVista.AspNetCore.Identity.Managers.ClaimsFactory.AppInstanceId, installationId));
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, NonceGenerator()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64));
 

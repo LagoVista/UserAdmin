@@ -28,6 +28,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public const string Logintype = "com.lagovista.iot.logintype";
         public const string InstanceId = "com.lagovista.iot.instanceid";
+        public const string AppInstanceId = "com.lagovista.iot.appinstanceid";
         public const string InstanceName = "com.lagovista.iot.instancename";
         public const string HostId = "com.lagovista.iot.hostid";
         public const string HostName = "com.lagovista.iot.hostname";

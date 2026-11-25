@@ -26,6 +26,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
     public class AuthTokenManager : IAuthTokenManager
     {
         private readonly IRefreshTokenManager _refreshTokenManager;
+        private readonly IAppInstanceRepo _appInstanceRepo;
         private readonly IAdminLogger _adminLogger;
         private readonly ISignInManager _signInManager;
         private readonly IUserManager _userManager;
@@ -47,6 +48,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
                                 IAdminLogger adminLogger, ISignInManager signInManager, IUserManager userManager)
         {
             _refreshTokenManager = refreshTokenManager;
+            _appInstanceRepo = appInstanceRepo;
             _adminLogger = adminLogger;
             _tokenHelper = tokenHelper;
             _signInManager = signInManager;
@@ -162,6 +164,8 @@ namespace LagoVista.AspNetCore.Identity.Managers
             {
                 /* This generally happens for the first time the app is logged in on a new device, if it is logged in again future times it will resend the app id */
                 var appInstanceResult = await _appInstanceManager.CreateForUserAsync(appUser.Id, authRequest);
+                if (!appInstanceResult.Successful)
+                    return InvokeResult<AuthResponse>.FromInvokeResult(appInstanceResult.ToInvokeResult());
                 authRequest.AppInstanceId = appInstanceResult.Result.RowKey;
             }
             else
@@ -316,11 +320,27 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 }
             }
 
+            var tokenValidation = await _authRequestValidators.ValidateRefreshTokenAsync(authRequest.RefreshToken, appUser.Id);
+            if (!tokenValidation.Successful)
+                return InvokeResult<AuthResponse>.FromInvokeResult(tokenValidation);
+
+            var installation = await _appInstanceRepo.GetAppInstanceAsync(appUser.Id, authRequest.AppInstanceId);
+            if (installation == null || installation.UserId != appUser.Id ||
+                installation.PartitionKey != appUser.Id || installation.RowKey != authRequest.AppInstanceId ||
+                installation.AppId != authRequest.AppId)
+                return InvokeResult<AuthResponse>.FromError("Invalid application installation binding.");
+
+            var refreshTokenResponse = await _refreshTokenManager.RenewRefreshTokenAsync(authRequest.RefreshToken, appUser.Id, installation.AppId, installation.RowKey);
+            if (!refreshTokenResponse.Successful)
+                return InvokeResult<AuthResponse>.FromInvokeResult(refreshTokenResponse.ToInvokeResult());
+
+            authRequest.AppId = installation.AppId;
+            authRequest.AppInstanceId = installation.RowKey;
             var updateLastRefreshTokenResult = (await _appInstanceManager.UpdateLastAccessTokenRefreshAsync(appUser.Id, authRequest));
             if (updateLastRefreshTokenResult.Successful)
             {
                 authRequest.AppInstanceId = updateLastRefreshTokenResult.Result.RowKey;
-                var refreshTokenResponse = await _refreshTokenManager.RenewRefreshTokenAsync(authRequest.RefreshToken, appUser.Id);
+                // Rotation succeeded against the authoritative binding before installation mutation.
                 _adminLogger.LogInvokeResult("AuthTokenManager_RefreshTokenGrantAsync", refreshTokenResponse);
                 if(refreshTokenResponse.Successful)
                     await _authLogMgr.AddAsync(UserAdmin.Models.Security.AuthLogTypes.RefreshTokenGrantSuccess, appUser);

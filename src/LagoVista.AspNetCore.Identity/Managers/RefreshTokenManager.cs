@@ -158,6 +158,17 @@ namespace LagoVista.AspNetCore.Identity.Managers
             return await RenewRefreshTokenAsync(refreshToken);
         }
 
+        public async Task<InvokeResult<RefreshToken>> RenewRefreshTokenAsync(string refreshTokenId, string userId, string appId, string appInstanceId)
+        {
+            var token = await GetRefreshTokenAsync(refreshTokenId, userId);
+            if (token == null || token.PartitionKey != userId || token.RowKey != refreshTokenId ||
+                String.IsNullOrWhiteSpace(appId) || String.IsNullOrWhiteSpace(appInstanceId) ||
+                token.AppId != appId || token.AppInstanceId != appInstanceId)
+                return InvokeResult<RefreshToken>.FromError("Invalid refresh token binding.");
+
+            return await RenewRefreshTokenAsync(token);
+        }
+
         public Task RevokeAllForUserAsync(string userId)
         {
             return _refreshTokenRepo.RemoveAllForUserAsync(userId);
