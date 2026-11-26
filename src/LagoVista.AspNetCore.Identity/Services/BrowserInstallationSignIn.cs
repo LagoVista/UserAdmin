@@ -22,6 +22,7 @@ namespace LagoVista.AspNetCore.Identity.Services
         private readonly Func<HttpContext, Task<(string AppId, Uri Origin)>> _resolveApplication;
         private AppUser _provenUser;
         private ClaimsPrincipal _issuedPrincipal;
+        private bool _signedOut;
 
         public BrowserInstallationSignIn(BrowserInstallationSession session,
             Func<HttpContext, Task<(string AppId, Uri Origin)>> resolveApplication)
@@ -38,7 +39,11 @@ namespace LagoVista.AspNetCore.Identity.Services
             return new ProofScope(() => _provenUser = previous);
         }
 
-        public void ClearIssuedSession() => _issuedPrincipal = null;
+        public void ClearIssuedSession()
+        {
+            _issuedPrincipal = null;
+            _signedOut = true;
+        }
 
         public async Task ApplyAsync(CookieSigningInContext context, Func<string, Task<AppUser>> loadUser)
         {
@@ -79,6 +84,7 @@ namespace LagoVista.AspNetCore.Identity.Services
                     var previous = _issuedPrincipal;
                     if (previous == null)
                     {
+                        if (_signedOut) return;
                         var authenticated = await context.HttpContext.AuthenticateAsync(IdentityConstants.ApplicationScheme);
                         if (!authenticated.Succeeded) return;
                         previous = authenticated.Principal;
@@ -92,6 +98,7 @@ namespace LagoVista.AspNetCore.Identity.Services
                     identity.AddClaim(new Claim(ClaimsFactory.AppInstanceId, instance.RowKey));
                 }
                 _issuedPrincipal = principal.Clone();
+                _signedOut = false;
             }
             catch (OperationCanceledException) { throw; }
             catch (Exception)
