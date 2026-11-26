@@ -18,7 +18,6 @@ namespace LagoVista.AspNetCore.Identity.Services
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
             if (resolveApplication == null) throw new ArgumentNullException(nameof(resolveApplication));
-            services.AddScoped<BrowserInstallationManager>();
             services.AddScoped<BrowserInstallationCookie>();
             services.AddScoped<BrowserInstallationSession>();
             services.AddScoped(sp => new BrowserInstallationSignIn(
