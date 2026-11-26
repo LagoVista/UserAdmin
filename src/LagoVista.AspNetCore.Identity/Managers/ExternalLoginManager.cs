@@ -3,6 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.AspNetCore.Identity.Interfaces;
+using LagoVista.AspNetCore.Identity.Services;
 using LagoVista.AspNetCore.Identity.Managers;
 using LagoVista.Core;
 using LagoVista.Core.Interfaces;
@@ -37,10 +38,12 @@ namespace LagoVista.UserAdmin.Managers
         private readonly IAppConfig _appConfig;
         private readonly IUserVerficationManager _userVerficationManager;
         private readonly IUserRegistrationManager _userRegistrationManager;
+        private readonly BrowserInstallationSignIn _browserInstallation;
 
         public ExternalLoginManager(ITwitterAuthService twitterAuthorization, SignInManager<AppUser> signInManager, IAppConfig appConfig, IUserVerficationManager userVerficationManager, IAuthTokenManager authTokenManager, IOrganizationManager orgManager, IAdminLogger adminLogger, IAuthenticationLogManager authLogManager,
-                                   IUserRegistrationManager userRegistrationManager, IAppUserManager appUserManager)
+                                   IUserRegistrationManager userRegistrationManager, IAppUserManager appUserManager, BrowserInstallationSignIn browserInstallation = null)
         {
+            _browserInstallation = browserInstallation;
             _twitterAuthorization = twitterAuthorization ?? throw new ArgumentNullException(nameof(twitterAuthorization));
             _adminLogger = adminLogger ?? throw new ArgumentNullException(nameof(adminLogger));
             _authLogManager = authLogManager ?? throw new ArgumentNullException(nameof(authLogManager));
@@ -164,7 +167,8 @@ namespace LagoVista.UserAdmin.Managers
             _adminLogger.Trace($"{this.Tag} User: {appUser.Email}");
             await _authLogManager.AddAsync(AuthLogTypes.OAuthLoginFinalizationStarted, appUser, inviteId: inviteId, redirectUri: String.IsNullOrEmpty( returnUrl) ? String.Empty : returnUrl,  oauthProvider: provider);
 
-            await _signInManager.SignInProvenUserAsync(appUser, false);
+            using (var proof = _browserInstallation?.BeginProvenSignIn(appUser))
+                await _signInManager.SignInAsync(appUser, false);
 
             if (!String.IsNullOrEmpty(returnUrl))
             {
