@@ -140,7 +140,7 @@ namespace LagoVista.UserAdmin.Managers
                 });
             }
 
-            await _signinManager.SignInAsync(appUser, true);
+            await _signinManager.SignInProvenUserAsync(appUser, true);
             return await _signinManager.CompleteSignInToAppAsync(appUser);
         }
 
