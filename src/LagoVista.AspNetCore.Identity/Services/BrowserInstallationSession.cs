@@ -69,8 +69,10 @@ namespace LagoVista.AspNetCore.Identity.Services
 
             var users = principal.FindAll(ClaimsFactory.CurrentUserId).ToArray();
             var names = principal.FindAll(ClaimTypes.NameIdentifier).ToArray();
-            if (users.Length != 1 || names.Length != 1 ||
-                users[0].Value != user.Id.Value || names[0].Value != user.Id.Value ||
+            // ASP.NET Identity and our existing ClaimsPrincipalFactory both supply
+            // NameIdentifier. Identical values are valid; conflicting values are not.
+            if (users.Length != 1 || names.Length == 0 ||
+                users[0].Value != user.Id.Value || names.Any(n => n.Value != user.Id.Value) ||
                 !identities[0].HasClaim(ClaimsFactory.CurrentUserId, user.Id.Value) ||
                 !identities[0].HasClaim(ClaimTypes.NameIdentifier, user.Id.Value))
                 throw new InvalidOperationException("Authenticated session user mismatch.");
