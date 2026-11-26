@@ -21,7 +21,7 @@ namespace LagoVista.AspNetCore.Identity.Services
             services.AddScoped<BrowserInstallationCookie>();
             services.AddScoped<BrowserInstallationSession>();
             services.AddScoped(sp => new BrowserInstallationSignIn(
-                sp.GetRequiredService<BrowserInstallationSession>(), context => resolveApplication(sp, context)));
+                sp.GetRequiredService<BrowserInstallationSession>(), context => resolveApplication(sp, context), sp.GetRequiredService<BrowserInstallationCookie>()));
 
             // Compose rather than replace any existing application-cookie event.
             services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, options =>
