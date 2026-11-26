@@ -164,7 +164,7 @@ namespace LagoVista.UserAdmin.Managers
             _adminLogger.Trace($"{this.Tag} User: {appUser.Email}");
             await _authLogManager.AddAsync(AuthLogTypes.OAuthLoginFinalizationStarted, appUser, inviteId: inviteId, redirectUri: String.IsNullOrEmpty( returnUrl) ? String.Empty : returnUrl,  oauthProvider: provider);
 
-            await _signInManager.SignInAsync(appUser, false);
+            await _signInManager.SignInProvenUserAsync(appUser, false);
 
             if (!String.IsNullOrEmpty(returnUrl))
             {
