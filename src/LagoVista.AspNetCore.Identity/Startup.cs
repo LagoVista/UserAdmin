@@ -57,6 +57,12 @@ namespace LagoVista.AspNetCore.Identity
             services.AddScoped<IExternalLoginManager, ExternalLoginManager>();
             services.AddScoped<IAppUserMfaManager, AppUserMfaManager>();
             services.AddHttpContextAccessor();
+            if (configuration.GetValue<bool>("BrowserInstallation:Enabled"))
+                services.AddBrowserInstallationBinding(async (provider, context) =>
+                {
+                    var resolver = provider.GetService<IBrowserInstallationApplicationResolver>();
+                    return resolver == null ? (null, null) : await resolver.ResolveAsync(context);
+                });
             services.AddScoped<IPasskeyRelyingPartyContext, PasskeyRelyingPartyContext>();
             services.AddScoped<IAppUserPasskeyManager, RequestScopedAppUserPasskeyManager>();
             services.AddScoped<IEmailPasskeyAuthenticationService, EmailPasskeyAuthenticationService>();
