@@ -1,4 +1,5 @@
 using LagoVista.Core;
+using LagoVista.AspNetCore.Identity.Services;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Models;
@@ -38,6 +39,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
         private readonly IAuthenticationLogManager _authLogManager;
         private readonly IUserRedirectServices _userRedirectService;
         private readonly IAppConfig _appConfig;
+        private readonly BrowserInstallationSignIn _browserInstallation;
 
         private static readonly Histogram UserSignInMetrics = Metrics.CreateHistogram("nuviot_user_sign_in", "Use Sign In Metrics.",
             new HistogramConfiguration
@@ -53,10 +55,11 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public SignInManager(IAdminLogger adminLogger, IDefaultRoleList defaultRoleList, IUserRoleManager roleManager, IDependencyManager depManager, IOrgUserRepo orgUserRepo,
                             IUserFavoritesManager userFavoritesManager, IMostRecentlyUsedManager mostRecentlyUsedManager, IAppUserRepo appUserRepo, IUserRedirectServices userRedirectService,
                             IAuthenticationLogManager authenticationLogManager, ISecurity security, IAppConfig appConfig, IUserManager userManager, IOrganizationManager orgManager, IOrganizationRepo orgRepo,
-                            SignInManager<AppUser> signInManager)
+                            SignInManager<AppUser> signInManager, BrowserInstallationSignIn browserInstallation = null)
             : base(adminLogger, appConfig, depManager, security)
         {
             _signinManager = signInManager;
+            _browserInstallation = browserInstallation;
             _adminLogger = adminLogger;
             _orgManager = orgManager;
             _userManager = userManager;
@@ -73,6 +76,12 @@ namespace LagoVista.AspNetCore.Identity.Managers
         public Task SignInAsync(AppUser user, bool isPersistent = false)
         {
             return _signinManager.SignInAsync(user, isPersistent);
+        }
+
+        public async Task SignInProvenUserAsync(AppUser user, bool isPersistent = false)
+        {
+            using var proof = _browserInstallation?.BeginProvenSignIn(user);
+            await _signinManager.SignInAsync(user, isPersistent);
         }
 
         public Task SignInProvisionalAsync(AppUser user, string actorId, bool isPersistent = false)
@@ -214,6 +223,9 @@ namespace LagoVista.AspNetCore.Identity.Managers
                 return InvokeResult<AuthenticationResponse>.FromErrors(UserAdminErrorCodes.AuthInvalidCredentials.ToErrorMessage());
             }
 
+            // ASP.NET Identity only issues the application cookie on successful full sign-in.
+            // A two-factor challenge uses its separate scheme and cannot establish a binding.
+            using var proof = _browserInstallation?.BeginProvenSignIn(appUser);
             var signInResult = await _signinManager.PasswordSignInAsync(userName, loginRequest.Password, loginRequest.RememberMe, loginRequest.LockoutOnFailure);
             if (signInResult.Succeeded)
             {
@@ -249,6 +261,7 @@ namespace LagoVista.AspNetCore.Identity.Managers
 
         public Task SignOutAsync()
         {
+            _browserInstallation?.ClearIssuedSession();
             return _signinManager.SignOutAsync();
         }
     }
