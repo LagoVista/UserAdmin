@@ -31,7 +31,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
                 RedirectPage = "/home"
             };
 
-            harness.SignInManager.Setup(manager => manager.SignInAsync(harness.User, true)).Returns(Task.CompletedTask);
+            harness.SignInManager.Setup(manager => manager.SignInProvenUserAsync(harness.User, true)).Returns(Task.CompletedTask);
             harness.SignInManager
                 .Setup(manager => manager.CompleteSignInToAppAsync(harness.User, null, "", ""))
                 .ReturnsAsync(InvokeResult<AuthenticationResponse>.Create(expected));
@@ -42,7 +42,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(result.Result, Is.SameAs(expected));
             Assert.That(result.Result.CanEnterApplication, Is.True);
             Assert.That(result.Result.RedirectPage, Is.EqualTo("/home"));
-            harness.SignInManager.Verify(manager => manager.SignInAsync(harness.User, true), Times.Once);
+            harness.SignInManager.Verify(manager => manager.SignInProvenUserAsync(harness.User, true), Times.Once);
             harness.SignInManager.Verify(manager => manager.CompleteSignInToAppAsync(harness.User, null, "", ""), Times.Once);
         }
 
