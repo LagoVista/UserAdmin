@@ -53,8 +53,9 @@ namespace LagoVista.UserAdmin.Auth.Tests
                     _ => Task.FromResult(configured ? (AppId, Origin) : ((string)null, (Uri)null)));
             }
 
-            public CookieSigningInContext Event(string scheme = IdentityConstants.ApplicationScheme, bool restricted = false)
+            public CookieSigningInContext Event(string scheme = null, bool restricted = false)
             {
+                scheme ??= IdentityConstants.ApplicationScheme;
                 var identity = new ClaimsIdentity(new[] {
                     new Claim(ClaimTypes.NameIdentifier, UserId), new Claim(ClaimsFactory.CurrentUserId, UserId),
                     new Claim("amr", "pwd")
