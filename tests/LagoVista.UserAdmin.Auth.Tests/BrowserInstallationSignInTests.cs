@@ -37,7 +37,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             public readonly BrowserInstallationSignIn Coordinator;
             private AppInstance _record;
 
-            public Harness(bool configured = true)
+            public Harness(bool configured = true, bool initializeOnProof = false)
             {
                 Http.Request.Scheme = "https";
                 Http.Request.Host = new HostString(Origin.Host);
@@ -50,7 +50,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
                     .Callback<AppInstance>(r => _record = r).Returns(Task.CompletedTask);
                 Coordinator = new BrowserInstallationSignIn(
                     new BrowserInstallationSession(Cookie, new BrowserInstallationManager(Repo.Object)),
-                    _ => Task.FromResult(configured ? (AppId, Origin) : ((string)null, (Uri)null)));
+                    _ => Task.FromResult(configured ? (AppId, Origin) : ((string)null, (Uri)null)), initializeOnProof ? Cookie : null);
             }
 
             public CookieSigningInContext Event(string scheme = null, bool restricted = false)
@@ -80,6 +80,29 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(evt.Principal.FindFirst("amr").Value, Is.EqualTo("pwd"));
             Assert.That(evt.Properties.IsPersistent, Is.True);
             h.Repo.Verify(r => r.AddAppInstanceAsync(It.IsAny<AppInstance>()), Times.Once);
+        }
+
+        [Test]
+        public async Task FirstProvenLoginInitializesCookieAndBindsWithoutPreflight()
+        {
+            var h = new Harness(initializeOnProof: true);
+            var evt = h.Event();
+            using (h.Coordinator.BeginProvenSignIn(h.User)) await h.Apply(evt);
+            Assert.That(evt.Principal.FindAll(ClaimsFactory.AppInstanceId).Count(), Is.EqualTo(1));
+            Assert.That(h.Http.Response.Headers.SetCookie.Count, Is.EqualTo(1));
+            Assert.That(h.Cookie.Read(h.Http, Origin), Is.Not.Null);
+            h.Repo.Verify(r => r.AddAppInstanceAsync(It.IsAny<AppInstance>()), Times.Once);
+        }
+
+        [Test]
+        public async Task OrdinaryUnboundSessionCannotInitializeBrowserCookie()
+        {
+            var h = new Harness(initializeOnProof: true);
+            var evt = h.Event();
+            await h.Apply(evt);
+            Assert.That(evt.Principal.FindFirst(ClaimsFactory.AppInstanceId), Is.Null);
+            Assert.That(h.Http.Response.Headers.SetCookie.Count, Is.Zero);
+            h.Repo.VerifyNoOtherCalls();
         }
 
         [Test]
