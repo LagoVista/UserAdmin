@@ -19,14 +19,16 @@ namespace LagoVista.AspNetCore.Identity.Services
     public sealed class BrowserInstallationSignIn
     {
         private readonly BrowserInstallationSession _session;
+        private readonly BrowserInstallationCookie _cookie;
         private readonly Func<HttpContext, Task<(string AppId, Uri Origin)>> _resolveApplication;
         private AppUser _provenUser;
         private ClaimsPrincipal _issuedPrincipal;
         private bool _signedOut;
 
         public BrowserInstallationSignIn(BrowserInstallationSession session,
-            Func<HttpContext, Task<(string AppId, Uri Origin)>> resolveApplication)
+            Func<HttpContext, Task<(string AppId, Uri Origin)>> resolveApplication, BrowserInstallationCookie cookie = null)
         {
+            _cookie = cookie;
             _session = session ?? throw new ArgumentNullException(nameof(session));
             _resolveApplication = resolveApplication ?? throw new ArgumentNullException(nameof(resolveApplication));
         }
@@ -74,6 +76,9 @@ namespace LagoVista.AspNetCore.Identity.Services
 
                 if (_provenUser != null && _provenUser.Id == user.Id)
                 {
+                    // Initialize on the existing successful full-authentication path.
+                    // The cookie conveys continuity only; it never authenticates a user.
+                    _cookie?.Initialize(context.HttpContext, binding.Origin);
                     await _session.BindProvenSessionAsync(context.HttpContext, principal, user,
                         binding.AppId, binding.Origin);
                 }
