@@ -43,10 +43,7 @@ namespace LagoVista.UserAdmin.Managers
 
         public async Task<AppInstance> BindProvenUserAsync(AppUser user, string trustedAppId, string browserId)
         {
-            if (user == null || String.IsNullOrWhiteSpace(user.Id) || user.IsAccountDisabled ||
-                user.IsDeleted == true || user.IsAnonymous || user.IsUserDevice ||
-                (user.LoginType != LoginTypes.AppUser && user.LoginType != LoginTypes.AppEndUser))
-                throw new InvalidOperationException("Browser installation binding requires a proven active human.");
+            RequireHuman(user);
 
             var appId = CanonicalId(trustedAppId);
             var deviceId = CanonicalId(browserId);
@@ -80,6 +77,30 @@ namespace LagoVista.UserAdmin.Managers
                 if (winner == null) throw;
                 return RequireBinding(winner, userId, appId, deviceId, instanceId);
             }
+        }
+
+        /// <summary>Validate an existing session binding without creating or updating storage.</summary>
+        public async Task<AppInstance> ReadBoundUserAsync(AppUser user, string trustedAppId,
+            string browserId, string claimedInstanceId)
+        {
+            RequireHuman(user);
+            var appId = CanonicalId(trustedAppId);
+            var deviceId = CanonicalId(browserId);
+            var userId = user.Id.Value;
+            var instanceId = InstanceId(appId, deviceId);
+            if (claimedInstanceId != instanceId)
+                throw new InvalidOperationException("Browser installation binding rejected.");
+            var current = await _instances.GetAppInstanceAsync(userId, instanceId).ConfigureAwait(false);
+            if (current == null) throw new InvalidOperationException("Browser installation binding unavailable.");
+            return RequireBinding(current, userId, appId, deviceId, instanceId);
+        }
+
+        private static void RequireHuman(AppUser user)
+        {
+            if (user == null || String.IsNullOrWhiteSpace(user.Id) || user.IsAccountDisabled ||
+                user.IsDeleted == true || user.IsAnonymous || user.IsUserDevice ||
+                (user.LoginType != LoginTypes.AppUser && user.LoginType != LoginTypes.AppEndUser))
+                throw new InvalidOperationException("Browser installation binding requires a proven active human.");
         }
 
         private static AppInstance RequireBinding(AppInstance instance, string userId, string appId,
