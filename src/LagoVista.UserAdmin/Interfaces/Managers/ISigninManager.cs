@@ -12,6 +12,8 @@ namespace LagoVista.UserAdmin.Interfaces.Managers
         Task<InvokeResult<AuthenticationResponse>> PasswordSignInAsync(AuthLoginRequest loginRequest);
         Task<InvokeResult<AppUser>> VerifyPasswordForMfaAsync(AuthLoginRequest loginRequest);
         Task SignInAsync(AppUser user, bool isPersistent = false);
+        // Explicit full-authentication completion, distinct from ordinary cookie reissue.
+        Task SignInProvenUserAsync(AppUser user, bool isPersistent = false) => SignInAsync(user, isPersistent);
         Task SignInProvisionalAsync(AppUser user, string actorId, bool isPersistent = false);
         Task SignOutAsync();
         Task RefreshUserLoginAsync(AppUser user);
