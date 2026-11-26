@@ -81,6 +81,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(result.Successful, Is.False);
             harness.MfaChallengeStore.Verify(store => store.GetAsync(It.IsAny<string>()), Times.Never);
             harness.SignInManager.Verify(manager => manager.SignInAsync(It.IsAny<AppUser>(), It.IsAny<bool>()), Times.Never);
+            harness.SignInManager.Verify(manager => manager.SignInProvenUserAsync(It.IsAny<AppUser>(), It.IsAny<bool>()), Times.Never);
             Assert.That(harness.Log.Events, Is.Empty);
         }
 
@@ -102,6 +103,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             Assert.That(result.Successful, Is.False);
             harness.MfaChallengeStore.Verify(store => store.ConsumeAsync(It.IsAny<string>()), Times.Never);
             harness.SignInManager.Verify(manager => manager.SignInAsync(It.IsAny<AppUser>(), It.IsAny<bool>()), Times.Never);
+            harness.SignInManager.Verify(manager => manager.SignInProvenUserAsync(It.IsAny<AppUser>(), It.IsAny<bool>()), Times.Never);
             Assert.That(harness.Log.Events.Select(evt => evt.Type), Is.EqualTo(new AuthLogTypes?[]
             {
                 AuthLogTypes.TotpConsumeRecoveryCodeStart,
@@ -173,7 +175,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
             mfaChallengeStore.Setup(store => store.GetAsync(ChallengeId)).ReturnsAsync(InvokeResult<MfaChallenge>.Create(challenge));
             mfaChallengeStore.Setup(store => store.ConsumeAsync(ChallengeId)).ReturnsAsync(InvokeResult<MfaChallenge>.Create(challenge));
 
-            signInManager.Setup(manager => manager.SignInAsync(user, true)).Returns(Task.CompletedTask);
+            signInManager.Setup(manager => manager.SignInProvenUserAsync(user, true)).Returns(Task.CompletedTask);
             signInManager.Setup(manager => manager.CompleteSignInToAppAsync(user, null, "", ""))
                 .ReturnsAsync(InvokeResult<AuthenticationResponse>.Create(new AuthenticationResponse
                 {
