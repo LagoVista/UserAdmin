@@ -56,7 +56,7 @@ namespace LagoVista.UserAdmin.Auth.Tests
 
             harness.MfaChallengeStore.Verify(store => store.ConsumeAsync(ChallengeId), Times.Once);
             harness.SecureStorage.Verify(storage => storage.RemoveUserSecretAsync(It.IsAny<EntityHeader>(), "auth-secret"), Times.Once);
-            harness.SignInManager.Verify(manager => manager.SignInAsync(harness.User, true), Times.Once);
+            harness.SignInManager.Verify(manager => manager.SignInProvenUserAsync(harness.User, true), Times.Once);
             harness.SignInManager.Verify(manager => manager.CompleteSignInToAppAsync(harness.User, null, "", ""), Times.Once);
             Assert.That(harness.Log.Events.Select(evt => evt.Type), Is.EqualTo(new AuthLogTypes?[]
             {
