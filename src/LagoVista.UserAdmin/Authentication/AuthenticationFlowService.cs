@@ -158,7 +158,7 @@ namespace LagoVista.UserAdmin.Authentication
             if (_signInManager == null)
                 throw new InvalidOperationException("Sign-in manager is not configured for proven-user session completion.");
 
-            await _signInManager.SignInAsync(appUser, rememberMe);
+            await _signInManager.SignInProvenUserAsync(appUser, rememberMe);
             return await _signInManager.CompleteSignInToAppAsync(appUser);
         }
 
