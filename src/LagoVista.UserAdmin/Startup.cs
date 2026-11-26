@@ -34,6 +34,7 @@ namespace LagoVista.UserAdmin
             services.AddScoped<IAnonymousVisitorPromotionManager, AnonymousVisitorPromotionManager>();
             services.AddScoped<IModuleManager, ModuleManager>();
             services.AddScoped<IAppInstanceManager, AppInstanceManager>();
+            services.AddScoped<BrowserInstallationManager>();
             services.AddScoped<IUserVerficationManager, UserVerficationManager>();
             services.AddScoped<IDefaultRoleList, DefaultRoleList>();
             services.AddScoped<IPasswordManager, PasswordManager>();
